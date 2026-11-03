@@ -132,21 +132,64 @@ function isTopFundLabel(name: string): boolean {
 }
 
 /** True for accelerators/programs/labs that should never appear as "investors" on a deal card. */
-function isProgramOrNetworkLabel(name: string): boolean {
+export function isProgramOrNetworkLabel(name: string): boolean {
   const raw = name.trim();
   if (!raw) return true;
   const lower = raw.toLowerCase();
+  if (/^inv_/.test(lower)) return false;
   for (const net of CAMPUS_AND_LAB) {
     if (net.label.toLowerCase() === lower) return true;
   }
   for (const rule of SOURCE_URL_RULES) {
     if (rule.label.toLowerCase() === lower) return true;
   }
-  return /vip-?x|y combinator|\byc\b|a16z speedrun|speedrun|startup challenge|bridge award|venture prize|summer launchpad|thiel fellowship|\bneo\b|pear\s*xc|mayfield fellows|skydeck|\belab\b|delta v|venturecat|tsai city|startup lab|grasp lab|cardinal ventures|innovate x|cal launchpad|summer venture studio|^velocity$/i.test(raw);
+  // Catch short DB variants like "Venture Lab VIP-X" (not only the full Penn label).
+  return /vip-?x|venture\s*lab\s*vip|y combinator|\byc\b|a16z speedrun|speedrun|startup challenge|bridge award|venture prize|summer launchpad|thiel fellowship|\bneo\b|pear\s*xc|mayfield fellows|skydeck|\belab\b|delta v|venturecat|tsai city|startup lab|grasp lab|cardinal ventures|innovate x|cal launchpad|summer venture studio|^velocity$/i.test(raw);
 }
 
-function realInvestorNames(names: string[]): string[] {
+/** True for fund / investor ids or labels that must not appear under Networks. */
+export function isInvestorNetworkRef(idOrLabel: string, kind?: string | null): boolean {
+  if (kind === "investor") return true;
+  const raw = (idOrLabel || "").trim();
+  if (!raw) return false;
+  if (/^inv_/i.test(raw)) return true;
+  return false;
+}
+
+export function realInvestorNames(names: string[]): string[] {
   return names.filter((name) => !isProgramOrNetworkLabel(name));
+}
+
+/** Split deal labels: programs/accelerators/labs vs funds only. */
+export function partitionDealLists(args: {
+  networkLabels: string[];
+  networkIds?: string[];
+  networkKinds?: Array<string | null | undefined>;
+  investorLabels: string[];
+}): { networks: string[]; investors: string[] } {
+  const investors = realInvestorNames(args.investorLabels);
+  const invSeen = new Set(investors.map((n) => n.trim().toLowerCase()));
+  const networks: string[] = [];
+  const netSeen = new Set<string>();
+  const ids = args.networkIds ?? [];
+  const kinds = args.networkKinds ?? [];
+  args.networkLabels.forEach((label, i) => {
+    const id = ids[i] ?? "";
+    const kind = kinds[i];
+    if (isInvestorNetworkRef(id, kind) || isInvestorNetworkRef(label, kind)) return;
+    if (isProgramOrNetworkLabel(label) === false && /^inv_/i.test(label)) return;
+    // Drop pure fund labels that belong on Investors.
+    if (invSeen.has(label.trim().toLowerCase())) return;
+    // Investor-looking labels without program cues stay out of Networks.
+    if (!isProgramOrNetworkLabel(label) && /ventures|capital|partners|fund\b|vc\b/i.test(label) && !/y combinator|speedrun|fellowship|prize|challenge|lab\b|program|accelerator/i.test(label)) {
+      return;
+    }
+    const key = label.trim().toLowerCase();
+    if (!key || netSeen.has(key)) return;
+    netSeen.add(key);
+    networks.push(label.trim());
+  });
+  return { networks, investors };
 }
 
 function parseStage(raw: string | null | undefined): string | null {
@@ -415,6 +458,8 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     if (!companyNames.has(row.project_id)) continue;
     const label = (row.value_text || "").trim();
     if (!label) continue;
+    // Corpus-wide: programs/accelerators never live in company_facts investor lists for deal cards.
+    if (isProgramOrNetworkLabel(label)) continue;
     const list = companyInvestors.get(row.project_id) ?? [];
     if (!list.includes(label)) list.push(label);
     companyInvestors.set(row.project_id, list);
@@ -886,6 +931,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
 
   const companiesLinked = new Set(links.map((link) => link.companyId)).size;
   const foundersLinked = new Set(links.map((link) => link.founderId)).size;
+  const foundersShown = meta.founderNames.size;
 
   const page: FounderNetworksPage = {
     generatedAt: new Date().toISOString(),
@@ -898,6 +944,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
       companiesLinked,
       corpusCompanies: meta.corpusCompanies,
       foundersLinked,
+      foundersShown,
       byKind,
       bySourceKey: Object.fromEntries([...bySourceKey.entries()].sort((a, b) => b[1] - a[1])),
       omitted: [
@@ -1275,6 +1322,8 @@ export function buildFounderNetworksGraph(): GraphPayload {
   const networksByFounder = new Map<string, string[]>();
   for (const link of links) {
     if (!founderSet.has(link.founderId)) continue;
+    // Funds stay on Investors; only programs/accelerators/labs on Networks.
+    if (link.kind === "investor" || isInvestorNetworkRef(link.networkId, link.kind)) continue;
     const list = networksByFounder.get(link.founderId) ?? [];
     if (!list.includes(link.label)) list.push(link.label);
     networksByFounder.set(link.founderId, list);
@@ -1291,28 +1340,13 @@ export function buildFounderNetworksGraph(): GraphPayload {
       companies.find((id) => companySet.has(id)) ??
       [...(meta.companyFounders.entries())].find(([, set]) => set.has(founderId))?.[0] ??
       null;
-    const investorsRaw = realInvestorNames(companyId ? meta.companyInvestors.get(companyId) ?? [] : []);
-    // Dedupe sourced investor labels (case-insensitive); keep richer lists when company facts have them.
-    const invSeen = new Set<string>();
-    const investors: string[] = [];
-    for (const name of investorsRaw) {
-      const key = name.trim().toLowerCase();
-      if (!key || invSeen.has(key)) continue;
-      invSeen.add(key);
-      investors.push(name.trim());
-    }
-    const networkLabelsRaw = networksByFounder.get(founderId) ?? [];
-    const netSeen = new Set<string>();
-    const networkLabels: string[] = [];
-    for (const name of networkLabelsRaw) {
-      const key = name.trim().toLowerCase();
-      // Keep programs/labs/accelerators on Networks; drop labels already listed as investors.
-      if (!key || invSeen.has(key) || netSeen.has(key)) continue;
-      netSeen.add(key);
-      networkLabels.push(name.trim());
-    }
-    const hasTopFund =
-      investors.some((name) => isTopFundLabel(name)) || networkLabels.some((name) => isTopFundLabel(name));
+    const parted = partitionDealLists({
+      networkLabels: networksByFounder.get(founderId) ?? [],
+      investorLabels: companyId ? meta.companyInvestors.get(companyId) ?? [] : [],
+    });
+    const investors = parted.investors;
+    const networkLabels = parted.networks;
+    const hasTopFund = investors.some((name) => isTopFundLabel(name));
     founderDeals[founderId] = {
       founderId,
       founderName: meta.founderNames.get(founderId) ?? founderId,

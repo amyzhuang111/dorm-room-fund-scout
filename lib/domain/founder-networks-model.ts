@@ -156,6 +156,7 @@ export interface FounderNetworksPage {
     /** Full investable corpus size; companyTotal is a share of this. */
     corpusCompanies: number;
     foundersLinked: number;
+    foundersShown: number;
     byKind: Record<NetworkKind, number>;
     bySourceKey: Record<string, number>;
     omitted: { kind: string; reason: string }[];

@@ -119,7 +119,7 @@ export function NetworksApp() {
             <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
             <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
             <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies ·{" "}
-            <span data-networks-count="founders">{data.totals.foundersLinked.toLocaleString("en-US")}</span> founders
+            all <span data-networks-count="founders">{(data.totals.foundersShown ?? data.totals.foundersLinked).toLocaleString("en-US")}</span> founders
           </p>
         </div>
       </header>
@@ -132,10 +132,10 @@ export function NetworksApp() {
               Network map
             </h2>
             <p className="mt-0.5 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
-              Every founder and company, colored by campus. Dark hubs are programs and funds — hover a founder, click a hub.
+              Every founder and company, colored by campus. Dark hubs are programs and funds. Hover a founder, click a hub.
             </p>
             <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
-              Campus-colored founders and program hubs — scroll to zoom.
+              Campus-colored founders and program hubs. Scroll to zoom.
             </p>
           </div>
           <div className="md:min-h-0">

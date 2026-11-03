@@ -22,7 +22,7 @@ const expected = {
   corpusCompanies: totals.corpusCompanies ?? pageJson.corpusCompanies,
   founderLinks: totals.founderLinks,
   networks: totals.networks,
-  founders: totals.foundersLinked,
+  founders: totals.foundersShown ?? totals.foundersLinked,
 };
 
 if (totals.companyTotal !== totals.companiesLinked) {

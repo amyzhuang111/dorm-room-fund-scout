@@ -1,11 +1,16 @@
 /**
- * Nature-map poster graph: every founder + company, campus-colored clusters,
+ * Nature-map poster graph: every corpus founder + company, campus-colored clusters,
  * force-packed layout, compact JSON (≤210 KiB) + separate deals file.
  */
 import fs from "fs";
 import path from "path";
 import { forceSimulation, forceManyBody, forceCollide, forceX, forceY, forceLink } from "d3-force";
-import { loadFounderNetworkLinks, buildFounderNetworksPage } from "../lib/domain/founder-networks";
+import {
+  loadFounderNetworkLinks,
+  buildFounderNetworksPage,
+  partitionDealLists,
+  isInvestorNetworkRef,
+} from "../lib/domain/founder-networks";
 import { assignFounderNetworkCampusColors } from "../components/network-style";
 
 const ROOT = process.cwd();
@@ -29,8 +34,11 @@ type SimNode = {
 const { links, meta } = loadFounderNetworkLinks();
 const page = buildFounderNetworksPage();
 
-const founderIds = [...new Set(links.map((l) => l.founderId))];
-const companyIds = [...new Set(links.map((l) => l.companyId))];
+// ALL founders on investable companies + ALL investable companies (not only mapped subset).
+const linkedFounderIds = new Set(links.map((l) => l.founderId));
+const linkedCompanyIds = new Set(links.map((l) => l.companyId));
+const founderIds = [...meta.founderNames.keys()].sort();
+const companyIds = [...meta.companyNames.keys()].sort();
 
 // Campus table (founders with unknown campus → "other")
 const campusCount = new Map<string, number>();
@@ -48,12 +56,26 @@ const campusIndex = new Map(campusIds.map((id, i) => [id, i]));
 const colorMap = assignFounderNetworkCampusColors(
   campusIds.filter((id) => id !== "other").map((id) => ({ id, label: meta.uniLabels.get(id) ?? id })),
 );
-const campuses = campusIds.map((id) => ({
-  id,
-  label: id === "other" ? "Other" : shortCampus(meta.uniLabels.get(id) ?? id),
-  color: id === "other" ? "#94a3b8" : colorMap.get(id) ?? "#94a3b8",
-  n: campusCount.get(id) ?? 0,
-}));
+
+function pastel(hex: string, amount = 0.38): string {
+  const h = hex.replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const rgb = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+  const mixed = rgb.map((c) => Math.round(c + (255 - c) * amount));
+  return `#${mixed.map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
+const campuses = campusIds.map((id) => {
+  const base = id === "other" ? "#94a3b8" : colorMap.get(id) ?? "#94a3b8";
+  // Keep Penn closer to cobalt; pastel the rest for the ephemeral white-poster look.
+  const isPenn = /penn|pennsylvania/i.test(`${id} ${meta.uniLabels.get(id) ?? ""}`);
+  return {
+    id,
+    label: id === "other" ? "Other" : shortCampus(meta.uniLabels.get(id) ?? id),
+    color: isPenn ? base : pastel(base, 0.32),
+    n: campusCount.get(id) ?? 0,
+  };
+});
 
 function shortCampus(label: string): string {
   return label
@@ -66,7 +88,6 @@ function shortCampus(label: string): string {
     .slice(0, 18);
 }
 
-// Degrees
 const founderDeg = new Map<string, number>();
 const companyDeg = new Map<string, number>();
 const hubDeg = new Map<string, number>();
@@ -76,7 +97,6 @@ for (const l of links) {
   hubDeg.set(l.networkId, (hubDeg.get(l.networkId) ?? 0) + 1);
 }
 
-// Company primary campus = mode of its founders
 const companyCampusId = new Map<string, string>();
 for (const cid of companyIds) {
   const fos = [...(meta.companyFounders.get(cid) ?? [])];
@@ -96,7 +116,6 @@ for (const cid of companyIds) {
   companyCampusId.set(cid, best);
 }
 
-// Top hubs for dark nodes (programs + investors with enough reach)
 const hubDefs = [
   ...page.topNetworks.filter((n) => n.kind !== "investor").slice(0, 16),
   ...page.investorHubs.slice(0, 8),
@@ -108,60 +127,50 @@ const hubs = hubDefs.filter((h) => {
   return true;
 });
 
-// Campus centroids in overlapping organic ring (Nature-like)
-const nCamp = Math.max(1, campuses.length);
 const nodes: SimNode[] = [];
 const indexOf = new Map<string, number>();
 
-for (let i = 0; i < campuses.length; i++) {
-  // skip placing campus marker nodes — founders fill the cloud
-}
-
-/** Distinct campus islands: 1–2 big central masses + separated satellite blobs (Nature). */
+/** Distinct campus islands: twin central masses + mid ring + far satellites (Nature). */
 function campusXY(ci: number): { x: number; y: number } {
   const n = campuses[ci]?.n ?? 1;
-  // Twin central masses (Nature NA / Europe style) with a clear cleft
-  if (ci === 0) return { x: -95, y: -40 };
-  if (ci === 1) return { x: 110, y: -5 };
-  // Near-core majors: still attached to the central cloud but not fused
+  if (ci === 0) return { x: -120, y: -48 };
+  if (ci === 1) return { x: 135, y: -8 };
   if (ci < 5) {
     const k = ci - 2;
     const ang = -Math.PI * 0.55 + k * 1.15;
-    const rad = 210 + k * 18;
+    const rad = 250 + k * 22;
     return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad };
   }
-  // Mid ring
   if (ci < 12) {
     const k = ci - 5;
-    const ang = (k / 7) * Math.PI * 2 + 0.2;
-    const rad = 320 + (k % 2) * 30;
+    const ang = (k / 7) * Math.PI * 2 + 0.25;
+    const rad = 390 + (k % 2) * 48;
     return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad };
   }
-  // Far satellites — white space + haze gaps like Nature AU/CN/JP/SA
   const j = ci - 12;
   const satN = Math.max(1, campuses.length - 12);
   const ang = (j / satN) * Math.PI * 2 + 0.55;
-  const rad = 460 + (j % 6) * 42 + Math.sqrt(Math.max(1, n)) * 2.2;
-  return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad * 0.95 };
+  const rad = 560 + (j % 6) * 52 + Math.sqrt(Math.max(1, n)) * 2.8;
+  return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad * 0.92 };
 }
 
 for (const fid of founderIds) {
   const cid = founderCampusId.get(fid) ?? "other";
   const ci = campusIndex.get(cid) ?? campusIndex.get("other") ?? 0;
   const home = campusXY(ci);
-  const deg = founderDeg.get(fid) ?? 1;
-  // Screen-ish radius 3–14px (sqrt of connectedness); stored in world units ≈ px after normalize
-  const r = Math.max(3.2, Math.min(16, 3.2 + Math.sqrt(deg) * 1.55));
+  const deg = founderDeg.get(fid) ?? 0;
+  // Tiny ephemeral dots: ~1.5–3px; hubs later are only modestly larger.
+  const r = deg <= 0 ? 1.5 : Math.max(1.5, Math.min(3.0, 1.5 + Math.sqrt(deg) * 0.45));
   const campN = campusCount.get(cid) ?? 1;
-  // Tight seed so collide packs into a solid blob
-  const jitter = 8 + Math.sqrt(campN) * 0.7;
+  // Soft float for unlinked founders near the campus cloud.
+  const jitter = (deg <= 0 ? 14 : 7) + Math.sqrt(campN) * 0.55;
   const id = `fo:${fid}`;
   indexOf.set(id, nodes.length);
   nodes.push({
     id,
     kind: 0,
     campus: ci,
-    deg,
+    deg: Math.max(1, deg),
     r,
     x: home.x + (hash(fid) - 0.5) * jitter * 2,
     y: home.y + (hash(fid + "y") - 0.5) * jitter * 2,
@@ -172,19 +181,19 @@ for (const cid of companyIds) {
   const camp = companyCampusId.get(cid) ?? "other";
   const ci = campusIndex.get(camp) ?? 0;
   const home = campusXY(ci);
-  const deg = companyDeg.get(cid) ?? 1;
+  const deg = companyDeg.get(cid) ?? 0;
   const invN = (meta.companyInvestors.get(cid) ?? []).length;
   const score = Math.max(deg, invN);
-  const r = Math.max(3.0, Math.min(14, 3.0 + Math.sqrt(score) * 1.35));
+  const r = score <= 0 ? 1.5 : Math.max(1.5, Math.min(2.8, 1.5 + Math.sqrt(score) * 0.35));
   const campN = campusCount.get(camp) ?? 1;
-  const jitter = 7 + Math.sqrt(campN) * 0.55;
+  const jitter = (score <= 0 ? 12 : 6) + Math.sqrt(campN) * 0.45;
   const id = `co:${cid}`;
   indexOf.set(id, nodes.length);
   nodes.push({
     id,
     kind: 1,
     campus: ci,
-    deg: score,
+    deg: Math.max(1, score),
     r,
     x: home.x + (hash(cid) - 0.5) * jitter * 2,
     y: home.y + (hash(cid + "y") - 0.5) * jitter * 2,
@@ -192,7 +201,6 @@ for (const cid of companyIds) {
 }
 
 for (const hub of hubs) {
-  // Place hub at mean of its linked founders
   const fos = links.filter((l) => l.networkId === hub.id).map((l) => l.founderId);
   let sx = 0;
   let sy = 0;
@@ -205,7 +213,7 @@ for (const hub of hubs) {
     n += 1;
   }
   const deg = hub.founderCount || hubDeg.get(hub.id) || 1;
-  const r = Math.max(5.5, Math.min(14, 5.5 + Math.sqrt(deg) * 0.22));
+  const r = Math.max(3.2, Math.min(5.5, 3.2 + Math.sqrt(deg) * 0.08));
   const id = `net:${hub.id}`;
   indexOf.set(id, nodes.length);
   nodes.push({
@@ -221,8 +229,7 @@ for (const hub of hubs) {
   });
 }
 
-// Edges for layout + draw: founder-company + hub-founder (sampled for YC) + cofounder
-type E = { s: number; t: number; k: number }; // k: 0 fo-co, 1 hub-fo, 2 cofounder
+type E = { s: number; t: number; k: number }; // k: 0 fo-co, 1 hub-fo, 2 cofounder, 3 shared-investor
 const edges: E[] = [];
 const edgeSeen = new Set<string>();
 function addEdge(a: string, b: string, k: number) {
@@ -237,69 +244,87 @@ function addEdge(a: string, b: string, k: number) {
 
 for (const l of links) {
   addEdge(`fo:${l.founderId}`, `co:${l.companyId}`, 0);
-  // Hub-founder: keep all non-YC; strongly subsample YC for draw (layout uses force on subset)
+  // Keep far more real hub-founder edges (YC still lightly sampled for file size).
   if (l.networkId === "yc") {
-    if (hash(`${l.founderId}:yc`) < 0.08) addEdge(`net:yc`, `fo:${l.founderId}`, 1);
+    if (hash(`${l.founderId}:yc`) < 0.22) addEdge(`net:yc`, `fo:${l.founderId}`, 1);
   } else if (hubSeen.has(l.networkId)) {
     addEdge(`net:${l.networkId}`, `fo:${l.founderId}`, 1);
   }
 }
 
-// Same-company cofounders
 for (const cid of companyIds) {
   const fos = [...(meta.companyFounders.get(cid) ?? [])].filter((f) => indexOf.has(`fo:${f}`)).sort();
   for (let i = 0; i < fos.length; i++) {
-    for (let j = i + 1; j < Math.min(fos.length, i + 4); j++) {
+    for (let j = i + 1; j < Math.min(fos.length, i + 5); j++) {
       addEdge(`fo:${fos[i]}`, `fo:${fos[j]}`, 2);
     }
   }
 }
 
-// Force layout — per-campus blobs with gaps between islands (weaker global packing)
+// Shared investor edges between companies (real company_facts only; no invented ties).
+const invIndex = new Map<string, string[]>();
+for (const cid of companyIds) {
+  for (const name of meta.companyInvestors.get(cid) ?? []) {
+    const key = name.trim().toLowerCase();
+    if (!key) continue;
+    const list = invIndex.get(key) ?? [];
+    list.push(cid);
+    invIndex.set(key, list);
+  }
+}
+for (const [, cos] of invIndex) {
+  if (cos.length < 2 || cos.length > 40) continue;
+  const sample = cos.slice(0, 12);
+  for (let i = 0; i < sample.length; i++) {
+    for (let j = i + 1; j < sample.length; j++) {
+      if (hash(`${sample[i]}|${sample[j]}`) < 0.35) addEdge(`co:${sample[i]}`, `co:${sample[j]}`, 3);
+    }
+  }
+}
+
 const simNodes = nodes.map((n, i) => ({ ...n, index: i }));
 const simEdges = edges.map((e) => ({ source: e.s, target: e.t, k: e.k }));
 
 const sim = forceSimulation(simNodes as any)
-  .force("charge", forceManyBody().strength(-28).distanceMax(280))
+  .force("charge", forceManyBody().strength(-22).distanceMax(320))
   .force(
     "link",
     forceLink(simEdges as any)
       .id((d: any) => d.index)
-      .distance((l: any) => (l.k === 1 ? 42 : l.k === 2 ? 4 : 10))
-      .strength((l: any) => (l.k === 1 ? 0.015 : l.k === 2 ? 0.22 : 0.08)),
+      .distance((l: any) => (l.k === 1 ? 48 : l.k === 2 ? 3.5 : l.k === 3 ? 70 : 9))
+      .strength((l: any) => (l.k === 1 ? 0.012 : l.k === 2 ? 0.28 : l.k === 3 ? 0.004 : 0.07)),
   )
   .force(
     "collide",
     forceCollide()
-      .radius((d: any) => d.r + 0.35)
-      .strength(0.75)
+      .radius((d: any) => d.r + 0.55)
+      .strength(0.85)
       .iterations(2),
   )
   .force(
     "x",
     forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength((d: any) => {
-      if (d.kind === 2) return 0.01;
+      if (d.kind === 2) return 0.008;
       const ci = Math.max(0, d.campus);
-      return ci >= 12 ? 0.16 : ci >= 5 ? 0.1 : 0.07;
+      return ci >= 12 ? 0.2 : ci >= 5 ? 0.13 : 0.08;
     }),
   )
   .force(
     "y",
     forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength((d: any) => {
-      if (d.kind === 2) return 0.01;
+      if (d.kind === 2) return 0.008;
       const ci = Math.max(0, d.campus);
-      return ci >= 12 ? 0.16 : ci >= 5 ? 0.1 : 0.07;
+      return ci >= 12 ? 0.2 : ci >= 5 ? 0.13 : 0.08;
     }),
   )
   .stop();
-for (let i = 0; i < 360; i++) sim.tick();
+for (let i = 0; i < 380; i++) sim.tick();
 
 for (let i = 0; i < simNodes.length; i++) {
   nodes[i].x = simNodes[i].x;
   nodes[i].y = simNodes[i].y;
 }
 
-// Uniform scale → circular/organic cloud; wide pad leaves white margins for callouts
 let minX = Infinity,
   maxX = -Infinity,
   minY = Infinity,
@@ -310,11 +335,11 @@ for (const n of nodes) {
   minY = Math.min(minY, n.y - n.r);
   maxY = Math.max(maxY, n.y + n.r);
 }
-const pad = 95; // white margin band for Nature-style callouts (keep room for leaders)
+const pad = 100;
 const spanX = Math.max(1, maxX - minX);
 const spanY = Math.max(1, maxY - minY);
 const W = 1200;
-const H = 900; // nearer to square so normalize stays circular, not a squash
+const H = 900;
 const scale = Math.min((W - pad * 2) / spanX, (H - pad * 2) / spanY);
 const midX = (minX + maxX) / 2;
 const midY = (minY + maxY) / 2;
@@ -323,22 +348,23 @@ for (const n of nodes) {
   n.y = H / 2 + (n.y - midY) * scale;
 }
 
-// Sourced callouts (4–6)
-const founderNets = new Map<string, Set<string>>();
+const founderNets = new Map<string, { id: string; label: string; kind: string }[]>();
 for (const l of links) {
-  const s = founderNets.get(l.founderId) ?? new Set();
-  s.add(l.networkId);
-  founderNets.set(l.founderId, s);
+  if (isInvestorNetworkRef(l.networkId, l.kind) || l.kind === "investor") continue;
+  const list = founderNets.get(l.founderId) ?? [];
+  if (!list.some((x) => x.id === l.networkId)) list.push({ id: l.networkId, label: l.label, kind: l.kind });
+  founderNets.set(l.founderId, list);
 }
 let vip = 0,
   vipYc = 0;
-for (const s of founderNets.values()) {
-  if (!s.has("vipx")) continue;
+for (const list of founderNets.values()) {
+  const ids = new Set(list.map((x) => x.id));
+  if (!ids.has("vipx")) continue;
   vip += 1;
-  if (s.has("yc")) vipYc += 1;
+  if (ids.has("yc")) vipYc += 1;
 }
 const topFunds = new Set(
-  ["sequoia", "a16z", "andreessen", "general catalyst", "accel", "benchmark", "greylock", "lightspeed", "khosla", "founders fund"].map((s) =>
+  ["sequoia", "a16z", "andreessen", "general catalyst", "accel", "benchmark", "greylock", "lightspeed", "khosla", "founders fund", "bessemer"].map((s) =>
     s.toLowerCase(),
   ),
 );
@@ -349,7 +375,7 @@ function isTop(name: string) {
 let cosWithTop = 0;
 let cosTotal = 0;
 const campusNoTop = new Map<string, { total: number; topped: number }>();
-for (const cid of companyIds) {
+for (const cid of linkedCompanyIds) {
   cosTotal += 1;
   const inv = meta.companyInvestors.get(cid) ?? [];
   const topped = inv.some(isTop);
@@ -369,7 +395,7 @@ const inv0 = page.investorHubs[0];
 const calloutTexts: string[] = [];
 if (vip > 0) {
   calloutTexts.push(
-    `Only ${vipYc.toLocaleString("en-US")} of ${vip.toLocaleString("en-US")} VIP-X founders also show a YC tie — most of that path is still open to other capital.`,
+    `Only ${vipYc.toLocaleString("en-US")} of ${vip.toLocaleString("en-US")} VIP-X founders also show a YC tie. Most of that path is still open to other capital.`,
   );
 }
 calloutTexts.push(
@@ -377,12 +403,12 @@ calloutTexts.push(
 );
 if (inv0) {
   calloutTexts.push(
-    `${inv0.label} reaches ${inv0.founderCount.toLocaleString("en-US")} campus founders across ${inv0.companyCount.toLocaleString("en-US")} companies here — top-fund coverage stays thin beside program hubs.`,
+    `${inv0.label} reaches ${inv0.founderCount.toLocaleString("en-US")} campus founders across ${inv0.companyCount.toLocaleString("en-US")} companies here. Top-fund coverage stays thin beside program hubs.`,
   );
 }
 if (barren[0]) {
   calloutTexts.push(
-    `${barren[0].label}'s cluster has top-fund backing on only ${barren[0].topped.toLocaleString("en-US")} of ${barren[0].total.toLocaleString("en-US")} companies — a clear white space.`,
+    `${barren[0].label}'s cluster has top-fund backing on only ${barren[0].topped.toLocaleString("en-US")} of ${barren[0].total.toLocaleString("en-US")} companies. A clear white space.`,
   );
 }
 if (barren[1]) {
@@ -393,11 +419,11 @@ if (barren[1]) {
 const ycHub = hubs.find((h) => h.id === "yc");
 if (ycHub) {
   calloutTexts.push(
-    `Y Combinator sits across campus colors with ${ycHub.founderCount.toLocaleString("en-US")} founders — the densest bridge in this cloud.`,
+    `Y Combinator sits across campus colors with ${ycHub.founderCount.toLocaleString("en-US")} founders. The densest bridge in this cloud.`,
   );
 }
-// Prefer anchoring callouts to major campus blob centroids (closer to what they describe)
-const campusCentroid: { x: number; y: number; n: number }[] = campuses.map(() => ({ x: 0, y: 0, n: 0 }));
+
+const campusCentroid: { x: number; y: number; n: number; r: number }[] = campuses.map(() => ({ x: 0, y: 0, n: 0, r: 40 }));
 for (const n of nodes) {
   if (n.kind !== 0 || n.campus < 0) continue;
   const c = campusCentroid[n.campus];
@@ -405,11 +431,19 @@ for (const n of nodes) {
   c.y += n.y;
   c.n += 1;
 }
-for (const c of campusCentroid) {
+for (let i = 0; i < campusCentroid.length; i++) {
+  const c = campusCentroid[i];
   if (c.n) {
     c.x /= c.n;
     c.y /= c.n;
   }
+  // Approximate cluster radius from member spread.
+  let maxD = 24;
+  for (const n of nodes) {
+    if (n.kind !== 0 || n.campus !== i) continue;
+    maxD = Math.max(maxD, Math.hypot(n.x - c.x, n.y - c.y));
+  }
+  c.r = Math.min(120, Math.max(28, maxD * 0.85));
 }
 const calloutAnchors = [
   campusCentroid[campusIndex.get("univ_penn") ?? 0],
@@ -417,20 +451,18 @@ const calloutAnchors = [
   campusCentroid[campusIndex.get("univ_mit") ?? 2],
   campusCentroid[campusIndex.get(barren[0]?.id ?? "univ_berkeley") ?? 3],
   campusCentroid[campusIndex.get(barren[1]?.id ?? "univ_harvard") ?? 4],
-  nodes[indexOf.get("net:yc") ?? 0] ? { x: nodes[indexOf.get("net:yc")!].x, y: nodes[indexOf.get("net:yc")!].y, n: 1 } : campusCentroid[0],
+  nodes[indexOf.get("net:yc") ?? 0] ? { x: nodes[indexOf.get("net:yc")!].x, y: nodes[indexOf.get("net:yc")!].y, n: 1, r: 40 } : campusCentroid[0],
 ];
 const callouts = calloutTexts.slice(0, 6).map((text, i) => {
   const side = i % 2 === 0 ? "left" : "right";
-  const anchor = calloutAnchors[i] ?? campusCentroid[i % campusCentroid.length] ?? { x: W / 2, y: H / 2, n: 1 };
+  const anchor = calloutAnchors[i] ?? campusCentroid[i % campusCentroid.length] ?? { x: W / 2, y: H / 2, n: 1, r: 40 };
   const ax = anchor.x || W / 2;
   const ay2 = anchor.y || H / 2;
-  // True page margins (outside the cloud), staggered so boxes don't stack
   const lx = side === "left" ? 10 : W - 228;
   const ly = Math.min(H - 80, Math.max(18, 40 + i * 110 + (side === "right" ? 30 : 0)));
   return { text, ax: round1(ax), ay: round1(ay2), lx: round1(lx), ly: round1(ly), side };
 });
 
-// Compact parallel arrays
 const x: number[] = [];
 const y: number[] = [];
 const r: number[] = [];
@@ -451,7 +483,6 @@ const hubNodes = hubs.map((h) => {
   return { id: h.id, label: h.label, kind: h.kind, i: ix, founders: h.founderCount };
 });
 
-// Edge arrays (uint-like)
 const e0: number[] = [];
 const e1: number[] = [];
 const ek: number[] = [];
@@ -461,46 +492,33 @@ for (const e of edges) {
   ek.push(e.k);
 }
 
-// Featured founder: richest sourced investors
 let featuredId: string | null = null;
 let featuredScore = -1;
 const deals: Record<string, any> = {};
 for (const fid of founderIds) {
-  const cos = [...(meta.companyFounders.entries())].filter(([, set]) => set.has(fid)).map(([id]) => id);
-  const companyId = cos[0] ?? null;
-  const investorsRaw = [...(companyId ? meta.companyInvestors.get(companyId) ?? [] : [])];
-  const invSeen = new Set<string>();
-  const investors: string[] = [];
-  for (const name of investorsRaw) {
-    const k = name.trim().toLowerCase();
-    if (!k || invSeen.has(k)) continue;
-    invSeen.add(k);
-    investors.push(name.trim());
-  }
-  const netsRaw = [...(founderNets.get(fid) ?? [])].map((nid) => page.topNetworks.find((n) => n.id === nid)?.label ?? nid);
-  const nets: string[] = [];
-  const netSeen = new Set<string>();
-  for (const name of netsRaw) {
-    const k = name.trim().toLowerCase();
-    if (!k || invSeen.has(k) || netSeen.has(k)) continue;
-    netSeen.add(k);
-    nets.push(name);
-  }
-  const hasTop = investors.some(isTop);
+  const cos = [...meta.companyFounders.entries()].filter(([, set]) => set.has(fid)).map(([id]) => id);
+  const companyId = cos.find((id) => linkedCompanyIds.has(id)) ?? cos[0] ?? null;
+  const netRows = founderNets.get(fid) ?? [];
+  const parted = partitionDealLists({
+    networkLabels: netRows.map((n) => n.label),
+    networkIds: netRows.map((n) => n.id),
+    networkKinds: netRows.map((n) => n.kind),
+    investorLabels: companyId ? meta.companyInvestors.get(companyId) ?? [] : [],
+  });
+  const hasTop = parted.investors.some(isTop);
   const deal = {
     founderName: meta.founderNames.get(fid) ?? fid,
     companyName: companyId ? meta.companyNames.get(companyId) ?? null : null,
     companyId,
     stage: companyId ? meta.companyStages.get(companyId) ?? null : null,
-    networks: nets.slice(0, 6),
-    investors: investors.slice(0, 10),
+    networks: parted.networks.slice(0, 10),
+    investors: parted.investors.slice(0, 12),
     hasTopFund: hasTop,
   };
-  // Only keep deals with something to show (or all founders with short stub)
-  if (investors.length || nets.length) {
+  if (parted.investors.length || parted.networks.length) {
     deals[fid] = deal;
   }
-  const score = investors.length * 3 + (hasTop ? 5 : 0) + nets.length;
+  const score = parted.investors.length * 3 + (hasTop ? 5 : 0) + parted.networks.length;
   if (score > featuredScore) {
     featuredScore = score;
     featuredId = fid;
@@ -508,9 +526,21 @@ for (const fid of founderIds) {
 }
 
 const insights = calloutTexts.slice(0, 3);
+const campusLabels = campuses
+  .map((c, i) => ({
+    id: c.id,
+    label: c.label,
+    n: c.n,
+    x: round1(campusCentroid[i].x),
+    y: round1(campusCentroid[i].y),
+    r: round1(campusCentroid[i].r),
+  }))
+  .filter((c) => c.n >= 8)
+  .sort((a, b) => b.n - a.n)
+  .slice(0, 14);
 
 const poster = {
-  v: 1,
+  v: 2,
   w: W,
   h: H,
   totals: {
@@ -522,9 +552,12 @@ const poster = {
     founderLinks: page.totals.founderLinks,
     networks: page.totals.networks,
     foundersLinked: page.totals.foundersLinked,
+    foundersShown: founderIds.length,
+    companiesShown: companyIds.length,
   },
   campuses,
   hubs: hubNodes,
+  campusLabels,
   x,
   y,
   r,
@@ -543,7 +576,6 @@ const poster = {
     founders: h.founderCount,
     companies: h.companyCount,
   })),
-  // id tables only for hubs + index→founder/company for hover (compact)
   foIds: founderIds,
   coIds: companyIds,
 };
@@ -563,10 +595,14 @@ console.log(
       edges: edges.length,
       founders: founderIds.length,
       companies: companyIds.length,
+      linkedFounders: linkedFounderIds.size,
       hubs: hubNodes.length,
       campuses: campuses.length,
       callouts: callouts.length,
       under210: kib <= 210,
+      featuredId,
+      featuredInvestors: featuredId ? deals[featuredId]?.investors?.slice(0, 3) : null,
+      featuredNetworks: featuredId ? deals[featuredId]?.networks : null,
     },
     null,
     2,
