@@ -71,13 +71,26 @@ export function absYear(year: number): number {
 
 /**
  * Founder visible under scrub year.
- * year=0 always visible; otherwise abs(year) <= scrub (and all dated at yearMax).
+ * year=0 always visible; dated years must be >= YEAR_MIN (2023-or-later filter)
+ * and abs(year) <= scrub (all in-range dated years show at yearMax).
  */
-export function founderVisibleAtYear(year: number, scrub: number, yearMax: number): boolean {
+export function founderVisibleAtYear(
+  year: number,
+  scrub: number,
+  yearMax: number,
+  yearMin: number = YEAR_MIN_DEFAULT,
+): boolean {
   if (!year) return true;
   const y = absYear(year);
+  if (y < yearMin) return false;
   if (scrub >= yearMax) return true;
   return y <= scrub;
+}
+
+/** Company passes the shared 2023-or-later filter when listed in the pass set. */
+export function companyPasses2023Filter(companyId: string | null | undefined, passIds: Set<string>): boolean {
+  if (!companyId) return false;
+  return passIds.has(companyId);
 }
 
 export function countFoundersByYear(

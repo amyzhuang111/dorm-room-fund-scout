@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   YEAR_MIN_DEFAULT,
   cohortYearNow,
+  companyPasses2023Filter,
   countFoundersByYear,
   founderVisibleAtYear,
   type Deal,
@@ -63,6 +64,8 @@ type MediaCard = {
   title: string;
   hue: string;
   pop: number;
+  /** Company id — at most one media card per companyId */
+  companyId: string;
   /** Real sourced logo path when available */
   logoUrl?: string;
   /** Real photo thumb (company site / OG / official press) when available */
@@ -233,6 +236,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
   type ThumbMeta = { path: string; sourceUrl: string };
   const [thumbById, setThumbById] = useState<Record<string, ThumbMeta>>({});
   const thumbByIdRef = useRef(thumbById);
+  const [companyPassIds, setCompanyPassIds] = useState<Set<string>>(() => new Set());
+  const companyPassIdsRef = useRef(companyPassIds);
   const yearMax = cohortYearNow();
   const yearMin = YEAR_MIN_DEFAULT;
   const [scrubYear, setScrubYear] = useState(yearMax);
@@ -280,6 +285,14 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
   useEffect(() => {
     thumbByIdRef.current = thumbById;
   }, [thumbById]);
+  useEffect(() => {
+    companyPassIdsRef.current = companyPassIds;
+    (window as unknown as { __NETWORKS_COMPANY_PASS__?: string[] }).__NETWORKS_COMPANY_PASS__ = [
+      ...companyPassIds,
+    ];
+    // Re-gate company nodes once the shared 2023-or-later pass set arrives.
+    apiRef.current?.applyYear(scrubRef.current);
+  }, [companyPassIds]);
   useEffect(() => {
     let cancelled = false;
     fetch("/company-logos/manifest.json")
@@ -330,6 +343,12 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       .then((r) => r.json())
       .then((data: { deals?: Record<string, Deal> }) => {
         if (!cancelled) setDeals(data.deals ?? {});
+      })
+      .catch(() => {});
+    fetch("/data/networks-company-recency.json")
+      .then((r) => r.json())
+      .then((data: { passIds?: string[] }) => {
+        if (!cancelled) setCompanyPassIds(new Set(data.passIds ?? []));
       })
       .catch(() => {});
     return () => {
@@ -888,11 +907,26 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       };
       (window as unknown as { __NETWORKS_EDGE_STATS__?: typeof edgeStats }).__NETWORKS_EDGE_STATS__ = edgeStats;
 
+      const founderCount = p.foIds?.length ?? 0;
+      const coIdsArr = p.coIds ?? [];
+      const passSet = companyPassIdsRef.current;
+      const companyNodePasses = (nodeIdx: number): boolean => {
+        if (passSet.size === 0) return true; // data not loaded yet — don't blank the graph
+        const ci = nodeIdx - founderCount;
+        if (ci < 0 || ci >= coIdsArr.length) return true;
+        return companyPasses2023Filter(coIdsArr[ci], passSet);
+      };
       const nodeVisible = new Uint8Array(n);
       const applyYearVisibility = (scrub: number) => {
         for (let i = 0; i < n; i++) {
-          if (p.kind[i] === 0) nodeVisible[i] = founderVisibleAtYear(yearArr[i], scrub, yearMax) ? 1 : 0;
-          else nodeVisible[i] = 1;
+          if (p.kind[i] === 0) {
+            // Founder marks keep year scrub; company cards/nodes carry the 2023-or-later gate.
+            nodeVisible[i] = founderVisibleAtYear(yearArr[i], scrub, yearMax, yearMin) ? 1 : 0;
+          } else if (p.kind[i] === 1) {
+            nodeVisible[i] = companyNodePasses(i) ? 1 : 0;
+          } else {
+            nodeVisible[i] = 1;
+          }
         }
         const sizeAttr = geo.getAttribute("size") as import("three").BufferAttribute;
         for (let i = 0; i < n; i++) {
@@ -1072,6 +1106,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         __NETWORKS_SET_YEAR__?: (y: number) => void;
       };
       w.__NETWORKS_POSTER__ = p;
+      (w as unknown as { __NETWORKS_COMPANY_PASS__?: string[] }).__NETWORKS_COMPANY_PASS__ = [...companyPassIdsRef.current];
       w.__NETWORKS_FADE__ = 1;
       const applyScaleNow = (scale: number) => {
         const dist = scaleToDist(scale);
@@ -1342,10 +1377,12 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           cand.sort((a, b) => b.score - a.score || a.dist - b.dist);
           const maxCards = ww < 500 ? 4 : 6;
           const out: Card[] = [];
+          const passCards = companyPassIdsRef.current;
           for (const c of cand) {
             if (out.length >= maxCards) break;
             const fid = p.foIds[c.i] ?? "";
             const deal = dealsRef.current[fid];
+            if (passCards.size > 0 && deal?.companyId && !companyPasses2023Filter(deal.companyId, passCards)) continue;
             const ci = p.campus[c.i];
             out.push({
               key: `c-${c.i}`,
@@ -1376,12 +1413,17 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             const tb = db?.companyId && thumbByIdRef.current[db.companyId] ? 1 : 0;
             return tb - ta || b.score - a.score;
           }).slice(0, Math.min(cand.length, 90));
+          const seenCompany = new Set<string>();
+          const passNow = companyPassIdsRef.current;
           for (let mi = 0; mi < pool.length && media.length < maxMedia; mi++) {
             const c = pool[mi];
             const fid = p.foIds[c.i] ?? "";
             const deal = dealsRef.current[fid];
             const cid = deal?.companyId;
             if (!cid) continue;
+            if (seenCompany.has(cid)) continue; // at most one card per company
+            if (passNow.size > 0 && !companyPasses2023Filter(cid, passNow)) continue;
+            seenCompany.add(cid);
             const thumb = thumbByIdRef.current[cid];
             const hasLogo = logoIdsRef.current.has(cid);
             if (!thumb && !hasLogo) continue; // need real image or logo — never invent
@@ -1417,6 +1459,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
               title: (deal?.companyName || deal?.founderName || "·").slice(0, 14),
               hue: campusColor,
               pop: cardW,
+              companyId: cid,
               logoUrl,
               imageUrl,
               imageSourceUrl,
@@ -1707,6 +1750,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             <div
               key={m.key}
               data-networks-media-card={m.key}
+              data-networks-media-company={m.companyId}
+              data-networks-media-title={m.title}
               data-networks-media-source={m.imageSourceUrl || ""}
               className="absolute overflow-hidden rounded-[3px] border border-slate-800/25 bg-[#f7f5f1] shadow-sm"
               style={{

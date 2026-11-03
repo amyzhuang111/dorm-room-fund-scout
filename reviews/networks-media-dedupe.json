@@ -1,0 +1,106 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:3488",
+  "betweenScale": 2.55,
+  "passCompanies": 495,
+  "n": 18,
+  "cards": [
+    {
+      "key": "m-236",
+      "companyId": "proj_ZfDsU_8R9LQv",
+      "title": "Dyna Robotics"
+    },
+    {
+      "key": "m-1821",
+      "companyId": "proj_Ovv9fb0wIFo9",
+      "title": "Keye"
+    },
+    {
+      "key": "m-696",
+      "companyId": "proj_w39r4RPgjq_e",
+      "title": "Otis Labs"
+    },
+    {
+      "key": "m-1926",
+      "companyId": "proj_sq8rq1AFiVO_",
+      "title": "Assemble"
+    },
+    {
+      "key": "m-1052",
+      "companyId": "proj_wfmDtDLJpZMS",
+      "title": "Storiara"
+    },
+    {
+      "key": "m-216",
+      "companyId": "proj_3GKPU6aVYaev",
+      "title": "The Zillennial"
+    },
+    {
+      "key": "m-831",
+      "companyId": "proj_1HbxIWF4rS-w",
+      "title": "Copperlane"
+    },
+    {
+      "key": "m-1255",
+      "companyId": "proj_BBxeAZHkRbCF",
+      "title": "Syncere"
+    },
+    {
+      "key": "m-396",
+      "companyId": "proj_ha4vMOGaUy5i",
+      "title": "Perceptron ML"
+    },
+    {
+      "key": "m-498",
+      "companyId": "proj_v3W_XLM9oxBM",
+      "title": "Revise Robotic"
+    },
+    {
+      "key": "m-316",
+      "companyId": "proj_u-RlUftIY8mH",
+      "title": "Civic"
+    },
+    {
+      "key": "m-1603",
+      "companyId": "proj_0r9rQDyKIEo7",
+      "title": "Fed10"
+    },
+    {
+      "key": "m-156",
+      "companyId": "proj_FgQqoPFk9Vk5",
+      "title": "OnGov"
+    },
+    {
+      "key": "m-115",
+      "companyId": "proj_PubAJ5m1zeE6",
+      "title": "UAPPLY"
+    },
+    {
+      "key": "m-46",
+      "companyId": "proj_u14m2WT2PEIA",
+      "title": "Phia"
+    },
+    {
+      "key": "m-114",
+      "companyId": "proj_WCe206R3EJV1",
+      "title": "Reason Machine"
+    },
+    {
+      "key": "m-1456",
+      "companyId": "proj_qqTNKwy7Xd1C",
+      "title": "Prox"
+    },
+    {
+      "key": "m-1231",
+      "companyId": "proj_o-M5xhPvgGSY",
+      "title": "Forma Systems"
+    }
+  ],
+  "uniqueCompanyIds": 18,
+  "duplicateCompanyIds": [],
+  "duplicateTitles": [],
+  "passOnWindow": 495,
+  "failingPass": [],
+  "knownBadHit": [],
+  "rule": "Company passes when at least one founder is a current student or has enrollment_grad_year >= 2023 (shared methodology 2023-or-later filter)."
+}
