@@ -1,6 +1,5 @@
-// Verified public university startup sourcing destinations discovered 2026-11-03.
-// A directory's existence does not verify a person or startup. Each imported
-// company retains its underlying source URL and evidence roles.
+// 2026 public university startup sources. "implemented" entries have
+// verified source records in data/campus-universe.db; discovery entries do not.
 import type { SourceCatalogueEntry } from "./source-quality";
 
 export const LATE_2026_CAMPUS_SOURCE_ROSTERS: SourceCatalogueEntry[] = [
@@ -34,8 +33,9 @@ export const LATE_2026_CAMPUS_SOURCE_ROSTERS: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Exact Founder/Co-Founder titles and MBA graduation years; cohort funding is non-dilutive program support, not a VC round."
     ],
-    "status": "unconfigured",
-    "statusNote": "New batch26 source data staged for verification and database import."
+    "status": "implemented",
+    "statusNote": "Imported in official-source batch26 and deduplicated in campus-universe.db on 2026-11-03. Named founders, alumni and team members retain their evidenced roles.",
+    "dbSourceId": "src_v3_hbs_edu"
   },
   {
     "id": "cat_new_hae_2026",
@@ -67,8 +67,9 @@ export const LATE_2026_CAMPUS_SOURCE_ROSTERS: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "These are alumni founders, not a current Harvard student roster; no exact graduation years."
     ],
-    "status": "unconfigured",
-    "statusNote": "New batch29 source data staged for verification and database import."
+    "status": "implemented",
+    "statusNote": "Imported in official-source batch29 and deduplicated in campus-universe.db on 2026-11-03. Named founders, alumni and team members retain their evidenced roles.",
+    "dbSourceId": "src_v3_harvardae_org"
   },
   {
     "id": "cat_new_ucdavis_littlebang_2026",
@@ -100,8 +101,9 @@ export const LATE_2026_CAMPUS_SOURCE_ROSTERS: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Project pitch and student venture participation do not prove incorporation or an individual's founder title."
     ],
-    "status": "unconfigured",
-    "statusNote": "New batch31 source data staged for verification and database import."
+    "status": "implemented",
+    "statusNote": "Imported in official-source batch31 and deduplicated in campus-universe.db on 2026-11-03. Named founders, alumni and team members retain their evidenced roles.",
+    "dbSourceId": "src_v3_innovate_ucdavis_edu"
   },
   {
     "id": "cat_new_ucla_draper_2026",
@@ -133,8 +135,9 @@ export const LATE_2026_CAMPUS_SOURCE_ROSTERS: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "It includes alumni and cross-campus startups; founder names, enrollment and funding must be checked separately."
     ],
-    "status": "unconfigured",
-    "statusNote": "New batch32 source data staged for verification and database import."
+    "status": "implemented",
+    "statusNote": "Imported in official-source batch32 and deduplicated in campus-universe.db on 2026-11-03. Named founders, alumni and team members retain their evidenced roles.",
+    "dbSourceId": "src_v3_anderson_ucla_edu"
   },
   {
     "id": "cat_new_dartmouth_magnuson_2026",
@@ -166,8 +169,9 @@ export const LATE_2026_CAMPUS_SOURCE_ROSTERS: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "No founders or schools for individual participants printed on this event page; venue is not enrollment."
     ],
-    "status": "unconfigured",
-    "statusNote": "New batch32 source data staged for verification and database import."
+    "status": "implemented",
+    "statusNote": "Imported in official-source batch32 and deduplicated in campus-universe.db on 2026-11-03. Named founders, alumni and team members retain their evidenced roles.",
+    "dbSourceId": "src_v3_luma_com"
   },
   {
     "id": "cat_new_ucla_anderson_accel",
