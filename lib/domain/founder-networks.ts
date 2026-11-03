@@ -923,6 +923,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
         campusId,
         campusLabel: campusId ? meta.uniLabels.get(campusId) ?? campusId : null,
         stage,
+        sourceUrl: link.sourceUrl,
       });
     }
     // Signal-first roster: later stages / known stage above alphabetical dump.

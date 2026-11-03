@@ -604,10 +604,20 @@ function NetworkMemberEntry({
         >
           {member.companyName}
         </Link>
-        <button type="button" onClick={onPreview} aria-label={`Quick view ${member.companyName}`}
-          className="min-h-8 shrink-0 rounded border border-[color:var(--line)] px-2 text-[10px] font-semibold text-[color:var(--cobalt)] hover:bg-[#eff2fd]">
-          Preview
-        </button>
+        <div className="flex shrink-0 items-center gap-1.5">
+          {member.sourceUrl && /^https?:\/\//i.test(member.sourceUrl) ? (
+            <a href={member.sourceUrl} target="_blank" rel="noopener noreferrer"
+              title="Open the published evidence for this network connection"
+              className="inline-flex min-h-8 items-center rounded border border-[color:var(--line)] px-2 text-[10px] font-semibold text-[color:var(--fg-2)] hover:bg-[#f3f6fc]"
+              data-network-evidence-link="">
+              Evidence
+            </a>
+          ) : null}
+          <button type="button" onClick={onPreview} aria-label={`Quick view ${member.companyName}`}
+            className="min-h-8 shrink-0 rounded border border-[color:var(--line)] px-2 text-[10px] font-semibold text-[color:var(--cobalt)] hover:bg-[#eff2fd]">
+            Preview
+          </button>
+        </div>
       </div>
     </div>
   );
