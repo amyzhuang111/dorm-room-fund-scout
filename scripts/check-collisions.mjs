@@ -127,6 +127,8 @@ for (const vp of VIEWPORTS) {
         if (!text) continue;
         const parent = node.parentElement;
         if (!parent || SKIP.has(parent.tagName) || isSkipped(parent)) continue;
+        // Canvas/map labels are measured via glyph boxes below; skip their HTML text twins.
+        if (parent.closest("[data-canvas-label], [data-map-label], [data-globe-label]")) continue;
         // Skip raw SVG text nodes — handled via <text> elements below
         if (parent.closest("svg") && parent.tagName !== "FOREIGNObject" && parent.closest("foreignObject") == null) {
           if (parent.tagName === "text" || parent.tagName === "tspan") continue;
@@ -173,16 +175,43 @@ for (const vp of VIEWPORTS) {
         items.push({ text: text.slice(0, 80), ...c, path: pathOf(el), kind: "svg" });
       }
 
-      // Canvas / map label mirrors
+      // Canvas / map label mirrors — union of rendered glyph boxes + padding (not element bbox).
+      // One item per label so wrapped lines do not self-collide.
+      const LABEL_PAD = 3;
       for (const el of document.querySelectorAll("[data-canvas-label], [data-map-label], [data-globe-label]")) {
         if (isSkipped(el)) continue;
         const text = (el.getAttribute("data-label") || el.textContent || "").replace(/\s+/g, " ").trim();
         if (!text) continue;
-        const r = el.getBoundingClientRect();
-        if (r.width < 1 || r.height < 1) continue;
-        const c = clipRect(r, el);
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        let rects = [...range.getClientRects()].filter((r) => r.width >= 1 && r.height >= 1);
+        if (!rects.length) {
+          const r = el.getBoundingClientRect();
+          if (r.width >= 1 && r.height >= 1) rects = [r];
+        }
+        if (!rects.length) continue;
+        let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+        for (const r of rects) {
+          left = Math.min(left, r.left);
+          top = Math.min(top, r.top);
+          right = Math.max(right, r.right);
+          bottom = Math.max(bottom, r.bottom);
+        }
+        const padded = {
+          left: left - LABEL_PAD,
+          top: top - LABEL_PAD,
+          right: right + LABEL_PAD,
+          bottom: bottom + LABEL_PAD,
+        };
+        const c = clipRect(padded, el);
         if (c.w < 1 || c.h < 1) continue;
-        items.push({ text: text.slice(0, 80), ...c, path: pathOf(el), kind: "canvas-label" });
+        items.push({
+          text: text.slice(0, 80),
+          ...c,
+          path: pathOf(el),
+          kind: "canvas-label",
+          labelId: el.getAttribute("data-canvas-label") || el.getAttribute("data-map-label") || el.getAttribute("data-globe-label") || text,
+        });
       }
 
       const collisions = [];
@@ -197,6 +226,8 @@ for (const vp of VIEWPORTS) {
             Math.abs(a.y2 - b.y2) < 0.5 &&
             a.text === b.text
           ) continue;
+          if (a.labelId && b.labelId && a.labelId === b.labelId) continue;
+          if (a.path && a.path === b.path && a.text === b.text) continue;
           const x = Math.max(0, Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1));
           const y = Math.max(0, Math.min(a.y2, b.y2) - Math.max(a.y1, b.y1));
           const area = x * y;

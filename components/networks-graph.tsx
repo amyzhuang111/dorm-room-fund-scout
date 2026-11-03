@@ -116,7 +116,7 @@ function placeLabels(
   const topPad = 8;
   const bottomLimit = viewH - legendH - 6;
   const placed: LabelBox[] = [];
-  const hitPad = viewW < 900 ? 8 : 9;
+  const hitPad = viewW < 900 ? 10 : 12;
 
   const hubs: HubScreen[] = candidates.map((cluster) => {
     const center = toScreen(cluster.cx, cluster.cy);
@@ -146,8 +146,9 @@ function placeLabels(
     const fontPx = 11;
     const maxW = Math.min(190, Math.max(96, Math.min(viewW * 0.2, text.length > 26 ? 180 : 140)));
     const { w, h } = wrapLabelMetrics(text, maxW, fontPx);
-    // Dense right-side clusters: prefer outward (screen-right) angles to avoid neighbor overlap.
+    // Dense right-side / upper-right clusters: prefer outward angles; skip more aggressively.
     const rightSide = center.x > viewW * 0.52;
+    const upperRight = rightSide && center.y < viewH * 0.48;
     const baseAng = rightSide
       ? Math.atan2(center.y - viewH / 2, Math.max(24, viewW - center.x))
       : Math.atan2(center.y - viewH / 2, center.x - viewW / 2);
@@ -228,7 +229,7 @@ function placeLabels(
     }
     // Skip low-rank labels that would collide rather than force-overlap in dense right clusters.
     if (!chosen) {
-      if (cluster.rank > 6 && cluster.id !== hoverId) continue;
+      if ((cluster.rank > 6 || (upperRight && cluster.rank > 4)) && cluster.id !== hoverId) continue;
       const rimX = center.x + (rightSide ? anchorR : -anchorR * 0.2);
       const rimY = center.y;
       const trial: LabelBox = {
@@ -570,13 +571,24 @@ export function NetworksGraph({
       const my = (pa.y + pb.y) / 2;
       const dx = pb.x - pa.x;
       const dy = pb.y - pa.y;
-      // Bundle preview: pull control points toward the hub so spokes share a corridor.
-      const bend = ycBundlePreview ? 0.32 : edge.type === "cofounder" ? 0.18 : 0.12;
-      const cxCtrl = ycBundlePreview ? mx - dy * bend * 0.35 : mx - dy * bend;
-      const cyCtrl = ycBundlePreview ? my + dx * bend * 0.35 : my + dx * bend;
       ctx.beginPath();
-      ctx.moveTo(pa.x, pa.y);
-      ctx.quadraticCurveTo(cxCtrl, cyCtrl, pb.x, pb.y);
+      if (ycBundlePreview) {
+        // Route collapsed YC spokes through shared angular lanes so the hub is not a hairball.
+        const hubPt = edge.source === "net:yc" ? pa : pb;
+        const leafPt = edge.source === "net:yc" ? pb : pa;
+        const ang = Math.atan2(leafPt.y - hubPt.y, leafPt.x - hubPt.x);
+        const lanes = 8;
+        const lane = Math.floor((((ang + Math.PI) / (Math.PI * 2)) * lanes) % lanes);
+        const laneAng = -Math.PI + ((lane + 0.5) / lanes) * Math.PI * 2;
+        const bx = hubPt.x + Math.cos(laneAng) * 42;
+        const by = hubPt.y + Math.sin(laneAng) * 42;
+        ctx.moveTo(leafPt.x, leafPt.y);
+        ctx.quadraticCurveTo(bx, by, hubPt.x, hubPt.y);
+      } else {
+        const bend = edge.type === "cofounder" ? 0.18 : 0.12;
+        ctx.moveTo(pa.x, pa.y);
+        ctx.quadraticCurveTo(mx - dy * bend, my + dx * bend, pb.x, pb.y);
+      }
       const campus = a.campusId || b.campusId;
       const ink = campus && colors.get(campus) ? colors.get(campus)! : "#64748b";
       let alpha = 0.18;
@@ -868,73 +880,88 @@ export function NetworksGraph({
     return <p className="px-4 py-8 text-sm text-[color:var(--fg-2)]">Loading network graph...</p>;
   }
 
-  const renderDealBody = (deal: GraphFounderDeal) => (
-    <>
-      <div className="text-[color:var(--fg-2)]">
-        {deal.companyName ?? "Company unknown"}
-        {deal.stage ? ` · ${deal.stage}` : null}
-      </div>
-      <div className="mt-0.5 text-[10px] text-[color:var(--fg-3)]">
-        Networks: {deal.networks.length ? deal.networks.join(", ") : "unknown"}
-      </div>
-      <div className="text-[10px] text-[color:var(--fg-3)]">
-        Investors: {deal.investors.length ? deal.investors.join(", ") : "unknown"}
-        {deal.hasTopFund ? " · top fund on file" : " · not yet backed by a top fund"}
-      </div>
-    </>
-  );
-
-  const detailCard = (
-    <div
-      data-networks-detail=""
-      className="rounded border border-[color:var(--line)] bg-white px-2.5 py-2 text-xs text-[color:var(--fg)]"
-    >
-      {hover ? (
-        <>
-          <div className="font-medium">{hover.deal?.founderName ?? hover.label}</div>
-          {hover.deal ? (
-            renderDealBody(hover.deal)
-          ) : (
+  const renderDealBody = (deal: GraphFounderDeal, opts?: { featured?: boolean }) => {
+    const investors = (deal.investors ?? []).filter(Boolean);
+    return (
+      <>
+        <div className="text-[color:var(--fg-2)]">
+          {deal.companyName ?? "Company unknown"}
+          {deal.stage ? ` · ${deal.stage}` : null}
+        </div>
+        <div className="mt-0.5 text-[10px] text-[color:var(--fg-3)]">
+          Networks: {deal.networks.length ? deal.networks.join(", ") : "unknown"}
+        </div>
+        <div className="text-[10px] text-[color:var(--fg-3)]">
+          {investors.length ? (
             <>
-              <div className="text-[color:var(--fg-2)]">
-                {hover.ties.toLocaleString("en-US")} {hover.kind === "company" || hover.kind === "founder" ? "ties" : "founder links"}
-              </div>
-              {hover.shownOfTotal ? <div className="text-[color:var(--fg-3)]">{hover.shownOfTotal}</div> : null}
+              Investors: {investors.join(", ")}
+              {deal.hasTopFund ? " · top fund on file" : " · not yet backed by a top fund"}
             </>
+          ) : (
+            <>{deal.hasTopFund ? "Top fund on file" : "No named investors on file yet"}</>
           )}
-          {hover.sourceUrl ? (
-            <a
-              href={hover.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-1 inline-block text-[10px] font-medium text-[color:var(--cobalt)] hover:underline"
-            >
-              Source
-            </a>
-          ) : null}
-        </>
-      ) : featuredDefault?.kind === "founder" ? (
-        <>
-          <div className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Featured founder</div>
-          <div className="font-medium">{featuredDefault.deal.founderName}</div>
-          {renderDealBody(featuredDefault.deal)}
-        </>
-      ) : featuredDefault?.kind === "pathway" ? (
-        <>
-          <div className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Top pathway</div>
-          <div className="font-medium">{featuredDefault.label}</div>
-          <div className="text-[color:var(--fg-2)]">
-            {featuredDefault.founders.toLocaleString("en-US")} founders · {featuredDefault.companies.toLocaleString("en-US")} companies
-          </div>
-          {featuredDefault.callout ? (
-            <div className="mt-0.5 text-[10px] text-[color:var(--fg-3)]">{featuredDefault.callout}</div>
-          ) : null}
-        </>
-      ) : (
-        <div className="text-[color:var(--fg-3)]">Hover a founder or hub for deal detail.</div>
-      )}
-    </div>
-  );
+        </div>
+      </>
+    );
+  };
+
+  const renderDetailCard = (mobile: boolean) => {
+    const showingFeatured = !hover && featuredDefault?.kind === "founder";
+    return (
+      <div
+        data-networks-detail=""
+        {...(showingFeatured ? { "data-networks-featured": "" } : {})}
+        className="rounded border border-[color:var(--line)] bg-white px-2.5 py-2 text-xs text-[color:var(--fg)]"
+      >
+        {hover ? (
+          <>
+            <div className="font-medium">{hover.deal?.founderName ?? hover.label}</div>
+            {hover.deal ? (
+              renderDealBody(hover.deal)
+            ) : (
+              <>
+                <div className="text-[color:var(--fg-2)]">
+                  {hover.ties.toLocaleString("en-US")} {hover.kind === "company" || hover.kind === "founder" ? "ties" : "founder links"}
+                </div>
+                {hover.shownOfTotal ? <div className="text-[color:var(--fg-3)]">{hover.shownOfTotal}</div> : null}
+              </>
+            )}
+            {hover.sourceUrl ? (
+              <a
+                href={hover.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-1 inline-block text-[10px] font-medium text-[color:var(--cobalt)] hover:underline"
+              >
+                Source
+              </a>
+            ) : null}
+          </>
+        ) : featuredDefault?.kind === "founder" ? (
+          <>
+            <div className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">
+              Featured founder
+            </div>
+            <div className="font-medium">{featuredDefault.deal.founderName}</div>
+            {renderDealBody(featuredDefault.deal, { featured: true })}
+          </>
+        ) : featuredDefault?.kind === "pathway" ? (
+          <>
+            <div className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Top pathway</div>
+            <div className="font-medium">{featuredDefault.label}</div>
+            <div className="text-[color:var(--fg-2)]">
+              {featuredDefault.founders.toLocaleString("en-US")} founders · {featuredDefault.companies.toLocaleString("en-US")} companies
+            </div>
+            {featuredDefault.callout ? (
+              <div className="mt-0.5 text-[10px] text-[color:var(--fg-3)]">{featuredDefault.callout}</div>
+            ) : null}
+          </>
+        ) : (
+          <div className="text-[color:var(--fg-3)]">Hover a founder or hub for deal detail.</div>
+        )}
+      </div>
+    );
+  };
 
   const chromeControls = (
     <div
@@ -1009,98 +1036,95 @@ export function NetworksGraph({
 
   return (
     <div className="w-full" data-networks-desk="">
-      <div className="md:grid md:grid-cols-[minmax(0,1fr)_17.5rem] md:items-stretch">
-        <div
-          ref={wrapRef}
-          className="relative h-[300px] w-full touch-manipulation overflow-hidden bg-white sm:h-[420px] md:h-[560px]"
-          data-networks-graph=""
-          onWheel={onWheel}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={() => {
-            dragRef.current = null;
-          }}
-        >
-          <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing" aria-label="Founder networks graph" />
+      {/* Full-width graph (n3 content width): chrome sits below, not in a side column that squeezes the canvas. */}
+      <div
+        ref={wrapRef}
+        className="relative h-[300px] w-full touch-manipulation overflow-hidden bg-white sm:h-[420px] md:h-[560px]"
+        data-networks-graph=""
+        onWheel={onWheel}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={() => {
+          dragRef.current = null;
+        }}
+      >
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing" aria-label="Founder networks graph" />
 
-          <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" width={size.w} height={size.h} aria-hidden="true">
-            {labels.map((label) => {
-              const lx = label.x + label.w / 2;
-              const ly = label.y + label.h / 2;
-              return (
-                <path
-                  key={`lead-${label.id}`}
-                  d={`M ${label.rimX} ${label.rimY} L ${lx} ${ly}`}
-                  stroke="rgba(70,80,110,0.4)"
-                  strokeWidth="0.7"
-                  fill="none"
-                />
-              );
-            })}
-          </svg>
+        <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" width={size.w} height={size.h} aria-hidden="true">
+          {labels.map((label) => {
+            const lx = label.x + label.w / 2;
+            const ly = label.y + label.h / 2;
+            return (
+              <path
+                key={`lead-${label.id}`}
+                d={`M ${label.rimX} ${label.rimY} L ${lx} ${ly}`}
+                stroke="rgba(70,80,110,0.4)"
+                strokeWidth="0.7"
+                fill="none"
+              />
+            );
+          })}
+        </svg>
 
-          {labels.map((label) => (
-            <button
-              key={label.id}
-              type="button"
-              data-canvas-label={label.id}
-              className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
-              data-label-anchor-x={Math.round(label.rimX)}
-              data-label-anchor-y={Math.round(label.rimY)}
-              data-hub-x={Math.round(label.hubX)}
-              data-hub-y={Math.round(label.hubY)}
-              data-hub-r={Math.round(label.hubR)}
-              style={{
-                left: label.x,
-                top: label.y,
-                width: label.w,
-                color: label.color,
-                textShadow: "0 0 3px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)",
-              }}
-              onClick={(event) => {
-                event.stopPropagation();
-                pinHub(label.id);
-              }}
-            >
-              <span className="block whitespace-normal break-words">{label.text}</span>
-            </button>
-          ))}
-
-          {/* Single campus legend (in-frame only). Mobile: short strip so labels stay clear. */}
-          <div
-            data-networks-legend-frame=""
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-center gap-x-2 gap-y-0.5 bg-gradient-to-t from-white via-white/95 to-transparent px-2 pb-1.5 pt-4 text-[10px] text-[color:var(--fg-2)]"
+        {labels.map((label) => (
+          <button
+            key={label.id}
+            type="button"
+            data-canvas-label={label.id}
+            className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
+            data-label-anchor-x={Math.round(label.rimX)}
+            data-label-anchor-y={Math.round(label.rimY)}
+            data-hub-x={Math.round(label.hubX)}
+            data-hub-y={Math.round(label.hubY)}
+            data-hub-r={Math.round(label.hubR)}
+            style={{
+              left: label.x,
+              top: label.y,
+              width: label.w,
+              color: label.color,
+              textShadow: "0 0 3px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)",
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              pinHub(label.id);
+            }}
           >
-            {campusLegend.slice(0, 8).map((item) => (
-              <span key={item.id} className="inline-flex items-center gap-1">
-                <span className="inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />
-                <span className="hidden sm:inline">{item.label}</span>
-                <span className="sm:hidden">{item.label.split(" ")[0]}</span>
-              </span>
-            ))}
-            <span className="ml-auto hidden text-[9px] text-[color:var(--fg-3)] sm:inline">
-              {!ycExpanded ? "YC collapsed · click hub to expand" : "YC expanded · click hub to collapse"}
-            </span>
-          </div>
-        </div>
+            <span className="block whitespace-normal break-words">{label.text}</span>
+          </button>
+        ))}
 
-        {/* Desktop side rail: detail, insights, investors, compact legend — off the graph surface. */}
-        <aside
-          data-networks-rail=""
-          className="hidden flex-col gap-3 border-l border-[color:var(--line)] bg-[#fafbfe] p-3 md:flex"
+        <div
+          data-networks-legend-frame=""
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-center gap-x-2 gap-y-0.5 bg-gradient-to-t from-white via-white/95 to-transparent px-2 pb-1.5 pt-4 text-[10px] text-[color:var(--fg-2)]"
         >
-          {detailCard}
-          {insightsBlock}
-          {investorList}
-          <div className="mt-auto border-t border-[color:var(--line)] pt-2">{chromeControls}</div>
-        </aside>
+          {campusLegend.slice(0, 8).map((item) => (
+            <span key={item.id} className="inline-flex items-center gap-1">
+              <span className="inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />
+              <span className="hidden sm:inline">{item.label}</span>
+              <span className="sm:hidden">{item.label.split(" ")[0]}</span>
+            </span>
+          ))}
+          <span className="ml-auto hidden text-[9px] text-[color:var(--fg-3)] sm:inline">
+            {!ycExpanded ? "YC collapsed · click hub to expand" : "YC expanded · click hub to collapse"}
+          </span>
+        </div>
       </div>
 
-      {/* Mobile chrome: uncrowded toggle + detail (campus legend stays in-frame only). */}
-      <div className="space-y-1.5 border-t border-[color:var(--line)] px-3 py-1.5 md:hidden">
-        {chromeControls}
-        {detailCard}
+      {/* Desktop chrome under the graph: no empty stretch band, Top networks stays near the fold. */}
+      <aside
+        data-networks-rail=""
+        className="hidden gap-3 border-t border-[color:var(--line)] bg-[#fafbfe] p-3 md:grid md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_minmax(0,0.95fr)]"
+      >
+        {renderDetailCard(false)}
+        {insightsBlock}
+        {investorList}
+      </aside>
+
+      {/* Mobile: featured card fully below the graph frame, then slim controls (not crowding the card). */}
+      <div className="space-y-2 border-t border-[color:var(--line)] px-3 py-2 md:hidden">
+        {renderDetailCard(true)}
+        <div className="pt-1">{chromeControls}</div>
       </div>
     </div>
   );

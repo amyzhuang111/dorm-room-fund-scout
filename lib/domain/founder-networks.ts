@@ -131,6 +131,24 @@ function isTopFundLabel(name: string): boolean {
   return TOP_FUND_LABELS.has(name.trim().toLowerCase());
 }
 
+/** True for accelerators/programs/labs that should never appear as "investors" on a deal card. */
+function isProgramOrNetworkLabel(name: string): boolean {
+  const raw = name.trim();
+  if (!raw) return true;
+  const lower = raw.toLowerCase();
+  for (const net of CAMPUS_AND_LAB) {
+    if (net.label.toLowerCase() === lower) return true;
+  }
+  for (const rule of SOURCE_URL_RULES) {
+    if (rule.label.toLowerCase() === lower) return true;
+  }
+  return /vip-?x|y combinator|\byc\b|a16z speedrun|speedrun|startup challenge|bridge award|venture prize|summer launchpad|thiel fellowship|\bneo\b|pear\s*xc|mayfield fellows|skydeck|\belab\b|delta v|venturecat|tsai city|startup lab|grasp lab|cardinal ventures|innovate x|cal launchpad|summer venture studio|^velocity$/i.test(raw);
+}
+
+function realInvestorNames(names: string[]): string[] {
+  return names.filter((name) => !isProgramOrNetworkLabel(name));
+}
+
 function parseStage(raw: string | null | undefined): string | null {
   if (!raw) return null;
   const m = raw.match(/\b(Pre-?Seed|Seed|Series\s*[A-F]|Angel)\b/i);
@@ -1271,7 +1289,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
       companies.find((id) => companySet.has(id)) ??
       [...(meta.companyFounders.entries())].find(([, set]) => set.has(founderId))?.[0] ??
       null;
-    const investors = companyId ? meta.companyInvestors.get(companyId) ?? [] : [];
+    const investors = realInvestorNames(companyId ? meta.companyInvestors.get(companyId) ?? [] : []);
     const networkLabels = networksByFounder.get(founderId) ?? [];
     const hasTopFund =
       investors.some((name) => isTopFundLabel(name)) || networkLabels.some((name) => isTopFundLabel(name));

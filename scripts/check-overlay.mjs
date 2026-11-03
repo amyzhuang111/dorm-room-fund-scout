@@ -255,12 +255,33 @@ for (const vp of VIEWPORTS) {
         networksUnobstructed = Number(((1 - blocked / total) * 100).toFixed(1));
       }
 
+      // Featured / detail cards must sit fully outside the graph canvas on mobile.
+      let networksCardOnGraph = null;
+      if (graph) {
+        const g = rectOf(graph);
+        const cards = [...document.querySelectorAll("[data-networks-detail], [data-networks-featured]")].filter(visible);
+        const hits = [];
+        for (const card of cards) {
+          const r = rectOf(card);
+          if (!intersects(g, r, 1)) continue;
+          const hit = area(g, r);
+          if (hit < 8) continue;
+          hits.push({
+            kind: card.hasAttribute("data-networks-featured") ? "featured" : "detail",
+            hit: Math.round(hit),
+            text: (card.textContent || "").trim().slice(0, 48),
+          });
+        }
+        networksCardOnGraph = hits;
+      }
+
       return {
         overlayCount: overlays.length,
         onText: dedupe(onText, "text"),
         onControl: dedupe(onControl, "control"),
         calloutOnLabel: dedupe(calloutOnLabel, "text"),
         networksUnobstructed,
+        networksCardOnGraph,
       };
     }, OVERLAY_SEL);
 
@@ -272,9 +293,11 @@ for (const vp of VIEWPORTS) {
       overlayOnControl: found.onControl.length,
       calloutOnLabel: (found.calloutOnLabel || []).length,
       networksUnobstructed: found.networksUnobstructed,
+      networksCardOnGraph: (found.networksCardOnGraph || []).length,
       onText: found.onText.slice(0, 12),
       onControl: found.onControl.slice(0, 12),
       onCalloutLabel: (found.calloutOnLabel || []).slice(0, 12),
+      cardOnGraph: (found.networksCardOnGraph || []).slice(0, 8),
     };
     report.pages.push(entry);
     report.totals.overlayOnText += entry.overlayOnText;
@@ -298,6 +321,12 @@ for (const vp of VIEWPORTS) {
       failed = true;
       report.ok = false;
       fail(`${label}: networks-unobstructed=${entry.networksUnobstructed}% (need ≥85)`);
+    }
+    // Mobile /networks: featured/detail cards must not intersect the graph canvas rect.
+    if (route === "/networks" && vp.name === "375" && entry.networksCardOnGraph > 0) {
+      failed = true;
+      report.ok = false;
+      fail(`${label}: card-on-graph=${entry.networksCardOnGraph} ${JSON.stringify(entry.cardOnGraph).slice(0, 220)}`);
     }
     if (!failed) {
       const u = entry.networksUnobstructed != null ? ` unobstructed=${entry.networksUnobstructed}%` : "";

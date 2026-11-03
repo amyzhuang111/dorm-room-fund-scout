@@ -101,16 +101,16 @@ export function NetworksApp() {
 
   return (
     <div className="min-h-screen bg-white text-[color:var(--fg)]" data-networks-page="">
-      <header className="border-b border-[color:var(--line)] bg-white">
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-0.5 px-4 py-2.5 sm:gap-2 sm:px-5 sm:py-5">
+      <header className="border-b border-[color:var(--line)] bg-white" data-networks-hero="">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-1 px-4 py-3 sm:gap-2 sm:px-5 sm:py-5">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
             <CampusSeal label="CS" title="Campus Scout" size="sm" />
             <span className="text-[10px] font-medium uppercase tracking-[0.08em] sm:text-xs">Campus Scout</span>
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Networks</h1>
-          <p className="hidden max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:block sm:text-sm sm:leading-normal">
-            Deal-flow map of accelerators, campus programs, labs, and funds that reach student founders in the verified investable corpus of{" "}
-            {data.corpusCompanies.toLocaleString("en-US")} companies.
+          <h1 className="text-xl font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
+          <p className="max-w-3xl text-[13px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal">
+            A map of the programs and funds that already reach student founders across{" "}
+            {data.corpusCompanies.toLocaleString("en-US")} companies. Open a hub to see who is on that path.
           </p>
           <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs">
             {data.totals.founderLinks.toLocaleString("en-US")} founder links · {data.totals.networks.toLocaleString("en-US")} networks ·{" "}
@@ -119,17 +119,17 @@ export function NetworksApp() {
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:gap-8 sm:px-5 sm:py-6">
+      <main className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:gap-4 sm:px-5 sm:py-5">
         <section aria-labelledby="graph-heading" className="order-1 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-1">
-          <div className="px-3 py-2 sm:px-4 sm:py-3">
+          <div className="px-3 py-2 sm:px-4 sm:py-2.5">
             <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
-              Deal flow graph
+              Network map
             </h2>
             <p className="mt-0.5 hidden text-[13px] text-[color:var(--fg-2)] sm:block">
-              Founder dots are colored by campus. Programs and investors are hubs. Co-founder links and membership ties are real. Hover a founder for company, stage, and backers. Toggle Not yet backed by a top fund for uncrowded deals.
+              Founders are colored by campus. Hubs are programs and funds. Lines are real co-founder and membership ties. Hover a founder for the company and backers.
             </p>
             <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
-              Campus-colored founders, program hubs, real co-founder ties.
+              Campus colored founders and program hubs.
             </p>
           </div>
           <NetworksGraph
