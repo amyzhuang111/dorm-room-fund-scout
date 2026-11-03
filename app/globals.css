@@ -1742,3 +1742,73 @@ details:not([open]) > :not(summary) {
     display: none !important;
   }
 }
+
+
+/* r55: company white shell + opaque site chrome (no cream around mobile dossier) */
+html[data-sample="halflight"] header[data-site-chrome],
+html[data-sample="halflight"] [data-site-nav] {
+  background: #FFFFFF !important;
+}
+[data-company-shell="white"] {
+  background: #FFFFFF !important;
+  color: #0B0E17;
+}
+[data-company-product-chrome] {
+  background: #FFFFFF !important;
+}
+
+
+/* r56 desk: full-bleed map fold — mast in overlay, open-lane hero, compact peak under it */
+@media (min-width: 1024px) {
+  [data-fold-desk-bleed="1"][data-fold-hierarchy] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+  }
+  [data-fold-overlay-mast] [data-founder-search] {
+    margin-bottom: 0 !important;
+  }
+  [data-fold-overlay-mast] [data-founder-search] label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  [data-fold-overlay-mast] [data-founder-search] input {
+    margin-top: 0 !important;
+    height: 2.25rem !important;
+  }
+  [data-fold-overlay-mast] [data-fold-filter-chips] {
+    margin-bottom: 0 !important;
+  }
+  [data-fold-overlay-mast] [data-fold-current-view] {
+    margin-bottom: 0 !important;
+  }
+  /* Open-lane owns campus ranks; rail already uses mobile peak — shrink figure, keep month bars. */
+  [data-fold-open-lane-peak] [data-fold-peak-share-mobile] {
+    border-bottom-width: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  [data-fold-open-lane-peak] [data-fold-peak-figure] {
+    font-size: 28px !important;
+    height: auto !important;
+  }
+  [data-fold-open-lane-peak] [data-fold-peak-caption] {
+    font-size: 12px !important;
+  }
+  [data-fold-open-lane-peak] [data-fold-peak-campus-rank-mobile],
+  [data-fold-open-lane-peak] [data-fold-peak-campus-rank-mobile-reserve] {
+    display: none !important;
+  }
+  [data-fold-open-lane-peak] [data-fold-peak-bars],
+  [data-fold-open-lane-peak] [data-fold-peak-month-bars],
+  [data-fold-open-lane-peak] [data-fold-peak-bars-mobile],
+  [data-fold-open-lane-peak] [data-fold-peak-bars-mobile-reserve] {
+    height: 3.25rem !important;
+    margin-top: 0.35rem !important;
+  }
+  [data-fold-overlay-peak] {
+    max-width: min(340px, 34%);
+  }
+}

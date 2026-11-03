@@ -1,9 +1,85 @@
 import { chromium } from "playwright";
 import fs from "fs";
+import { execSync } from "child_process";
+import { homedir } from "os";
+import path from "path";
 
 const BASE = process.env.BASE || "http://127.0.0.1:3460";
 const OUT = process.env.OUT || "/workspace/reviews/shots/campus-scout/wip";
 fs.mkdirSync(OUT, { recursive: true });
+
+/** Resolve the commit that BASE actually serves — never trust a stale GIT_HEAD env alone. */
+function readVercelToken() {
+  try {
+    const auth = JSON.parse(fs.readFileSync(path.join(homedir(), ".local/share/com.vercel.cli/auth.json"), "utf8"));
+    return auth.token || auth.accessToken || null;
+  } catch {
+    return process.env.VERCEL_TOKEN || null;
+  }
+}
+
+async function resolveGitHead(base) {
+  const localHead = (() => {
+    try {
+      return execSync("git rev-parse HEAD", { encoding: "utf8" }).trim();
+    } catch {
+      return null;
+    }
+  })();
+
+  // Explicit deployed sha wins (CI / ops override for the URL under test).
+  if (process.env.DEPLOYED_GIT_HEAD?.trim()) return process.env.DEPLOYED_GIT_HEAD.trim();
+
+  let host = null;
+  try {
+    host = new URL(base).host;
+  } catch {
+    host = null;
+  }
+
+  if (host && /vercel\.app$/i.test(host)) {
+    try {
+      // Deployment id from Link: ...?dpl=dpl_xxx or from hostname via inspect
+      const res = await fetch(base.replace(/\/$/, "") + "/", { method: "HEAD", redirect: "follow" });
+      const link = res.headers.get("link") || "";
+      const m = link.match(/dpl_([A-Za-z0-9]+)/) || link.match(/(dpl_[A-Za-z0-9]+)/);
+      let dpl = m ? (m[1].startsWith("dpl_") ? m[1] : `dpl_${m[1]}`) : null;
+      if (!dpl) {
+        // hostname is the deployment alias — resolve via vercel inspect JSON
+        try {
+          const raw = execSync(`npx vercel inspect ${host} --json`, { encoding: "utf8", timeout: 60000 });
+          const j = JSON.parse(raw);
+          dpl = j.id || null;
+        } catch {
+          dpl = null;
+        }
+      }
+      const token = readVercelToken();
+      if (dpl && token) {
+        const api = await fetch(`https://api.vercel.com/v13/deployments/${dpl}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (api.ok) {
+          const body = await api.json();
+          const sha = body?.meta?.gitCommitSha || body?.meta?.githubCommitSha || null;
+          if (sha) return sha;
+        }
+      }
+    } catch (err) {
+      console.warn("resolveGitHead vercel failed:", err?.message || err);
+    }
+  }
+
+  // Local / fallback: worktree HEAD that built this server.
+  if (localHead) return localHead;
+
+  // Last resort: GIT_HEAD only if it matches local (prevents sandbox stale r51 sha).
+  const envHead = process.env.GIT_HEAD?.trim() || null;
+  if (envHead && localHead && (envHead === localHead || localHead.startsWith(envHead) || envHead.startsWith(localHead.slice(0, 7)))) {
+    return localHead;
+  }
+  return envHead;
+}
 
 async function shot(page, name) {
   const path = `${OUT}/${name}.png`;
@@ -78,6 +154,7 @@ async function openBrowseFilters(page) {
   }
 }
 
+const gitHead = await resolveGitHead(BASE);
 fs.writeFileSync(
   `${OUT}/META.json`,
   JSON.stringify(
@@ -85,18 +162,21 @@ fs.writeFileSync(
       shotAt: new Date().toISOString(),
       base: BASE,
       out: OUT,
-      gitHead: process.env.GIT_HEAD || null,
+      gitHead,
       buildId: process.env.BUILD_ID || null,
       routes: {
         home: "/",
         companies: "/companies",
         signals: "/companies?feed=leaderboard",
       },
+      mobileDpr: 2,
+      framing: "control companies offsets; mobile DPR2; dossier scrollY=0 with site nav",
     },
     null,
     2,
   ),
 );
+console.log("META gitHead", gitHead);
 
 const browser = await chromium.launch({ headless: true });
 
@@ -250,7 +330,12 @@ const browser = await chromium.launch({ headless: true });
 }
 
 {
-  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  const page = await browser.newPage({
+    viewport: { width: 375, height: 812 },
+    deviceScaleFactor: 2,
+    hasTouch: true,
+    isMobile: true,
+  });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await waitFoundersReady(page);
@@ -400,39 +485,20 @@ const browser = await chromium.launch({ headless: true });
 
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(1200);
-  // Pin the company name lead in frame (below sticky chrome via scroll-mt on hero).
-  const dossierM = page.locator("[data-company-mobile-hero]").first();
-  if (await dossierM.count()) {
-    await dossierM.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
-    await page.waitForTimeout(400);
-    // If sticky nav still clips the name, nudge down so data-company-name-lead is fully visible.
-    await page.evaluate(() => {
-      const name = document.querySelector("[data-company-name-lead]");
-      if (!name) return;
-      const top = name.getBoundingClientRect().top;
-      if (top < 56) window.scrollBy(0, top - 64);
-    });
-    await page.waitForTimeout(200);
-  }
-  await shot(page, "company-sim-375");
-  // r54: restore 65b4329 full-record-375 = dossier fold at scrollY=0 (founders / identity / CONFIRMED),
-  // not the scrolled [data-company-full-record] panel (that view scored worse).
+  // Dossier fold at scrollY=0 so site nav + white shell stay in frame (stable control framing).
+  await page.waitForSelector("[data-site-nav]", { timeout: 20000 });
+  await page.waitForSelector("[data-company-shell='white'], [data-company-mobile-hero]", { timeout: 20000 });
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(350);
-  const dossierFold = page.locator("[data-company-mobile-hero], [data-dossier-founders-lead], [data-full-record-identity]").first();
-  if (await dossierFold.count()) {
-    await dossierFold.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(300);
-    await page.evaluate(() => {
-      const name = document.querySelector("[data-company-name-lead], [data-dossier-founders-lead]");
-      if (!name) return;
-      const top = name.getBoundingClientRect().top;
-      if (top < 56) window.scrollBy(0, top - 64);
-    });
-    await page.waitForTimeout(200);
-  } else {
-    await page.evaluate(() => window.scrollTo(0, 0));
-  }
+  await page.waitForFunction(() => {
+    const nav = document.querySelector("[data-site-nav]");
+    if (!nav) return false;
+    const r = nav.getBoundingClientRect();
+    return r.top >= -1 && r.bottom > 40;
+  }, { timeout: 5000 });
+  await shot(page, "company-sim-375");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(250);
   await shot(page, "company-full-record-375");
   await page.goto(`${BASE}/data`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForSelector("[data-corpus-explorer]", { timeout: 30000 });

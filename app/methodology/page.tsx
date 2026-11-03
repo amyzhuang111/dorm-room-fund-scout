@@ -2,6 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { RUBRIC_DIMENSIONS, RUBRIC_VERSION } from "@/lib/scoring/rubric";
 import { SCREENING_CONFIG } from "@/lib/screening/config";
+import {
+  openLaneDefinitionText,
+  openLaneStrongDefinition,
+  openLaneTopFundDefinition,
+} from "@/lib/domain/open-lane";
 
 function loadRecencyFunnel() {
   try {
@@ -24,6 +29,7 @@ export default function MethodologyPage() {
       <nav className="micro sticky top-20 hidden space-y-3 lg:block" aria-label="On this page">
         <a href="#products" className="block text-fg-3">Products</a>
         <a href="#promotion" className="block text-fg-3">Promotion</a>
+        <a href="#open-lane" className="block text-fg-3">Open lane</a>
         <a href="#founder-recency" className="block text-fg-3">Founder recency</a>
       </nav>
       <div className="max-w-[680px] space-y-8">
@@ -122,6 +128,26 @@ export default function MethodologyPage() {
         </table>
       </section>
 
+
+
+      <section id="open-lane" data-methodology-open-lane="">
+        <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Open lane on the map</h2>
+        <p className="mt-1 text-sm text-muted">
+          The desk map fold shows how many strong student founders still have no top fund on record. The wording below is
+          generated from <code className="font-mono text-xs">lib/domain/open-lane.ts</code> so it cannot drift from the matcher.
+        </p>
+        <p className="mt-3 text-sm text-foreground" data-methodology-open-lane-def="">
+          <span data-methodology-open-lane-def-strong="">{openLaneStrongDefinition()}</span>{" "}
+          <span data-methodology-open-lane-def-top-fund="">{openLaneTopFundDefinition()}</span>
+        </p>
+        <p className="sr-only" data-methodology-open-lane-def-full="">
+          {openLaneDefinitionText()}
+        </p>
+        <p className="mt-2 text-xs text-muted">
+          Open lane = strong signal and no top fund on the founder&apos;s program list. Top VC names use the same
+          <code className="font-mono text-xs"> investorFactIsTopVc </code> helper as the network heatmaps.
+        </p>
+      </section>
 
       <section id="founder-recency">
         <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Founder recency gate</h2>

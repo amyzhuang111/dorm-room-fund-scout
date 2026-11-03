@@ -206,9 +206,10 @@ export function TileGlobe({
     const fit = () => {
       const wide = window.innerWidth >= 1024;
       // r53 mobile: taller full-bleed stage (~88vh) so globe dominates under the deck sheet.
-      const target = Math.round(window.innerHeight * (wide ? 0.78 : 0.88));
+      // r56 desk: taller full-bleed (~86vh) so the map owns the first screen with fold overlays.
+      const target = Math.round(window.innerHeight * (wide ? 0.86 : 0.88));
       const next = wide
-        ? Math.max(560, Math.min(780, target))
+        ? Math.max(640, Math.min(900, target))
         : Math.max(520, Math.min(760, target));
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));

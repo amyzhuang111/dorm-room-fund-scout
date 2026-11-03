@@ -241,13 +241,20 @@ export function MobileFounderPeek({
           return (
             <div
               key={founder.id}
-              className="inline-flex h-9 max-w-[11rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2"
+              className="inline-flex h-9 max-w-[13rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2"
               data-founder-card=""
               data-founder-peek-chip=""
             >
               <CampusSeal label={founder.campus} size="sm" />
-              <span className="min-w-0 truncate text-[11px] font-semibold leading-none text-[color:var(--fg,#0B0E17)]" data-founder-name="">
-                {founder.name}
+              <span className="min-w-0 truncate leading-none">
+                <span className="block truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]" data-founder-name="">
+                  {founder.name}
+                </span>
+                {founder.company ? (
+                  <span className="mt-0.5 block truncate font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]" data-founder-company="">
+                    {founder.company}
+                  </span>
+                ) : null}
               </span>
               {href ? (
                 <Link

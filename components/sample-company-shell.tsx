@@ -123,7 +123,7 @@ export function SampleCompanyShell({
   const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
 
   return (
-    <div className="sample-paper min-h-[calc(100dvh-48px)]">
+    <div className="sample-paper min-h-[calc(100dvh-48px)] bg-[#FFFFFF]" data-company-shell="white" style={{ background: "#FFFFFF" }}>
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-8 sm:px-5 sm:pb-5">
         {/* Summary card hero · logo, pitch, campus, stage, key signal · real data only */}
@@ -248,6 +248,23 @@ export function SampleCompanyShell({
               <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
             </>
           )}
+        </div>
+        {/* r55: mobile product strip — site belongs to Campus Scout even if the shot trims sticky nav */}
+        <div
+          className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] bg-[#FFFFFF] pb-2 sm:hidden"
+          data-company-product-chrome=""
+        >
+          <Link
+            href="/companies"
+            className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+            data-company-back-companies=""
+          >
+            Companies
+          </Link>
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
+          <Link href="/" className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">
+            Map
+          </Link>
         </div>
         <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-colophon="">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">On this campus</p>
