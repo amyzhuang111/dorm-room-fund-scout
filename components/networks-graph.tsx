@@ -116,7 +116,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const [hover, setHover] = useState<HoverState | null>(null);
   const [selectedHub, setSelectedHub] = useState<string | null>(null);
   const [legendOtherOpen, setLegendOtherOpen] = useState(false);
-  const [zoomScale, setZoomScale] = useState(NETWORK_ZOOM_PRESETS[1].scale);
+  const [zoomScale, setZoomScale] = useState<number>(NETWORK_ZOOM_PRESETS[1].scale);
   const yearMax = cohortYearNow();
   const yearMin = YEAR_MIN_DEFAULT;
   const [scrubYear, setScrubYear] = useState(yearMax);
@@ -124,7 +124,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const scrubRef = useRef(yearMax);
   const playRef = useRef(false);
   const playAccRef = useRef(0);
-  const camRef = useRef({ x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale });
+  const camRef = useRef<{ x: number; y: number; scale: number }>({ x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale });
   const dragRef = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null);
   const hoverRef = useRef<HoverState | null>(null);
   const selectedRef = useRef<string | null>(null);
