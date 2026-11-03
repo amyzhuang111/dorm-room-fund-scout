@@ -38,13 +38,13 @@ function UniversityRow({
       // belongs to a campus it doesn't.
       href={buildHref(basePath, current, switchingCampus ? { university: u.id, project: null } : { university: u.id })}
       title={u.name}
-      aria-label={`${u.name} — ${coverage.label}`}
+      aria-label={`${u.name} · ${coverage.label}`}
       className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm ${current.university === u.id ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
     >
       <span className="truncate">{label}</span>
       <span className="flex shrink-0 items-center gap-1.5">
         <span className={`text-[10px] ${userCampus ? "text-foreground" : coverage.cls}`}>{userCampus ? "User-added" : coverage.label}</span>
-        {/* A campus that hasn't been scanned shows only its status, never a numeric "0" —
+        {/* A campus that hasn't been scanned shows only its status, never a numeric "0"  · 
             unscanned is not the same claim as "zero found here." */}
         {(u.sourcesConfigured > 0 || count > 0) && <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] text-muted">{count}</span>}
       </span>
@@ -82,7 +82,7 @@ export function FilterSidebar({
   // unresearched, per brief section 1, so there's nothing to list for them).
   return (
     <CollapsibleSidebar>
-    <aside className="w-full shrink-0 border-b border-border-c bg-surface p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
+    <aside className="paper-card w-full shrink-0 self-start p-4 sm:w-[232px]">
       <div className="mb-3 flex items-baseline justify-between">
         <span className="ui-label">Universities</span>
         {current.university && (

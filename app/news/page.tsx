@@ -8,7 +8,7 @@ import { buildHref } from "@/lib/domain/url";
 const TIERS = ["S+", "S", "A", "B", "C", "D"];
 
 export const metadata = {
-  title: "News — Campus Scout",
+  title: "News · Campus Scout",
   description: "Public news about startups and founders in Campus Scout.",
 };
 
@@ -34,10 +34,11 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
   }
 
   return (
-    <div className="min-h-full bg-white text-black">
-      <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-black">News</h1>
-        <p className="mt-1 text-sm text-black">
+    <div className="min-h-full">
+      <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
+        <p className="page-eyebrow">Public headlines</p>
+        <h1 className="page-title">News</h1>
+        <p className="page-subtitle">
           Public headlines about startups and founders in Campus Scout. A story is kept when the startup name appears with a founder, school, or company domain.
           News is sourcing context. It is not an input to Founder Signal, eligibility, or investment score.
         </p>

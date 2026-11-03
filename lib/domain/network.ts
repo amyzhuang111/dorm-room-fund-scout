@@ -12,7 +12,7 @@ import { unverifiedLinkedInByPerson } from "./queries";
 
 export type NodeType = "university" | "community" | "person" | "project";
 
-export interface NetworkGuide extends LayoutGuide {}
+export type NetworkGuide = LayoutGuide;
 
 export interface NetworkNode {
   id: string;

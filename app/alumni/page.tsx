@@ -1,6 +1,5 @@
-import { AlumniReferrals } from "@/components/alumni-referrals";
-import { alumniReferralDirectory, introCoverage } from "@/lib/domain/who-can-intro";
+import { redirect } from "next/navigation";
 
 export default function AlumniPage() {
-  return <AlumniReferrals rows={alumniReferralDirectory()} coverage={introCoverage()} />;
+  redirect("/map/network");
 }

@@ -21,7 +21,7 @@ const aden =
   "Bachelor's degree Computer Science at University of California, Berkeley 2018 - 2027. Working to complete my final 30 units.";
 const zihao = "Bachelor of Science - BS Computer Science at University of Pennsylvania 2022 - 2026.";
 const sanjith =
-  "Massachusetts Institute of Technology — BS, Electrical Engineering and Computer Science MAY 2028 (EXPECTED).";
+  "Massachusetts Institute of Technology · BS, Electrical Engineering and Computer Science MAY 2028 (EXPECTED).";
 const jathin =
   "UC Berkeley Management, Entrepreneurship, & Technology Program: Jathin Pranav Singaraju (M.E.T. '27) received first place in the Snap Inc. Challenge at CalHacks.";
 const hannah =

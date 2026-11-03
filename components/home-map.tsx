@@ -2,9 +2,11 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { loadCandidates, loadGlobeMap } from "@/lib/client/map-prefetch";
 import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
 import { useAskHighlight } from "./ask-highlight";
+import { PageHeader } from "./page-header";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 import { useUserPipeline } from "./user-pipeline-provider";
 import { mergeCatalog, userMapMarkers } from "@/lib/domain/user-pipeline";
@@ -24,7 +26,7 @@ const GlobeView = dynamic(() => globeChunk().then((mod) => mod.GlobeView), {
 const NetworkMapApp = dynamic(() => networkChunk().then((mod) => mod.NetworkMapApp), {
   ssr: false,
   loading: () => (
-    <div className="grid min-h-[80vh] w-full place-items-center bg-white text-sm text-black" style={{ height: "max(80vh, calc(100dvh - 3.5rem))" }}>
+    <div className="grid min-h-[70vh] w-full place-items-center bg-surface text-sm text-muted">
       Loading network…
     </div>
   ),
@@ -33,8 +35,90 @@ const NetworkMapApp = dynamic(() => networkChunk().then((mod) => mod.NetworkMapA
 export function HomeMap({ initial, network }: { initial: Record<string, string | undefined>; network: boolean }) {
   return (
     <ScoutNav basePath="/" initial={initial}>
-      {network ? <NetworkMapApp /> : <HomeMapBody />}
+      <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
+        <HomeChrome network={network} />
+        {network ? (
+          <div className="mt-8">
+            <div className="overflow-hidden rounded-2xl border border-border-c">
+              <NetworkMapApp />
+            </div>
+            <p className="viz-legend">Color marks university, community, person, and company. A square outline is user-added.</p>
+          </div>
+        ) : (
+          <div className="mt-8">
+            <HomeMapBody />
+          </div>
+        )}
+      </div>
     </ScoutNav>
+  );
+}
+
+function HomeViewToggle({ network }: { network: boolean }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  function setHomeView(view: "globe" | "network") {
+    const params = new URLSearchParams(searchParams.toString());
+    if (view === "network") params.set("view", "network");
+    else params.delete("view");
+    const qs = params.toString();
+    router.replace(qs ? `/?${qs}` : "/", { scroll: false });
+  }
+
+  return (
+    <div className="segmented" role="group" aria-label="Homepage view">
+      <button type="button" className={network ? "" : "is-active"} aria-pressed={!network} onClick={() => setHomeView("globe")}>
+        Map
+      </button>
+      <button type="button" className={network ? "is-active" : ""} aria-pressed={network} onClick={() => setHomeView("network")}>
+        Network
+      </button>
+    </div>
+  );
+}
+
+function HomeChrome({ network }: { network: boolean }) {
+  const nav = useScoutNav()!;
+  const [universities, setUniversities] = useState<UniversitySummary[]>([]);
+  const [knownResultCount, setKnownResultCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancel = false;
+    loadGlobeMap()
+      .then((data) => {
+        if (cancel) return;
+        setUniversities(data.universities ?? []);
+        setKnownResultCount(data.candidateCount ?? 0);
+      })
+      .catch(() => {});
+    return () => {
+      cancel = true;
+    };
+  }, []);
+
+  const selected = universities.find((university) => university.id === nav.current.university);
+  const monitored = universities.filter((university) => university.sourcesConfigured > 0).length;
+  const stats = selected
+    ? [
+        { n: selected.companyCount, label: "companies" },
+        { n: selected.founderCount, label: "founders" },
+        { n: selected.sourcesConfigured, label: "sources" },
+      ]
+    : [
+        { n: knownResultCount, label: "in view" },
+        { n: universities.length || null, label: "campuses" },
+        { n: universities.length ? monitored : null, label: "monitored" },
+      ];
+
+  return (
+    <PageHeader
+      eyebrow={selected ? `Campus map · ${selected.name}` : "Campus map"}
+      title="Find pre-seed student prospects, by university."
+      subtitle="A Founder Scout and Startup Scout workspace for pre-seed student prospects."
+      stats={stats}
+      aside={<HomeViewToggle network={network} />}
+    />
   );
 }
 
@@ -103,19 +187,18 @@ function HomeMapBody() {
       active
       resultsPending={!candidatesReady}
       knownResultCount={knownResultCount}
+      hideStats
+      flush
     />
   );
 }
 
 function GlobeShell() {
   return (
-    <div className="p-2">
-      <div
-        className="relative grid h-[min(68dvh,820px)] min-h-[420px] w-full place-items-center overflow-hidden rounded-xl border border-border-c sm:min-h-[520px]"
-        style={{ background: "#f7f6f8" }}
-      >
-        <p className="ui-label">Loading globe</p>
-      </div>
+    <div
+      className="relative grid h-[min(62dvh,680px)] min-h-[420px] w-full place-items-center overflow-hidden rounded-2xl border border-border-c bg-surface sm:min-h-[520px]"
+    >
+      <p className="ui-label">Loading globe</p>
     </div>
   );
 }

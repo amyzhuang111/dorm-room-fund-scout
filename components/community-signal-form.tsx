@@ -18,7 +18,7 @@ export function CommunitySignalForm({ sourceId, current }: { sourceId: string; c
       <form action={setCommunitySignal} className="space-y-2.5 border-t border-border-c p-2.5">
         <input type="hidden" name="sourceId" value={sourceId} />
         <p className="text-[11px] text-muted">
-          Enter what you actually read — real threads, real commenters. Never a guess to fill a gap; use &quot;Insufficient&quot; if that&apos;s
+          Enter what you actually read · real threads, real commenters. Never a guess to fill a gap; use &quot;Insufficient&quot; if that&apos;s
           honestly what the search turned up.
         </p>
         <div>
@@ -90,7 +90,7 @@ export function CommunitySignalForm({ sourceId, current }: { sourceId: string; c
         </div>
         <div>
           <label className="block text-xs font-medium text-muted">
-            Rationale (required) — cite real threads/comments; note if a claim came from a club officer/member rather than an independent
+            Rationale (required) · cite real threads/comments; note if a claim came from a club officer/member rather than an independent
             commenter
           </label>
           <textarea

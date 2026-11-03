@@ -183,7 +183,7 @@ for (const row of analysis.density.rows) {
 const penn = analysis.metros.rows.find((row) => row.label === "Penn");
 assert.ok(penn && penn.all.count > 0, "Penn should have headquartered startups");
 
-assert.equal(analysis.pitchbook.title, "PitchBook VC-backed alumni founders (2015–2026)");
+assert.equal(analysis.pitchbook.title, "PitchBook VC-backed alumni founders (2015-2026)");
 assert.ok(analysis.pitchbook.rows.length >= 5);
 assert.equal(analysis.pitchbook.sourceUrl, "https://pitchbook.com/news/articles/pitchbook-university-rankings");
 let previousPitch = Number.POSITIVE_INFINITY;

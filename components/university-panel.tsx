@@ -9,7 +9,6 @@ import { CampusBenchmarks } from "./campus-benchmarks";
 import { PersonLinkButton } from "./person-link";
 import { ScoutLink } from "./scout-nav";
 import { CompanyNameLink } from "./company-website";
-import { DrfPresenceNote } from "./drf-presence-note";
 import { EntityMarks } from "./entity-marks";
 
 const TABS = ["prospects", "builders", "signals", "sources"] as const;
@@ -70,7 +69,6 @@ export function UniversityPanel({
         {university.lastCheckedAt ? ` · last checked ${university.lastCheckedAt.slice(0, 10)}` : " · never checked"}
       </p>
       {university.coordSource && <p className="mt-0.5 text-[11px] text-muted">Coordinates: {university.coordSource}</p>}
-      <DrfPresenceNote presence={university.drfPresence} />
       <CampusBenchmarks pitchbook={university.pitchbook} hitRate={university.hitRate} />
 
       <div className="mt-3 flex gap-1 border-b border-border-c">

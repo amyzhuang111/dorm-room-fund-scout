@@ -13,7 +13,7 @@ export function NotesSection({ entityType, entityId, notes }: { entityType: stri
             </p>
           </li>
         ))}
-        {notes.length === 0 && <p className="text-sm text-muted">No notes yet — analyst inferences and hunches belong here, labeled as yours, not as evidence.</p>}
+        {notes.length === 0 && <p className="text-sm text-muted">No notes yet · analyst inferences and hunches belong here, labeled as yours, not as evidence.</p>}
       </ul>
       <form action={addNote} className="flex gap-2">
         <input type="hidden" name="entityType" value={entityType} />
@@ -21,7 +21,7 @@ export function NotesSection({ entityType, entityId, notes }: { entityType: stri
         <input type="hidden" name="author" value="scout" />
         <textarea
           name="body"
-          placeholder="Add a note (your own inference or reminder — kept separate from sourced evidence)"
+          placeholder="Add a note (your own inference or reminder · kept separate from sourced evidence)"
           rows={2}
           required
           className="flex-1 rounded-md border border-border-c bg-surface px-2 py-1 text-xs"

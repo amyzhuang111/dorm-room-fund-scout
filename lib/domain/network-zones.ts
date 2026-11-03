@@ -86,7 +86,6 @@ export function groupKey(placeKey: string): string {
   if (placeKey.includes("skydeck")) return "berkeley skydeck";
   if (/(^| )pear( |$)/.test(placeKey)) return "pear";
   if (placeKey.includes("prod fellowship")) return "prod fellowship";
-  if (placeKey.includes("dorm room fund")) return "dorm room fund";
   if (placeKey.includes("gc venture") || placeKey.includes("rough draft")) return "gc venture fellows";
   if (placeKey === "y combinator" || placeKey.startsWith("y combinator ")) return "y combinator";
   if (placeKey.includes("a16z speedrun") || placeKey === "speedrun") return "a16z speedrun";

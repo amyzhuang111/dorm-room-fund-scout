@@ -10,7 +10,7 @@
 // is a different Berkeley program and is not this entity.
 
 import crypto from "node:crypto";
-import { getDb, newId, nowIso } from "../../lib/db/client";
+import { getDb, nowIso } from "../../lib/db/client";
 import { mergeRecordedPair } from "../../lib/domain/dedupe";
 
 const CHECKED_ON = "2026-09-27";
@@ -316,30 +316,6 @@ function main() {
         "person_6p2ELmfBpFG5",
         "Both rows store https://www.linkedin.com/in/julianweng and the name Julian Weng at Penn.",
         "https://www.linkedin.com/in/julianweng"
-      );
-    }
-
-    const navarro = db.prepare(`SELECT enrollment_status, enrollment_grad_year FROM people WHERE id = 'person_drf_jeremy_navarro'`).get() as
-      | { enrollment_status: string | null; enrollment_grad_year: number | null }
-      | undefined;
-    if (navarro && navarro.enrollment_grad_year === 2021 && navarro.enrollment_status !== "older_alumni") {
-      const evidence = "Archived DRF team page (2020) lists Jeremy Navarro on the HQ roster, Middlebury College. Stored class year is 2021, so the bucket is older alumni.";
-      const url = "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team";
-      db.prepare(
-        `UPDATE people SET enrollment_status = 'older_alumni', enrollment_evidence = ?, enrollment_source_url = ?, enrollment_basis = 'verified' WHERE id = 'person_drf_jeremy_navarro'`
-      ).run(evidence, url);
-      counts.enrollmentFixed += 1;
-      record(
-        db,
-        "enrollment:person_drf_jeremy_navarro",
-        "person",
-        "person_drf_jeremy_navarro",
-        "fix",
-        "enrollment_status",
-        navarro.enrollment_status,
-        "older_alumni",
-        evidence,
-        url
       );
     }
   });

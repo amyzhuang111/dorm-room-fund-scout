@@ -60,7 +60,6 @@ interface CompanyIn {
 
 const PHOTON = "https://photon.codes/";
 const LUMA = "https://luma.com/tinyfish-hvv6";
-const GITHUB = "https://github.com/danieltyx";
 const DANIEL_LI = "https://www.linkedin.com/in/danieltian316";
 const RYAN_LI = "https://www.linkedin.com/in/ryanzhuuuu";
 const CRIMSON = "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/";

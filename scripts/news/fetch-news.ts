@@ -41,7 +41,7 @@ import { parseRss, plainText, type RssItem } from "../../lib/domain/news-rss";
 import type { MatchConfidence } from "../../lib/domain/news-types";
 import { classifySourceType, strongerConfidence } from "../../lib/domain/news-types";
 
-const UA = "CampusScout/1.0 (news fetch; student sourcing; +https://github.com/amyzhuang111/dorm-room-fund-scout)";
+const UA = "CampusScout/1.0 (news fetch; student sourcing)";
 
 const CAMPUS_RSS: { key: string; sourceName: string; url: string }[] = [
   { key: "crimson", sourceName: "The Harvard Crimson", url: "https://www.thecrimson.com/feeds/section/news/" },
@@ -896,7 +896,6 @@ async function main() {
   cursor = 0;
   attempted = 0;
   await Promise.all([worker("company"), worker("company"), worker("company")]);
-  const companyAttempts = attempted;
   const companyAttemptsDone = attempted;
   cursor = 0;
   await Promise.all([worker("founder"), worker("founder")]);

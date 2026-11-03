@@ -49,7 +49,7 @@ function SearchField({
           name="q"
           defaultValue={current.q ?? ""}
           placeholder={placeholder}
-          className="w-full rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
+          className="w-full rounded-full border border-border-c bg-surface px-4 py-1.5 text-sm placeholder:text-muted"
         />
       </form>
     );
@@ -61,7 +61,7 @@ function SearchField({
       value={value}
       onChange={(event) => setValue(event.target.value)}
       placeholder={placeholder}
-      className="min-w-[200px] flex-1 rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
+      className="min-w-[200px] flex-1 rounded-full border border-border-c bg-surface px-4 py-1.5 text-sm placeholder:text-muted"
     />
   );
 }
@@ -95,43 +95,43 @@ export function ExploreToolbar({
   if (current.feedback) activeFilters.push({ key: "feedback", label: current.feedback === "hidden" ? "Hidden" : current.feedback === "liked" ? "Liked" : "Passed" });
 
   return (
-    <div className="border-b border-border-c px-3 py-2">
+    <div className="pb-4">
       <div className="mb-3">
         <EnrollmentChips basePath={basePath} current={current} counts={counts} />
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <SearchField basePath={basePath} current={current} placeholder={searchPlaceholder} />
 
-        <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
+        <div className="segmented shrink-0" role="group" aria-label="Candidate kind">
           <ScoutLink
-            href={buildHref("/startup/discover", current, {})}
-            className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/startup") ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
+            href={buildHref("/companies", current, {})}
+            className={basePath.startsWith("/startup") ? "is-active" : ""}
           >
             Companies
           </ScoutLink>
           <ScoutLink
-            href={buildHref("/founder/discover", { university: current.university, q: current.q, enroll: current.enroll, tier: current.tier, sort: current.sort }, {})}
-            className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/founder") ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
+            href={buildHref("/founders", { university: current.university, q: current.q, enroll: current.enroll, tier: current.tier, sort: current.sort }, {})}
+            className={basePath.startsWith("/founder") ? "is-active" : ""}
           >
             Founders
           </ScoutLink>
         </div>
 
         {showViewSwitch && (
-          <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
+          <div className="segmented shrink-0" role="group" aria-label="Result view">
             {views.map((v) => (
               <ScoutLink
                 key={v}
                 href={buildHref(basePath, current, { view: v })}
-                className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${view === v ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
+                className={view === v ? "is-active" : ""}
               >
-                {v}
+                {v === "globe" ? "Map" : v === "table" ? "List" : "Network"}
               </ScoutLink>
             ))}
           </div>
         )}
 
-        <ScoutLink href="/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
+        <ScoutLink href="/signals/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
           Scan sources
         </ScoutLink>
       </div>

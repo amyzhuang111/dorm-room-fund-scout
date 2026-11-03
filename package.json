@@ -1,5 +1,5 @@
 {
-  "name": "dorm-room-fund-scout",
+  "name": "campus-scout",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "prebuild": "tsx scripts/precompute-map-cache.ts",
     "start": "next start",
     "lint": "eslint",
@@ -32,18 +32,10 @@
     "test:enrollment-infer": "tsx lib/domain/enrollment-infer.test.ts",
     "classify-enrollment": "tsx scripts/ingest/classify-enrollment.ts",
     "fetch-hotspot-founders": "tsx scripts/ingest/fetch-hotspot-founders.ts",
-    "import:drf-presence": "tsx scripts/ingest/import-drf-campus-presence.ts",
-    "test:drf-presence": "tsx lib/domain/drf-presence.test.ts",
-    "import:drf-alumni": "tsx scripts/ingest/import-drf-alumni.ts",
-    "import:drf-linkedin-pass2": "tsx scripts/ingest/import-drf-linkedin-pass2.ts",
-    "import:drf-linkedin-pass3": "tsx scripts/ingest/import-drf-linkedin-pass3.ts",
-    "import:drf-linkedin-verified": "tsx scripts/ingest/import-drf-linkedin-verified.ts",
-    "test:drf-linkedin-verified": "tsx scripts/ingest/import-drf-linkedin-verified.test.ts",
     "import:pitchbook": "tsx scripts/ingest/import-pitchbook-rankings.ts",
     "test:campus-signals": "tsx lib/domain/pitchbook.test.ts && tsx lib/domain/campus-hit-rate.test.ts && tsx lib/domain/same-school.test.ts",
-    "test:drf-intro": "tsx lib/domain/drf-intro.test.ts",
-    "test:who-can-intro": "tsx lib/domain/who-can-intro.test.ts",
     "test:startup-card": "tsx lib/domain/startup-card.test.ts",
+    "test:directory": "tsx lib/domain/directory.test.ts",
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",
     "import:pear-hc-prod": "tsx scripts/ingest/import-pear-hc-prod-members.ts",
     "import:founders-inc-spc": "tsx scripts/ingest/import-founders-inc-spc.ts",
@@ -59,7 +51,8 @@
     "test:ask-retrieve": "tsx lib/domain/ask-retrieve.test.ts",
     "test:ask-gemini": "tsx lib/domain/ask-gemini.test.ts",
     "test:auth": "tsx lib/auth/access.test.ts && tsx lib/auth/magic-link.test.ts && tsx lib/auth/required-env.test.ts && tsx lib/auth/send-email.test.ts && tsx lib/auth/auth-routes.test.ts",
-    "ingest:all": "tsx scripts/ingest/seed-universities.ts && tsx scripts/ingest/fetch-drf-portfolio.ts && tsx scripts/ingest/fetch-penn-labs.ts && tsx scripts/ingest/fetch-penn-startup-challenge.ts && tsx scripts/ingest/enrich-penn-labs-github.ts && tsx scripts/ingest/fetch-pennapps-devpost.ts && tsx scripts/ingest/fetch-treehacks-devpost.ts && tsx scripts/ingest/fetch-calhacks-devpost.ts && tsx scripts/ingest/fetch-wdb-github.ts && tsx scripts/ingest/fetch-grasp-startups.ts && tsx scripts/ingest/fetch-hack4impact.ts && tsx scripts/ingest/fetch-penn-electric-racing.ts && tsx scripts/ingest/fetch-penn-aerial-robotics.ts && tsx scripts/ingest/fetch-eb-berkeley.ts && tsx scripts/ingest/fetch-skydeck.ts && tsx scripts/ingest/fetch-yc-directory.ts && tsx scripts/ingest/fetch-github-founder-bios.ts && tsx scripts/ingest/fetch-velocity.ts && tsx scripts/ingest/fetch-mit-deltav.ts && tsx scripts/ingest/fetch-hackthenorth-devpost.ts && tsx scripts/ingest/fetch-mt-alumni.ts && tsx scripts/ingest/fetch-penn-depth.ts && tsx scripts/ingest/fetch-pennapps-xxii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiv-devpost.ts && tsx scripts/ingest/seed-source-tiers.ts && tsx scripts/ingest/backfill-founder-status.ts && tsx scripts/screen/match-portfolio.ts && tsx scripts/screen/run-gates.ts"
+    "ingest:all": "tsx scripts/ingest/seed-universities.ts && tsx scripts/ingest/fetch-penn-labs.ts && tsx scripts/ingest/fetch-penn-startup-challenge.ts && tsx scripts/ingest/enrich-penn-labs-github.ts && tsx scripts/ingest/fetch-pennapps-devpost.ts && tsx scripts/ingest/fetch-treehacks-devpost.ts && tsx scripts/ingest/fetch-calhacks-devpost.ts && tsx scripts/ingest/fetch-wdb-github.ts && tsx scripts/ingest/fetch-grasp-startups.ts && tsx scripts/ingest/fetch-hack4impact.ts && tsx scripts/ingest/fetch-penn-electric-racing.ts && tsx scripts/ingest/fetch-penn-aerial-robotics.ts && tsx scripts/ingest/fetch-eb-berkeley.ts && tsx scripts/ingest/fetch-skydeck.ts && tsx scripts/ingest/fetch-yc-directory.ts && tsx scripts/ingest/fetch-github-founder-bios.ts && tsx scripts/ingest/fetch-velocity.ts && tsx scripts/ingest/fetch-mit-deltav.ts && tsx scripts/ingest/fetch-hackthenorth-devpost.ts && tsx scripts/ingest/fetch-mt-alumni.ts && tsx scripts/ingest/fetch-penn-depth.ts && tsx scripts/ingest/fetch-pennapps-xxii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiv-devpost.ts && tsx scripts/ingest/seed-source-tiers.ts && tsx scripts/ingest/backfill-founder-status.ts && tsx scripts/screen/match-portfolio.ts && tsx scripts/screen/run-gates.ts",
+    "test:marker-radius": "tsx lib/domain/marker-radius.test.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.65",
@@ -70,6 +63,7 @@
     "ai": "^7.0.117",
     "better-sqlite3": "^13.0.3",
     "cheerio": "^1.2.0",
+    "cobe": "^0.6.5",
     "d3-force": "^3.0.0",
     "graphology": "^0.26.0",
     "graphology-layout-forceatlas2": "^0.10.1",
@@ -95,6 +89,7 @@
     "apify-client": "^2.25.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "playwright": "^1.64.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5"

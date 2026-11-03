@@ -28,7 +28,6 @@ function memoryDb() {
     CREATE TABLE person_project_roles (id TEXT PRIMARY KEY, person_id TEXT, project_id TEXT, claim_id TEXT);
     CREATE TABLE affiliations (id TEXT PRIMARY KEY, person_id TEXT, university_id TEXT, claim_id TEXT);
     CREATE TABLE claims (id TEXT PRIMARY KEY, entity_type TEXT, entity_id TEXT);
-    CREATE TABLE drf_alumni (id TEXT PRIMARY KEY, person_id TEXT);
     CREATE TABLE entity_redirects (old_id TEXT PRIMARY KEY, entity_type TEXT, survivor_id TEXT);
     CREATE TABLE program_signals (id TEXT PRIMARY KEY, person_id TEXT, claim_id TEXT);
     CREATE TABLE company_facts (id TEXT PRIMARY KEY, project_id TEXT);

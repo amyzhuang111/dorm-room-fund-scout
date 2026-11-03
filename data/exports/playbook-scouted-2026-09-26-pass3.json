@@ -1,6 +1,6 @@
 {
  "generated_at": "2026-09-25T20:42:18-04:00",
- "schema_note": "Fields mirror amyzhuang111/dorm-room-fund-scout lib/db/schema.sql (projects, people, affiliations, person_project_roles, claims). Third pass. signal_tier (S/A/B/C/D) per playbook tier rules, null where no rule applies. kind=hackathon_project marks Devpost projects (not confirmed companies). See scouted3_summary.md.",
+ "schema_note": "Fields mirror campus-scout lib/db/schema.sql (projects, people, affiliations, person_project_roles, claims). Third pass. signal_tier (S/A/B/C/D) per playbook tier rules, null where no rule applies. kind=hackathon_project marks Devpost projects (not confirmed companies). See scouted3_summary.md.",
  "companies": [
   {
    "name": "Dimely",

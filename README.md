@@ -1,8 +1,7 @@
-# Campus Universe — a Dorm Room Fund-shaped startup scout
+# Campus Scout
 
-An independent scouting workspace to discover and prioritize
-pre-seed, student-founder prospects by university. **Not an official Dorm
-Room Fund product.** There is no automatic outreach anywhere in the app.
+A scouting workspace any fund can use to discover and prioritize
+pre-seed, student-founder prospects by university. There is no automatic outreach anywhere in the app.
 
 This README is the honest status report: what's real, what's checked, and
 what's still missing. It's written to match what the code actually does,
@@ -138,7 +137,7 @@ conversation looked plausible and turned out to be wrong or incomplete.
 **What was actually wrong, in order of discovery:**
 
 1. **Pale-on-pale colors** (the literal first bug you reported). Fixed by
-   sampling real DRF purple tones instead of near-white tints.
+   sampling the purple accent tones instead of near-white tints.
 2. **A second, self-inflicted bug from fixing #1**: recoloring the
    landcover/landuse/park layers without also capping their `fill-opacity`
    painted a near-opaque solid-color wall over the whole map at low zoom —
@@ -188,14 +187,11 @@ with `apt-get download` and pointed `LD_LIBRARY_PATH` at the extracted
 - Confirm the same real screenshot (visible continents, oceans, boundary
   lines, labels, and our own campus markers with labels) on all of: an
   isolated non-bundled test page, the local production server, and the
-  live deployment at https://dorm-room-fund-scout.vercel.app
+  live deployment
 
-## Visual identity now sampled directly from dormroomfund.com
+## Visual identity
 
-A later, explicit request asked to closely mimic DRF's actual site colors
-and type, superseding the "not sampled reference-site values" instruction
-below for this specific aspect. Real values pulled from DRF's own
-stylesheet (`dormroomfund.webflow.shared.css`):
+A later pass set the palette and type from a reference stylesheet, superseding the "not sampled reference-site values" instruction below for this specific aspect:
 
 - **Font**: Satoshi (`var(--font-family--heading/body)` in their CSS) —
   loaded from Fontshare, the font's own free CDN.
@@ -206,7 +202,7 @@ stylesheet (`dormroomfund.webflow.shared.css`):
   selected-campus marker). Status colors use their actual dark-text-on-
   light-bg pairs (green `#114e0b` on `#cef5ca`, yellow `#5e5515` on
   `#fcf8d8`, red `#3b0b0b` on `#f8e4e4`) rather than an opacity trick.
-- **Type scale**: DRF's headings are weight 500, letter-spacing 0, line-
+- **Type scale**: Headings are weight 500, letter-spacing 0, line-
   height ~1.15 at marketing-hero sizes (h1 `clamp(3.25rem,5.8vw,5.125rem)`)
   — kept the same weight/letter-spacing/line-height here but scaled down
   for a dense app UI rather than reproducing hero-sized headings. Body
@@ -230,7 +226,7 @@ style (land/water/boundaries/labels) to their own brand palette via
 `setPaintProperty` on every style layer.
 
 **Replaced `react-globe.gl` (a photo-textured three.js sphere) with this
-same real stack**, recolored to the DRF-sampled tokens instead of YCGlobe's
+same real stack**, recolored to these tokens instead of YCGlobe's
 orange/cream theme:
 - `components/globe-view.tsx` now dynamically imports `maplibre-gl`
   client-side, creates a real `Map` with the OpenFreeMap style, switches to
@@ -261,9 +257,9 @@ orange/cream theme:
 - Did not adopt: YCGlobe's animated entry splash or draggable/resizable
   panels (same reasoning as the prior pass — out of scope for this tool).
 
-## Second design pass: pushed DRF fidelity further + studied dashboard.vclense.ch/ycglobe
+## Second design pass: pushed visual fidelity further + studied dashboard.vclense.ch/ycglobe
 
-- **Body text now 16px** (was 15px) — matches DRF's own `1rem` body size
+- **Body text now 16px** (was 15px) — matches a `1rem` body size
   exactly rather than approximately.
 - Studied YCGlobe's real stylesheet directly (it's a maplibre-gl-based
   YC-companies globe with a sidebar of grouped filters and floating
@@ -271,7 +267,7 @@ orange/cream theme:
   Influencers" — each with a compact uppercase 10px accent-colored label,
   11px pill toggles, and `backdrop-filter: blur(10px) saturate(1.15)`
   glass panels with soft shadows). Borrowed the **structural pattern**,
-  not their color palette (still DRF-sampled tokens):
+  not their color palette (still these tokens):
   - New `.ui-label` (10px, 700 weight, uppercase, 0.1em tracking, accent
     color), `.pill-toggle`, `.status-dot`, and `.glass-panel` /
     `.glass-panel-head` utilities in `globals.css`.
@@ -298,9 +294,8 @@ A large interface spec arrived mid-session. No `design.md` exists anywhere
 in this repo (checked) — flagging that rather than silently ignoring the
 request to read one. The spec's palette section says "suggested design
 tokens, not sampled reference-site values," so the new look uses that
-spec's own dark neutral palette rather than literally sampling
-dormroomfund.com's colors (which an earlier, separate request had asked
-for) — the detailed spec is the more specific and more recent instruction.
+spec's own dark neutral palette rather than the lighter reference palette
+from the earlier pass — the detailed spec is the more specific and more recent instruction.
 
 **Done, real, verified:**
 - New design tokens (`app/globals.css`): dark neutral palette
@@ -413,8 +408,7 @@ where the first pass left off:**
 
 ## Live deployment
 
-**https://dorm-room-fund-scout.vercel.app** — the app deployed as-is, serving
-the real ingested data described below.
+The hosted app serves the ingested data described below.
 
 Vercel's serverless filesystem is read-only outside `/tmp`, but SQLite needs
 to write a journal/WAL file next to the `.db` file even for plain reads. So
@@ -458,32 +452,22 @@ key. `VERCEL` is set by Vercel itself and should not be added by hand.
 
 ## Sign-in for Pipeline and Shortlist
 
-Discover, News, Hotspots, Verification, Signals, Sources, the globe, the
-network map, and Ask AI stay public. Pipeline and Shortlist, their API
-routes (`/api/user-pipeline`), and the note, assessment, and pipeline
-edit actions require a signed-in member. The gate is the Next.js 16
-`proxy.ts` file (the renamed middleware) plus a check inside each of
-those routes and actions. Hiding the nav link is not the lock.
+Discover, News, Hotspots, Verification, Signals, Sources, Pipeline,
+Shortlist, the globe, the network map, and Ask stay open without an
+account. The Next.js 16 `proxy.ts` file (the renamed middleware) does not
+lock any route.
 
-Auth.js (NextAuth v5) keeps the session in an encrypted JWT. No new
-database is required. If Upstash Redis is already configured for the
-pipeline store, a magic link is also single-use. Without Redis, the link
-expires after 15 minutes.
+Auth.js (NextAuth v5) can still keep an optional session in an encrypted
+JWT. No new database is required. If Upstash Redis is already configured
+for the pipeline store, a magic link is also single-use. Without Redis,
+the link expires after 15 minutes.
 
-Anyone with an `@dormroomfund.com` address can sign in. `ALLOWED_EMAILS`
-adds more addresses, comma-separated. When that variable is omitted, these
-two addresses are still allowed so the owner can get in:
-
-```
-zhuanga@engineering.upenn.edu
-amyzhuang880@gmail.com
-```
-
-Set the variable in Vercel to that same list. Anyone else sees: "Pipeline
-and Shortlist are for Dorm Room Fund members, sign in with your DRF email".
+`ALLOWED_EMAILS` is an optional comma-separated allowlist for that sign-in.
+When it is omitted, the allowlist is empty. The workspace itself does not
+ask anyone to sign in.
 
 If `AUTH_SECRET` or a mail sender is missing, the site still builds and
-the public pages still run. Pipeline and Shortlist stay locked.
+every page still runs.
 
 Add these in the Vercel project settings (Production, and Preview if you
 use it). None of them are paid.
@@ -491,7 +475,7 @@ use it). None of them are paid.
 | Name | How to get it for free |
 | --- | --- |
 | `AUTH_SECRET` | Any long random string. On your machine: `openssl rand -base64 32`. This signs the session cookie. |
-| `ALLOWED_EMAILS` | `zhuanga@engineering.upenn.edu,amyzhuang880@gmail.com` |
+| `ALLOWED_EMAILS` | Optional. Comma-separated addresses for the unused sign-in form. Leave unset. |
 | `EMAIL_FROM` | Optional From address. Leave unset with Resend so mail comes from `Campus Scout <onboarding@resend.dev>`. |
 | `RESEND_API_KEY` | Preferred sender. Free Resend account at https://resend.com (3,000 emails/month, 100/day). Create an API key. Until you verify a domain (also free), Resend only delivers from `Campus Scout <onboarding@resend.dev>` to the email you used to sign up. |
 | `SMTP_HOST` | Fallback when `RESEND_API_KEY` is unset. `smtp.gmail.com` |
@@ -514,8 +498,7 @@ place of the separate SMTP variables.
 and never secret values. The message is neutral Campus Scout branding.
 
 Google sign-in needs `AUTH_SECRET`, `AUTH_GOOGLE_ID`, and
-`AUTH_GOOGLE_SECRET`, and still only admits `@dormroomfund.com` plus
-`ALLOWED_EMAILS`.
+`AUTH_GOOGLE_SECRET`. It admits only addresses in `ALLOWED_EMAILS`.
 
 `.env.example` lists the same names. `.env.local` is gitignored.
 
@@ -527,7 +510,6 @@ below):
 
 ```bash
 npx tsx scripts/ingest/seed-universities.ts             # 5 campuses, sourced coordinates
-npx tsx scripts/ingest/fetch-drf-portfolio.ts            # DRF's public portfolio (reference/exclusion set)
 npx tsx scripts/ingest/fetch-penn-labs.ts                # Penn Labs team directory (builder evidence)
 npx tsx scripts/ingest/fetch-penn-startup-challenge.ts   # Penn Venture Lab 2026 Startup Challenge (real candidate companies)
 npx tsx scripts/ingest/enrich-penn-labs-github.ts        # real GitHub activity for Penn Labs' 4 products
@@ -536,8 +518,8 @@ npx tsx scripts/ingest/fetch-treehacks-devpost.ts        # TreeHacks 2026 Devpos
 npx tsx scripts/ingest/fetch-calhacks-devpost.ts         # Cal Hacks 12.0 Devpost gallery (bounded sample)
 npx tsx scripts/ingest/fetch-velocity.ts                 # Velocity (Waterloo accelerator), real candidate companies, 2025-26 cohorts
 npx tsx scripts/ingest/seed-source-tiers.ts              # applies Founder/Startup Scout tiers to every source
-npx tsx scripts/screen/match-portfolio.ts                # matches ingested candidates against the DRF portfolio exclusion set
-npx tsx scripts/screen/run-gates.ts                      # deterministic DRF screening gates over ingested candidates
+npx tsx scripts/screen/match-portfolio.ts                # matches ingested candidates against a portfolio exclusion set, when one is loaded
+npx tsx scripts/screen/run-gates.ts                      # deterministic screening gates over ingested candidates
 ```
 
 All of these hit live, public URLs over the network. If you're offline,
@@ -586,13 +568,7 @@ named list and remain real, un-built backlog.
 
 **Real, verified, currently working:**
 
-- **319 DRF portfolio entries**, imported from `dormroomfund.com/portfolio`
-  across its actual 5 pages (Webflow/Finsweet pagination via
-  `?f3d579bb_page=N`, reverse-engineered from the page's own "Next" control
-  — re-verify if DRF redesigns the page). The directory's own headline
-  claims "340 first checks"; this import captures 319 named, linkable
-  entries from the public list and does not claim to reconcile the
-  difference.
+- **Portfolio reference set.** An earlier import stored a public portfolio as a reference exclusion list. This generic build does not ship that directory.
 - **189 real people** from Penn Labs' public team directory
   (`pennlabs.org/page-data/team/page-data.json`, a Gatsby page-data JSON
   endpoint, not a documented API — same re-verify caveat). These are
@@ -880,9 +856,9 @@ alone.
   is fully covered (this was already correct; just confirmed and
   commented).
 - Palette rebalanced toward neutral per explicit feedback that the
-  DRF-sampled lavender was washing across every surface: primary surfaces
+  lavender wash was covering every surface: primary surfaces
   are now white/near-white gray (`--background: #fafafa`, `--surface:
-  #ffffff`), text is near-black (`--foreground: #171417`), and the DRF
+  #ffffff`), text is near-black (`--foreground: #171417`), and the
   purple accent is reserved for interaction/selection only, with a new
   `--accent-subtle` token for restrained selected-state fills.
 - Copy fixes: sidebar shows "Not scanned" (not "0") for a campus with zero
@@ -1023,7 +999,7 @@ as a genuine `kind='company'` candidate with a `founder` role, sourced
 directly to their own public profile. Ran the full gate pipeline on it;
 every gate correctly returned `needs_verification` (no fabricated
 pass/fail from a bio alone) except `portfolio_relationship`, which
-correctly passed (no match to the existing DRF portfolio).
+correctly passed (no match to an existing portfolio directory).
 
 Ingested 2026-09-21: 9 projects, 21 real people via commit credit, 1
 self-reported founder candidate, 35/50 fetches used (GitHub's
@@ -1710,6 +1686,6 @@ and the production site only updated after a manual `npx vercel --prod`.
 This branch commits `data/campus-universe.db`
 so a git deploy can bundle that coverage database. The manual production
 refresh above shipped the laptop database, including the "Unconfirmed"
-badge, to **https://dorm-room-fund-scout.vercel.app**.
+badge, to the hosted app.
 
 `npx tsc --noEmit` and `npm run build` both clean throughout.

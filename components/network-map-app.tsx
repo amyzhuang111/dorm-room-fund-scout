@@ -18,9 +18,6 @@ import { NODE_FILL, campusSwatches, groupCampusSwatches } from "./network-style"
 import { useAskHighlight } from "./ask-highlight";
 import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
 import { LinkedInIconButton, LinkedInOpenButton, LinkedInProfileLink, PersonLinkButton, ProfileIconLinks } from "./person-link";
-import { DrfHopFilter } from "./drf-hop-filter";
-import { DrfReferrerOverlay } from "./drf-referrer-overlay";
-import { WarmIntroPaths } from "./warm-intro-paths";
 import { StartupCardSheet } from "./startup-directory-card";
 
 const LEGEND_REGION: Record<string, string> = {
@@ -82,7 +79,6 @@ interface Filters {
   yearTo: number | null;
   orgTier: OrgTierMode;
   orgSections: HotspotSectionId[];
-  drfHops: boolean;
   confirmedOnly: boolean;
 }
 
@@ -117,12 +113,8 @@ export function NetworkMapApp() {
   const [fly, setFly] = useState<{ id: string; token: number }>({ id: "", token: 0 });
   const [focus, setFocus] = useState<NetworkFocus | null>(null);
   const graphApi = useRef<NetworkSigmaHandle | null>(null);
-  const [mapReady, setMapReady] = useState(false);
-  const [referrersOn, setReferrersOn] = useState(false);
-  const [referrersWeak, setReferrersWeak] = useState(false);
 
   const [pinned, setPinned] = useState<{ label: string; ids: Set<string> } | null>(null);
-  const [drfNear, setDrfNear] = useState<Set<string> | null>(null);
 
   useEffect(() => {
     const onFilter = (event: Event) => {
@@ -171,7 +163,6 @@ export function NetworkMapApp() {
           yearTo: null,
           orgTier: "all",
           orgSections: [...ORG_SECTIONS],
-          drfHops: false,
           confirmedOnly: false,
         };
         defaultsRef.current = initial;
@@ -208,25 +199,9 @@ export function NetworkMapApp() {
     setFilters({ ...filters, campuses: [...filters.campuses, ...fresh] });
   }, [shown, filters]);
 
-  useEffect(() => {
-    if (!filters?.drfHops || drfNear) return;
-    let cancel = false;
-    fetch("/api/drf/neighborhood")
-      .then((res) => (res.ok ? (res.json() as Promise<{ ids?: string[] }>) : { ids: [] }))
-      .then((data) => {
-        if (!cancel) setDrfNear(new Set(data.ids ?? []));
-      })
-      .catch(() => {
-        if (!cancel) setDrfNear(new Set());
-      });
-    return () => {
-      cancel = true;
-    };
-  }, [filters?.drfHops, drfNear]);
-
   const ask = useAskHighlight();
   const hidden = useMemo(() => {
-    const base = hiddenIds(shown, filters, showIsolates, filters?.drfHops ? drfNear : null);
+    const base = hiddenIds(shown, filters, showIsolates);
     let next = base;
     if (ask && shown && ask.ids.length > 0) {
       const keep = new Set(ask.ids);
@@ -245,7 +220,7 @@ export function NetworkMapApp() {
       return narrowed;
     }
     return next;
-  }, [shown, filters, showIsolates, ask, pinned, drfNear]);
+  }, [shown, filters, showIsolates, ask, pinned]);
   const edgeTypes = useMemo(() => new Set(filters?.edgeTypes ?? []), [filters]);
   const activeId = selected && !hidden.has(selected) ? selected : null;
 
@@ -318,14 +293,11 @@ export function NetworkMapApp() {
           onSelect={(id) => setSelected(id)}
           onReady={(api) => {
             graphApi.current = api;
-            setMapReady(api != null);
           }}
         />
       ) : (
         <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-black">{error ?? "Laying out the map…"}</p>
       )}
-      <DrfReferrerOverlay apiRef={graphApi} hidden={hidden} mapReady={mapReady} enabled={referrersOn} includeWeak={referrersWeak} />
-
       <div className="absolute left-4 top-4 z-30 flex max-w-[22rem] flex-col items-start gap-1.5">
         <div className="flex flex-wrap items-center gap-1">
           <button
@@ -340,19 +312,9 @@ export function NetworkMapApp() {
             <input type="checkbox" className="accent-black" checked={showIsolates} onChange={(event) => setShowIsolates(event.target.checked)} />
             Unlinked
           </label>
-          <label className="inline-flex h-7 items-center gap-1.5 rounded border border-neutral-200 bg-white/80 px-2 text-[11px] text-neutral-700">
-            <input type="checkbox" className="accent-black" checked={referrersOn} onChange={(event) => setReferrersOn(event.target.checked)} />
-            DRF alumni referrers
-          </label>
-          {referrersOn && (
-            <label className="inline-flex h-7 items-center gap-1.5 rounded border border-neutral-200 bg-white/80 px-2 text-[11px] text-neutral-700">
-              <input type="checkbox" className="accent-black" checked={referrersWeak} onChange={(event) => setReferrersWeak(event.target.checked)} />
-              Include weak (same-metro)
-            </label>
-          )}
         </div>
         <p className="pl-0.5 text-[11px] leading-none text-neutral-400 tabular-nums">
-          {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
+          {visibleCounts.person.toLocaleString("en-US")} people · {visibleCounts.startup.toLocaleString("en-US")} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
         </p>
         <p className="max-w-[18rem] pl-0.5 text-[11px] leading-snug text-neutral-900">Closer = more similar (shared programs, sectors, investors)</p>
       </div>
@@ -456,7 +418,7 @@ export function NetworkMapApp() {
                 [
                   ["all", "All"],
                   ["1", "Tier 1"],
-                  ["12", "Tier 1–2"],
+                  ["12", "Tier 1-2"],
                 ] as const
               ).map(([id, label]) => (
                 <button
@@ -468,7 +430,7 @@ export function NetworkMapApp() {
                   {label}
                 </button>
               ))}
-              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Tier 1 is S+ and S. Tier 1–2 adds A. Directory tiers do not change Founder Signal.</p>
+              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Tier 1 is S+ and S. Tier 1-2 adds A. Directory tiers do not change Founder Signal.</p>
             </FilterGroup>
             <FilterGroup title="Organization category">
               {ORG_SECTIONS.map((section) => (
@@ -538,11 +500,6 @@ export function NetworkMapApp() {
                   />
                 ))}
                 <p className="pt-1 text-[10px] leading-snug text-neutral-600">Studied-at links stay hidden until you hover a node, so campus clusters stay readable.</p>
-                <DrfHopFilter
-                  checked={filters.drfHops}
-                  disabled={filters.drfHops && !drfNear}
-                  onChange={(drfHops) => setFilters({ ...filters, drfHops })}
-                />
               </FilterGroup>
             </details>
           </div>
@@ -704,11 +661,6 @@ export function NetworkMapApp() {
             ) : (
               <p className="text-sm text-neutral-600">Loading…</p>
             )}
-            {(selectedNode.type === "person" || selectedNode.type === "startup") && !isUserAddedId(selectedNode.id) && (
-              <div className="mt-3 border-t border-black/10 pt-2">
-                <WarmIntroPaths entityId={selectedNode.id} />
-              </div>
-            )}
           </div>
         </aside>
       )}
@@ -757,7 +709,7 @@ function personYearOk(node: MapNode, filters: Filters): boolean {
   return true;
 }
 
-function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates: boolean, drfNear: Set<string> | null): Set<string> {
+function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates: boolean): Set<string> {
   const hidden = new Set<string>();
   if (!graph || !filters) return hidden;
   const allCampuses = graph.nodes.filter((node) => node.type === "campus").map((node) => node.campus).filter((id): id is string => !!id);
@@ -872,11 +824,6 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       show = graph.edges.some((edge) => edge.type === "invested_in" && edge.source === node.id && startupOk.has(edge.target));
     }
     if (!show) hidden.add(node.id);
-  }
-  if (drfNear) {
-    for (const node of graph.nodes) {
-      if (!drfNear.has(node.id)) hidden.add(node.id);
-    }
   }
   return hidden;
 }

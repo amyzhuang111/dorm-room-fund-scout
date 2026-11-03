@@ -7,8 +7,7 @@ import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
 
-// Dark-text-on-light-bg chip style, matching dormroomfund.com's own status
-// pairs (e.g. their green-dark/green-light) rather than an opacity trick.
+// Dark-text-on-light-bg chip style, using solid status pairs rather than an opacity trick.
 const QUEUE_CLASS: Record<Queue, string> = {
   top_prospects: "bg-ok-bg text-ok border-ok/20",
   exploration: "bg-accent-2/20 text-link border-accent-2/40",
@@ -50,13 +49,13 @@ export function GateBadge({ result, gateOutcomes }: { result: string | null; gat
 }
 
 const TIER_CLASS: Record<string, string> = {
-  "S+": "border-foreground bg-foreground text-white px-2 text-[12px] font-bold ring-2 ring-accent ring-offset-1",
-  S: "bg-accent text-accent-foreground border-accent",
-  A: "bg-ok-bg text-ok border-ok/20",
-  B: "bg-warn-bg text-warn border-warn/20",
-  C: "bg-surface-2 text-muted border-border-c",
-  D: "bg-surface-2 text-muted border-border-c",
-  talent: "bg-surface-2 text-muted border-border-c",
+  "S+": "tier-chip tier-splus",
+  S: "tier-chip tier-s",
+  A: "tier-chip tier-a",
+  B: "tier-chip tier-b",
+  C: "tier-chip tier-c",
+  D: "tier-chip tier-d",
+  talent: "tier-chip tier-talent",
 };
 
 export function SameSchoolBadge() {
@@ -72,10 +71,9 @@ export function SameSchoolBadge() {
 
 export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
   if (!tier) return null;
-  const superTier = tier === "S+";
   return (
     <span
-      className={`inline-flex shrink-0 items-center rounded-full border leading-none ${superTier ? "px-2 py-0.5" : "px-1.5 py-0.5 text-[10px] font-semibold"} ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
+      className={`inline-flex shrink-0 items-center leading-none ${TIER_CLASS[tier] ?? "tier-chip tier-none"}`}
       title={basis ? `Signal tier ${tier}. ${basis}` : `Signal tier ${tier}`}
     >
       {tier}
@@ -84,7 +82,7 @@ export function SignalTierBadge({ tier, basis }: { tier: string | null | undefin
 }
 
 export function TierBadge({ tier, label }: { tier: string | null; label: string }) {
-  if (!tier) return <span className="text-xs text-muted">{label}: —</span>;
+  if (!tier) return <span className="text-xs text-muted">{label}:  · </span>;
   return (
     <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium ${TIER_CLASS[tier] ?? ""}`}>
       {label}: {tier}
@@ -326,8 +324,8 @@ const AFFILIATION_STATUS_LABEL: Record<string, string> = {
 const AFFILIATION_STATUS_TITLE: Record<string, string> = {
   current_student: "Enrollment status confirmed by the source (e.g. a program directory or class-year mention).",
   recent_grad: "Recently graduated, per the source.",
-  older_alumni: "Alumni, per the source — not necessarily a current student.",
-  unverified: "Real evidence ties this person to the university (e.g. a hackathon roster or campus-org listing), but that source alone can't confirm they're currently enrolled — not independently checked yet.",
+  older_alumni: "Alumni, per the source · not necessarily a current student.",
+  unverified: "Real evidence ties this person to the university (e.g. a hackathon roster or campus-org listing), but that source alone can't confirm they're currently enrolled · not independently checked yet.",
 };
 
 export function AffiliationStatusBadge({ status }: { status: string }) {
@@ -337,6 +335,47 @@ export function AffiliationStatusBadge({ status }: { status: string }) {
       title={AFFILIATION_STATUS_TITLE[status] ?? "Affiliation status as recorded by the source."}
     >
       {AFFILIATION_STATUS_LABEL[status] ?? status}
+    </span>
+  );
+}
+
+
+/** Company-level founder-recency gate label. Unverified is never counted as kept. */
+export function RecencyStatusBadge({
+  status,
+}: {
+  status: "kept" | "excluded_older_alumni" | "unverified_recency" | string | null | undefined;
+}) {
+  if (!status) return null;
+  const map: Record<string, { label: string; className: string; title: string }> = {
+    kept: {
+      label: "Recency kept",
+      className: "bg-ok-bg text-ok border-ok/20",
+      title: "At least one founder is a current student or graduated 2023 or later.",
+    },
+    excluded_older_alumni: {
+      label: "Excluded · older alumni",
+      className: "bg-surface-2 text-muted border-border-c",
+      title: "Checked founders all graduated before 2023.",
+    },
+    unverified_recency: {
+      label: "Unverified recency",
+      className: "bg-warn-bg text-warn border-warn/20",
+      title: "Founder graduation years not yet verified. Not counted as a verified/investable company.",
+    },
+  };
+  const row = map[status] ?? {
+    label: status,
+    className: "bg-surface-2 text-muted border-border-c",
+    title: "Founder recency status.",
+  };
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${row.className}`}
+      title={row.title}
+      data-recency-status={status}
+    >
+      {row.label}
     </span>
   );
 }

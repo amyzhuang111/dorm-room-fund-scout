@@ -12,7 +12,7 @@ import { hotspotAppendix } from "../../lib/domain/hotspots";
 import { hasPhrase, normHotspotName } from "../../lib/domain/hotspot-model";
 
 const SOURCE_ID = "src_campus_hotspots";
-const SOURCE_URL = "https://github.com/amyzhuang111/dorm-room-fund-scout/blob/main/data/imports/campus_hotspots.csv";
+const SOURCE_URL = "https://github.com/campus-scout/campus-scout/blob/main/data/imports/campus_hotspots.csv";
 
 function core(name: string): string {
   return name.replace(/\s*\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();

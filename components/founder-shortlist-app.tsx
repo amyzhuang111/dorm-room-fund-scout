@@ -71,7 +71,7 @@ function ShortlistBody({
         <EnrollmentChips basePath="/founder/shortlist" current={current} counts={counts} />
         <h1 className="mt-3 text-lg font-semibold text-foreground">Founder shortlist</h1>
         <p className="mt-1 text-sm text-muted">
-          Sorted by whether there&apos;s an attached claim, not a score — there&apos;s no per-founder scoring model yet. Read the evidence
+          Sorted by whether there&apos;s an attached claim, not a score · there&apos;s no per-founder scoring model yet. Read the evidence
           directly rather than trusting a rank.
         </p>
         <section className="mt-5">

@@ -17,6 +17,7 @@ import { ScoutLink, ScoutNav, useScoutNav } from "./scout-nav";
 import { useFeedbackRecords } from "./feedback-provider";
 import { useMergedCatalog } from "./user-pipeline-provider";
 import { EnrollmentChips } from "./enrollment-chips";
+import { PageHeader } from "./page-header";
 
 export function FounderDiscoverApp({
   initial,
@@ -119,34 +120,38 @@ function FounderBody({
     return () => window.clearTimeout(handle);
   }, [query, current.q, nav]);
 
+  const monitored = universities.filter((u) => u.sourcesConfigured > 0).length;
   return (
-    <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
+    <div data-scout-live="" className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
+      <PageHeader
+        eyebrow="Founder scout"
+        title="Founder candidates promoted once they show real building evidence."
+        subtitle={`${totalFounders} founder candidates · ${monitored} campuses monitored. Promoted from ${totalResolved} resolved people · most resolved people stay raw records until they show real building evidence.`}
+        stats={[
+          { n: totalFounders, label: "founders" },
+          { n: visible.length, label: "shown" },
+          { n: monitored, label: "monitored" },
+        ]}
+      />
+      <div className="mt-8 flex min-h-[70vh] flex-col gap-6 sm:flex-row">
       <FilterSidebar universities={catalog.universities} basePath="/founder/discover" current={current} mode="founder" />
-      <div className="flex-1">
-        <div className="border-b border-border-c px-4 py-3">
+      <div className="min-w-0 flex-1">
+        <div className="pb-4">
           <EnrollmentChips basePath="/founder/discover" current={current} counts={counts} />
-          <div className="mb-2 mt-3 flex items-center gap-1">
-            <ScoutLink href={buildHref("/startup/discover", { university: current.university, q: current.q, view: "globe", enroll: current.enroll, tier: current.tier, sort: current.sort }, {})} className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2">
+          <div className="segmented mb-2 mt-3">
+            <ScoutLink href={buildHref("/startup/discover", { university: current.university, q: current.q, view: "globe", enroll: current.enroll, tier: current.tier, sort: current.sort }, {})} className="text-muted">
               Companies
             </ScoutLink>
-            <ScoutLink href={buildHref("/founder/discover", current, { pool: null, founder: null })} className={`rounded-md px-2.5 py-1 text-xs font-medium ${showingPotential ? "text-muted hover:bg-surface-2" : "bg-accent text-accent-foreground"}`}>
+            <ScoutLink href={buildHref("/founder/discover", current, { pool: null, founder: null })} className={showingPotential ? "" : "is-active"}>
               Founders
             </ScoutLink>
             <ScoutLink
               href={buildHref("/founder/discover", current, { pool: "potential", founder: null, sort: "tier", enroll: "current_student,recent_grad,older_alumni" })}
-              className={`rounded-md px-2.5 py-1 text-xs font-medium ${showingPotential ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
+              className={showingPotential ? "is-active" : ""}
             >
               Potential founders
             </ScoutLink>
           </div>
-          <h1 className="text-lg font-semibold text-foreground">Founder Scout</h1>
-          <p className="text-sm text-muted">
-            {totalFounders} founder candidates · {universities.filter((u) => u.sourcesConfigured > 0).length} campuses monitored
-          </p>
-          <p className="mt-0.5 text-xs text-muted">
-            Promoted from {totalResolved} resolved people — most resolved people stay raw records until they show real building
-            evidence (see Methodology).
-          </p>
           <p className="mt-2 flex items-center gap-1 text-[11px] text-muted">
             Sort
             <ScoutLink href={buildHref("/founder/discover", current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-link" : "hover:text-foreground"}>
@@ -162,7 +167,7 @@ function FounderBody({
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search founders…"
-            className="mt-2 w-full max-w-sm rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
+            className="mt-2 w-full max-w-sm rounded-full border border-border-c bg-surface px-4 py-1.5 text-sm placeholder:text-muted"
           />
         </div>
         <div className="grid gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -170,7 +175,7 @@ function FounderBody({
             <FounderCard key={founder.id} founder={founder} feedbackView={filters.feedback} open={filters.founder === founder.id} basePath="/founder/discover" current={filters} />
           ))}
           {visible.length === 0 && (
-            <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni to widen the list.</p>
+            <p className="text-sm text-muted">No founders match. Student and New grad are on · turn on Alumni to widen the list.</p>
           )}
         </div>
         {current.university && (
@@ -181,6 +186,7 @@ function FounderBody({
           </p>
         )}
       </div>
+    </div>
     </div>
   );
 }

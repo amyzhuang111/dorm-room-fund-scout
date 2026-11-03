@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "note": "Generic/CMS/portal favicon hashes — fall back to cobalt seal. Built from campus-d1c924b-data-verify.md audit. + Canva site stub (Vytrina/CFO 4 ALL).",
+  "sha256": [
+    "31b22a668abde2a94290b9c2b659d5c27926e1d3095f2fc858c282e0ae337ce3",
+    "3c84ff76fcdd0591195c726c8cbd5906981e9b5f56703499df4016beb151f468",
+    "410efe0d946b3201b28ac0b79c28105499fe8a0b456015c45acc36fc9376be8c",
+    "4312c768443b491d9a11d3853283925460eb642efa99cddb85b20c77bc81a807",
+    "4e045634d7c21b310c2848053e45de5880c4e1f60ec7d33048deb4b92b898dd6",
+    "65df7f07de2504d30c0dd6680bd92468d2bd4edd02600e58cd053c1cad922805",
+    "6ad1690d66e2674251efa3e08ce7d81c7493bbe72b65baa3d5a104f2f0b36883",
+    "6e2d517474d0ca135f6036d03f1ae81cf9b0fc17b3dff71946ee8952a7f94653",
+    "8d9a0f9b3a9e6380e5e4553f70beb383c0e8d4e1a6924ee925b7728a14431458",
+    "969b29546a56bd7406474eed098f30e86133257cf5e53cd5bb101e33915a9d5b",
+    "9dc26b6ce532fbe6d4314ea0eea59d8b754d7e91c75b0e961696e85da6895979",
+    "da2f58d94c7d8301e31e17b4a6b88f3838dd7aa7a5ae33e26558e50303e947d9",
+    "db080f73aeba0302aff1c54e0e1a9c827b3c8e43736702f116e046bc74baa0ec",
+    "fb49452d1b255321985346b0b58d81dc1be7ae46a6036c333dabb00926d4d0f4"
+  ],
+  "pixel32": [
+    "0dfb414e3d95b3dfd713eb58376c088c964a8689e9a7fd0feab98f66c0c7800d",
+    "13121e0be0b2525ee5117ffa5a409b69c5cd1331f8d2fe78262812797cc39d04",
+    "13273809480aea7e8377e62447ad0a9d5ce7604376740f2ea3091677bf6e13a8",
+    "388baed5d0d00823ed168c034ead08751ebfc9a581b0fd428d0c22a0688e4f26",
+    "3a312a7e159acfbf7e7c75ebcbee1fb071fe1da03ac1b1aca2aaaff0f520e640",
+    "53dafe028f8ad377d46ab72ebede891fc5f897667cc86cc12283a22e279a1d6f",
+    "56159a6413b47f9c8ed8e5a2148cb734a04053b7ab05ea699c281607569d4c43",
+    "5a94a2cd599a32dd87877e02ca6f9a4e81bcb5e1667774ea9766ddb8440e16ac",
+    "5fa7eea906920867d47da5a327cf7ae50455aa80f360c6b68083d22d205a7116",
+    "85ec39c78a442f49246cbd16ea6b05250594e6136eb873e8d1d5087c5a0e6207",
+    "9016115b0e1917b66507b267e3ae4d67a0a1efa638e242707c22d7cad52a46ba",
+    "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+    "be172f10c68da2e801031b4cc81e06415b508b1e7e4a28f39940c8e00a057acf",
+    "f47a8ec3e9aff2318d896942282ad4fe37d6391c82914f54a5da8a37de1300c6"
+  ],
+  "seeds": {
+    "wordpress_w": "proj_Cj43kNc3J_CF",
+    "blank_multifactor": "proj_0dr5puehPGU7",
+    "yc_portal": "proj_iiR2P6D8YhKq",
+    "linkedin": "proj_iJnySTE73HKB",
+    "wix_wordmark": "proj_oFIBTVUdm_oh",
+    "wix_favicon_fullflock": "proj_-HzfQkhkV3ul",
+    "gray_cube_gs2": "proj_BrjL9m6xoGdO",
+    "canva_stub_vytrina": "proj_i4aqcESGAlmD"
+  }
+}

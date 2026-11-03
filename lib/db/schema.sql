@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS projects (
   website_url TEXT,
   primary_link TEXT,             -- best public page when no official website was found
   primary_link_kind TEXT,        -- devpost | press | accelerator | github | crunchbase | directory | other
-  is_portfolio_reference INTEGER NOT NULL DEFAULT 0, -- existing DRF investment: reference only, never a new target
+  is_portfolio_reference INTEGER NOT NULL DEFAULT 0, -- an existing portfolio company: reference only, never a new target
   is_investable_candidate INTEGER NOT NULL DEFAULT 1, -- 0 for e.g. a builder org's own internal tools (still valuable as ability-to-build evidence, but not itself something to screen/score as an investment)
   signal_tier TEXT,             -- S | A | B | C | D from the founder-signal tier list; null when no rule applies
   signal_tier_basis TEXT,
@@ -381,59 +381,6 @@ CREATE INDEX IF NOT EXISTS idx_relationships_target ON relationships(target_enti
 CREATE INDEX IF NOT EXISTS idx_gate_results_project ON gate_results(project_id);
 CREATE INDEX IF NOT EXISTS idx_company_facts_project ON company_facts(project_id);
 
--- DRF student-partner presence by school, loaded from data/imports/drf_campus_presence.csv.
--- Named partners are copied from that file. The importer does not add names.
-CREATE TABLE IF NOT EXISTS drf_campus_presence (
-  id TEXT PRIMARY KEY,
-  school TEXT NOT NULL UNIQUE,
-  university_id TEXT,
-  drf_region TEXT NOT NULL,
-  status TEXT NOT NULL,
-  partner_count INTEGER NOT NULL,
-  named_partners TEXT NOT NULL,
-  evidence_links TEXT NOT NULL,
-  change_vs_v1 TEXT NOT NULL,
-  date_checked TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_drf_campus_presence_university ON drf_campus_presence(university_id);
-
--- Former DRF student partners, loaded from data/imports/drf_alumni.json.
--- Every row keeps a public source URL. The importer does not invent people.
-CREATE TABLE IF NOT EXISTS drf_alumni (
-  id TEXT PRIMARY KEY,
-  person_id TEXT NOT NULL REFERENCES people(id),
-  name TEXT NOT NULL,
-  drf_team TEXT,
-  university_id TEXT,
-  school_label TEXT,
-  program_id TEXT,
-  program_label TEXT,
-  year_start INTEGER,
-  year_end INTEGER,
-  class_year INTEGER,
-  current_firm TEXT,
-  current_role TEXT,
-  firm_type TEXT,             -- vc | founder | big_tech | other
-  firm_confidence TEXT,       -- confirmed | likely, for the current role only
-  linkedin_confidence TEXT,   -- confirmed | likely, for the profile URL only
-  linkedin_url TEXT,
-  linkedin_source_url TEXT,   -- independent page that corroborates the profile
-  location TEXT,
-  verification_note TEXT,
-  investor_id TEXT,
-  source_url TEXT NOT NULL,
-  firm_source_url TEXT,
-  sources_json TEXT NOT NULL DEFAULT '[]',
-  confidence TEXT NOT NULL, -- confirmed | likely
-  excerpt TEXT NOT NULL,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  UNIQUE(person_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_drf_alumni_person ON drf_alumni(person_id);
-CREATE INDEX IF NOT EXISTS idx_drf_alumni_investor ON drf_alumni(investor_id);
-
 -- Accuracy audit trail. False positives stay in people/projects; this table
 -- records why they left a scout list. idempotency_key makes a re-run a no-op.
 CREATE TABLE IF NOT EXISTS accuracy_audit (
@@ -534,3 +481,21 @@ CREATE TABLE IF NOT EXISTS pitchbook_rankings (
 
 CREATE INDEX IF NOT EXISTS idx_pitchbook_rankings_university ON pitchbook_rankings(university_id);
 CREATE INDEX IF NOT EXISTS idx_pitchbook_rankings_track ON pitchbook_rankings(track, rank);
+
+
+-- DRF student-partner presence by school, loaded from data/imports/drf_campus_presence.csv.
+-- Named partners are copied from that file. The importer does not add names.
+CREATE TABLE IF NOT EXISTS drf_campus_presence (
+  id TEXT PRIMARY KEY,
+  school TEXT NOT NULL UNIQUE,
+  university_id TEXT,
+  drf_region TEXT NOT NULL,
+  status TEXT NOT NULL,
+  partner_count INTEGER NOT NULL,
+  named_partners TEXT NOT NULL,
+  evidence_links TEXT NOT NULL,
+  change_vs_v1 TEXT NOT NULL,
+  date_checked TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_drf_campus_presence_university ON drf_campus_presence(university_id);

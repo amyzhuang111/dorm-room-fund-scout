@@ -33,7 +33,7 @@ export function EnrollmentChips({
   }
 
   const primaryClass = (on: boolean) =>
-    `inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium ${
+    `inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm ${
       on ? "border-accent bg-accent text-accent-foreground" : "border-border-c bg-surface text-foreground hover:bg-surface-2"
     }`;
 
@@ -51,7 +51,7 @@ export function EnrollmentChips({
         })}
       </div>
       <p className="mt-1.5 text-[11px] leading-snug text-muted">
-        Student and New grad are on. New grad means graduated in 2023–2026. est. means the bucket was inferred.
+        Student and New grad are on. New grad means graduated in 2023-2026. est. means the bucket was inferred.
       </p>
     </div>
   );

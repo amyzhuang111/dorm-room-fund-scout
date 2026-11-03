@@ -95,12 +95,12 @@ export function SourceCardView({ card, compact, typedCounts }: { card: SourceCar
               {card.live.communitySignal.rationale && <p className="mt-1 text-xs text-foreground">{card.live.communitySignal.rationale}</p>}
               {(card.live.communitySignal.mentionCount != null || card.live.communitySignal.independentMentions != null) && (
                 <p className="mt-1 text-[11px] text-muted">
-                  {card.live.communitySignal.mentionCount ?? "—"} mention(s) · {card.live.communitySignal.independentMentions ?? "—"} independent ·{" "}
+                  {card.live.communitySignal.mentionCount ?? "-"} mention(s) · {card.live.communitySignal.independentMentions ?? "-"} independent ·{" "}
                   {card.live.communitySignal.lastCheckedAt?.slice(0, 10) ?? "date unknown"}
                 </p>
               )}
               <p className="mt-1 text-[11px] text-muted">
-                Source-priority input only — never scored into Founder Signal, eligibility, or investment score.
+                Source-priority input only · never scored into Founder Signal, eligibility, or investment score.
               </p>
             </div>
           )}

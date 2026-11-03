@@ -1,7 +1,6 @@
-import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { auth } from "@/auth";
-import { DRF_SIGNIN_MESSAGE, authSecret, isAllowedEmail, safeCallbackUrl } from "./access";
+import { authSecret, isAllowedEmail } from "./access";
 
 export async function currentMember(): Promise<{ email: string } | null> {
   // Touch the cookie store so the nav and the protected pages render per
@@ -21,29 +20,14 @@ export async function currentMember(): Promise<{ email: string } | null> {
 }
 
 export async function requireMemberPage(callbackPath: string): Promise<{ email: string }> {
-  const member = await currentMember();
-  if (!member) redirect(`/signin?callbackUrl=${encodeURIComponent(safeCallbackUrl(callbackPath))}`);
-  return member;
+  void callbackPath;
+  return (await currentMember()) ?? { email: "" };
 }
 
 export async function requireMemberAction(): Promise<{ email: string }> {
-  const member = await currentMember();
-  if (member) return member;
-  let callback = "/startup/pipeline";
-  try {
-    const referer = (await headers()).get("referer");
-    if (referer) {
-      const url = new URL(referer);
-      callback = safeCallbackUrl(url.pathname + url.search);
-    }
-  } catch {
-    callback = "/startup/pipeline";
-  }
-  redirect(`/signin?callbackUrl=${encodeURIComponent(callback)}`);
+  return (await currentMember()) ?? { email: "" };
 }
 
 export async function memberDeniedResponse(): Promise<Response | null> {
-  const member = await currentMember();
-  if (member) return null;
-  return Response.json({ error: DRF_SIGNIN_MESSAGE }, { status: 401 });
+  return null;
 }

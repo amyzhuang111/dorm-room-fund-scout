@@ -16,7 +16,6 @@ import { relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots"
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
 import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } from "./company-profile";
 import { matchCandidate } from "./candidate-filter";
-import { presenceByUniversity, type DrfCampusPresence } from "./drf-presence";
 import { bestPrecollegeSignals, isPrecollegeSignalType, type PrecollegeSignalView } from "./precollege";
 import { bestProgramSignals, isProgramMatchStatus, isProgramSignalType, type ProgramSignalView } from "./program-signals";
 import { newsForProject } from "./news";
@@ -53,13 +52,11 @@ export interface UniversitySummary {
   /** @deprecated use companyCount */
   candidateProjectCount: number;
   companyCount: number; // Startup Scout: formed/plausibly-formed companies only (kind='company')
-  founderCount: number; // Founder Scout: PROMOTED founder candidates only (see lib/domain/promotion.ts) — not every resolved person
+  founderCount: number; // Founder Scout: PROMOTED founder candidates only (see lib/domain/promotion.ts) · not every resolved person
   resolvedPersonCount: number; // total distinct people resolved with any affiliation to this campus, promoted or not
   sourcesConfigured: number;
   lastCheckedAt: string | null;
   coverage: CoverageState;
-  /** DRF partner presence for this campus, when the school maps to one row. */
-  drfPresence: DrfCampusPresence | null;
   /** PitchBook 2026 rankings when this campus matched a list. */
   pitchbook: PitchbookCampus | null;
   /** Scout hit rate for tracked founders at this campus. Null when nobody is tracked. */
@@ -117,11 +114,28 @@ export function countCandidateProjects(): number {
   return row.c;
 }
 
+/** Public campus coordinates for rows missing lat/lon in SQLite (verifiable locations only). */
+const CAMPUS_COORD_OVERRIDES: Record<string, { lat: number; lon: number; country: string }> = {
+  // Franklin W. Olin College of Engineering, Needham, MA
+  univ_olin_college: { lat: 42.2925, lon: -71.2639, country: "United States" },
+  // Huron University College (Western University), London, Ontario
+  univ_western_university_huron_college: { lat: 43.0125, lon: -81.2736, country: "Canada" },
+};
+
 function buildUniversities(): UniversitySummary[] {
   const db = getDb();
   const universities = db.prepare(`SELECT id, name, country, lat, lon, coord_source FROM universities ORDER BY name`).all() as {
     id: string; name: string; country: string | null; lat: number | null; lon: number | null; coord_source: string | null;
   }[];
+  for (const row of universities) {
+    if (row.lat != null && row.lon != null) continue;
+    const override = CAMPUS_COORD_OVERRIDES[row.id];
+    if (!override) continue;
+    row.lat = override.lat;
+    row.lon = override.lon;
+    if (!row.country) row.country = override.country;
+    row.coord_source = row.coord_source || "public_campus";
+  }
 
   const companyCounts = new Map<string, number>();
   for (const row of db
@@ -149,7 +163,6 @@ function buildUniversities(): UniversitySummary[] {
     personCounts.set(row.id, row.c);
   }
   const founderCounts = founderCountsByUniversity();
-  const presence = presenceByUniversity();
   const pitchbook = pitchbookByCampus();
   const hitRates = hitRateByCampus();
 
@@ -182,7 +195,6 @@ function buildUniversities(): UniversitySummary[] {
       sourcesConfigured: sourceRow.c,
       lastCheckedAt: sourceRow.last,
       coverage,
-      drfPresence: presence.get(u.id) ?? null,
       pitchbook: pitchbook.get(u.id) ?? null,
       hitRate: hitRates.get(u.id) ?? null,
     };
@@ -764,7 +776,7 @@ export interface ClaimRow {
 export interface ProjectDetail extends CandidateSummary {
   profile: CompanyProfile;
   claims: ClaimRow[];
-  signals: { id: string; signalType: string; currentObservation: string; sourceDate: string | null; significanceNote: string | null }[];
+  signals: { id: string; signalType: string; currentObservation: string; sourceDate: string | null; significanceNote: string | null; sourceUrl: string | null }[];
   pipeline: { status: string; nextAction: string | null; dueDate: string | null; notes: string | null; passReason: string | null } | null;
   manualNotes: ManualNote[];
   assessmentHistory: AssessmentHistoryRow[];
@@ -813,11 +825,59 @@ export function getProjectDetail(id: string): ProjectDetail | null {
     verificationState: r.verification_state,
   }));
 
-  const signals = (
-    db
-      .prepare(`SELECT id, signal_type, current_observation, source_date, significance_note FROM signals WHERE project_id = ? ORDER BY created_at DESC`)
-      .all(id) as { id: string; signal_type: string; current_observation: string; source_date: string | null; significance_note: string | null }[]
-  ).map((r) => ({ id: r.id, signalType: r.signal_type, currentObservation: r.current_observation, sourceDate: r.source_date, significanceNote: r.significance_note }));
+  const signalRows = db
+    .prepare(
+      `SELECT id, signal_type, current_observation, source_date, significance_note, claim_ids_json
+       FROM signals WHERE project_id = ? ORDER BY created_at DESC`
+    )
+    .all(id) as {
+      id: string;
+      signal_type: string;
+      current_observation: string;
+      source_date: string | null;
+      significance_note: string | null;
+      claim_ids_json: string | null;
+    }[];
+  const claimIdSet = new Set<string>();
+  const parsedClaimIds = signalRows.map((r) => {
+    let ids: string[] = [];
+    try {
+      const raw = r.claim_ids_json ? JSON.parse(r.claim_ids_json) : [];
+      if (Array.isArray(raw)) ids = raw.filter((x): x is string => typeof x === "string");
+    } catch {
+      ids = [];
+    }
+    for (const cid of ids) claimIdSet.add(cid);
+    return ids;
+  });
+  const claimUrlById = new Map<string, string>();
+  if (claimIdSet.size > 0) {
+    const ids = [...claimIdSet];
+    const placeholders = ids.map(() => "?").join(",");
+    for (const row of db
+      .prepare(`SELECT id, source_url FROM claims WHERE id IN (${placeholders}) AND source_url IS NOT NULL AND source_url != ''`)
+      .all(...ids) as { id: string; source_url: string }[]) {
+      claimUrlById.set(row.id, row.source_url);
+    }
+  }
+  const signals = signalRows.map((r, i) => {
+    let sourceUrl: string | null = null;
+    for (const cid of parsedClaimIds[i]) {
+      const url = claimUrlById.get(cid);
+      if (url) {
+        sourceUrl = url;
+        break;
+      }
+    }
+    return {
+      id: r.id,
+      signalType: r.signal_type,
+      currentObservation: r.current_observation,
+      sourceDate: r.source_date,
+      significanceNote: r.significance_note,
+      sourceUrl,
+    };
+  });
 
   const pipeline = db
     .prepare(`SELECT status, next_action, due_date, notes, pass_reason FROM pipeline_entries WHERE project_id = ?`)
@@ -1109,8 +1169,8 @@ export interface FounderRow {
   programSignals: ProgramSignalView[];
   signalEvidence: { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean } | null;
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
-  possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
-  linkedinUrl: string | null; // from a captured `linkedin:<url>` alias — a URL found on a source page, not built from a name
+  possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted · null once linkedCompany is set
+  linkedinUrl: string | null; // from a captured `linkedin:<url>` alias · a URL found on a source page, not built from a name
   linkedinCandidates: LinkedInCandidate[];
   link: PersonLinkTarget | null;
   profileLinks: ProfileIconLink[];
@@ -1671,12 +1731,18 @@ export function listSignalsForUniversity(universityId: string) {
       `SELECT DISTINCT s.id, p.name as project_name, s.signal_type, s.current_observation, s.source_date, s.significance_note
        FROM signals s
        JOIN projects p ON p.id = s.project_id
-       JOIN person_project_roles ppr ON ppr.project_id = p.id
-       JOIN affiliations a ON a.person_id = ppr.person_id
-       WHERE a.university_id = ?
-       ORDER BY s.created_at DESC`
+       WHERE s.project_id IN (
+         SELECT ppr.project_id FROM person_project_roles ppr
+         JOIN affiliations a ON a.person_id = ppr.person_id
+         WHERE a.university_id = ?
+         UNION
+         SELECT r.source_entity_id FROM relationships r
+         WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university'
+           AND r.relationship_type = 'affiliated_with' AND r.target_entity_id = ?
+       )
+       ORDER BY COALESCE(s.source_date, s.created_at) DESC`
     )
-    .all(universityId) as { id: string; project_name: string; signal_type: string; current_observation: string; source_date: string | null; significance_note: string | null }[];
+    .all(universityId, universityId) as { id: string; project_name: string; signal_type: string; current_observation: string; source_date: string | null; significance_note: string | null }[];
 }
 
 export function getUniversity(id: string) {
@@ -1747,7 +1813,7 @@ export interface NetworkNodeDetail {
     enrollmentLabel: string | null;
     leftSchool: boolean;
     school: string | null;
-  }[]; // every person with a role on this project, role shown as-is — not all team members are founders (§8/§18)
+  }[]; // every person with a role on this project, role shown as-is · not all team members are founders (§8/§18)
   claims: { excerpt: string; sourceUrl: string; retrievedAt: string }[];
   linkedCompanyId: string | null; // set when kind='company', for a Founder Scout node to deep-link into Startup Scout
 }

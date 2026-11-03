@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { WebWorkerMLCEngine } from "@mlc-ai/web-llm";
 import { ASK_BROWSER_MODELS, ASK_DEFAULT_MODEL_ID, formatDownload } from "@/lib/domain/ask-browser-models";
-import { answerFromRecords, ASK_SYSTEM_PROMPT, askUserPrompt, NOT_IN_THE_DATA, onDeviceNote } from "@/lib/domain/ask-prompt";
+import { NOT_IN_THE_DATA } from "@/lib/domain/ask-prompt";
 import type { AskHit } from "@/lib/domain/ask-types";
+import { parseAskIntent } from "@/lib/domain/ask-intent";
+import { askIntentHasBrowseFilters, browseHrefFromAskIntent } from "@/lib/domain/ask-browse";
 import { CAMPUSES, compareCampusLabels } from "@/lib/domain/campuses";
 import { setAskHighlight } from "./ask-highlight";
 
@@ -24,16 +26,6 @@ let browserWorker: Worker | null = null;
 let browserEngine: WebWorkerMLCEngine | null = null;
 let browserModelId: string | null = null;
 let browserLoad: Promise<boolean> | null = null;
-
-async function waitForWebgpu(read: () => boolean | null): Promise<boolean> {
-  if (read() === false) return false;
-  if (read() === true) return true;
-  const started = Date.now();
-  while (read() === null && Date.now() - started < 2500) {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
-  return read() === true;
-}
 
 async function ensureBrowserEngine(modelId: string, onProgress: (report: { progress: number; text: string }) => void): Promise<boolean> {
   if (browserEngine && browserModelId === modelId) return true;
@@ -66,22 +58,11 @@ async function ensureBrowserEngine(modelId: string, onProgress: (report: { progr
 }
 
 export function AskAiProvider({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const onAskSurface = pathname === "/" || pathname === "/founder/network";
   return (
     <>
       {children}
-      {onAskSurface && <AskAiDock />}
+      <AskAiDock />
     </>
-  );
-}
-
-function SparkleIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" className="shrink-0">
-      <path fill="currentColor" d="M8 .6 9.3 5.4 14.2 6.6 9.3 7.9 8 12.8 6.7 7.9 1.8 6.6 6.7 5.4 8 .6Z" />
-      <path fill="currentColor" d="M12.6 1.2 13.1 2.8 14.7 3.3 13.1 3.8 12.6 5.4 12.1 3.8 10.5 3.3 12.1 2.8 12.6 1.2Z" />
-    </svg>
   );
 }
 
@@ -117,7 +98,8 @@ function highlightFrom(hits: AskHit[]): {
   };
 }
 
-function AskAiDock() {
+export function AskAiDock() {
+  const router = useRouter();
   const [webgpu, setWebgpu] = useState<boolean | null>(null);
   const [modelId, setModelId] = useState(ASK_DEFAULT_MODEL_ID);
   const [loadedId, setLoadedId] = useState<string | null>(browserModelId);
@@ -127,15 +109,14 @@ function AskAiDock() {
   const [open, setOpen] = useState(false);
   const [question, setQuestion] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [answer, setAnswer] = useState("");
-  const [matches, setMatches] = useState<AskHit[]>([]);
-  const [matchCount, setMatchCount] = useState(0);
-  const [asked, setAsked] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [answer] = useState("");
+  const [matches] = useState<AskHit[]>([]);
+  const [matchCount] = useState(0);
+  const [asked] = useState(false);
+  const [busy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [engine, setEngine] = useState<"gemini" | "on-device" | "search" | null>(null);
-  const [note, setNote] = useState<string | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
+  const [engine] = useState<"gemini" | "on-device" | "search" | null>(null);
+  const [note] = useState<string | null>(null);
   const webgpuRef = useRef(webgpu);
   useEffect(() => {
     webgpuRef.current = webgpu;
@@ -171,7 +152,6 @@ function AskAiDock() {
 
   useEffect(() => {
     return () => {
-      abortRef.current?.abort();
       setAskHighlight(null);
     };
   }, []);
@@ -197,12 +177,19 @@ function AskAiDock() {
         inputRef.current?.blur();
       }
     }
+    function openFromNav() {
+      setOpen(true);
+      inputRef.current?.focus();
+    }
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("campus-scout-open-ask", openFromNav);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("campus-scout-open-ask", openFromNav);
+    };
   }, []);
 
   function close() {
-    abortRef.current?.abort();
     setAskHighlight(null);
     setOpen(false);
     inputRef.current?.blur();
@@ -213,16 +200,8 @@ function AskAiDock() {
     next.focusId = hit.id;
     next.focusCampus = hit.campuses[0] ?? null;
     setAskHighlight(next);
-  }
-
-  async function revealAnswer(text: string, signal: AbortSignal) {
-    const size = Math.max(2, Math.ceil(text.length / 28));
-    for (let i = size; i < text.length; i += size) {
-      if (signal.aborted) return;
-      setAnswer(text.slice(0, i));
-      await new Promise((resolve) => setTimeout(resolve, 16));
-    }
-    if (!signal.aborted) setAnswer(text);
+    setOpen(false);
+    router.push(hit.href);
   }
 
   async function loadModel(): Promise<boolean> {
@@ -252,115 +231,61 @@ function AskAiDock() {
     }
   }
 
-  function deviceCanRunModel(): Promise<boolean> {
-    return waitForWebgpu(() => webgpuRef.current);
-  }
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
 
-  async function answerOnDevice(trimmed: string, rows: AskHit[], quota: boolean, total: number) {
-    const canRun = await deviceCanRunModel();
-    const signal = abortRef.current?.signal ?? new AbortController().signal;
-    if (!canRun) {
-      setNote(onDeviceNote(quota, false));
-      setEngine("search");
-      await revealAnswer(answerFromRecords(rows, trimmed, total), signal);
-      return;
-    }
-    setNote(onDeviceNote(quota, true));
-    const ready = await loadModel();
-    if (!ready || !browserEngine) {
-      setEngine("search");
-      await revealAnswer(answerFromRecords(rows, trimmed, total), signal);
-      return;
-    }
-    setEngine("on-device");
-    await browserEngine.resetChat();
-    const stream = await browserEngine.chat.completions.create({
-      stream: true,
-      temperature: 0.2,
-      max_tokens: 280,
-      messages: [
-        { role: "system", content: ASK_SYSTEM_PROMPT },
-        { role: "user", content: askUserPrompt(trimmed, rows, total) },
-      ],
-    });
-    let textOut = "";
-    for await (const chunk of stream) {
-      const delta = chunk.choices[0]?.delta?.content ?? "";
-      if (!delta) continue;
-      textOut += delta;
-      setAnswer(textOut);
-    }
-    if (!textOut.trim()) await revealAnswer(answerFromRecords(rows, trimmed, total), abortRef.current?.signal ?? new AbortController().signal);
-  }
-
-  async function ask(text: string) {
-    const trimmed = text.trim();
-    if (!trimmed || busy) return;
-    setOpen(true);
-    setQuestion(trimmed);
-    setAnswer("");
-    setMatches([]);
-    setMatchCount(0);
-    setAsked(true);
-    setError(null);
-    setEngine(null);
-    setNote(null);
-    setAskHighlight(null);
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-    setBusy(true);
+  function go(text: string, mode: "ask" | "browse" = "ask") {
+    const q = text.trim();
+    if (!q) return;
     try {
-      const res = await fetch("/api/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: trimmed }),
-        signal: controller.signal,
-      });
-      const data = (await res.json()) as { engine?: string; answer?: string; matches?: AskHit[]; matchCount?: number; error?: string };
-      const rows = Array.isArray(data.matches) ? data.matches : [];
-      const total = typeof data.matchCount === "number" ? data.matchCount : rows.length;
-      setMatches(rows);
-      setMatchCount(total);
-      setAskHighlight(rows.length ? highlightFrom(rows) : null);
-      if (res.ok && data.answer) {
-        setEngine(data.engine === "gemini" ? "gemini" : "search");
-        await revealAnswer(data.answer, controller.signal);
-        return;
-      }
-      if (!res.ok && data.error === "bad_request") {
-        setError("Ask AI could not read that question.");
-        return;
-      }
-      if (rows.length === 0) {
-        setEngine("search");
-        await revealAnswer(NOT_IN_THE_DATA, controller.signal);
-        return;
-      }
-      await answerOnDevice(trimmed, rows, res.status === 429 || data.error === "quota", total);
-    } catch (err) {
-      if ((err as { name?: string }).name !== "AbortError") setError("Ask AI could not answer that.");
-    } finally {
-      setBusy(false);
+      const recent = JSON.parse(localStorage.getItem("campus-scout-ask-recent") || "[]") as string[];
+      const next = [q, ...recent.filter((item) => item !== q)].slice(0, 5);
+      localStorage.setItem("campus-scout-ask-recent", JSON.stringify(next));
+    } catch {
+      // Storage can be blocked. The question still opens.
     }
+    setOpen(false);
+    if (mode === "browse") {
+      const intent = parseAskIntent(q);
+      router.push(browseHrefFromAskIntent(intent, q));
+      return;
+    }
+    const intent = parseAskIntent(q);
+    if (askIntentHasBrowseFilters(intent) && (intent.campus || intent.stage || intent.sector || intent.year)) {
+      // Prefer filtered Companies when the question is clearly a desk filter.
+      router.push(browseHrefFromAskIntent(intent, q));
+      return;
+    }
+    router.push(`/ask?q=${encodeURIComponent(q)}`);
   }
+
+  if (!open) return null;
+
+  const recent = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("campus-scout-ask-recent") || "[]") as string[];
+    } catch {
+      return [];
+    }
+  })();
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center px-3">
+    <div className="fixed inset-0 z-50 bg-[#12110f]/40" onMouseDown={() => setOpen(false)}>
       <section
         data-ask-ai-panel
-        data-ask-open={open ? "yes" : "no"}
-        className={`pointer-events-auto w-[min(42rem,calc(100vw-1.5rem))] origin-bottom border border-black bg-white text-black shadow-[0_18px_50px_-20px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out ${open ? "rounded-3xl" : "rounded-full"}`}
-        aria-label="Ask AI"
+        data-ask-open="yes"
+        className="absolute left-1/2 top-[120px] w-[min(640px,calc(100%-32px))] -translate-x-1/2 rounded-xl border border-line bg-raised text-fg"
+        aria-label="Ask"
+        onMouseDown={(event) => event.stopPropagation()}
       >
         <form
-          className="flex items-center gap-2 px-3 py-2"
+          className="flex items-center gap-2 px-4 py-2"
           onSubmit={(event) => {
             event.preventDefault();
-            void ask(question);
+            go(question);
           }}
         >
-          <SparkleIcon />
           <label htmlFor="ask-ai-q" className="sr-only">
             Ask Campus Scout
           </label>
@@ -373,33 +298,58 @@ function AskAiDock() {
             onChange={(event) => setQuestion(event.target.value)}
             onFocus={() => setOpen(true)}
             placeholder="Ask Campus Scout"
-            className="min-w-0 flex-1 bg-white text-sm text-black outline-none placeholder:text-neutral-500 disabled:bg-white"
+            className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted"
           />
           {open ? (
             <button type="button" className="text-xs font-semibold underline" onClick={close}>
               Close
             </button>
           ) : (
-            <kbd className="rounded border border-black px-1.5 py-0.5 text-[10px] font-semibold">/</kbd>
+            <kbd className="rounded border border-border-c px-1.5 py-0.5 text-[10px] font-semibold">/</kbd>
           )}
-          <button type="submit" disabled={busy || !question.trim()} aria-label="Ask" className="grid h-7 w-7 place-items-center rounded-full bg-black text-sm text-white disabled:bg-neutral-400">
+            <button type="submit" disabled={busy || !question.trim()} aria-label="Ask" className="grid h-7 w-7 place-items-center rounded-full bg-foreground text-sm text-background disabled:opacity-40">
             ↑
           </button>
         </form>
+        <div className="flex flex-wrap items-center gap-2 border-t border-line px-4 py-2" data-ask-deep-link="">
+          <button
+            type="button"
+            data-ask-open-filtered=""
+            className="inline-flex h-8 items-center rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+            onClick={() => go(question, "browse")}
+            disabled={!question.trim()}
+          >
+            Open filtered Companies
+          </button>
+          <p className="text-[11px] text-fg-3">Cmd-K applies campus, stage, sector, and year when the question names them.</p>
+        </div>
+
         <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
           <div className="overflow-hidden" inert={open ? undefined : true} aria-hidden={open ? undefined : true}>
-            <div className="max-h-[min(32rem,calc(100dvh-8rem))] space-y-3 overflow-y-auto border-t border-black px-3 py-3">
-              <p className="text-xs text-black">Answers use Campus Scout records. Gemini’s free tier answers first. If Gemini is unavailable, a small model runs in this browser.</p>
+            <div className="max-h-[min(32rem,calc(100dvh-8rem))] space-y-3 overflow-y-auto border-t border-border-c px-3 py-3">
+              <p className="text-xs text-foreground">Answers use Campus Scout records. Gemini’s free tier answers first. If Gemini is unavailable, a small model runs in this browser.</p>
               {!asked && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wide">Try</p>
+                  {recent.length > 0 && (
+                    <>
+                      <p className="micro">Recent</p>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {recent.map((item) => (
+                          <button key={item} type="button" className="rounded border border-line px-3 py-1 text-left text-xs" onClick={() => go(item)}>
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  <p className="micro mt-3">Try</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {ASK_EXAMPLES.map((example) => (
                       <button
                         key={example}
                         type="button"
-                        className="rounded-full border border-black px-3 py-1 text-left text-xs font-medium hover:bg-black hover:text-white"
-                        onClick={() => void ask(example)}
+                        className="rounded-full border border-border-c px-3 py-1 text-left text-xs font-medium hover:bg-foreground hover:text-background"
+                        onClick={() => go(example)}
                       >
                         {example}
                       </button>
@@ -411,8 +361,8 @@ function AskAiDock() {
                       <button
                         key={campus}
                         type="button"
-                        className="rounded-full border border-black px-2 py-0.5 text-[11px] font-medium hover:bg-black hover:text-white"
-                        onClick={() => void ask(`${campus} founders`)}
+                        className="rounded-full border border-border-c px-2 py-0.5 text-[11px] font-medium hover:bg-foreground hover:text-background"
+                        onClick={() => go(`${campus} founders`)}
                       >
                         {campus}
                       </button>
@@ -421,13 +371,13 @@ function AskAiDock() {
                 </div>
               )}
               {webgpu === false && (
-                <div className="border border-black px-3 py-2" data-ask-webgpu="no">
+                <div className="border border-border-c px-3 py-2" data-ask-webgpu="no">
                   <p className="text-sm font-semibold">This browser can’t run the on-device model</p>
                   <p className="mt-1 text-xs leading-snug">WebGPU isn’t available on this browser or device. Ask still searches Campus Scout and lists the matching records.</p>
                 </div>
               )}
               {webgpu !== false && (
-                <details className="border border-black px-3 py-2">
+                <details className="border border-border-c px-3 py-2">
                   <summary className="cursor-pointer text-xs font-semibold">On-device fallback · {formatDownload(model.bytes)}</summary>
                   <div className="mt-2 space-y-2">
                     <label className="block text-[10px] font-semibold uppercase tracking-wide" htmlFor="ask-ai-model">
@@ -438,12 +388,12 @@ function AskAiDock() {
                       data-ask-model
                       value={modelId}
                       onChange={(event) => setModelId(event.target.value)}
-                      className="w-full border border-black bg-white px-2 py-1.5 text-xs text-black"
+                      className="w-full border border-border-c bg-surface px-2 py-1.5 text-xs text-foreground"
                     >
                       {ASK_BROWSER_MODELS.map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.label}
-                          {item.id === ASK_DEFAULT_MODEL_ID ? " (default)" : ""} — {formatDownload(item.bytes)}
+                          {item.id === ASK_DEFAULT_MODEL_ID ? " (default)" : ""} · {formatDownload(item.bytes)}
                         </option>
                       ))}
                     </select>
@@ -452,14 +402,14 @@ function AskAiDock() {
                       data-ask-ai-load
                       disabled={loading || modelReady}
                       onClick={() => void loadModel()}
-                      className="bg-black px-3 py-1.5 text-xs font-semibold text-white disabled:bg-neutral-400"
+                      className="bg-foreground px-3 py-1.5 text-xs font-semibold text-background disabled:bg-neutral-400"
                     >
                       {loading ? "Loading…" : modelReady ? "Model ready" : `Load model (${formatDownload(model.bytes)})`}
                     </button>
                     {(loading || progressText) && (
                       <div>
-                        <div className="h-2 border border-black" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
-                          <div className="h-full bg-black" style={{ width: `${Math.min(100, Math.round(progress * 100))}%` }} />
+                        <div className="h-2 border border-border-c" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
+                          <div className="h-full bg-foreground" style={{ width: `${Math.min(100, Math.round(progress * 100))}%` }} />
                         </div>
                         <p className="mt-1 text-[11px] leading-snug">{progressText}</p>
                       </div>
@@ -482,7 +432,7 @@ function AskAiDock() {
               {answer && (
                 <p className="text-sm leading-snug" data-ask-ai-answer>
                   {answer}
-                  {busy && <span className="ml-0.5 inline-block h-3 w-1.5 translate-y-0.5 bg-black" />}
+                  {busy && <span className="ml-0.5 inline-block h-3 w-1.5 translate-y-0.5 bg-foreground" />}
                 </p>
               )}
               {asked && !busy && matches.length === 0 && !error && !answer && <p className="text-sm font-medium">{NOT_IN_THE_DATA}</p>}
@@ -500,7 +450,7 @@ function AskAiDock() {
                         <button
                           type="button"
                           data-ask-hit={hit.id}
-                          className="h-full w-full rounded-2xl border border-black bg-white p-2 text-left shadow-sm hover:bg-black hover:text-white"
+                          className="h-full w-full rounded-2xl border border-border-c bg-surface p-2 text-left shadow-sm hover:bg-foreground hover:text-background"
                           onClick={() => focusHit(hit)}
                         >
                           <span className="text-[10px] font-semibold uppercase tracking-wide">{hit.kind}</span>

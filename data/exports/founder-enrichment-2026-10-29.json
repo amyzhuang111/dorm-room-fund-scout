@@ -1,0 +1,50 @@
+{
+  "favicon_facts": 1192,
+  "people_with_linkedin_in_url": 3445,
+  "role_people_with_linkedin": 2973,
+  "role_people_total": 4952,
+  "enrichment_this_pass": [
+    {
+      "person": "Huagang Tan",
+      "company": "02AI",
+      "linkedin": "https://www.linkedin.com/in/huagang-t-715749163",
+      "source": "https://www.velocityincubator.com/company/02ai"
+    },
+    {
+      "person": "Jason Li",
+      "company": "Serpent Robotics",
+      "linkedin": "https://www.linkedin.com/in/jason3090",
+      "source": "https://jasonid.com/"
+    },
+    {
+      "person": "Naheem Cadiz",
+      "company": "Coveted",
+      "linkedin": "https://www.linkedin.com/in/naheem-cadiz",
+      "source": "https://library.syracuse.edu/news/2026-hult-prize-campus-qualifier-winners/"
+    },
+    {
+      "person": "Noah Merhai",
+      "company": "Coveted",
+      "linkedin": "https://www.linkedin.com/in/noah-merhai",
+      "source": "https://library.syracuse.edu/news/2026-hult-prize-campus-qualifier-winners/"
+    },
+    {
+      "person": "Stephania Calin",
+      "company": "Coveted",
+      "linkedin": null,
+      "source": "https://covetedapp.com/faq"
+    },
+    {
+      "person": "Haley Greene",
+      "company": "Miirror",
+      "linkedin": null,
+      "source": "https://library.syracuse.edu/news/2026-hult-prize-campus-qualifier-winners/"
+    },
+    {
+      "person": "Vivek Olumbe",
+      "company": "Affil.ai",
+      "note": "added Penn affiliation",
+      "source": "https://www.ycombinator.com/companies/affil-ai"
+    }
+  ]
+}

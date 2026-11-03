@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { DRF_SIGNIN_MESSAGE, safeCallbackUrl } from "@/lib/auth/access";
+import { SIGNIN_MESSAGE, safeCallbackUrl } from "@/lib/auth/access";
 import { SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 
 export function VerifyMagicLink() {
@@ -36,7 +36,7 @@ export function VerifyMagicLink() {
             setMessage(SIGNIN_UNCONFIGURED_MESSAGE);
             return;
           }
-          setMessage(result.error === "AccessDenied" ? DRF_SIGNIN_MESSAGE : "This sign-in link is invalid or has expired.");
+          setMessage(result.error === "AccessDenied" ? SIGNIN_MESSAGE : "This sign-in link is invalid or has expired.");
           return;
         }
         // Stay on this page's host. Auth.js often returns an absolute URL on a

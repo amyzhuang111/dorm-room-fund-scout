@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
-import { WhoCanIntro } from "./who-can-intro";
-
 const LINK_LABEL: Record<StartupLinkKind, string> = {
   website: "Website",
   linkedin: "LinkedIn",
@@ -15,22 +13,6 @@ const LINK_LABEL: Record<StartupLinkKind, string> = {
   productHunt: "Product Hunt",
 };
 
-function faviconUrlForWebsite(website: string | null): string | null {
-  if (!website) return null;
-  try {
-    const host = new URL(website).hostname.replace(/^www\./, "");
-    if (!host) return null;
-    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`;
-  } catch {
-    return null;
-  }
-}
-
-function companyLetter(name: string): string {
-  const letter = name.trim().charAt(0).toUpperCase();
-  return letter || "?";
-}
-
 function personInitials(name: string): string {
   const parts = name.split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
@@ -38,22 +20,36 @@ function personInitials(name: string): string {
   return `${parts[0].charAt(0)}${parts[parts.length - 1].charAt(0)}`.toUpperCase();
 }
 
-function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | null }) {
-  const [failedUrl, setFailedUrl] = useState<string | null>(null);
-  const src = websiteUrl && failedUrl !== websiteUrl ? faviconUrlForWebsite(websiteUrl) : null;
-  if (!src) {
-    return (
-      <div className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-neutral-100 text-xl font-bold text-black shadow-sm" aria-hidden>
-        {companyLetter(name)}
-      </div>
-    );
-  }
+function companyInitials(name: string): string {
+  const cleaned = name.replace(/[^a-zA-Z0-9&+\s.-]/g, " ").trim();
+  const parts = cleaned.split(/[\s._-]+/).filter(Boolean).filter((p) => !/^(inc|llc|ltd|co|corp|the|and|&)$/i.test(p));
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
+  return `${parts[0]!.charAt(0)}${parts[1]!.charAt(0)}`.toUpperCase();
+}
+
+function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string | null }) {
+  const src = logoUrl && logoUrl.startsWith("/") ? logoUrl : null;
+  const [ok, setOk] = useState(Boolean(src));
+  const mono = (
+    <div
+      className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#2F4FD8]/40 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[18px] font-semibold tracking-tight text-[#2F4FD8] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.12)]"
+      aria-hidden
+      title={name}
+    >
+      {companyInitials(name).slice(0, 2)}
+    </div>
+  );
+  if (!src || !ok) return mono;
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt=""
+      width={56}
+      height={56}
       className="h-14 w-14 shrink-0 rounded-xl border border-neutral-200 bg-white object-contain p-2 shadow-sm"
-      onError={() => setFailedUrl(websiteUrl)}
+      onError={() => setOk(false)}
     />
   );
 }
@@ -93,7 +89,7 @@ function SchoolIcon() {
 
 function founderMeta(founder: StartupCardFounder): string | null {
   const place = [founder.program, founder.school].filter(Boolean).join(" · ");
-  const parts = [place, founder.linkedinFollowers != null ? `${founder.linkedinFollowers.toLocaleString()} LinkedIn followers` : null, founder.yearsExperience != null ? `${founder.yearsExperience} years experience` : null].filter(Boolean);
+  const parts = [place, founder.linkedinFollowers != null ? `${founder.linkedinFollowers.toLocaleString("en-US")} LinkedIn followers` : null, founder.yearsExperience != null ? `${founder.yearsExperience} years experience` : null].filter(Boolean);
   return parts.length ? parts.join(" · ") : null;
 }
 
@@ -118,7 +114,7 @@ export function StartupDirectoryCard({
   const body = (
     <>
       <div className="flex items-start gap-3">
-        <CompanyLogo name={card.name} websiteUrl={card.websiteUrl} />
+        <CompanyLogo name={card.name} logoUrl={card.logoUrl} />
         <div className={`min-w-0 flex-1 ${onClose ? "pr-8" : ""}`}>
           {name}
           {card.subtitle && <p className="mt-1 text-sm text-neutral-600">{card.subtitle}</p>}
@@ -127,7 +123,7 @@ export function StartupDirectoryCard({
 
       {card.sector && (
         <p className="mt-4">
-          <span className="inline-flex rounded-full bg-[#5840a0] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">{card.sector}</span>
+          <span className="inline-flex rounded-full bg-ember px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-accent-foreground">{card.sector}</span>
         </p>
       )}
 
@@ -191,7 +187,7 @@ export function StartupDirectoryCard({
       )}
 
       <section className="mt-5">
-        <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#5840a0]">Founders</h3>
+        <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cobalt">Founders</h3>
         {card.founders.length === 0 ? (
           <p className="mt-2 text-sm text-neutral-600">No founders on record.</p>
         ) : (
@@ -211,23 +207,20 @@ export function StartupDirectoryCard({
                       </p>
                     )}
                   </div>
-                  {founder.linkedinUrl && (
-                    <span className="inline-flex shrink-0 items-center gap-1">
-                      <a
-                        href={founder.linkedinUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`LinkedIn for ${founder.name}`}
-                        title={founder.linkedinConfidence === "likely" ? "Likely LinkedIn profile. The name matched one of school, startup, or program." : "Open this person's LinkedIn profile"}
-                        className="inline-flex items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
-                      >
-                        in
-                      </a>
-                      {founder.linkedinConfidence === "likely" && (
-                        <span className="rounded border border-dashed border-neutral-400 px-1 text-[10px] font-medium uppercase tracking-wide text-neutral-500">
-                          likely
-                        </span>
-                      )}
+                  {founder.linkedinUrl && founder.linkedinConfidence === "confirmed" ? (
+                    <a
+                      href={founder.linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`LinkedIn for ${founder.name}`}
+                      title="Verified public LinkedIn profile"
+                      className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
+                    >
+                      in
+                    </a>
+                  ) : (
+                    <span className="shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 py-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                      Not on record
                     </span>
                   )}
                 </li>
@@ -236,16 +229,128 @@ export function StartupDirectoryCard({
           </ul>
         )}
       </section>
-
-      <div className="mt-4 border-t border-neutral-200 pt-3">
-        <WhoCanIntro entityId={card.id} />
-      </div>
     </>
   );
   if (embedded) {
     return (
-      <div data-testid="startup-directory-card" className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-        {body}
+      <div data-testid="startup-directory-card" className="space-y-3 bg-transparent p-0 shadow-none">
+        <header className="space-y-1.5">
+          <div className="flex items-start gap-2.5">
+            <CompanyLogo name={card.name} logoUrl={card.logoUrl} />
+            <div className="min-w-0 flex-1">
+              {name}
+              {card.subtitle ? <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">{card.subtitle}</p> : null}
+              {card.sector ? (
+                <p className="mt-1.5">
+                  <span className="inline-flex rounded-sm border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--ember,#D96B1C)]/10 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)]">{card.sector}</span>
+                </p>
+              ) : null}
+            </div>
+          </div>
+          {card.description ? <p className="text-[14px] leading-snug text-[color:var(--fg,#0B0E17)] sm:text-[15px]">{card.description}</p> : null}
+        </header>
+
+        <section>
+          <h3 className="border-b border-[color:var(--line,#E1E5EF)] pb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
+          {card.founders.length === 0 ? (
+            <p className="mt-1.5 text-sm text-[color:var(--fg-3,#5C647A)]">No founders on record.</p>
+          ) : (
+            <ul className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">
+              {card.founders.map((founder) => {
+                const meta = founderMeta(founder);
+                return (
+                  <li key={founder.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-2.5 px-2.5 py-2">
+                    <FounderAvatar name={founder.name} />
+                    <div className="min-w-0">
+                      <p className="break-words text-[13px] font-semibold leading-snug text-[color:var(--fg,#0B0E17)] sm:text-[14px]">{founder.name}</p>
+                      {founder.role ? <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)]">{founder.role}</p> : null}
+                      {meta ? (
+                        <p className="mt-1 flex items-start gap-1 text-xs leading-snug text-[color:var(--fg-3,#5C647A)]">
+                          <SchoolIcon />
+                          <span className="min-w-0 break-words">{meta}</span>
+                        </p>
+                      ) : null}
+                    </div>
+                    {founder.linkedinUrl && founder.linkedinConfidence === "confirmed" ? (
+                      <a
+                        href={founder.linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`LinkedIn for ${founder.name}`}
+                        title="Verified public LinkedIn profile"
+                        className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#0a66c2] px-2 py-1 text-xs font-semibold text-white hover:bg-[#004182]"
+                      >
+                        in
+                      </a>
+                    ) : (
+                      <span className="inline-flex max-w-[5.5rem] shrink-0 flex-col rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-1.5 py-1 text-center font-mono text-[9px] leading-tight text-[color:var(--fg-3,#5C647A)]">
+                        Not on record
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
+        <section>
+          <h3 className="border-b border-[color:var(--line,#E1E5EF)] pb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Signals</h3>
+          <dl className="mt-1.5 space-y-1.5 text-sm text-[color:var(--fg,#0B0E17)]">
+            {card.region ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Region</dt>
+                <dd>{card.region}</dd>
+              </div>
+            ) : null}
+            {card.campuses.length > 0 ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">{card.campuses.length > 1 ? "Campuses" : "Campus"}</dt>
+                <dd>{card.campuses.join(", ")}</dd>
+              </div>
+            ) : null}
+            {card.status ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Status</dt>
+                <dd>{card.status}</dd>
+              </div>
+            ) : null}
+            {card.teamSize ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Team</dt>
+                <dd>{card.teamSize}</dd>
+              </div>
+            ) : null}
+          </dl>
+        </section>
+
+        <section className="pb-1">
+          <h3 className="border-b border-[color:var(--line,#E1E5EF)] pb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Links</h3>
+          {card.links.length > 0 ? (
+            <ul className="mt-1.5 space-y-1.5">
+              {card.links.map((link) => (
+                <li key={link.kind}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-9 items-center gap-2 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[12px] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                  >
+                    <span className="grid h-5 w-5 shrink-0 place-items-center text-[color:var(--cobalt,#2F4FD8)]">
+                      <LinkMark kind={link.kind} />
+                    </span>
+                    <span className="min-w-0 truncate">{LINK_LABEL[link.kind]}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="mt-1.5 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2.5 py-2">
+              <p className="font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">Not on record</p>
+              <p className="mt-0.5 break-words text-[11px] leading-snug text-[color:var(--fg-3,#5C647A)]">No verified website or social links stored.</p>
+            </div>
+          )}
+        </section>
       </div>
     );
   }
@@ -263,7 +368,7 @@ export function StartupDirectoryCard({
 
 function FounderAvatar({ name }: { name: string }) {
   return (
-    <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-neutral-100 text-sm font-bold text-black" aria-hidden>
+    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-[color:var(--cobalt-haze,#E8ECFA)] font-mono text-[11px] font-bold text-[color:var(--cobalt,#2F4FD8)] sm:h-10 sm:w-10 sm:text-xs" aria-hidden>
       {personInitials(name)}
     </div>
   );

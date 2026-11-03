@@ -137,6 +137,9 @@ export function openDatabase(dbPath: string): Database.Database {
 // existing databases (including the one already bundled/committed) pick up
 // schema changes without needing a full re-ingest.
 function migrate(db: Database.Database) {
+  // Alumni partner roster is not part of the generic workspace.
+  // Campus presence (36 DRF schools from verified CSV) stays for coverage honesty.
+  db.exec(`DROP TABLE IF EXISTS drf_alumni`);
   const addColumnIfMissing = (table: string, column: string, ddl: string) => {
     const cols = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[];
     if (!cols.some((c) => c.name === column)) {
@@ -187,6 +190,7 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("projects", "verification_status", "verification_status TEXT");
   addColumnIfMissing("projects", "last_verified_at", "last_verified_at TEXT");
   addColumnIfMissing("projects", "verification_note", "verification_note TEXT");
+  addColumnIfMissing("projects", "excluded_reason", "excluded_reason TEXT");
   db.exec(`CREATE TABLE IF NOT EXISTS entity_redirects (
     old_id TEXT PRIMARY KEY,
     entity_type TEXT NOT NULL,
@@ -213,46 +217,6 @@ function migrate(db: Database.Database) {
   db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_precollege_person_signal
     ON precollege_signals(person_id, signal_type, IFNULL(year, 0), source_url)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_precollege_person ON precollege_signals(person_id)`);
-
-  db.exec(`CREATE TABLE IF NOT EXISTS drf_alumni (
-    id TEXT PRIMARY KEY,
-    person_id TEXT NOT NULL REFERENCES people(id),
-    name TEXT NOT NULL,
-    drf_team TEXT,
-    university_id TEXT,
-    school_label TEXT,
-    program_id TEXT,
-    program_label TEXT,
-    year_start INTEGER,
-    year_end INTEGER,
-    class_year INTEGER,
-    current_firm TEXT,
-    current_role TEXT,
-    firm_type TEXT,
-    firm_confidence TEXT,
-    linkedin_confidence TEXT,
-    linkedin_url TEXT,
-    linkedin_source_url TEXT,
-    location TEXT,
-    verification_note TEXT,
-    investor_id TEXT,
-    source_url TEXT NOT NULL,
-    firm_source_url TEXT,
-    sources_json TEXT NOT NULL DEFAULT '[]',
-    confidence TEXT NOT NULL,
-    excerpt TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT (datetime('now')),
-    UNIQUE(person_id)
-  )`);
-  db.exec(`CREATE INDEX IF NOT EXISTS idx_drf_alumni_person ON drf_alumni(person_id)`);
-  db.exec(`CREATE INDEX IF NOT EXISTS idx_drf_alumni_investor ON drf_alumni(investor_id)`);
-  addColumnIfMissing("drf_alumni", "firm_type", "firm_type TEXT");
-  addColumnIfMissing("drf_alumni", "firm_confidence", "firm_confidence TEXT");
-  addColumnIfMissing("drf_alumni", "linkedin_confidence", "linkedin_confidence TEXT");
-  addColumnIfMissing("drf_alumni", "linkedin_url", "linkedin_url TEXT");
-  addColumnIfMissing("drf_alumni", "linkedin_source_url", "linkedin_source_url TEXT");
-  addColumnIfMissing("drf_alumni", "location", "location TEXT");
-  addColumnIfMissing("drf_alumni", "verification_note", "verification_note TEXT");
 
   db.exec(`CREATE TABLE IF NOT EXISTS program_signals (
     id TEXT PRIMARY KEY,

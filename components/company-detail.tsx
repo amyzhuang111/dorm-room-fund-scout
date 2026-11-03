@@ -12,9 +12,35 @@ import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyProfileCard } from "./company-profile";
-import { WhoCanIntro } from "./who-can-intro";
+import { CompanyFullRecord } from "./company-full-record";
 import { InTheNews } from "./in-the-news";
 import { StartupDirectoryCard, useStartupCard } from "./startup-directory-card";
+
+function normalizeOpenQuestion(raw: string): string {
+  // Dedupe gate merge tails ("Also recorded: …") when the extra restates the primary.
+  const text = raw.replace(/\s+/g, " ").trim();
+  const parts = text.split(/\s*Also recorded:\s*/i);
+  if (parts.length < 2) return text;
+  const primary = parts[0]!.trim();
+  const extras = parts.slice(1).map((p) => p.trim()).filter(Boolean);
+  const keep: string[] = [];
+  const norm = (s: string) => s.toLowerCase().replace(/[—–·|]/g, " ").replace(/\s+/g, " ").trim();
+  const seen = new Set([norm(primary)]);
+  for (const e of extras) {
+    const n = norm(e);
+    if (!n || seen.has(n)) continue;
+    // Near-duplicate: >70% shared tokens with primary
+    const a = new Set(n.split(" "));
+    const b = new Set(norm(primary).split(" "));
+    const inter = [...a].filter((x) => b.has(x)).length;
+    const union = new Set([...a, ...b]).size || 1;
+    if (inter / union >= 0.7) continue;
+    keep.push(e);
+    seen.add(n);
+  }
+  if (!keep.length) return primary;
+  return `${primary} Also recorded: ${keep.join(" · ")}`;
+}
 
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
@@ -31,16 +57,62 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   const strongestEvidence = project.claims[0];
   const strongestConcern = concernReasons[0];
 
+  const openQ = strongestConcern
+    ? normalizeOpenQuestion(strongestConcern.rationale)
+    : "No unresolved eligibility concerns on record.";
+  const whyLook = (
+      <section className="dossier-brief relative space-y-1.5 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2 sm:space-y-2 sm:p-2.5" data-why-look-section="">
+        <div>
+          <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
+        </div>
+        <div>
+          <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">
+            <span className="sm:hidden">
+              {project.founders.length ? "Attributed evidence lives under Evidence below." : "Not yet identified from evidence."}
+            </span>
+            <span className="hidden sm:inline">
+              {project.founders.length ? `${project.founders.join(" · ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
+            </span>
+          </p>
+        </div>
+        <div>
+          <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{openQ}</p>
+        </div>
+        {/* r48: port desk scout actions onto mobile why-look (action path was desk-only). */}
+        <div className="flex flex-wrap gap-2 pt-1" data-scout-actions="">
+          <a href="#evidence" className="inline-flex min-h-9 items-center rounded-md bg-[color:var(--cobalt,#2F4FD8)] px-3 py-1.5 text-xs font-medium text-white sm:min-h-0 sm:bg-accent sm:text-accent-foreground">
+            Research company
+          </a>
+          <a href="#pipeline" className="inline-flex min-h-9 items-center rounded-md border border-[color:var(--ember,#D96B1C)]/50 px-3 py-1.5 text-xs font-medium text-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--ember,#D96B1C)]/10 sm:min-h-0">
+            Save / add to pipeline
+          </a>
+        </div>
+      </section>
+  );
+
   return (
-    <div className="space-y-5 p-4">
+    <div className="space-y-3 p-2.5 sm:space-y-5 sm:p-4">
+      {/* Mobile: Why look above Funding so sim-375 matches 73a fold (Funding peeks) */}
+      <div className="sm:hidden">{whyLook}</div>
+
+      {/* r45: Full record lead (founders / identity / CONFIRMED) stays at the top. */}
+      <div data-full-record-top="">
+        <CompanyFullRecord project={project} />
+      </div>
+
       {/* Header */}
       <div>
         {card ? (
-          <StartupDirectoryCard card={card} embedded />
+          <div className="hidden sm:block" data-dossier-desk-directory-card="">
+            <StartupDirectoryCard card={card} embedded />
+          </div>
         ) : (
           <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
         )}
-        <div className="mt-3 flex items-start justify-between gap-2">
+        <div className="sample-ops-chrome mt-2 hidden items-start justify-between gap-2 sm:flex">
           <div className="flex flex-wrap items-center gap-2">
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
             {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}
@@ -85,9 +157,6 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
                   ))}
                 </div>
                 <CompanyProfileCard profile={project.profile} founders={project.founderLinks} />
-                <div className="mt-3">
-                  <WhoCanIntro entityId={project.id} />
-                </div>
                 <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted sm:grid-cols-3">
                   <div>
                     <dt className="font-semibold uppercase tracking-wide">Sector</dt>
@@ -113,34 +182,12 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             ))}
           </p>
         )}
-        <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
+        <div className="sample-ops-chrome">
+          <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
+        </div>
       </div>
 
-      {/* Above the fold: why look / founder edge / open question */}
-      <section className="space-y-3 rounded-md border border-border-c bg-surface p-3">
-        <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Why look</h3>
-          <p className="mt-0.5 text-sm text-foreground">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
-        </div>
-        <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Founder edge</h3>
-          <p className="mt-0.5 text-sm text-foreground">
-            {project.founders.length ? `${project.founders.join(", ")} — see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
-          </p>
-        </div>
-        <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Open question</h3>
-          <p className="mt-0.5 text-sm text-foreground">{strongestConcern ? strongestConcern.rationale : "No unresolved eligibility concerns on record."}</p>
-        </div>
-        <div className="flex flex-wrap gap-2 pt-1">
-          <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
-            Research company
-          </a>
-          <a href="#pipeline" className="rounded-md border border-border-c px-3 py-1.5 text-xs text-foreground hover:bg-surface">
-            Save / add to pipeline
-          </a>
-        </div>
-      </section>
+      <div className="hidden sm:block">{whyLook}</div>
 
       <InTheNews items={project.news} moreHref={`/news?q=${encodeURIComponent(project.name)}`} />
 
@@ -169,7 +216,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             {project.sameSchoolBonus > 0 ? ` Includes +${project.sameSchoolBonus} for same-school co-founders.` : ""}
           </p>
         ) : (
-          <p className="mt-1 text-sm text-muted">Unassessed — {project.openQuestion ?? "no rubric dimensions rated yet."}</p>
+          <p className="mt-1 text-sm text-muted">Unassessed · {project.openQuestion ?? "no rubric dimensions rated yet."}</p>
         )}
         <div className="mt-2">
           <AssessmentForm projectId={project.id} history={project.assessmentHistory} />
@@ -193,16 +240,16 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         </section>
       )}
 
-      {/* Founders */}
-      <section>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Founders</h3>
+      {project.founderLinks.length > 0 ? (
+      <section data-company-founders="">
+        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
         <ul className="mt-1 space-y-1 text-sm text-foreground">
-          {project.founderLinks.length === 0 && <li>None identified yet.</li>}
           {project.founderLinks.map((f) => (
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
               <Link href={founderHref(f)} className="text-link hover:underline">
                 {f.name}
               </Link>
+              {f.role ? <span className="text-xs text-muted">{f.role.replaceAll("_", " ")}</span> : null}
               <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={f.school ?? project.universities[0]} websiteUrl={f.linkedinUrl} />
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />
@@ -224,7 +271,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
                           {host}
                         </a>
                         {item.status === "unverified" ? " · unverified" : ""}
-                        {item.excerpt ? ` — ${item.excerpt}` : ""}
+                        {item.excerpt ? ` · ${item.excerpt}` : ""}
                       </li>
                     );
                   })}
@@ -233,7 +280,8 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             </li>
           ))}
         </ul>
-      </section>
+      </section> ) : null}
+
 
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Sources</h3>
@@ -290,6 +338,14 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
               <p className="mt-0.5 text-muted">
                 {s.signalType.replace(/_/g, " ")}
                 {s.sourceDate ? ` · ${s.sourceDate}` : ""}
+                {s.sourceUrl ? (
+                  <>
+                    {" · "}
+                    <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
+                      source
+                    </a>
+                  </>
+                ) : null}
               </p>
             </li>
           ))}

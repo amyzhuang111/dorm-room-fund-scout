@@ -139,7 +139,6 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
     const name = row.value_text.replace(/\s+/g, " ").trim();
     if (name) investorNames.set(investorNodeId(name), name);
   }
-  investorNames.set(investorNodeId("Dorm Room Fund"), "Dorm Room Fund");
   const investors = [...investorNames.entries()].map(([id, name]) => ({ id, name }));
 
   const companyIds = new Set(

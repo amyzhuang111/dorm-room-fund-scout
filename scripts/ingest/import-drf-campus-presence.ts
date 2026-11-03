@@ -1,4 +1,5 @@
-// Load DRF campus presence from data/imports/drf_campus_presence.csv.
+// Load DRF campus presence from data/imports/drf_campus_presence.csv
+// (v2 atlas: 36 DRF partner schools; synced from drf_campus_presence_v2.csv).
 // Re-running replaces the table with the file: same school updates in place,
 // schools no longer in the file are removed, and named partners are never invented.
 //

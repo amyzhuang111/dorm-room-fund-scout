@@ -206,7 +206,7 @@ function buildMetros(
       if (hqByCompany.has(companyId)) knownTotal.add(companyId);
     }
   }
-  const caption = `Cells are startups founded by someone at that campus. Headquarters are on file for ${knownTotal.size.toLocaleString()} of ${startupTotal.size.toLocaleString()} startups tied to these campuses. Shading compares the metro columns. Unknown has no headquarters fact. All metros counts every known headquarters, including cities that are not a column.`;
+  const caption = `Cells are startups founded by someone at that campus. Headquarters are on file for ${knownTotal.size.toLocaleString("en-US")} of ${startupTotal.size.toLocaleString("en-US")} startups tied to these campuses. Shading compares the metro columns. Unknown has no headquarters fact. All metros counts every known headquarters, including cities that are not a column.`;
 
   return {
     id: "metros",

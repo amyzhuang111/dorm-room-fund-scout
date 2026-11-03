@@ -57,7 +57,7 @@ export function computeFounderSignal(
   } else if (namedRole) {
     dims.push({ key: "ability_to_build", label: "Ability to build", level: "medium", evidence: "Specific, named role on a real shipped project." });
   } else if (projects.length > 0) {
-    dims.push({ key: "ability_to_build", label: "Ability to build", level: "none", evidence: "Only a generic team-member listing — no differentiated ownership evidence yet." });
+    dims.push({ key: "ability_to_build", label: "Ability to build", level: "none", evidence: "Only a generic team-member listing · no differentiated ownership evidence yet." });
   } else {
     dims.push({ key: "ability_to_build", label: "Ability to build", level: null, evidence: null });
   }
@@ -72,7 +72,7 @@ export function computeFounderSignal(
   } else if (distinctProjects === 2) {
     dims.push({ key: "repeat_building", label: "Repeat building", level: "medium", evidence: "2 distinct projects on record." });
   } else if (distinctProjects === 1) {
-    dims.push({ key: "repeat_building", label: "Repeat building", level: "none", evidence: "Only 1 project on record so far — absence of a second isn't negative evidence." });
+    dims.push({ key: "repeat_building", label: "Repeat building", level: "none", evidence: "Only 1 project on record so far · absence of a second isn't negative evidence." });
   } else {
     dims.push({ key: "repeat_building", label: "Repeat building", level: null, evidence: null });
   }
@@ -106,7 +106,7 @@ export function computeFounderSignal(
         .get(...projectIds) as { current_observation: string } | undefined)
     : undefined;
   if (awardHit) {
-    dims.push({ key: "external_validation", label: "External validation", level: "medium", evidence: "Team-level prize/award on record — not individually attributed." });
+    dims.push({ key: "external_validation", label: "External validation", level: "medium", evidence: "Team-level prize/award on record · not individually attributed." });
   } else {
     dims.push({ key: "external_validation", label: "External validation", level: null, evidence: null });
   }

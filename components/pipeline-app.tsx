@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { PIPELINE_STAGES, type PipelineStage, type UserStartup } from "@/lib/domain/user-pipeline";
-import type { IntroPanel } from "@/lib/domain/who-can-intro";
 import { AddStartupForm } from "./add-startup-form";
 import { UserAddedBadge, VerifiedByUserBadge } from "./entity-marks";
 import { PipelineSourceFields } from "./pipeline-source-fields";
@@ -15,8 +14,6 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
   const pipeline = useUserPipeline();
   const params = useSearchParams();
   const requested = params.get("edit");
-  const outreachId = params.get("outreach");
-  const referrerId = params.get("referrer");
   const [creating, setCreating] = useState(params.get("add") === "1");
   const [editingId, setEditingId] = useState<string | null>(requested);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
@@ -29,10 +26,11 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
   ];
 
   return (
-    <div className="mx-auto max-w-[1400px] p-4 text-black sm:p-6">
+    <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10 text-foreground">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-lg font-semibold">Pipeline</h1>
+          <p className="page-eyebrow">Your list</p>
+          <h1 className="page-title">Pipeline</h1>
           <p className="mt-1 max-w-2xl text-sm text-neutral-700">
             Startups and founders you have verified, plus anyone you star from search or a detail page. Move a card between stages, edit it, or delete it.
           </p>
@@ -55,8 +53,6 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
       {pipeline.storage !== "local" && <div id="setup" />}
 
       <PipelineSourceMix state={pipeline.state} />
-
-      {outreachId && referrerId && <OutreachRequest entityId={outreachId} referrerId={referrerId} />}
 
       {showForm && (
         <div className="mt-4">
@@ -140,76 +136,6 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
         })}
       </div>
     </div>
-  );
-}
-
-function OutreachRequest({ entityId, referrerId }: { entityId: string; referrerId: string }) {
-  const pipeline = useUserPipeline();
-  const [panel, setPanel] = useState<IntroPanel | null>(null);
-  const [failed, setFailed] = useState(false);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    let cancel = false;
-    fetch(`/api/drf/intros?id=${encodeURIComponent(entityId)}`)
-      .then((res) => (res.ok ? (res.json() as Promise<IntroPanel>) : null))
-      .then((payload) => {
-        if (!cancel) setPanel(payload);
-      })
-      .catch(() => {
-        if (!cancel) setFailed(true);
-      });
-    return () => {
-      cancel = true;
-    };
-  }, [entityId]);
-
-  if (failed) return <p className="mt-4 text-sm text-neutral-800">The intro path could not be loaded.</p>;
-  if (!panel) return <p className="mt-4 text-sm text-neutral-700">Loading intro…</p>;
-  const path = panel.paths.find((item) => item.alumPersonId === referrerId);
-  if (!panel.target || !path) {
-    return <p className="mt-4 rounded-md border border-black bg-white p-3 text-sm">That referrer is not a recorded path for this startup.</p>;
-  }
-  const line = `${path.alumName} — ${path.reason}`.slice(0, 120);
-  const existing = pipeline.state.links.find((link) => link.entityType === panel.target!.kind && link.entityId === panel.target!.id);
-  return (
-    <section className="mt-4 rounded-md border border-black bg-white p-3 text-sm">
-      <h2 className="font-semibold">Add to outreach</h2>
-      <p className="mt-1">
-        {panel.target.name}
-        {panel.target.campusName ? ` · ${panel.target.campusName}` : ""}
-      </p>
-      <p className="mt-1">
-        <span className="font-semibold uppercase">{path.strength}</span> · {path.reason}
-        {path.throughFounder ? `, with ${path.throughFounder}` : ""}
-      </p>
-      <p className="mt-1 text-neutral-800">Referrer: {path.alumName}{[path.role, path.firm].filter(Boolean).length ? ` · ${[path.role, path.firm].filter(Boolean).join(", ")}` : ""}</p>
-      {saved || existing?.referrer === line ? (
-        <p className="mt-2 font-semibold">In the pipeline, with {path.alumName} as the referrer.</p>
-      ) : (
-        <button
-          type="button"
-          className="mt-2 rounded-md border border-black bg-black px-3 py-1.5 text-sm font-medium text-white"
-          onClick={() => {
-            if (existing) pipeline.setLinkSource(existing.id, "alum_referral", line);
-            else {
-              pipeline.star({
-                entityType: panel.target!.kind,
-                entityId: panel.target!.id,
-                name: panel.target!.name,
-                campusName: panel.target!.campusName,
-                websiteUrl: panel.target!.websiteUrl,
-                sourcedVia: "alum_referral",
-                referrer: line,
-              });
-            }
-            setSaved(true);
-          }}
-        >
-          {existing ? "Attach referrer" : "Add to outreach"}
-        </button>
-      )}
-    </section>
   );
 }
 

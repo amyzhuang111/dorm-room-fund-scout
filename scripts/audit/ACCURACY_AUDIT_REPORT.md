@@ -1,7 +1,7 @@
 # Accuracy audit
 
 Checked 2026-09-27 against company websites, YC company pages, press, GitHub, Devpost, and university pages.
-Search HTML came from DuckDuckGo, Bing, and Google. LinkedIn profile pages were not fetched (they require a login). DRF alumni rows were not modified.
+Search HTML came from DuckDuckGo, Bing, and Google. LinkedIn profile pages were not fetched (they require a login).
 
 ## Counts
 

@@ -24,7 +24,7 @@ const GENERIC_ROLES = new Set(["team_member", "contributor", "unknown", "member"
 const REASON_LABEL: Record<PromotionReason, string> = {
   company_founder: "Linked to a real (or plausibly forming) company as a founder.",
   leadership_role: "Held a named leadership/technical-lead role on a real project.",
-  repeat_builder: "Appears with a real role on 2+ distinct projects — repeat building.",
+  repeat_builder: "Appears with a real role on 2+ distinct projects · repeat building.",
   named_technical_role: "Held a specific, named technical role (not a generic team-member label) on a real project.",
 };
 

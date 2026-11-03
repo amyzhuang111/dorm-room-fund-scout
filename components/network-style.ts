@@ -102,7 +102,8 @@ export function readableInk(hex: string): string {
   if (!parsed) return "#374151";
   let [red, green, blue] = parsed;
   if (contrastOnWhite(red, green, blue) >= 4.5) return toHex(red, green, blue);
-  let { h, s, l } = rgbToHsl(red, green, blue);
+  const { h, s, l: startL } = rgbToHsl(red, green, blue);
+  let l = startL;
   for (let step = 0; step < 28 && contrastOnWhite(red, green, blue) < 4.5; step++) {
     l = Math.max(12, l - 3);
     [red, green, blue] = hslToRgb(h, s, l);
@@ -565,20 +566,6 @@ export function selectVisibleLabels(
         else grid.set(key, [box]);
       }
     }
-  };
-  const hits = (box: LabelBox): boolean => {
-    const x0 = Math.floor(box.left / cell);
-    const x1 = Math.floor(box.right / cell);
-    const y0 = Math.floor(box.top / cell);
-    const y1 = Math.floor(box.bottom / cell);
-    for (let x = x0; x <= x1; x++) {
-      for (let y = y0; y <= y1; y++) {
-        const list = grid.get(`${x}:${y}`);
-        if (!list) continue;
-        for (const other of list) if (boxesOverlap(other, box)) return true;
-      }
-    }
-    return false;
   };
   const hitsDisc = (box: LabelBox, discId?: string) => discs.some((disc) => disc.id !== discId && boxHitsDisc(box, disc));
   const overlapScore = (box: LabelBox): number => {

@@ -433,7 +433,7 @@ export const CAMPUSES: CampusConfig[] = [
     country: "United States",
     lat: 43.0753,
     lon: -89.4042,
-    coordSource: "en.wikipedia.org/wiki/University_of_Wisconsin–Madison (MediaWiki coordinates API, retrieved 2026-09-27)",
+    coordSource: "en.wikipedia.org/wiki/University_of_Wisconsin-Madison (MediaWiki coordinates API, retrieved 2026-09-27)",
   },
   {
     id: "univ_byu",

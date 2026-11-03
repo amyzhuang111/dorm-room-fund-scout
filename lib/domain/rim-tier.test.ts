@@ -41,7 +41,7 @@ assert.equal(band("StartX", "organization", 24), "inward");
 assert.equal(band("Venture Lab Startup Challenge", "organization", 218), "inward");
 
 assert.equal(band("Jerome Fisher M&T", "organization", 52), null);
-assert.equal(band("Dorm Room Fund", "investor", 400), null);
+assert.equal(band("Example Student Fund", "investor", 400), null);
 assert.equal(band("Z Fellows", "organization", 1), null);
 assert.equal(band("Cal Hacks organising team", "organization", 8), null);
 assert.equal(band("Ada Lovelace", "person", 4), null);

@@ -73,7 +73,7 @@ async function main() {
 
   process.env.AUTH_SECRET = "super-secret-value";
   process.env.RESEND_API_KEY = "re_test_key_value";
-  delete process.env.ALLOWED_EMAILS;
+  process.env.ALLOWED_EMAILS = "scout@example.com";
 
   const sent: { url: string; init: RequestInit | undefined }[] = [];
   globalThis.fetch = async (input, init) => {
@@ -82,8 +82,8 @@ async function main() {
     return new Response(JSON.stringify({ id: "email_123" }), { status: 200 });
   };
 
-  assert.equal(SEEDED_ALLOWED_EMAILS.includes("amyzhuang880@gmail.com"), true);
-  const ok = await post("AmyZhuang880@gmail.com");
+  assert.equal(SEEDED_ALLOWED_EMAILS.length, 0);
+  const ok = await post("Scout@Example.com");
   assert.equal(ok.status, 200);
   assert.deepEqual(await ok.json(), { ok: true });
   assert.equal(sent.length, 1);
@@ -92,10 +92,10 @@ async function main() {
   assert.equal(headers.get("authorization"), "Bearer re_test_key_value");
   const body = JSON.parse(String(sent[0]?.init?.body)) as { from: string; to: string[]; subject: string; text: string };
   assert.equal(body.from, "Campus Scout <onboarding@resend.dev>");
-  assert.deepEqual(body.to, ["amyzhuang880@gmail.com"]);
+  assert.deepEqual(body.to, ["scout@example.com"]);
   assert.match(body.subject, /Campus Scout/);
   assert.match(body.text, /Campus Scout/);
-  assert.equal(/\bamy\b|zhuang/i.test(`${body.from}\n${body.subject}\n${body.text}`), false);
+  assert.equal(/\bamy\b|zhuang|\bdrf\b|dorm room/i.test(`${body.from}\n${body.subject}\n${body.text}`), false);
   assert.match(body.text, /http:\/\/localhost:3000\/signin\/verify\?/);
 
   const beforeForbidden = sent.length;
@@ -103,12 +103,8 @@ async function main() {
   assert.equal(forbidden.status, 403);
   assert.equal(sent.length, beforeForbidden);
 
-  const otherSeed = await post("zhuanga@engineering.upenn.edu");
-  assert.equal(otherSeed.status, 200);
-  assert.deepEqual(await otherSeed.json(), { ok: true });
-
   globalThis.fetch = async () => new Response(JSON.stringify({ message: "API key re_test_key_value is invalid" }), { status: 422 });
-  const failed = await post("amyzhuang880@gmail.com");
+  const failed = await post("scout@example.com");
   const failedBody = (await failed.json()) as { error?: string };
   assert.equal(failed.status, 502);
   assert.equal(failedBody.error, SIGNIN_EMAIL_FAILED_MESSAGE);
@@ -121,7 +117,7 @@ async function main() {
     sent.push({ url: "unexpected", init: undefined });
     throw new Error("should not send");
   };
-  const unconfigured = await post("amyzhuang880@gmail.com");
+  const unconfigured = await post("scout@example.com");
   const unconfiguredBody = (await unconfigured.json()) as { error?: string };
   assert.equal(unconfigured.status, 503);
   assert.equal(unconfiguredBody.error, SIGNIN_UNCONFIGURED_MESSAGE);

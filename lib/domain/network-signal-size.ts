@@ -8,7 +8,7 @@ export function mentionsAccelerator(text: string | null | undefined): boolean {
 
 /**
  * Confirmed startups count fully, partial ones at half. Unverified startups
- * do not count. Funded, accelerator-backed, and S/A or DRF-portfolio companies
+ * do not count. Funded, accelerator-backed, and S/A companies
  * weigh more.
  */
 export function startupSignalWeight(input: {

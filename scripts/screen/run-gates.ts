@@ -1,4 +1,4 @@
-// Evaluates DRF screening gates for every investable-candidate project that
+// Evaluates screening gates for every investable-candidate project that
 // isn't a confirmed existing portfolio member, and persists gate_results.
 // Deterministic — no LLM involved. Safe to re-run; results are upserted.
 //

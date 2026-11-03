@@ -70,11 +70,11 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   if (!text) return;
   const tip = (data as { signalTip?: string }).signalTip;
   const links = (data as { links?: number }).links;
-  const linkLine = links != null && links > 0 ? `${links.toLocaleString()} connections` : null;
+  const linkLine = links != null && links > 0 ? `${links.toLocaleString("en-US")} connections` : null;
   const size = settings.labelSize;
   context.font = `600 ${size}px ${settings.labelFont}`;
   const titleWidth = context.measureText(text).width;
-  context.font = "11px Satoshi, Arial, sans-serif";
+  context.font = "11px Geist, ui-sans-serif, sans-serif";
   const tipWidth = tip ? context.measureText(tip).width : 0;
   const linkWidth = linkLine ? context.measureText(linkLine).width : 0;
   const width = Math.max(titleWidth, tipWidth, linkWidth);
@@ -103,13 +103,13 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.fillText(text, x + 8, y + size + 2);
   let lineY = y + size + 16;
   if (linkLine) {
-    context.font = "11px Satoshi, Arial, sans-serif";
+    context.font = "11px Geist, ui-sans-serif, sans-serif";
     context.fillStyle = "#111111";
     context.fillText(linkLine, x + 8, lineY);
     lineY += 14;
   }
   if (tip) {
-    context.font = "11px Satoshi, Arial, sans-serif";
+    context.font = "11px Geist, ui-sans-serif, sans-serif";
     context.fillStyle = "#404040";
     context.fillText(tip, x + 8, lineY);
   }

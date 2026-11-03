@@ -502,7 +502,6 @@ async function main() {
     const pageUrl = (company.primary_link || company.website_url) as string;
     try {
       const html = await fetchText(pageUrl);
-      const text = pageText(html);
       const founded = html.match(/Founded\s*((?:19|20)\d{2})/i);
       if (founded) {
         put({

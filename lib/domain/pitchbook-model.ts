@@ -8,7 +8,7 @@ import { perThousand } from "./network-analysis-model";
 export const PITCHBOOK_SOURCE_URL = "https://pitchbook.com/news/articles/pitchbook-university-rankings";
 export const PITCHBOOK_LIST_URL =
   "https://editorial-viz.s3.us-west-1.amazonaws.com/20260901-universities-2026/global/Universities+list.xlsx";
-export const PITCHBOOK_TITLE = "PitchBook VC-backed alumni founders (2015–2026)";
+export const PITCHBOOK_TITLE = "PitchBook VC-backed alumni founders (2015-2026)";
 export const PITCHBOOK_PERIOD_START = "2015-01-01";
 export const PITCHBOOK_PERIOD_END = "2026-08-31";
 

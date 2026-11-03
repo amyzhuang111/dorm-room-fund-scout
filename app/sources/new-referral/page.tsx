@@ -7,7 +7,7 @@ export default function NewReferralPage() {
     <div className="mx-auto max-w-xl p-4 sm:p-6">
       <h1 className="text-lg font-semibold text-foreground">Add a manual referral</h1>
       <p className="mt-1 text-sm text-muted">
-        For a firsthand lead you know about directly — who kept building after the hackathon, who built something you actually use. This
+        For a firsthand lead you know about directly · who kept building after the hackathon, who built something you actually use. This
         goes through the exact same screening gates as anything ingested; nothing about entering it manually skips eligibility checks. Your
         note is stored as a labeled <code className="font-mono text-xs">user_note</code> claim, never presented as an independently observed
         fact.
@@ -52,7 +52,7 @@ export default function NewReferralPage() {
             <option value="current_student">Current student</option>
             <option value="recent_grad">Recent grad</option>
             <option value="older_alumni">Older alumni</option>
-            <option value="unverified">Not sure — flag for verification</option>
+            <option value="unverified">Not sure · flag for verification</option>
           </select>
         </div>
 
@@ -62,7 +62,7 @@ export default function NewReferralPage() {
             name="noteBody"
             required
             rows={3}
-            placeholder="How you know about this, and what specifically you saw — not a vague endorsement."
+            placeholder="How you know about this, and what specifically you saw · not a vague endorsement."
             className="mt-1 w-full rounded-md border border-border-c bg-surface px-2.5 py-1.5 text-sm"
           />
         </div>

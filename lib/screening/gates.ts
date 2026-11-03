@@ -44,13 +44,13 @@ export function evaluateAffiliationGate(facts: ProjectFacts): GateOutcome {
         gate: "affiliation",
         result: "needs_verification",
         rationale:
-          "Enrollment/graduation claim exists but isn't dated — an old biography is not proof of current status. Needs a dated source.",
+          "Enrollment/graduation claim exists but isn't dated · an old biography is not proof of current status. Needs a dated source.",
       };
     }
     return {
       gate: "affiliation",
       result: "pass",
-      rationale: `Dated evidence supports ${facts.affiliationStatus.replace("_", " ")}, within DRF's public ${SCREENING_CONFIG.studentRecencyYears.value}-year guidance.`,
+      rationale: `Dated evidence supports ${facts.affiliationStatus.replace("_", " ")}, within the brief's ${SCREENING_CONFIG.studentRecencyYears.value}-year guidance.`,
     };
   }
   if (facts.affiliationStatus === "older_alumni") {
@@ -58,13 +58,13 @@ export function evaluateAffiliationGate(facts: ProjectFacts): GateOutcome {
       gate: "affiliation",
       result: "needs_verification",
       rationale:
-        "Affiliation evidence points to alumni status beyond DRF's typical recency window. DRF-community exceptions exist — confirm before excluding.",
+        "Affiliation evidence points to alumni status beyond the brief's typical recency window. Confirm before excluding.",
     };
   }
   return {
     gate: "affiliation",
     result: "needs_verification",
-    rationale: "No dated affiliation evidence yet. Unknown is not the same as ineligible — route to research.",
+    rationale: "No dated affiliation evidence yet. Unknown is not the same as ineligible · route to research.",
   };
 }
 
@@ -75,7 +75,7 @@ export function evaluateStageGate(facts: ProjectFacts): GateOutcome {
       gate: "stage",
       result: "needs_verification",
       rationale: facts.selfReportedStage
-        ? `Only a self-reported stage ("${facts.selfReportedStage}") exists — a self-selected pre-seed label alone is insufficient. Needs independent corroboration (round report, program record, or founder-disclosed detail with a date).`
+        ? `Only a self-reported stage ("${facts.selfReportedStage}") exists · a self-selected pre-seed label alone is insufficient. Needs independent corroboration (round report, program record, or founder-disclosed detail with a date).`
         : "No stage evidence yet.",
     };
   }
@@ -96,27 +96,27 @@ export function evaluatePriorFundingGate(facts: ProjectFacts): GateOutcome {
     return {
       gate: "prior_funding",
       result: "needs_verification",
-      rationale: "No funding events on record. No announcement found does not mean zero funding — treat as unknown, not cleared.",
+      rationale: "No funding events on record. No announcement found does not mean zero funding · treat as unknown, not cleared.",
     };
   }
   if (hasUnknown) {
     return {
       gate: "prior_funding",
       result: "needs_verification",
-      rationale: `At least one funding event has an undisclosed amount. Known total so far is $${total.toLocaleString()}, which is a floor, not the real total.`,
+      rationale: `At least one funding event has an undisclosed amount. Known total so far is $${total.toLocaleString("en-US")}, which is a floor, not the real total.`,
     };
   }
   if (total >= trigger) {
     return {
       gate: "prior_funding",
       result: "outside_current_brief",
-      rationale: `Known prior funding ($${total.toLocaleString()}) is at or above the $${trigger.toLocaleString()} review trigger (internal sourcing guidance, not a stated DRF policy).`,
+      rationale: `Known prior funding ($${total.toLocaleString("en-US")}) is at or above the $${trigger.toLocaleString("en-US")} review trigger (internal sourcing guidance, not a published hard cap).`,
     };
   }
   return {
     gate: "prior_funding",
     result: "pass",
-    rationale: `Known prior funding ($${total.toLocaleString()}) is below the $${trigger.toLocaleString()} review trigger.`,
+    rationale: `Known prior funding ($${total.toLocaleString("en-US")}) is below the $${trigger.toLocaleString("en-US")} review trigger.`,
   };
 }
 
@@ -151,10 +151,10 @@ export function evaluatePortfolioRelationshipGate(facts: ProjectFacts): GateOutc
     return {
       gate: "portfolio_relationship",
       result: "outside_current_brief",
-      rationale: "Matched to an existing DRF portfolio entry by name/alias/domain — kept as a reference, excluded from new targets.",
+      rationale: "Matched to an existing portfolio entry by name, alias, or domain. Kept as a reference and left out of new targets.",
     };
   }
-  return { gate: "portfolio_relationship", result: "pass", rationale: "No confirmed match to the existing DRF portfolio directory." };
+  return { gate: "portfolio_relationship", result: "pass", rationale: "No confirmed match to a portfolio directory." };
 }
 
 export function evaluateFundingAvailabilityGate(facts: ProjectFacts): GateOutcome {
@@ -166,7 +166,7 @@ export function evaluateFundingAvailabilityGate(facts: ProjectFacts): GateOutcom
     };
   }
   if (facts.fundingAvailability === "closed") {
-    return { gate: "funding_availability", result: "needs_verification", rationale: "Round reported closed — confirm before treating as actionable." };
+    return { gate: "funding_availability", result: "needs_verification", rationale: "Round reported closed · confirm before treating as actionable." };
   }
   return { gate: "funding_availability", result: "pass", rationale: `Funding availability: ${facts.fundingAvailability}.` };
 }

@@ -1,6 +1,6 @@
 {
  "generated_at": "2026-09-25T15:29:40-04:00",
- "schema_note": "Fields mirror amyzhuang111/dorm-room-fund-scout lib/db/schema.sql (projects, people, affiliations, person_project_roles, claims). See scouted_summary.md.",
+ "schema_note": "Fields mirror campus-scout lib/db/schema.sql (projects, people, affiliations, person_project_roles, claims). See scouted_summary.md.",
  "companies": [
   {
    "name": "Atelic",
@@ -3940,7 +3940,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -4066,7 +4066,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -4124,7 +4124,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8012,7 +8012,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8059,7 +8059,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8107,7 +8107,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8154,7 +8154,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8201,7 +8201,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8247,7 +8247,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8293,7 +8293,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,
@@ -8339,7 +8339,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance",
+    "low_relevance",
     "snippet_only"
    ],
    "is_investable_candidate": false,

@@ -25,7 +25,7 @@ const QUEUE_NOTE: Record<Queue, string> = {
   top_prospects: "Passes current screening gates, has enough evidence for comparison, and there's a specific reason to meet.",
   exploration: "Meaningful positive signal, but eligibility or evidence gaps are still unresolved.",
   watch: "An explicit milestone or revisit date is on record.",
-  reference_outside_brief: "Existing DRF investments and out-of-scope opportunities, kept for reference only.",
+  reference_outside_brief: "Existing portfolio companies and out-of-scope opportunities, kept for reference only.",
 };
 
 function useCompanies(
@@ -100,7 +100,7 @@ function ShortlistBody({
         <div>
           <h1 className="text-lg font-semibold text-foreground">Startup shortlist</h1>
           <p className="mt-1 text-sm text-muted">
-            Only justified recommendations appear here — queues aren&apos;t padded to a fixed count. Ties and score bands are normal when the
+            Only justified recommendations appear here · queues aren&apos;t padded to a fixed count. Ties and score bands are normal when the
             evidence doesn&apos;t support a finer ranking.
           </p>
         </div>
@@ -131,7 +131,7 @@ function ShortlistBody({
                       ) : (
                         <p className="mt-1">
                           No candidates on record at all yet.{" "}
-                          <Link href="/sources?from=startup" className="text-link underline">
+                          <Link href="/signals/sources?from=startup" className="text-link underline">
                             Pick a source to scan
                           </Link>
                           .
@@ -205,7 +205,7 @@ function VerificationBody({
       <div className="flex-1 p-4">
         <h1 className="text-lg font-semibold text-foreground">Verification</h1>
         <p className="mt-1 text-sm text-muted">
-          Companies grouped by the single most important thing blocking them from clearing eligibility — resolve the blocker to move a
+          Companies grouped by the single most important thing blocking them from clearing eligibility · resolve the blocker to move a
           company forward, rather than treating every gap as generic &quot;needs research&quot;.
         </p>
         <div className="mt-5 space-y-6">

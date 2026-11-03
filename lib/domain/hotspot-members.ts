@@ -363,30 +363,3 @@ export function parseCenterCityFounders(html: string): RosterMember[] {
   });
   return members;
 }
-
-export interface DrfPartner {
-  name: string;
-  region: string;
-  school: string;
-  universityId: "univ_penn" | "univ_berkeley";
-  campusLabel: string;
-}
-
-export function parseDrfCampusPartners(html: string): DrfPartner[] {
-  const $ = cheerio.load(html);
-  const partners: DrfPartner[] = [];
-  $(".partner-card").each((_, card) => {
-    const name = tidy($(card).find(".partner-card_name").first().text());
-    const region = ($(card).attr("data-region") ?? "").trim();
-    const school = tidy($(card).find(".partner-card_school").last().text());
-    if (!cleanName(name) || !school) return;
-    if (/\bM\.E\.T\./.test(school)) {
-      partners.push({ name, region, school, universityId: "univ_berkeley", campusLabel: "UC Berkeley" });
-      return;
-    }
-    if (/\bM&T\b/.test(school)) {
-      partners.push({ name, region, school, universityId: "univ_penn", campusLabel: "Penn" });
-    }
-  });
-  return partners;
-}

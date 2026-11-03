@@ -14,10 +14,6 @@ import { openDatabase } from "../../lib/db/client";
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), "stale-wal-"));
 
-function rmSidecars(dbPath: string) {
-  for (const suffix of ["-wal", "-shm"]) fs.rmSync(dbPath + suffix, { force: true });
-}
-
 function snapshotLiveWal(source: string, dest: string) {
   fs.copyFileSync(source, dest);
   fs.copyFileSync(source + "-wal", dest + "-wal");

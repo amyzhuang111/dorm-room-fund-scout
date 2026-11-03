@@ -1,0 +1,252 @@
+{
+  "batch": "recency-batch1-2026-11-02",
+  "checked_at": "2026-11-02T13:59:22Z",
+  "kept": 7,
+  "excluded": 8,
+  "unverified_in_batch": 0,
+  "decisions": [
+    {
+      "id": "proj_NLaUsSvmgNWh",
+      "name": "Human Behavior",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Amogh Chaturvedi",
+          "grad_year": null,
+          "status": "current_student",
+          "evidence": "Stanford CS started 2023; TechCrunch Sep 2025: 20yo Stanford dropout. Counts as current/recent student.",
+          "url": "https://techcrunch.com/2025/09/03/these-20-and-22-year-olds-raised-5m-from-yc-general-catalyst-to-study-online-behavior-using-vision-ai/"
+        }
+      ]
+    },
+    {
+      "id": "proj_xzU1vFFDkGCW",
+      "name": "Molagri",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Zaky Hassan",
+          "grad_year": 2020,
+          "status": "older_alumni",
+          "evidence": "UToronto HBSc Biochemistry 2016-2020 (LinkedIn).",
+          "url": "https://linkedin.com/in/zaky-hassan"
+        },
+        {
+          "name": "Min Jin",
+          "grad_year": 2020,
+          "status": "older_alumni",
+          "evidence": "UToronto HBSc Biophysics 2016-2020 (LinkedIn).",
+          "url": "https://linkedin.com/in/min-jin-ca"
+        }
+      ]
+    },
+    {
+      "id": "proj_niPpgAKrE8gH",
+      "name": "Salem Robotics Inc",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Caleb Horan",
+          "grad_year": 2022,
+          "status": "older_alumni",
+          "evidence": "Colorado State BS ME spring 2022; UT Austin PhD from fall 2022.",
+          "url": "https://robotics.me.utexas.edu/people/15-graduate-students/18-graduate-students/164-caleb-horan"
+        },
+        {
+          "name": "Janak (Crasun) Panthi",
+          "grad_year": 2026,
+          "status": "current_student",
+          "evidence": "UT Austin PhD ME robotics 2021-2026 (LinkedIn/YC); MS 2024. Current student.",
+          "url": "https://linkedin.com/in/janak-panthi"
+        }
+      ]
+    },
+    {
+      "id": "proj_54a9WF6visUR",
+      "name": "ACX",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Emmanouela Petsolari",
+          "grad_year": 2024,
+          "status": "recent_alumni",
+          "evidence": "Cambridge PhD Biochemistry/Biophysics awarded Nov 2024.",
+          "url": "https://www.repository.cam.ac.uk/items/9679faaa-1665-478e-92b4-c88d98924578"
+        }
+      ]
+    },
+    {
+      "id": "proj_QV3jJwiLBC9p",
+      "name": "AICE",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Gregoire Chomette",
+          "grad_year": 2021,
+          "status": "older_alumni",
+          "evidence": "MIT MSc AeroAstro thesis June 2021; EPFL MSc 2018.",
+          "url": "https://dspace.mit.edu/handle/1721.1/138933"
+        }
+      ]
+    },
+    {
+      "id": "proj_NKkRAOYUUS2g",
+      "name": "AgentPhone",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Manav Modi",
+          "grad_year": 2023,
+          "status": "recent_alumni",
+          "evidence": "UIUC BS Computer Engineering 2023 (personal site/LinkedIn).",
+          "url": "https://manav2modi.com/"
+        },
+        {
+          "name": "Meet Modi",
+          "grad_year": null,
+          "status": "unknown",
+          "evidence": "UCLA BS CS & Linguistics; graduation year not confirmed in public snippets.",
+          "url": "https://linkedin.com/in/meetmodi-"
+        }
+      ]
+    },
+    {
+      "id": "proj_MgwQ5g7ZUPFV",
+      "name": "Airgoods",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Aaron Farr",
+          "grad_year": 2022,
+          "status": "older_alumni",
+          "evidence": "Yale BA Economics 2018-2022.",
+          "url": "https://svatlas.io/founders/f96b0124-0cf7-4e4b-9be0-827d6eb95582"
+        },
+        {
+          "name": "Elian Haddock",
+          "grad_year": 2022,
+          "status": "older_alumni",
+          "evidence": "Yale Economics 2018-2022 (LinkedIn).",
+          "url": "https://linkedin.com/in/elianhaddock"
+        }
+      ]
+    },
+    {
+      "id": "proj_fNmR1rxeTsZI",
+      "name": "Aktoria Robotics",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Shreenabh Agrawal",
+          "grad_year": 2025,
+          "status": "recent_alumni",
+          "evidence": "IISc Bangalore BS Research Physics 2021-2025; CMU MRSD 2025.",
+          "url": "https://linkedin.com/in/shreenabh"
+        }
+      ]
+    },
+    {
+      "id": "proj_kviMlQNqygxP",
+      "name": "Alara",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Dr. Sabrine Obbad",
+          "grad_year": 2014,
+          "status": "older_alumni",
+          "evidence": "NYU BS Chemistry 2014 (McNelis Thesis Prize); later NYU DDS.",
+          "url": "https://as.nyu.edu/departments/chemistry/alumni/alumni-news/mcnelis-thesis-prize-presentation-2014.html"
+        }
+      ]
+    },
+    {
+      "id": "proj_AwGUYMhSdSl6",
+      "name": "Alex",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Aaron Wang",
+          "grad_year": 2023,
+          "status": "recent_alumni",
+          "evidence": "Brown BS CS/Applied Math/Econ + MS CS 2023 (Brown Nelson Center).",
+          "url": "https://entrepreneurship.brown.edu/brown-ventures-action/alex"
+        }
+      ]
+    },
+    {
+      "id": "proj_2QkucAExmfeC",
+      "name": "Alkera AI",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Rick Gao",
+          "grad_year": 2026,
+          "status": "current_student",
+          "evidence": "Yale CS undergrad started Aug 2022 \u2192 Class of 2026 (LinkedIn/rickgao.dev).",
+          "url": "https://www.linkedin.com/in/rgao09"
+        }
+      ]
+    },
+    {
+      "id": "proj_FWj1deHSwdpt",
+      "name": "Antigen",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Saad Jamal",
+          "grad_year": 2021,
+          "status": "older_alumni",
+          "evidence": "UC Berkeley CS 2019-2021 (LinkedIn); UChicago Law 2024-2025.",
+          "url": "https://linkedin.com/in/sadjamz"
+        }
+      ]
+    },
+    {
+      "id": "proj_BslIs71R0y5D",
+      "name": "AutoPallet Robotics",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Nathan Yee",
+          "grad_year": 2019,
+          "status": "older_alumni",
+          "evidence": "Olin College BS CS 2015-2019 (class of 2019).",
+          "url": "https://linkedin.com/in/nathanielyee"
+        }
+      ]
+    },
+    {
+      "id": "proj_pUjIxbUkLuV-",
+      "name": "Blaze",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Faiyam Rahman",
+          "grad_year": 2015,
+          "status": "older_alumni",
+          "evidence": "Duke BS Math 2013; Cornell MEng 2015.",
+          "url": "https://linkedin.com/in/faiyam-rahman"
+        }
+      ]
+    },
+    {
+      "id": "proj_Y2CpTOZN9fp_",
+      "name": "Cloudglue",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Amy Xiao",
+          "grad_year": 2020,
+          "status": "older_alumni",
+          "evidence": "University of Toronto 2017-2020 (LinkedIn).",
+          "url": "https://linkedin.com/in/amyxiao"
+        }
+      ]
+    }
+  ],
+  "totals_after": {
+    "investable": 1165,
+    "excluded_older_alumni": 232,
+    "unverified_recency": 4154
+  }
+}

@@ -14,6 +14,7 @@ import { FilterSidebar } from "./filter-sidebar";
 import { CandidateTable } from "./candidate-table";
 import { CompanyDetail } from "./company-detail";
 import { ExploreToolbar } from "./explore-toolbar";
+import { PageHeader } from "./page-header";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 import { CampusBenchmarks } from "./campus-benchmarks";
 import { projectShell, useProjectDetail } from "./use-project-detail";
@@ -50,6 +51,7 @@ export function StartupDiscoverApp({
   likes,
   initialDetail,
   initialGraph,
+  basePath = "/companies",
 }: {
   initial: Record<string, string | undefined>;
   universities: UniversitySummary[];
@@ -60,9 +62,10 @@ export function StartupDiscoverApp({
   likes: FeedbackTarget[];
   initialDetail: ProjectDetail | null;
   initialGraph: NetworkGraph | null;
+  basePath?: string;
 }) {
   return (
-    <ScoutNav basePath="/startup/discover" initial={initial}>
+    <ScoutNav basePath={basePath} initial={initial}>
       <DiscoverBody
         universities={universities}
         arcs={arcs}
@@ -97,7 +100,7 @@ function DiscoverBody({
   initialGraph: NetworkGraph | null;
 }) {
   const nav = useScoutNav()!;
-  const { current, navigate } = nav;
+  const { current, navigate, basePath } = nav;
   const [candidates, setCandidates] = useState<CandidateSummary[]>([]);
   const [candidatesReady, setCandidatesReady] = useState(false);
   useEffect(() => {
@@ -165,12 +168,32 @@ function DiscoverBody({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const monitored = catalog.universities.filter((university) => university.sourcesConfigured > 0).length;
+  const headerStats = selectedUniversity
+    ? [
+        { n: selectedUniversity.companyCount, label: "companies" },
+        { n: selectedUniversity.founderCount, label: "founders" },
+        { n: selectedUniversity.sourcesConfigured, label: "sources" },
+      ]
+    : [
+        { n: candidatesReady ? sorted.length : null, label: "in view" },
+        { n: catalog.universities.length, label: "campuses" },
+        { n: monitored, label: "monitored" },
+      ];
+
   return (
-    <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={catalog.universities} basePath="/startup/discover" current={current} mode="startup" sectors={visibleSectors} />
+    <div data-scout-live="" className="mx-auto max-w-[1200px] px-5 pb-16 pt-10 sm:px-12">
+      <PageHeader
+        eyebrow={selectedUniversity ? selectedUniversity.name : "Companies"}
+        title="Companies in this workspace."
+        subtitle="Enrollment, sector, tier, and search filters stay on this list."
+        stats={headerStats}
+      />
+      <div className="mt-8 flex min-h-[70vh] flex-col gap-6 sm:flex-row">
+      <FilterSidebar universities={catalog.universities} basePath={basePath} current={current} mode="startup" sectors={visibleSectors} />
       <div className="min-w-0 flex-1">
         <ExploreToolbar
-          basePath="/startup/discover"
+          basePath={basePath}
           current={current}
           resultCount={sorted.length}
           resultLabel={sorted.length === 1 ? "startup candidate" : "startup candidates"}
@@ -184,19 +207,20 @@ function DiscoverBody({
         )}
         {seen.table && (
           <div className={view === "table" ? "" : "hidden"}>
-            <CandidateTable candidates={sorted} basePath="/startup/discover" current={query} feedbackView={query.feedback} detail={detail && query.project === detail.id ? detail : null} />
+            <p className="viz-legend mb-3">Each row is one company in view, with its founders, campus, and the reason it is on the list.</p>
+            <CandidateTable candidates={sorted} basePath={basePath} current={query} feedbackView={query.feedback} detail={detail && query.project === detail.id ? detail : null} />
           </div>
         )}
         {seen.network && current.university && (
           <div className={view === "network" ? "" : "hidden"}>
-            <NetworkSlot universities={catalog.universities} current={query} records={records} initialGraph={initialGraph} />
+            <NetworkSlot universities={catalog.universities} current={query} records={records} initialGraph={initialGraph} basePath={basePath} />
           </div>
         )}
         {seen.globe && (
           <div className={view === "globe" ? "" : "hidden"}>
             <GlobeView
               universities={catalog.universities}
-              basePath="/startup/discover"
+              basePath={basePath}
               current={query}
               previewCandidates={query.university ? sorted : []}
               trayCandidates={sorted}
@@ -205,15 +229,18 @@ function DiscoverBody({
               active={view === "globe"}
               userMarkers={markers}
               resultsPending={!candidatesReady}
+              hideStats
+              flush
             />
           </div>
         )}
       </div>
       {view === "globe" && selectedProject && (
-        <div className="w-full border-t border-border-c sm:w-96 sm:shrink-0 sm:border-l sm:border-t-0 xl:w-[420px]">
+        <div className="w-full border-t border-border-c sm:w-80 sm:shrink-0 sm:border-l sm:border-t-0">
           <CompanyDetail project={projectShell(selectedProject, detail)} />
         </div>
       )}
+      </div>
     </div>
   );
 }
@@ -223,11 +250,13 @@ function NetworkSlot({
   current,
   records,
   initialGraph,
+  basePath,
 }: {
   universities: UniversitySummary[];
   current: Record<string, string | undefined>;
   records: FeedbackRecord[];
   initialGraph: NetworkGraph | null;
+  basePath: string;
 }) {
   const key = `${current.university ?? ""}|${current.sector ?? ""}|${current.enroll ?? ""}`;
   const [graph, setGraph] = useState<NetworkGraph | null>(initialGraph);
@@ -274,5 +303,5 @@ function NetworkSlot({
     return <p className="p-6 text-sm text-muted">{graph ? "No evidence-backed connections on record for this campus yet." : "Loading network…"}</p>;
   }
   const campusName = universities.find((university) => university.id === current.university)?.name ?? "campus";
-  return <NetworkCanvas graph={visible} basePath="/startup/discover" current={current} campusName={campusName} presentation="campus" />;
+  return <NetworkCanvas graph={visible} basePath={basePath} current={current} campusName={campusName} presentation="campus" />;
 }

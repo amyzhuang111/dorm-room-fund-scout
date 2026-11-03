@@ -21,14 +21,14 @@ export function PipelineSourceMix({ state }: { state: UserPipelineState }) {
     <section className="mt-4 rounded-md border border-black bg-white p-3 text-black">
       <h2 className="text-sm font-semibold">Sourced via</h2>
       <p className="mt-1 max-w-3xl text-xs leading-relaxed text-neutral-700">
-        DRF&apos;s sourcing mix is roughly open applications 5%, alumni referrals 40%, and relationship-driven 60%. Those benchmark buckets overlap, so they are not shares of one whole. Each pipeline entry here has one channel.
+        A typical student fund mixes open applications, alumni referrals, and relationship-driven sourcing. Those benchmark buckets overlap, so they are not shares of one whole. Each pipeline entry here has one channel.
       </p>
       <div className="mt-3 grid gap-4 sm:grid-cols-2">
         <MixColumn title={total ? `This pipeline · ${total}` : "This pipeline"} rows={[
           ...SOURCE_CHANNELS.map((channel) => ({ label: channel.label, pct: total ? ((counts.get(channel.id) ?? 0) / total) * 100 : 0, note: String(counts.get(channel.id) ?? 0) })),
           { label: "Not set", pct: total ? ((counts.get("unset") ?? 0) / total) * 100 : 0, note: String(counts.get("unset") ?? 0) },
         ]} />
-        <MixColumn title="DRF benchmark" rows={BENCHMARK.map((row) => ({ label: row.label, pct: row.pct, note: `${row.pct}%` }))} />
+        <MixColumn title="Typical mix" rows={BENCHMARK.map((row) => ({ label: row.label, pct: row.pct, note: `${row.pct}%` }))} />
       </div>
     </section>
   );

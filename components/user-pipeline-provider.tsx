@@ -314,7 +314,7 @@ export function UserPipelineBanner() {
   const { storage, notice } = useUserPipeline();
   if (storage !== "local") return null;
   return (
-    <div className="border-b border-black bg-white px-4 py-2 text-center text-sm text-black">
+    <div className="border-b border-border-c bg-surface px-4 py-2 text-center text-sm text-foreground">
       {notice ?? "Pipeline entries are saved only in this browser. They stay on this device until a free database is connected."}{" "}
       <Link href="/startup/pipeline#setup" className="font-semibold underline">
         One-time setup

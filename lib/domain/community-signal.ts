@@ -16,8 +16,8 @@ export type CommunityConfidence = "high" | "medium" | "low" | "insufficient";
 export const COMMUNITY_CONFIDENCE_MEANING: Record<CommunityConfidence, string> = {
   high: "Multiple independent campus-community discussions (different threads, different commenters) point toward the same organization.",
   medium: "One strong thread, or multiple weak/single mentions.",
-  low: "A single anecdote — real, but not enough to act on alone.",
-  insufficient: "No useful campus-specific discussion found. This is NOT negative evidence — absence of discussion is not evidence of absence of quality.",
+  low: "A single anecdote · real, but not enough to act on alone.",
+  insufficient: "No useful campus-specific discussion found. This is NOT negative evidence · absence of discussion is not evidence of absence of quality.",
 };
 
 // What a source/community characteristically looks like, per repeated

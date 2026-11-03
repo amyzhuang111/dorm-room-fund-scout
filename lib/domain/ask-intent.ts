@@ -105,7 +105,7 @@ const STAGE_FORMS: { stage: AskStage; form: string }[] = [
 const SECTOR_PATTERNS: { sector: string; re: RegExp; forms: string[] }[] = [
   { sector: "healthcare", re: /\b(?:digital[\s-]?health|health[\s-]?tech|health[\s-]?care|med[\s-]?tech|bio[\s-]?tech)\b/i, forms: ["healthcare", "healthtech", "medtech", "biotech", "digitalhealth"] },
   { sector: "robotics", re: /\brobotics?\b/i, forms: ["robotics", "robotic"] },
-  { sector: "AI", re: /\bartificial intelligence\b|\bai\b/i, forms: ["ai"] },
+  { sector: "AI", re: /\bartificial intelligence\b|\bai[\s-]?agents?\b|\bai[\s-]?apps?\b|\bai\b/i, forms: ["ai agents", "ai agent", "ai apps", "ai app", "ai"] },
   { sector: "fintech", re: /\bfintech\b/i, forms: ["fintech", "fintec"] },
   { sector: "climate", re: /\bclimate\b/i, forms: ["climate"] },
   { sector: "edtech", re: /\bedtech\b|\beducation tech\b/i, forms: ["edtech"] },
@@ -311,10 +311,14 @@ function findStage(question: string): { stage: AskStage; phrase: string } | null
 }
 
 function findSector(question: string): { sector: string; phrase: string } | null {
+  let best: { sector: string; phrase: string } | null = null;
   for (const pattern of SECTOR_PATTERNS) {
     const match = question.match(pattern.re);
-    if (match?.[0]) return { sector: pattern.sector, phrase: match[0] };
+    if (match?.[0] && (!best || match[0].length > best.phrase.length)) {
+      best = { sector: pattern.sector, phrase: match[0] };
+    }
   }
+  if (best) return best;
   const tokens = question.toLowerCase().split(/[^a-z0-9]+/).filter((token) => token.length >= 5);
   for (const token of tokens) {
     for (const pattern of SECTOR_PATTERNS) {
@@ -343,8 +347,20 @@ function findYear(question: string): number | null {
 function residualName(question: string, consumed: string[]): string | null {
   let text = ` ${question.toLowerCase()} `;
   const phrases = [...consumed].filter((phrase) => phrase.trim().length >= 2).sort((a, b) => b.length - a.length);
+  // Also strip every token of multi-word facet phrases (ai agents → ai + agents).
+  const extras: string[] = [];
   for (const phrase of phrases) {
-    text = text.replace(new RegExp(`\\b${escapeReg(phrase.toLowerCase())}\\b`, "g"), " ");
+    for (const bit of phrase.toLowerCase().split(/[^a-z0-9]+/).filter((t) => t.length >= 2)) {
+      extras.push(bit);
+    }
+  }
+  const all = [...phrases, ...extras].sort((a, b) => b.length - a.length);
+  const seen = new Set<string>();
+  for (const phrase of all) {
+    const key = phrase.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    text = text.replace(new RegExp(`\\b${escapeReg(key)}\\b`, "g"), " ");
   }
   const tokens = text
     .split(/[^a-z0-9']+/)
@@ -462,7 +478,7 @@ function isPriced(band: string): boolean {
 function isAccelerator(investor: FundingInvestorView): boolean {
   const kind = (investor.kind ?? "").toLowerCase();
   if (kind === "accelerator") return true;
-  return /\b(y combinator|\byc\b|dorm room fund|\bdrf\b|techstars)\b/i.test(investor.name);
+  return /\b(y combinator|\byc\b|techstars)\b/i.test(investor.name);
 }
 
 function isGrantInvestor(investor: FundingInvestorView): boolean {
