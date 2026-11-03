@@ -6,7 +6,7 @@ hits = []
 for f in list(Path(".").rglob("*.ts")) + list(Path(".").rglob("*.tsx")):
     if any(s in f.parts for s in skip):
         continue
-    text = f.read_text()
+    text = f.read_text(encoding="utf-8")
     for i, line in enumerate(text.splitlines(), 1):
         if pat.search(line):
             hits.append(f"{f}:{i}:{line.strip()}")

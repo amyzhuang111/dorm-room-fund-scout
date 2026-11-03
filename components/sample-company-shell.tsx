@@ -19,16 +19,16 @@ import {
   type FacetState,
 } from "./sample-instrument";
 import { SampleTheme } from "./sample-theme";
+import { browseHref } from "@/lib/domain/facet-url";
+import styles from "./company-mobile.module.css";
 
 export function SampleCompanyShell({
   children,
   companies,
-  campuses,
   dossier,
 }: {
   children: ReactNode;
   companies: FacetCompany[];
-  campuses: { id: string; name: string; country: string; founders: number }[];
   /** Local company beat - name / campus / year / ids. Not the global dispatch count. */
   dossier?: {
     id?: string;
@@ -54,6 +54,7 @@ export function SampleCompanyShell({
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
   /** Full corpus for FacetRail only - lazy-loaded; SSR ships peer seed alone. */
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
+  const [campuses, setCampuses] = useState<{ id: string; name: string; country: string; founders: number }[]>([]);
   useEffect(() => {
     let cancelled = false;
     fetchSampleDirectory()
@@ -63,6 +64,19 @@ export function SampleCompanyShell({
       .catch(() => {
         /* keep peer seed; filters still navigate to /companies */
       });
+    // The global campus index is only needed by the hydrated desktop filters.
+    // Keep it out of every company's initial document, especially on mobile.
+    void fetch("/data/hero-stats.json")
+      .then(async (response) => {
+        if (!response.ok) throw new Error("campus index");
+        return await response.json() as { universities: { id: string; name: string; country?: string | null; founderCount: number; lat?: number | null; lon?: number | null }[] };
+      })
+      .then((data) => {
+        if (!cancelled) setCampuses(data.universities
+          .filter((university) => university.lat != null && university.lon != null)
+          .map((university) => ({ id: university.id, name: university.name, country: university.country?.trim() || "Unknown", founders: university.founderCount })));
+      })
+      .catch(() => { /* The browse link remains available if the index cannot load. */ });
     return () => {
       cancelled = true;
     };
@@ -71,24 +85,7 @@ export function SampleCompanyShell({
   const filtered = useMemo(() => applyFacets(facetCompanies, facets), [facetCompanies, facets]);
   function onFacetChange(next: FacetState) {
     setFacets(next);
-    const params = new URLSearchParams({ sample: "1" });
-    if (next.sector) params.set("sector", next.sector);
-    if (next.kind) params.set("kind", next.kind);
-    if (next.campus) params.set("campus", next.campus);
-    if (next.query.trim()) params.set("q", next.query.trim());
-    if (next.hqRegion) params.set("hq", next.hqRegion);
-    if (
-      next.sector ||
-      next.kind ||
-      next.campus ||
-      next.query.trim() ||
-      next.foundedYear ||
-      next.status ||
-      next.flag ||
-      next.hqRegion
-    ) {
-      router.push(`/companies?${params.toString()}`);
-    }
+    router.push(browseHref({ facets: next }));
   }
 
   const signaled = filtered.filter((c) => c.signals > 0).length;
@@ -121,7 +118,7 @@ export function SampleCompanyShell({
   const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
 
   return (
-    <div className="sample-paper min-h-[calc(100dvh-48px)]">
+    <div className={`sample-paper min-h-[calc(100dvh-48px)] ${styles.record}`}>
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-8 sm:px-5 sm:pb-5">
         {/* Summary card hero · logo, pitch, campus, stage, key signal · real data only */}
@@ -293,7 +290,7 @@ export function SampleCompanyShell({
                     {(dossier?.signals ?? 0) > 0 ? (dossier?.signals ?? 0).toLocaleString("en-US") : (wireCount > 0 ? wireCount.toLocaleString("en-US") : "0")}
                   </span>
                   <span className="text-[11px] text-[color:var(--fg-3,#5C647A)]">{(dossier?.signals ?? 0) > 0 ? "signals" : "on wire"}</span>
-                  <span className="truncate font-semibold text-[color:var(--fg,#0B0E17)]">
+                  <span className="min-w-0 break-words font-semibold text-[color:var(--fg,#0B0E17)]">
                     {dossier?.campus || (dossier?.schoolId ? shortCampusLabel(dossier.schoolId, "") : "Campus not on record")}
                     {dossier?.stage ? ` · ${dossier.stage}` : ""}
                   </span>
@@ -366,7 +363,7 @@ export function SampleCompanyShell({
               <div className="mt-1.5" data-dossier-founders-lead="" data-full-record-founders-peek="">
                 <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
                 <p className="mt-0.5 text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  {dossier.founders.slice(0, 4).join(" · ")}
+                  {dossier.founders.join(" · ")}
                 </p>
                 {dossier.founderConfirmed ? (
                   <p className="mt-1">
@@ -399,7 +396,7 @@ export function SampleCompanyShell({
                   return (
                     <li key={c.id} className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                       <span className="w-4 shrink-0 text-[color:var(--cobalt,#2F4FD8)]">{String(i + 1).padStart(2, "0")}</span>
-                      <Link href={`/startup/${c.id}`} className="min-w-0 flex-1 truncate font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">{c.name}</Link>
+                      <Link href={`/startup/${c.id}`} aria-current={c.id === dossier?.id ? "page" : undefined} className="min-w-0 flex-1 break-words font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2">{c.name}</Link>
                       {c.signalLabel ? (
                         <span className="shrink-0 font-bold text-[color:var(--ember,#D96B1C)]">{c.signalLabel}</span>
                       ) : null}
@@ -422,7 +419,7 @@ export function SampleCompanyShell({
         <div className="grid gap-3 lg:grid-cols-[minmax(240px,280px)_minmax(0,1fr)_minmax(240px,300px)]" data-dossier-spread="">
           <aside className="hidden min-w-0 lg:block" data-dossier-index="">
             <div className="sticky top-14 h-[min(78vh,720px)]">
-              <FacetRail
+              {catalog && campuses.length > 0 ? <FacetRail
                 companies={facetCompanies}
                 campuses={campuses}
                 facets={facets}
@@ -430,7 +427,11 @@ export function SampleCompanyShell({
                 index
                 indexCount={wireCount}
                 caption="Dossier index"
-              />
+              /> : (
+                <Link href="/companies" className="inline-flex min-h-10 items-center border border-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] text-[color:var(--cobalt,#2F4FD8)]">
+                  Browse company filters
+                </Link>
+              )}
             </div>
           </aside>
           <div className="min-w-0">

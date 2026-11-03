@@ -1,0 +1,51 @@
+.browse :global([data-filter-chip]) {
+  height: auto;
+  min-height: 32px;
+  max-width: 100%;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.browse :global([data-mobile-sort-segment]) a {
+  min-width: 0;
+}
+
+.browse :global([data-load-next]),
+.browse :global([data-ledger-more-footer]) > a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: 1px solid var(--cobalt, #2f4fd8);
+  background: #fff;
+  color: var(--cobalt, #2f4fd8);
+}
+
+.browse :global([data-card-founder-links]) a:focus-visible,
+.browse :global([data-filter-chip]):focus-visible,
+.browse :global([data-load-next]):focus-visible {
+  outline: 2px solid var(--cobalt, #2f4fd8);
+  outline-offset: 2px;
+}
+
+@media (max-width: 639px) {
+  .record :global([data-full-record-key-stats]) > div {
+    min-width: 0;
+    padding: 10px 8px;
+  }
+
+  .record :global([data-full-record-group]) dd {
+    overflow-wrap: anywhere;
+  }
+
+  .record :global([data-dossier-signal-timeline]) > li {
+    min-height: 24px;
+    align-items: baseline;
+    line-height: 20px;
+  }
+
+  .record :global([data-dossier-signal-timeline]) a {
+    overflow-wrap: anywhere;
+  }
+}
