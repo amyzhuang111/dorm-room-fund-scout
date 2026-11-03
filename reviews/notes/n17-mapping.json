@@ -1,0 +1,432 @@
+[
+  {
+    "id": "univ_emory",
+    "label": "Emory",
+    "n": 15,
+    "backed": 0,
+    "x": 205.64666666666665,
+    "y": 493.22,
+    "share": 0.0,
+    "color": "#28ad1f"
+  },
+  {
+    "id": "univ_waterloo",
+    "label": "Waterloo",
+    "n": 65,
+    "backed": 43,
+    "x": 293.1,
+    "y": 484.5,
+    "share": 0.6615,
+    "color": "#1fa0ad"
+  },
+  {
+    "id": "univ_hmc",
+    "label": "Harvey Mudd",
+    "n": 14,
+    "backed": 6,
+    "x": 173.69285714285712,
+    "y": 395.34285714285716,
+    "share": 0.4286,
+    "color": "#ad561f"
+  },
+  {
+    "id": "univ_ucla",
+    "label": "UCLA",
+    "n": 14,
+    "backed": 5,
+    "x": 167.77142857142857,
+    "y": 323.3142857142857,
+    "share": 0.3571,
+    "color": "#961fad"
+  },
+  {
+    "id": "univ_georgetown",
+    "label": "Georgetown",
+    "n": 13,
+    "backed": 2,
+    "x": 176.94615384615386,
+    "y": 229.2076923076923,
+    "share": 0.1538,
+    "color": "#1fad31"
+  },
+  {
+    "id": "univ_utexas",
+    "label": "UT Austin",
+    "n": 10,
+    "backed": 5,
+    "x": 207.35,
+    "y": 139.46,
+    "share": 0.5,
+    "color": "#1f68ad"
+  },
+  {
+    "id": "univ_uchicago",
+    "label": "UChicago",
+    "n": 9,
+    "backed": 8,
+    "x": 301.03333333333336,
+    "y": 98.66666666666667,
+    "share": 0.8889,
+    "color": "#ad1f56"
+  },
+  {
+    "id": "univ_cornell",
+    "label": "Cornell",
+    "n": 61,
+    "backed": 10,
+    "x": 367.7,
+    "y": 219,
+    "share": 0.1639,
+    "color": "#ad1fa9"
+  },
+  {
+    "id": "univ_penn",
+    "label": "Penn",
+    "n": 319,
+    "backed": 88,
+    "x": 488.3,
+    "y": 415.4,
+    "share": 0.2759,
+    "color": "#ad1f1f"
+  },
+  {
+    "id": "univ_queens",
+    "label": "Queen's",
+    "n": 8,
+    "backed": 0,
+    "x": 401.55,
+    "y": 69.425,
+    "share": 0.0,
+    "color": "#1f84ad"
+  },
+  {
+    "id": "univ_berkeley",
+    "label": "Berkeley",
+    "n": 191,
+    "backed": 183,
+    "x": 587.6,
+    "y": 243.2,
+    "share": 0.9581,
+    "color": "#5f1fad"
+  },
+  {
+    "id": "univ_brown",
+    "label": "Brown",
+    "n": 52,
+    "backed": 4,
+    "x": 641,
+    "y": 82.8,
+    "share": 0.0769,
+    "color": "#7bad1f"
+  },
+  {
+    "id": "univ_columbia",
+    "label": "Columbia",
+    "n": 47,
+    "backed": 21,
+    "x": 871.3,
+    "y": 209.2,
+    "share": 0.4468,
+    "color": "#1f31ad"
+  },
+  {
+    "id": "univ_mit",
+    "label": "MIT",
+    "n": 185,
+    "backed": 169,
+    "x": 791.1,
+    "y": 291.9,
+    "share": 0.9135,
+    "color": "#ad8d1f"
+  },
+  {
+    "id": "univ_stanford",
+    "label": "Stanford",
+    "n": 245,
+    "backed": 232,
+    "x": 705.6,
+    "y": 421.1,
+    "share": 0.9469,
+    "color": "#1fada0"
+  },
+  {
+    "id": "univ_harvard",
+    "label": "Harvard",
+    "n": 110,
+    "backed": 69,
+    "x": 910.2,
+    "y": 469.6,
+    "share": 0.6273,
+    "color": "#43ad1f"
+  },
+  {
+    "id": "other",
+    "label": "Other",
+    "n": 133,
+    "backed": 74,
+    "x": 724.3,
+    "y": 538.9,
+    "share": 0.5564,
+    "color": "#ad1f3a"
+  },
+  {
+    "id": "univ_usc",
+    "label": "USC",
+    "n": 35,
+    "backed": 5,
+    "x": 982.3,
+    "y": 616.2,
+    "share": 0.1429,
+    "color": "#7b1fad"
+  },
+  {
+    "id": "univ_nyu",
+    "label": "NYU",
+    "n": 33,
+    "backed": 6,
+    "x": 948.1,
+    "y": 695.7,
+    "share": 0.1818,
+    "color": "#5fad1f"
+  },
+  {
+    "id": "univ_yale",
+    "label": "Yale",
+    "n": 33,
+    "backed": 16,
+    "x": 886.7727272727273,
+    "y": 768.0,
+    "share": 0.4848,
+    "color": "#ad3a1f"
+  },
+  {
+    "id": "univ_cmu",
+    "label": "CMU",
+    "n": 73,
+    "backed": 63,
+    "x": 723.7,
+    "y": 709.6,
+    "share": 0.863,
+    "color": "#1fad84"
+  },
+  {
+    "id": "univ_michigan",
+    "label": "Michigan",
+    "n": 28,
+    "backed": 17,
+    "x": 813.282142857143,
+    "y": 841.9607142857143,
+    "share": 0.6071,
+    "color": "#431fad"
+  },
+  {
+    "id": "univ_northwestern",
+    "label": "Northwestern",
+    "n": 25,
+    "backed": 3,
+    "x": 711.54,
+    "y": 893.92,
+    "share": 0.12,
+    "color": "#96ad1f"
+  },
+  {
+    "id": "univ_princeton",
+    "label": "Princeton",
+    "n": 24,
+    "backed": 24,
+    "x": 603.2083333333334,
+    "y": 906.2916666666666,
+    "share": 1.0,
+    "color": "#1fad68"
+  },
+  {
+    "id": "univ_duke",
+    "label": "Duke",
+    "n": 23,
+    "backed": 4,
+    "x": 535.0782608695652,
+    "y": 810.5956521739131,
+    "share": 0.1739,
+    "color": "#ad1f72"
+  },
+  {
+    "id": "univ_gatech",
+    "label": "Georgia Tech",
+    "n": 68,
+    "backed": 45,
+    "x": 476,
+    "y": 675.8,
+    "share": 0.6618,
+    "color": "#1f4dad"
+  },
+  {
+    "id": "univ_bu",
+    "label": "Boston",
+    "n": 22,
+    "backed": 0,
+    "x": 422.7863636363636,
+    "y": 809.1227272727273,
+    "share": 0.0,
+    "color": "#ada91f"
+  },
+  {
+    "id": "univ_rice",
+    "label": "Rice",
+    "n": 22,
+    "backed": 0,
+    "x": 329.54090909090905,
+    "y": 777.7227272727273,
+    "share": 0.0,
+    "color": "#1fad4d"
+  },
+  {
+    "id": "univ_uiuc",
+    "label": "UIUC",
+    "n": 18,
+    "backed": 13,
+    "x": 261.6666666666667,
+    "y": 700.3777777777777,
+    "share": 0.7222,
+    "color": "#ad1f8d"
+  },
+  {
+    "id": "univ_caltech",
+    "label": "Caltech",
+    "n": 16,
+    "backed": 3,
+    "x": 173.2625,
+    "y": 666.4875,
+    "share": 0.1875,
+    "color": "#ad721f"
+  },
+  {
+    "id": "univ_dartmouth",
+    "label": "Dartmouth",
+    "n": 15,
+    "backed": 12,
+    "x": 140.75333333333336,
+    "y": 593.3733333333333,
+    "share": 0.8,
+    "color": "#281fad"
+  },
+  {
+    "id": "univ_toronto",
+    "label": "Toronto",
+    "n": 7,
+    "backed": 6,
+    "share": 0.8571,
+    "color": "#b24a34",
+    "x": 503.59999999999997,
+    "y": 64.05714285714286
+  },
+  {
+    "id": "univ_uva",
+    "label": "UVA",
+    "n": 7,
+    "backed": 0,
+    "share": 0.0,
+    "color": "#b27f34",
+    "x": 551.4714285714286,
+    "y": -12.414285714285713
+  },
+  {
+    "id": "univ_uw",
+    "label": "UW",
+    "n": 7,
+    "backed": 1,
+    "share": 0.1429,
+    "color": "#afb234",
+    "x": 653.6142857142858,
+    "y": -25.5
+  },
+  {
+    "id": "univ_byu",
+    "label": "BYU",
+    "n": 3,
+    "backed": 3,
+    "share": 1.0,
+    "color": "#7ab234",
+    "x": 763.8000000000001,
+    "y": -23.433333333333334
+  },
+  {
+    "id": "univ_cambridge",
+    "label": "Cambridge",
+    "n": 3,
+    "backed": 3,
+    "share": 1.0,
+    "color": "#45b234",
+    "x": 870.9333333333334,
+    "y": 40.266666666666666
+  },
+  {
+    "id": "univ_lafayette",
+    "label": "Lafayette",
+    "n": 1,
+    "backed": 0,
+    "share": 0.0,
+    "color": "#34b257",
+    "x": 876.0,
+    "y": 109.7
+  },
+  {
+    "id": "univ_laurentian",
+    "label": "Laurentian",
+    "n": 1,
+    "backed": 0,
+    "share": 0.0,
+    "color": "#34b28c",
+    "x": 966.0,
+    "y": 169.1
+  },
+  {
+    "id": "univ_notredame",
+    "label": "Notre Dame",
+    "n": 1,
+    "backed": 1,
+    "share": 1.0,
+    "color": "#34a3b2",
+    "x": 1021.4,
+    "y": 291.2
+  },
+  {
+    "id": "univ_rwth_aachen",
+    "label": "RWTH Aachen",
+    "n": 1,
+    "backed": 0,
+    "share": 0.0,
+    "color": "#346eb2",
+    "x": 989.7,
+    "y": 292.7
+  },
+  {
+    "id": "univ_unc",
+    "label": "UNC",
+    "n": 1,
+    "backed": 0,
+    "share": 0.0,
+    "color": "#3439b2",
+    "x": 1112.5,
+    "y": 394.0
+  },
+  {
+    "id": "univ_vanderbilt",
+    "label": "Vanderbilt",
+    "n": 1,
+    "backed": 1,
+    "share": 1.0,
+    "color": "#6434b2",
+    "x": 1059.4,
+    "y": 547.0
+  },
+  {
+    "id": "univ_washu",
+    "label": "WashU",
+    "n": 1,
+    "backed": 1,
+    "share": 1.0,
+    "color": "#9934b2",
+    "x": 995.4,
+    "y": 522.2
+  }
+]
