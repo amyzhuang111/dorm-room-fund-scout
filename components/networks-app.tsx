@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { CampusSeal } from "@/components/campus-seal";
-import { NetworksGraph } from "@/components/networks-graph";
+import { NetworksGraph, type NetworkMapFocus } from "@/components/networks-graph";
 import { StartupCardSheet } from "@/components/startup-directory-card";
 import { searchFounderNetworks, selectedNetworkMembers } from "@/lib/domain/network-directory-search";
 import type {
@@ -49,6 +49,7 @@ function inkFor(count: number, max: number): string {
 export function NetworksApp() {
   const [data, setData] = useState<FounderNetworksPage | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [mapFocus, setMapFocus] = useState<NetworkMapFocus | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [matrixOpen, setMatrixOpen] = useState(false);
@@ -215,7 +216,13 @@ export function NetworksApp() {
                 <button
                   key={match.network.id}
                   type="button"
-                  onClick={() => chooseNetwork(match.network.id, true, false)}
+                  onClick={() => {
+                    chooseNetwork(match.network.id, true, false);
+                    setMapFocus({
+                      networkId: match.network.id,
+                      founderId: match.nameMatch ? undefined : match.matchingMembers[0]?.founderId,
+                    });
+                  }}
                   className="flex min-h-10 w-full items-center justify-between gap-3 rounded px-2 text-left text-xs hover:bg-[color:var(--cobalt-haze)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
                   data-network-quick-result={match.network.id}
                 >
@@ -249,6 +256,7 @@ export function NetworksApp() {
           </div>
           <div className="relative md:min-h-0" data-network-map-and-inspector="">
             <NetworksGraph
+              mapFocus={mapFocus}
               investorHubs={data.investorHubs}
               onSelectCompany={(id) => setCompanyId(id)}
               onSelectNetwork={(id) => chooseNetwork(id, true)}
