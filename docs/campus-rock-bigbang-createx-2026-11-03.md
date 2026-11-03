@@ -31,3 +31,11 @@ HBS Rock Center, Harvard Alumni Entrepreneurs, UC Davis Little Bang, UCLA Anders
 ## Validation and deployment
 
 The branch-only workflow `.github/workflows/campus-rock-bigbang-createx-2026.yml` builds the CREATE-X file from the official live page, imports all seven batches with existing idempotent campus importer, runs SQLite integrity and `npm run test:directory`, and commits the updated binary `data/campus-universe.db` and the generated CREATE-X JSON to the PR branch. Review import log net-new counts and any ambiguities before merging. Vercel production deployment must succeed independently.
+
+## Validated import result (GitHub Actions, November 3)
+
+The source parser downloaded Georgia Tech CREATE-X's official 2026 Demo Day HTML and extracted **111 distinct company rows** from two tables. The existing importer matched nine to the prior database and created **102 new CREATE-X company records**. The seven batch imports collectively reported **184 net-new companies and 115 net-new people profiles**, with zero ambiguous identity matches in the run. Of the 115 new profiles, **61 current-class-year HBS Rock participants and 12 Harvard alumni participants have explicitly documented founder/cofounder titles**; the remainder are named student/venture competition team members, not presumed founders.
+
+Run-by-run new company counts: Rock Catalyst 48, Yale Tsai Spring 3, UC Davis Big Bang 3, Harvard Alumni Entrepreneurs 11, CREATE-X 102, UC Davis Little Bang 7, UCLA/Dartmouth 10. Run-by-run new people: 61, 6, 24, 12, 0, 12, 0 respectively. These are deduplicated record additions, not raw published-roster totals.
+
+**Validation passed**: `PRAGMA integrity_check`, sampled imported founders and companies, and `npm run test:directory`. The canonical SQLite database and the generated CREATE-X source JSON were committed onto the feature branch by GitHub Actions. Source catalogue entries are marked implemented only after this validated import. Site production readiness is a separate Vercel deployment check.
