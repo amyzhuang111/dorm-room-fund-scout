@@ -1542,3 +1542,8 @@ details:not([open]) > :not(summary) {
 [data-fold-sheet-founders] [data-founder-card] {
   border-color: color-mix(in srgb, var(--cobalt, #2F4FD8) 14%, var(--line, #E1E5EF)) !important;
 }
+
+/* /networks full-page cream; every other page stays white via --bg */
+html:has([data-networks-cream]) body {
+  background: var(--networks-bg, #ece9e4);
+}

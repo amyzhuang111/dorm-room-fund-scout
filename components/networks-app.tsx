@@ -85,7 +85,7 @@ export function NetworksApp() {
 
   if (loadError) {
     return (
-      <div className="min-h-screen bg-white px-5 py-10 text-sm text-[color:var(--fg-2)]" data-networks-page="">
+      <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-2)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
         {loadError}
       </div>
     );
@@ -93,15 +93,15 @@ export function NetworksApp() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-white px-5 py-10 text-sm text-[color:var(--fg-3)]" data-networks-page="">
+      <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-3)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
         Loading networks...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-[color:var(--fg)]" data-networks-page="" style={{ background: "var(--networks-bg, #ece9e4)" }}>
-      <header className="border-b border-[color:var(--line)] bg-white" data-networks-hero="">
+    <div className="min-h-screen text-[color:var(--fg)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
+      <header className="border-b border-[color:var(--line)]" style={{ background: "var(--networks-bg, #ece9e4)" }} data-networks-hero="">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-0.5 px-4 py-2 sm:gap-1 sm:px-6 sm:py-3">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
             <CampusSeal label="CS" title="Campus Scout" size="sm" />
