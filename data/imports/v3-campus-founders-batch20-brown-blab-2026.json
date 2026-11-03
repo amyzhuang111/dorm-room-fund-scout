@@ -1,0 +1,353 @@
+{
+  "retrievedAt": "2026-11-03T07:46:00.000Z",
+  "companies": [
+    {
+      "name": "Goldvi",
+      "description": "Functional nutrition for adults aged 65 and older.",
+      "website": "https://goldvi.co",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Goldvi; featured venture team: Drew Clearie '26.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Drew Clearie",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Goldvi)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Goldvi; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Drew Clearie with Goldvi; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown B-Lab 2026: Goldvi; featured venture team: Drew Clearie '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Goldvi; featured venture team: Drew Clearie '26."
+        }
+      ]
+    },
+    {
+      "name": "Groovy Labs",
+      "description": "Accessible cosmetic packaging for customers with limited fine-motor mobility.",
+      "website": "https://groovylabs.co",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Groovy Labs; featured venture team: Maia Schlussel '26, Claire Nicolas '26.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Maia Schlussel",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Groovy Labs)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Groovy Labs; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Maia Schlussel with Groovy Labs; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown B-Lab 2026: Groovy Labs; featured venture team: Maia Schlussel '26, Claire Nicolas '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Groovy Labs; featured venture team: Maia Schlussel '26, Claire Nicolas '26."
+        },
+        {
+          "name": "Claire Nicolas",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Groovy Labs)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Groovy Labs; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Claire Nicolas with Groovy Labs; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown B-Lab 2026: Groovy Labs; featured venture team: Maia Schlussel '26, Claire Nicolas '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Groovy Labs; featured venture team: Maia Schlussel '26, Claire Nicolas '26."
+        }
+      ]
+    },
+    {
+      "name": "Lindatoto",
+      "description": "Digital childhood immunization profiles and follow-up reminders for low-resource care.",
+      "website": "https://lindatoto.com",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Lindatoto; featured venture team: Francis Parserio '26.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Francis Parserio",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Lindatoto)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Lindatoto; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Francis Parserio with Lindatoto; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown B-Lab 2026: Lindatoto; featured venture team: Francis Parserio '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Lindatoto; featured venture team: Francis Parserio '26."
+        }
+      ]
+    },
+    {
+      "name": "Living Outside",
+      "description": "Youth-led homelessness destigmatization nonprofit distributing care bags and building local chapters.",
+      "website": "https://www.livingoutside.org",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Living Outside; featured venture team: Bella Brown '29, Arden Brown.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Bella Brown",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Living Outside)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Living Outside; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Bella Brown with Living Outside; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Brown B-Lab 2026: Living Outside; featured venture team: Bella Brown '29, Arden Brown."
+          },
+          "excerpt": "Brown B-Lab 2026: Living Outside; featured venture team: Bella Brown '29, Arden Brown."
+        },
+        {
+          "name": "Arden Brown",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Brown B-Lab 2026 venture team (Living Outside)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Living Outside; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Arden Brown with Living Outside; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "excerpt": "Brown B-Lab 2026: Living Outside; featured venture team: Bella Brown '29, Arden Brown."
+        }
+      ]
+    },
+    {
+      "name": "Naiad Technologies",
+      "description": "Biological membranes for phosphate capture to combat aquatic algae blooms.",
+      "website": "https://www.vivaquaai.com",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Naiad Technologies; featured venture team: Malia Chavinson '27, Peyton Bure '26.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Malia Chavinson",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Naiad Technologies)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Naiad Technologies; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Malia Chavinson with Naiad Technologies; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Brown B-Lab 2026: Naiad Technologies; featured venture team: Malia Chavinson '27, Peyton Bure '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Naiad Technologies; featured venture team: Malia Chavinson '27, Peyton Bure '26."
+        },
+        {
+          "name": "Peyton Bure",
+          "aliases": [],
+          "campusId": "univ_toronto",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Naiad Technologies) — university stated as Toronto",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Naiad Technologies; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Peyton Bure with Naiad Technologies; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown B-Lab 2026: Naiad Technologies; featured venture team: Malia Chavinson '27, Peyton Bure '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Naiad Technologies; featured venture team: Malia Chavinson '27, Peyton Bure '26."
+        }
+      ]
+    },
+    {
+      "name": "ProductivityPeriod",
+      "description": "Hormone-aware scheduling and productivity insights.",
+      "website": "https://g1isgone.github.io",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: ProductivityPeriod; featured venture team: Ji Won Chung '27.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ji Won Chung",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (ProductivityPeriod)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for ProductivityPeriod; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Ji Won Chung with ProductivityPeriod; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Brown B-Lab 2026: ProductivityPeriod; featured venture team: Ji Won Chung '27."
+          },
+          "excerpt": "Brown B-Lab 2026: ProductivityPeriod; featured venture team: Ji Won Chung '27."
+        }
+      ]
+    },
+    {
+      "name": "Q&Q AI",
+      "description": "Auditable AI valuation workflows connecting new market information with model drivers.",
+      "website": "https://qandq.ai",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Q&Q AI; featured venture team: Yanle Lyu '27, Kinsey Feng '26.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yanle Lyu",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Q&Q AI)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Q&Q AI; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Yanle Lyu with Q&Q AI; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Brown B-Lab 2026: Q&Q AI; featured venture team: Yanle Lyu '27, Kinsey Feng '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Q&Q AI; featured venture team: Yanle Lyu '27, Kinsey Feng '26."
+        },
+        {
+          "name": "Kinsey Feng",
+          "aliases": [],
+          "campusId": "univ_columbia",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Q&Q AI) — university stated as Columbia",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Q&Q AI; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Kinsey Feng with Q&Q AI; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown B-Lab 2026: Q&Q AI; featured venture team: Yanle Lyu '27, Kinsey Feng '26."
+          },
+          "excerpt": "Brown B-Lab 2026: Q&Q AI; featured venture team: Yanle Lyu '27, Kinsey Feng '26."
+        }
+      ]
+    },
+    {
+      "name": "Subsix Nutrition",
+      "description": "Clean-label performance nutrition and SapFuel snack products.",
+      "website": "https://subsixnutrition.com",
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Subsix Nutrition; no named team member on the public roster.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Tona",
+      "description": "Skin-lesion tracking and monitoring designed for diverse skin tones.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026",
+      "excerpt": "Brown B-Lab 2026: Tona; featured venture team: Delyce Twizeyimana '27.",
+      "orgPlace": "Brown B-Lab 2026 summer accelerator",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Delyce Twizeyimana",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown B-Lab 2026 venture team (Tona)",
+          "founderStatus": "potential",
+          "companyRole": "team_member",
+          "potentialSignal": "Named on 2026 Brown B-Lab venture team for Tona; legal founder title not individually stated",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center official 2026 page associates Delyce Twizeyimana with Tona; does not explicitly identify legal cofounder status. Different stated schools are respected.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Brown B-Lab 2026: Tona; featured venture team: Delyce Twizeyimana '27."
+          },
+          "excerpt": "Brown B-Lab 2026: Tona; featured venture team: Delyce Twizeyimana '27."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}
