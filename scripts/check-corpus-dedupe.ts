@@ -33,7 +33,25 @@ for (const r of rows) {
   }
 }
 
-const nameDups = [...byName.entries()].filter(([, g]) => g.length > 1);
+// A shared name is not necessarily a shared company. See the source review in
+// reviews/company-name-collision-agora.md. Match the exact records, sources and
+// founder sets; any new record or changed identity still fails this audit.
+const reviewedAgora = [
+  { id: "proj_jRCyQwIq8J1u", source: "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/", founders: ["Christian Herren", "David Cui", "Tomer Ben Yaakov"] },
+  { id: "proj_yTsIek7JT4YO", source: "https://www.thedp.com/article/2024/11/penn-startup-apps-trading-items", founders: ["Meha Gaba", "Yochi Hobson"] },
+];
+function isReviewedNameCollision(name: string, group: typeof rows): boolean {
+  if (name !== normalizeCompanyName("Agora") || group.length !== reviewedAgora.length) return false;
+  return reviewedAgora.every(review => {
+    const row = group.find(r => r.id === review.id);
+    if (!row || row.primary_link !== review.source) return false;
+    const founders = db.prepare(`SELECT DISTINCT p.name FROM person_project_roles r JOIN people p ON p.id = r.person_id WHERE r.project_id = ?`).all(review.id) as { name: string }[];
+    return JSON.stringify(founders.map(f => f.name).sort()) === JSON.stringify([...review.founders].sort());
+  });
+}
+const nameCollisions = [...byName.entries()].filter(([, g]) => g.length > 1);
+const reviewedNameCollisions = nameCollisions.filter(([name, group]) => isReviewedNameCollision(name, group));
+const nameDups = nameCollisions.filter(([name, group]) => !isReviewedNameCollision(name, group));
 const domainDups = [...byDomain.entries()].filter(([, g]) => g.length > 1);
 const signalDups = db
   .prepare(
@@ -74,7 +92,7 @@ if (signalDups.length) {
 if (failed) process.exit(1);
 console.log(
   JSON.stringify(
-    { ok: true, investable: rows.length, nameGroups: byName.size, domainGroups: byDomain.size, snapshot: snap },
+    { ok: true, investable: rows.length, nameGroups: byName.size, reviewedNameCollisions: reviewedNameCollisions.map(([name, group]) => ({ name, ids: group.map(r => r.id) })), domainGroups: byDomain.size, snapshot: snap },
     null,
     2,
   ),

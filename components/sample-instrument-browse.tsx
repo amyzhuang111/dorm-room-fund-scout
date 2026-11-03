@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
+import { companyDisplayCopy } from "@/lib/ui/company-display-copy";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
@@ -240,6 +241,7 @@ export function SampleInstrumentBrowse({
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
+  const [catalogFailed, setCatalogFailed] = useState(false);
   const [founderLinks, setFounderLinks] = useState<Record<string, { name: string; linkedinUrl: string }[]>>({});
   const [rightTab, setRightTab] = useState<"feed" | "overlays">("feed");
   /** Right instrument starts closed so the ledger owns the width (Monitor-style peek). */
@@ -249,9 +251,9 @@ export function SampleInstrumentBrowse({
     let cancel = false;
     void loadDirectoryClient()
       .then((data) => {
-        if (!cancel) setCatalog(data.cards);
+        if (!cancel) setCatalog(companyDisplayCopy(data.cards));
       })
-      .catch(() => {});
+      .catch(() => { if (!cancel) setCatalogFailed(true); });
     return () => {
       cancel = true;
     };
@@ -260,7 +262,7 @@ export function SampleInstrumentBrowse({
   const companiesLive = catalog ?? companies;
   // When ?more>1, expand the ledger from the client catalog so SSR stays ≤1 page.
   const cards = useMemo(() => {
-    if (!catalog) return cardsProp;
+    if (!catalog) return companyDisplayCopy(cardsProp);
     const PAGE = 14;
     const matched = applyFacets(catalog, facets) as DirectoryCard[];
     const ordered = [...matched];
@@ -303,6 +305,7 @@ export function SampleInstrumentBrowse({
   }, [pages, catalog, cardsProp, feed, facets, sort]);
   const boardCompanies = useMemo(() => applyFacets(companiesLive, facets), [companiesLive, facets]);
   const total = catalog ? (feed === "leaderboard" ? boardCompanies.filter((c) => c.signals > 0).length : boardCompanies.length) : initialTotal;
+  const matchingCount = catalog ? boardCompanies.length.toLocaleString("en-US") : "…";
   const moreHref = browseHref({ feed, facets, sort, more: pages + 1 });
   /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
   const signaledMatch = useMemo(
@@ -521,7 +524,7 @@ export function SampleInstrumentBrowse({
 
   return (
     <div
-      className={`${styles.browse} mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:gap-5 ${
+      className={`${styles.browse} ${feed === "directory" ? styles.directory : ""} mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:gap-5 ${
         rightOpen
           ? "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)]"
           : "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)]"
@@ -540,7 +543,7 @@ export function SampleInstrumentBrowse({
           >
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filters</p>
             <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-              <span data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
+              <span data-match-count="">{matchingCount}</span>
               <span className="mx-1.5 text-[18px] font-semibold tracking-normal text-[color:var(--fg-3,#5C647A)]">of</span>
               <span className="text-[22px] font-bold text-[color:var(--fg,#0B0E17)]" data-total-count="">
                 {total.toLocaleString("en-US")}
@@ -555,6 +558,7 @@ export function SampleInstrumentBrowse({
                   key={String(chip.key)}
                   type="button"
                   data-filter-chip={String(chip.key)}
+                  aria-label={`Remove ${chip.label} filter`}
                   onClick={() => commitFacet({ ...facets, ...chip.clear })}
                   className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--ember,#D96B1C)]"
                 >
@@ -579,6 +583,7 @@ export function SampleInstrumentBrowse({
               <button
                 type="button"
                 data-export-filtered=""
+                disabled={!catalog}
                 onClick={() => exportFilteredCsv(boardCompanies)}
                 className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
               >
@@ -645,7 +650,8 @@ export function SampleInstrumentBrowse({
                   ).map(([id, label]) => (
                     <Link
                       key={id}
-                      href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                      href={browseHref({ feed, facets, sort: id })}
+                      aria-current={sort === id ? "true" : undefined}
                       className={`inline-flex h-8 items-center rounded-sm border px-3 font-mono text-[11px] font-medium ${sortChip(sort === id)}`}
                     >
                       {label}
@@ -673,7 +679,7 @@ export function SampleInstrumentBrowse({
               data-signals-landed-desk={pages > 1 ? undefined : ""}
               data-signals-landed-desk-continued={pages > 1 ? "" : undefined}
             >
-              <SignalsLanded companies={companiesLive} />
+              <SignalsLanded companies={boardCompanies} />
             </div>
           ) : null}
         </div>
@@ -686,6 +692,7 @@ export function SampleInstrumentBrowse({
               key={`m-${String(chip.key)}`}
               type="button"
               data-filter-chip={String(chip.key)}
+                  aria-label={`Remove ${chip.label} filter`}
               onClick={() => commitFacet({ ...facets, ...chip.clear })}
               className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium"
             >
@@ -693,35 +700,19 @@ export function SampleInstrumentBrowse({
               <span className="font-mono text-[10px] text-[color:var(--ember,#D96B1C)]" aria-hidden>x</span>
             </button>
           ))}
-          <button
-            type="button"
-            data-export-filtered-mobile=""
-            onClick={() => exportFilteredCsv(boardCompanies)}
-            className="ml-auto font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
-          >
-            Export CSV
-          </button>
+
         </div>
         <div className="mb-3 space-y-2 lg:hidden" data-mobile-browse-compose="">
           {/* r30: one list mast (seal + counts + takeaway), then a single collapsed Filters row. Sort lives inside Filters. */}
           {feed === "directory" && pages <= 1 ? (
             <div data-browse-mobile-hero="">
-            <MobileListMast
-              kicker="Companies on this desk"
-              sealLabel={deskCampusTop?.label}
-              figure={signaledMatch.toLocaleString("en-US")}
-              figureSuffix="with a signal"
-              takeaway={
-                deskCampusTop
-                  ? `${deskCampusTop.label} leads with ${deskCampusTop.signaled.toLocaleString("en-US")} signaled of ${deskCampusTop.companies.toLocaleString("en-US")} on the desk`
-                  : `${signaledMatch.toLocaleString("en-US")} companies on this desk carry a signal`
-              }
-              meta="Signal desk"
-            >
-              <div data-signals-landed-mobile="" className="border-t border-[color:var(--cobalt,#2F4FD8)]/15 px-3.5 pb-3">
-                <SignalsLanded companies={companiesLive} compact />
+            <section className={styles.listSummary} aria-label="Company directory summary" aria-busy={!catalog}>
+              <div className={styles.summaryHeadline}>
+                <div><h1>Companies</h1><p><strong>{matchingCount}</strong> matching companies</p></div>
+                <p><strong>{catalog ? signaledMatch.toLocaleString("en-US") : "…"}</strong><span>with recorded signals</span></p>
               </div>
-            </MobileListMast>
+              <div data-signals-landed-mobile="">{catalog ? <SignalsLanded companies={boardCompanies} compact /> : <p className={styles.chartLoading} role="status">Loading signal history…</p>}</div>
+            </section>
             </div>
           ) : null}
 
@@ -796,8 +787,14 @@ export function SampleInstrumentBrowse({
             />
           ) : null}
 
+          {feed === "directory" && <form key={query} className={styles.quickSearch} role="search" aria-label="Search companies" onSubmit={(event) => { event.preventDefault(); const value = String(new FormData(event.currentTarget).get("q") ?? ""); commitFacet({ ...facets, query: value.trim() }); }}>
+            <label className="sr-only" htmlFor="company-quick-search">Search company or founder</label>
+            <input id="company-quick-search" name="q" type="search" defaultValue={query} placeholder="Search company or founder" />
+            <button type="submit">Search</button>
+            <button type="button" data-mobile-filters-open="" aria-expanded={mobileFiltersOpen} aria-controls="mobile-filter-sheet" onClick={() => setMobileFiltersOpen(true)}>Filters{chipDefs.length ? ` (${chipDefs.length.toLocaleString("en-US")})` : ""}</button>
+          </form>}
           {/* Continued pages: sort segment stays above the list (r29 peak+sort). Page 1 keeps sort inside Filters. */}
-          {feed === "directory" && pages > 1 ? (
+          {feed === "directory" ? (
             <div
               className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
               data-mobile-sort-segment=""
@@ -833,39 +830,7 @@ export function SampleInstrumentBrowse({
             </div>
           ) : null}
 
-          {/* Single chrome row: Filters (sort chips inside on page 1). */}
-          {feed === "directory" ? (
-            <div
-              className="overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
-              role="region"
-              aria-label="Scout filters"
-              data-mobile-filters-inline=""
-              data-mobile-contents-hero=""
-              data-filters-index-hero=""
-            >
-              <button
-                type="button"
-                className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
-                onClick={() => setMobileFiltersOpen(true)}
-                aria-expanded={mobileFiltersOpen}
-                aria-controls="mobile-filter-sheet"
-                data-mobile-filters-open=""
-              >
-                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
-                  Filters
-                  <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
-                    {boardCompanies.length.toLocaleString("en-US")}
-                  </span>
-                  <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
-                    of {total.toLocaleString("en-US")}
-                  </span>
-                </p>
-                <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
-                  Open
-                </span>
-              </button>
-            </div>
-          ) : null}
+
         </div>
 
 
@@ -891,14 +856,15 @@ export function SampleInstrumentBrowse({
 
         {/* One strong ledger stage · map-stage language: cobalt frame, ruled rows.
             Browse-more (pages > 1): sticky row-range, section dividers, end mark. */}
+        {feed === "directory" && catalogFailed && <p role="alert" className={styles.loadError}>The full directory could not load. <button type="button" onClick={() => window.location.reload()}>Reload to retry</button></p>}
         {cards.length === 0 ? (
-          <p className="text-[13px] text-[color:var(--fg-2,#3F465C)]">
+          <div className={styles.emptyResults}><p className="text-[13px] text-[color:var(--fg-2,#3F465C)]">
             {query
               ? `No companies match "${query}".`
               : campusName && campusTotal === 0
                 ? `No companies are stored for ${campusName}.`
                 : "No companies in this category."}
-          </p>
+          </p><button type="button" onClick={() => commitFacet(emptyFacets())}>Clear filters</button></div>
         ) : (
           <div data-ledger-expanded={pages > 1 ? "1" : "0"}>
             {pages > 1 ? (
@@ -1188,6 +1154,7 @@ export function SampleInstrumentBrowse({
           </p>
         ) : null}
 
+        {feed === "directory" && <button type="button" data-export-filtered-mobile="" disabled={!catalog || !boardCompanies.length} onClick={() => exportFilteredCsv(boardCompanies)} className="mt-2 min-h-10 px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden">Export CSV</button>}
         <div className="h-4 lg:hidden" aria-hidden data-mobile-dock-spacer="" />
 
         <div className="sr-only">
@@ -1298,7 +1265,7 @@ export function SampleInstrumentBrowse({
               <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
                 Filters
                 <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--ember,#D96B1C)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
+                  {matchingCount}
                 </span>
                 <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
                   of {total.toLocaleString("en-US")}
@@ -1542,7 +1509,7 @@ function LedgerRow({
                 onClick={(event) => event.stopPropagation()}
               >
                 in
-                <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
+                <span className="break-words font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
               </a>
             ))}
           </span>

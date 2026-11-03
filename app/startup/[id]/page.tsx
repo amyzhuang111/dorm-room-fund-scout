@@ -1,3 +1,5 @@
+import { storedCompanyLinks } from "@/lib/domain/company-link";
+import { companyDisplayCopy } from "@/lib/ui/company-display-copy";
 import { notFound, permanentRedirect } from "next/navigation";
 import { CompanyDetail } from "@/components/company-detail";
 import { SampleCompanyShell } from "@/components/sample-company-shell";
@@ -87,6 +89,9 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     directoryRow?.stage ??
     project.profile.rounds[0]?.stage ??
     null;
+  const links = storedCompanyLinks({ websiteUrl: project.websiteUrl, primaryLink: project.primaryLink, sourceUrls: [project.profile.companyLinkedin?.text, ...project.claims.map(c => c.sourceUrl)] });
+  const campusPeers = directoryRow?.schoolId ? campusPeerCompanies(all, directoryRow.schoolId) : [];
+  const sectorPeers = directoryRow?.sectorId ? all.filter(c => c.sectorId === directoryRow.sectorId) : [];
   const dossier = {
     id: project.id,
     name: card?.name ?? project.name,
@@ -97,6 +102,13 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     sector: directoryRow?.sector ?? null,
     primaryProgram: directoryRow?.primaryProgram ?? null,
     founders: directoryRow?.founders ?? [],
+    founderProfiles: (directoryRow?.founders ?? []).map(name => {
+      const founder = project.founderLinks.find(f => f.name === name);
+      return { name, url: founder?.link?.kind === "linkedin" ? founder.link.url : null, confirmed: founder?.link?.kind === "linkedin" };
+    }),
+    websiteUrl: links.website,
+    linkedinUrl: links.linkedin,
+    peerCount: campusPeers.length || sectorPeers.length || all.filter(c => c.signals > 0).length,
     founderConfirmed: (project.founderLinks ?? []).some((f) => f.link?.kind === "linkedin"),
     signals: directoryRow?.signals ?? 0,
     operatingStatus: directoryRow?.operatingStatus ?? null,
@@ -108,8 +120,8 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (
-    <SampleCompanyShell companies={companies} dossier={dossier}>
-      <CompanyDetail project={project} initialCard={card} />
+    <SampleCompanyShell companies={companyDisplayCopy(companies)} dossier={companyDisplayCopy(dossier)}>
+      <CompanyDetail project={companyDisplayCopy(project)} initialCard={companyDisplayCopy(card)} />
     </SampleCompanyShell>
   );
 }
