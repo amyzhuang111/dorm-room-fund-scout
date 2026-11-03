@@ -1,11 +1,14 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3488",
-  "minPct": 8,
   "width": 2880,
   "height": 1530,
   "samples": 275760,
-  "nonBackground": 144075,
-  "pct": 52.25,
-  "fade": "1"
+  "nonBackground": 30849,
+  "pct": 11.19,
+  "colored": 19348,
+  "coloredPct": 7.02,
+  "fade": "1",
+  "base": "http://127.0.0.1:3488",
+  "minPct": 8,
+  "minColoredPct": 5
 }

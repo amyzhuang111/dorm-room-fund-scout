@@ -57,7 +57,20 @@ const result = await page.evaluate(() => {
       if (dist > 18 || d[3] < 250) non += 1;
     }
   }
+  let colored = 0;
   const pct = total ? (100 * non) / total : 0;
+  // Second pass already sampled; reuse loop vars by recounting chroma in the same grid
+  for (let y = 0; y < h; y += step) {
+    for (let x = 0; x < w; x += step) {
+      const d = ctx.getImageData(x, y, 1, 1).data;
+      const mx = Math.max(d[0], d[1], d[2]);
+      const mn = Math.min(d[0], d[1], d[2]);
+      // Chromatic vs near-gray: saturation-ish delta, and not near bg
+      const dist = Math.abs(d[0] - bg[0]) + Math.abs(d[1] - bg[1]) + Math.abs(d[2] - bg[2]);
+      if (dist > 18 && mx - mn >= 12) colored += 1;
+    }
+  }
+  const coloredPct = total ? (100 * colored) / total : 0;
   return {
     ok: true,
     width: w,
@@ -65,15 +78,19 @@ const result = await page.evaluate(() => {
     samples: total,
     nonBackground: non,
     pct: Math.round(pct * 100) / 100,
+    colored: colored,
+    coloredPct: Math.round(coloredPct * 100) / 100,
     fade: wrap?.getAttribute("data-networks-fade") ?? null,
   };
 });
 
+const MIN_COLORED_PCT = Number(process.env.MIN_COLORED_PCT || 5);
 const report = {
-  ok: result.ok && result.pct >= MIN_PCT,
+  ...result,
+  ok: !!(result.ok && result.pct >= MIN_PCT && (result.coloredPct ?? 0) >= MIN_COLORED_PCT),
   base: BASE,
   minPct: MIN_PCT,
-  ...result,
+  minColoredPct: MIN_COLORED_PCT,
 };
 fs.mkdirSync("reviews", { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(report, null, 2));

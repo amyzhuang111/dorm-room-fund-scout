@@ -554,7 +554,7 @@ const r: number[] = [];
 const kind: number[] = [];
 const campus: number[] = [];
 const deg: number[] = [];
-const year: number[] = []; // 0 = unknown; founders carry enrollment_grad_year
+const year: number[] = []; // 0 always-on; >0 grad year; <0 = -(founded proxy year)
 for (const n of nodes) {
   x.push(round1(n.x));
   y.push(round1(n.y));
@@ -566,7 +566,10 @@ for (const n of nodes) {
   deg.push(Math.min(255, n.deg));
   if (n.kind === 0) {
     const fid = n.id.startsWith("fo:") ? n.id.slice(3) : "";
-    year.push(meta.founderYears.get(fid) ?? 0);
+    const yv = meta.founderYears.get(fid) ?? 0;
+    const k = meta.founderYearKind.get(fid);
+    // Negative encodes founded-year proxy without a parallel yearKind array (keeps JSON under 210KiB).
+    year.push(k === "founded" && yv > 0 ? -yv : yv);
   } else {
     year.push(0);
   }
@@ -648,7 +651,9 @@ const poster = {
     foundersLinked: page.totals.foundersLinked,
     foundersShown: founderIds.length,
     companiesShown: companyIds.length,
-    foundersWithYear: founderIds.filter((id) => (meta.founderYears.get(id) ?? 0) > 0).length,
+    foundersWithYear: founderIds.filter((id) => (meta.founderYearKind.get(id) === "grad")).length,
+    foundersWithProxy: founderIds.filter((id) => meta.founderYearKind.get(id) === "founded").length,
+    foundersAlwaysOn: founderIds.filter((id) => !(meta.founderYears.get(id) ?? 0)).length,
     foundersNoYear: founderIds.filter((id) => !(meta.founderYears.get(id) ?? 0)).length,
     yearMin: 2023,
     yearMax: 2026,

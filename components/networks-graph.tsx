@@ -954,31 +954,49 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
 
   const hubLabelLayout = useMemo(() => {
     if (!poster) return [] as { id: string; label: string; x: number; y: number }[];
-    const raw = poster.hubs.slice(0, 10).map((hub) => {
+    type Lab = { id: string; label: string; x: number; y: number; priority: number; kind: "hub" | "campus" };
+    const raw: Lab[] = [];
+    for (const lab of (poster.campusLabels ?? []).slice(0, 10)) {
+      const pt = worldToScreen(lab.x, lab.y);
+      raw.push({ id: `campus:${lab.id}`, label: lab.label, x: pt.x, y: pt.y, priority: 1000 + lab.n, kind: "campus" });
+    }
+    for (const hub of poster.hubs.slice(0, 10)) {
       const pt = worldToScreen(poster.x[hub.i], poster.y[hub.i]);
-      return {
+      raw.push({
         id: hub.id,
-        label: hub.label.length > 22 ? `${hub.label.slice(0, 20)}…` : hub.label,
+        label: hub.label.length > 22 ? `${hub.label.slice(0, 20)}...` : hub.label,
         x: pt.x,
         y: pt.y + 10,
-      };
-    });
-    raw.sort((a, b) => a.y - b.y || a.x - b.x);
-    for (let i = 0; i < raw.length; i++) {
-      for (let j = 0; j < i; j++) {
-        if (Math.abs(raw[i].x - raw[j].x) < 130 && Math.abs(raw[i].y - raw[j].y) < 14) {
-          raw[i].y = raw[j].y + 14;
-        }
-      }
+        priority: 400 + hub.founders,
+        kind: "hub",
+      });
     }
-    return raw;
+    raw.sort((a, b) => b.priority - a.priority);
+    const kept: Lab[] = [];
+    for (const lab of raw) {
+      if (lab.kind === "campus") continue; // campuses rendered separately; only reserve space
+      let hit = false;
+      for (const k of kept) {
+        if (Math.abs(lab.x - k.x) < 120 && Math.abs(lab.y - k.y) < 14) { hit = true; break; }
+      }
+      // Also hide hub if it sits on a campus label
+      for (const c of raw) {
+        if (c.kind !== "campus") continue;
+        if (Math.abs(lab.x - c.x) < 100 && Math.abs(lab.y - c.y) < 16) { hit = true; break; }
+      }
+      if (hit) continue;
+      kept.push(lab);
+      if (kept.length >= 8) break;
+    }
+    return kept.map(({ id, label, x, y }) => ({ id, label, x, y }));
   }, [poster, worldToScreen, size, zoomScale]);
 
   const visibleCount = useMemo(() => {
     if (!poster?.year) return 0;
     return countFoundersByYear(poster.year, poster.kind, scrubYear, yearMax);
   }, [poster, scrubYear, yearMax]);
-  const noYearCount = poster?.totals.foundersNoYear ?? 0;
+  const alwaysOnCount = poster?.totals.foundersAlwaysOn ?? poster?.totals.foundersNoYear ?? 0;
+  const proxyCount = poster?.totals.foundersWithProxy ?? 0;
   const totalFounders = poster?.foIds.length ?? poster?.totals.foundersShown ?? 1960;
 
   // Campus labels (Nature/phylum centered) - satisfy label gates; no hub labels on dots.
@@ -1090,7 +1108,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           playing={playing}
           visibleCount={visibleCount}
           totalFounders={totalFounders}
-          noYearCount={noYearCount}
+          alwaysOnCount={alwaysOnCount}
+          proxyCount={proxyCount}
           onYear={(y) => {
             setPlaying(false);
             setScrubYear(y);
@@ -1282,6 +1301,7 @@ const NetworksGraph3DLazy = dynamic(
 /** Prefers WebGL 3D + time; falls back to canvas 2D for no WebGL or reduced motion. */
 export function NetworksGraph(props: Props) {
   const [mode, setMode] = useState<"pending" | "3d" | "2d">("pending");
+  const fallback2D = useCallback(() => setMode("2d"), []);
   useEffect(() => {
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
     let gl = false;
@@ -1297,7 +1317,7 @@ export function NetworksGraph(props: Props) {
     return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>;
   }
   if (mode === "3d") {
-    return <NetworksGraph3DLazy {...props} onFallback2D={() => setMode("2d")} />;
+    return <NetworksGraph3DLazy {...props} onFallback2D={fallback2D} />;
   }
   return <NetworksGraph2D {...props} />;
 }

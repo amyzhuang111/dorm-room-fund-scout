@@ -226,8 +226,10 @@ interface LinkMeta {
   companyUrls: Map<string, string>;
   /** Founder evidence URL (enrollment source) when known. */
   founderEvidenceUrls: Map<string, string>;
-  /** Enrollment/grad cohort year when known (else absent). */
+  /** Effective cohort year for timeline (grad year, else company founded year). */
   founderYears: Map<string, number>;
+  /** How the year was sourced: grad | founded. Absent when unknown. */
+  founderYearKind: Map<string, "grad" | "founded">;
   /** Best company_facts.investor source_url per project. */
   investorFactUrls: Map<string, string>;
   /** VIP-X evidence URLs keyed by project or person id. */
@@ -407,13 +409,34 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
 
   const founderEvidenceUrls = new Map<string, string>();
   const founderYears = new Map<string, number>();
+  const founderYearKind = new Map<string, "grad" | "founded">();
   for (const row of db
     .prepare(`SELECT id, enrollment_source_url, enrollment_grad_year FROM people WHERE founder_status = 'founder'`)
     .all() as { id: string; enrollment_source_url: string | null; enrollment_grad_year: number | null }[]) {
     const url = pickHttpUrl(row.enrollment_source_url);
     if (url) founderEvidenceUrls.set(row.id, url);
     const y = row.enrollment_grad_year;
-    if (y != null && y >= 1970 && y <= 2040) founderYears.set(row.id, y);
+    if (y != null && y >= 1970 && y <= 2040) {
+      founderYears.set(row.id, y);
+      founderYearKind.set(row.id, "grad");
+    }
+  }
+  // Company founded_year as labeled proxy when grad year is missing.
+  const companyFoundedYear = new Map<string, number>();
+  for (const row of db
+    .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'founded_year'`)
+    .all() as { project_id: string; value_text: string }[]) {
+    const y = Number.parseInt(String(row.value_text).slice(0, 4), 10);
+    if (Number.isFinite(y) && y >= 1970 && y <= 2040) companyFoundedYear.set(row.project_id, y);
+  }
+  for (const [companyId, founders] of companyFounders) {
+    const fy = companyFoundedYear.get(companyId);
+    if (fy == null) continue;
+    for (const fid of founders) {
+      if (founderYears.has(fid)) continue;
+      founderYears.set(fid, fy);
+      founderYearKind.set(fid, "founded");
+    }
   }
 
   const founderCampuses = new Map<string, string[]>();
@@ -512,6 +535,7 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     companyUrls,
     founderEvidenceUrls,
     founderYears,
+    founderYearKind,
     investorFactUrls,
     vipEvidenceUrls,
     uniLabels,

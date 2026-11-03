@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   YEAR_MIN_DEFAULT,
   cohortYearNow,
@@ -8,6 +8,7 @@ import {
   founderVisibleAtYear,
   type Deal,
   type Poster,
+  type PosterCampusLabel,
   type PosterHub,
 } from "@/components/networks-poster-types";
 import { NetworksTimeline } from "@/components/networks-timeline";
@@ -19,10 +20,34 @@ type Props = {
   onFallback2D?: () => void;
 };
 
+type OverlayLabel = {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  priority: number;
+  kind: "campus" | "hub";
+  n?: number;
+};
+
+type TrackBox = { id: string; label: string; x: number; y: number; box: number; n: number };
+type ArcSeg = { x1: number; y1: number; x2: number; y2: number; cx: number; cy: number };
+type Card = {
+  key: string;
+  x: number;
+  y: number;
+  title: string;
+  school: string;
+  company: string;
+};
+
 function clamp(n: number, a: number, b: number) {
   return Math.max(a, Math.min(b, n));
 }
-
+function smoothstep(t: number) {
+  const x = clamp(t, 0, 1);
+  return x * x * (3 - 2 * x);
+}
 function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace("#", "");
   if (h.length === 3) {
@@ -30,16 +55,105 @@ function hexToRgb(hex: string): [number, number, number] {
   }
   return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
 }
-
+function hash01(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) / 4294967296;
+}
 function distToScale(dist: number): number {
-  // Map camera distance to legacy 2D scale (0.7-5.5) for zoom-tier gates/shots.
   const t = clamp((1100 - dist) / 900, 0, 1);
   return 0.7 + t * 4.8;
 }
-
 function scaleToDist(scale: number): number {
   const t = clamp((scale - 0.7) / 4.8, 0, 1);
   return 1100 - t * 900;
+}
+function curved(x1: number, y1: number, x2: number, y2: number, bendScale = 1.4) {
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy) || 1;
+  const bend = Math.min(40, len * 0.22) * bendScale;
+  return { cx: mx - (dy / len) * bend, cy: my + (dx / len) * bend };
+}
+
+function makeGlowTexture(THREE: typeof import("three"), color: [number, number, number], soft = true) {
+  const size = soft ? 128 : 64;
+  const c = document.createElement("canvas");
+  c.width = size;
+  c.height = size;
+  const g = c.getContext("2d")!;
+  const grd = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  const [r, gch, b] = color;
+  if (soft) {
+    grd.addColorStop(0, `rgba(${r},${gch},${b},1)`);
+    grd.addColorStop(0.25, `rgba(${r},${gch},${b},0.55)`);
+    grd.addColorStop(0.55, `rgba(${r},${gch},${b},0.18)`);
+    grd.addColorStop(1, `rgba(${r},${gch},${b},0)`);
+  } else {
+    grd.addColorStop(0, `rgba(${r},${gch},${b},1)`);
+    grd.addColorStop(0.45, `rgba(${r},${gch},${b},0.85)`);
+    grd.addColorStop(0.7, `rgba(${r},${gch},${b},0.25)`);
+    grd.addColorStop(1, `rgba(${r},${gch},${b},0)`);
+  }
+  g.fillStyle = grd;
+  g.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function collideLabels(raw: OverlayLabel[], maxShow = 18): OverlayLabel[] {
+  // Campuses first (higher priority already), then hubs; hide lower-priority on AABB overlap.
+  const sorted = [...raw].sort((a, b) => b.priority - a.priority || a.label.localeCompare(b.label));
+  const kept: OverlayLabel[] = [];
+  const approxW = (lab: OverlayLabel) => Math.min(180, 10 + lab.label.length * (lab.kind === "campus" ? 7.8 : 6.6));
+  const approxH = (lab: OverlayLabel) => (lab.kind === "campus" ? 20 : 15);
+  for (const lab of sorted) {
+    const lw = approxW(lab);
+    const lh = approxH(lab);
+    const l = lab.x - lw / 2;
+    const r = lab.x + lw / 2;
+    const top = lab.y - lh / 2;
+    const bot = lab.y + lh / 2;
+    let hit = false;
+    for (const k of kept) {
+      const kw = approxW(k);
+      const kh = approxH(k);
+      const kl = k.x - kw / 2;
+      const kr = k.x + kw / 2;
+      const kt = k.y - kh / 2;
+      const kb = k.y + kh / 2;
+      if (l < kr + 10 && r > kl - 10 && top < kb + 8 && bot > kt - 8) {
+        hit = true;
+        break;
+      }
+    }
+    if (hit) continue;
+    kept.push(lab);
+    if (kept.length >= maxShow) break;
+  }
+  return kept;
+}
+
+function collideTrackBoxes(boxes: TrackBox[], maxShow = 6): TrackBox[] {
+  const sorted = [...boxes].sort((a, b) => b.n - a.n);
+  const kept: TrackBox[] = [];
+  for (const b of sorted) {
+    const half = b.box / 2 + 18; // include monospace label above
+    const hit = kept.some((k) => {
+      const kh = k.box / 2 + 18;
+      return Math.abs(b.x - k.x) < half + kh && Math.abs(b.y - k.y) < half + kh;
+    });
+    if (hit) continue;
+    kept.push(b);
+    if (kept.length >= maxShow) break;
+  }
+  return kept;
 }
 
 export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }: Props) {
@@ -48,20 +162,37 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
   const [poster, setPoster] = useState<Poster | null>(null);
   const [deals, setDeals] = useState<Record<string, Deal>>({});
   const [legendOtherOpen, setLegendOtherOpen] = useState(false);
-  const [webglOk, setWebglOk] = useState(true);
   const yearMax = cohortYearNow();
   const yearMin = YEAR_MIN_DEFAULT;
   const [scrubYear, setScrubYear] = useState(yearMax);
   const [playing, setPlaying] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
+  const [labels, setLabels] = useState<OverlayLabel[]>([]);
+  const [trackBoxes, setTrackBoxes] = useState<TrackBox[]>([]);
+  const [arcs, setArcs] = useState<ArcSeg[]>([]);
+  const [cards, setCards] = useState<Card[]>([]);
   const scrubRef = useRef(scrubYear);
+  const dealsRef = useRef(deals);
+  const fallbackRef = useRef(onFallback2D);
   const playRef = useRef(false);
   const idleRef = useRef(0);
   const tierRef = useRef(0);
+  const apiRef = useRef<{
+    applyYear: (y: number) => void;
+    setBloom: (b: number) => void;
+    setDeep: (d: number) => void;
+  } | null>(null);
 
   useEffect(() => {
     scrubRef.current = scrubYear;
+    apiRef.current?.applyYear(scrubYear);
   }, [scrubYear]);
+  useEffect(() => {
+    dealsRef.current = deals;
+  }, [deals]);
+  useEffect(() => {
+    fallbackRef.current = onFallback2D;
+  }, [onFallback2D]);
   useEffect(() => {
     playRef.current = playing;
   }, [playing]);
@@ -77,7 +208,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         if (!cancelled) setPoster(p);
       })
       .catch(() => {
-        if (!cancelled) onFallback2D?.();
+        if (!cancelled) fallbackRef.current?.();
       });
     fetch("/data/founder-networks-deals.json")
       .then((r) => r.json())
@@ -91,60 +222,60 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
   }, [onFallback2D]);
 
   const totalFounders = poster?.foIds.length ?? poster?.totals.foundersShown ?? 1960;
-  const noYearCount = poster?.totals.foundersNoYear ?? 0;
+  const alwaysOnCount = poster?.totals.foundersAlwaysOn ?? poster?.totals.foundersNoYear ?? 0;
+  const proxyCount = poster?.totals.foundersWithProxy ?? 0;
   const visibleCount = useMemo(() => {
-    if (!poster?.year) return 0;
+    if (!poster?.year) return totalFounders;
     return countFoundersByYear(poster.year, poster.kind, scrubYear, yearMax);
-  }, [poster, scrubYear, yearMax]);
-
-  // Hub label collision offsets in screen space (recomputed each frame into state lightly).
-  const [hubLabelPos, setHubLabelPos] = useState<{ id: string; label: string; x: number; y: number }[]>([]);
+  }, [poster, scrubYear, yearMax, totalFounders]);
 
   useEffect(() => {
-    if (!poster || !mountRef.current || !webglOk) return;
+    if (!poster || !mountRef.current) return;
     let disposed = false;
     let raf = 0;
     let renderer: import("three").WebGLRenderer | null = null;
-    let controls: { dispose: () => void; update: () => void; autoRotate: boolean; target: import("three").Vector3; enableDamping: boolean } | null = null;
+    let controls: {
+      dispose: () => void;
+      update: () => void;
+      autoRotate: boolean;
+      target: import("three").Vector3;
+      enableDamping: boolean;
+    } | null = null;
 
     (async () => {
       const THREE = await import("three");
       const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
       if (disposed || !mountRef.current) return;
-
       const p = poster;
       const el = mountRef.current;
-      const w0 = el.clientWidth || 800;
-      const h0 = el.clientHeight || 600;
 
-      let glOk = true;
       try {
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: true });
+        renderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: false,
+          powerPreference: "high-performance",
+          preserveDrawingBuffer: true,
+        });
       } catch {
-        glOk = false;
-      }
-      if (!glOk || !renderer) {
-        setWebglOk(false);
-        onFallback2D?.();
+        fallbackRef.current?.();
         return;
       }
 
+      const w0 = el.clientWidth || 800;
+      const h0 = el.clientHeight || 600;
       renderer.setClearColor(0xfbfaf7, 1);
       renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
       renderer.setSize(w0, h0, false);
       el.appendChild(renderer.domElement);
-      renderer.domElement.style.display = "block";
-      renderer.domElement.style.width = "100%";
-      renderer.domElement.style.height = "100%";
-      renderer.domElement.style.cursor = "grab";
+      Object.assign(renderer.domElement.style, { display: "block", width: "100%", height: "100%", cursor: "grab" });
 
       const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0xfbfaf7, 0.00115);
+      scene.fog = new THREE.FogExp2(0xfbfaf7, 0.00022);
 
       const camera = new THREE.PerspectiveCamera(42, w0 / h0, 1, 5000);
       const cx = p.w / 2;
       const cy = p.h / 2;
-      camera.position.set(cx, cy - 40, 780);
+      camera.position.set(cx, cy - 30, 1080);
       camera.up.set(0, 0, 1);
 
       const ctrl = new OrbitControls(camera, renderer.domElement);
@@ -152,28 +283,23 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       ctrl.enableDamping = true;
       ctrl.dampingFactor = 0.08;
       ctrl.autoRotate = true;
-      ctrl.autoRotateSpeed = 0.35;
+      ctrl.autoRotateSpeed = 0.32;
       ctrl.minDistance = 180;
       ctrl.maxDistance = 1400;
-      ctrl.maxPolarAngle = Math.PI * 0.92;
-      ctrl.minPolarAngle = 0.08;
       controls = ctrl;
 
-      // Soft ambient + hemisphere for white glow feel
-      scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-      const hemi = new THREE.HemisphereLight(0xffffff, 0xe8e4dc, 0.55);
-      scene.add(hemi);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+      scene.add(new THREE.HemisphereLight(0xffffff, 0xe8e4dc, 0.4));
 
       const zArr = p.z ?? p.x.map(() => 0);
       const yearArr = p.year ?? p.x.map(() => 0);
-
-      // Founder + company points
       const n = p.x.length;
+
+      // ---- Additive colored founder/company/hub points ----
       const positions = new Float32Array(n * 3);
       const colors = new Float32Array(n * 3);
       const sizes = new Float32Array(n);
-      const baseAlpha = new Float32Array(n);
-
+      const baseSize = new Float32Array(n);
       for (let i = 0; i < n; i++) {
         positions[i * 3] = p.x[i];
         positions[i * 3 + 1] = p.y[i];
@@ -181,19 +307,23 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         let rgb: [number, number, number] = [148, 163, 184];
         if (p.kind[i] === 0) {
           const ci = p.campus[i];
-          const col = ci >= 0 && p.campuses[ci] ? p.campuses[ci].color : "#94a3b8";
-          rgb = hexToRgb(col);
-          sizes[i] = Math.max(2.2, Math.min(5.5, p.r[i] * 1.15));
-          baseAlpha[i] = 0.82;
+          rgb = ci >= 0 && p.campuses[ci] ? hexToRgb(p.campuses[ci].color) : [148, 163, 184];
+          // Push chroma so additive sprites read as campus color, not gray mist
+          const mx = Math.max(rgb[0], rgb[1], rgb[2]) || 1;
+          rgb = [
+            Math.min(255, Math.round(rgb[0] + (rgb[0] / mx) * 40 + 12)),
+            Math.min(255, Math.round(rgb[1] + (rgb[1] / mx) * 40 + 12)),
+            Math.min(255, Math.round(rgb[2] + (rgb[2] / mx) * 40 + 12)),
+          ];
+          baseSize[i] = 6.8 + Math.min(3.4, p.r[i] * 0.6);
         } else if (p.kind[i] === 1) {
           rgb = [148, 163, 184];
-          sizes[i] = Math.max(1.6, Math.min(3.2, p.r[i]));
-          baseAlpha[i] = 0.55;
+          baseSize[i] = 2.4;
         } else {
           rgb = [30, 41, 59];
-          sizes[i] = Math.max(4, Math.min(9, p.r[i] * 1.4));
-          baseAlpha[i] = 0.95;
+          baseSize[i] = 6.5;
         }
+        sizes[i] = baseSize[i];
         colors[i * 3] = rgb[0] / 255;
         colors[i * 3 + 1] = rgb[1] / 255;
         colors[i * 3 + 2] = rgb[2] / 255;
@@ -204,50 +334,121 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
       geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
 
-      const mat = new THREE.PointsMaterial({
-        size: 3.2,
-        vertexColors: true,
-        sizeAttenuation: true,
+      const glowTex = makeGlowTexture(THREE, [255, 255, 255], true);
+      const pointMat = new THREE.ShaderMaterial({
+        uniforms: {
+          uTexture: { value: glowTex },
+          uOpacity: { value: 0.92 },
+          uScale: { value: 280 },
+          uPixelRatio: { value: renderer.getPixelRatio() },
+        },
+        vertexShader: `
+          attribute float size;
+          attribute vec3 color;
+          varying vec3 vColor;
+          varying float vAlpha;
+          uniform float uScale;
+          uniform float uPixelRatio;
+          void main() {
+            vColor = color;
+            vec4 mv = modelViewMatrix * vec4(position, 1.0);
+            float dist = max(40.0, -mv.z);
+            // Target ~3-6 CSS px on screen at resting distance
+            gl_PointSize = clamp(size * uScale / dist, 5.0, 20.0) * uPixelRatio;
+            vAlpha = size < 0.05 ? 0.0 : 1.0;
+            gl_Position = projectionMatrix * mv;
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D uTexture;
+          uniform float uOpacity;
+          varying vec3 vColor;
+          varying float vAlpha;
+          void main() {
+            vec4 tex = texture2D(uTexture, gl_PointCoord);
+            float a = tex.a * uOpacity * vAlpha;
+            if (a < 0.02) discard;
+            // Keep campus hue; use texture only for soft alpha falloff
+            gl_FragColor = vec4(vColor, a);
+          }
+        `,
         transparent: true,
-        opacity: 0.88,
         depthWrite: false,
+        // Normal on cream bg keeps campus hue; additive would wash to white
+        blending: THREE.NormalBlending,
       });
-      const points = new THREE.Points(geo, mat);
+      const points = new THREE.Points(geo, pointMat);
       scene.add(points);
 
-      // Soft campus island discs (glow on white)
+      // Soft glow halo (same campus color via vertex colors; slightly larger)
+      const glowSizes = new Float32Array(n);
+      for (let i = 0; i < n; i++) glowSizes[i] = baseSize[i] * (p.kind[i] === 0 ? 2.35 : 1.55);
+      const glowGeo = geo.clone();
+      glowGeo.setAttribute("size", new THREE.BufferAttribute(glowSizes, 1));
+      const glowMat = pointMat.clone();
+      glowMat.blending = THREE.NormalBlending;
+      glowMat.uniforms = {
+        uTexture: { value: glowTex },
+        uOpacity: { value: 0.42 },
+        uScale: { value: 300 },
+        uPixelRatio: { value: renderer.getPixelRatio() },
+      };
+      const glowPoints = new THREE.Points(glowGeo, glowMat);
+      scene.add(glowPoints);
+
+      // ---- Tight campus island haze (soft sprites hugging each cluster) ----
       const islandGroup = new THREE.Group();
+      const islandMats: import("three").SpriteMaterial[] = [];
       if (p.campusLabels) {
-        for (const lab of p.campusLabels.slice(0, 10)) {
+        for (const lab of p.campusLabels.slice(0, 16)) {
           const ci = p.campuses.findIndex((c) => c.id === lab.id);
-          const col = ci >= 0 ? hexToRgb(p.campuses[ci].color) : [180, 190, 210];
-          const discGeo = new THREE.CircleGeometry(Math.max(40, lab.r * 0.95), 48);
-          const discMat = new THREE.MeshBasicMaterial({
-            color: new THREE.Color(col[0] / 255, col[1] / 255, col[2] / 255),
+          const rgb = (ci >= 0 ? hexToRgb(p.campuses[ci].color) : [180, 190, 210]) as [number, number, number];
+          // Tight: hug the founder cloud, not a huge pale circle
+          const rad = Math.max(22, Math.min(48, lab.r * 0.22 + Math.sqrt(Math.max(8, lab.n)) * 0.9));
+          const tex = makeGlowTexture(THREE, rgb, true);
+          const discMat = new THREE.SpriteMaterial({
+            map: tex,
+            color: 0xffffff,
             transparent: true,
-            opacity: 0.14,
+            opacity: 0.28,
             depthWrite: false,
+            blending: THREE.NormalBlending,
           });
-          const disc = new THREE.Mesh(discGeo, discMat);
+          islandMats.push(discMat);
+          const disc = new THREE.Sprite(discMat);
+          disc.scale.set(rad * 2, rad * 2, 1);
           disc.position.set(lab.x, lab.y, -6);
           islandGroup.add(disc);
-          // Outer soft ring
-          const ringGeo = new THREE.RingGeometry(Math.max(42, lab.r * 0.95), Math.max(56, lab.r * 1.25), 48);
-          const ringMat = new THREE.MeshBasicMaterial({
-            color: new THREE.Color(col[0] / 255, col[1] / 255, col[2] / 255),
-            transparent: true,
-            opacity: 0.08,
-            depthWrite: false,
-            side: THREE.DoubleSide,
-          });
-          const ring = new THREE.Mesh(ringGeo, ringMat);
-          ring.position.set(lab.x, lab.y, -5);
-          islandGroup.add(ring);
         }
       }
       scene.add(islandGroup);
 
-      // Edges as line segments
+      // Mid-zoom bloom sprites (big saturated blurs at campus centroids)
+      const bloomGroup = new THREE.Group();
+      bloomGroup.visible = false;
+      if (p.campusLabels) {
+        for (const lab of p.campusLabels.slice(0, 10)) {
+          const ci = p.campuses.findIndex((c) => c.id === lab.id);
+          const rgb = (ci >= 0 ? hexToRgb(p.campuses[ci].color) : [180, 190, 210]) as [number, number, number];
+          const tex = makeGlowTexture(THREE, rgb, true);
+          const mat = new THREE.SpriteMaterial({
+            map: tex,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.55,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+          });
+          const spr = new THREE.Sprite(mat);
+          const sc = Math.max(55, Math.min(120, lab.r * 0.85 + 20));
+          spr.scale.set(sc, sc, 1);
+          spr.position.set(lab.x, lab.y, 8);
+          bloomGroup.add(spr);
+        }
+      }
+      scene.add(bloomGroup);
+
+      // ---- Colored edges ----
       const maxE = p.e0.length;
       const edgePos = new Float32Array(maxE * 6);
       const edgeCol = new Float32Array(maxE * 6);
@@ -260,8 +461,15 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         edgePos[i * 6 + 3] = p.x[b];
         edgePos[i * 6 + 4] = p.y[b];
         edgePos[i * 6 + 5] = zArr[b];
-        const gray = 0.45;
-        for (let k = 0; k < 6; k++) edgeCol[i * 6 + k] = gray;
+        const fo = p.kind[a] === 0 ? a : p.kind[b] === 0 ? b : a;
+        const ci = p.campus[fo];
+        const rgb = ci >= 0 && p.campuses[ci] ? hexToRgb(p.campuses[ci].color) : [148, 163, 184];
+        const s = 0.85;
+        for (let k = 0; k < 2; k++) {
+          edgeCol[i * 6 + k * 3] = (rgb[0] / 255) * s;
+          edgeCol[i * 6 + k * 3 + 1] = (rgb[1] / 255) * s;
+          edgeCol[i * 6 + k * 3 + 2] = (rgb[2] / 255) * s;
+        }
       }
       const edgeGeo = new THREE.BufferGeometry();
       edgeGeo.setAttribute("position", new THREE.BufferAttribute(edgePos, 3));
@@ -269,62 +477,65 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       const edgeMat = new THREE.LineBasicMaterial({
         vertexColors: true,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.4,
         depthWrite: false,
       });
       const edges = new THREE.LineSegments(edgeGeo, edgeMat);
       scene.add(edges);
 
-      // Visibility buffers for year scrub
       const nodeVisible = new Uint8Array(n);
       const applyYearVisibility = (scrub: number) => {
-        const ymax = yearMax;
         for (let i = 0; i < n; i++) {
-          if (p.kind[i] === 0) {
-            nodeVisible[i] = founderVisibleAtYear(yearArr[i], scrub, ymax) ? 1 : 0;
-          } else if (p.kind[i] === 2) {
-            nodeVisible[i] = 1;
-          } else {
-            // company: visible if any linked founder visible (approx: always soft)
-            nodeVisible[i] = 1;
-          }
+          if (p.kind[i] === 0) nodeVisible[i] = founderVisibleAtYear(yearArr[i], scrub, yearMax) ? 1 : 0;
+          else nodeVisible[i] = 1;
         }
-        // Hide founders without year and those not yet grown in by shrinking size via color alpha trick:
-        // PointsMaterial has global opacity; instead zero-out size by pushing far or dimming color.
-        const colAttr = geo.getAttribute("color") as import("three").BufferAttribute;
-        const sizeAttr = geo.getAttribute("size") as import("three").BufferAttribute | undefined;
+        const sizeAttr = geo.getAttribute("size") as import("three").BufferAttribute;
+        const glowSizeAttr = glowGeo.getAttribute("size") as import("three").BufferAttribute;
         for (let i = 0; i < n; i++) {
           const on = nodeVisible[i] === 1;
-          if (p.kind[i] === 0) {
-            const fade = on ? 1 : 0.02;
-            colAttr.setXYZ(
-              i,
-              colors[i * 3] * fade,
-              colors[i * 3 + 1] * fade,
-              colors[i * 3 + 2] * fade,
-            );
-            if (sizeAttr) sizeAttr.setX(i, on ? sizes[i] : 0.01);
-          }
+          sizeAttr.setX(i, on ? baseSize[i] : 0.01);
+          glowSizeAttr.setX(i, on ? baseSize[i] * (p.kind[i] === 0 ? 2.4 : 1.6) : 0.01);
         }
-        colAttr.needsUpdate = true;
-        if (sizeAttr) sizeAttr.needsUpdate = true;
-
-        // Edge opacity by endpoints
+        sizeAttr.needsUpdate = true;
+        glowSizeAttr.needsUpdate = true;
         const ec = edgeGeo.getAttribute("color") as import("three").BufferAttribute;
         for (let i = 0; i < maxE; i++) {
           const a = p.e0[i];
           const b = p.e1[i];
-          const aOk = p.kind[a] === 0 ? nodeVisible[a] : 1;
-          const bOk = p.kind[b] === 0 ? nodeVisible[b] : 1;
-          const v = aOk && bOk ? 0.42 : 0.02;
-          ec.setXYZ(i * 2, v, v, v);
-          ec.setXYZ(i * 2 + 1, v, v, v);
+          const ok =
+            (p.kind[a] !== 0 || nodeVisible[a]) && (p.kind[b] !== 0 || nodeVisible[b]);
+          const fo = p.kind[a] === 0 ? a : p.kind[b] === 0 ? b : a;
+          const ci = p.campus[fo];
+          const rgb = ci >= 0 && p.campuses[ci] ? hexToRgb(p.campuses[ci].color) : [148, 163, 184];
+          const s = ok ? 0.85 : 0.02;
+          for (let k = 0; k < 2; k++) {
+            ec.setXYZ(i * 2 + k, (rgb[0] / 255) * s, (rgb[1] / 255) * s, (rgb[2] / 255) * s);
+          }
         }
         ec.needsUpdate = true;
       };
       applyYearVisibility(scrubRef.current);
 
-      // Idle tracking
+      apiRef.current = {
+        applyYear: applyYearVisibility,
+        setBloom: (b: number) => {
+          bloomGroup.visible = b > 0.08;
+          bloomGroup.traverse((obj) => {
+            if ((obj as import("three").Sprite).isSprite) {
+              const m = (obj as import("three").Sprite).material as import("three").SpriteMaterial;
+              m.opacity = 0.25 + b * 0.55;
+            }
+          });
+          for (const m of islandMats) m.opacity = 0.22 + b * 0.2;
+          edgeMat.opacity = 0.22 + b * 0.12;
+          pointMat.uniforms.uOpacity.value = 0.82 + b * 0.1;
+        },
+        setDeep: (d: number) => {
+          glowMat.uniforms.uOpacity.value = 0.42 * (1 - d * 0.55);
+          bloomGroup.visible = d < 0.55 && bloomGroup.visible;
+        },
+      };
+
       const markActive = () => {
         idleRef.current = 0;
         ctrl.autoRotate = false;
@@ -332,7 +543,6 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       renderer.domElement.addEventListener("pointerdown", markActive);
       renderer.domElement.addEventListener("wheel", markActive, { passive: true });
 
-      // __NETWORKS_SET_SCALE__ bridge for screenshots
       const w = window as unknown as {
         __NETWORKS_POSTER__?: Poster;
         __NETWORKS_SET_SCALE__?: (scale: number) => void;
@@ -341,15 +551,37 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       };
       w.__NETWORKS_POSTER__ = p;
       w.__NETWORKS_FADE__ = 1;
-      w.__NETWORKS_SET_SCALE__ = (scale: number) => {
+      const applyScaleNow = (scale: number) => {
         const dist = scaleToDist(scale);
-        const dir = camera.position.clone().sub(ctrl.target).normalize();
-        camera.position.copy(ctrl.target).add(dir.multiplyScalar(dist));
+        idleRef.current = 0;
+        ctrl.autoRotate = false;
+        const offset = new THREE.Vector3().copy(camera.position).sub(ctrl.target);
+        if (offset.lengthSq() < 1e-6) offset.set(0, -0.3, 1);
+        offset.setLength(dist);
+        camera.position.copy(ctrl.target).add(offset);
+        camera.lookAt(ctrl.target);
+        // Sync OrbitControls internal spherical by reading the new offset on next update.
         ctrl.update();
+        const mapped = distToScale(camera.position.distanceTo(ctrl.target));
+        const bloom = smoothstep((mapped - 1.2) / 0.9) * (1 - smoothstep((mapped - 2.55) / 0.55));
+        const deep = smoothstep((mapped - 2.45) / 0.7);
+        const tier = deep > 0.55 ? 2 : bloom > 0.4 ? 1 : 0;
+        tierRef.current = tier;
+        wrapRef.current?.setAttribute("data-networks-zoom", String(tier));
+        setZoomScale(mapped);
+        apiRef.current?.setBloom(bloom);
+        apiRef.current?.setDeep(deep);
       };
-      w.__NETWORKS_SET_YEAR__ = (y: number) => {
-        setScrubYear(clamp(y, yearMin, yearMax));
-      };
+      w.__NETWORKS_SET_SCALE__ = applyScaleNow;
+      (w as unknown as { __NETWORKS_GET_DIST__?: () => number }).__NETWORKS_GET_DIST__ = () =>
+        camera.position.distanceTo(ctrl.target);
+      // Pending scale from shots if set before mount finished
+      const pending = (w as unknown as { __NETWORKS_PENDING_SCALE__?: number }).__NETWORKS_PENDING_SCALE__;
+      if (typeof pending === "number") {
+        applyScaleNow(pending);
+        delete (w as unknown as { __NETWORKS_PENDING_SCALE__?: number }).__NETWORKS_PENDING_SCALE__;
+      }
+      w.__NETWORKS_SET_YEAR__ = (y: number) => setScrubYear(clamp(y, yearMin, yearMax));
 
       const ro = new ResizeObserver(() => {
         if (!mountRef.current || !renderer) return;
@@ -358,54 +590,137 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         camera.aspect = ww / Math.max(1, hh);
         camera.updateProjectionMatrix();
         renderer.setSize(ww, hh, false);
+        pointMat.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+        glowMat.uniforms.uPixelRatio.value = renderer.getPixelRatio();
       });
       if (wrapRef.current) ro.observe(wrapRef.current);
 
-      let lastPlayTick = 0;
-      const tmp = new THREE.Vector3();
-      const projectHubLabels = () => {
+      const worldToOverlay = (wx: number, wy: number, sc: number) => {
         const wrap = wrapRef.current;
-        if (!wrap) return;
+        if (!wrap) return { x: 0, y: 0 };
         const ww = wrap.clientWidth;
         const hh = wrap.clientHeight;
         const fit = Math.min(ww / p.w, hh / p.h);
         const ox = (ww - p.w * fit) / 2;
         const oy = (hh - p.h * fit) / 2;
-        // Scale overlay with camera distance so zoom tiers still feel linked
-        const dist = camera.position.distanceTo(ctrl.target);
-        const sc = Math.max(0.85, Math.min(1.35, 900 / Math.max(200, dist)));
-        const cx = ww / 2;
-        const cy = hh / 2;
-        const raw: { id: string; label: string; x: number; y: number }[] = [];
-        for (const hub of p.hubs.slice(0, 10)) {
-          let sx = ox + p.x[hub.i] * fit;
-          let sy = oy + p.y[hub.i] * fit;
-          sx = cx + (sx - cx) * sc;
-          sy = cy + (sy - cy) * sc;
-          raw.push({
-            id: hub.id,
-            label: hub.label.length > 22 ? `${hub.label.slice(0, 20)}...` : hub.label,
-            x: sx,
-            y: sy + 10,
-          });
-        }
-        raw.sort((a, b) => a.y - b.y || a.x - b.x);
-        for (let i = 0; i < raw.length; i++) {
-          for (let j = 0; j < i; j++) {
-            if (Math.abs(raw[i].x - raw[j].x) < 130 && Math.abs(raw[i].y - raw[j].y) < 14) {
-              raw[i].y = raw[j].y + 14;
-            }
-          }
-        }
-        setHubLabelPos(raw);
+        const cx0 = ww / 2;
+        const cy0 = hh / 2;
+        let sx = ox + wx * fit;
+        let sy = oy + wy * fit;
+        sx = cx0 + (sx - cx0) * sc;
+        sy = cy0 + (sy - cy0) * sc;
+        return { x: sx, y: sy };
       };
 
-      let labelTick = 0;
+      let lastPlayTick = 0;
+      let overlayTick = 0;
+      const updateOverlays = (scale: number, bloom: number, deep: number) => {
+        const dist = camera.position.distanceTo(ctrl.target);
+        const sc = Math.max(0.85, Math.min(1.45, 900 / Math.max(200, dist)));
+        const raw: OverlayLabel[] = [];
+        for (const lab of (p.campusLabels ?? []).slice(0, 12)) {
+          const pt = worldToOverlay(lab.x, lab.y, sc);
+          raw.push({
+            id: lab.id,
+            label: lab.label,
+            x: pt.x,
+            y: pt.y,
+            priority: 1000 + lab.n,
+            kind: "campus",
+            n: lab.n,
+          });
+        }
+        for (const hub of p.hubs.slice(0, 12)) {
+          const pt = worldToOverlay(p.x[hub.i], p.y[hub.i], sc);
+          raw.push({
+            id: `hub:${hub.id}`,
+            label: hub.label.length > 22 ? `${hub.label.slice(0, 20)}...` : hub.label,
+            x: pt.x,
+            y: pt.y + 12,
+            priority: 400 + hub.founders,
+            kind: "hub",
+          });
+        }
+        if (bloom > 0.1 && p.campusLabels) {
+          const boxes: TrackBox[] = [];
+          for (const lab of p.campusLabels.slice(0, 10)) {
+            const pt = worldToOverlay(lab.x, lab.y, sc);
+            boxes.push({
+              id: lab.id,
+              label: lab.label,
+              x: pt.x,
+              y: pt.y,
+              box: Math.max(36, Math.min(78, 28 + Math.sqrt(lab.n) * 3.2)),
+              n: lab.n,
+            });
+          }
+          const keptBoxes = collideTrackBoxes(boxes, bloom > 0.45 ? 6 : 4);
+          setTrackBoxes(keptBoxes);
+          const boxIds = new Set(keptBoxes.map((b) => b.id));
+          // Prefer tracking-box monospace labels; hide overlapping plain campus labels
+          const labelRaw = raw.filter((lab) => !(lab.kind === "campus" && boxIds.has(lab.id)));
+          setLabels(collideLabels(labelRaw, deep > 0.5 ? 6 : 12));
+          const segs: ArcSeg[] = [];
+          for (let i = 0; i < keptBoxes.length; i++) {
+            for (let j = i + 1; j < keptBoxes.length; j++) {
+              if (j - i > 2 && i > 1) continue;
+              const a = keptBoxes[i];
+              const b = keptBoxes[j];
+              const { cx: acx, cy: acy } = curved(a.x, a.y, b.x, b.y, 1.55);
+              segs.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y, cx: acx, cy: acy });
+            }
+          }
+          setArcs(segs.slice(0, 12));
+        } else {
+          setLabels(collideLabels(raw, deep > 0.5 ? 8 : 16));
+          setTrackBoxes([]);
+          setArcs([]);
+        }
+
+        if (deep > 0.12) {
+          // Prefer high-degree founders with deals
+          const cand: { i: number; score: number }[] = [];
+          for (let i = 0; i < n; i++) {
+            if (p.kind[i] !== 0) continue;
+            if (!founderVisibleAtYear(yearArr[i], scrubRef.current, yearMax)) continue;
+            const fid = p.foIds[i] ?? "";
+            const deal = dealsRef.current[fid];
+            const score = p.deg[i] + (deal ? 20 : 0) + hash01(`card:${i}`) * 5;
+            cand.push({ i, score });
+          }
+          cand.sort((a, b) => b.score - a.score);
+          const out: Card[] = [];
+          const placed: { x: number; y: number }[] = [];
+          const maxCards = (wrapRef.current?.clientWidth ?? 800) < 500 ? 8 : 12;
+          for (const c of cand) {
+            if (out.length >= maxCards) break;
+            const pt = worldToOverlay(p.x[c.i], p.y[c.i], sc * 1.05);
+            if (pt.x < 50 || pt.y < 56 || pt.x > (wrapRef.current?.clientWidth ?? 0) - 50) continue;
+            if (pt.y > (wrapRef.current?.clientHeight ?? 0) - 70) continue;
+            // Card is ~132x54 above the point; enforce non-overlap
+            if (placed.some((q) => Math.abs(q.x - pt.x) < 140 && Math.abs(q.y - pt.y) < 64)) continue;
+            placed.push(pt);
+            const fid = p.foIds[c.i] ?? "";
+            const deal = dealsRef.current[fid];
+            const ci = p.campus[c.i];
+            out.push({
+              key: `c-${c.i}`,
+              x: pt.x,
+              y: pt.y,
+              title: deal?.founderName ?? "Founder",
+              school: ci >= 0 && p.campuses[ci] ? p.campuses[ci].label : "",
+              company: deal?.companyName ?? "",
+            });
+          }
+          setCards(out);
+        } else {
+          setCards([]);
+        }
+      };
+
       const tick = (t: number) => {
         if (disposed) return;
         raf = requestAnimationFrame(tick);
-
-        // Play timeline
         if (playRef.current) {
           if (t - lastPlayTick > 900) {
             lastPlayTick = t;
@@ -418,20 +733,18 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
               setPlaying(false);
             }
           }
-        } else {
-          applyYearVisibility(scrubRef.current);
         }
-
         idleRef.current += 1;
         if (idleRef.current > 180) ctrl.autoRotate = true;
-
         ctrl.update();
         renderer!.render(scene, camera);
 
         const dist = camera.position.distanceTo(ctrl.target);
         const scale = distToScale(dist);
-        const bloom = clamp((scale - 1.2) / 0.9, 0, 1) * (1 - clamp((scale - 2.55) / 0.55, 0, 1));
-        const deep = clamp((scale - 2.45) / 0.7, 0, 1);
+        const bloom = smoothstep((scale - 1.2) / 0.9) * (1 - smoothstep((scale - 2.55) / 0.55));
+        const deep = smoothstep((scale - 2.45) / 0.7);
+        apiRef.current?.setBloom(bloom);
+        apiRef.current?.setDeep(deep);
         const tier = deep > 0.55 ? 2 : bloom > 0.4 ? 1 : 0;
         if (tierRef.current !== tier) {
           tierRef.current = tier;
@@ -440,32 +753,12 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         }
         wrapRef.current?.setAttribute("data-networks-fade", "1");
 
-        // Mid zoom: strengthen island glow
-        islandGroup.visible = true;
-        islandGroup.traverse((obj) => {
-          if ((obj as import("three").Mesh).isMesh) {
-            const m = (obj as import("three").Mesh).material as import("three").MeshBasicMaterial;
-            if (m && "opacity" in m) {
-              m.opacity = tier === 0 ? 0.1 : tier === 1 ? 0.22 : 0.06;
-            }
-          }
-        });
-        edgeMat.opacity = tier === 2 ? 0.06 : 0.12;
-        mat.opacity = tier === 2 ? 0.7 : 0.88;
-
-        labelTick += 1;
-        if (labelTick % 4 === 0) projectHubLabels();
+        overlayTick += 1;
+        if (overlayTick % 3 === 0) updateOverlays(scale, bloom, deep);
       };
       raf = requestAnimationFrame(tick);
-
-      // Initial fade attribute
       wrapRef.current?.setAttribute("data-networks-fade", "1");
       wrapRef.current?.setAttribute("data-networks-zoom", "0");
-
-      return () => {
-        renderer?.domElement.removeEventListener("pointerdown", markActive);
-        renderer?.domElement.removeEventListener("wheel", markActive);
-      };
     })();
 
     return () => {
@@ -474,16 +767,14 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       controls?.dispose();
       if (renderer) {
         renderer.dispose();
-        if (renderer.domElement.parentElement) renderer.domElement.parentElement.removeChild(renderer.domElement);
+        renderer.domElement.parentElement?.removeChild(renderer.domElement);
       }
+      apiRef.current = null;
       const w = window as unknown as { __NETWORKS_SET_SCALE__?: unknown; __NETWORKS_SET_YEAR__?: unknown };
       delete w.__NETWORKS_SET_SCALE__;
       delete w.__NETWORKS_SET_YEAR__;
     };
-  }, [poster, webglOk, onFallback2D, yearMax, yearMin]);
-
-  // Campus labels (2D overlay projected approx via poster fit - use simple world mapping for out/mid)
-  const campusLabels = poster?.campusLabels?.slice(0, 10) ?? [];
+  }, [poster, yearMax, yearMin]);
 
   const legendCampuses = poster?.campuses.filter((c) => c.id !== "other") ?? [];
   const legendTop = legendCampuses.slice(0, 6);
@@ -492,6 +783,10 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
   const investors = investorHubs?.length
     ? investorHubs.map((h) => ({ id: h.id, label: h.label, founders: h.founderCount }))
     : poster?.investorHubs ?? [];
+
+  const bloomOpacity = smoothstep((zoomScale - 1.2) / 0.9) * (1 - smoothstep((zoomScale - 2.55) / 0.55));
+  const deepOpacity = smoothstep((zoomScale - 2.45) / 0.7);
+  const labelOpacity = Math.max(0.12, 1 - deepOpacity * 0.85);
 
   if (!poster) {
     return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>;
@@ -510,45 +805,89 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       >
         <div ref={mountRef} className="absolute inset-0 h-full w-full" />
 
-        {/* Campus labels */}
-        <div
-          className="pointer-events-none absolute inset-0 z-[1]"
-          style={{ opacity: Math.max(0.15, 1 - Math.max(0, (zoomScale - 2.3) / 0.8)) }}
+        {/* Dashed mid-zoom arcs */}
+        <svg
+          className="pointer-events-none absolute inset-0 z-[1] h-full w-full overflow-visible"
+          aria-hidden="true"
+          style={{ opacity: bloomOpacity }}
         >
-          {campusLabels.map((lab) => {
-            // Approximate with normalized poster coords into wrap
-            const wrap = wrapRef.current;
-            const ww = wrap?.clientWidth ?? 1200;
-            const hh = wrap?.clientHeight ?? 800;
-            const fit = Math.min(ww / poster.w, hh / poster.h);
-            const ox = (ww - poster.w * fit) / 2;
-            const oy = (hh - poster.h * fit) / 2;
-            const lx = ox + lab.x * fit;
-            const ly = oy + lab.y * fit;
-            return (
-              <div
-                key={lab.id}
-                data-canvas-label={lab.id}
-                data-label-anchor-x={lx}
-                data-label-anchor-y={ly}
-                data-hub-x={lx}
-                data-hub-y={ly}
-                data-hub-r={Math.max(36, lab.r * fit)}
-                className="absolute -translate-x-1/2 -translate-y-1/2 text-center text-[11px] font-medium tracking-wide text-[color:var(--fg)] md:text-[13px]"
-                style={{ left: lx, top: ly, textShadow: "0 0 4px #fbfaf7, 0 1px 2px #fbfaf7" }}
-              >
-                {lab.label}
-              </div>
-            );
-          })}
-          {hubLabelPos.map((hub) => (
+          {arcs.map((a, i) => (
+            <path
+              key={`arc-${i}`}
+              d={`M ${a.x1} ${a.y1} Q ${a.cx} ${a.cy} ${a.x2} ${a.y2}`}
+              fill="none"
+              stroke="rgba(15,23,42,0.35)"
+              strokeWidth="1.1"
+              strokeDasharray="4 6"
+              data-networks-arc=""
+            />
+          ))}
+        </svg>
+
+        {/* Mid tracking boxes */}
+        <div className="pointer-events-none absolute inset-0 z-[1]" style={{ opacity: bloomOpacity }}>
+          {trackBoxes.map((b) => (
             <div
-              key={`hub-lab-${hub.id}`}
-              data-canvas-hub-label={hub.id}
-              className="absolute -translate-x-1/2 text-[9px] font-semibold tracking-wide text-[color:var(--fg)] md:text-[10px]"
-              style={{ left: hub.x, top: hub.y, textShadow: "0 0 3px #fbfaf7" }}
+              key={`box-${b.id}`}
+              data-networks-track-box={b.id}
+              className="absolute border border-slate-800/70"
+              style={{
+                left: b.x - b.box / 2,
+                top: b.y - b.box / 2,
+                width: b.box,
+                height: b.box,
+              }}
             >
-              {hub.label}
+              <div className="absolute -top-4 left-0 font-mono text-[9px] tracking-wide text-slate-800">
+                {b.label} · {b.n.toLocaleString("en-US")}
+              </div>
+              <div
+                className="absolute border border-slate-800/40"
+                style={{ left: 4, top: 4, right: 4, bottom: 4 }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Campus + hub labels (collision-culled) */}
+        <div className="pointer-events-none absolute inset-0 z-[2]" style={{ opacity: labelOpacity }}>
+          {labels.map((lab) => (
+            <div
+              key={lab.id}
+              {...(lab.kind === "campus"
+                ? {
+                    "data-canvas-label": lab.id,
+                    "data-label-anchor-x": lab.x,
+                    "data-label-anchor-y": lab.y,
+                    "data-hub-x": lab.x,
+                    "data-hub-y": lab.y,
+                    "data-hub-r": 40,
+                  }
+                : { "data-canvas-hub-label": lab.id.replace(/^hub:/, "") })}
+              className={
+                lab.kind === "campus"
+                  ? "absolute -translate-x-1/2 -translate-y-1/2 text-center text-[11px] font-medium tracking-wide text-[color:var(--fg)] md:text-[13px]"
+                  : "absolute -translate-x-1/2 text-[9px] font-semibold tracking-wide text-[color:var(--fg)] md:text-[10px]"
+              }
+              style={{ left: lab.x, top: lab.y, textShadow: "0 0 4px #fbfaf7, 0 1px 2px #fbfaf7" }}
+            >
+              {lab.label}
+            </div>
+          ))}
+        </div>
+
+        {/* Deep founder cards */}
+        <div className="pointer-events-none absolute inset-0 z-[2]" style={{ opacity: deepOpacity }}>
+          {cards.map((c) => (
+            <div
+              key={c.key}
+              data-networks-founder-card=""
+              className="absolute w-[132px] -translate-x-1/2 -translate-y-full rounded border border-slate-800/30 bg-white/92 px-1.5 py-1 shadow-sm"
+              style={{ left: c.x, top: c.y - 8 }}
+            >
+              <div className="truncate text-[10px] font-semibold text-slate-900">{c.title}</div>
+              {c.school ? <div className="truncate text-[9px] text-slate-500">{c.school}</div> : null}
+              {c.company ? <div className="truncate text-[9px] text-slate-600">{c.company}</div> : null}
             </div>
           ))}
         </div>
@@ -560,7 +899,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           playing={playing}
           visibleCount={visibleCount}
           totalFounders={totalFounders}
-          noYearCount={noYearCount}
+          alwaysOnCount={alwaysOnCount}
+          proxyCount={proxyCount}
           onYear={(y) => {
             setPlaying(false);
             setScrubYear(y);
@@ -573,8 +913,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }}
         />
 
-        <div className="pointer-events-none absolute bottom-2 left-2 rounded bg-white/80 px-2 py-1 text-[10px] text-[color:var(--fg-3)]">
-          Drag to orbit · scroll to zoom · idle auto-rotates
+        <div className="pointer-events-none absolute bottom-3 right-3 rounded bg-white/80 px-2 py-1 text-[10px] text-[color:var(--fg-3)]">
+          Drag to orbit · scroll to zoom
         </div>
       </div>
 
@@ -643,10 +983,19 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
                 {featuredDeal.companyName ?? "Company unknown"}
                 {featuredDeal.stage ? ` · ${featuredDeal.stage}` : ""}
               </div>
-              <div className="text-[10px] text-[color:var(--fg-3)]" data-networks-deal-networks="" data-networks-deal-networks-total={(featuredDeal.networks ?? []).length}>
-                Networks ({(featuredDeal.networks ?? []).length.toLocaleString("en-US")}): {(featuredDeal.networks ?? []).slice(0, 2).join(", ") || "none on file yet"}
+              <div
+                className="text-[10px] text-[color:var(--fg-3)]"
+                data-networks-deal-networks=""
+                data-networks-deal-networks-total={(featuredDeal.networks ?? []).length}
+              >
+                Networks ({(featuredDeal.networks ?? []).length.toLocaleString("en-US")}):{" "}
+                {(featuredDeal.networks ?? []).slice(0, 2).join(", ") || "none on file yet"}
               </div>
-              <div className="text-[10px] text-[color:var(--fg-3)]" data-networks-deal-investors="" data-networks-deal-investors-total={(featuredDeal.investors ?? []).length}>
+              <div
+                className="text-[10px] text-[color:var(--fg-3)]"
+                data-networks-deal-investors=""
+                data-networks-deal-investors-total={(featuredDeal.investors ?? []).length}
+              >
                 {(featuredDeal.investors ?? []).length
                   ? `${Math.min(4, featuredDeal.investors.length).toLocaleString("en-US")} of ${featuredDeal.investors.length.toLocaleString("en-US")} investors: ${featuredDeal.investors.slice(0, 4).join(", ")}`
                   : "No named investors on file yet"}
