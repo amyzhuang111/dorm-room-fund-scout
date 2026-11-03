@@ -1,46 +1,17 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
-type PosterCampus = { id: string; label: string; color: string; n: number };
-type PosterHub = { id: string; label: string; kind: string; i: number; founders: number };
-type PosterCampusLabel = { id: string; label: string; n: number; x: number; y: number; r: number };
-type PosterCallout = { text: string; ax: number; ay: number; lx: number; ly: number; side: string };
-type Poster = {
-  v: number;
-  w: number;
-  h: number;
-  totals: {
-    founders: number;
-    companies: number;
-    links: number;
-    companyTotal: number;
-    corpusCompanies: number;
-    founderLinks: number;
-    networks: number;
-    foundersLinked: number;
-    foundersShown?: number;
-    companiesShown?: number;
-  };
-  campuses: PosterCampus[];
-  hubs: PosterHub[];
-  campusLabels?: PosterCampusLabel[];
-  x: number[];
-  y: number[];
-  r: number[];
-  kind: number[];
-  campus: number[];
-  deg: number[];
-  e0: number[];
-  e1: number[];
-  ek: number[];
-  callouts: PosterCallout[];
-  insights: string[];
-  featuredId: string | null;
-  investorHubs: { id: string; label: string; founders: number; companies: number }[];
-  foIds: string[];
-  coIds: string[];
-};
+import {
+  YEAR_MIN_DEFAULT,
+  cohortYearNow,
+  countFoundersByYear,
+  founderVisibleAtYear,
+  type Poster,
+  type PosterHub,
+  type PosterCampusLabel,
+} from "@/components/networks-poster-types";
+import { NetworksTimeline } from "@/components/networks-timeline";
+import dynamic from "next/dynamic";
 
 type Deal = {
   founderName: string;
@@ -135,7 +106,7 @@ class QuadTree {
   }
 }
 
-export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany, onSelectNetwork }: Props) {
+export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompany, onSelectNetwork }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [poster, setPoster] = useState<Poster | null>(null);
@@ -145,6 +116,13 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
   const [selectedHub, setSelectedHub] = useState<string | null>(null);
   const [legendOtherOpen, setLegendOtherOpen] = useState(false);
   const [zoomScale, setZoomScale] = useState(1);
+  const yearMax = cohortYearNow();
+  const yearMin = YEAR_MIN_DEFAULT;
+  const [scrubYear, setScrubYear] = useState(yearMax);
+  const [playing, setPlaying] = useState(false);
+  const scrubRef = useRef(yearMax);
+  const playRef = useRef(false);
+  const playAccRef = useRef(0);
   const camRef = useRef({ x: 0, y: 0, scale: 1 });
   const dragRef = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null);
   const hoverRef = useRef<HoverState | null>(null);
@@ -201,6 +179,8 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
 
   useEffect(() => { hoverRef.current = hover; }, [hover]);
   useEffect(() => { selectedRef.current = selectedHub; }, [selectedHub]);
+  useEffect(() => { scrubRef.current = scrubYear; }, [scrubYear]);
+  useEffect(() => { playRef.current = playing; }, [playing]);
 
   const founderCount = poster?.foIds.length ?? 0;
 
@@ -358,6 +338,29 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
     const hv = hoverRef.current;
     const focusHub = sel || (hv?.hub?.id ?? null);
     const focusNode = hv?.index ?? -1;
+    const scrub = scrubRef.current;
+    const ymax = yearMax;
+    const years = p.year;
+    const isFoOn = (i: number) => {
+      if (p.kind[i] !== 0) return true;
+      if (!years) return true;
+      return founderVisibleAtYear(years[i], scrub, ymax);
+    };
+
+    // Timeline play (~1 year / 0.9s at 60fps)
+    if (playRef.current) {
+      playAccRef.current += 1;
+      if (playAccRef.current > 54) {
+        playAccRef.current = 0;
+        const next = scrub >= ymax ? yearMin : scrub + 1;
+        scrubRef.current = next;
+        queueMicrotask(() => setScrubYear(next));
+        if (next >= ymax) {
+          playRef.current = false;
+          queueMicrotask(() => setPlaying(false));
+        }
+      }
+    }
 
     // Three distinct zoom tiers with smooth crossfades
     // out: scale ~0.7-1.35 | mid: ~1.35-2.6 | deep: ~2.6+
@@ -408,6 +411,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
     }
     for (let i = 0; i < nE; i++) {
       const a = p.e0[i], b = p.e1[i], k = p.ek[i];
+      if ((p.kind[a] === 0 && !isFoOn(a)) || (p.kind[b] === 0 && !isFoOn(b))) continue;
       const hubA = p.kind[a] === 2, hubB = p.kind[b] === 2;
       const hubIdx = hubA ? a : hubB ? b : -1;
       const hubId = hubIdx >= 0 ? p.hubs.find((hh) => hh.i === hubIdx)?.id : null;
@@ -425,7 +429,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       const rgb = hexToRgb(color);
       const campA = p.campus[a], campB = p.campus[b];
       const crossCamp = campA >= 0 && campB >= 0 && campA !== campB;
-      // Target visible web ~0.08–0.15 at rest after fade
+      // Target visible web ~0.08-0.15 at rest after fade
       let alpha = k === 2 ? 0.13 : k === 1 ? 0.1 : k === 3 ? 0.09 : crossCamp ? 0.14 : 0.11;
       let lineW = k === 2 ? 0.85 : crossCamp ? 0.75 : 0.65;
       if (hubId === "yc" && !focusHub) { alpha = 0.07; lineW = 0.55; }
@@ -499,9 +503,10 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
 
     // Nodes
     for (let i = 0; i < p.x.length; i++) {
+      if (p.kind[i] === 0 && !isFoOn(i)) continue;
       const pt = toS(p.x[i], p.y[i], i);
       if (pt.x < -40 || pt.y < -40 || pt.x > w + 40 || pt.y > h + 40) continue;
-      // Floor to ~2–3.5 CSS px at 1440 so dots survive fit scaling
+      // Floor to ~2-3.5 CSS px at 1440 so dots survive fit scaling
       const baseR = Math.max(2.0, Math.min(3.5, p.r[i] * Math.max(s, 0.85)));
       const bloomR = baseR * (1 + bloom * (10 + hash01(String(i)) * 16));
 
@@ -549,7 +554,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
 
       // Crisp saturated pastel dot
       const dotR = Math.max(2.0, Math.min(3.5, baseR));
-      const dotA = (0.55 + crisp * 0.3) * fade; // 0.55–0.85 at rest
+      const dotA = (0.55 + crisp * 0.3) * fade; // 0.55-0.85 at rest
       ctx.beginPath();
       ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${dotA})`;
       ctx.arc(pt.x, pt.y, dotR * (p.kind[i] === 0 ? 1 : 0.9), 0, Math.PI * 2);
@@ -593,6 +598,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       let boxed = 0;
       for (let i = 0; i < p.x.length && boxed < 28; i++) {
         if (p.kind[i] !== 0) continue;
+        if (!isFoOn(i)) continue;
         if (hash01(`box:${i}`) > 0.035) continue;
         const pt = toS(p.x[i], p.y[i], i);
         if (pt.x < 20 || pt.y < 20 || pt.x > w - 20 || pt.y > h - 20) continue;
@@ -617,6 +623,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       const qt = new QuadTree(-200, -200, p.w + 400, p.h + 400);
       for (let i = 0; i < p.x.length; i++) {
         if (p.kind[i] === 2) continue;
+        if (p.kind[i] === 0 && !isFoOn(i)) continue;
         qt.insert({ i, x: p.x[i], y: p.y[i] });
       }
       // Visible world AABB
@@ -718,7 +725,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       if (pat) { ctx.fillStyle = pat; ctx.fillRect(0, 0, w, h); }
       ctx.globalAlpha = 1;
     }
-  }, [poster, size, deals, founderCount]);
+  }, [poster, size, yearMax, yearMin, deals, founderCount]);
 
   // Continuous RAF: fade, drift, inertia, pulses. Do not cancel on hover.
   useEffect(() => {
@@ -945,7 +952,36 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
   const legendTop = legendCampuses.slice(0, 6);
   const legendRest = legendCampuses.slice(6);
 
-  // Campus labels (Nature/phylum centered) — satisfy label gates; no hub labels on dots.
+  const hubLabelLayout = useMemo(() => {
+    if (!poster) return [] as { id: string; label: string; x: number; y: number }[];
+    const raw = poster.hubs.slice(0, 10).map((hub) => {
+      const pt = worldToScreen(poster.x[hub.i], poster.y[hub.i]);
+      return {
+        id: hub.id,
+        label: hub.label.length > 22 ? `${hub.label.slice(0, 20)}…` : hub.label,
+        x: pt.x,
+        y: pt.y + 10,
+      };
+    });
+    raw.sort((a, b) => a.y - b.y || a.x - b.x);
+    for (let i = 0; i < raw.length; i++) {
+      for (let j = 0; j < i; j++) {
+        if (Math.abs(raw[i].x - raw[j].x) < 130 && Math.abs(raw[i].y - raw[j].y) < 14) {
+          raw[i].y = raw[j].y + 14;
+        }
+      }
+    }
+    return raw;
+  }, [poster, worldToScreen, size, zoomScale]);
+
+  const visibleCount = useMemo(() => {
+    if (!poster?.year) return 0;
+    return countFoundersByYear(poster.year, poster.kind, scrubYear, yearMax);
+  }, [poster, scrubYear, yearMax]);
+  const noYearCount = poster?.totals.foundersNoYear ?? 0;
+  const totalFounders = poster?.foIds.length ?? poster?.totals.foundersShown ?? 1960;
+
+  // Campus labels (Nature/phylum centered) - satisfy label gates; no hub labels on dots.
   const campusLabelNodes = useMemo(() => {
     if (!poster?.campusLabels?.length) return [];
     return poster.campusLabels.slice(0, 10);
@@ -1035,20 +1071,37 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
               </div>
             );
           })}
-          {poster.hubs.slice(0, 8).map((hub) => {
-            const pt = worldToScreen(poster.x[hub.i], poster.y[hub.i]);
-            return (
-              <div
-                key={`hub-lab-${hub.id}`}
-                data-canvas-hub-label={hub.id}
-                className="absolute -translate-x-1/2 text-[9px] font-semibold tracking-wide text-[color:var(--fg)] md:text-[10px]"
-                style={{ left: pt.x, top: pt.y + 8, textShadow: "0 0 3px #fbfaf7" }}
-              >
-                {hub.label.length > 22 ? `${hub.label.slice(0, 20)}…` : hub.label}
-              </div>
-            );
-          })}
+          {hubLabelLayout.map((hub) => (
+            <div
+              key={`hub-lab-${hub.id}`}
+              data-canvas-hub-label={hub.id}
+              className="absolute -translate-x-1/2 text-[9px] font-semibold tracking-wide text-[color:var(--fg)] md:text-[10px]"
+              style={{ left: hub.x, top: hub.y, textShadow: "0 0 3px #fbfaf7" }}
+            >
+              {hub.label}
+            </div>
+          ))}
         </div>
+
+        <NetworksTimeline
+          yearMin={yearMin}
+          yearMax={yearMax}
+          year={scrubYear}
+          playing={playing}
+          visibleCount={visibleCount}
+          totalFounders={totalFounders}
+          noYearCount={noYearCount}
+          onYear={(y) => {
+            setPlaying(false);
+            setScrubYear(y);
+          }}
+          onTogglePlay={() => {
+            setPlaying((v) => {
+              if (!v && scrubYear >= yearMax) setScrubYear(yearMin);
+              return !v;
+            });
+          }}
+        />
 
         <div className="pointer-events-none absolute bottom-2 left-2 rounded bg-white/80 px-2 py-1 text-[10px] text-[color:var(--fg-3)]">
           Scroll to zoom · drag to pan
@@ -1218,4 +1271,33 @@ function DealCard({ deal, short }: { deal: Deal; short?: boolean }) {
       </div>
     </div>
   );
+}
+
+
+const NetworksGraph3DLazy = dynamic(
+  () => import("@/components/networks-graph-3d").then((m) => m.NetworksGraph3D),
+  { ssr: false, loading: () => <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading 3D map...</p> },
+);
+
+/** Prefers WebGL 3D + time; falls back to canvas 2D for no WebGL or reduced motion. */
+export function NetworksGraph(props: Props) {
+  const [mode, setMode] = useState<"pending" | "3d" | "2d">("pending");
+  useEffect(() => {
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    let gl = false;
+    try {
+      const c = document.createElement("canvas");
+      gl = !!(c.getContext("webgl2") || c.getContext("webgl"));
+    } catch {
+      gl = false;
+    }
+    setMode(reduced || !gl ? "2d" : "3d");
+  }, []);
+  if (mode === "pending") {
+    return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>;
+  }
+  if (mode === "3d") {
+    return <NetworksGraph3DLazy {...props} onFallback2D={() => setMode("2d")} />;
+  }
+  return <NetworksGraph2D {...props} />;
 }

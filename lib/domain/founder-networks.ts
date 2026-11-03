@@ -226,6 +226,8 @@ interface LinkMeta {
   companyUrls: Map<string, string>;
   /** Founder evidence URL (enrollment source) when known. */
   founderEvidenceUrls: Map<string, string>;
+  /** Enrollment/grad cohort year when known (else absent). */
+  founderYears: Map<string, number>;
   /** Best company_facts.investor source_url per project. */
   investorFactUrls: Map<string, string>;
   /** VIP-X evidence URLs keyed by project or person id. */
@@ -404,11 +406,14 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
   }
 
   const founderEvidenceUrls = new Map<string, string>();
+  const founderYears = new Map<string, number>();
   for (const row of db
-    .prepare(`SELECT id, enrollment_source_url FROM people WHERE founder_status = 'founder'`)
-    .all() as { id: string; enrollment_source_url: string | null }[]) {
+    .prepare(`SELECT id, enrollment_source_url, enrollment_grad_year FROM people WHERE founder_status = 'founder'`)
+    .all() as { id: string; enrollment_source_url: string | null; enrollment_grad_year: number | null }[]) {
     const url = pickHttpUrl(row.enrollment_source_url);
     if (url) founderEvidenceUrls.set(row.id, url);
+    const y = row.enrollment_grad_year;
+    if (y != null && y >= 1970 && y <= 2040) founderYears.set(row.id, y);
   }
 
   const founderCampuses = new Map<string, string[]>();
@@ -506,6 +511,7 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     companyInvestors,
     companyUrls,
     founderEvidenceUrls,
+    founderYears,
     investorFactUrls,
     vipEvidenceUrls,
     uniLabels,

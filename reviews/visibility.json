@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:3488",
+  "minPct": 8,
+  "width": 2880,
+  "height": 1530,
+  "samples": 275760,
+  "nonBackground": 144075,
+  "pct": 52.25,
+  "fade": "1"
+}

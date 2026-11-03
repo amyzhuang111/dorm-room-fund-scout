@@ -398,6 +398,38 @@ for (const n of nodes) {
       n.y = sy / c;
     }
   }
+  // De-stack overlapping hub nodes (Penn VIP-X / Velocity / Startup Challenge cluster).
+  {
+    const hubsOnly = nodes.filter((n) => n.kind === 2);
+    const minDist = 52;
+    for (let pass = 0; pass < 48; pass++) {
+      let moved = 0;
+      for (let i = 0; i < hubsOnly.length; i++) {
+        for (let j = i + 1; j < hubsOnly.length; j++) {
+          const a = hubsOnly[i];
+          const b = hubsOnly[j];
+          let dx = b.x - a.x;
+          let dy = b.y - a.y;
+          let d = Math.hypot(dx, dy);
+          if (d < 0.01) {
+            dx = (hash(a.id) - 0.5) * 2;
+            dy = (hash(b.id) - 0.5) * 2;
+            d = Math.hypot(dx, dy) || 1;
+          }
+          if (d >= minDist) continue;
+          const push = (minDist - d) * 0.55;
+          const nx = dx / d;
+          const ny = dy / d;
+          a.x -= nx * push * 0.5;
+          a.y -= ny * push * 0.5;
+          b.x += nx * push * 0.5;
+          b.y += ny * push * 0.5;
+          moved += 1;
+        }
+      }
+      if (!moved) break;
+    }
+  }
 }
 
 const founderNets = new Map<string, { id: string; label: string; kind: string }[]>();
@@ -517,17 +549,27 @@ const callouts = calloutTexts.slice(0, 6).map((text, i) => {
 
 const x: number[] = [];
 const y: number[] = [];
+const z: number[] = [];
 const r: number[] = [];
 const kind: number[] = [];
 const campus: number[] = [];
 const deg: number[] = [];
+const year: number[] = []; // 0 = unknown; founders carry enrollment_grad_year
 for (const n of nodes) {
   x.push(round1(n.x));
   y.push(round1(n.y));
+  const shelf = n.kind === 2 ? 28 : n.campus < 0 ? 0 : ((n.campus % 7) - 3) * 18;
+  z.push(round1(shelf + (n.kind === 0 ? (n.deg % 5) * 1.2 : 0)));
   r.push(round1(n.r));
   kind.push(n.kind);
   campus.push(n.campus);
   deg.push(Math.min(255, n.deg));
+  if (n.kind === 0) {
+    const fid = n.id.startsWith("fo:") ? n.id.slice(3) : "";
+    year.push(meta.founderYears.get(fid) ?? 0);
+  } else {
+    year.push(0);
+  }
 }
 
 const hubNodes = hubs.map((h) => {
@@ -606,16 +648,22 @@ const poster = {
     foundersLinked: page.totals.foundersLinked,
     foundersShown: founderIds.length,
     companiesShown: companyIds.length,
+    foundersWithYear: founderIds.filter((id) => (meta.founderYears.get(id) ?? 0) > 0).length,
+    foundersNoYear: founderIds.filter((id) => !(meta.founderYears.get(id) ?? 0)).length,
+    yearMin: 2023,
+    yearMax: 2026,
   },
   campuses,
   hubs: hubNodes,
   campusLabels,
   x,
   y,
+  z,
   r,
   kind,
   campus,
   deg,
+  year,
   e0,
   e1,
   ek,

@@ -1,5 +1,5 @@
 {
-  "base": "http://127.0.0.1:3470",
+  "base": "http://127.0.0.1:3488",
   "expect": {
     "investableCompanies": 1173,
     "foundersListed": 2006,
@@ -11,7 +11,7 @@
   "inventory": [
     {
       "page": "home",
-      "url": "http://127.0.0.1:3470/",
+      "url": "http://127.0.0.1:3488/",
       "status": 200,
       "counts": {
         "founders-listed": "2,006",
@@ -46,7 +46,7 @@
     },
     {
       "page": "companies",
-      "url": "http://127.0.0.1:3470/companies",
+      "url": "http://127.0.0.1:3488/companies",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
@@ -74,7 +74,7 @@
     },
     {
       "page": "campuses",
-      "url": "http://127.0.0.1:3470/campuses",
+      "url": "http://127.0.0.1:3488/campuses",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
@@ -102,7 +102,7 @@
     },
     {
       "page": "data",
-      "url": "http://127.0.0.1:3470/data",
+      "url": "http://127.0.0.1:3488/data",
       "status": 200,
       "counts": {
         "recency-kept": "1,173",
@@ -134,7 +134,7 @@
     },
     {
       "page": "signals",
-      "url": "http://127.0.0.1:3470/signals",
+      "url": "http://127.0.0.1:3488/signals",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
@@ -162,7 +162,7 @@
     },
     {
       "page": "companies-overlay-rail",
-      "url": "http://127.0.0.1:3470/companies",
+      "url": "http://127.0.0.1:3488/companies",
       "status": 200,
       "counts": {
         "overlayUnit": "founders",

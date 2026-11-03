@@ -28,9 +28,21 @@ const result = await page.evaluate(() => {
   const wrap = document.querySelector("[data-networks-graph]");
   const canvas = wrap?.querySelector("canvas");
   if (!canvas) return { ok: false, error: "no canvas" };
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return { ok: false, error: "no ctx" };
   const { width: w, height: h } = canvas;
+  let ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) {
+    // WebGL canvas: sample via drawImage into a 2d probe (needs preserveDrawingBuffer)
+    const probe = document.createElement("canvas");
+    probe.width = w;
+    probe.height = h;
+    ctx = probe.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return { ok: false, error: "no ctx" };
+    try {
+      ctx.drawImage(canvas, 0, 0);
+    } catch (e) {
+      return { ok: false, error: "drawImage failed: " + String(e) };
+    }
+  }
   // Sample a grid rather than every pixel
   const step = 4;
   let total = 0;
