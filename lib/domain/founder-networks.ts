@@ -932,7 +932,9 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
         a.founderName.localeCompare(b.founderName) ||
         a.companyName.localeCompare(b.companyName)
     );
-    membersByNetwork[net.id] = members.slice(0, 80);
+    // Search and member drill-down must cover every publicly evidenced
+    // founder-company relationship, not silently hide matches after row 80.
+    membersByNetwork[net.id] = members;
   }
 
   const campusFounderCount = new Map<string, number>();
