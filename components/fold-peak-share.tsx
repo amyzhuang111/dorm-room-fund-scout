@@ -167,17 +167,20 @@ export function FoldPeakShare({
         </ol>
         {topCampuses.length > 0 ? (
           <ol
-            className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-[color:var(--line,#E1E5EF)] pt-2"
+            className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-1.5"
             data-fold-peak-campus-rank-mobile=""
           >
-            {topCampuses.map((campus, i) => (
-              <li key={campus.id} className="flex items-center gap-1.5">
-                <span className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
-                <CampusSeal label={campus.name} size="md" />
-                <span className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
-                <span className="font-mono text-[12px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{campus.founders.toLocaleString("en-US")}</span>
+            {topCampuses.slice(0, 3).map((campus, i) => {
+              const short = campus.name.replace(/^University of (?:California, )?/, "").replace(/ University$/, "");
+              return (
+              <li key={campus.id} className="flex shrink-0 items-center gap-1" data-fold-peak-campus-item="">
+                <span className="shrink-0 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                <CampusSeal label={campus.name} size="sm" />
+                <span className="whitespace-nowrap text-[11px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-campus-label="">{short}</span>
+                <span className="shrink-0 font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{campus.founders.toLocaleString("en-US")}</span>
               </li>
-            ))}
+              );
+            })}
           </ol>
         ) : null}
       </div>

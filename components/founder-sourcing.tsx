@@ -30,12 +30,12 @@ export function FounderSearchBar({
 }) {
   return (
     <form
-      className="mb-3 lg:mb-2"
+      className="mb-1.5 lg:mb-2"
       role="search"
       onSubmit={(event) => event.preventDefault()}
       data-founder-search=""
     >
-      <label htmlFor="founder-search" className="block font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
+      <label htmlFor="founder-search" className="block font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)] max-lg:sr-only">
         Search founders
       </label>
       <input
@@ -44,7 +44,7 @@ export function FounderSearchBar({
         value={query}
         onChange={(event) => onQuery(event.target.value)}
         placeholder="Name, campus, program, or company"
-        className="mt-2 h-10 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)] lg:mt-1 lg:h-10"
+        className="mt-0 h-9 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)] lg:mt-1 lg:h-10"
       />
     </form>
   );
@@ -180,7 +180,7 @@ export function FounderResults({
       <div className={`mb-3 lg:mb-2 ${peek ? "max-lg:mb-1" : ""}`} data-founder-filters="">
         <button
           type="button"
-          className="mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden"
+          className={`mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] ${peek ? "" : "lg:hidden"}`}
           aria-expanded={filtersOpen}
           onClick={() => setFiltersOpen((open) => !open)}
           data-founder-filters-toggle=""
@@ -190,7 +190,7 @@ export function FounderResults({
             <span className="font-bold normal-case tracking-normal text-[color:var(--cobalt,#2F4FD8)]">· on</span>
           ) : null}
         </button>
-        <div className={`${filtersOpen ? "flex" : "hidden"} flex-wrap gap-2 lg:flex`}>
+        <div className={`${filtersOpen ? "flex" : "hidden"} flex-wrap gap-2 ${peek ? "" : "lg:flex"}`}>
           <FilterSelect label="Program" value={program} onChange={setProgram}>
             <option value="">Any program</option>
             {options.programs.map(([name, count]) => (

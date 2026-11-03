@@ -283,7 +283,7 @@ function MapStageOverlays({
   return createPortal(
     <div className="pointer-events-none absolute inset-0 z-[5]" data-fold-map-overlays="">
       <aside
-        className={`pointer-events-auto absolute left-2 top-2 max-h-[calc(100%-1rem)] overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+        className={`pointer-events-auto absolute left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
           peakOpen ? "w-[min(280px,32%)]" : "w-auto"
         }`}
         data-fold-overlay-peak=""
@@ -302,17 +302,17 @@ function MapStageOverlays({
             {peakOpen ? "Hide" : "Show"}
           </button>
         </div>
-        {peakOpen ? <div className="max-h-[min(420px,calc(100vh-12rem))] overflow-y-auto p-2.5">{peak}</div> : null}
+        {peakOpen ? <div className="p-2.5">{peak}</div> : null}
       </aside>
       <aside
-        className={`pointer-events-auto absolute right-2 top-2 max-h-[calc(100%-1rem)] overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
-          foundersOpen ? "w-[min(280px,32%)]" : "w-auto"
+        className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(280px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+          foundersOpen ? "" : "!w-auto !bottom-auto"
         }`}
         data-fold-overlay-founders=""
         data-fold-founders-col=""
         data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
+        <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founders</p>
           <button
             type="button"
@@ -324,7 +324,7 @@ function MapStageOverlays({
             {foundersOpen ? "Hide" : "Show"}
           </button>
         </div>
-        {foundersOpen ? <div className="max-h-[min(520px,calc(100vh-12rem))] overflow-y-auto p-2.5">{founders}</div> : null}
+        {foundersOpen ? <div className="min-h-0 flex-1 overflow-y-auto p-2.5">{founders}</div> : null}
       </aside>
     </div>,
     stage,
@@ -485,9 +485,11 @@ export function SampleHomeClient(props: {
           <div className="mb-2" data-fold-mast="">
             <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
           </div>
-          {/* Desk-only current-view strip under search; Peak lives in the founders rail. */}
-          <div className="mb-2 hidden lg:block">
-            <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
+          {/* Compact current-view dock (r50); chips stay desk-only. Peak/founders stay on the map. */}
+          <div className="mb-2">
+            <div className="hidden lg:block">
+              <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
+            </div>
             <CurrentViewStrip
               campusName={mapCampusName}
               query={founderQuery}

@@ -1,0 +1,139 @@
+{
+  "ok": true,
+  "sourceHits": null,
+  "offenders": [],
+  "pages": [
+    {
+      "route": "/",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": [
+        "32/67",
+        "32/67",
+        "32/67",
+        "32/67"
+      ]
+    },
+    {
+      "route": "/companies",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": [
+        "167 with a signal",
+        "32/67"
+      ]
+    },
+    {
+      "route": "/companies?feed=leaderboard",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": [
+        "35 signaled"
+      ]
+    },
+    {
+      "route": "/founders",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/campuses",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/data",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/signals",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
+      "viewport": "375",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": [
+        "32/67",
+        "32/67",
+        "32/67",
+        "32/67"
+      ]
+    },
+    {
+      "route": "/companies",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": [
+        "167 with a signal",
+        "32/67"
+      ]
+    },
+    {
+      "route": "/companies?feed=leaderboard",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": [
+        "35 signaled"
+      ]
+    },
+    {
+      "route": "/founders",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/campuses",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/data",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/signals",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
+      "viewport": "1440",
+      "locale": "de-DE",
+      "periodThousands": [],
+      "figures": []
+    }
+  ]
+}
