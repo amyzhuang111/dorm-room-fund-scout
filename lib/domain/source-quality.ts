@@ -13,6 +13,7 @@
 
 import type { CommunitySignal } from "./community-signal";
 import { EXPANDED_CAMPUS_DIRECTORIES } from "./expanded-campus-directories";
+import { CAMPUS_FOUNDER_SOURCE_EXPANSION } from "./campus-founder-source-expansion";
 
 export type Tier = "S+" | "S" | "A" | "B" | "C" | "D";
 export type DimensionLevel = "high" | "medium" | "low";
@@ -1895,6 +1896,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     statusNote: "Skipped 2026-11-02 because it has no founder, campus, or grad evidence. Use Velocity instead.",
   },
   ...EXPANDED_CAMPUS_DIRECTORIES,
+  ...CAMPUS_FOUNDER_SOURCE_EXPANSION,
 ];
 
 export function catalogueForCampus(campusId: string): SourceCatalogueEntry[] {
