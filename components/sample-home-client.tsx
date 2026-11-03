@@ -233,6 +233,13 @@ function MapFoldSheet({
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-fold-sheet-mode", mode);
+    return () => {
+      document.documentElement.removeAttribute("data-fold-sheet-mode");
+    };
+  }, [mode]);
+
   const expandToDeck = () => setHeight(clampH(DECK));
 
   const onPointerDown = (e: ReactPointerEvent) => {
@@ -289,6 +296,7 @@ function MapFoldSheet({
               selectedId={campusId}
               onSelect={onSelectCampus}
               onClear={onClearCampus}
+              kicker="Open lane campuses"
             />
           </div>
           {mode === "peek" ? (
@@ -591,7 +599,7 @@ export function SampleHomeClient(props: {
     <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <div className="px-0 pb-6 pt-0 sm:px-4 lg:px-0 lg:pt-0" data-fold-hierarchy="" data-fold-mobile-bleed="" data-fold-desk-bleed="1">
+        <div className="px-0 pb-6 pt-0 sm:px-4 lg:px-0 lg:pt-0" data-fold-hierarchy="" data-fold-mobile-bleed="" data-fold-desk-bleed="1" data-fold-investor-first="1">
           {/* r56 desk: search + chips live inside the map fold overlays (not stacked above). Mobile unchanged. */}
           {/* r45: map-dominant stage with floating panels (desk) / peek sheet (mobile). */}
           <div data-fold-stack="" data-fold-bigmap="" data-fold-overlay="">
@@ -608,7 +616,7 @@ export function SampleHomeClient(props: {
 
               {/* Mobile sheet only below lg — keeps first [data-founder-card] visible for checks. */}
               {!isLg ? <MapFoldSheet
-                campuses={topCampuses}
+                campuses={(openLane?.campuses?.length ? openLane.campuses : topCampuses)}
                 campusId={mapCampusId}
                 onSelectCampus={selectCampus}
                 onClearCampus={clearCampus}
@@ -628,6 +636,7 @@ export function SampleHomeClient(props: {
                     status={founderStatus}
                     query={founderQuery}
                     campusId={mapCampusId}
+                    openLane={openLane}
                   />
                 }
                 peek={
@@ -636,6 +645,7 @@ export function SampleHomeClient(props: {
                     status={founderStatus}
                     query={founderQuery}
                     campusId={mapCampusId}
+                    openLane={openLane}
                   />
                 }
                 filterKeep={

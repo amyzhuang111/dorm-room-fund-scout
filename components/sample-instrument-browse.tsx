@@ -738,16 +738,16 @@ export function SampleInstrumentBrowse({
 
           {feed === "directory" && pages > 1 ? (
             <MobileListMast
-              kicker="Campuses in this batch"
+              kicker="Companies in this batch"
               sealLabel={pageCampusRanks[0]?.label}
-              figure={String(pageCampusRanks.length || pageSignaled)}
-              figureSuffix={pageCampusRanks.length ? "campuses" : "signaled"}
+              figure={`${pageFrom.toLocaleString("en-US")}-${cards.length.toLocaleString("en-US")}`}
+              figureSuffix={`of ${total.toLocaleString("en-US")}`}
               takeaway={
                 pageCampusRanks[0]
-                  ? `${pageCampusRanks[0].label} tops this batch with ${pageCampusRanks[0].companies.toLocaleString("en-US")} companies · ${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} have a signal`
+                  ? `${pageCampusRanks[0].label} tops this batch · ${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} signaled · ${pageCampusRanks.length.toLocaleString("en-US")} campuses`
                   : `${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} on this page have a signal`
               }
-              meta={`Companies ${pageFrom.toLocaleString("en-US")}-${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`}
+              meta={`${pageCampusRanks.length.toLocaleString("en-US")} campuses in range · sort stays below`}
             >
               <div
                 className="border-t border-[color:var(--cobalt,#2F4FD8)]/15 px-3.5 pb-3"
@@ -1009,7 +1009,8 @@ export function SampleInstrumentBrowse({
                       ranked={feed === "leaderboard"}
                       whyOverride={whyOverride}
                       showCampusSeal={showCampusSeal}
-                      />
+                      evidenceRich={feed === "directory" && pages > 1}
+                    />
                   </li>
                 );
               })}
@@ -1093,9 +1094,9 @@ export function SampleInstrumentBrowse({
                     data-pass-close=""
                   >
                     <p className="border-b border-[color:var(--cobalt,#2F4FD8)]/15 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" data-ledger-end-continue="">
-                      Batch close · companies above
+                      Batch close · last companies
                     </p>
-                    <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-2" data-mobile-list-mast="">
+                    <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-2.5" data-mobile-list-mast="">
                       <div className="flex items-start gap-3">
                         {pageCampusRanks[0] ? (
                           endLeadCampusHref ? (
@@ -1107,18 +1108,18 @@ export function SampleInstrumentBrowse({
                           )
                         ) : null}
                         <div className="min-w-0 flex-1">
-                          <p className="m-kicker">Campuses in this batch</p>
+                          <p className="m-kicker">Batch close</p>
                           <p className="m-figure mt-1.5" data-ledger-showing="" data-end-lead="" data-more-context="">
-                            {pageCampusRanks.length.toLocaleString("en-US")}
-                            <span className="m-figure-sub ml-1.5">campuses</span>
+                            {cards.length.toLocaleString("en-US")}
+                            <span className="m-figure-sub ml-1.5">of {total.toLocaleString("en-US")}</span>
                           </p>
                           <p className="m-takeaway mt-2">
                             {pageCampusRanks[0]
-                              ? `${pageCampusRanks[0].label} leads with ${pageCampusRanks[0].companies.toLocaleString("en-US")} companies on this page`
+                              ? `${pageCampusRanks[0].label} leads · ${pageCampusRanks.length.toLocaleString("en-US")} campuses · ${pageSignaled.toLocaleString("en-US")} signaled`
                               : `${cards.length.toLocaleString("en-US")} companies loaded`}
                           </p>
                           <p className="m-meta mt-1">
-                            {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")} loaded
+                            Companies 1–{cards.length.toLocaleString("en-US")} on desk
                           </p>
                         </div>
                       </div>
@@ -1127,17 +1128,24 @@ export function SampleInstrumentBrowse({
                     {cards.length ? (
                       <ul className="divide-y divide-[color:var(--line,#E1E5EF)] border-b border-[color:var(--line,#E1E5EF)] px-3.5" data-ledger-end-companies="">
                         {cards.slice(-3).map((card) => (
-                          <li key={card.id} className="flex items-center gap-2 py-1.5">
-                            <LogoMark name={card.name} logoUrl={card.logoUrl} size={16} />
-                            <Link
-                              href={`/startup/${card.id}`}
-                              className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)]"
-                            >
-                              {card.name}
-                            </Link>
-                            <span className="shrink-0 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                              {card.school || "Campus missing"}
-                            </span>
+                          <li key={card.id} className="flex items-center gap-2 py-2">
+                            <LogoMark name={card.name} logoUrl={card.logoUrl} size={18} />
+                            <div className="min-w-0 flex-1">
+                              <Link
+                                href={`/startup/${card.id}`}
+                                className="block truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)]"
+                              >
+                                {card.name}
+                              </Link>
+                              <p className="mt-0.5 flex flex-wrap items-center gap-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                                <span className="truncate">{card.school || "Campus missing"}</span>
+                                {card.signalLabel ? (
+                                  <span className="inline-flex h-[16px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1 font-semibold text-[color:var(--cobalt,#2F4FD8)]">
+                                    {card.signalLabel}
+                                  </span>
+                                ) : null}
+                              </p>
+                            </div>
                           </li>
                         ))}
                       </ul>
@@ -1458,6 +1466,7 @@ function LedgerRow({
   showCampusSeal = true,
   selected = false,
   founderLinks = [],
+  evidenceRich = false,
 }: {
   card: DirectoryCard;
   rank: number | null;
@@ -1468,6 +1477,8 @@ function LedgerRow({
   showCampusSeal?: boolean;
   selected?: boolean;
   founderLinks?: { name: string; linkedinUrl: string }[];
+  /** r57: richer stage/program chips on continued mobile batches (companies-more). */
+  evidenceRich?: boolean;
 }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
@@ -1575,13 +1586,25 @@ function LedgerRow({
             ))}
           </span>
         ) : null}
-        {meta ? (
-          <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
-            <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]">
-              {meta.primary}
-            </span>
-            {meta.secondary ? (
-              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:hidden">
+        {meta || (evidenceRich && (card.stage || card.primaryProgram)) ? (
+          <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined}>
+            {meta ? (
+              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" data-evidence-chip="signal">
+                {meta.primary}
+              </span>
+            ) : null}
+            {evidenceRich && card.stage ? (
+              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--ember,#D96B1C)] lg:hidden" data-evidence-chip="stage">
+                {card.stage}
+              </span>
+            ) : null}
+            {evidenceRich && card.primaryProgram && card.primaryProgram !== meta?.primary ? (
+              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)] lg:hidden" data-evidence-chip="program">
+                {card.primaryProgram}
+              </span>
+            ) : null}
+            {meta?.secondary ? (
+              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:hidden" data-evidence-chip="date">
                 {meta.secondary}
               </span>
             ) : null}

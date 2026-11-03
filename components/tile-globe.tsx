@@ -207,16 +207,25 @@ export function TileGlobe({
       const wide = window.innerWidth >= 1024;
       // r53 mobile: taller full-bleed stage (~88vh) so globe dominates under the deck sheet.
       // r56 desk: taller full-bleed (~86vh) so the map owns the first screen with fold overlays.
-      const target = Math.round(window.innerHeight * (wide ? 0.86 : 0.88));
+      // r57 mobile: when the investor sheet is deck/expanded, shrink map to a compact header.
+      const sheetMode = document.documentElement.getAttribute("data-fold-sheet-mode");
+      const compactHeader = !wide && (sheetMode === "deck" || sheetMode === "expanded");
+      const target = compactHeader
+        ? Math.round(window.innerHeight * 0.24)
+        : Math.round(window.innerHeight * (wide ? 0.86 : 0.88));
       const next = wide
         ? Math.max(640, Math.min(900, target))
-        : Math.max(520, Math.min(760, target));
+        : compactHeader
+          ? Math.max(140, Math.min(220, target))
+          : Math.max(520, Math.min(760, target));
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
       nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
     };
     fit();
     window.addEventListener("resize", fit);
+    const sheetMo = new MutationObserver(fit);
+    sheetMo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-fold-sheet-mode"] });
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let reduce = motion.matches;
     const onMotion = () => {
@@ -640,6 +649,7 @@ export function TileGlobe({
       window.clearTimeout(styleTimer);
       observer.disconnect();
       window.removeEventListener("resize", fit);
+      sheetMo.disconnect();
       motion.removeEventListener("change", onMotion);
       map?.remove();
       mapRef.current = null;
