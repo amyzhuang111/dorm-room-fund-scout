@@ -52,6 +52,7 @@ export function NetworksApp() {
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [matrixOpen, setMatrixOpen] = useState(false);
   const [concentrationOpen, setConcentrationOpen] = useState(true);
+  const [mobileHubsOpen, setMobileHubsOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -130,27 +131,6 @@ export function NetworksApp() {
             <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
               Campus-colored founders, program hubs, real co-founder ties.
             </p>
-            {/* Mobile fold: scrollable top-10 hubs with counts above the compact graph. */}
-            <ol
-              className="mt-2 max-h-[12.5rem] divide-y divide-[color:var(--line)] overflow-y-auto rounded border border-[color:var(--line)] md:hidden"
-              data-networks-mobile-top=""
-            >
-              {data.topNetworks.slice(0, 10).map((row, index) => (
-                <li key={`mobile-top-${row.id}`}>
-                  <button
-                    type="button"
-                    className="flex w-full items-center gap-2 px-2 py-1 text-left"
-                    onClick={() => setActiveNetwork(row.id)}
-                  >
-                    <span className="w-4 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg)]">{row.label}</span>
-                    <span className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2)]">
-                      {row.founderCount.toLocaleString("en-US")}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ol>
           </div>
           <NetworksGraph
             investorHubs={data.investorHubs}
@@ -169,11 +149,14 @@ export function NetworksApp() {
             <p className="text-[12px] text-[color:var(--fg-2)] sm:text-sm">Where campus founders already concentrate, ranked by linked founders.</p>
           </div>
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-4">
-            <ol className="divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white">
+            <ol
+              className="divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white"
+              data-networks-mobile-top=""
+            >
               {data.topNetworks.map((row, index) => {
                 const selected = row.id === activeNetwork;
-                // Mobile first viewport: show top 6; desktop shows all.
-                const mobileHide = index >= 4 ? "hidden sm:list-item" : "";
+                // Mobile: first 4 hubs, rest behind a More toggle (no mid-row clip).
+                const mobileHide = index >= 4 && !mobileHubsOpen ? "hidden sm:list-item" : "";
                 return (
                   <li key={row.id} className={mobileHide}>
                     <button
@@ -195,6 +178,21 @@ export function NetworksApp() {
                   </li>
                 );
               })}
+              {data.topNetworks.length > 4 ? (
+                <li className="sm:hidden">
+                  <button
+                    type="button"
+                    className="w-full px-2.5 py-2 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
+                    data-networks-mobile-more=""
+                    aria-expanded={mobileHubsOpen}
+                    onClick={() => setMobileHubsOpen((open) => !open)}
+                  >
+                    {mobileHubsOpen
+                      ? "Show fewer hubs"
+                      : `More hubs (${(data.topNetworks.length - 4).toLocaleString("en-US")})`}
+                  </button>
+                </li>
+              ) : null}
             </ol>
 
             <aside className="hidden rounded-lg border border-[color:var(--line)] bg-white p-4 lg:block" aria-live="polite">

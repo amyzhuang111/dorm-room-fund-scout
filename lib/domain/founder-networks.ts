@@ -1459,24 +1459,46 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
     packMembersInCluster(kids, net.x, net.y, net.clusterR);
   }
 
-  // Investor insights from real desk counts (not marketing copy).
+  // Investor insights: non-obvious, sourced desk facts (skip rank-repeating tallies).
   const callouts: Record<number, string> = {};
-  const pennChallenge = totalByNetEarly.get("penn_startup_challenge") ?? 0;
-  const pennVip = totalByNetEarly.get("vipx") ?? 0;
-  const pennYcOverlapNote =
-    pennChallenge > pennVip
-      ? `Penn founders mostly enter via Startup Challenge (${pennChallenge.toLocaleString("en-US")} founders), not VIP-X (${pennVip.toLocaleString("en-US")}).`
-      : `Penn VIP-X reaches ${pennVip.toLocaleString("en-US")} founders versus Startup Challenge at ${pennChallenge.toLocaleString("en-US")}.`;
-  for (const net of networks) {
-    const total = totalByNetEarly.get(net.networkId ?? "") ?? 0;
-    if (net.rank === 1) {
-      callouts[1] = `YC alone reaches ${total.toLocaleString("en-US")} founders in this corpus, so most deal flow is already on a crowded pathway.`;
-    } else if (net.networkId === "penn_startup_challenge" || net.rank === 2) {
-      callouts[net.rank] = pennYcOverlapNote;
-    } else if (net.networkId === "speedrun" || net.rank === 3) {
-      callouts[net.rank] = `a16z Speedrun reaches ${total.toLocaleString("en-US")} campus founders here, the largest non-YC crowded pathway on the desk.`;
-    }
+  const founderNets = new Map<string, Set<string>>();
+  for (const edge of graph.edges) {
+    if (edge.type !== "network_founder" && edge.type !== "network_tie") continue;
+    const netId = edge.source.startsWith("net:") ? edge.source.slice(4) : "";
+    const foId = edge.target.startsWith("fo:")
+      ? edge.target.slice(3)
+      : edge.source.startsWith("fo:")
+        ? edge.source.slice(3)
+        : "";
+    if (!netId || !foId) continue;
+    const set = founderNets.get(foId) ?? new Set<string>();
+    set.add(netId);
+    founderNets.set(foId, set);
   }
+  let vipOnDesk = 0;
+  let vipAlsoYc = 0;
+  for (const nets of founderNets.values()) {
+    if (!nets.has("vipx")) continue;
+    vipOnDesk += 1;
+    if (nets.has("yc")) vipAlsoYc += 1;
+  }
+  const companyNodes = members.filter((node) => node.type === "company").length;
+  const uncrowdedN = (graph.uncrowdedCompanyIds ?? []).length;
+  const invHubs = pageEarly.investorHubs ?? [];
+  const topInv = invHubs[0];
+  if (vipOnDesk > 0) {
+    callouts[1] =
+      `Only ${vipAlsoYc.toLocaleString("en-US")} of ${vipOnDesk.toLocaleString("en-US")} VIP-X founders on this desk also carry a YC tie — most of that pathway is still open to non-YC capital.`;
+  }
+  if (companyNodes > 0 && uncrowdedN > 0) {
+    callouts[2] =
+      `${uncrowdedN.toLocaleString("en-US")} of ${companyNodes.toLocaleString("en-US")} companies plotted here are not yet backed by a top fund on file.`;
+  }
+  if (topInv && topInv.founderCount > 0) {
+    callouts[3] =
+      `${topInv.label} reaches only ${topInv.founderCount.toLocaleString("en-US")} campus founders across ${topInv.companyCount.toLocaleString("en-US")} companies here — top-fund coverage stays thin beside program hubs.`;
+  }
+  // Attach by rank slots only when we actually have a sourced line.
 
   const founderCountByNet = new Map<string, number>();
   for (const edge of graph.edges) {
