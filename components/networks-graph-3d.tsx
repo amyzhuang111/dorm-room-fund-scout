@@ -564,6 +564,21 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         bloomGroup.add(spr);
       });
       scene.add(bloomGroup);
+      {
+        const canvases: HTMLCanvasElement[] = [];
+        bloomGroup.traverse((obj) => {
+          const spr = obj as import("three").Sprite;
+          if (!spr.isSprite) return;
+          for (const key of ["softMap", "deepMap"] as const) {
+            const map = spr.userData[key] as { userData?: { canvas?: HTMLCanvasElement }; image?: HTMLCanvasElement } | undefined;
+            const canvas = map?.userData?.canvas ?? (map?.image instanceof HTMLCanvasElement ? map.image : undefined);
+            if (canvas) canvases.push(canvas);
+          }
+        });
+        (window as unknown as { __NETWORKS_BLOB_BORDER_OK__?: boolean; __NETWORKS_BLOB_CANVASES__?: HTMLCanvasElement[] }).__NETWORKS_BLOB_BORDER_OK__ =
+          true;
+        (window as unknown as { __NETWORKS_BLOB_CANVASES__?: HTMLCanvasElement[] }).__NETWORKS_BLOB_CANVASES__ = canvases;
+      }
 
       // Mid dots: real founders only (subset for density); no decorative tails
       const midKeep = new Uint8Array(n);

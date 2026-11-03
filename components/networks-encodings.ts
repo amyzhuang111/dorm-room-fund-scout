@@ -234,6 +234,41 @@ export function satMulFromShare(share: number): number {
  * Density-contour watercolor texture from real campus dot offsets.
  * Area of the sprite is set separately (∝ √founders); saturation follows backed share.
  */
+/** Sample outer border of a canvas; every alpha must be 0 (no hard sprite clip). */
+export function assertBlobTextureBorderClear(
+  canvas: HTMLCanvasElement,
+  label = "blob",
+  borderPx = 2,
+): void {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error(`${label}: no 2d context`);
+  const { width: w, height: h } = canvas;
+  const img = ctx.getImageData(0, 0, w, h);
+  const d = img.data;
+  const hits: string[] = [];
+  const check = (x: number, y: number) => {
+    const a = d[(y * w + x) * 4 + 3];
+    if (a !== 0) hits.push(`${x},${y}=${a}`);
+  };
+  for (let y = 0; y < h; y++) {
+    for (let b = 0; b < borderPx; b++) {
+      check(b, y);
+      check(w - 1 - b, y);
+    }
+  }
+  for (let x = borderPx; x < w - borderPx; x++) {
+    for (let b = 0; b < borderPx; b++) {
+      check(x, b);
+      check(x, h - 1 - b);
+    }
+  }
+  if (hits.length) {
+    throw new Error(
+      `${label}: blob texture border alpha must be 0 (sprite clip); samples: ${hits.slice(0, 12).join("; ")}${hits.length > 12 ? ` (+${hits.length - 12})` : ""}`,
+    );
+  }
+}
+
 export function makeCampusContourTexture(
   THREE: typeof import("three"),
   rgb: [number, number, number],
@@ -244,7 +279,8 @@ export function makeCampusContourTexture(
 ) {
   const soft = opts.soft !== false; // mid: soft overlap into continuous field
   const edgeRichness = opts.edgeRichness ?? 0.35;
-  const size = 192;
+  // Larger grid + pad so density falls to 0 before the sprite edge (no hard rect clip)
+  const size = 256;
   const c = document.createElement("canvas");
   c.width = size;
   c.height = size;
@@ -252,11 +288,14 @@ export function makeCampusContourTexture(
   const img = ctx.createImageData(size, size);
   const data = img.data;
 
-  // Bounding radius of points → normalize into texture
+  // Bounding radius of points → normalize into padded texture interior
   let maxR = 1;
   for (const p of localPts) maxR = Math.max(maxR, Math.hypot(p.x, p.y));
-  maxR *= 1.15;
+  maxR = Math.max(maxR, 1) * 1.12;
   const sigma = Math.max(soft ? 0.18 : 0.1, Math.min(soft ? 0.4 : 0.22, (soft ? 1.15 : 0.55) / Math.sqrt(Math.max(6, localPts.length))));
+  // Extend world extent past cluster so soft kernels die before the texture rim
+  const padFrac = soft ? 0.2 : 0.14; // empty margin on each side (UV)
+  const worldHalf = maxR / (1 - 2 * padFrac);
   const twoSig2 = 2 * sigma * sigma;
 
   // Light edge noise (watercolor feel only — not a second encoding)
@@ -300,8 +339,8 @@ export function makeCampusContourTexture(
     for (let x = 0; x < size; x += step) {
       const u = (x + 0.5) / size;
       const v = (y + 0.5) / size;
-      const px = (u - 0.5) * 2 * maxR;
-      const py = (v - 0.5) * 2 * maxR;
+      const px = (u - 0.5) * 2 * worldHalf;
+      const py = (v - 0.5) * 2 * worldHalf;
       let d = 0;
       for (const pt of localPts) {
         const dx = (px - pt.x) / maxR;
@@ -337,6 +376,14 @@ export function makeCampusContourTexture(
       }
       if (a < 0.03) a = 0;
       a *= 0.72 + 0.28 * satMul; // unbacked fainter; denser mid fill overall
+      // Fade alpha to exactly 0 before each texture edge (kills hard rect clip)
+      const edgeDist = Math.min(u, v, 1 - u, 1 - v);
+      const fadeStart = padFrac * 0.85;
+      if (edgeDist < fadeStart) {
+        const tEdge = Math.max(0, edgeDist / fadeStart);
+        a *= tEdge * tEdge * (3 - 2 * tEdge); // smoothstep
+      }
+      if (edgeDist < 1.5 / size) a = 0;
       const i = (y * size + x) * 4;
       data[i] = cr;
       data[i + 1] = cg;
@@ -344,9 +391,32 @@ export function makeCampusContourTexture(
       data[i + 3] = Math.round(a * 255);
     }
   }
+  // Guarantee outer pixels are fully clear (sprite clamp / bilinear safety)
+  const borderClear = 2;
+  for (let y = 0; y < size; y++) {
+    for (let b = 0; b < borderClear; b++) {
+      for (const x of [b, size - 1 - b]) {
+        const i = (y * size + x) * 4 + 3;
+        data[i] = 0;
+      }
+    }
+  }
+  for (let x = borderClear; x < size - borderClear; x++) {
+    for (let b = 0; b < borderClear; b++) {
+      for (const y of [b, size - 1 - b]) {
+        const i = (y * size + x) * 4 + 3;
+        data[i] = 0;
+      }
+    }
+  }
   ctx.putImageData(img, 0, 0);
+  assertBlobTextureBorderClear(c, "campus-contour", borderClear);
   const tex = new THREE.CanvasTexture(c);
   tex.needsUpdate = true;
+  // Clamp edges so sampling never wraps opaque rim
+  tex.wrapS = THREE.ClampToEdgeWrapping;
+  tex.wrapT = THREE.ClampToEdgeWrapping;
+  (tex as unknown as { userData: { canvas?: HTMLCanvasElement } }).userData = { canvas: c };
   return tex;
 }
 
