@@ -1,0 +1,871 @@
+{
+  "retrievedAt": "2026-11-03T07:59:00.000Z",
+  "companies": [
+    {
+      "name": "Aaron & Emma Productions",
+      "description": "Musical theater production company for stage and screen.",
+      "website": "https://www.aaronemmaprod.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Aaron & Emma Productions — Aaron Ventresca '27; Emma Ventresca '28.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Aaron Ventresca",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Aaron & Emma Productions",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Aaron & Emma Productions; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Aaron Ventresca alongside venture Aaron & Emma Productions and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Aaron & Emma Productions — Aaron Ventresca '27; Emma Ventresca '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Aaron & Emma Productions — Aaron Ventresca '27; Emma Ventresca '28."
+        },
+        {
+          "name": "Emma Ventresca",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Aaron & Emma Productions",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Aaron & Emma Productions; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Emma Ventresca alongside venture Aaron & Emma Productions and Yale class '28. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Aaron & Emma Productions — Aaron Ventresca '27; Emma Ventresca '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Aaron & Emma Productions — Aaron Ventresca '27; Emma Ventresca '28."
+        }
+      ]
+    },
+    {
+      "name": "Adroit Education",
+      "description": "College admissions mentorship for gifted international high school students.",
+      "website": "https://adroit.education",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Adroit Education — Md Shahreer Zahan '28.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Md Shahreer Zahan",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Adroit Education",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Adroit Education; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Md Shahreer Zahan alongside venture Adroit Education and Yale class '28. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Adroit Education — Md Shahreer Zahan '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Adroit Education — Md Shahreer Zahan '28."
+        }
+      ]
+    },
+    {
+      "name": "AllStrum",
+      "description": "Guitar and ukulele attachment that automatically plays chords.",
+      "website": "https://www.allstrum.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: AllStrum — Eytan Israel '26; Matthew Mendelsohn '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Eytan Israel",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for AllStrum",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for AllStrum; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Eytan Israel alongside venture AllStrum and Yale class '26. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: AllStrum — Eytan Israel '26; Matthew Mendelsohn '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: AllStrum — Eytan Israel '26; Matthew Mendelsohn '27."
+        },
+        {
+          "name": "Matthew Mendelsohn",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for AllStrum",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for AllStrum; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Matthew Mendelsohn alongside venture AllStrum and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: AllStrum — Eytan Israel '26; Matthew Mendelsohn '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: AllStrum — Eytan Israel '26; Matthew Mendelsohn '27."
+        }
+      ]
+    },
+    {
+      "name": "Ber.be.da",
+      "description": "Personalized hand-painted fashion and artwork.",
+      "website": "https://ber.be.da",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Ber.be.da — Nur (Rani) Maharani '28.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Nur (Rani) Maharani",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Ber.be.da",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Ber.be.da; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Nur (Rani) Maharani alongside venture Ber.be.da and Yale class '28. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Ber.be.da — Nur (Rani) Maharani '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Ber.be.da — Nur (Rani) Maharani '28."
+        }
+      ]
+    },
+    {
+      "name": "Crystallizers",
+      "description": "Social learning game based on memory science.",
+      "website": "https://cristal-memoria.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Crystallizers — Himalaya Girard '33.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Himalaya Girard",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Crystallizers",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Crystallizers; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Himalaya Girard alongside venture Crystallizers and Yale class '33. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'33",
+            "gradYear": 2033,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Crystallizers — Himalaya Girard '33."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Crystallizers — Himalaya Girard '33."
+        }
+      ]
+    },
+    {
+      "name": "Got Accepted",
+      "description": "Expert admissions coaching for international students.",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Got Accepted — Viktor Ellacuriaga '30.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Viktor Ellacuriaga",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Got Accepted",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Got Accepted; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Viktor Ellacuriaga alongside venture Got Accepted and Yale class '30. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'30",
+            "gradYear": 2030,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Got Accepted — Viktor Ellacuriaga '30."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Got Accepted — Viktor Ellacuriaga '30."
+        }
+      ]
+    },
+    {
+      "name": "Group Therapeutics",
+      "description": "Value-based chronic pain support for clinics.",
+      "website": "https://grouptherapeutics.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Group Therapeutics — Kike Oduba '28.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kike Oduba",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator and Venture Ready student venture team for Group Therapeutics",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator and Venture Ready for Group Therapeutics; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Kike Oduba alongside venture Group Therapeutics and Yale class '28. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Group Therapeutics — Kike Oduba '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Group Therapeutics — Kike Oduba '28."
+        }
+      ]
+    },
+    {
+      "name": "Ilvirs",
+      "description": "Real-time optimization of deployed industrial robot arms.",
+      "website": "https://ilvirs.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Ilvirs — Khosilmurod Abdukholikov '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Khosilmurod Abdukholikov",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Ilvirs",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Ilvirs; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Khosilmurod Abdukholikov alongside venture Ilvirs and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Ilvirs — Khosilmurod Abdukholikov '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Ilvirs — Khosilmurod Abdukholikov '27."
+        }
+      ]
+    },
+    {
+      "name": "New Horizon Brass",
+      "description": "Brass ensemble developing new concert and music repertoire.",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: New Horizon Brass — Jon-Michael Taylor '27; Mikal Martin '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jon-Michael Taylor",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for New Horizon Brass",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for New Horizon Brass; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Jon-Michael Taylor alongside venture New Horizon Brass and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: New Horizon Brass — Jon-Michael Taylor '27; Mikal Martin '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: New Horizon Brass — Jon-Michael Taylor '27; Mikal Martin '27."
+        },
+        {
+          "name": "Mikal Martin",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for New Horizon Brass",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for New Horizon Brass; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Mikal Martin alongside venture New Horizon Brass and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: New Horizon Brass — Jon-Michael Taylor '27; Mikal Martin '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: New Horizon Brass — Jon-Michael Taylor '27; Mikal Martin '27."
+        }
+      ]
+    },
+    {
+      "name": "OCDChi",
+      "description": "Self-help software for people with obsessive-compulsive disorder in China.",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: OCDChi — Zoe Dong '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Zoe Dong",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for OCDChi",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for OCDChi; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Zoe Dong alongside venture OCDChi and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: OCDChi — Zoe Dong '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: OCDChi — Zoe Dong '27."
+        }
+      ]
+    },
+    {
+      "name": "RallyAI",
+      "description": "Tennis shot tracking and personalized AI coaching.",
+      "website": "https://www.rallyai.ai",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: RallyAI — Brandon Shi '27; Xinyu Guo '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Brandon Shi",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for RallyAI",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for RallyAI; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Brandon Shi alongside venture RallyAI and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: RallyAI — Brandon Shi '27; Xinyu Guo '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: RallyAI — Brandon Shi '27; Xinyu Guo '27."
+        },
+        {
+          "name": "Xinyu Guo",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for RallyAI",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for RallyAI; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Xinyu Guo alongside venture RallyAI and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: RallyAI — Brandon Shi '27; Xinyu Guo '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: RallyAI — Brandon Shi '27; Xinyu Guo '27."
+        }
+      ]
+    },
+    {
+      "name": "UltraClass",
+      "description": "Personalized AI test preparation, beginning with GRE instruction.",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: UltraClass — Lu Zhang '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Lu Zhang",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for UltraClass",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for UltraClass; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Lu Zhang alongside venture UltraClass and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: UltraClass — Lu Zhang '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: UltraClass — Lu Zhang '27."
+        }
+      ]
+    },
+    {
+      "name": "Wavel",
+      "description": "Passive monitoring of at-home dementia care between clinician visits.",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Wavel — Gaurav Chaudhuri '29; William Wakefield '29.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Gaurav Chaudhuri",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator and Venture Ready student venture team for Wavel",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator and Venture Ready for Wavel; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Gaurav Chaudhuri alongside venture Wavel and Yale class '29. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Wavel — Gaurav Chaudhuri '29; William Wakefield '29."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Wavel — Gaurav Chaudhuri '29; William Wakefield '29."
+        },
+        {
+          "name": "William Wakefield",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator and Venture Ready student venture team for Wavel",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator and Venture Ready for Wavel; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names William Wakefield alongside venture Wavel and Yale class '29. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Wavel — Gaurav Chaudhuri '29; William Wakefield '29."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator and Venture Ready: Wavel — Gaurav Chaudhuri '29; William Wakefield '29."
+        }
+      ]
+    },
+    {
+      "name": "Yarty",
+      "description": "Real-time campus nightlife and event activity map.",
+      "website": "https://yarty.app",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Yarty — Eugene Lee '29; Matthew Li '29; Sasha Serkov '28.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Eugene Lee",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Yarty",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Yarty; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Eugene Lee alongside venture Yarty and Yale class '29. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Yarty — Eugene Lee '29; Matthew Li '29; Sasha Serkov '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Yarty — Eugene Lee '29; Matthew Li '29; Sasha Serkov '28."
+        },
+        {
+          "name": "Matthew Li",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Yarty",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Yarty; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Matthew Li alongside venture Yarty and Yale class '29. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Yarty — Eugene Lee '29; Matthew Li '29; Sasha Serkov '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Yarty — Eugene Lee '29; Matthew Li '29; Sasha Serkov '28."
+        },
+        {
+          "name": "Sasha Serkov",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for Yarty",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for Yarty; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Sasha Serkov alongside venture Yarty and Yale class '28. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: Yarty — Eugene Lee '29; Matthew Li '29; Sasha Serkov '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: Yarty — Eugene Lee '29; Matthew Li '29; Sasha Serkov '28."
+        }
+      ]
+    },
+    {
+      "name": "YUE Tea",
+      "description": "Tea rituals and consumer products for daily reflection.",
+      "website": "https://yuetea.co",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: YUE Tea — Yue (Music) Ying '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yue (Music) Ying",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Accelerator student venture team for YUE Tea",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Accelerator for YUE Tea; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Yue (Music) Ying alongside venture YUE Tea and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Accelerator: YUE Tea — Yue (Music) Ying '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Accelerator: YUE Tea — Yue (Music) Ying '27."
+        }
+      ]
+    },
+    {
+      "name": "ALINE",
+      "description": "Virtual try-on and garment fit intelligence for fashion retailers.",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: ALINE — Diya Patel '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Diya Patel",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for ALINE",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for ALINE; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Diya Patel alongside venture ALINE and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: ALINE — Diya Patel '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: ALINE — Diya Patel '27."
+        }
+      ]
+    },
+    {
+      "name": "Auxo Health",
+      "description": "Automates insurance paperwork for independent orthopedic clinics.",
+      "website": "https://auxohealth.co",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Auxo Health — Atreya Manaswi '29; Shaurya Sharma '29.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Atreya Manaswi",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for Auxo Health",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for Auxo Health; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Atreya Manaswi alongside venture Auxo Health and Yale class '29. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: Auxo Health — Atreya Manaswi '29; Shaurya Sharma '29."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Auxo Health — Atreya Manaswi '29; Shaurya Sharma '29."
+        },
+        {
+          "name": "Shaurya Sharma",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for Auxo Health",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for Auxo Health; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Shaurya Sharma alongside venture Auxo Health and Yale class '29. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: Auxo Health — Atreya Manaswi '29; Shaurya Sharma '29."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Auxo Health — Atreya Manaswi '29; Shaurya Sharma '29."
+        }
+      ]
+    },
+    {
+      "name": "Nomos Robotics",
+      "description": "Adaptive robotics for unfamiliar physical environments.",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Nomos Robotics — Haoran Sun '31; Zeyi (Andy) Liu '29.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Haoran Sun",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for Nomos Robotics",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for Nomos Robotics; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Haoran Sun alongside venture Nomos Robotics and Yale class '31. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'31",
+            "gradYear": 2031,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: Nomos Robotics — Haoran Sun '31; Zeyi (Andy) Liu '29."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Nomos Robotics — Haoran Sun '31; Zeyi (Andy) Liu '29."
+        },
+        {
+          "name": "Zeyi (Andy) Liu",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for Nomos Robotics",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for Nomos Robotics; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Zeyi (Andy) Liu alongside venture Nomos Robotics and Yale class '29. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: Nomos Robotics — Haoran Sun '31; Zeyi (Andy) Liu '29."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Nomos Robotics — Haoran Sun '31; Zeyi (Andy) Liu '29."
+        }
+      ]
+    },
+    {
+      "name": "Partzona",
+      "description": "AI automotive parts sourcing and matching platform.",
+      "website": "https://us.partzona.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Partzona — Numraddin Huseynov '28.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Numraddin Huseynov",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for Partzona",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for Partzona; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Numraddin Huseynov alongside venture Partzona and Yale class '28. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: Partzona — Numraddin Huseynov '28."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Partzona — Numraddin Huseynov '28."
+        }
+      ]
+    },
+    {
+      "name": "Vispire",
+      "description": "Agentic commerce and manufacturing for AI-human product creation.",
+      "website": "https://vispire.ai",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Vispire — Frank Fang '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Frank Fang",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for Vispire",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for Vispire; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Frank Fang alongside venture Vispire and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: Vispire — Frank Fang '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: Vispire — Frank Fang '27."
+        }
+      ]
+    },
+    {
+      "name": "VYBEA",
+      "description": "AI systems for entertainment intellectual property decisions.",
+      "website": "https://vybea.ai",
+      "sourceUrl": "https://city.yale.edu/stories/2026/10/13/big-ideas-bold-ventures-meet-tsai-citys-fall-2026-vdp-cohorts",
+      "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: VYBEA — Yuqing (Dorothy) Wu '27.",
+      "orgPlace": "Yale Tsai CITY Fall 2026 Venture Ready",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yuqing (Dorothy) Wu",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Tsai CITY Fall 2026 Venture Ready student venture team for VYBEA",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named Yale student entrepreneur in Tsai CITY Fall 2026 Venture Ready for VYBEA; independent founding title not published",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tsai CITY officially names Yuqing (Dorothy) Wu alongside venture VYBEA and Yale class '27. Roster is team evidence, not proof of a legal founder title.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Fall 2026 Venture Ready: VYBEA — Yuqing (Dorothy) Wu '27."
+          },
+          "excerpt": "Yale Tsai CITY Fall 2026 Venture Ready: VYBEA — Yuqing (Dorothy) Wu '27."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}
