@@ -1,0 +1,39 @@
+name: Validate useful network scouting workflows
+
+on:
+  push:
+    branches:
+      - codex/network-scout-utility-2026-11-03
+    paths:
+      - ".github/workflows/network-scout-utility.yml"
+      - "components/networks-app.tsx"
+      - "lib/domain/founder-networks.ts"
+      - "lib/domain/founder-networks-model.ts"
+      - "lib/domain/network-directory-search*"
+      - "scripts/audit/check-network-utility.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  network-workflows:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Search by founder, company, campus or source
+        run: ./node_modules/.bin/tsx lib/domain/network-directory-search.test.ts
+      - name: Verify real linked founder records, source links and action wiring
+        run: ./node_modules/.bin/tsx scripts/audit/check-network-utility.ts
+      - name: Recompute latest network graph from canonical SQLite database
+        run: npm run precompute:networks
+      - name: Preserve startup and founder directory regression checks
+        run: npm run test:directory
+      - name: Type-check entire application
+        run: ./node_modules/.bin/tsc --noEmit
