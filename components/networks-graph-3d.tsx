@@ -1027,6 +1027,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       const w = window as unknown as {
         __NETWORKS_POSTER__?: Poster;
         __NETWORKS_SET_SCALE__?: (scale: number) => void;
+        __NETWORKS_RESET_VIEW__?: () => void;
         __NETWORKS_FADE__?: number;
         __NETWORKS_SET_YEAR__?: (y: number) => void;
       };
@@ -1053,6 +1054,15 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         idleRef.current = 0;
       };
       w.__NETWORKS_SET_SCALE__ = applyScaleNow;
+      w.__NETWORKS_RESET_VIEW__ = () => {
+        // Start over at the same reproducible overhead camera used for the
+        // widest reference. Do not leave a close-up orbit orientation behind.
+        ctrl.target.set(cx + 18, cy - 36, 0);
+        camera.up.set(0, 0, 1);
+        camera.position.set(cx + 68, cy - 118, 1095);
+        ctrl.update();
+        applyScaleNow(0.76);
+      };
       (w as unknown as { __NETWORKS_GET_DIST__?: () => number }).__NETWORKS_GET_DIST__ = () =>
         camera.position.distanceTo(ctrl.target);
       // Pending scale from shots if set before mount finished
@@ -1346,6 +1356,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         }
       };
 
+      let lastUiScale = distToScale(camera.position.distanceTo(ctrl.target));
       const tick = (t: number) => {
         if (disposed) return;
         raf = requestAnimationFrame(tick);
@@ -1363,7 +1374,10 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }
         }
         idleRef.current += 1;
-        if (idleRef.current > 120) ctrl.autoRotate = true;
+        const currentScale = distToScale(camera.position.distanceTo(ctrl.target));
+        // Keep close-ups stable long enough to inspect names and relationships.
+        // Only the two wide reference levels may gently orbit when idle.
+        ctrl.autoRotate = idleRef.current > 480 && currentScale < 1.2;
         ctrl.update();
         renderer!.render(scene, camera);
 
@@ -1371,10 +1385,15 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         const scale = distToScale(dist);
         const st = stageWeights(scale);
         apiRef.current?.setStages(st.outW, st.midW, st.cardW, st.deepW, t * 0.001);
-        if (tierRef.current !== st.tier) {
+        // Keep React overlays synchronized while zooming continuously, not
+        // only when crossing a tier. The old behavior popped cards and labels
+        // abruptly because state remained at the previous camera tier.
+        if (tierRef.current !== st.tier || Math.abs(lastUiScale - scale) > 0.1) {
           tierRef.current = st.tier;
+          lastUiScale = scale;
           setZoomScale(scale);
           wrapRef.current?.setAttribute("data-networks-zoom", String(st.tier));
+          wrapRef.current?.setAttribute("data-networks-current-scale", scale.toFixed(2));
         }
         wrapRef.current?.setAttribute("data-networks-fade", "1");
 
@@ -1395,8 +1414,9 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         renderer.domElement.parentElement?.removeChild(renderer.domElement);
       }
       apiRef.current = null;
-      const w = window as unknown as { __NETWORKS_SET_SCALE__?: unknown; __NETWORKS_SET_YEAR__?: unknown };
+      const w = window as unknown as { __NETWORKS_SET_SCALE__?: unknown; __NETWORKS_RESET_VIEW__?: unknown; __NETWORKS_SET_YEAR__?: unknown };
       delete w.__NETWORKS_SET_SCALE__;
+      delete w.__NETWORKS_RESET_VIEW__;
       delete w.__NETWORKS_SET_YEAR__;
     };
   }, [posterForScene, yearMax, yearMin]);

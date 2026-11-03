@@ -53,6 +53,8 @@ export function NetworksApp() {
   const [matrixOpen, setMatrixOpen] = useState(false);
   const [concentrationOpen, setConcentrationOpen] = useState(true);
   const [desktopHubsOpen, setDesktopHubsOpen] = useState(false);
+  const [networkQuery, setNetworkQuery] = useState("");
+  const [networkKind, setNetworkKind] = useState<NetworkKind | "all">("all");
 
   useEffect(() => {
     let cancelled = false;
@@ -75,6 +77,13 @@ export function NetworksApp() {
     [data, activeNetwork],
   );
   const members: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
+  const displayedNetworks = useMemo(() => {
+    const query = networkQuery.trim().toLocaleLowerCase("en-US");
+    return (data?.topNetworks ?? []).filter((network) => {
+      if (networkKind !== "all" && network.kind !== networkKind) return false;
+      return !query || network.label.toLocaleLowerCase("en-US").includes(query);
+    });
+  }, [data, networkKind, networkQuery]);
 
   let matrixMax = 0;
   if (data) {
@@ -156,12 +165,35 @@ export function NetworksApp() {
             </h2>
             <p className="text-[12px] text-[color:var(--fg-2)] sm:text-sm">Where campus founders already concentrate, ranked by linked founders.</p>
           </div>
+          <div className="mb-3 flex flex-wrap items-end gap-2" data-network-directory-controls="">
+            <label className="min-w-[180px] flex-1 text-[11px] font-medium text-[color:var(--fg-2)]">
+              Search networks
+              <input type="search" value={networkQuery} onChange={(event) => { setNetworkQuery(event.target.value); setDesktopHubsOpen(false); }}
+                placeholder="Program, accelerator or fund" aria-label="Search program and fund networks"
+                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]" />
+            </label>
+            <label className="text-[11px] font-medium text-[color:var(--fg-2)]">
+              Type
+              <select value={networkKind} onChange={(event) => { setNetworkKind(event.target.value as NetworkKind | "all"); setDesktopHubsOpen(false); }}
+                aria-label="Filter networks by type"
+                className="mt-1 h-11 min-w-[140px] rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]">
+                <option value="all">All networks</option>
+                <option value="accelerator">Accelerators</option>
+                <option value="program">Programs</option>
+                <option value="investor">Investors</option>
+                <option value="lab">Labs</option>
+              </select>
+            </label>
+            <span className="pb-3 text-xs tabular-nums text-[color:var(--fg-3)]" data-network-results-count="">
+              {displayedNetworks.length.toLocaleString("en-US")} networks
+            </span>
+          </div>
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-4">
             <ol
-              className="hidden divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white sm:block"
+              className="block divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white"
               data-networks-desktop-top=""
             >
-              {data.topNetworks.map((row, index) => {
+              {displayedNetworks.map((row, index) => {
                 const selected = row.id === activeNetwork;
                 const deskLimit = 12;
                 const deskHide = index >= deskLimit && !desktopHubsOpen ? "hidden" : "";
@@ -190,7 +222,10 @@ export function NetworksApp() {
                   </li>
                 );
               })}
-              {data.topNetworks.length > 12 ? (
+              {displayedNetworks.length === 0 ? (
+                <li className="px-4 py-5 text-sm text-[color:var(--fg-3)]">No networks match these filters.</li>
+              ) : null}
+              {displayedNetworks.length > 12 ? (
                 <li>
                   <button
                     type="button"
@@ -201,13 +236,13 @@ export function NetworksApp() {
                   >
                     {desktopHubsOpen
                       ? "Show fewer networks"
-                      : `More networks (${(data.topNetworks.length - 12).toLocaleString("en-US")})`}
+                      : `More networks (${(displayedNetworks.length - 12).toLocaleString("en-US")})`}
                   </button>
                 </li>
               ) : null}
             </ol>
 
-            <aside className="hidden rounded-lg border border-[color:var(--line)] bg-white p-4 lg:block" aria-live="polite">
+            <aside className="rounded-lg border border-[color:var(--line)] bg-white p-4" aria-live="polite">
               {active ? (
                 <>
                   <div className="mb-2">
@@ -217,7 +252,7 @@ export function NetworksApp() {
                       {active.campusCount.toLocaleString("en-US")} campuses
                     </p>
                   </div>
-                  <ul className="max-h-[28rem] space-y-2 overflow-y-auto pr-1">
+                  <ul className="max-h-52 space-y-2 overflow-y-auto pr-1 lg:max-h-[28rem]">
                     {members.map((member) => (
                       <li key={`${member.founderId}-${member.companyId}`} className="rounded border border-[color:var(--line)] px-2.5 py-2">
                         <div className="flex items-start gap-2">

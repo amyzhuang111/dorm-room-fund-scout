@@ -12,6 +12,7 @@ import {
 } from "@/components/networks-poster-types";
 import { NetworksTimeline } from "@/components/networks-timeline";
 import dynamic from "next/dynamic";
+import { NETWORK_ZOOM_PRESETS, closestNetworkZoomPreset, type NetworkZoomPreset } from "@/lib/domain/network-zoom-presets";
 
 type Deal = {
   founderName: string;
@@ -207,9 +208,23 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       velRef.current.vScale = 0;
       bump((n) => n + 1);
     };
+    const pending = (w as typeof w & { __NETWORKS_PENDING_SCALE__?: number }).__NETWORKS_PENDING_SCALE__;
+    if (typeof pending === "number") {
+      w.__NETWORKS_SET_SCALE__(pending);
+      delete (w as typeof w & { __NETWORKS_PENDING_SCALE__?: number }).__NETWORKS_PENDING_SCALE__;
+    }
+    (w as typeof w & { __NETWORKS_RESET_VIEW__?: () => void }).__NETWORKS_RESET_VIEW__ = () => {
+      camRef.current = { x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[0].scale };
+      velRef.current = { vx: 0, vy: 0, vScale: 0 };
+      dragRef.current = null;
+      setSelectedHub(null);
+      setZoomScale(NETWORK_ZOOM_PRESETS[0].scale);
+      bump((n) => n + 1);
+    };
     return () => {
       delete w.__NETWORKS_POSTER__;
       delete w.__NETWORKS_SET_SCALE__;
+      delete (w as typeof w & { __NETWORKS_RESET_VIEW__?: () => void }).__NETWORKS_RESET_VIEW__;
     };
   }, [poster]);
 
@@ -777,6 +792,10 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         assembleRef.current = 1;
         fadeRef.current = 1;
       }
+      const scaleTag = cam.scale.toFixed(2);
+      if (wrapRef.current?.getAttribute("data-networks-current-scale") !== scaleTag) {
+        wrapRef.current?.setAttribute("data-networks-current-scale", scaleTag);
+      }
       draw();
       rafRef.current = requestAnimationFrame(loop);
     };
@@ -1298,26 +1317,128 @@ const NetworksGraph3DLazy = dynamic(
   { ssr: false, loading: () => <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading 3D map...</p> },
 );
 
-/** Prefers WebGL 3D + time; falls back to canvas 2D for no WebGL or reduced motion. */
+/** Screenshot-matched overview / campus / founder details; 2D works without WebGL. */
 export function NetworksGraph(props: Props) {
   const [mode, setMode] = useState<"pending" | "3d" | "2d">("pending");
+  const [supports3D, setSupports3D] = useState(false);
+  const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[0]);
+  const networkRootRef = useRef<HTMLDivElement>(null);
   const fallback2D = useCallback(() => setMode("2d"), []);
+
   useEffect(() => {
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    const mobile = window.matchMedia?.("(max-width: 639px)")?.matches ?? false;
     let gl = false;
     try {
-      const c = document.createElement("canvas");
-      gl = !!(c.getContext("webgl2") || c.getContext("webgl"));
+      const canvas = document.createElement("canvas");
+      gl = !!(canvas.getContext("webgl2") || canvas.getContext("webgl"));
     } catch {
       gl = false;
     }
-    setMode(reduced || !gl ? "2d" : "3d");
+    setSupports3D(gl && !reduced);
+    // On 375px phones, start with a lightweight readable 2D view.
+    // The user can still enable 3D when WebGL and motion settings permit.
+    setMode(reduced || !gl || mobile ? "2d" : "3d");
   }, []);
-  if (mode === "pending") {
-    return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>;
+
+  useEffect(() => {
+    if (mode === "pending") return;
+    const app = window as typeof window & {
+      __NETWORKS_PENDING_SCALE__?: number;
+      __NETWORKS_SET_SCALE__?: (scale: number) => void;
+    };
+    // 2D exposes its API on mount; 3D initializes asynchronously from the
+    // current database poster, so leave a pending scale for it to consume.
+    if (app.__NETWORKS_SET_SCALE__) app.__NETWORKS_SET_SCALE__(zoomPreset.scale);
+    else app.__NETWORKS_PENDING_SCALE__ = zoomPreset.scale;
+
+    const root = networkRootRef.current;
+    if (!root) return;
+    const syncManualZoom = () => {
+      // In 3D the graph node is mounted after its asynchronous poster loads.
+      // Watch descendants so wheel-driven zoom remains reflected in the
+      // active control even after this later mount.
+      const graph = root.querySelector<HTMLElement>("[data-networks-graph]");
+      const scale = Number(graph?.getAttribute("data-networks-current-scale"));
+      if (!Number.isFinite(scale) || scale <= 0) return;
+      const nearest = closestNetworkZoomPreset(scale);
+      setZoomPreset((current) => current.id === nearest.id ? current : nearest);
+    };
+    const observer = new MutationObserver(syncManualZoom);
+    observer.observe(root, {
+      attributes: true, subtree: true, childList: true,
+      attributeFilter: ["data-networks-current-scale"],
+    });
+    syncManualZoom();
+    return () => observer.disconnect();
+  }, [mode]); // Manual scrolling changes labels but never snaps the camera.
+
+  const choosePreset = useCallback((preset: NetworkZoomPreset) => {
+    setZoomPreset(preset);
+    const app = window as typeof window & {
+      __NETWORKS_SET_SCALE__?: (scale: number) => void;
+      __NETWORKS_PENDING_SCALE__?: number;
+    };
+    if (app.__NETWORKS_SET_SCALE__) app.__NETWORKS_SET_SCALE__(preset.scale);
+    else app.__NETWORKS_PENDING_SCALE__ = preset.scale;
+  }, []);
+
+  function resetView() {
+    const app = window as typeof window & {
+      __NETWORKS_RESET_VIEW__?: () => void;
+      __NETWORKS_SET_SCALE__?: (scale: number) => void;
+      __NETWORKS_PENDING_SCALE__?: number;
+    };
+    setZoomPreset(NETWORK_ZOOM_PRESETS[0]);
+    if (app.__NETWORKS_RESET_VIEW__) app.__NETWORKS_RESET_VIEW__();
+    else if (app.__NETWORKS_SET_SCALE__) app.__NETWORKS_SET_SCALE__(NETWORK_ZOOM_PRESETS[0].scale);
+    else app.__NETWORKS_PENDING_SCALE__ = NETWORK_ZOOM_PRESETS[0].scale;
   }
-  if (mode === "3d") {
-    return <NetworksGraph3DLazy {...props} onFallback2D={fallback2D} />;
-  }
-  return <NetworksGraph2D {...props} />;
+
+  return (
+    <div ref={networkRootRef} data-networks-view={mode}>
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-2 px-3 py-2 sm:px-6 lg:flex-row lg:items-center lg:justify-between" data-networks-controls="">
+        <div className="min-w-0 overflow-x-auto pb-0.5" role="group" aria-label="Network detail level">
+          <div className="flex w-max items-center gap-1 rounded-lg border border-[color:var(--line)] bg-white p-1">
+            {NETWORK_ZOOM_PRESETS.map((preset, index) => (
+              <button key={preset.id} type="button" data-networks-zoom-preset={preset.id}
+                aria-pressed={zoomPreset.id === preset.id}
+                title={preset.detail}
+                disabled={mode === "pending"}
+                onClick={() => choosePreset(preset)}
+                className={`min-h-11 shrink-0 rounded-md px-2.5 text-[11px] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] sm:px-3 sm:text-xs ${zoomPreset.id === preset.id ? "bg-[color:var(--cobalt)] text-white" : "text-[color:var(--fg-2)] hover:bg-[#eef1f9]"}`}>
+                <span className="mr-1 font-mono text-[10px] opacity-70">{index + 1}</span>{preset.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center justify-between gap-2 lg:justify-end">
+          <p className="min-w-0 truncate text-[11px] text-[color:var(--fg-2)]" data-networks-zoom-caption="">{zoomPreset.detail}</p>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <div className="inline-flex overflow-hidden rounded-md border border-[color:var(--line)] bg-white" role="group" aria-label="Network projection">
+              <button type="button" aria-pressed={mode === "2d"} disabled={mode === "pending"}
+                onClick={() => setMode("2d")}
+                className={`min-h-11 px-2.5 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] ${mode === "2d" ? "bg-[color:var(--cobalt)] text-white" : "hover:bg-[#eef1f9]"}`}>2D</button>
+              <button type="button" aria-pressed={mode === "3d"} disabled={mode === "pending" || !supports3D}
+                onClick={() => setMode("3d")}
+                title={supports3D ? "Interactive 3D orbit view" : "Requires WebGL and standard-motion settings"}
+                className={`min-h-11 border-l border-[color:var(--line)] px-2.5 text-xs disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] ${mode === "3d" ? "bg-[color:var(--cobalt)] text-white" : "hover:bg-[#eef1f9]"}`}>3D</button>
+            </div>
+            <button type="button" onClick={resetView} disabled={mode === "pending"}
+              aria-label="Reset network to wide overview"
+              className="min-h-11 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-medium text-[color:var(--cobalt)] hover:bg-[#eef1f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+      {mode === "pending" ? (
+        <p role="status" className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>
+      ) : mode === "3d" ? (
+        <NetworksGraph3DLazy {...props} onFallback2D={fallback2D} />
+      ) : (
+        <NetworksGraph2D {...props} />
+      )}
+    </div>
+  );
 }

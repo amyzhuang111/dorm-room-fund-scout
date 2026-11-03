@@ -1,0 +1,48 @@
+name: Refine networks explorer on latest GitHub corpus
+on:
+  push:
+    branches:
+      - codex/refine-network-map-explorer-2026-11-03
+    paths:
+      - ".github/workflows/refine-networks-explorer.yml"
+      - "components/networks-*"
+      - "lib/domain/founder-networks.ts"
+      - "lib/domain/network-zoom-presets*"
+      - "scripts/audit/check-network-refinement.ts"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Verify five wide-to-close network camera stops
+        run: ./node_modules/.bin/tsx lib/domain/network-zoom-presets.test.ts
+      - name: Verify latest sourced founder and accelerator connections
+        run: ./node_modules/.bin/tsx scripts/audit/check-network-refinement.ts
+      - name: Regenerate all network graph and scene payloads from latest database
+        run: npm run precompute:networks
+      - name: Check graph nodes, edges, year scrubbing, and investor/founder payloads
+        run: |
+          node --input-type=module -e '
+            import assert from "node:assert/strict";
+            import fs from "node:fs";
+            const prefix="public/data/founder-networks-";
+            const read=n=>JSON.parse(fs.readFileSync(prefix+n+".json","utf8"));
+            const graph=read("graph"), page=read("page"), poster=read("poster");
+            assert.ok(graph.nodes.length>100 && graph.edges.length>100);
+            assert.equal(page.topNetworks.length,page.totals.networks);
+            assert.ok(poster.foIds.length>100);
+            assert.ok(poster.year);
+            console.log("Verified network scene", {networks:page.totals.networks,nodes:graph.nodes.length,edges:graph.edges.length,founders:poster.foIds.length});
+          '
+      - run: npm run test:directory
+      - name: Typecheck updated responsive network explorer
+        run: ./node_modules/.bin/tsc --noEmit
