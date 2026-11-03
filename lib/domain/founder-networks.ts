@@ -896,6 +896,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
       founderLinks: links.length,
       companyTotal: companiesLinked,
       companiesLinked,
+      corpusCompanies: meta.corpusCompanies,
       foundersLinked,
       byKind,
       bySourceKey: Object.fromEntries([...bySourceKey.entries()].sort((a, b) => b[1] - a[1])),
@@ -923,7 +924,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
     topFundNote:
       "Top fund means a curated list of major funds and crowded pathways (Y Combinator, a16z Speedrun, Andreessen Horowitz, Sequoia Capital, General Catalyst, Founders Fund, CRV, Accel, Benchmark, First Round Capital, and peers). A company counts as backed when that label appears in company investor facts or as a linked network. Everything else, including missing investor rows, is labeled unknown or not yet backed.",
     howItWorks: [
-      `Counts cover the verified investable corpus of ${meta.corpusCompanies.toLocaleString("en-US")} companies for investor deal flow.`,
+      `${companiesLinked.toLocaleString("en-US")} of ${meta.corpusCompanies.toLocaleString("en-US")} companies in the verified investable corpus have mapped networks.`,
       "A founder link is directed: a stored accelerator, program, lab, or investor membership points at a founder of an investable company.",
       "The 2023+ rule keeps current students and alumni who graduated in 2023 or later. Older alumni are excluded from this desk.",
       "A founder can contribute to more than one network when their record shows more than one qualifying membership.",

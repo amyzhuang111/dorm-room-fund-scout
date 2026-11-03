@@ -110,13 +110,16 @@ export function NetworksApp() {
           </div>
           <h1 className="text-xl font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
           <p className="max-w-3xl text-[13px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal">
-            A map of the programs and funds that already reach student founders across{" "}
-            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> companies. Open a hub to see who is on that path.
+            A map of the programs and funds that already reach student founders.{" "}
+            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
+            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies
+            have mapped networks. Open a hub to see who is on that path.
           </p>
           <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
             <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> founder links ·{" "}
             <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
-            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> companies ·{" "}
+            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
+            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies ·{" "}
             <span data-networks-count="founders">{data.totals.foundersLinked.toLocaleString("en-US")}</span> founders
           </p>
         </div>

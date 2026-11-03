@@ -153,6 +153,8 @@ export interface FounderNetworksPage {
     /** Shared company total for hero + stats strip (same value as companiesLinked). */
     companyTotal: number;
     companiesLinked: number;
+    /** Full investable corpus size; companyTotal is a share of this. */
+    corpusCompanies: number;
     foundersLinked: number;
     byKind: Record<NetworkKind, number>;
     bySourceKey: Record<string, number>;
