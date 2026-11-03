@@ -1,4 +1,4 @@
-# One-time, reviewable sourcing import on the dedicated PR branch.
+# Reconciled with main at 6f5a35c: import must reapply onto the latest DB.\n# One-time, reviewable sourcing import on the dedicated PR branch.
 # Runs automatically when this workflow is committed; commits the resulting
 # canonical SQLite DB onto the PR branch, not directly onto main.
 name: Import verified 2026 campus startup cohorts

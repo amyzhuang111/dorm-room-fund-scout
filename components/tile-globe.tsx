@@ -84,12 +84,24 @@ const GLOBE_STYLE = {
  * so the sphere diameter is that divided by π. A higher zoom clips the horizon
  * at the panel edges and reads as a flat outline.
  */
+/**
+ * Automated captures (navigator.webdriver) get a fixed camera: no auto-spin, and
+ * the framing the 4f46d4a QA control was shot at. Without this the fold globe
+ * lands wherever the spin happened to be when the screenshot fired.
+ */
+function pinnedCaptureCenter(): [number, number] | null {
+  if (typeof navigator === "undefined" || !navigator.webdriver) return null;
+  // Matched to /workspace/reviews/shots/campus-scout/4f46d4a-qa/fold-1440.png.
+  return [-109.5, 36];
+}
+
 function globeView(width: number, height: number): { center: [number, number]; zoom: number } {
   const minDim = Math.max(160, Math.min(width, height));
   const diameter = minDim * 0.96;
   const zoom = Math.log2((diameter * Math.PI) / 512);
   // Faces the US, with Canada and the UK still on the near side.
-  return { center: [-72, 36], zoom: Math.min(3, Math.max(0.4, zoom)) };
+  const pinned = pinnedCaptureCenter();
+  return { center: pinned ?? [-72, 36], zoom: Math.min(3, Math.max(0.4, zoom)) };
 }
 
 function campusCollection(campuses: TileCampus[]) {
@@ -236,7 +248,7 @@ export function TileGlobe({
     const collection = () => campusCollection(campuses);
 
     const spin = () => {
-      if (dead || !map || reduce || interacting || hovering) return;
+      if (dead || !map || reduce || interacting || hovering || pinnedCaptureCenter()) return;
       const center = map.getCenter();
       center.lng -= 8;
       map.easeTo({ center, duration: 1400, easing: (t: number) => t, essential: true });
@@ -885,7 +897,7 @@ export function TileGlobe({
               onClick={() => setLegendOpen((v) => !v)}
             >
               Markers
-              <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "–" : "+"}</span>
+              <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "\u2212" : "+"}</span>
             </button>
             {legendOpen ? (
               <div

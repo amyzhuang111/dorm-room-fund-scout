@@ -786,7 +786,7 @@ export interface ProjectDetail extends CandidateSummary {
 
 /**
  * Dossier pages must resolve any real company id founders deep-link to —
- * including non-investable companies that sit outside the 1,173 Scout desk.
+ * including non-investable companies that sit outside the investable Scout desk.
  * Investable candidates reuse the Scout summary; others get a thin DB stub.
  */
 function candidateSummaryForDossier(id: string): CandidateSummary | null {

@@ -1,0 +1,205 @@
+{
+  "ok": true,
+  "retrievedAt": "2026-11-03T04:53:34.141Z",
+  "companiesAfter": 5665,
+  "investableAfterImport": 1225,
+  "excludedOlderAlumniCompanies": 235,
+  "excluded2021_2022VerifiedAlumniPeople": 75,
+  "perSource": [
+    {
+      "source": "Princeton Student Ventures portfolio",
+      "sourceId": "src_princeton_psv",
+      "listUrl": "https://www.psv.vc/portfolio",
+      "ok": true,
+      "rowsFound": 33,
+      "imported": 28,
+      "merged": 5,
+      "foundersCreated": 61,
+      "foundersLinked": 67,
+      "excludedFaculty": 0,
+      "excludedPre2023FoundersCounted": 0
+    },
+    {
+      "source": "Boston College Accelerate@Shea 2026",
+      "sourceId": "src_bc_accelerate_shea_2026",
+      "listUrl": "https://www.startatshea.com/accelerate-shea",
+      "ok": true,
+      "rowsFound": 12,
+      "imported": 11,
+      "merged": 1,
+      "foundersCreated": 19,
+      "foundersLinked": 19,
+      "excludedFaculty": 0,
+      "excludedPre2023FoundersCounted": 0
+    },
+    {
+      "source": "NYU Summer Launchpad 2026 cohort",
+      "sourceId": "src_nyu_summer_launchpad_2026",
+      "listUrl": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+      "ok": true,
+      "rowsFound": 10,
+      "imported": 0,
+      "merged": 10,
+      "foundersCreated": 0,
+      "foundersLinked": 25,
+      "excludedFaculty": 0,
+      "excludedPre2023FoundersCounted": 1
+    },
+    {
+      "source": "UQ Ventures ilab Pitch Night Chapter 2 2026",
+      "sourceId": "src_uq_ilab_chapter2_2026",
+      "listUrl": "https://ventures.uq.edu.au/pitch-night",
+      "ok": true,
+      "rowsFound": 10,
+      "imported": 10,
+      "merged": 0,
+      "foundersCreated": 16,
+      "foundersLinked": 16,
+      "excludedFaculty": 0,
+      "excludedPre2023FoundersCounted": 0
+    },
+    {
+      "source": "UH Calvin Shindo Student Venture Fund portfolio",
+      "sourceId": "src_hawaii_shindo_svf",
+      "listUrl": "https://pace.shidler.hawaii.edu/venture-fund/",
+      "ok": true,
+      "rowsFound": 2,
+      "imported": 2,
+      "merged": 0,
+      "foundersCreated": 3,
+      "foundersLinked": 3,
+      "excludedFaculty": 1,
+      "excludedPre2023FoundersCounted": 0
+    },
+    {
+      "source": "Ole Miss Rebel Student Venture Fund portfolio",
+      "sourceId": "src_olemiss_rebel_svf",
+      "listUrl": "https://olemisscie.com/programs/rebel-venture-capital-fund/",
+      "ok": true,
+      "rowsFound": 30,
+      "imported": 30,
+      "merged": 0,
+      "foundersCreated": 0,
+      "foundersLinked": 0,
+      "excludedFaculty": 0,
+      "excludedPre2023FoundersCounted": 0
+    }
+  ],
+  "alreadyImported": [
+    {
+      "source": "Georgia KickStart Fund",
+      "sourceId": "src_uga_georgia_kickstart",
+      "note": "already in corpus from morning weekly import"
+    },
+    {
+      "source": "Illinois iVenture",
+      "sourceId": "src_uiuc_iventure",
+      "note": "already in corpus from morning weekly import"
+    },
+    {
+      "source": "USF SII",
+      "sourceId": "src_usf_sii",
+      "note": "already in corpus from morning weekly import"
+    },
+    {
+      "source": "UConn Hillside Ventures",
+      "sourceId": "src_uconn_hillside",
+      "note": "already in corpus from morning weekly import"
+    },
+    {
+      "source": "RIT Venture Fund",
+      "sourceId": "src_rit_venture_fund",
+      "note": "already in corpus from morning weekly import"
+    },
+    {
+      "source": "CU Boulder Deming",
+      "sourceId": "src_cu_deming",
+      "note": "already in corpus from morning weekly import"
+    },
+    {
+      "source": "Duke BRiDGE",
+      "sourceId": "src_duke_bridge",
+      "note": "already in corpus from morning weekly import"
+    },
+    {
+      "source": "Duke Startup Showcase 2025",
+      "sourceId": "src_duke_showcase_2025",
+      "note": "already in corpus from morning weekly import"
+    }
+  ],
+  "skipped": [
+    {
+      "source": "Columbia entrepreneurship directory",
+      "reason": "Crunchbase-powered; reuse unresolved — stay excluded",
+      "url": "https://startups.columbia.edu/founders"
+    },
+    {
+      "source": "CampusHunt",
+      "reason": "Unverified / provisional; not a real startup portfolio",
+      "url": "https://campushunt.co/"
+    },
+    {
+      "source": "UCSD Startup Database",
+      "reason": "Airtable embed; row payload not in public HTML",
+      "url": "https://innovation.ucsd.edu/startup/startup-database.html"
+    },
+    {
+      "source": "BuildList /map",
+      "reason": "No campus/student/grad-year fields to apply Amy's filter",
+      "url": "https://buildlist.xyz/map"
+    },
+    {
+      "source": "BuildList /companies",
+      "reason": "No campus/student/grad-year fields to apply Amy's filter",
+      "url": "https://buildlist.xyz/companies"
+    },
+    {
+      "source": "Nebraska Husker Venture Fund",
+      "reason": "Student-run fund portfolio; founders' UNL affiliation generally not stated on page (cannot claim university without evidence)",
+      "url": "https://business.unl.edu/student-resources/center-entrepreneurship/student-involvement/husker-venture-fund/investment-portfolio/"
+    },
+    {
+      "source": "Waterloo Student Venture Fund investments",
+      "reason": "Investment years only; no founder names or campus/grad-year evidence (Velocity remains Waterloo source)",
+      "url": "https://uwaterloo.ca/school-of-accounting-and-finance/students/student-opportunities/student-venture-fund/svf-investments"
+    }
+  ],
+  "liveChecks": [
+    {
+      "url": "https://www.psv.vc/portfolio",
+      "status": 200
+    },
+    {
+      "url": "https://www.startatshea.com/accelerate-shea",
+      "status": 200
+    },
+    {
+      "url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+      "status": 200
+    },
+    {
+      "url": "https://ventures.uq.edu.au/pitch-night",
+      "status": 200
+    },
+    {
+      "url": "https://pace.shidler.hawaii.edu/venture-fund/",
+      "status": 200
+    },
+    {
+      "url": "https://olemisscie.com/programs/rebel-venture-capital-fund/",
+      "status": 200
+    }
+  ],
+  "totals": {
+    "rowsFound": 97,
+    "imported": 81,
+    "merged": 16,
+    "foundersCreated": 99,
+    "foundersLinked": 130
+  },
+  "notes": {
+    "cutoff": "2023-or-later (Amy confirmed 2026-11-02); no held 2021-2022 list",
+    "hawaii": "Hohonu faculty-only → not a student startup; Reeler alumni without stated grad year → unverified recency",
+    "huskerWaterloo": "skipped — insufficient founder campus/grad evidence"
+  }
+}

@@ -75,3 +75,9 @@ committing and redeploying the updated DB.
 - NYU featured startups: https://entrepreneur.nyu.edu/featured-nyu-startups/
 - Waterloo: https://www.waterloostartups.com/
 - Berkeley Startup Cluster: https://berkeleystartupcluster.com/startups/
+
+## November 3 reconciliation (post-import)
+
+Seven current public cohorts/competitions were processed: Cornell (33), Northwestern VentureCat (25), CMU VentureBridge (13), NYU Entrepreneurs Challenge (27), Georgia Tech CREATE-X and UChicago NVC (12), Rice RBPC (42), and Harvard PIC (25), totaling **177 roster company records**. The initial deduplicated run against the then-current DB found **109 new companies** and **261 new people**; counts may be lower after incorporating another concurrent main-branch campus import. Rice's primary-source PDF yielded **106 named team contacts**, not 106 confirmed founders. The workflow replays these sources over the newest main DB so concurrent campus work is preserved.
+
+The company/founder links are evidence-grounded; current-student status is not inferred from alumnus, faculty, or Rice competition attendance. Only a source explicitly naming a founder is labeled a founder; other competition participants are stored as team members.

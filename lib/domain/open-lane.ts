@@ -28,7 +28,7 @@ export function founderIsStrong(founder: FounderLead): boolean {
   return founder.signalTypes.some((type) => STRONG.has(type));
 }
 
-/** Linked company id is one of the investable Scout desk companies (the shared 1,173). */
+/** Linked company id is one of the investable Scout desk companies (the shared investable desk). */
 export function founderCompanyOnInvestableDesk(
   founder: FounderLead,
   investableCompanyIds: ReadonlySet<string>,

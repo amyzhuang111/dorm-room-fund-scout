@@ -1,3 +1,4 @@
+import { plainTextDeep } from "@/lib/display/plain-text";
 import { permanentRedirect } from "next/navigation";
 import { FounderShortlistApp } from "@/components/founder-shortlist-app";
 import { requireMemberPage } from "@/lib/auth/guard";
@@ -24,7 +25,7 @@ export default async function FounderShortlistPage({ searchParams }: { searchPar
     <FounderShortlistApp
       initial={sp}
       universities={universities}
-      founders={listFoundersForPage()}
+      founders={plainTextDeep(listFoundersForPage())}
       enrollment={enrollment}
       records={review.records}
       likes={review.likes}

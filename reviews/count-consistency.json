@@ -1,12 +1,12 @@
 {
   "base": "http://127.0.0.1:3460",
   "expect": {
-    "investableCompanies": 1173,
-    "foundersListed": 2006,
-    "foundersIndexed": 3107,
-    "campusesOnMap": 75,
-    "campusesTotal": 84,
-    "ycMembership": 318
+    "investableCompanies": 1225,
+    "foundersListed": 2104,
+    "foundersIndexed": 3205,
+    "campusesOnMap": 161,
+    "campusesTotal": 170,
+    "ycMembership": 319
   },
   "inventory": [
     {
@@ -14,32 +14,32 @@
       "url": "http://127.0.0.1:3460/",
       "status": 200,
       "counts": {
-        "founders-listed": "2,006",
-        "founders-indexed": "3,107",
-        "campuses-on-map": "75",
-        "visibleCompanies": "1,173",
-        "visibleCampuses": "75",
-        "topCampusesText": "Desk rank"
+        "founders-listed": "2,104",
+        "founders-indexed": "3,205",
+        "campuses-on-map": "161",
+        "visibleCompanies": "1,225",
+        "visibleCampuses": "161",
+        "topCampusesText": "Campus counts01PnPenn2002NWNorthwestern1303YlYale804BUBoston University705HvHarvard7"
       },
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1173,
+          "value": 1225,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2006,
+          "value": 2104,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3107,
+          "value": 3205,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 75,
+          "value": 161,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 84,
+          "value": 170,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
@@ -51,23 +51,23 @@
       "counts": {},
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1173,
+          "value": 1225,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2006,
+          "value": 2104,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3107,
+          "value": 3205,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 75,
+          "value": 161,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 84,
+          "value": 170,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
@@ -79,23 +79,23 @@
       "counts": {},
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1173,
+          "value": 1225,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2006,
+          "value": 2104,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3107,
+          "value": 3205,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 75,
+          "value": 161,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 84,
+          "value": 170,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
@@ -105,29 +105,29 @@
       "url": "http://127.0.0.1:3460/data",
       "status": 200,
       "counts": {
-        "recency-kept": "1,173",
+        "recency-kept": "1,225",
         "recency-excluded": "235",
-        "recency-unverified": "1,217"
+        "recency-unverified": "4,171"
       },
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1173,
+          "value": 1225,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2006,
+          "value": 2104,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3107,
+          "value": 3205,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 75,
+          "value": 161,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 84,
+          "value": 170,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
@@ -139,23 +139,23 @@
       "counts": {},
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1173,
+          "value": 1225,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2006,
+          "value": 2104,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3107,
+          "value": 3205,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 75,
+          "value": 161,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 84,
+          "value": 170,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
@@ -168,12 +168,12 @@
         "overlayUnit": "founders",
         "railUnit": "founders",
         "overlayStatus": {
-          "active": 1159,
+          "active": 1211,
           "acquired": 7,
           "closed": 7
         },
         "railStatusByLabel": {
-          "active": 1159,
+          "active": 1211,
           "acquired": 7,
           "closed": 7
         },

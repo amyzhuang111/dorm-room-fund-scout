@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-11-02T20:20:29.861Z",
+  "generatedAt": "2026-11-03T04:56:29.212Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1173,
-  "signals": 1090,
+  "investableCompanies": 1225,
+  "signals": 1476,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 5947,
-  "founders": 2802,
-  "campuses": 84,
+  "people": 6043,
+  "founders": 2900,
+  "campuses": 170,
   "withSignal": 649,
   "ycCompanies": 564,
   "peak": {
-    "peakCount": 32,
+    "peakCount": 33,
     "peakId": "2026-04",
     "peakLabel": "Apr 2026",
-    "dated": 67,
-    "sharePct": 48,
-    "inWindow": 64,
+    "dated": 77,
+    "sharePct": 43,
+    "inWindow": 67,
     "earlierValid": 0,
-    "undatedMonth": 3,
-    "quiet": 1006
+    "undatedMonth": 10,
+    "quiet": 1048
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,16 +27,16 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1173,
-  "signalsDated": 279,
+  "directoryCards": 1225,
+  "signalsDated": 665,
   "signalsUndated": 811,
-  "foundersIndexed": 3107,
-  "foundersListed": 2006,
-  "campusesTotal": 84,
-  "campusesOnMap": 75,
-  "campusesWithFounders": 62,
-  "companiesWithSignal": 167,
-  "ycMembership": 318,
+  "foundersIndexed": 3205,
+  "foundersListed": 2104,
+  "campusesTotal": 170,
+  "campusesOnMap": 161,
+  "campusesWithFounders": 63,
+  "companiesWithSignal": 177,
+  "ycMembership": 319,
   "campusFoundersTop": [
     {
       "name": "University of Pennsylvania",
@@ -81,6 +81,13 @@
       "country": "United States"
     },
     {
+      "name": "Princeton University",
+      "short": "Princeton",
+      "founders": 106,
+      "companies": 49,
+      "country": "United States"
+    },
+    {
       "name": "Carnegie Mellon University",
       "short": "CMU",
       "founders": 101,
@@ -100,16 +107,9 @@
       "founders": 81,
       "companies": 44,
       "country": "Canada"
-    },
-    {
-      "name": "Georgia Institute of Technology",
-      "short": "Georgia Tech",
-      "founders": 77,
-      "companies": 52,
-      "country": "United States"
     }
   ],
-  "companiesTotal": 2658,
+  "companiesTotal": 5665,
   "excludedOlderAlumni": 235,
-  "unverifiedRecency": 1217
+  "unverifiedRecency": 4171
 }

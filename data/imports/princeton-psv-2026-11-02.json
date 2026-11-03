@@ -1,0 +1,966 @@
+[
+  {
+    "name": "Flyway Health",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "AI agents for finding strategic insights in life sciences data for pharma and MedTech.",
+    "founders": [
+      {
+        "name": "Andre Biehl",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Taylan Aydin",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Era",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "The intelligence layer for AI-powered hardware devices.",
+    "founders": [
+      {
+        "name": "Liz Dorman",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Haladir",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Operational Superintelligence.",
+    "founders": [
+      {
+        "name": "Joseph Tso",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Copperlane",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "AI-native platform for mortgage origination.",
+    "founders": [
+      {
+        "name": "Athan Zhang",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Polygone Systems",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Scalable solutions to combat microplastic pollution.",
+    "founders": [
+      {
+        "name": "Nathaniel Banks",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Yidian Liu",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "NewCo",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Infrastructure to support the next generation of U.S. companies.",
+    "founders": [
+      {
+        "name": "Kelvin Yu",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Paragon",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Patent drafting co-intelligence tool. Acquired.",
+    "founders": [
+      {
+        "name": "AR Bhatti",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Shlok Patel",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Rose Weathers",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Adora",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Personalized, AR-powered campus tours. Acquired.",
+    "founders": [
+      {
+        "name": "Ron Miasnik",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Raya Ward",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Joseph Rubin",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Gamut Ink",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Writing tool that lets users adjust verbosity, style, and vocabulary with sliders. Acquired.",
+    "founders": [
+      {
+        "name": "Huxley Marvit",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "BoreDM",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Web platform for geotechnical engineers to upload and analyze soil boring data.",
+    "founders": [
+      {
+        "name": "Louis Aaron",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Rescript",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "AI tool that monitors and summarizes congressional meetings.",
+    "founders": [
+      {
+        "name": "Nikhil Ajjarapu",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Vincent Huang",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Alex Pesendorfer",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Rotostitch",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Reinventing garment construction starting from the stitch.",
+    "founders": [
+      {
+        "name": "Anson Tsang",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Watt-Our",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Virtual power plant services for residential customers.",
+    "founders": [
+      {
+        "name": "Alex Tseng",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Trestle",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Data management system for government contractors.",
+    "founders": [
+      {
+        "name": "Francis Barth",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Lovestruck Games",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Indigenous history RPG",
+    "founders": [
+      {
+        "name": "Ammon Love",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "EVAL",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Esports recruiting platform",
+    "founders": [
+      {
+        "name": "Sekou Roland",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Ryan Divan",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Optimesh",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "AI network planning",
+    "founders": [
+      {
+        "name": "Chandler Stevenson",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Xavier Lee",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Nirvana Carbon Solutions",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Carbon capture via biochar",
+    "founders": [
+      {
+        "name": "Sunrit Panda",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Emma Limor",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Shabba Financial",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Marketmaker on the Dar Stock Exchange in Tanzania",
+    "founders": [
+      {
+        "name": "Bryson Jandwa",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "John Bugeraha",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Overton Bio",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Workflow automation for biopharma",
+    "founders": [
+      {
+        "name": "Mihir Rao",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Keith Matanachai",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "RePaired",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "AI-powered home repairs marketplace",
+    "founders": [
+      {
+        "name": "Nick Aronow",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Chase Magnano",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Precision Metrics",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "RTK GPS device for rowing performance tracking",
+    "founders": [
+      {
+        "name": "Nathan Myers",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Eir",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Wearable tracking athletic performance and menstrual cycles",
+    "founders": [
+      {
+        "name": "Katharine Kalap",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Sterling Hall",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Shelby Fulton",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Nina Weeldreyer",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Composer AI",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "AI music generator using natural language inputs",
+    "founders": [
+      {
+        "name": "Reuel Williams",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Evan Dogariu",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "David Shustin",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Chamber AI",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "One-click AI video editing for gaming creators",
+    "founders": [
+      {
+        "name": "Christine Sun",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Jenny Sun",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Berry",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Browser extension for dietary-aware online grocery shopping",
+    "founders": [
+      {
+        "name": "Anna Prilutsky",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Franchesca Doell",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Foogly",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Bioplastics from food waste using native heme-enzymes",
+    "founders": [
+      {
+        "name": "Kevin Speina",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Junction",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Grading management system for educators",
+    "founders": [
+      {
+        "name": "Cindy Han",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Angelo Ou",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Amanda Vera",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "MoVA",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "AR/VR museum experiences",
+    "founders": [
+      {
+        "name": "Sophie Jiang",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Isla Xi Han",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Priscilla Zhang",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Genyuan Hu",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "ProperFi",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Tokenization platform for short-term rental properties",
+    "founders": [
+      {
+        "name": "Antonio Knez",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Juan Coloma",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Qlassic",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Software toolchain combining quantum and classical computing",
+    "founders": [
+      {
+        "name": "Wei Tang",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Yipeng Huang",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Esin Tureci",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "Treun",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "VR environments for phobia exposure therapy",
+    "founders": [
+      {
+        "name": "Tanujay Saha",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Isla Xi Han",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Gabriel Dolsten",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  },
+  {
+    "name": "VICI",
+    "university": "Princeton University",
+    "campusId": "univ_princeton",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.psv.vc/portfolio",
+    "program": "Princeton Student Ventures",
+    "source": "src_princeton_psv",
+    "description": "Recruiting and mentorship platform for student athletes",
+    "founders": [
+      {
+        "name": "Nicholas Sanker",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Nia Mosby",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Marco Scarano",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      },
+      {
+        "name": "Lance Reaves-Hicks",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.psv.vc/portfolio"
+      }
+    ]
+  }
+]

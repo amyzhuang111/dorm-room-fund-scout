@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Hohonu",
+    "university": "University of Hawaiʻi at Mānoa",
+    "campusId": "univ_hawaii",
+    "affiliation_type": "faculty",
+    "cohort_year": 2022,
+    "enrollment_status": null,
+    "website": "https://www.hohonu.io/",
+    "evidence_url": "https://www.hawaii.edu/news/2022/08/18/venture-fund-first-investments/",
+    "program": "Calvin Shindo Student Venture Fund",
+    "source": "src_hawaii_shindo_svf",
+    "description": "Real-time flood and water-level monitoring; founded by UH Mānoa faculty (Brian Glazer).",
+    "markFacultyOnly": true,
+    "founders": [
+      {
+        "name": "Brian Glazer",
+        "affiliation_type": "faculty",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.hawaii.edu/news/2026/02/24/hohonu-global-water-challenge/"
+      }
+    ]
+  },
+  {
+    "name": "Reeler",
+    "university": "University of Hawaiʻi at Mānoa",
+    "campusId": "univ_hawaii",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://www.hawaii.edu/news/2022/08/18/venture-fund-first-investments/",
+    "program": "Calvin Shindo Student Venture Fund",
+    "source": "src_hawaii_shindo_svf",
+    "description": "Mobile app connecting small-scale fishermen directly to consumers.",
+    "founders": [
+      {
+        "name": "Lauren Pierce",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.hawaii.edu/news/2022/08/18/venture-fund-first-investments/"
+      },
+      {
+        "name": "Spencer VanDerKamp",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.hawaii.edu/news/2022/08/18/venture-fund-first-investments/"
+      }
+    ]
+  }
+]
