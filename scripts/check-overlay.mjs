@@ -1,10 +1,12 @@
 /**
  * Hard gate: floating fold/map overlays must not cover real page text or controls
- * at 1440 and 375 on every primary route.
+ * at 1440 and 375 on every primary route. On /networks, canvas insight callouts
+ * ([data-canvas-callout]) must not cover canvas labels ([data-canvas-label]).
  *
  * Counts:
  *   overlay-on-text     — overlay intersects visible text outside the overlay itself
  *   overlay-on-control  — overlay intersects interactive controls outside itself
+ *   callout-on-label    — canvas callout covers a canvas network label
  *
  * Fold content inside a collapsible panel is allowed; covering stats/search/Map
  * labels or Program filters is not.
@@ -49,7 +51,7 @@ function fail(msg) {
 }
 
 const browser = await chromium.launch({ headless: true });
-const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0 } };
+const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0, calloutOnLabel: 0 } };
 
 for (const vp of VIEWPORTS) {
   const page = await browser.newPage({
@@ -61,6 +63,9 @@ for (const vp of VIEWPORTS) {
     if (route === "/") {
       await page.waitForSelector("[data-directory-ready='1'], [data-fold-peak-figure], [data-founder-search]", { timeout: 60000 }).catch(() => {});
       await page.waitForTimeout(1600);
+    } else if (route === "/networks") {
+      await page.waitForSelector("[data-networks-graph] canvas", { timeout: 60000 }).catch(() => {});
+      await page.waitForTimeout(2200);
     } else {
       await page.waitForTimeout(900);
     }
@@ -183,10 +188,32 @@ for (const vp of VIEWPORTS) {
         });
       };
 
+      // Canvas callouts must not cover canvas labels (networks graph).
+      const callouts = [...document.querySelectorAll("[data-canvas-callout]")].filter(visible).map((el) => ({
+        id: el.getAttribute("data-canvas-callout") || "callout",
+        text: (el.textContent || "").trim().slice(0, 60),
+        rect: rectOf(el),
+      }));
+      const labels = [...document.querySelectorAll("[data-canvas-label]")].filter(visible).map((el) => ({
+        id: el.getAttribute("data-canvas-label") || "label",
+        text: (el.textContent || "").trim().slice(0, 60),
+        rect: rectOf(el),
+      }));
+      const calloutOnLabel = [];
+      for (const callout of callouts) {
+        for (const label of labels) {
+          if (!intersects(callout.rect, label.rect, 2)) continue;
+          const hit = area(callout.rect, label.rect);
+          if (hit < 20) continue;
+          calloutOnLabel.push({ callout: callout.id, label: label.id, text: label.text, hit: Math.round(hit) });
+        }
+      }
+
       return {
         overlayCount: overlays.length,
         onText: dedupe(onText, "text"),
         onControl: dedupe(onControl, "control"),
+        calloutOnLabel: dedupe(calloutOnLabel, "text"),
       };
     }, OVERLAY_SEL);
 
@@ -196,21 +223,24 @@ for (const vp of VIEWPORTS) {
       overlayCount: found.overlayCount,
       overlayOnText: found.onText.length,
       overlayOnControl: found.onControl.length,
+      calloutOnLabel: (found.calloutOnLabel || []).length,
       onText: found.onText.slice(0, 12),
       onControl: found.onControl.slice(0, 12),
+      onCalloutLabel: (found.calloutOnLabel || []).slice(0, 12),
     };
     report.pages.push(entry);
     report.totals.overlayOnText += entry.overlayOnText;
     report.totals.overlayOnControl += entry.overlayOnControl;
+    report.totals.calloutOnLabel = (report.totals.calloutOnLabel || 0) + entry.calloutOnLabel;
 
     const label = `${route}@${vp.name}`;
-    if (entry.overlayOnText || entry.overlayOnControl) {
+    if (entry.overlayOnText || entry.overlayOnControl || entry.calloutOnLabel) {
       report.ok = false;
       fail(
-        `${label}: overlay-on-text=${entry.overlayOnText} overlay-on-control=${entry.overlayOnControl} text=${JSON.stringify(entry.onText).slice(0, 280)} ctrl=${JSON.stringify(entry.onControl).slice(0, 280)}`,
+        `${label}: overlay-on-text=${entry.overlayOnText} overlay-on-control=${entry.overlayOnControl} callout-on-label=${entry.calloutOnLabel} text=${JSON.stringify(entry.onText).slice(0, 200)} callouts=${JSON.stringify(entry.onCalloutLabel).slice(0, 200)}`,
       );
     } else {
-      console.log(`OK ${label} overlays=${entry.overlayCount} overlay-on-text=0 overlay-on-control=0`);
+      console.log(`OK ${label} overlays=${entry.overlayCount} overlay-on-text=0 overlay-on-control=0 callout-on-label=0`);
     }
   }
   await page.close();

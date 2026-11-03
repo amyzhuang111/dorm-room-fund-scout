@@ -1,0 +1,147 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:3471",
+  "collisions": [],
+  "pages": [
+    {
+      "route": "/",
+      "viewport": "375",
+      "nodeCount": 38,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies",
+      "viewport": "375",
+      "nodeCount": 49,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?more=2",
+      "viewport": "375",
+      "nodeCount": 48,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?feed=leaderboard",
+      "viewport": "375",
+      "nodeCount": 42,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/founders",
+      "viewport": "375",
+      "nodeCount": 47,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses",
+      "viewport": "375",
+      "nodeCount": 57,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/data",
+      "viewport": "375",
+      "nodeCount": 69,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/signals",
+      "viewport": "375",
+      "nodeCount": 55,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/networks",
+      "viewport": "375",
+      "nodeCount": 58,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
+      "viewport": "375",
+      "nodeCount": 53,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/",
+      "viewport": "1440",
+      "nodeCount": 90,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies",
+      "viewport": "1440",
+      "nodeCount": 143,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?more=2",
+      "viewport": "1440",
+      "nodeCount": 169,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?feed=leaderboard",
+      "viewport": "1440",
+      "nodeCount": 126,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/founders",
+      "viewport": "1440",
+      "nodeCount": 136,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses",
+      "viewport": "1440",
+      "nodeCount": 125,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/data",
+      "viewport": "1440",
+      "nodeCount": 258,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/signals",
+      "viewport": "1440",
+      "nodeCount": 65,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/networks",
+      "viewport": "1440",
+      "nodeCount": 102,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
+      "viewport": "1440",
+      "nodeCount": 115,
+      "collisions": [],
+      "collisionCount": 0
+    }
+  ]
+}

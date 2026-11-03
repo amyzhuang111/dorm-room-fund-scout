@@ -27,6 +27,7 @@ const ALLOWED = new Set([
   "relationships.program",
   "person_project_roles.shared_founder",
   "person_project_roles.company_founder",
+  "person_project_roles.same_company_cofounder",
 ]);
 
 let bad = 0;
