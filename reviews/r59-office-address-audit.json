@@ -1,11 +1,11 @@
 {
   "checkedAt": "2026-11-03",
-  "companies": 1552,
+  "companies": 1548,
   "cityMapped": 696,
   "sourcedAddressPoints": 29,
   "cityOnly": 667,
-  "cityUnknown": 856,
-  "withoutSourcedAddress": 1523,
+  "cityUnknown": 852,
+  "withoutSourcedAddress": 1519,
   "websiteDiscovery": {
     "attemptedRecords": 1225,
     "no_address_found_on_checked_pages": 497,
@@ -462,12 +462,12 @@
   "reviewStatusCounts": {
     "candidate_needs_verification": 214,
     "held_from_publication": 21,
-    "new_import_not_reviewed": 327,
+    "new_import_not_reviewed": 323,
     "no_address_found_on_checked_pages": 496,
     "published_business_address": 29,
     "source_unavailable": 465
   },
   "productionBase": "3d9153fa4685fff1d19ddec92d56154eb59e6a11",
-  "newImportsNotAddressReviewed": 327,
+  "newImportsNotAddressReviewed": 323,
   "databaseChange": "Four user-approved duplicate merges only; address research did not modify company metadata."
 }

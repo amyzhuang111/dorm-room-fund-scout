@@ -685,9 +685,17 @@ export function TileGlobe({
 
 
 
+  function resetGlobalView() {
+    const width = mapNode.current?.clientWidth || 1200;
+    const height = mapNode.current?.clientHeight || stageHeight;
+    const camera = globeView(width, height);
+    mapRef.current?.flyTo({ ...camera, duration: 550, essential: true });
+  }
+
   function focus(campus: TileCampus) {
     setLocationsMode(false);
-    mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 11, essential: true });
+    // Keep the global context; zoom 11 shows only streets and obscures other campuses.
+    mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
     onSelect(campus.id);
   }
 
@@ -752,9 +760,10 @@ export function TileGlobe({
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
         <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]">Map
           <span className="ml-auto inline-flex border border-[#c3cdee] bg-white" role="group" aria-label="Map locations">
-            <button type="button" aria-pressed={locationsMode} onClick={()=>setLocationsMode(true)} className={`min-h-9 px-3 ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
+            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-9 px-3 ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
+            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-9 px-3 bg-white text-[#2f4fd8]">World view</button>
             <button type="button" aria-pressed={rotationEnabled} title="Rotation pauses while using the map, at city zoom, and for reduced motion" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-9 px-3 bg-white text-[#2f4fd8]">{rotationEnabled ? "Pause rotation" : "Rotate globe"}</button>
-            <button type="button" aria-pressed={!locationsMode} onClick={()=>setLocationsMode(false)} className={`min-h-9 px-3 ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
+            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-9 px-3 ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
           </span>
         </h2>
         <div

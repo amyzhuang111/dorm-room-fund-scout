@@ -6,7 +6,7 @@
   "counts": {
     "candidate_needs_verification": 214,
     "held_from_publication": 21,
-    "new_import_not_reviewed": 327,
+    "new_import_not_reviewed": 323,
     "no_address_found_on_checked_pages": 496,
     "published_business_address": 29,
     "source_unavailable": 465
@@ -9111,15 +9111,6 @@
       "checkedPages": []
     },
     {
-      "projectId": "proj_St9hoeGPhEGo",
-      "company": "MediMint",
-      "status": "new_import_not_reviewed",
-      "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
-      "checkedAt": null,
-      "discoveryStatus": "not_attempted",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_Lh2K0WSKkPX0",
       "company": "MedIQ Health",
       "status": "source_unavailable",
@@ -14241,15 +14232,6 @@
       "checkedPages": []
     },
     {
-      "projectId": "proj_XvJasex7rEyc",
-      "company": "Spectral Autonomy",
-      "status": "new_import_not_reviewed",
-      "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
-      "checkedAt": null,
-      "discoveryStatus": "not_attempted",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_jlRJi2V-uRR_",
       "company": "Spectre Intelligence",
       "status": "no_address_found_on_checked_pages",
@@ -14321,15 +14303,6 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:47.123Z",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
-    },
-    {
-      "projectId": "proj_ODfwwTLKx1OO",
-      "company": "Spine Bionics",
-      "status": "new_import_not_reviewed",
-      "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
-      "checkedAt": null,
-      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -16590,15 +16563,6 @@
       "checkedPages": [
         "https://www.winkosolar.com/"
       ]
-    },
-    {
-      "projectId": "proj_K9ZubuBuvVzx",
-      "company": "Winko",
-      "status": "new_import_not_reviewed",
-      "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
-      "checkedAt": null,
-      "discoveryStatus": "not_attempted",
-      "checkedPages": []
     },
     {
       "projectId": "proj_-3-GGqPqOjXD",
