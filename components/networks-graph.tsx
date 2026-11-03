@@ -12,7 +12,7 @@ import {
 } from "@/components/networks-poster-types";
 import { NetworksTimeline } from "@/components/networks-timeline";
 import dynamic from "next/dynamic";
-import { NETWORK_ZOOM_PRESETS, type NetworkZoomPreset } from "@/lib/domain/network-zoom-presets";
+import { NETWORK_ZOOM_PRESETS, closestNetworkZoomPreset, type NetworkZoomPreset } from "@/lib/domain/network-zoom-presets";
 
 type Deal = {
   founderName: string;
@@ -792,6 +792,10 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         assembleRef.current = 1;
         fadeRef.current = 1;
       }
+      const scaleTag = cam.scale.toFixed(2);
+      if (wrapRef.current?.getAttribute("data-networks-current-scale") !== scaleTag) {
+        wrapRef.current?.setAttribute("data-networks-current-scale", scaleTag);
+      }
       draw();
       rafRef.current = requestAnimationFrame(loop);
     };
@@ -1338,10 +1342,27 @@ export function NetworksGraph(props: Props) {
 
   useEffect(() => {
     if (mode === "pending") return;
-    // New 3D scenes initialize asynchronously. Keep the chosen scale ready
-    // until the freshly mounted renderer exposes its camera controls.
-    (window as typeof window & { __NETWORKS_PENDING_SCALE__?: number }).__NETWORKS_PENDING_SCALE__ = zoomPreset.scale;
-  }, [mode]); // intentionally only on renderer switch; buttons call the live API
+    const app = window as typeof window & {
+      __NETWORKS_PENDING_SCALE__?: number;
+      __NETWORKS_SET_SCALE__?: (scale: number) => void;
+    };
+    // 2D exposes its API on mount; 3D initializes asynchronously from the
+    // current database poster, so leave a pending scale for it to consume.
+    if (app.__NETWORKS_SET_SCALE__) app.__NETWORKS_SET_SCALE__(zoomPreset.scale);
+    else app.__NETWORKS_PENDING_SCALE__ = zoomPreset.scale;
+
+    const graph = document.querySelector<HTMLElement>("[data-networks-graph]");
+    if (!graph) return;
+    const syncManualZoom = () => {
+      const scale = Number(graph.getAttribute("data-networks-current-scale"));
+      if (!Number.isFinite(scale) || scale <= 0) return;
+      const nearest = closestNetworkZoomPreset(scale);
+      setZoomPreset((current) => current.id === nearest.id ? current : nearest);
+    };
+    const observer = new MutationObserver(syncManualZoom);
+    observer.observe(graph, { attributes: true, attributeFilter: ["data-networks-current-scale"] });
+    return () => observer.disconnect();
+  }, [mode]); // Manual scrolling changes labels but never snaps the camera.
 
   const choosePreset = useCallback((preset: NetworkZoomPreset) => {
     setZoomPreset(preset);
