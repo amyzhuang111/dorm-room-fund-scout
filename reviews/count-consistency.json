@@ -19,7 +19,7 @@
         "campuses-on-map": "157",
         "visibleCompanies": "1,172",
         "visibleCampuses": "157",
-        "topCampusesText": "Top campuses2,003 founder names on investable companies · 157 campuses on map"
+        "topCampusesText": "Top campuses2,003 founder names on investable companies \u00b7 157 campuses on map"
       },
       "sourceOfTruth": {
         "investableCompanies": {
@@ -161,5 +161,17 @@
       }
     }
   ],
-  "errors": []
+  "errors": [],
+  "snapshot": {
+    "investableCompanies": 1225,
+    "foundersListed": 2104,
+    "foundersIndexed": 3205,
+    "campusesOnMap": 161,
+    "campusesTotal": 170,
+    "ycMembership": 319,
+    "excludedOlderAlumni": 235,
+    "unverifiedRecency": 4171,
+    "companiesTotal": 5665,
+    "generatedAt": "2026-11-03T04:56:29.212Z"
+  }
 }
