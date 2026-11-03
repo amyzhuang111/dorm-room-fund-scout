@@ -271,6 +271,7 @@ Excluded examples: Molagri (UofT 2020), AICE (MIT 2021), Airgoods (Yale 2022), A
 
 - Kept: 7 · Excluded: 3 · Unverified in batch: 1
 - Totals after: investable 1172, excluded older 235, unverified 4144
+- Totals after sources import 2026-11-02 (class of 2023+ cutoff): investable **1225**, excluded older alumni 235, unverified recency 4171, founders with grad year 2021/2022 excluded from site eligibility: 87 (no held list)
 - Artifact: `/workspace/reviews/recency-batch2-2026-11-02.json`
 
 Kept: Atlas Discovery, Atlia, Avea, Aviern, AxionOrbital, Bluejay, Booko. Excluded: Arva AI (2021), Avelis (2021), Azalea (≤2022). Still unverified: Bernard (no public grad year).
