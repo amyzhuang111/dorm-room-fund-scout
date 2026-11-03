@@ -12,6 +12,7 @@
 // separately surfaced as scores in the UI.
 
 import type { CommunitySignal } from "./community-signal";
+import { EXPANDED_CAMPUS_DIRECTORIES } from "./expanded-campus-directories";
 
 export type Tier = "S+" | "S" | "A" | "B" | "C" | "D";
 export type DimensionLevel = "high" | "medium" | "low";
@@ -1520,6 +1521,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     status: "implemented",
     statusNote: "Rachel Koh (Boston University) and Noah Jacobs (Michigan) from harvardst.co. Lana Yepifanova from the Rice Thresher. Ilya Gulko is not imported.",
   },
+  ...EXPANDED_CAMPUS_DIRECTORIES,
 ];
 
 export function catalogueForCampus(campusId: string): SourceCatalogueEntry[] {
