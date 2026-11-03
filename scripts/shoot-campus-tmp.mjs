@@ -254,7 +254,9 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await waitFoundersReady(page);
-  await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
+  // r53: search lives in expanded sheet; deck + cards are the rest-state surface
+  await page.waitForSelector("[data-founder-deck]", { timeout: 20000 });
+  await page.waitForSelector("[data-founder-card]", { state: "visible", timeout: 20000 });
   await waitGlobeIdle(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "fold-375");
