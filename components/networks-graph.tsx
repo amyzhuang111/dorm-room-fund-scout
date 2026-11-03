@@ -32,7 +32,10 @@ type HoverState = {
   hub?: PosterHub;
 };
 
+export type NetworkMapFocus = { networkId: string; founderId?: string };
+
 type Props = {
+  mapFocus?: NetworkMapFocus | null;
   investorHubs?: { id: string; label: string; founderCount: number; companyCount?: number }[];
   onSelectCompany?: (id: string) => void;
   onSelectNetwork?: (id: string) => void;
@@ -107,7 +110,7 @@ class QuadTree {
   }
 }
 
-export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompany, onSelectNetwork }: Props) {
+export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompany, onSelectNetwork, mapFocus }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [poster, setPoster] = useState<Poster | null>(null);
@@ -183,6 +186,26 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   useEffect(() => { scrubRef.current = scrubYear; }, [scrubYear]);
   useEffect(() => { playRef.current = playing; }, [playing]);
 
+  const [focusedNode, setFocusedNode] = useState(-1);
+  useEffect(() => {
+    if (!poster || !mapFocus) return;
+    const founder = mapFocus.founderId ? poster.foIds.indexOf(mapFocus.founderId) : -1;
+    const hub = poster.hubs.find((entry) => entry.id === mapFocus.networkId);
+    const index = founder >= 0 ? founder : hub?.i ?? -1;
+    if (index < 0) return;
+    const scale = founder >= 0 ? 3.4 : 2;
+    const fit = Math.min(size.w / poster.w, size.h / poster.h);
+    camRef.current = {
+      scale,
+      x: (poster.w / 2 - poster.x[index]) * fit * scale,
+      y: (poster.h / 2 - poster.y[index]) * fit * scale,
+    };
+    velRef.current = { vx: 0, vy: 0, vScale: 0 };
+    setSelectedHub(founder >= 0 ? null : hub?.id ?? null);
+    setFocusedNode(founder);
+    setZoomScale(scale);
+  }, [mapFocus, poster, size.w, size.h]);
+
   const founderCount = poster?.foIds.length ?? 0;
 
   useEffect(() => {
@@ -219,6 +242,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       velRef.current = { vx: 0, vy: 0, vScale: 0 };
       dragRef.current = null;
       setSelectedHub(null);
+      setFocusedNode(-1);
       setZoomScale(NETWORK_ZOOM_PRESETS[0].scale);
       bump((n) => n + 1);
     };
@@ -369,7 +393,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     const sel = selectedRef.current;
     const hv = hoverRef.current;
     const focusHub = sel || (hv?.hub?.id ?? null);
-    const focusNode = hv?.index ?? -1;
+    const focusNode = hv?.index ?? focusedNode;
     const scrub = scrubRef.current;
     const ymax = yearMax;
     const years = p.year;
@@ -742,7 +766,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (pat) { ctx.fillStyle = pat; ctx.fillRect(0, 0, w, h); }
       ctx.globalAlpha = 1;
     }
-  }, [poster, size, yearMax, yearMin, deals, founderCount, campusConnections]);
+  }, [poster, size, yearMax, yearMin, deals, founderCount, campusConnections, focusedNode]);
 
   // Continuous RAF: fade, drift, inertia, pulses. Do not cancel on hover.
   useEffect(() => {
@@ -1319,6 +1343,9 @@ export function NetworksGraph(props: Props) {
   const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[1]);
   const networkRootRef = useRef<HTMLDivElement>(null);
   const fallback2D = useCallback(() => setMode("2d"), []);
+  useEffect(() => {
+    if (props.mapFocus) setMode("2d");
+  }, [props.mapFocus]);
 
   useEffect(() => {
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
@@ -1422,7 +1449,7 @@ export function NetworksGraph(props: Props) {
             <button type="button" onClick={resetView} disabled={mode === "pending"}
               aria-label="Reset network to wide overview"
               className="min-h-11 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-medium text-[color:var(--cobalt)] hover:bg-[#eef1f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]">
-              Reset
+              Back to overview
             </button>
           </div>
         </div>
