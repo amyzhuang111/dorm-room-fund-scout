@@ -1,0 +1,51 @@
+name: Verify r50 /networks merged with latest Campus Scout
+on:
+  push:
+    branches:
+      - codex/merge-r50-networks-preview-2026-11-03
+    paths:
+      - ".github/workflows/verify-network-preview-merge.yml"
+      - "app/networks/**"
+      - "components/networks*"
+      - "lib/domain/founder-networks*"
+      - "scripts/precompute-founder-networks.ts"
+      - "scripts/build-poster-graph.mts"
+      - "package.json"
+      - "package-lock.json"
+      - "components/site-nav.tsx"
+      - "app/globals.css"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  networks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Generate networks from the latest committed SQLite corpus
+        run: npm run precompute:networks
+      - name: Verify graph and desk payloads exist
+        run: |
+          node --input-type=module -e '
+            import fs from "node:fs";
+            import assert from "node:assert/strict";
+            const prefix = "public/data/founder-networks-";
+            const read = name => JSON.parse(fs.readFileSync(prefix+name+".json","utf8"));
+            const graph=read("graph"),page=read("page"),poster=read("poster"),deals=read("deals");
+            assert.ok(graph.nodes.length>0,"graph nodes");
+            assert.ok(graph.edges.length>0,"graph edges");
+            assert.ok(page.topNetworks.length>0,"top networks");
+            assert.ok(page.totals.foundersLinked>0,"founder links");
+            assert.ok(poster,"poster");
+            assert.ok(deals,"deals");
+            console.log("Networks source payload OK", {nodes:graph.nodes.length,edges:graph.edges.length,networks:page.totals.networks,foundersLinked:page.totals.foundersLinked});
+          '
+      - run: npm run test:directory
+      - name: Build complete Campus Scout including /networks
+        run: npm run build
