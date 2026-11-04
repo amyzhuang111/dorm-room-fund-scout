@@ -1,7 +1,8 @@
 /** Facet helpers for the sample instrument. Counts come from stored directory cards only. */
 
-export type RecencyId = "month" | "year" | "older" | "none";
-export type StatusId = "active" | "acquired" | "closed";
+export type RecencyId = "month" | "year" | "older" | "future" | "none";
+export type StatusId = "active" | "acquired" | "closed" | "unknown";
+export type OperatingStatus = "active" | "public" | "acquired" | "dead";
 /** Product flags backed by stored fields only (no meta asset flags like logo). */
 export type FlagId = "new" | "signaled" | "funded" | "founders";
 
@@ -24,7 +25,7 @@ export interface FacetCompany {
   signalLabel?: string | null;
   latestSignalAt?: string | null;
   foundedYear?: number | null;
-  operatingStatus?: "acquired" | "dead" | null;
+  operatingStatus?: OperatingStatus | null;
   hqRegion?: string | null;
   primaryProgram?: string | null;
   programs?: string[] | null;
@@ -36,29 +37,31 @@ export interface FacetCount {
   count: number;
 }
 
-/** Today for sample recency buckets (box clock America/New_York). */
-const TODAY = { y: 2026, m: 10, d: 29 };
+export type CalendarDay = { y: number; m: number; d: number };
+const dayFormatter = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" });
+export function currentCalendarDay(now = new Date()): CalendarDay {
+  const parts = dayFormatter.formatToParts(now);
+  const part = (name: Intl.DateTimeFormatPartTypes) => Number(parts.find((p) => p.type === name)?.value);
+  return { y: part("year"), m: part("month"), d: part("day") };
+}
 
-export function recencyOf(latestSignalAt: string | null | undefined): RecencyId {
-  if (!latestSignalAt || latestSignalAt.length < 4) return "none";
-  const y = Number(latestSignalAt.slice(0, 4));
-  if (!Number.isFinite(y)) return "none";
-  const rawM = latestSignalAt.length >= 7 ? latestSignalAt.slice(5, 7) : "00";
-  const m = rawM === "00" ? 0 : Number(rawM);
-  if (y > TODAY.y) return "month";
-  if (y === TODAY.y) {
-    if (!m || m === TODAY.m) return "month";
-    if (m === TODAY.m - 1 || (TODAY.m === 1 && m === 12 && y === TODAY.y)) return "month";
-    return "year";
-  }
-  if (y === TODAY.y - 1 && TODAY.m === 1 && m === 12) return "month";
-  return "older";
+export function recencyOf(latestSignalAt: string | null | undefined, today = currentCalendarDay()): RecencyId {
+  const match = /^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$/.exec(latestSignalAt ?? "");
+  if (!match) return "none";
+  const y = Number(match[1]), m = Number(match[2] ?? 0), d = Number(match[3] ?? 0);
+  if (m > 12 || (m === 0 && d !== 0)) return "none";
+  const days = daysSinceSignal(latestSignalAt, today);
+  if (d && days === null) return "none";
+  if (y > today.y || (y === today.y && m > today.m) || (days !== null && days < 0)) return "future";
+  if (days !== null && days <= 30) return "month";
+  return y === today.y ? "year" : "older";
 }
 
 export const RECENCY_LABEL: Record<RecencyId, string> = {
   month: "Past month",
   year: "This year",
   older: "Older",
+  future: "Future dated",
   none: "No date",
 };
 
@@ -66,11 +69,12 @@ export const STATUS_LABEL: Record<StatusId, string> = {
   active: "Active",
   acquired: "Acquired",
   closed: "Closed",
+  unknown: "Not on record",
 };
 
 export const FLAG_LABEL: Record<FlagId, string> = {
-  new: "Founded in 2026",
-  signaled: "Active this month",
+  new: "Founded this year",
+  signaled: "Signal in past 30 days",
   funded: "Raised funding",
   founders: "Has named founders",
 };
@@ -79,35 +83,46 @@ export const FLAG_LABEL: Record<FlagId, string> = {
 export function statusOf(company: FacetCompany): StatusId {
   if (company.operatingStatus === "dead") return "closed";
   if (company.operatingStatus === "acquired") return "acquired";
-  return "active";
+  if (company.operatingStatus === "active" || company.operatingStatus === "public") return "active";
+  return "unknown";
+}
+
+export function recordedOperatingStatus(value: string | null | undefined): OperatingStatus | null {
+  const raw = value?.trim().toLowerCase();
+  if (raw === "active" || raw === "public" || raw === "acquired" || raw === "dead") return raw;
+  if (raw === "closed" || raw === "inactive" || raw === "shut down" || raw === "shutdown") return "dead";
+  return null;
 }
 
 /** Calendar day distance from TODAY (box clock). Full YYYY-MM-DD only; partial dates do not count. */
-export function daysSinceSignal(latestSignalAt: string | null | undefined, today = TODAY): number | null {
-  if (!latestSignalAt || latestSignalAt.length < 10) return null;
+export function daysSinceSignal(latestSignalAt: string | null | undefined, today = currentCalendarDay()): number | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(latestSignalAt ?? "")) return null;
+  if (!latestSignalAt) return null;
   const y = Number(latestSignalAt.slice(0, 4));
   const m = Number(latestSignalAt.slice(5, 7));
   const d = Number(latestSignalAt.slice(8, 10));
-  if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d) || m < 1 || d < 1) return null;
+  if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d) || m < 1 || m > 12 || d < 1) return null;
   const then = Date.UTC(y, m - 1, d);
+  const date = new Date(then);
+  if (date.getUTCFullYear() !== y || date.getUTCMonth() !== m - 1 || date.getUTCDate() !== d) return null;
   const now = Date.UTC(today.y, today.m - 1, today.d);
   return Math.floor((now - then) / 86400000);
 }
 
 /** Last full-date signal within the last 30 days (inclusive of today). */
-export function activeThisMonth(latestSignalAt: string | null | undefined, today = TODAY): boolean {
+export function activeThisMonth(latestSignalAt: string | null | undefined, today = currentCalendarDay()): boolean {
   const days = daysSinceSignal(latestSignalAt, today);
   return days != null && days >= 0 && days <= 30;
 }
 
 /** Founded in the current calendar year (not "last two years"). */
-export function newThisYear(foundedYear: number | null | undefined, today = TODAY): boolean {
+export function newThisYear(foundedYear: number | null | undefined, today = currentCalendarDay()): boolean {
   return foundedYear === today.y;
 }
 
-export function hasFlag(company: FacetCompany, flag: FlagId): boolean {
-  if (flag === "new") return newThisYear(company.foundedYear);
-  if (flag === "signaled") return activeThisMonth(company.latestSignalAt);
+export function hasFlag(company: FacetCompany, flag: FlagId, today = currentCalendarDay()): boolean {
+  if (flag === "new") return newThisYear(company.foundedYear, today);
+  if (flag === "signaled") return activeThisMonth(company.latestSignalAt, today);
   if (flag === "funded") return company.signalKind === "funding" || Boolean(company.stage);
   if (flag === "founders") return (company.founders?.length ?? 0) > 0;
   return false;
@@ -267,9 +282,11 @@ export function filterFacetCompanies(
     flag?: FlagId | null;
     hqRegion?: string | null;
     query?: string;
+    today?: CalendarDay;
   },
 ): FacetCompany[] {
   const tokens = (opts.query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const today = opts.today ?? currentCalendarDay();
   return companies.filter((company) => {
     if (opts.sectorMissing) {
       if (company.sectorId) return false;
@@ -279,14 +296,14 @@ export function filterFacetCompanies(
     if (opts.kind && company.signalKind !== opts.kind) return false;
     if (opts.stage && company.stage !== opts.stage) return false;
     if (opts.campus && company.schoolId !== opts.campus) return false;
-    if (opts.recency && recencyOf(company.latestSignalAt) !== opts.recency) return false;
+    if (opts.recency && recencyOf(company.latestSignalAt, today) !== opts.recency) return false;
     if (opts.yearMissing) {
       if (company.foundedYear != null) return false;
     } else if (opts.foundedYear != null && company.foundedYear !== opts.foundedYear) {
       return false;
     }
     if (opts.status && statusOf(company) !== opts.status) return false;
-    if (opts.flag && !hasFlag(company, opts.flag)) return false;
+    if (opts.flag && !hasFlag(company, opts.flag, today)) return false;
     if (opts.hqRegion === NOT_ON_RECORD) {
       if (company.hqRegion) return false;
     } else if (opts.hqRegion && company.hqRegion !== opts.hqRegion) {

@@ -16,16 +16,16 @@ const companies: FacetCompany[] = [
 ];
 
 // An acquisition signal is not an acquired company. Status follows operatingStatus.
-assert.equal(statusOf(companies[1]!), "active");
+assert.equal(statusOf(companies[1]!), "unknown");
 const status = overlayStatusRows(companies);
 const byId = Object.fromEntries(status.map((r) => [r.id, r.count]));
-assert.equal(byId.active, 3); // A + B (signal only) + E
+assert.equal(byId.unknown, 3); // A + B (signal only) + E
 assert.equal(byId.acquired, 1); // C
 assert.equal(byId.closed, 1);
 
 const rawActive = companies.filter((c) => c.operatingStatus !== "acquired" && c.operatingStatus !== "dead").length;
 assert.equal(rawActive, 3);
-assert.equal(byId.active, rawActive);
+assert.equal(byId.unknown, rawActive);
 
 const campuses = [
   { id: "univ_penn", name: "University of Pennsylvania", shortLabel: "Penn", founders: 758 },

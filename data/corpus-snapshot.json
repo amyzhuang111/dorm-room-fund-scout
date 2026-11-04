@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-03T09:25:09.574Z",
+  "generatedAt": "2026-11-04T07:16:59.780Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1633,
+  "investableCompanies": 2364,
   "signals": 1476,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 6336,
+  "people": 7353,
   "founders": 3196,
   "campuses": 170,
   "withSignal": 649,
@@ -27,13 +27,13 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1633,
+  "directoryCards": 2364,
   "signalsDated": 665,
   "signalsUndated": 811,
-  "foundersIndexed": 3501,
-  "foundersListed": 2414,
-  "campusesTotal": 170,
-  "campusesOnMap": 166,
+  "foundersIndexed": 3726,
+  "foundersListed": 2891,
+  "campusesTotal": 201,
+  "campusesOnMap": 197,
   "campusesWithFounders": 86,
   "companiesWithSignal": 200,
   "ycMembership": 323,
@@ -109,7 +109,9 @@
       "country": "United States"
     }
   ],
-  "companiesTotal": 6039,
+  "companiesTotal": 6375,
   "excludedOlderAlumni": 234,
-  "unverifiedRecency": 4139
+  "unverifiedRecency": 3765,
+  "peopleTotal": 7353,
+  "projectsTotal": 7145
 }

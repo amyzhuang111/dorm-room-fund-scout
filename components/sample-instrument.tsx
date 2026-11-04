@@ -475,6 +475,7 @@ const STATUS_DOT: Record<StatusId, string> = {
   active: "#22c55e",
   acquired: "#a855f7",
   closed: "#ef4444",
+  unknown: "#737c91",
 };
 
 const FLAG_ICON: Record<FlagId, string> = {

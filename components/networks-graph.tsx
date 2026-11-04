@@ -128,6 +128,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const playRef = useRef(false);
   const playAccRef = useRef(0);
   const camRef = useRef<{ x: number; y: number; scale: number }>({ x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale });
+  const [camera, setCamera] = useState<{ x: number; y: number; scale: number }>({ x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale });
+  const cameraPaintAt = useRef(0);
   const dragRef = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null);
   const hoverRef = useRef<HoverState | null>(null);
   const selectedRef = useRef<string | null>(null);
@@ -201,9 +203,12 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       y: (poster.h / 2 - poster.y[index]) * fit * scale,
     };
     velRef.current = { vx: 0, vy: 0, vScale: 0 };
-    setSelectedHub(founder >= 0 ? null : hub?.id ?? null);
-    setFocusedNode(founder);
-    setZoomScale(scale);
+    const frame = requestAnimationFrame(() => {
+      setSelectedHub(founder >= 0 ? null : hub?.id ?? null);
+      setFocusedNode(founder);
+      setZoomScale(scale);
+    });
+    return () => cancelAnimationFrame(frame);
   }, [mapFocus, poster, size.w, size.h]);
 
   const founderCount = poster?.foIds.length ?? 0;
@@ -256,14 +261,14 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const worldToScreen = useCallback(
     (wx: number, wy: number) => {
       if (!poster) return { x: 0, y: 0, s: 1 };
-      const cam = camRef.current;
+      const cam = camera;
       const fit = Math.min(size.w / poster.w, size.h / poster.h);
       const s = fit * cam.scale;
       const ox = (size.w - poster.w * fit) / 2 + cam.x + (poster.w * (fit - s)) / 2;
       const oy = (size.h - poster.h * fit) / 2 + cam.y + (poster.h * (fit - s)) / 2;
       return { x: wx * s + ox, y: wy * s + oy, s };
     },
-    [poster, size],
+    [poster, size, camera],
   );
 
   const getGlowSprite = (color: string, soft = true) => {
@@ -821,6 +826,12 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         fadeRef.current = 1;
       }
       const scaleTag = cam.scale.toFixed(2);
+      const now = performance.now();
+      if (now - cameraPaintAt.current >= 33) {
+        cameraPaintAt.current = now;
+        const snapshot = { ...cam };
+        setCamera((previous) => Math.abs(previous.x - snapshot.x) > 0.1 || Math.abs(previous.y - snapshot.y) > 0.1 || Math.abs(previous.scale - snapshot.scale) > 0.0001 ? snapshot : previous);
+      }
       if (wrapRef.current?.getAttribute("data-networks-current-scale") !== scaleTag) {
         wrapRef.current?.setAttribute("data-networks-current-scale", scaleTag);
       }
@@ -1120,7 +1131,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         >
           {campusLabelNodes.map((lab) => {
             const pt = worldToScreen(lab.x, lab.y);
-            const hubR = Math.max(36, lab.r * Math.min(size.w / poster.w, size.h / poster.h) * camRef.current.scale);
+            const hubR = Math.max(36, lab.r * Math.min(size.w / poster.w, size.h / poster.h) * camera.scale);
             return (
               <div
                 key={lab.id}
@@ -1340,13 +1351,15 @@ const NetworksGraph3DLazy = dynamic(
 
 /** Screenshot-matched overview / campus / founder details; 2D works without WebGL. */
 export function NetworksGraph(props: Props) {
-  const [mode, setMode] = useState<"pending" | "3d" | "2d">("pending");
+  const [mode, setMode] = useState<"pending" | "3d" | "2d">("2d");
   const [supports3D, setSupports3D] = useState(false);
   const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[1]);
   const networkRootRef = useRef<HTMLDivElement>(null);
   const fallback2D = useCallback(() => setMode("2d"), []);
   useEffect(() => {
-    if (props.mapFocus) setMode("2d");
+    if (!props.mapFocus) return;
+    const frame = requestAnimationFrame(() => setMode("2d"));
+    return () => cancelAnimationFrame(frame);
   }, [props.mapFocus]);
 
   useEffect(() => {
@@ -1358,11 +1371,11 @@ export function NetworksGraph(props: Props) {
     } catch {
       gl = false;
     }
-    setSupports3D(gl && !reduced);
+    const frame = requestAnimationFrame(() => setSupports3D(gl && !reduced));
     // Use a reliably visible, map-like overview everywhere. The old default
     // WebGL scene can show only off-screen marginalia while the nodes vanish;
     // 3D remains an explicit opt-in for people who want to orbit the graph.
-    setMode("2d");
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {

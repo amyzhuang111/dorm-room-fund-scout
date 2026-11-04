@@ -285,25 +285,27 @@ for (const [, cos] of invIndex) {
 const simNodes = nodes.map((n, i) => ({ ...n, index: i }));
 const simEdges = edges.map((e) => ({ source: e.s, target: e.t, k: e.k }));
 
-const sim = forceSimulation(simNodes as any)
+type LayoutNode = typeof simNodes[number];
+type LayoutEdge = { source: number | LayoutNode; target: number | LayoutNode; k: number };
+const sim = forceSimulation<LayoutNode>(simNodes)
   .force("charge", forceManyBody().strength(-28).distanceMax(420))
   .force(
     "link",
-    forceLink(simEdges as any)
-      .id((d: any) => d.index)
-      .distance((l: any) => (l.k === 1 ? 72 : l.k === 2 ? 4.0 : l.k === 3 ? 90 : 11))
-      .strength((l: any) => (l.k === 1 ? 0.007 : l.k === 2 ? 0.3 : l.k === 3 ? 0.003 : 0.06)),
+    forceLink<LayoutNode, LayoutEdge>(simEdges)
+      .id((d) => d.index)
+      .distance((l) => (l.k === 1 ? 72 : l.k === 2 ? 4.0 : l.k === 3 ? 90 : 11))
+      .strength((l) => (l.k === 1 ? 0.007 : l.k === 2 ? 0.3 : l.k === 3 ? 0.003 : 0.06)),
   )
   .force(
     "collide",
-    forceCollide()
-      .radius((d: any) => d.r + 0.7)
+    forceCollide<LayoutNode>()
+      .radius((d) => d.r + 0.7)
       .strength(0.9)
       .iterations(2),
   )
   .force(
     "x",
-    forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength((d: any) => {
+    forceX<LayoutNode>((d) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength((d) => {
       if (d.kind === 2) return 0.006;
       const ci = Math.max(0, d.campus);
       return ci >= 12 ? 0.32 : ci >= 5 ? 0.22 : 0.12;
@@ -311,7 +313,7 @@ const sim = forceSimulation(simNodes as any)
   )
   .force(
     "y",
-    forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength((d: any) => {
+    forceY<LayoutNode>((d) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength((d) => {
       if (d.kind === 2) return 0.006;
       const ci = Math.max(0, d.campus);
       return ci >= 12 ? 0.32 : ci >= 5 ? 0.22 : 0.12;
@@ -591,7 +593,7 @@ for (const e of edges) {
 
 let featuredId: string | null = null;
 let featuredScore = -1;
-const deals: Record<string, any> = {};
+const deals: Record<string, { founderName: string; companyName: string | null; companyId: string | null; stage: string | null; networks: string[]; investors: string[]; hasTopFund: boolean }> = {};
 for (const fid of founderIds) {
   const cos = [...meta.companyFounders.entries()].filter(([, set]) => set.has(fid)).map(([id]) => id);
   const companyId = cos.find((id) => linkedCompanyIds.has(id)) ?? cos[0] ?? null;

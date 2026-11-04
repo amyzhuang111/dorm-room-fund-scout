@@ -6,7 +6,7 @@ export interface RankCard {
   founders: string[];
   programs: string[];
   stage: string | null;
-  operatingStatus: "acquired" | "dead" | null;
+  operatingStatus: "active" | "public" | "acquired" | "dead" | null;
   school: string | null;
   schoolId: string | null;
   /** Optional identity for specific Why-it-here lines (DirectoryCard). */

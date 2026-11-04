@@ -66,7 +66,7 @@ async function readCounts(page) {
 async function main() {
   const errors = [];
   const inventory = [];
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH });
   const page = await browser.newPage();
 
   const routes = [
@@ -244,7 +244,7 @@ async function main() {
   await browser.close();
 
 
-  const outPath = path.join(process.cwd(), "reviews", "count-consistency.json");
+  const outPath = process.env.COUNT_REPORT_PATH || path.join(process.cwd(), "reviews", "count-consistency.json");
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify({ base: BASE, expect: EXPECT, inventory, errors }, null, 2) + "\n");
 

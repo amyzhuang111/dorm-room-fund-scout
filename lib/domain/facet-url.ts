@@ -57,9 +57,9 @@ export type BrowseUrlOpts = {
   basePath?: string;
 };
 
-const STATUS_OK = new Set(["active", "acquired", "closed"]);
+const STATUS_OK = new Set(["active", "acquired", "closed", "unknown"]);
 const FLAG_OK = new Set(["new", "signaled", "funded", "founders"]);
-const RECENCY_OK = new Set(["month", "year", "older", "none"]);
+const RECENCY_OK = new Set(["month", "year", "older", "future", "none"]);
 
 export function facetsFromSearchParams(
   sp: Record<string, string | undefined> | URLSearchParams,

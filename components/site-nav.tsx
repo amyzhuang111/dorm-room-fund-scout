@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { discoveryHref } from "@/lib/domain/discovery-navigation";
 import { useUserPipeline } from "./user-pipeline-provider";
 
 /** One flat nav (Map + desks + Signals + Work). No second Explore umbrella. */
@@ -32,6 +33,14 @@ export function SiteNav() {
   const pipeline = useUserPipeline();
   const local = pipeline.storage === "local";
   const [open, setOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
+  const contextPath = pathname === "/" || pathname === "/companies";
+  const discoveryLink = (id: "map" | "companies" | "signals") => discoveryHref(id, contextPath ? new URLSearchParams(searchParams) : new URLSearchParams());
+  useEffect(() => {
+    if (open) menu.current?.querySelector<HTMLElement>("a")?.focus();
+  }, [open]);
+  function closeMenu() { setOpen(false); menuButton.current?.focus(); }
 
   function openAsk() {
     window.dispatchEvent(new Event("campus-scout-open-ask"));
@@ -51,13 +60,14 @@ export function SiteNav() {
         {onCompaniesDesk ? (
           <nav className="ml-1 flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto md:hidden" aria-label="Views" data-mobile-view-tabs="">
             {([
-              { href: "/companies", label: "Companies", active: pathname.startsWith("/companies") && searchParams.get("feed") !== "leaderboard" },
-              { href: "/companies?feed=leaderboard", label: "Signals", active: pathname.startsWith("/companies") && searchParams.get("feed") === "leaderboard" },
-              { href: "/", label: "Map", active: false },
+              { href: discoveryLink("companies"), label: "Companies", active: pathname.startsWith("/companies") && searchParams.get("feed") !== "leaderboard" },
+              { href: discoveryLink("signals"), label: "By signals", active: pathname.startsWith("/companies") && searchParams.get("feed") === "leaderboard" },
+              { href: discoveryLink("map"), label: "Map", active: false },
             ]).map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
+                aria-current={item.active ? "page" : undefined}
                 className={`inline-flex h-8 shrink-0 items-center rounded-sm px-2 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
                   item.active
                     ? "bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
@@ -71,7 +81,7 @@ export function SiteNav() {
         ) : null}
         <nav className="ml-4 hidden min-w-0 items-center gap-4 overflow-x-auto md:flex" aria-label="Primary">
           {NAV.map((item) => (
-            <Link key={item.id} href={item.href} className={`nav-link ${item.match(pathname) ? "is-active" : ""}`}>
+            <Link key={item.id} href={contextPath && (item.id === "map" || item.id === "companies") ? discoveryLink(item.id) : item.href} aria-current={item.match(pathname) ? "page" : undefined} className={`nav-link ${item.match(pathname) ? "is-active" : ""}`}>
               {item.label}
               {item.id === "work" && local ? (
                 <span
@@ -88,7 +98,7 @@ export function SiteNav() {
           </button>
         </div>
         <div className="ml-auto flex items-center gap-2 md:hidden">
-          <button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[14px] text-fg" aria-controls="mobile-site-menu" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+          <button ref={menuButton} type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[14px] text-fg" aria-controls="mobile-site-menu" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
             Menu
           </button>
         </div>
@@ -110,7 +120,7 @@ export function SiteNav() {
         ))}
       </nav>
       {open ? (
-        <div id="mobile-site-menu" className="max-h-[75dvh] overflow-y-auto space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden" onKeyDown={(event) => { if (event.key === "Escape") setOpen(false); }}>
+        <div ref={menu} id="mobile-site-menu" className="max-h-[75dvh] overflow-y-auto space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden" onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeMenu(); } }}>
           {NAV.map((item) => (
             <Link key={item.id} href={item.href} className="flex min-h-11 items-center text-[14px] text-fg" onClick={() => setOpen(false)}>
               {item.label}
