@@ -1979,7 +1979,7 @@ html:has([data-networks-cream]) [data-site-nav] {
     min-width: 44px !important;
   }
   /* inline anchors ignore min-height unless they participate in flex/block formatting */
-  a[href]:not(.block):not(.flex):not(.inline-flex):not(.grid):not([class*="flex "]):not([class*=" grid"]) {
+  a[href]:not(.block):not(.flex):not(.inline-flex):not(.grid) {
     display: inline-flex !important;
     align-items: center;
   }
