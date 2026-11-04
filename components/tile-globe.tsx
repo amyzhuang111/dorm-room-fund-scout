@@ -149,7 +149,7 @@ export function TileGlobe({
   const [ready, setReady] = useState(false);
   const [painted, setPainted] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [locationsMode, setLocationsMode] = useState(true);
+  const [locationsMode, setLocationsMode] = useState(false);
   const [expandedMap, setExpandedMap] = useState(false);
   const [rotationEnabled, setRotationEnabled] = useState(true);
   useGlobeRotation(activeMap, rotationEnabled && !pinnedCaptureCenter());
@@ -754,7 +754,7 @@ export function TileGlobe({
           </Link>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Choose a city to explore recorded startup HQs." : "Click a campus to see its founders."}</p>
+        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Student founder intelligence, by campus. Click a campus to see its founders."}</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">

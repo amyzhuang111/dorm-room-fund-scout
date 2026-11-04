@@ -9,6 +9,15 @@ import { isBoilerplateDescription } from "@/lib/domain/sectors";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CampusSeal } from "@/components/campus-seal";
 
+function displaySignalDate(value: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (!match) return value;
+  const [, year, month, day] = match;
+  if (month === "00") return year!;
+  if (day === "00") return `${year}-${month}`;
+  return value;
+}
+
 function isEmpty(value: unknown): boolean {
   return value == null || value === "" || (Array.isArray(value) && value.length === 0);
 }
@@ -95,6 +104,8 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   const founded = profile.foundedYear?.text ?? null;
   const signalCount = project.signals.length;
 
+  const ycNamed = profile.investors.some((i) => /y combinator/i.test(i.name)) || /y combinator/i.test(project.latestSignalNote ?? "");
+  const ycBatchMissing = ycNamed && yc.every((i) => !i.batch);
   const missing: string[] = [];
   if (isEmpty(campus)) missing.push("Campus");
   if (isEmpty(sectorText)) missing.push("Sector");
@@ -103,16 +114,15 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   if (isEmpty(profile.hq)) missing.push("HQ");
   if (isEmpty(profile.operatingStatus)) missing.push("Status");
   if (isEmpty(profile.teamSize)) missing.push("Team size");
-  if (isEmpty(profile.description)) missing.push("Description");
-  if (isEmpty(funding)) missing.push("Funding");
-  if (isEmpty(profile.rounds)) missing.push("Funding rounds");
-  if (isEmpty(profile.investors)) missing.push("Investors");
-  if (isEmpty(yc)) missing.push("YC batch");
+  if (isEmpty(profile.description) && isEmpty(project.description)) missing.push("Description");
+  if (isEmpty(funding) && isEmpty(profile.rounds) && isEmpty(profile.investors)) missing.push("Funding");
+  if (isEmpty(profile.rounds) && !isEmpty(funding)) missing.push("Funding rounds");
+  if (isEmpty(profile.investors) && !isEmpty(profile.rounds)) missing.push("Investors");
+  if (ycBatchMissing) missing.push("YC batch");
   if (isEmpty(website)) missing.push("Website");
   if (isEmpty(companyLi)) missing.push("Company LinkedIn");
-  if (isEmpty(otherLinks)) missing.push("Other links");
   if (isEmpty(project.founderLinks)) missing.push("Founders");
-  if (isEmpty(project.signals)) missing.push("Signals");
+  if (isEmpty(project.signals) && isEmpty(project.latestSignalNote)) missing.push("Signals");
 
   const hqText = !isEmpty(profile.hq) ? profile.hq?.text : null;
   const teamText = !isEmpty(profile.teamSize) ? profile.teamSize?.text : null;
@@ -442,7 +452,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                     <p className="font-medium tracking-tight">{plainText(s.currentObservation)}</p>
                     <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                       {s.signalType.replaceAll("_", " ")}
-                      {s.sourceDate ? ` · ${s.sourceDate}` : ""}
+                      {s.sourceDate ? ` · ${displaySignalDate(s.sourceDate)}` : ""}
                       {s.sourceUrl ? (
                         <>
                           {" · "}

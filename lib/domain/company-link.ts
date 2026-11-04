@@ -25,9 +25,21 @@ export function linkKind(url: string): { kind: string; label: string } {
       if (row.test(host)) return { kind: row.kind, label: row.label };
     }
   } catch {
-    return { kind: "other", label: "Public page" };
+    return { kind: "other", label: hostLabel(url) };
   }
-  return { kind: "other", label: "Public page" };
+  return { kind: "other", label: hostLabel(url) };
+}
+
+/** A readable name for a link that is not a known directory, press, or social host. */
+function hostLabel(url: string): string {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    if (host === "news.google.com" || host.endsWith(".news.google.com")) return "News";
+    if (!host) return "Source";
+    return host;
+  } catch {
+    return "Source";
+  }
 }
 
 export function isOfficialProductHost(url: string): boolean {

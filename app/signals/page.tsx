@@ -36,6 +36,12 @@ interface SignalRow {
 
 const SIGNALS_PAGE_SIZE = 40;
 
+const CAMPUS_TOOLS = new Set(["penn mobile", "penn clubs", "penn courses"]);
+
+function typeLabel(type: string): string {
+  return TYPE_LABEL[type] ?? type.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 const TYPE_LABEL: Record<string, string> = {
   demo: "Product launch",
   continued_dev: "Technical release",
@@ -57,6 +63,8 @@ function formatSignalDate(value: string): string {
     const month = MONTHS[Number(full[2]) - 1];
     const day = Number(full[3]);
     if (month && day >= 1 && day <= 31) return `${month} ${day}, ${full[1]}`;
+    if (month && day === 0) return `${month} ${full[1]}`;
+    if (!month) return full[1]!;
   }
   const monthOnly = /^(\d{4})-(\d{2})$/.exec(stored);
   if (monthOnly) {
@@ -149,6 +157,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   const review = await readReviewState();
   const allSignals = listAllSignals().filter(
     (s) =>
+      !CAMPUS_TOOLS.has(s.project_name.trim().toLowerCase()) &&
       !isHidden(review.records, {
         entityType: "project",
         entityId: s.project_id,
@@ -273,7 +282,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
                   href={buildHref(basePath, sp, { type: sp.type === t ? null : t, page: null })}
                   className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white" : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-3,#5C647A)]"}`}
                 >
-                  {TYPE_LABEL[t] ?? t}
+                  {typeLabel(t)}
                 </Link>
               ))}
             </>
@@ -367,12 +376,12 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
                 </Link>
                 {s.project_kind === "company" && <CompanyWebsiteIcon url={s.website_url} name={s.project_name} />}
               </span>
-              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{typeLabel(s.signal_type)}</p>
               <p className={`mt-1 text-foreground ${featured ? "text-[15px] leading-snug" : "text-sm"}`}>{plainText(s.current_observation)}</p>
               {s.significance_note && lowConfidence ? <p className="mt-1 text-sm text-muted">{plainText(s.significance_note)}</p> : null}
               {s.significance_note && !lowConfidence ? <p className="mt-1 text-sm text-muted">Why it matters: {plainText(s.significance_note)}</p> : null}
               <p className="mt-1.5 text-xs text-muted">
-                {s.source_name ? <span>{plainText(s.source_name)}</span> : null}
+                {s.source_name ? <span>{plainText(s.source_name).replace(/\s*\([^)]*API\)/g, "")}</span> : null}
                 {s.source_name && s.source_url ? " · " : null}
                 {s.source_url ? (
                   <a href={s.source_url} target="_blank" rel="noopener noreferrer" className="text-link underline">

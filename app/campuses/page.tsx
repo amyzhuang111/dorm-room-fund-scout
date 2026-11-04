@@ -95,7 +95,7 @@ export default function CampusesPage() {
                 </p>
               </div>
               <p className="font-mono text-[11px] leading-5 text-[color:var(--fg-3,#5C647A)]">
-                Open a campus for founders, companies, and sources on that desk.
+                Founder rank follows how many sources were scanned. A high count with many sources is coverage. Open a campus for founders, companies, and sources.
               </p>
             </div>
           </aside>

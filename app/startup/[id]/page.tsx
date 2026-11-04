@@ -100,7 +100,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   const dossier = {
     id: project.id,
     name: card?.name ?? project.name,
-    campus: card?.campuses?.[0] ?? directoryRow?.school ?? null,
+    campus: directoryRow?.school ?? card?.campuses?.[0] ?? null,
     year: directoryRow?.foundedYear ?? null,
     schoolId: directoryRow?.schoolId ?? null,
     sectorId: directoryRow?.sectorId ?? null,

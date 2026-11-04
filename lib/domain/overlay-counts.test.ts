@@ -15,18 +15,17 @@ const companies: FacetCompany[] = [
   { id: "5", name: "E", schoolId: "univ_penn", school: "University of Pennsylvania", signals: 2, operatingStatus: null, sectorId: "fintech", sector: "Fintech" },
 ];
 
-// statusOf treats acquisition signals as acquired — overlays must match that, not raw operatingStatus.
-assert.equal(statusOf(companies[1]!), "acquired");
+// An acquisition signal is not an acquired company. Status follows operatingStatus.
+assert.equal(statusOf(companies[1]!), "active");
 const status = overlayStatusRows(companies);
 const byId = Object.fromEntries(status.map((r) => [r.id, r.count]));
-assert.equal(byId.active, 2); // A + E
-assert.equal(byId.acquired, 2); // B (signal) + C (status)
+assert.equal(byId.active, 3); // A + B (signal only) + E
+assert.equal(byId.acquired, 1); // C
 assert.equal(byId.closed, 1);
 
-// Raw operatingStatus alone would have called B "Active" — prove the shared helper does not.
 const rawActive = companies.filter((c) => c.operatingStatus !== "acquired" && c.operatingStatus !== "dead").length;
 assert.equal(rawActive, 3);
-assert.notEqual(byId.active, rawActive);
+assert.equal(byId.active, rawActive);
 
 const campuses = [
   { id: "univ_penn", name: "University of Pennsylvania", shortLabel: "Penn", founders: 758 },
