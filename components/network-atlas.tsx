@@ -149,6 +149,7 @@ export function NetworkAtlas() {
       a,
       b,
       kind: "company",
+      label: "Founded this startup",
       id: "company",
     }));
     for (const g of data.groups) {
@@ -157,7 +158,7 @@ export function NetworkAtlas() {
           ? selected
           : g.members[0];
       for (const b of g.members)
-        if (b !== root) out.push({ a: root, b, kind: g.kind, id: g.id });
+        if (b !== root) out.push({ a: root, b, kind: g.kind, id: g.id, label: `Shared ${g.name}` });
     }
     return out;
   }, [data, selected]);
@@ -210,6 +211,28 @@ export function NetworkAtlas() {
     let frame = 0,
       last = 0;
     let drawnKey = "";
+    // Reuse soft sprites instead of blurring thousands of shapes every frame.
+    const halos = new Map<string, HTMLCanvasElement>();
+    const haloFor = (color: string) => {
+      let sprite = halos.get(color);
+      if (!sprite) {
+        sprite = document.createElement("canvas");
+        sprite.width = sprite.height = 96;
+        const brush = sprite.getContext("2d")!;
+        const channels = [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16));
+        const middle = (Math.max(...channels) + Math.min(...channels)) / 2;
+        const vivid = `#${channels.map(c => Math.round(Math.max(0, Math.min(255, middle + (c - middle) * 2.6))).toString(16).padStart(2, "0")).join("")}`;
+        const glow = brush.createRadialGradient(48, 48, 0, 48, 48, 48);
+        glow.addColorStop(0, `${vivid}ee`);
+        glow.addColorStop(0.24, `${vivid}bb`);
+        glow.addColorStop(0.6, `${vivid}48`);
+        glow.addColorStop(1, `${vivid}00`);
+        brush.fillStyle = glow;
+        brush.fillRect(0, 0, 96, 96);
+        halos.set(color, sprite);
+      }
+      return sprite;
+    };
     const resize = new ResizeObserver(() => {
       const r = container.getBoundingClientRect();
       if (!r.width || !r.height) return;
@@ -255,27 +278,56 @@ export function NetworkAtlas() {
         };
       });
       projected.current = screen;
+      const detail = Math.max(0, Math.min(1, (v.zoom - 2.8) / 3.2));
       if (lines) {
-        ctx.lineWidth = 0.5;
+        const labels: { x: number; y: number }[] = [];
         for (const e of edges) {
           if (group && e.id !== group && e.kind !== "company") continue;
+          // A shared affiliation is not a personal relationship. Reveal these
+          // only when someone deliberately explores a member or a network.
+          if (e.kind !== "company" && selected === null && !group) continue;
           const a = screen[e.a],
             b = screen[e.b];
           if (!a || !b) continue;
+          const visible = (p: ScreenPoint) => p.x >= 0 && p.x <= w && p.y >= 0 && p.y <= h;
+          if (!visible(a) && !visible(b)) continue;
           const selectedEdge =
             selected !== null && (e.a === selected || e.b === selected);
           if (selected !== null && !selectedEdge) continue;
-          ctx.strokeStyle = selectedEdge
-            ? e.kind === "company" ? "rgba(54,71,83,.7)" : "rgba(54,71,83,.10)"
-            : `rgba(104,120,132,${v.zoom > 2 ? 0.12 : 0.022})`;
+          const company = e.kind === "company";
+          // Keep large accelerator memberships from becoming an unreadable
+          // radial fan. All members remain available in the network browser.
+          if (!company && Math.hypot(a.x - b.x, a.y - b.y) > 260) continue;
+          ctx.setLineDash(company ? [] : [4, 5]);
+          ctx.lineDashOffset = company ? 0 : (e.a * 17 + e.b * 13) % 19;
+          ctx.lineWidth = selectedEdge && company ? 1.25 : 0.55;
+          ctx.strokeStyle = company
+            ? `rgba(54,71,83,${selectedEdge ? 0.72 : v.zoom > 2 ? 0.14 : 0.022})`
+            : `rgba(122,85,163,${selectedEdge ? 0.3 : 0.12})`;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
           ctx.stroke();
+          if (selectedEdge && v.zoom > 2) {
+            const x = (a.x + b.x) / 2, y = (a.y + b.y) / 2;
+            if (labels.length < 6 && x > 100 && x < w - 100 && y > 80 && y < h - 40 &&
+                !labels.some(p => Math.abs(p.x - x) < 190 && Math.abs(p.y - y) < 28)) {
+              labels.push({ x, y });
+              ctx.font = "11px sans-serif";
+              const text = e.label.length > 38 ? `${e.label.slice(0, 35)}…` : e.label;
+              const width = ctx.measureText(text).width;
+              ctx.fillStyle = "rgba(255,255,255,.94)";
+              ctx.fillRect(x - width / 2 - 5, y - 11, width + 10, 18);
+              ctx.fillStyle = company ? "#364753" : "#704694";
+              ctx.fillText(text, x - width / 2, y + 2);
+            }
+          }
         }
+        ctx.setLineDash([]);
+        ctx.lineDashOffset = 0;
       }
       for (const p of [...screen].sort((a, b) => a.depth - b.depth)) {
-        if (p.x < -20 || p.x > w + 20 || p.y < -20 || p.y > h + 20) continue;
+        if (p.x < -60 || p.x > w + 60 || p.y < -60 || p.y > h + 60) continue;
         const n = data.nodes[p.i],
           place =
             n.places.find(
@@ -293,27 +345,42 @@ export function NetworkAtlas() {
         const active = selected === null
           ? !hasFilter || highlighted.has(p.i)
           : related.has(p.i);
-        ctx.globalAlpha = active ? 0.92 : 0.12;
+        const opacity = active ? 0.92 : 0.12;
+        ctx.globalAlpha = opacity * (1 - detail);
         const r =
           Math.max(2, Math.min(8, 3.6 * Math.sqrt(v.zoom))) +
           (p.i === selected ? 2 : 0);
         ctx.fillStyle = color;
         ctx.fillRect(p.x - r / 2, p.y - r / 2, r, r);
-        if (active && p.i % 4 === 0) {
+        if (active && p.i % 4 === 0 && detail < 0.5) {
           ctx.font = `${Math.max(3, r * 0.85)}px sans-serif`;
           ctx.fillStyle = "rgba(30,44,55,.58)";
           ctx.fillText(n.name.charAt(0), p.x - r * 0.28, p.y + r * 0.3);
         }
-        if (v.zoom > 2 && active) {
+        if (v.zoom > 2 && active && detail < 0.5) {
           ctx.strokeStyle = "rgba(35,48,61,.28)";
           ctx.lineWidth = 0.5;
           ctx.strokeRect(p.x - r / 2, p.y - r / 2, r, r);
+        }
+        if (detail > 0) {
+          const radius = (18 + (atlasHash(n.id) % 27)) * detail;
+          ctx.globalAlpha = opacity * detail * 0.72;
+          ctx.drawImage(haloFor(color), p.x - radius, p.y - radius, radius * 2, radius * 2);
+          ctx.globalAlpha = opacity * detail;
+          ctx.fillStyle = "#263947";
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.i === selected ? 3.5 : 1.3, 0, Math.PI * 2);
+          ctx.fill();
         }
         if (p.i === selected) {
           ctx.globalAlpha = 1;
           ctx.strokeStyle = "#243c4a";
           ctx.lineWidth = 2;
-          ctx.strokeRect(p.x - r / 2 - 3, p.y - r / 2 - 3, r + 6, r + 6);
+          if (detail > 0.5) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+            ctx.stroke();
+          } else ctx.strokeRect(p.x - r / 2 - 3, p.y - r / 2 - 3, r + 6, r + 6);
         }
       }
       ctx.globalAlpha = 1;
@@ -746,7 +813,7 @@ export function NetworkAtlas() {
               {peers.length > 0 && (
                 <>
                   <div className={styles.eyebrow}>
-                    {current.kind === "founder" ? "STARTUPS" : "FOUNDERS"}
+                    {current.kind === "founder" ? "SOLID LINE · FOUNDED" : "SOLID LINE · FOUNDED BY"}
                   </div>
                   {peers.map((i) => (
                     <button
@@ -759,6 +826,7 @@ export function NetworkAtlas() {
                   ))}
                 </>
               )}
+              {(nodeGroups.get(selected!) ?? []).length > 0 && <p className={styles.note}>Dashed purple lines = shared affiliation, not a personal connection.</p>}
               {(nodeGroups.get(selected!) ?? []).map((g) => (
                 <div className={styles.membership} key={g.id}>
                   <button
@@ -767,7 +835,7 @@ export function NetworkAtlas() {
                       setMode("networks");
                     }}
                   >
-                    {g.name}
+                    Shared {g.name}
                   </button>
                   {(g.evidenceByMember?.[selected!] || g.source) && /^https?:\/\//.test(g.evidenceByMember?.[selected!] || g.source || "") && (
                     <a href={g.evidenceByMember?.[selected!] || g.source} target="_blank" rel="noreferrer">
@@ -802,8 +870,10 @@ export function NetworkAtlas() {
             />{" "}
             Show connections
           </label>
-          <span>Each tile = one founder or startup</span>
-          <span>Lines = shared network or founder–company link</span>
+          <span>Each tile / dot = one founder or startup</span>
+          <span className={styles.lineKey}><i /> Founded this startup</span>
+          <span className={`${styles.lineKey} ${styles.sharedKey}`}><i /> Shared affiliation</span>
+          <span>Select a record or network for nearby shared affiliations.</span>
         </footer>
       </div>
     </section>
