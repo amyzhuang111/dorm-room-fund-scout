@@ -332,7 +332,7 @@ export function NetworksApp() {
         </section>
         </div>
 
-        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-3 py-4 sm:gap-5 sm:px-6 sm:py-6">
+        <div className="order-2 mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-3 py-4 sm:gap-5 sm:px-6 sm:py-6">
 
         <section aria-labelledby="top-networks-heading" className="order-2">
           <div className="mb-2 sm:mb-3">
