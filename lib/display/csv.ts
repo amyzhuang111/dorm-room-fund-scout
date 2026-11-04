@@ -3,11 +3,22 @@ import { plainText } from "@/lib/display/plain-text";
 
 const PLACEHOLDER = /^(?:n\/a|na|none|null|undefined|not available|-+)$/i;
 
+function decodeEntities(value: string): string {
+  return value
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec: string) => String.fromCodePoint(Number(dec)))
+    .replace(/&(?:nbsp|#160|#x0*a0);/gi, " ")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&amp;/gi, "&");
+}
+
 /** One plain cell: no HTML, no odd spaces, no dash punctuation, no placeholder tokens. */
 export function cleanCsvText(value: unknown): string {
   if (value == null) return "";
-  let text = String(value);
-  text = text.replace(/&(?:nbsp|#160|#x0*a0);/gi, " ");
+  let text = decodeEntities(String(value));
   text = text.replace(/<\s*br\s*\/?\s*>/gi, " ");
   text = text.replace(/<[^>]+>/g, " ");
   text = text.replace(/[\u00a0\u200b\u200c\u200d\ufeff]/g, " ");
@@ -17,6 +28,22 @@ export function cleanCsvText(value: unknown): string {
   text = text.replace(/\s+/g, " ").trim();
   if (!text || PLACEHOLDER.test(text)) return "";
   return text;
+}
+
+/** Person names as they should read in a spreadsheet, without handles, class-year suffixes, or leading junk. */
+export function cleanCsvName(value: unknown): string {
+  let text = cleanCsvText(value);
+  text = text.replace(/\s*\(GitHub\)\s*$/i, "");
+  text = text.replace(/^@+/, "");
+  text = text.replace(/^\.+(?=[A-Za-z])/, "");
+  text = text.replace(/^\d+\s+(?=[A-Za-z])/, "");
+  text = text.replace(/\s*\([^)]*(?:['’]\d{2}|\b(?:19|20)\d{2}\b)[^)]*\)\s*$/, "");
+  text = text.replace(/\s+['’]\d{2}\s*$/, "");
+  return text.trim();
+}
+
+export function cleanCsvNames(values: unknown[]): string {
+  return values.map((value) => cleanCsvName(value)).filter(Boolean).join(" | ");
 }
 
 /** Stored dates only. A missing day or month stays blank instead of -00. */
@@ -33,6 +60,9 @@ export function cleanCsvUrl(value: unknown): string {
   try {
     const url = new URL(text);
     if ((url.protocol !== "http:" && url.protocol !== "https:") || !url.hostname) return "";
+    const host = url.hostname.toLowerCase();
+    if (host === "html.duckduckgo.com" || host.endsWith(".duckduckgo.com") || host === "duckduckgo.com") return "";
+    if ((host === "google.com" || host.endsWith(".google.com") || host === "bing.com" || host.endsWith(".bing.com")) && url.pathname.startsWith("/search")) return "";
     return text;
   } catch {
     return "";

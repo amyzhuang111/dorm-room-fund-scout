@@ -1,4 +1,4 @@
-import { cleanCsvList, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
+import { cleanCsvDate, cleanCsvList, cleanCsvName, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
 import { getDb } from "@/lib/db/client";
 
 export interface PersonCorpusRow {
@@ -53,9 +53,71 @@ export function yearReviewLabel(p:PersonCorpusRow):string{
   if(p.yearChecked)return 'Individual class year verified';
   return ({conflict:'Conflicting sources',source_unavailable:'Source unavailable; year unverified',needs_review:'Stored year needs review',missing:'No supported class year found',invalid_inference:'Invalid inferred year removed',changed_since_review:'Changed since review',not_reviewed:'Not yet reviewed'} as Record<string,string>)[p.yearReviewStatus]||'Needs review';
 }
-export function peopleCorpusToCsv(rows:PersonCorpusRow[]):string{
-  const headers=['person_id','name','school_ids','schools','class_year','year_verification','year_source_url','year_evidence','founder_status','enrollment_status','profile_verification','project_ids','projects_and_roles','source_urls','class_year_review_status','class_year_review_reason','class_year_review_date','previous_class_year','review_source_coverage','class_year_observations','profile_evidence_flags','profile_review_scope'];
-  return encodeCsv([headers,...rows.map(p=>[
-    cleanCsvText(p.id),cleanCsvText(p.name),cleanCsvList(p.campuses.map(c=>c.id)),cleanCsvList(p.campuses.map(c=>c.name)),p.graduationYear,yearReviewLabel(p),cleanCsvUrl(p.yearSourceUrl),cleanCsvText(p.yearEvidence),cleanCsvText(p.founderStatus),cleanCsvText(p.enrollmentStatus),cleanCsvText(p.verification),cleanCsvList(p.projects.map(c=>c.id)),cleanCsvList(p.projects.map(c=>{const name=cleanCsvText(c.name);const role=cleanCsvText(c.role);return name&&role?`${name} (${role})`:name||role;})),cleanCsvUrls(p.sourceUrls),p.yearReviewStatus,cleanCsvText(p.yearReviewReason),p.yearReviewedAt,p.previousYear,cleanCsvText(p.yearSourceCoverage),JSON.stringify(p.educationObservations.map(o=>({...o,evidence:cleanCsvText(o.evidence),sourceUrl:cleanCsvUrl(o.sourceUrl),yearMeaning:cleanCsvText(o.yearMeaning)}))),cleanCsvList(p.profileEvidenceFlags),'Class-year review and stored evidence screening; other profile fields are not independently verified by this audit'
-  ])]);
+function observationCell(rows: PersonCorpusRow["educationObservations"]): string {
+  return rows
+    .map((row) =>
+      [row.graduationYear ? String(row.graduationYear) : "", cleanCsvText(row.evidence), cleanCsvText(row.yearMeaning), cleanCsvUrl(row.sourceUrl)]
+        .filter(Boolean)
+        .join(" | "),
+    )
+    .filter(Boolean)
+    .join(" ; ");
+}
+
+export function peopleCorpusToCsv(rows: PersonCorpusRow[]): string {
+  const headers = [
+    "person_id",
+    "name",
+    "school_ids",
+    "schools",
+    "class_year",
+    "year_verification",
+    "year_source_url",
+    "year_evidence",
+    "founder_status",
+    "enrollment_status",
+    "profile_verification",
+    "project_ids",
+    "projects_and_roles",
+    "source_urls",
+    "class_year_review_status",
+    "class_year_review_reason",
+    "class_year_review_date",
+    "previous_class_year",
+    "review_source_coverage",
+    "class_year_observations",
+    "profile_evidence_flags",
+  ];
+  return encodeCsv([
+    headers,
+    ...rows.map((p) => [
+      cleanCsvText(p.id),
+      cleanCsvName(p.name),
+      cleanCsvList(p.campuses.map((c) => c.id)),
+      cleanCsvList(p.campuses.map((c) => c.name)),
+      p.graduationYear,
+      yearReviewLabel(p),
+      cleanCsvUrl(p.yearSourceUrl),
+      cleanCsvText(p.yearEvidence),
+      cleanCsvText(p.founderStatus),
+      cleanCsvText(p.enrollmentStatus),
+      cleanCsvText(p.verification),
+      cleanCsvList(p.projects.map((c) => c.id)),
+      cleanCsvList(
+        p.projects.map((c) => {
+          const name = cleanCsvName(c.name);
+          const role = cleanCsvText(c.role);
+          return name && role ? `${name} (${role})` : name || role;
+        }),
+      ),
+      cleanCsvUrls(p.sourceUrls),
+      cleanCsvText(p.yearReviewStatus),
+      cleanCsvText(p.yearReviewReason),
+      cleanCsvDate(p.yearReviewedAt),
+      p.previousYear,
+      cleanCsvText(p.yearSourceCoverage),
+      observationCell(p.educationObservations),
+      cleanCsvList(p.profileEvidenceFlags),
+    ]),
+  ]);
 }

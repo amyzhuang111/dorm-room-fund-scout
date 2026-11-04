@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
-import { cleanCsvList, cleanCsvText, encodeCsv } from "@/lib/display/csv";
+import { cleanCsvNames, cleanCsvText, encodeCsv } from "@/lib/display/csv";
 import { plainText } from "@/lib/display/plain-text";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { LogoMark } from "./sample-instrument";
@@ -191,7 +191,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         cleanCsvText(row.name),
         cleanCsvText(row.tier),
         cleanCsvText(row.campus),
-        cleanCsvList(row.people.map((person) => person.name)),
+        cleanCsvNames(row.people.map((person) => person.name)),
         cleanCsvText(row.full ?? row.detail ?? row.event),
       ]),
     ]);

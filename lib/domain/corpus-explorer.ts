@@ -11,7 +11,7 @@ import {
   searchDirectory,
   sortDirectory,
 } from "@/lib/domain/directory";
-import { cleanCsvDate, cleanCsvList, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
+import { cleanCsvDate, cleanCsvNames, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
 import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 
 export const CORPUS_PAGE_SIZE = 25;
@@ -285,7 +285,7 @@ export function corpusToCsv(rows: CorpusRow[]): string {
       cleanCsvText(r.primaryProgram),
       cleanCsvText(r.ycBatch),
       r.founderCount,
-      cleanCsvList(r.founders),
+      cleanCsvNames(r.founders),
       cleanCsvUrl(r.website),
       cleanCsvText(r.fundingText),
       cleanCsvText(r.kind),

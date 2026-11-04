@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDialogFocus } from "./use-dialog-focus";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
-import { cleanCsvDate, cleanCsvList, cleanCsvText, encodeCsv } from "@/lib/display/csv";
+import { cleanCsvDate, cleanCsvNames, cleanCsvText, encodeCsv } from "@/lib/display/csv";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
@@ -88,7 +88,7 @@ function exportFilteredCsv(rows: FacetCompany[]) {
       row.signals ?? 0,
       cleanCsvDate(row.latestSignalAt),
       cleanCsvText(row.primaryProgram),
-      cleanCsvList(row.founders ?? []),
+      cleanCsvNames(row.founders ?? []),
     ]),
   ]);
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
