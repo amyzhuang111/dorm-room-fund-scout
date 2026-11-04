@@ -529,18 +529,17 @@ export function SampleInstrumentBrowse({
       ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white"
       : "border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
-  const kicker = feed === "leaderboard" ? "Signals" : "Companies";
-  const caption = total === 1 ? "company" : "companies";
+  const caption = feed === "leaderboard" ? "By signals" : "Companies";
   const subline =
     feed === "leaderboard"
-      ? "Ordered by how many signals are stored"
+      ? "Most signals first"
       : sort === "recent"
         ? "Newest signal first"
         : sort === "name"
           ? "Alphabetical"
           : sort === "stage"
             ? "Ordered by stage"
-            : "Ranked from signals, founders, programs, and stage";
+            : "Ranked by signals, founders, programs, and stage";
 
   return (
     <div
@@ -562,18 +561,11 @@ export function SampleInstrumentBrowse({
             data-n-of-m=""
           >
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filters</p>
-            <p className="mt-1 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]" data-showing-label="">
-              Showing
-            </p>
             <p className="mt-1 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
               <span data-match-count="">{total.toLocaleString("en-US")}</span>
-              <span className="mx-1.5 text-[18px] font-semibold tracking-normal text-[color:var(--fg-3,#5C647A)]">of</span>
-              <span className="text-[22px] font-bold text-[color:var(--fg,#0B0E17)]" data-total-count="">
-                {total.toLocaleString("en-US")}
-              </span>
             </p>
             <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {feed === "leaderboard" ? "on the signal desk" : "companies"}
+              {feed === "leaderboard" ? "companies with signals" : "companies"}
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-2" data-filter-chips="" aria-label="Active filters">
               {chipDefs.map((chip) => (
@@ -643,7 +635,6 @@ export function SampleInstrumentBrowse({
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
               <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                 {caption}
                 {campusName ? (

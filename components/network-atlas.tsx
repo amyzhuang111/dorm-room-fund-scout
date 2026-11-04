@@ -505,15 +505,7 @@ export function NetworkAtlas() {
       aria-label="Founder and startup atlas"
     >
       <aside className={styles.sidebar} data-open={filtersOpen}>
-        <div className={styles.eyebrow}>EXPLORE THE ECOSYSTEM</div>
-        <h2>
-          Every connection.
-          <br />
-          One network.
-        </h2>
-        <p className={styles.muted}>
-          {data.nodes.length.toLocaleString()} founders & startups
-        </p>
+        <h2>Explore the map</h2>
         <div className={styles.tabs}>
           <button
             aria-pressed={mode === "geography"}
@@ -531,7 +523,7 @@ export function NetworkAtlas() {
         {mode === "geography" ? (
           <>
             <label>
-              Location based on
+              Location source
               <select
                 value={basis}
                 onChange={(e) => {
@@ -540,7 +532,7 @@ export function NetworkAtlas() {
                   setPage(0);
                 }}
               >
-                <option value="campus">Campus affiliation</option>
+                <option value="campus">Campus</option>
                 <option value="headquarters">Company headquarters</option>
               </select>
             </label>
@@ -608,8 +600,7 @@ export function NetworkAtlas() {
                 ))}
             </div>
             <p className={styles.note}>
-              Campus colors describe school affiliation, not nationality.
-              Headquarters describe the company, not a founder’s residence.
+              Locations reflect campuses or company headquarters, not personal residence.
             </p>
           </>
         ) : (
@@ -644,7 +635,7 @@ export function NetworkAtlas() {
               <span>{data.nodes[c.i].name}<small>{c.networkTypes} network types · {c.campuses} campuses</small></span><span>↗</span>
             </button>
           ))}
-          {!connectors.some(c => !hasFilter || highlighted.has(c.i)) && <p className={styles.note}>No records with multiple networks and a founding link in this selection.</p>}
+          {!connectors.some(c => !hasFilter || highlighted.has(c.i)) && <p className={styles.note}>No superconnectors in this selection.</p>}
         </details>
       </aside>
       <div className={styles.main}>
@@ -657,8 +648,8 @@ export function NetworkAtlas() {
             Explore
           </button>
           <input
-            aria-label="Search every founder or startup"
-            placeholder="Find a founder or startup…"
+            aria-label="Search founders or startups"
+            placeholder="Search founders or startups…"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -675,13 +666,13 @@ export function NetworkAtlas() {
             {hasFilter
               ? `${highlighted.size.toLocaleString()} highlighted · `
               : ""}
-            {data.nodes.length.toLocaleString()} records on the map
+            {data.nodes.length.toLocaleString()} founders & startups
           </span>
           <button onClick={reset}>Reset all</button>
         </div>
         {list ? (
           <div className={styles.results}>
-            <p>All matching records · {resultIds.length.toLocaleString()}</p>
+            <p>Results · {resultIds.length.toLocaleString()}</p>
             {resultIds.slice(page * 30, (page + 1) * 30).map((i) => (
               <button
                 key={data.nodes[i].id}
@@ -928,11 +919,10 @@ export function NetworkAtlas() {
             />{" "}
             Show connections
           </label>
-          <span>Each tile / dot = one founder or startup</span>
+          <span>Dot = founder or startup</span>
           <label><input type="checkbox" checked={showConnectors} onChange={e => setShowConnectors(e.target.checked)} /> ◎ Superconnectors</label>
           <span className={styles.lineKey}><i /> Founded this startup</span>
           <span className={`${styles.lineKey} ${styles.sharedKey}`}><i /> Shared affiliation</span>
-          <span>Choose a network to reveal its shared affiliations.</span>
           <label><input type="checkbox" checked={!running} onChange={e => setRunning(!e.target.checked)} /> Still view</label>
         </footer>
       </div>
