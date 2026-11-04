@@ -51,6 +51,36 @@ export function foundersPerThousand(founders: number, undergrads: number): numbe
   return perThousand(founders, undergrads);
 }
 
+/** Slim undergraduate fields safe to ship on the map payload. */
+export function undergradRankFields(
+  pitchbook: { undergrad: PitchbookTrack | null } | null | undefined,
+): { pitchbookRank: number | null; pitchbookFounders: number | null } {
+  const track = pitchbook?.undergrad;
+  if (!track) return { pitchbookRank: null, pitchbookFounders: null };
+  return { pitchbookRank: track.rank, pitchbookFounders: track.founderCount };
+}
+
+/** PitchBook undergraduate rank, lowest first. Schools with no rank sort last. */
+export function compareUndergradRank(
+  a: { pitchbookRank?: number | null; name: string },
+  b: { pitchbookRank?: number | null; name: string },
+): number {
+  const ar = a.pitchbookRank ?? null;
+  const br = b.pitchbookRank ?? null;
+  if (ar == null && br == null) return a.name.localeCompare(b.name);
+  if (ar == null) return 1;
+  if (br == null) return -1;
+  return ar - br || a.name.localeCompare(b.name);
+}
+
+export function rankedByUndergrad<T extends { pitchbookRank?: number | null; pitchbookFounders?: number | null; name: string }>(
+  rows: T[],
+): T[] {
+  return [...rows]
+    .filter((row) => row.pitchbookRank != null && (row.pitchbookFounders ?? 0) > 0)
+    .sort(compareUndergradRank);
+}
+
 export function normalizeCampusName(raw: string): string {
   return raw
     .toLowerCase()

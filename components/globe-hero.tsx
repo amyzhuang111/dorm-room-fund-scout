@@ -32,6 +32,8 @@ function plottedCampuses(stats: HeroStats): TileCampus[] {
       founders: university.founderCount,
       signals: university.signalCount,
       country: university.country?.trim() || "Unknown",
+      pitchbookRank: (university as { pitchbookRank?: number | null }).pitchbookRank ?? null,
+      pitchbookFounders: (university as { pitchbookFounders?: number | null }).pitchbookFounders ?? null,
     }));
 }
 

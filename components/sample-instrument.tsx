@@ -72,12 +72,14 @@ export function ScoutSignalPodium({
   totalOnDesk,
   allHref = "/campuses",
   rankedCount,
+  caption = "Ranked by founder names",
 }: {
-  rows: { id: string; label: string; founders: number; signals: number }[];
+  rows: { id: string; label: string; founders: number; signals: number; onFile?: number; pitchbook?: boolean; rank?: number | null }[];
   totalOnDesk: number;
   allHref?: string;
   /** Total campuses with founders on record (may exceed visible rows). */
   rankedCount?: number;
+  caption?: string;
 }) {
   if (!rows.length) return null;
   const max = Math.max(1, ...rows.map((r) => r.founders));
@@ -91,7 +93,7 @@ export function ScoutSignalPodium({
       <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4">
         <div className="min-w-0">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Signal podium</p>
-          <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Ranked by founder names</p>
+          <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
         </div>
         <p className="shrink-0 text-right font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
           <span className="font-bold text-[color:var(--ember,#D96B1C)]">{totalOnDesk.toLocaleString("en-US")}</span>
@@ -103,7 +105,7 @@ export function ScoutSignalPodium({
           <li key={row.id} className={i === 0 ? "bg-[color:var(--ember,#D96B1C)]/[0.06]" : undefined}>
             <div className={`flex items-end gap-3 px-3.5 pl-4 ${i < 3 ? "py-3.5" : "py-2"}`}>
               <span className={`shrink-0 font-mono font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] ${i === 0 ? "text-[40px]" : i === 1 ? "text-[28px]" : i === 2 ? "text-[22px]" : "text-[14px]"}`}>
-                {String(i + 1).padStart(2, "0")}
+                {String(row.rank ?? i + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
@@ -120,6 +122,12 @@ export function ScoutSignalPodium({
                   />
                 </div>
                 <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  {row.pitchbook && row.onFile != null ? (
+                    <>
+                      <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.onFile.toLocaleString("en-US")}</span>
+                      {" on file · "}
+                    </>
+                  ) : null}
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signals.toLocaleString("en-US")}</span>
                   {" signals on record"}
                 </p>

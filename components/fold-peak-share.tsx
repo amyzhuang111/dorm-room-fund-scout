@@ -14,7 +14,21 @@ export { buildPeakShell } from "@/lib/domain/peak-shell";
  * No data-scout-chronograph (DOM chronographGoneFromHome).
  * Accepts SSR shell so first paint reserves exact height (CLS ≈ 0).
  */
-export type FoldTopCampus = { id: string; name: string; founders: number };
+export type FoldTopCampus = {
+  id: string;
+  name: string;
+  founders: number;
+  pitchbookRank?: number | null;
+  pitchbookFounders?: number | null;
+};
+
+function campusRankLabel(campus: FoldTopCampus, index: number): string {
+  return String(campus.pitchbookRank ?? index + 1).padStart(2, "0");
+}
+
+function campusFigure(campus: FoldTopCampus): number {
+  return campus.pitchbookFounders ?? campus.founders;
+}
 
 export function FoldPeakShare({
   companies,
@@ -109,21 +123,28 @@ export function FoldPeakShare({
             </p>
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Founders on file</p>
-            <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Not adjusted for scan depth</p>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">PitchBook 2026</p>
+            <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Undergraduate alumni, VC-backed</p>
             {topCampuses.length > 0 ? (
               <ol className="mt-2 space-y-2" data-fold-peak-campus-rank="">
-                {topCampuses.map((campus, i) => (
+                {topCampuses.slice(0, 3).map((campus, i) => (
                   <li key={campus.id} className="flex items-center gap-3">
                     <span className="w-5 shrink-0 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                      {String(i + 1).padStart(2, "0")}
+                      {campusRankLabel(campus, i)}
                     </span>
                     <CampusSeal label={campus.name} size="lg" />
-                    <span className="min-w-0 flex-1 truncate text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                      {campus.name}
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                        {campus.name}
+                      </span>
+                      {campus.pitchbookFounders != null ? (
+                        <span className="block font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                          {campus.founders.toLocaleString("en-US")} on file
+                        </span>
+                      ) : null}
                     </span>
                     <span className="shrink-0 font-mono text-[18px] font-bold leading-none tracking-[-0.03em] text-[color:var(--cobalt,#2F4FD8)]">
-                      {campus.founders.toLocaleString("en-US")}
+                      {campusFigure(campus).toLocaleString("en-US")}
                     </span>
                   </li>
                 ))}
@@ -174,15 +195,15 @@ export function FoldPeakShare({
             className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-1.5"
             data-fold-peak-campus-rank-mobile=""
           >
-            <li className="w-full font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Founders on file · not adjusted for scan depth</li>
+            <li className="w-full font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">PitchBook 2026 undergraduate alumni</li>
             {topCampuses.slice(0, 3).map((campus, i) => {
               const short = campus.name.replace(/^University of (?:California, )?/, "").replace(/ University$/, "");
               return (
               <li key={campus.id} className="flex shrink-0 items-center gap-1" data-fold-peak-campus-item="">
-                <span className="shrink-0 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="shrink-0 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{campusRankLabel(campus, i)}</span>
                 <CampusSeal label={campus.name} size="sm" />
                 <span className="whitespace-nowrap text-[11px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-campus-label="">{short}</span>
-                <span className="shrink-0 font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{campus.founders.toLocaleString("en-US")}</span>
+                <span className="shrink-0 font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{campusFigure(campus).toLocaleString("en-US")}</span>
               </li>
               );
             })}
