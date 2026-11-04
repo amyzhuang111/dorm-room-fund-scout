@@ -353,7 +353,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
 
     // Warm off-white base
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#fbfaf7";
+    ctx.fillStyle = "#f2f4ef";
     ctx.fillRect(0, 0, w, h);
 
     const cam = camRef.current;
@@ -445,7 +445,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       const breathe = reduced ? 1 : 1 + Math.sin(t * 0.4 + ci) * 0.05;
       const rad = (42 + Math.sqrt(n) * 5.8) * s * breathe * (1.05 + bloom * 0.9);
       const sprite = getGlowSprite(p.campuses[ci].color, true);
-      ctx.globalAlpha = (0.32 + bloom * 0.38) * fade;
+      ctx.globalAlpha = (0.08 + bloom * 0.06) * fade;
       ctx.drawImage(sprite, home.x - rad, home.y - rad, rad * 2, rad * 2);
       ctx.globalAlpha = 1;
     }
@@ -551,7 +551,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (pt.x < -40 || pt.y < -40 || pt.x > w + 40 || pt.y > h + 40) continue;
       // Floor to ~2-3.5 CSS px at 1440 so dots survive fit scaling
       const baseR = Math.max(2.0, Math.min(3.5, p.r[i] * Math.max(s, 0.85)));
-      const bloomR = baseR * (1 + bloom * (10 + hash01(String(i)) * 16));
+      const bloomR = baseR * (1 + bloom * 1.5);
 
       if (p.kind[i] === 2) {
         if (!reduced && bloom > 0.2) {
@@ -580,8 +580,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       // Soft glow under every founder/company at rest
       {
         const sprite = getGlowSprite(col, true);
-        const glowRad = baseR * (2.8 + bloom * 8);
-        ctx.globalAlpha = (0.35 + crisp * 0.2 + bloom * 0.45) * fade * (p.kind[i] === 0 ? 1 : 0.8);
+        const glowRad = baseR * 1.8;
+        ctx.globalAlpha = (0.06 + bloom * 0.08) * fade * (p.kind[i] === 0 ? 1 : 0.8);
         ctx.drawImage(sprite, pt.x - glowRad, pt.y - glowRad, glowRad * 2, glowRad * 2);
         ctx.globalAlpha = 1;
       }
@@ -590,7 +590,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (bloom > 0.02) {
         const sprite = getGlowSprite(col, true);
         const rad = bloomR;
-        ctx.globalAlpha = (0.28 + bloom * 0.55) * fade * (p.kind[i] === 0 ? 1 : 0.75);
+        ctx.globalAlpha = 0.1 * fade * (p.kind[i] === 0 ? 1 : 0.75);
         ctx.drawImage(sprite, pt.x - rad, pt.y - rad, rad * 2, rad * 2);
         ctx.globalAlpha = 1;
       }
@@ -605,7 +605,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (crisp > 0.35) {
         ctx.beginPath();
         ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${0.22 * crisp * fade})`;
-        ctx.arc(pt.x, pt.y, dotR * 2.2, 0, Math.PI * 2);
+        ctx.arc(pt.x, pt.y, dotR * 1.15, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -1060,8 +1060,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     <div className="w-full overflow-visible" data-networks-desk="">
       <div
         ref={wrapRef}
-        className="relative w-screen max-w-none touch-manipulation overflow-hidden bg-[#fbfaf7] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[64vh]"
-        style={{ height: "min(76vh, 710px)" }}
+        className="relative w-full min-w-0 max-w-full touch-manipulation overflow-hidden bg-[#f2f4ef] max-md:!h-[52vh]"
+        style={{ height: "clamp(360px, 62vh, 680px)" }}
         data-networks-graph=""
         data-networks-fade="0"
         data-networks-zoom="0"
