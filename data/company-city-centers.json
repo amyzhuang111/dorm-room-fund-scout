@@ -1,0 +1,867 @@
+{
+  "source": "https://download.geonames.org/export/dump/cities15000.zip",
+  "license": "CC BY 4.0",
+  "precision": "city",
+  "cities": [
+    {
+      "storedLabel": "Ann Arbor, MI",
+      "id": "4984247",
+      "city": "Ann Arbor",
+      "country": "US",
+      "region": "MI",
+      "latitude": 42.27756,
+      "longitude": -83.74088,
+      "sourceUrl": "https://www.geonames.org/4984247/"
+    },
+    {
+      "storedLabel": "Atlanta, GA",
+      "id": "4180439",
+      "city": "Atlanta",
+      "country": "US",
+      "region": "GA",
+      "latitude": 33.749,
+      "longitude": -84.38798,
+      "sourceUrl": "https://www.geonames.org/4180439/"
+    },
+    {
+      "storedLabel": "Austin, TX",
+      "id": "4671654",
+      "city": "Austin",
+      "country": "US",
+      "region": "TX",
+      "latitude": 30.26715,
+      "longitude": -97.74306,
+      "sourceUrl": "https://www.geonames.org/4671654/"
+    },
+    {
+      "storedLabel": "Austin, TX, USA",
+      "id": "4671654",
+      "city": "Austin",
+      "country": "US",
+      "region": "TX",
+      "latitude": 30.26715,
+      "longitude": -97.74306,
+      "sourceUrl": "https://www.geonames.org/4671654/"
+    },
+    {
+      "storedLabel": "Austin, Texas",
+      "id": "4671654",
+      "city": "Austin",
+      "country": "US",
+      "region": "TX",
+      "latitude": 30.26715,
+      "longitude": -97.74306,
+      "sourceUrl": "https://www.geonames.org/4671654/"
+    },
+    {
+      "storedLabel": "Baltimore, MD",
+      "id": "4347778",
+      "city": "Baltimore",
+      "country": "US",
+      "region": "MD",
+      "latitude": 39.29038,
+      "longitude": -76.61219,
+      "sourceUrl": "https://www.geonames.org/4347778/"
+    },
+    {
+      "storedLabel": "Bellevue, Washington",
+      "id": "5786882",
+      "city": "Bellevue",
+      "country": "US",
+      "region": "WA",
+      "latitude": 47.61038,
+      "longitude": -122.20068,
+      "sourceUrl": "https://www.geonames.org/5786882/"
+    },
+    {
+      "storedLabel": "Berkeley, California",
+      "id": "5327684",
+      "city": "Berkeley",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.87159,
+      "longitude": -122.27275,
+      "sourceUrl": "https://www.geonames.org/5327684/"
+    },
+    {
+      "storedLabel": "Berlin, Berlin, Germany",
+      "id": "2950159",
+      "city": "Berlin",
+      "country": "DE",
+      "region": "16",
+      "latitude": 52.52437,
+      "longitude": 13.41053,
+      "sourceUrl": "https://www.geonames.org/2950159/"
+    },
+    {
+      "storedLabel": "Berlin, Germany",
+      "id": "2950159",
+      "city": "Berlin",
+      "country": "DE",
+      "region": "16",
+      "latitude": 52.52437,
+      "longitude": 13.41053,
+      "sourceUrl": "https://www.geonames.org/2950159/"
+    },
+    {
+      "storedLabel": "Bogota",
+      "id": "3688689",
+      "city": "Bogotá",
+      "country": "CO",
+      "region": "34",
+      "latitude": 4.60971,
+      "longitude": -74.08175,
+      "sourceUrl": "https://www.geonames.org/3688689/"
+    },
+    {
+      "storedLabel": "Boston, MA, USA",
+      "id": "4930956",
+      "city": "Boston",
+      "country": "US",
+      "region": "MA",
+      "latitude": 42.35843,
+      "longitude": -71.05977,
+      "sourceUrl": "https://www.geonames.org/4930956/"
+    },
+    {
+      "storedLabel": "Boston, Massachusetts",
+      "id": "4930956",
+      "city": "Boston",
+      "country": "US",
+      "region": "MA",
+      "latitude": 42.35843,
+      "longitude": -71.05977,
+      "sourceUrl": "https://www.geonames.org/4930956/"
+    },
+    {
+      "storedLabel": "Brooklyn",
+      "id": "5110302",
+      "city": "Brooklyn",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.6501,
+      "longitude": -73.94958,
+      "sourceUrl": "https://www.geonames.org/5110302/"
+    },
+    {
+      "storedLabel": "Cambridge, US",
+      "id": "4931972",
+      "city": "Cambridge",
+      "country": "US",
+      "region": "MA",
+      "latitude": 42.3751,
+      "longitude": -71.10561,
+      "sourceUrl": "https://www.geonames.org/4931972/"
+    },
+    {
+      "storedLabel": "Charlotte, NC",
+      "id": "4460243",
+      "city": "Charlotte",
+      "country": "US",
+      "region": "NC",
+      "latitude": 35.22709,
+      "longitude": -80.84313,
+      "sourceUrl": "https://www.geonames.org/4460243/"
+    },
+    {
+      "storedLabel": "Chicago, IL, USA",
+      "id": "4887398",
+      "city": "Chicago",
+      "country": "US",
+      "region": "IL",
+      "latitude": 41.85003,
+      "longitude": -87.65005,
+      "sourceUrl": "https://www.geonames.org/4887398/"
+    },
+    {
+      "storedLabel": "Cleburne, TX",
+      "id": "4681976",
+      "city": "Cleburne",
+      "country": "US",
+      "region": "TX",
+      "latitude": 32.34764,
+      "longitude": -97.38668,
+      "sourceUrl": "https://www.geonames.org/4681976/"
+    },
+    {
+      "storedLabel": "Denver, CO",
+      "id": "5419384",
+      "city": "Denver",
+      "country": "US",
+      "region": "CO",
+      "latitude": 39.73915,
+      "longitude": -104.9847,
+      "sourceUrl": "https://www.geonames.org/5419384/"
+    },
+    {
+      "storedLabel": "Durham, NC, USA",
+      "id": "4464368",
+      "city": "Durham",
+      "country": "US",
+      "region": "NC",
+      "latitude": 35.99403,
+      "longitude": -78.89862,
+      "sourceUrl": "https://www.geonames.org/4464368/"
+    },
+    {
+      "storedLabel": "El Segundo, CA, USA",
+      "id": "5345860",
+      "city": "El Segundo",
+      "country": "US",
+      "region": "CA",
+      "latitude": 33.91918,
+      "longitude": -118.41647,
+      "sourceUrl": "https://www.geonames.org/5345860/"
+    },
+    {
+      "storedLabel": "Frisco, TX, USA",
+      "id": "4692559",
+      "city": "Frisco",
+      "country": "US",
+      "region": "TX",
+      "latitude": 33.15067,
+      "longitude": -96.82361,
+      "sourceUrl": "https://www.geonames.org/4692559/"
+    },
+    {
+      "storedLabel": "Hong Kong, Hong Kong",
+      "id": "1819729",
+      "city": "Hong Kong",
+      "country": "HK",
+      "region": "",
+      "latitude": 22.27832,
+      "longitude": 114.17469,
+      "sourceUrl": "https://www.geonames.org/1819729/"
+    },
+    {
+      "storedLabel": "Irvine, CA",
+      "id": "5359777",
+      "city": "Irvine",
+      "country": "US",
+      "region": "CA",
+      "latitude": 33.66946,
+      "longitude": -117.82311,
+      "sourceUrl": "https://www.geonames.org/5359777/"
+    },
+    {
+      "storedLabel": "Istanbul, Turkey",
+      "id": "745044",
+      "city": "Istanbul",
+      "country": "TR",
+      "region": "34",
+      "latitude": 41.01384,
+      "longitude": 28.94966,
+      "sourceUrl": "https://www.geonames.org/745044/"
+    },
+    {
+      "storedLabel": "Lafayette, California",
+      "id": "5364226",
+      "city": "Lafayette",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.88576,
+      "longitude": -122.11802,
+      "sourceUrl": "https://www.geonames.org/5364226/"
+    },
+    {
+      "storedLabel": "Lehi, UT",
+      "id": "5777224",
+      "city": "Lehi",
+      "country": "US",
+      "region": "UT",
+      "latitude": 40.39162,
+      "longitude": -111.85077,
+      "sourceUrl": "https://www.geonames.org/5777224/"
+    },
+    {
+      "storedLabel": "London, England, United Kingdom",
+      "id": "2643743",
+      "city": "London",
+      "country": "GB",
+      "region": "ENG",
+      "latitude": 51.50853,
+      "longitude": -0.12574,
+      "sourceUrl": "https://www.geonames.org/2643743/"
+    },
+    {
+      "storedLabel": "London, United Kingdom",
+      "id": "2643743",
+      "city": "London",
+      "country": "GB",
+      "region": "ENG",
+      "latitude": 51.50853,
+      "longitude": -0.12574,
+      "sourceUrl": "https://www.geonames.org/2643743/"
+    },
+    {
+      "storedLabel": "Los Angeles, CA",
+      "id": "5368361",
+      "city": "Los Angeles",
+      "country": "US",
+      "region": "CA",
+      "latitude": 34.05223,
+      "longitude": -118.24368,
+      "sourceUrl": "https://www.geonames.org/5368361/"
+    },
+    {
+      "storedLabel": "Los Angeles, CA, USA",
+      "id": "5368361",
+      "city": "Los Angeles",
+      "country": "US",
+      "region": "CA",
+      "latitude": 34.05223,
+      "longitude": -118.24368,
+      "sourceUrl": "https://www.geonames.org/5368361/"
+    },
+    {
+      "storedLabel": "Los Angeles, California",
+      "id": "5368361",
+      "city": "Los Angeles",
+      "country": "US",
+      "region": "CA",
+      "latitude": 34.05223,
+      "longitude": -118.24368,
+      "sourceUrl": "https://www.geonames.org/5368361/"
+    },
+    {
+      "storedLabel": "Lund, Sweden",
+      "id": "2693678",
+      "city": "Lund",
+      "country": "SE",
+      "region": "27",
+      "latitude": 55.70584,
+      "longitude": 13.19321,
+      "sourceUrl": "https://www.geonames.org/2693678/"
+    },
+    {
+      "storedLabel": "Medellín, Colombia",
+      "id": "3674962",
+      "city": "Medellín",
+      "country": "CO",
+      "region": "02",
+      "latitude": 6.245,
+      "longitude": -75.57151,
+      "sourceUrl": "https://www.geonames.org/3674962/"
+    },
+    {
+      "storedLabel": "Mexico City, Mexico",
+      "id": "3530597",
+      "city": "Mexico City",
+      "country": "MX",
+      "region": "09",
+      "latitude": 19.42847,
+      "longitude": -99.12766,
+      "sourceUrl": "https://www.geonames.org/3530597/"
+    },
+    {
+      "storedLabel": "Miami, FL",
+      "id": "4164138",
+      "city": "Miami",
+      "country": "US",
+      "region": "FL",
+      "latitude": 25.77427,
+      "longitude": -80.19366,
+      "sourceUrl": "https://www.geonames.org/4164138/"
+    },
+    {
+      "storedLabel": "Mountain View, California",
+      "id": "5375480",
+      "city": "Mountain View",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.38605,
+      "longitude": -122.08385,
+      "sourceUrl": "https://www.geonames.org/5375480/"
+    },
+    {
+      "storedLabel": "Munich, BY, Germany",
+      "id": "2867714",
+      "city": "Munich",
+      "country": "DE",
+      "region": "02",
+      "latitude": 48.13743,
+      "longitude": 11.57549,
+      "sourceUrl": "https://www.geonames.org/2867714/"
+    },
+    {
+      "storedLabel": "Munich, DE",
+      "id": "2867714",
+      "city": "Munich",
+      "country": "DE",
+      "region": "02",
+      "latitude": 48.13743,
+      "longitude": 11.57549,
+      "sourceUrl": "https://www.geonames.org/2867714/"
+    },
+    {
+      "storedLabel": "Myrtle Beach, SC, USA",
+      "id": "4588718",
+      "city": "Myrtle Beach",
+      "country": "US",
+      "region": "SC",
+      "latitude": 33.68906,
+      "longitude": -78.88669,
+      "sourceUrl": "https://www.geonames.org/4588718/"
+    },
+    {
+      "storedLabel": "NYC, New York",
+      "id": "5128581",
+      "city": "New York City",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "sourceUrl": "https://www.geonames.org/5128581/"
+    },
+    {
+      "storedLabel": "Nairobi, Kenya",
+      "id": "184745",
+      "city": "Nairobi",
+      "country": "KE",
+      "region": "05",
+      "latitude": -1.28333,
+      "longitude": 36.81667,
+      "sourceUrl": "https://www.geonames.org/184745/"
+    },
+    {
+      "storedLabel": "New Delhi, DL, India",
+      "id": "1261481",
+      "city": "New Delhi",
+      "country": "IN",
+      "region": "07",
+      "latitude": 28.62137,
+      "longitude": 77.2148,
+      "sourceUrl": "https://www.geonames.org/1261481/"
+    },
+    {
+      "storedLabel": "New Delhi, India",
+      "id": "1261481",
+      "city": "New Delhi",
+      "country": "IN",
+      "region": "07",
+      "latitude": 28.62137,
+      "longitude": 77.2148,
+      "sourceUrl": "https://www.geonames.org/1261481/"
+    },
+    {
+      "storedLabel": "New York",
+      "id": "5128581",
+      "city": "New York City",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "sourceUrl": "https://www.geonames.org/5128581/"
+    },
+    {
+      "storedLabel": "New York City",
+      "id": "5128581",
+      "city": "New York City",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "sourceUrl": "https://www.geonames.org/5128581/"
+    },
+    {
+      "storedLabel": "New York City, NY",
+      "id": "5128581",
+      "city": "New York City",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "sourceUrl": "https://www.geonames.org/5128581/"
+    },
+    {
+      "storedLabel": "New York City, NY, USA",
+      "id": "5128581",
+      "city": "New York City",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "sourceUrl": "https://www.geonames.org/5128581/"
+    },
+    {
+      "storedLabel": "New York City, New York",
+      "id": "5128581",
+      "city": "New York City",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "sourceUrl": "https://www.geonames.org/5128581/"
+    },
+    {
+      "storedLabel": "New York, New York",
+      "id": "5128581",
+      "city": "New York City",
+      "country": "US",
+      "region": "NY",
+      "latitude": 40.71427,
+      "longitude": -74.00597,
+      "sourceUrl": "https://www.geonames.org/5128581/"
+    },
+    {
+      "storedLabel": "Oakland, California",
+      "id": "5378538",
+      "city": "Oakland",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.80437,
+      "longitude": -122.2708,
+      "sourceUrl": "https://www.geonames.org/5378538/"
+    },
+    {
+      "storedLabel": "Oslo, Norway",
+      "id": "3143244",
+      "city": "Oslo",
+      "country": "NO",
+      "region": "12",
+      "latitude": 59.91273,
+      "longitude": 10.74609,
+      "sourceUrl": "https://www.geonames.org/3143244/"
+    },
+    {
+      "storedLabel": "Palo Alto, California",
+      "id": "5380748",
+      "city": "Palo Alto",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.44188,
+      "longitude": -122.14302,
+      "sourceUrl": "https://www.geonames.org/5380748/"
+    },
+    {
+      "storedLabel": "Paris, France",
+      "id": "2988507",
+      "city": "Paris",
+      "country": "FR",
+      "region": "11",
+      "latitude": 48.85341,
+      "longitude": 2.3488,
+      "sourceUrl": "https://www.geonames.org/2988507/"
+    },
+    {
+      "storedLabel": "Paris, Île-de-France, France",
+      "id": "2988507",
+      "city": "Paris",
+      "country": "FR",
+      "region": "11",
+      "latitude": 48.85341,
+      "longitude": 2.3488,
+      "sourceUrl": "https://www.geonames.org/2988507/"
+    },
+    {
+      "storedLabel": "Philadelphia, PA",
+      "id": "4560349",
+      "city": "Philadelphia",
+      "country": "US",
+      "region": "PA",
+      "latitude": 39.95238,
+      "longitude": -75.16362,
+      "sourceUrl": "https://www.geonames.org/4560349/"
+    },
+    {
+      "storedLabel": "Philadelphia, PA, USA",
+      "id": "4560349",
+      "city": "Philadelphia",
+      "country": "US",
+      "region": "PA",
+      "latitude": 39.95238,
+      "longitude": -75.16362,
+      "sourceUrl": "https://www.geonames.org/4560349/"
+    },
+    {
+      "storedLabel": "Providence, RI",
+      "id": "5224151",
+      "city": "Providence",
+      "country": "US",
+      "region": "RI",
+      "latitude": 41.82399,
+      "longitude": -71.41283,
+      "sourceUrl": "https://www.geonames.org/5224151/"
+    },
+    {
+      "storedLabel": "Provo, UT, USA",
+      "id": "5780026",
+      "city": "Provo",
+      "country": "US",
+      "region": "UT",
+      "latitude": 40.23384,
+      "longitude": -111.65853,
+      "sourceUrl": "https://www.geonames.org/5780026/"
+    },
+    {
+      "storedLabel": "Salt Lake City, UT, USA",
+      "id": "5780993",
+      "city": "Salt Lake City",
+      "country": "US",
+      "region": "UT",
+      "latitude": 40.76078,
+      "longitude": -111.89105,
+      "sourceUrl": "https://www.geonames.org/5780993/"
+    },
+    {
+      "storedLabel": "San Diego, CA, USA",
+      "id": "5391811",
+      "city": "San Diego",
+      "country": "US",
+      "region": "CA",
+      "latitude": 32.71571,
+      "longitude": -117.16472,
+      "sourceUrl": "https://www.geonames.org/5391811/"
+    },
+    {
+      "storedLabel": "San Francisco",
+      "id": "5391959",
+      "city": "San Francisco",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.77493,
+      "longitude": -122.41942,
+      "sourceUrl": "https://www.geonames.org/5391959/"
+    },
+    {
+      "storedLabel": "San Francisco, CA, USA",
+      "id": "5391959",
+      "city": "San Francisco",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.77493,
+      "longitude": -122.41942,
+      "sourceUrl": "https://www.geonames.org/5391959/"
+    },
+    {
+      "storedLabel": "San Francisco, California",
+      "id": "5391959",
+      "city": "San Francisco",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.77493,
+      "longitude": -122.41942,
+      "sourceUrl": "https://www.geonames.org/5391959/"
+    },
+    {
+      "storedLabel": "San Francisco, US",
+      "id": "5391959",
+      "city": "San Francisco",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.77493,
+      "longitude": -122.41942,
+      "sourceUrl": "https://www.geonames.org/5391959/"
+    },
+    {
+      "storedLabel": "San Fransisco, California",
+      "id": "5391959",
+      "city": "San Francisco",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.77493,
+      "longitude": -122.41942,
+      "sourceUrl": "https://www.geonames.org/5391959/"
+    },
+    {
+      "storedLabel": "San Jose, California",
+      "id": "5392171",
+      "city": "San Jose",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.33939,
+      "longitude": -121.89496,
+      "sourceUrl": "https://www.geonames.org/5392171/"
+    },
+    {
+      "storedLabel": "Santa Barbara, CA",
+      "id": "5392952",
+      "city": "Santa Barbara",
+      "country": "US",
+      "region": "CA",
+      "latitude": 34.42083,
+      "longitude": -119.69819,
+      "sourceUrl": "https://www.geonames.org/5392952/"
+    },
+    {
+      "storedLabel": "Santa Clara, US",
+      "id": "5393015",
+      "city": "Santa Clara",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.35411,
+      "longitude": -121.95524,
+      "sourceUrl": "https://www.geonames.org/5393015/"
+    },
+    {
+      "storedLabel": "Seattle, WA",
+      "id": "5809844",
+      "city": "Seattle",
+      "country": "US",
+      "region": "WA",
+      "latitude": 47.60621,
+      "longitude": -122.33207,
+      "sourceUrl": "https://www.geonames.org/5809844/"
+    },
+    {
+      "storedLabel": "Seattle, Washington",
+      "id": "5809844",
+      "city": "Seattle",
+      "country": "US",
+      "region": "WA",
+      "latitude": 47.60621,
+      "longitude": -122.33207,
+      "sourceUrl": "https://www.geonames.org/5809844/"
+    },
+    {
+      "storedLabel": "Seoul, Seoul, South Korea",
+      "id": "1835848",
+      "city": "Seoul",
+      "country": "KR",
+      "region": "11",
+      "latitude": 37.566,
+      "longitude": 126.9784,
+      "sourceUrl": "https://www.geonames.org/1835848/"
+    },
+    {
+      "storedLabel": "Singapore, Singapore",
+      "id": "1880252",
+      "city": "Singapore",
+      "country": "SG",
+      "region": "",
+      "latitude": 1.28967,
+      "longitude": 103.85007,
+      "sourceUrl": "https://www.geonames.org/1880252/"
+    },
+    {
+      "storedLabel": "Stockholm, Stockholm County, Sweden",
+      "id": "2673730",
+      "city": "Stockholm",
+      "country": "SE",
+      "region": "26",
+      "latitude": 59.32938,
+      "longitude": 18.06871,
+      "sourceUrl": "https://www.geonames.org/2673730/"
+    },
+    {
+      "storedLabel": "Stockholm, Sweden",
+      "id": "2673730",
+      "city": "Stockholm",
+      "country": "SE",
+      "region": "26",
+      "latitude": 59.32938,
+      "longitude": 18.06871,
+      "sourceUrl": "https://www.geonames.org/2673730/"
+    },
+    {
+      "storedLabel": "Stockton, CA",
+      "id": "5399020",
+      "city": "Stockton",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.9577,
+      "longitude": -121.29078,
+      "sourceUrl": "https://www.geonames.org/5399020/"
+    },
+    {
+      "storedLabel": "Sunnyvale, California",
+      "id": "5400075",
+      "city": "Sunnyvale",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.36883,
+      "longitude": -122.03635,
+      "sourceUrl": "https://www.geonames.org/5400075/"
+    },
+    {
+      "storedLabel": "São Paulo, SP, Brazil",
+      "id": "3448439",
+      "city": "São Paulo",
+      "country": "BR",
+      "region": "27",
+      "latitude": -23.5475,
+      "longitude": -46.63611,
+      "sourceUrl": "https://www.geonames.org/3448439/"
+    },
+    {
+      "storedLabel": "Tel Aviv-Yafo, Israel",
+      "id": "293397",
+      "city": "Tel Aviv",
+      "country": "IL",
+      "region": "05",
+      "latitude": 32.08088,
+      "longitude": 34.78057,
+      "sourceUrl": "https://www.geonames.org/293397/"
+    },
+    {
+      "storedLabel": "Toronto, Canada",
+      "id": "6167865",
+      "city": "Toronto",
+      "country": "CA",
+      "region": "08",
+      "latitude": 43.65333,
+      "longitude": -79.38389,
+      "sourceUrl": "https://www.geonames.org/6167865/"
+    },
+    {
+      "storedLabel": "Toronto, ON, Canada",
+      "id": "6167865",
+      "city": "Toronto",
+      "country": "CA",
+      "region": "08",
+      "latitude": 43.65333,
+      "longitude": -79.38389,
+      "sourceUrl": "https://www.geonames.org/6167865/"
+    },
+    {
+      "storedLabel": "Vancouver, BC, Canada",
+      "id": "6173331",
+      "city": "Vancouver",
+      "country": "CA",
+      "region": "02",
+      "latitude": 49.24966,
+      "longitude": -123.11934,
+      "sourceUrl": "https://www.geonames.org/6173331/"
+    },
+    {
+      "storedLabel": "Washington, DC",
+      "id": "4140963",
+      "city": "Washington",
+      "country": "US",
+      "region": "DC",
+      "latitude": 38.89511,
+      "longitude": -77.03637,
+      "sourceUrl": "https://www.geonames.org/4140963/"
+    },
+    {
+      "storedLabel": "Washington, DC, USA",
+      "id": "4140963",
+      "city": "Washington",
+      "country": "US",
+      "region": "DC",
+      "latitude": 38.89511,
+      "longitude": -77.03637,
+      "sourceUrl": "https://www.geonames.org/4140963/"
+    },
+    {
+      "storedLabel": "Waterloo, Canada",
+      "id": "6176823",
+      "city": "Waterloo",
+      "country": "CA",
+      "region": "08",
+      "latitude": 43.4668,
+      "longitude": -80.51639,
+      "sourceUrl": "https://www.geonames.org/6176823/"
+    },
+    {
+      "storedLabel": "Zürich, Switzerland",
+      "id": "2657896",
+      "city": "Zürich",
+      "country": "CH",
+      "region": "ZH",
+      "latitude": 47.36667,
+      "longitude": 8.55,
+      "sourceUrl": "https://www.geonames.org/2657896/"
+    }
+  ]
+}

@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useGlobeRotation } from "@/lib/client/use-globe-rotation";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadiusByFounders, markerSizeLegend } from "@/lib/domain/marker-radius";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
+import { CompanyLocationLayer } from "./company-location-layer";
+import mapStyles from "./company-location-map.module.css";
+import type { Map as LibreMap } from "maplibre-gl";
 import { campusFoundersTop, campusFoundersRanked, CAMPUS_FOUNDERS_VISIBLE } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
 import {
@@ -28,9 +33,6 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#EEF1F8";
-const LAND = "#6F7C96";
-const BOUNDARY = "#1E3A9A";
 const BRAND = "#2F4FD8";
 const COUNT = "font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]";
 
@@ -43,41 +45,6 @@ const COUNTRY_COLOR: Record<string, string> = {
 function markerColor(country: string): string {
   return COUNTRY_COLOR[country] ?? BRAND;
 }
-
-/** White ocean + cool slate land (own atlas, not YCGlobe cream). First painted frame is the globe. */
-const GLOBE_STYLE = {
-  version: 8,
-  name: "Campus Scout globe",
-  glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
-  sources: {
-    openmaptiles: { type: "vector", url: "https://tiles.openfreemap.org/planet" },
-  },
-  layers: [
-    { id: "background", type: "background", paint: { "background-color": LAND } },
-    {
-      id: "water",
-      type: "fill",
-      source: "openmaptiles",
-      "source-layer": "water",
-      paint: { "fill-color": OCEAN, "fill-opacity": 1 },
-    },
-    {
-      id: "coast",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "water",
-      paint: { "line-color": BOUNDARY, "line-width": 1.45, "line-opacity": 0.72 },
-    },
-    {
-      id: "boundary",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "boundary",
-      filter: ["any", ["==", ["get", "admin_level"], 2], ["==", ["get", "admin_level"], "2"]],
-      paint: { "line-color": BOUNDARY, "line-width": 1.15, "line-opacity": 0.55 },
-    },
-  ],
-};
 
 /**
  * Keep the globe disk inside the stage. MapLibre's equator is 512 * 2^zoom px,
@@ -164,7 +131,7 @@ export function TileGlobe({
   const hitPadRef = useRef(64);
   const nearestMaxRef = useRef(100);
   const campusesRef = useRef(campuses);
-  campusesRef.current = campuses;
+  useEffect(() => { campusesRef.current = campuses; }, [campuses]);
   const mapRef = useRef<{
     getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
     setFilter: (layer: string, filter: unknown) => void;
@@ -177,17 +144,22 @@ export function TileGlobe({
   } | null>(null);
   const frameRef = useRef<(() => void) | null>(null);
   const [hover, setHover] = useState<{ id: string; name: string; founders: number; signals: number; country: string; x: number; y: number } | null>(null);
-  const [pinned, setPinned] = useState<{ id: string; name: string; founders: number; signals: number; country: string } | null>(null);
+  const pinned = campuses.find(c => c.id === selectedId) ?? null;
+  const [activeMap, setActiveMap] = useState<LibreMap | null>(null);
   const [ready, setReady] = useState(false);
   const [painted, setPainted] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [locationsMode, setLocationsMode] = useState(true);
+  const [expandedMap, setExpandedMap] = useState(false);
+  const [rotationEnabled, setRotationEnabled] = useState(true);
+  useGlobeRotation(activeMap, rotationEnabled && !pinnedCaptureCenter());
+  const locationsModeRef = useRef(locationsMode);
+  useEffect(() => { locationsModeRef.current = locationsMode; }, [locationsMode]);
 
   useEffect(() => {
     const node = mapNode.current;
     if (!node) return;
     let dead = false;
-    let interacting = false;
-    let hovering = false;
     let map: {
       on: (type: string, layerOrHandler: string | ((event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number }; originalEvent?: Event }) => void), handler?: (event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number }; originalEvent?: Event }) => void) => void;
       getStyle: () => { layers: { id: string; type: string }[] };
@@ -200,6 +172,7 @@ export function TileGlobe({
       setFilter: (layer: string, filter: unknown) => void;
       getLayer: (id: string) => unknown;
       getCenter: () => { lng: number; lat: number };
+      getZoom: () => number;
       easeTo: (opts: object) => void;
       flyTo: (opts: object) => void;
       jumpTo: (opts: object) => void;
@@ -238,21 +211,9 @@ export function TileGlobe({
     window.addEventListener("resize", fit);
     const sheetMo = new MutationObserver(fit);
     sheetMo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-fold-sheet-mode"] });
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let reduce = motion.matches;
-    const onMotion = () => {
-      reduce = motion.matches;
-    };
-    motion.addEventListener("change", onMotion);
 
     const collection = () => campusCollection(campuses);
 
-    const spin = () => {
-      if (dead || !map || reduce || interacting || hovering || pinnedCaptureCenter()) return;
-      const center = map.getCenter();
-      center.lng -= 8;
-      map.easeTo({ center, duration: 1400, easing: (t: number) => t, essential: true });
-    };
 
     const styleTimer = window.setTimeout(() => {
       if (!dead) setFailed(true);
@@ -263,10 +224,11 @@ export function TileGlobe({
       if (dead || !mapNode.current) return;
       const created = new mod.Map({
         container: mapNode.current,
-        style: JSON.parse(JSON.stringify(GLOBE_STYLE)) as object,
+        style: "/company-globe-style.json",
         center: [-72, 36],
         zoom: 1.4,
         minZoom: 0.35,
+        maxZoom: 17,
         maxPitch: 0,
         renderWorldCopies: false,
         attributionControl: false,
@@ -407,6 +369,7 @@ export function TileGlobe({
           },
         });
         window.clearTimeout(styleTimer);
+        let framed = false;
         const frame = () => {
           if (dead || !map) return;
           const stage = mapNode.current?.parentElement;
@@ -420,20 +383,21 @@ export function TileGlobe({
           canvasBox.style.width = `${width}px`;
           canvasBox.style.height = `${height}px`;
           map.resize();
-          map.jumpTo(globeView(width, height));
+          if (!framed) map.jumpTo(globeView(width, height));
+          framed = true;
         };
         frameRef.current = frame;
         frame();
         setReady(true);
+        setActiveMap(map as unknown as LibreMap);
         let revealed = false;
         const reveal = () => {
           if (dead || revealed || !map) return;
-          // The style is already the orange/cream globe. Waiting on map.loaded()
+          // Waiting on map.loaded()
           // leaves the skeleton up when a tile request never settles.
           revealed = true;
           frame();
           setPainted(true);
-          spin();
         };
         map.on("render", reveal);
         map.on("idle", reveal);
@@ -458,12 +422,10 @@ export function TileGlobe({
       map.on("mousemove", "campus-dots", (event) => {
         const hit = read(event);
         if (!hit) return;
-        hovering = true;
         map!.getCanvas().style.cursor = "pointer";
         setHover(hit);
       });
       map.on("mouseleave", "campus-dots", () => {
-        hovering = false;
         if (map) map.getCanvas().style.cursor = "";
         setHover(null);
       });
@@ -552,11 +514,11 @@ export function TileGlobe({
         if (hit.id === lastSelectId && now - lastSelectAt < 450) return true;
         lastSelectAt = now;
         lastSelectId = hit.id;
-        setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
         onSelect(hit.id);
         return true;
       };
       const selectAt = (event: { point?: { x: number; y: number }; originalEvent?: Event }) => {
+        if (locationsModeRef.current) return;
         const point = pointFromMapEvent(event);
         if (!point) return;
         const hit = pickCampus(point);
@@ -564,6 +526,7 @@ export function TileGlobe({
         applyHit(hit);
       };
       const selectFromClient = (clientX: number, clientY: number, ev?: Event) => {
+        if (locationsModeRef.current) return false;
         // Re-read container rect on every tap.
         const point = mapPointFromPointer(map!.getCanvasContainer(), clientX, clientY);
         const hit = pickCampus(point);
@@ -573,8 +536,8 @@ export function TileGlobe({
       };
       const canvas = map.getCanvas();
       const canvasRoot = map.getCanvasContainer();
-      canvas.style.touchAction = "manipulation";
-      canvasRoot.style.touchAction = "manipulation";
+      canvas.style.touchAction = "none";
+      canvasRoot.style.touchAction = "none";
       let touchGuardUntil = 0;
       const onTouchEnd = (ev: TouchEvent) => {
         if (!ev.changedTouches?.length) return;
@@ -632,21 +595,7 @@ export function TileGlobe({
             );
         },
       };
-      const hold = () => {
-        interacting = true;
-      };
-      const release = () => {
-        interacting = false;
-      };
-      map.on("dragstart", hold);
-      map.on("dragend", release);
-      map.on("zoomstart", (event) => {
-        if (event.originalEvent) interacting = true;
-      });
-      map.on("zoomend", release);
-      map.on("moveend", () => {
-        if (!interacting) spin();
-      });
+
     });
     };
 
@@ -662,7 +611,6 @@ export function TileGlobe({
       observer.disconnect();
       window.removeEventListener("resize", fit);
       sheetMo.disconnect();
-      motion.removeEventListener("change", onMotion);
       map?.remove();
       mapRef.current = null;
     };
@@ -672,7 +620,32 @@ export function TileGlobe({
 
   useEffect(() => {
     frameRef.current?.();
-  }, [stageHeight]);
+  }, [stageHeight, expandedMap]);
+
+  useEffect(() => {
+    if (!expandedMap) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const keyboard = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setExpandedMap(false); return; }
+      if (event.key !== "Tab") return;
+      const controls = Array.from(mapNode.current?.parentElement?.querySelectorAll<HTMLElement>("a[href],button:not([disabled]),input,select") ?? []).filter(el => el.getBoundingClientRect().width > 0);
+      const first = controls[0], last = controls.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener("keydown", keyboard);
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener("keydown", keyboard); };
+  }, [expandedMap]);
+
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    const map = mapRef.current as unknown as LibreMap;
+    for (const layer of map.getStyle().layers ?? []) {
+      if (layer.id.startsWith("campus-")) map.setLayoutProperty(layer.id, "visibility", locationsMode ? "none" : "visible");
+    }
+    setHover(null);
+  }, [locationsMode, ready]);
 
   useEffect(() => {
     const source = mapRef.current?.getSource("campuses");
@@ -710,19 +683,18 @@ export function TileGlobe({
     map.setPaintProperty("campus-halo", "circle-opacity", haloMatch);
   }, [ready, highlightCampusIds, campuses]);
 
-  useEffect(() => {
-    if (!selectedId) {
-      setPinned(null);
-      return;
-    }
-    const campus = campuses.find((c) => c.id === selectedId);
-    if (campus) {
-      setPinned({ id: campus.id, name: campus.name, founders: campus.founders, signals: campus.signals, country: campus.country });
-    }
-  }, [selectedId, campuses]);
 
+
+  function resetGlobalView() {
+    const width = mapNode.current?.clientWidth || 1200;
+    const height = mapNode.current?.clientHeight || stageHeight;
+    const camera = globeView(width, height);
+    mapRef.current?.flyTo({ ...camera, duration: 550, essential: true });
+  }
 
   function focus(campus: TileCampus) {
+    setLocationsMode(false);
+    // Keep the global context; zoom 11 shows only streets and obscures other campuses.
     mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
     onSelect(campus.id);
   }
@@ -737,7 +709,6 @@ export function TileGlobe({
       .slice(0, 3);
   }, [companies, pinned]);
   const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
-  const quietUniverse = companies.length - signaledUniverse;
 
   // One campus count: the campuses actually drawn on the globe.
   const universeCounts = catalogReady
@@ -753,7 +724,7 @@ export function TileGlobe({
 
   return (
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
-      <div className="pointer-events-none absolute right-2 top-2 z-20 mb-0 ml-auto flex max-w-[70%] flex-wrap items-end justify-end gap-x-2 gap-y-0.5 rounded-sm bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 shadow-sm backdrop-blur-[2px] lg:pointer-events-auto lg:static lg:mb-2 lg:ml-0 lg:max-w-none lg:justify-between lg:gap-x-4 lg:gap-y-1 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none" data-fold-counts="">
+      <div className={`${locationsMode ? mapStyles.hqCounts : ""} pointer-events-none absolute right-2 top-2 z-20 mb-0 ml-auto flex max-w-[70%] flex-wrap items-end justify-end gap-x-2 gap-y-0.5 rounded-sm bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 shadow-sm backdrop-blur-[2px] lg:pointer-events-auto lg:static lg:mb-2 lg:ml-0 lg:max-w-none lg:justify-between lg:gap-x-4 lg:gap-y-1 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none`} data-fold-counts="" style={locationsMode ? {position:"relative",maxWidth:"none",top:"auto",right:"auto",margin:0} : undefined}>
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
           <span>
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
@@ -783,20 +754,32 @@ export function TileGlobe({
           </span>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">Click a campus to see its founders.</p>
+        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Choose a city to explore recorded startup HQs." : "Click a campus to see its founders."}</p>
       </div>
 
-      <section className="mb-0 lg:mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)] max-lg:sr-only">Map</h2>
+      <section className="mb-4" data-fold-desk-map="" aria-label="Map">
+        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
+          <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
+            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-9 px-3 ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
+            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-9 px-3 bg-white text-[#2f4fd8]">World view</button>
+            <button type="button" aria-pressed={rotationEnabled} title="Rotation pauses while using the map, at city zoom, and for reduced motion" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-9 px-3 bg-white text-[#2f4fd8]">{rotationEnabled ? "Pause rotation" : "Rotate globe"}</button>
+            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-9 px-3 ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
+          </span>
+        </h2>
         <div
-          className="relative overflow-hidden rounded-none border-0 border-[color:var(--cobalt,#2F4FD8)]/45 bg-[linear-gradient(165deg,#FBFCFE_0%,#F0F3FA_48%,#E6EBF6_100%)] shadow-none max-lg:before:hidden max-lg:after:opacity-40 lg:border lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.85),inset_0_-18px_40px_rgba(47,79,216,0.07),0_1px_2px_rgba(15,23,42,0.04)] lg:before:pointer-events-none lg:before:absolute lg:before:inset-2 lg:before:z-[1] lg:before:border lg:before:border-[color:var(--cobalt,#2F4FD8)]/15 lg:before:content-[''] lg:after:pointer-events-none lg:after:absolute lg:after:inset-0 lg:after:z-[1] lg:after:bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.55),transparent_55%),radial-gradient(ellipse_at_70%_85%,rgba(47,79,216,0.08),transparent_50%)] lg:after:content-['']"
-          style={{ height: stageHeight }}
+          className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-white`}
+          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
+          role={expandedMap ? "dialog" : undefined}
+          aria-modal={expandedMap ? true : undefined}
+          aria-label={expandedMap ? "Expanded startup map" : undefined}
+          data-map-expanded={expandedMap ? "true" : undefined}
           data-dispatch-map-stage=""
           data-fold-bigmap-stage=""
           data-map-stage-h={stageHeight}
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
           <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
+          <CompanyLocationLayer map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={setExpandedMap} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
           {!painted ? (
             <div className="absolute inset-0 z-30 bg-[#FFFFFF]" aria-busy="true" aria-live="polite">
               <div className="grid h-full place-items-center">
@@ -809,7 +792,7 @@ export function TileGlobe({
               <MapCredit />
             </p>
           </div>
-          {hover && (!pinned || pinned.id !== hover.id) ? (
+          {!locationsMode && hover && (!pinned || pinned.id !== hover.id) ? (
             <div
               className="pointer-events-none absolute z-30 w-max max-w-[260px] -translate-x-1/2 -translate-y-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)] shadow-sm"
               style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
@@ -824,7 +807,7 @@ export function TileGlobe({
               </p>
             </div>
           ) : null}
-          {pinned ? (
+          {!locationsMode && pinned ? (
             <div
               className="absolute bottom-8 left-3 z-30 w-[min(300px,calc(100%-1.5rem))] rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 text-left shadow-sm"
               data-fold-entity-card=""
@@ -838,7 +821,6 @@ export function TileGlobe({
                 <button
                   type="button"
                   onClick={() => {
-                    setPinned(null);
                     onSelect("");
                     try {
                       (window as unknown as { __campusScoutMap?: { resize?: () => void } }).__campusScoutMap?.resize?.();
@@ -887,7 +869,7 @@ export function TileGlobe({
             </div>
           ) : null}
           {/* r49: collapsible legend tucked bottom-left — never over Program/filters or stats. */}
-          <div className="pointer-events-auto absolute left-2 top-2 z-20 max-w-[168px] lg:top-auto lg:bottom-2" data-fold-map-legend="">
+          <div className={`pointer-events-auto absolute left-2 top-2 z-20 max-w-[168px] lg:top-auto lg:bottom-2 ${locationsMode ? "hidden" : ""}`} data-fold-map-legend="">
             <button
               type="button"
               className="inline-flex h-7 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] shadow-sm"
@@ -946,9 +928,9 @@ export function TileGlobe({
                 {showAllCampuses ? "Show top 10" : `All campuses · ${(rankedCampuses.length - topCampuses.length).toLocaleString("en-US")} more`}
               </button>
             ) : null}
-            <a href="/campuses" className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] underline-offset-2 hover:underline">
+            <Link href="/campuses" className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] underline-offset-2 hover:underline">
               Campus index
-            </a>
+            </Link>
           </div>
           <p className="mt-2 text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]">{markerSizeLegend()}</p>
         </section>

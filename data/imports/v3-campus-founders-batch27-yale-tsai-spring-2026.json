@@ -1,0 +1,354 @@
+{
+  "retrievedAt": "2026-11-03T08:56:00.000Z",
+  "companies": [
+    {
+      "name": "BridgePath Technologies",
+      "description": "AI platform matching students and early-career professionals with mentors",
+      "website": "https://www.mybridgepath.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture BridgePath Technologies: Chloe Yu (2028). AI platform matching students and early-career professionals with mentors.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Chloe Yu",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Chloe Yu with BridgePath Technologies and Yale 2028 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture BridgePath Technologies: Chloe Yu (2028). AI platform matching students and early-career professionals with mentors."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture BridgePath Technologies: Chloe Yu (2028). AI platform matching students and early-career professionals with mentors."
+        }
+      ]
+    },
+    {
+      "name": "Comitia",
+      "description": "AI comics creation and publishing",
+      "website": null,
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Comitia: Hanwool Jung (2026). AI comics creation and publishing.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Hanwool Jung",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Hanwool Jung with Comitia and Yale 2026 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Comitia: Hanwool Jung (2026). AI comics creation and publishing."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Comitia: Hanwool Jung (2026). AI comics creation and publishing."
+        }
+      ]
+    },
+    {
+      "name": "Cosnetix",
+      "description": "Predictive cosmetic product and skin interaction analysis",
+      "website": "https://www.cosnetix.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Cosnetix: Diana Salha (2027). Predictive cosmetic product and skin interaction analysis.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Diana Salha",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Diana Salha with Cosnetix and Yale 2027 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Cosnetix: Diana Salha (2027). Predictive cosmetic product and skin interaction analysis."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Cosnetix: Diana Salha (2027). Predictive cosmetic product and skin interaction analysis."
+        }
+      ]
+    },
+    {
+      "name": "Finsaku",
+      "description": "AI analysis of Japanese corporate disclosures",
+      "website": "https://finsakuai.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Finsaku: Yuto Kida (2026), Matthew Neissen (2026). AI analysis of Japanese corporate disclosures.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yuto Kida",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Yuto Kida with Finsaku and Yale 2026 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Finsaku: Yuto Kida (2026), Matthew Neissen (2026). AI analysis of Japanese corporate disclosures."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Finsaku: Yuto Kida (2026), Matthew Neissen (2026). AI analysis of Japanese corporate disclosures."
+        },
+        {
+          "name": "Matthew Neissen",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Matthew Neissen with Finsaku and Yale 2026 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Finsaku: Yuto Kida (2026), Matthew Neissen (2026). AI analysis of Japanese corporate disclosures."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Finsaku: Yuto Kida (2026), Matthew Neissen (2026). AI analysis of Japanese corporate disclosures."
+        }
+      ]
+    },
+    {
+      "name": "Helix",
+      "description": "City-based fashion resale rental and repair",
+      "website": "https://helixcommons.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Helix: Maya Caine (2026). City-based fashion resale rental and repair.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Maya Caine",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Maya Caine with Helix and Yale 2026 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Helix: Maya Caine (2026). City-based fashion resale rental and repair."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Helix: Maya Caine (2026). City-based fashion resale rental and repair."
+        }
+      ]
+    },
+    {
+      "name": "MyEezz",
+      "description": "AI focus and energy management app",
+      "website": "https://myeezz.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture MyEezz: Chris Johnson (2026), Arinze Agu. AI focus and energy management app.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Chris Johnson",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Chris Johnson with MyEezz and Yale 2026 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture MyEezz: Chris Johnson (2026), Arinze Agu. AI focus and energy management app."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture MyEezz: Chris Johnson (2026), Arinze Agu. AI focus and energy management app."
+        },
+        {
+          "name": "Arinze Agu",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Arinze Agu with MyEezz; legal founder role not independently established.",
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture MyEezz: Chris Johnson (2026), Arinze Agu. AI focus and energy management app."
+        }
+      ]
+    },
+    {
+      "name": "QuarterMill",
+      "description": "Archive scan digitization, cleaning and structuring",
+      "website": "https://quartermill.co",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture QuarterMill: Keith Pemberton (2027). Archive scan digitization, cleaning and structuring.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Keith Pemberton",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Keith Pemberton with QuarterMill and Yale 2027 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture QuarterMill: Keith Pemberton (2027). Archive scan digitization, cleaning and structuring."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture QuarterMill: Keith Pemberton (2027). Archive scan digitization, cleaning and structuring."
+        }
+      ]
+    },
+    {
+      "name": "Solaris",
+      "description": "Live music, art and social change experiences",
+      "website": "https://wearesolaris.net",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Solaris: Jon-Michael Taylor (2027), Hirad Moradi-Lakeh (2027). Live music, art and social change experiences.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jon-Michael Taylor",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Jon-Michael Taylor with Solaris and Yale 2027 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Solaris: Jon-Michael Taylor (2027), Hirad Moradi-Lakeh (2027). Live music, art and social change experiences."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Solaris: Jon-Michael Taylor (2027), Hirad Moradi-Lakeh (2027). Live music, art and social change experiences."
+        },
+        {
+          "name": "Hirad Moradi-Lakeh",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Hirad Moradi-Lakeh with Solaris and Yale 2027 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Solaris: Jon-Michael Taylor (2027), Hirad Moradi-Lakeh (2027). Live music, art and social change experiences."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Solaris: Jon-Michael Taylor (2027), Hirad Moradi-Lakeh (2027). Live music, art and social change experiences."
+        }
+      ]
+    },
+    {
+      "name": "Studio B-Du",
+      "description": "Ceramic art and craft accessibility",
+      "website": "https://www.studiobdu.com",
+      "sourceUrl": "https://city.yale.edu/stories/2026/2/20/spring-2026-venture-development-programs-the-builders-shaping-whats-next",
+      "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Studio B-Du: Brenton Duhan (2026). Ceramic art and craft accessibility.",
+      "orgPlace": "Yale Tsai CITY Spring 2026 Accelerator",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Brenton Duhan",
+          "aliases": [],
+          "campusId": "univ_yale",
+          "affiliationRole": "Named Yale Tsai CITY Spring 2026 Accelerator venture participant",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Accelerator team participant; individual founder title not explicitly established by listing",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Yale Tsai CITY official Spring 2026 list names Brenton Duhan with Studio B-Du and Yale 2026 degree; legal founder role not independently established.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Yale Tsai CITY Spring 2026 Accelerator venture Studio B-Du: Brenton Duhan (2026). Ceramic art and craft accessibility."
+          },
+          "excerpt": "Yale Tsai CITY Spring 2026 Accelerator venture Studio B-Du: Brenton Duhan (2026). Ceramic art and craft accessibility."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}

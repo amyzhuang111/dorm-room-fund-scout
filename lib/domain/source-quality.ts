@@ -12,6 +12,9 @@
 // separately surfaced as scores in the UI.
 
 import type { CommunitySignal } from "./community-signal";
+import { EXPANDED_CAMPUS_DIRECTORIES } from "./expanded-campus-directories";
+import { CAMPUS_FOUNDER_SOURCE_EXPANSION } from "./campus-founder-source-expansion";
+import { LATE_2026_CAMPUS_SOURCE_ROSTERS } from "./late-2026-campus-source-rosters";
 
 export type Tier = "S+" | "S" | "A" | "B" | "C" | "D";
 export type DimensionLevel = "high" | "medium" | "low";
@@ -884,11 +887,11 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
   },
   {
     id: "cat_cardinal_ventures",
-    dbSourceId: "src_cardinal_ventures",
+    dbSourceId: "src_v3_svfund_stanford_edu",
     name: "Cardinal Ventures (now rebranded \"Stanford Ventures\")",
     campus: "univ_stanford",
     sourceType: "accelerator",
-    url: "https://svfund.stanford.edu/",
+    url: "https://svfund.stanford.edu/accelerator/25-26/",
     founderScoutTier: "A",
     startupScoutTier: "A",
     role: "discovery",
@@ -898,9 +901,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whyItMatters: "Treat as a selection/corroboration layer · companies here already cleared a real student-run bar.",
     whatToExtract: ["cohort company names", "founder names", "sector focus (DeepTech/BioTech per their own positioning)"],
     whatNotToInfer: ["Cohort acceptance corroborates, but the underlying company/founder evidence still needs to be checked directly."],
-    status: "unconfigured",
+    status: "implemented",
     statusNote:
-      "Investigated, not built (2026-09-24): svfund.stanford.edu itself is a client-only SPA shell · every route (including plausible data endpoints like /data.json, /content.json, /api/content) returns the exact same empty index.html (Content-Type: text/html, not JSON), confirmed by inspecting response headers/bodies directly, not guessed. No server-rendered content, no discoverable JSON API. Same access class as Free Ventures/Entrepreneurs @ Berkeley above · real org, real (now-verified) URL, but nothing scrapable without a headless browser this environment doesn't have.",
+      "Imported 2025–26 official Stanford Ventures cohort roster in batch19: 27 startup names and 56 named founder links (49 people and 25 companies net new on 2026-11-03). The earlier crawl limitation for the home SPA does not apply to the cohort page. Verified school/current enrollment remains independent.",
   },
   {
     id: "cat_startx",
@@ -1893,6 +1896,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     status: "checked_and_skipped",
     statusNote: "Skipped 2026-11-02 because it has no founder, campus, or grad evidence. Use Velocity instead.",
   },
+  ...EXPANDED_CAMPUS_DIRECTORIES,
+  ...CAMPUS_FOUNDER_SOURCE_EXPANSION,
+  ...LATE_2026_CAMPUS_SOURCE_ROSTERS,
 ];
 
 export function catalogueForCampus(campusId: string): SourceCatalogueEntry[] {

@@ -1,0 +1,1416 @@
+{
+  "retrievedAt": "2026-11-03T06:00:00.000Z",
+  "companies": [
+    {
+      "name": "Aër",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Aër, Shirin Ghorbani ’28, Eva Ho ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Shirin Ghorbani",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Shirin Ghorbani on Aër; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Aër, Shirin Ghorbani ’28, Eva Ho ’28"
+          },
+          "excerpt": "Aër, Shirin Ghorbani ’28, Eva Ho ’28"
+        },
+        {
+          "name": "Eva Ho",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Eva Ho on Aër; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Aër, Shirin Ghorbani ’28, Eva Ho ’28"
+          },
+          "excerpt": "Aër, Shirin Ghorbani ’28, Eva Ho ’28"
+        }
+      ]
+    },
+    {
+      "name": "Anvil",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Anvil, Paul Trusov ’29",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Paul Trusov",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Paul Trusov on Anvil; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Anvil, Paul Trusov ’29"
+          },
+          "excerpt": "Anvil, Paul Trusov ’29"
+        }
+      ]
+    },
+    {
+      "name": "Asian Aunties",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Asian Aunties, Eunice Lee ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Eunice Lee",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Eunice Lee on Asian Aunties; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Asian Aunties, Eunice Lee ’27"
+          },
+          "excerpt": "Asian Aunties, Eunice Lee ’27"
+        }
+      ]
+    },
+    {
+      "name": "Better Tales",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Better Tales, Paulina Endara Pallasco PhD ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Paulina Endara Pallasco",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Paulina Endara Pallasco on Better Tales; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Better Tales, Paulina Endara Pallasco PhD ’27"
+          },
+          "excerpt": "Better Tales, Paulina Endara Pallasco PhD ’27"
+        }
+      ]
+    },
+    {
+      "name": "CommuniCare",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "CommuniCare, Samhita Korukonda ’27, Yuvna Musuku ’27, Ralph Ho ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Samhita Korukonda",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Samhita Korukonda on CommuniCare; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "CommuniCare, Samhita Korukonda ’27, Yuvna Musuku ’27, Ralph Ho ’27"
+          },
+          "excerpt": "CommuniCare, Samhita Korukonda ’27, Yuvna Musuku ’27, Ralph Ho ’27"
+        },
+        {
+          "name": "Yuvna Musuku",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Yuvna Musuku on CommuniCare; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "CommuniCare, Samhita Korukonda ’27, Yuvna Musuku ’27, Ralph Ho ’27"
+          },
+          "excerpt": "CommuniCare, Samhita Korukonda ’27, Yuvna Musuku ’27, Ralph Ho ’27"
+        },
+        {
+          "name": "Ralph Ho",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Ralph Ho on CommuniCare; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "CommuniCare, Samhita Korukonda ’27, Yuvna Musuku ’27, Ralph Ho ’27"
+          },
+          "excerpt": "CommuniCare, Samhita Korukonda ’27, Yuvna Musuku ’27, Ralph Ho ’27"
+        }
+      ]
+    },
+    {
+      "name": "CONTEXTOS",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "CONTEXTOS, Hadi Saif ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Hadi Saif",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Hadi Saif on CONTEXTOS; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "CONTEXTOS, Hadi Saif ’28"
+          },
+          "excerpt": "CONTEXTOS, Hadi Saif ’28"
+        }
+      ]
+    },
+    {
+      "name": "Dalia",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Dalia, Eashan Vagish ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Eashan Vagish",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Eashan Vagish on Dalia; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Dalia, Eashan Vagish ’27"
+          },
+          "excerpt": "Dalia, Eashan Vagish ’27"
+        }
+      ]
+    },
+    {
+      "name": "Diwan Coffee",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Diwan Coffee, Rayaan Lodi ’28, Noor Sattar ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Rayaan Lodi",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Rayaan Lodi on Diwan Coffee; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Diwan Coffee, Rayaan Lodi ’28, Noor Sattar ’27"
+          },
+          "excerpt": "Diwan Coffee, Rayaan Lodi ’28, Noor Sattar ’27"
+        },
+        {
+          "name": "Noor Sattar",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Noor Sattar on Diwan Coffee; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Diwan Coffee, Rayaan Lodi ’28, Noor Sattar ’27"
+          },
+          "excerpt": "Diwan Coffee, Rayaan Lodi ’28, Noor Sattar ’27"
+        }
+      ]
+    },
+    {
+      "name": "DRVN",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "DRVN, Howard Zheng ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Howard Zheng",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Howard Zheng on DRVN; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "DRVN, Howard Zheng ’28"
+          },
+          "excerpt": "DRVN, Howard Zheng ’28"
+        }
+      ]
+    },
+    {
+      "name": "ekimul",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "ekimul, Sheng Cui ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Sheng Cui",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Sheng Cui on ekimul; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "ekimul, Sheng Cui ’27"
+          },
+          "excerpt": "ekimul, Sheng Cui ’27"
+        }
+      ]
+    },
+    {
+      "name": "Evergreen Bites",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Evergreen Bites, Darian Pan ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Darian Pan",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Darian Pan on Evergreen Bites; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Evergreen Bites, Darian Pan ’28"
+          },
+          "excerpt": "Evergreen Bites, Darian Pan ’28"
+        }
+      ]
+    },
+    {
+      "name": "Fandia",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Alvin Fang",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Alvin Fang on Fandia; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+          },
+          "excerpt": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+        },
+        {
+          "name": "Sheng Cui",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Sheng Cui on Fandia; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+          },
+          "excerpt": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+        },
+        {
+          "name": "Taikary Jiang",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Taikary Jiang on Fandia; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+          },
+          "excerpt": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+        },
+        {
+          "name": "Michael Zhong",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Michael Zhong on Fandia; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+          },
+          "excerpt": "Fandia, Alvin Fang ’27, Sheng Cui ’27, Taikary Jiang ’27, Michael Zhong ’27"
+        }
+      ]
+    },
+    {
+      "name": "FirmAtlas",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "FirmAtlas, Peter Karacs MPS-RE ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Peter Karacs",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Peter Karacs on FirmAtlas; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "FirmAtlas, Peter Karacs MPS-RE ’28"
+          },
+          "excerpt": "FirmAtlas, Peter Karacs MPS-RE ’28"
+        }
+      ]
+    },
+    {
+      "name": "Gild",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Gild, Adriana Burnett, MPS ’27, Sarah Van Horn, MPS ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Adriana Burnett",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Adriana Burnett on Gild; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Gild, Adriana Burnett, MPS ’27, Sarah Van Horn, MPS ’27"
+          },
+          "excerpt": "Gild, Adriana Burnett, MPS ’27, Sarah Van Horn, MPS ’27"
+        },
+        {
+          "name": "Sarah Van Horn",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Sarah Van Horn on Gild; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Gild, Adriana Burnett, MPS ’27, Sarah Van Horn, MPS ’27"
+          },
+          "excerpt": "Gild, Adriana Burnett, MPS ’27, Sarah Van Horn, MPS ’27"
+        }
+      ]
+    },
+    {
+      "name": "Global Playground",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Global Playground, Danish Hussain Yar ’28, Yalda Hussain Yar ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Danish Hussain Yar",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Danish Hussain Yar on Global Playground; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Global Playground, Danish Hussain Yar ’28, Yalda Hussain Yar ’28"
+          },
+          "excerpt": "Global Playground, Danish Hussain Yar ’28, Yalda Hussain Yar ’28"
+        },
+        {
+          "name": "Yalda Hussain Yar",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Yalda Hussain Yar on Global Playground; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Global Playground, Danish Hussain Yar ’28, Yalda Hussain Yar ’28"
+          },
+          "excerpt": "Global Playground, Danish Hussain Yar ’28, Yalda Hussain Yar ’28"
+        }
+      ]
+    },
+    {
+      "name": "HailIQ",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "HailIQ, Noel Blackwell ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Noel Blackwell",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Noel Blackwell on HailIQ; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "HailIQ, Noel Blackwell ’28"
+          },
+          "excerpt": "HailIQ, Noel Blackwell ’28"
+        }
+      ]
+    },
+    {
+      "name": "IronThreads",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "IronThreads, Daniel Aranda ’29, Charlie De Sena ’30",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Daniel Aranda",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Daniel Aranda on IronThreads; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "IronThreads, Daniel Aranda ’29, Charlie De Sena ’30"
+          },
+          "excerpt": "IronThreads, Daniel Aranda ’29, Charlie De Sena ’30"
+        },
+        {
+          "name": "Charlie De Sena",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Charlie De Sena on IronThreads; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'30",
+            "gradYear": 2030,
+            "evidence": "IronThreads, Daniel Aranda ’29, Charlie De Sena ’30"
+          },
+          "excerpt": "IronThreads, Daniel Aranda ’29, Charlie De Sena ’30"
+        }
+      ]
+    },
+    {
+      "name": "ItsLife",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "ItsLife, Xuehao Zang PhD ’29",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Xuehao Zang",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Xuehao Zang on ItsLife; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "ItsLife, Xuehao Zang PhD ’29"
+          },
+          "excerpt": "ItsLife, Xuehao Zang PhD ’29"
+        }
+      ]
+    },
+    {
+      "name": "Mavin’s Landing",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Mavin’s Landing, Matthew Morris, MBA ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Matthew Morris",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Matthew Morris on Mavin’s Landing; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Mavin’s Landing, Matthew Morris, MBA ’27"
+          },
+          "excerpt": "Mavin’s Landing, Matthew Morris, MBA ’27"
+        }
+      ]
+    },
+    {
+      "name": "Memento",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Memento, Grace Chen ’28, Matias Riveros-Amado ’29, Isabella Salducco ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Grace Chen",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Grace Chen on Memento; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Memento, Grace Chen ’28, Matias Riveros-Amado ’29, Isabella Salducco ’28"
+          },
+          "excerpt": "Memento, Grace Chen ’28, Matias Riveros-Amado ’29, Isabella Salducco ’28"
+        },
+        {
+          "name": "Matias Riveros-Amado",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Matias Riveros-Amado on Memento; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Memento, Grace Chen ’28, Matias Riveros-Amado ’29, Isabella Salducco ’28"
+          },
+          "excerpt": "Memento, Grace Chen ’28, Matias Riveros-Amado ’29, Isabella Salducco ’28"
+        },
+        {
+          "name": "Isabella Salducco",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Isabella Salducco on Memento; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Memento, Grace Chen ’28, Matias Riveros-Amado ’29, Isabella Salducco ’28"
+          },
+          "excerpt": "Memento, Grace Chen ’28, Matias Riveros-Amado ’29, Isabella Salducco ’28"
+        }
+      ]
+    },
+    {
+      "name": "Mino",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Mino, Hoan Le, MBA ’27, Min Namkoong, MBA ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Hoan Le",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Hoan Le on Mino; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Mino, Hoan Le, MBA ’27, Min Namkoong, MBA ’27"
+          },
+          "excerpt": "Mino, Hoan Le, MBA ’27, Min Namkoong, MBA ’27"
+        },
+        {
+          "name": "Min Namkoong",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Min Namkoong on Mino; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Mino, Hoan Le, MBA ’27, Min Namkoong, MBA ’27"
+          },
+          "excerpt": "Mino, Hoan Le, MBA ’27, Min Namkoong, MBA ’27"
+        }
+      ]
+    },
+    {
+      "name": "Nüey",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Nüey, Valeria Ortiz MBA ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Valeria Ortiz",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Valeria Ortiz on Nüey; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Nüey, Valeria Ortiz MBA ’27"
+          },
+          "excerpt": "Nüey, Valeria Ortiz MBA ’27"
+        }
+      ]
+    },
+    {
+      "name": "Project EIA",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Project EIA, Tim Wurst, MBA ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Tim Wurst",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Tim Wurst on Project EIA; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Project EIA, Tim Wurst, MBA ’27"
+          },
+          "excerpt": "Project EIA, Tim Wurst, MBA ’27"
+        }
+      ]
+    },
+    {
+      "name": "Redtail Studios",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Santiago Fernandez",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Santiago Fernandez on Redtail Studios; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+          },
+          "excerpt": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+        },
+        {
+          "name": "Alejandro Cercio",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Alejandro Cercio on Redtail Studios; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+          },
+          "excerpt": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+        },
+        {
+          "name": "Mauricio SIlba",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Mauricio SIlba on Redtail Studios; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+          },
+          "excerpt": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+        },
+        {
+          "name": "Amritha Parimala",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Amritha Parimala on Redtail Studios; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+          },
+          "excerpt": "Redtail Studios, Santiago Fernandez, MBA ’27, Alejandro Cercio, MBA ’27, Mauricio SIlba, MBA ’27, Amritha Parimala, MBA ’27"
+        }
+      ]
+    },
+    {
+      "name": "Reharmonize",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Reharmonize, Ethan Tai ’29",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Ethan Tai",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Ethan Tai on Reharmonize; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Reharmonize, Ethan Tai ’29"
+          },
+          "excerpt": "Reharmonize, Ethan Tai ’29"
+        }
+      ]
+    },
+    {
+      "name": "Silo Labs",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Silo Labs, Yaron Klein, MBA ’27, Sahil Desai, PhD ’27,",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Yaron Klein",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Yaron Klein on Silo Labs; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Silo Labs, Yaron Klein, MBA ’27, Sahil Desai, PhD ’27,"
+          },
+          "excerpt": "Silo Labs, Yaron Klein, MBA ’27, Sahil Desai, PhD ’27,"
+        },
+        {
+          "name": "Sahil Desai",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Sahil Desai on Silo Labs; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Silo Labs, Yaron Klein, MBA ’27, Sahil Desai, PhD ’27,"
+          },
+          "excerpt": "Silo Labs, Yaron Klein, MBA ’27, Sahil Desai, PhD ’27,"
+        }
+      ]
+    },
+    {
+      "name": "STRIDE RUNNING COMPANY",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "STRIDE RUNNING COMPANY, Brooke Wilcox ’28, Kate Stiens ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Brooke Wilcox",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Brooke Wilcox on STRIDE RUNNING COMPANY; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "STRIDE RUNNING COMPANY, Brooke Wilcox ’28, Kate Stiens ’27"
+          },
+          "excerpt": "STRIDE RUNNING COMPANY, Brooke Wilcox ’28, Kate Stiens ’27"
+        },
+        {
+          "name": "Kate Stiens",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Kate Stiens on STRIDE RUNNING COMPANY; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "STRIDE RUNNING COMPANY, Brooke Wilcox ’28, Kate Stiens ’27"
+          },
+          "excerpt": "STRIDE RUNNING COMPANY, Brooke Wilcox ’28, Kate Stiens ’27"
+        }
+      ]
+    },
+    {
+      "name": "Syndeo",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Syndeo, Jackson Hutchison ’29",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Jackson Hutchison",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Jackson Hutchison on Syndeo; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Syndeo, Jackson Hutchison ’29"
+          },
+          "excerpt": "Syndeo, Jackson Hutchison ’29"
+        }
+      ]
+    },
+    {
+      "name": "Thrive Time",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Thrive Time, Justin Bertelsen, MBA ’27",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Justin Bertelsen",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Justin Bertelsen on Thrive Time; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Thrive Time, Justin Bertelsen, MBA ’27"
+          },
+          "excerpt": "Thrive Time, Justin Bertelsen, MBA ’27"
+        }
+      ]
+    },
+    {
+      "name": "Throttle",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Throttle, Jacob Berko M.Eng. ’26",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Jacob Berko",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Jacob Berko on Throttle; this does not prove incorporation, product launch, or funding.",
+          "excerpt": "Throttle, Jacob Berko M.Eng. ’26"
+        }
+      ]
+    },
+    {
+      "name": "Vitamin VVV",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Vitamin VVV, Viki Ding ’29",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Viki Ding",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Viki Ding on Vitamin VVV; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Vitamin VVV, Viki Ding ’29"
+          },
+          "excerpt": "Vitamin VVV, Viki Ding ’29"
+        }
+      ]
+    },
+    {
+      "name": "Zana",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Zana, Ezana Kavuma ’28",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Ezana Kavuma",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Ezana Kavuma on Zana; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Zana, Ezana Kavuma ’28"
+          },
+          "excerpt": "Zana, Ezana Kavuma ’28"
+        }
+      ]
+    },
+    {
+      "name": "Zybit",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://crea.cornell.edu/elab/elab-welcomes-33-student-startups-to-fall-cohort/",
+      "excerpt": "Zybit, Jad Alsouss ’29, Asad Rizvi ’29, Gabe Meredith ’29",
+      "orgPlace": "Cornell eLab 2026–27",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "verificationStatus": "partial",
+      "founders": [
+        {
+          "name": "Jad Alsouss",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Jad Alsouss on Zybit; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Zybit, Jad Alsouss ’29, Asad Rizvi ’29, Gabe Meredith ’29"
+          },
+          "excerpt": "Zybit, Jad Alsouss ’29, Asad Rizvi ’29, Gabe Meredith ’29"
+        },
+        {
+          "name": "Asad Rizvi",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Asad Rizvi on Zybit; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Zybit, Jad Alsouss ’29, Asad Rizvi ’29, Gabe Meredith ’29"
+          },
+          "excerpt": "Zybit, Jad Alsouss ’29, Asad Rizvi ’29, Gabe Meredith ’29"
+        },
+        {
+          "name": "Gabe Meredith",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell student founder, eLab 2026–27",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell's 2026–27 eLab student-venture roster lists Gabe Meredith on Zybit; this does not prove incorporation, product launch, or funding.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Zybit, Jad Alsouss ’29, Asad Rizvi ’29, Gabe Meredith ’29"
+          },
+          "excerpt": "Zybit, Jad Alsouss ’29, Asad Rizvi ’29, Gabe Meredith ’29"
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}

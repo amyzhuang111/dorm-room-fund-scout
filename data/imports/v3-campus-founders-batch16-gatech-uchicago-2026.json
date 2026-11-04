@@ -1,0 +1,201 @@
+{
+  "retrievedAt": "2026-11-03T06:51:00.000Z",
+  "companies": [
+    {
+      "name": "Alva",
+      "description": "AI-supported women’s health testing and biotech usability platform",
+      "website": null,
+      "sourceUrl": "https://news.gatech.edu/news/2026/08/31/create-x-demo-day-meet-founders-building-whats-next",
+      "excerpt": "Alva — Georgia Tech CREATE-X Demo Day 2026: Yaashmita Senthilnathan; Srija Konathala.",
+      "orgPlace": "Georgia Tech CREATE-X Demo Day 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yaashmita Senthilnathan",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "Georgia Tech CREATE-X Demo Day 2026",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official university report identifies Yaashmita Senthilnathan at Alva; class year not printed.",
+          "excerpt": "Alva — Georgia Tech CREATE-X Demo Day 2026: Yaashmita Senthilnathan; Srija Konathala."
+        },
+        {
+          "name": "Srija Konathala",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "Georgia Tech CREATE-X Demo Day 2026",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official university report identifies Srija Konathala at Alva; class year not printed.",
+          "excerpt": "Alva — Georgia Tech CREATE-X Demo Day 2026: Yaashmita Senthilnathan; Srija Konathala."
+        }
+      ]
+    },
+    {
+      "name": "AdaptaPlay",
+      "description": "Accessible adaptive game controller technology",
+      "website": null,
+      "sourceUrl": "https://news.gatech.edu/news/2026/08/31/create-x-demo-day-meet-founders-building-whats-next",
+      "excerpt": "AdaptaPlay — Georgia Tech CREATE-X Demo Day 2026: Akos Vida.",
+      "orgPlace": "Georgia Tech CREATE-X Demo Day 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Akos Vida",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "Georgia Tech CREATE-X Demo Day 2026",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official university report identifies Akos Vida at AdaptaPlay; class year not printed.",
+          "excerpt": "AdaptaPlay — Georgia Tech CREATE-X Demo Day 2026: Akos Vida."
+        }
+      ]
+    },
+    {
+      "name": "BRAIV",
+      "description": "Precision mental-health prescribing intelligence",
+      "website": "https://braiv.tech",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "BRAIV — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "CareLumi",
+      "description": "Automated healthcare compliance workflows",
+      "website": "https://carelumi.com",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "CareLumi — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "eep",
+      "description": "Predictive fatigue and performance intelligence",
+      "website": "https://witheep.com",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "eep — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Hydrastack",
+      "description": "AI translation of slot-machine games to online platforms",
+      "website": "https://hydrastack.io",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "Hydrastack — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Inzollo",
+      "description": "Inventory, order and warehouse software for distributors",
+      "website": "https://inzollo.com",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "Inzollo — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Nestera",
+      "description": "Home-hospital operating system",
+      "website": "https://nesterahealth.com",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "Nestera — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Rare Earth Rescue",
+      "description": "Rare-earth magnet recycling and materials",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "Rare Earth Rescue — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Slideflow Labs",
+      "description": "AI cancer pathology biomarker analysis",
+      "website": "https://www.slideflow.ai",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "Slideflow Labs — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Unloket",
+      "description": "AI hotel guest concierge",
+      "website": "https://www.unloket.com",
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "Unloket — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Vidnova Therapeutics",
+      "description": "Microbiome therapies for liver disease",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/05/21/10-startups-to-compete-for-over-1-million-at-30th-annual-edward-l-kaplan-71-new-venture-challenge-finals/",
+      "excerpt": "Vidnova Therapeutics — University of Chicago 2026 New Venture Challenge finalist.",
+      "orgPlace": "University of Chicago 2026 New Venture Challenge finalist",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    }
+  ],
+  "potential": [],
+  "links": []
+}

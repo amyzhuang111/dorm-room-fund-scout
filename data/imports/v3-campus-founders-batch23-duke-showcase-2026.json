@@ -1,0 +1,1162 @@
+{
+  "retrievedAt": "2026-11-03T08:05:00.000Z",
+  "companies": [
+    {
+      "name": "Alumni Capital Partners",
+      "description": "University project infrastructure investment platform",
+      "website": "https://www.alumnicapitalpartners.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Alumni Capital Partners — La'Naeschia O'Rear, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "La'Naeschia O'Rear",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Alumni Capital Partners",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names La'Naeschia O'Rear with Alumni Capital Partners; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Alumni Capital Partners — La'Naeschia O'Rear, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Alumni Capital Partners — La'Naeschia O'Rear, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Anka",
+      "description": "AI-native music creator identity and discovery",
+      "website": "https://www.anka.so",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Anka — Kaan Turan, Duke class '27.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kaan Turan",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Anka",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Kaan Turan with Anka; graduate year 2027. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Anka — Kaan Turan, Duke class '27."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Anka — Kaan Turan, Duke class '27."
+        }
+      ]
+    },
+    {
+      "name": "AphasiaGPT",
+      "description": "Speech and language recovery practice for people with aphasia",
+      "website": "https://aphasiagpt.ai",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: AphasiaGPT — Stephen Albright, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Stephen Albright",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for AphasiaGPT",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Stephen Albright with AphasiaGPT; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: AphasiaGPT — Stephen Albright, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: AphasiaGPT — Stephen Albright, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Avatar Training Portal",
+      "description": "Athlete biomechanics and injury-prevention insights",
+      "website": "https://atp-data.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Avatar Training Portal — Connor Barket, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Connor Barket",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Avatar Training Portal",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Connor Barket with Avatar Training Portal; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Avatar Training Portal — Connor Barket, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Avatar Training Portal — Connor Barket, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Ayin AI",
+      "description": "Security, compliance and cost-management middleware for AI APIs",
+      "website": "https://ayin.ai",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Ayin AI — Buddha Nepal, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Buddha Nepal",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Ayin AI",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Buddha Nepal with Ayin AI; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Ayin AI — Buddha Nepal, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Ayin AI — Buddha Nepal, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Belridge Labs",
+      "description": "AI phone agents for home service businesses",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Belridge Labs — Arihan Dixit, Duke class '28.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Arihan Dixit",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Belridge Labs",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Arihan Dixit with Belridge Labs; graduate year 2028. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Belridge Labs — Arihan Dixit, Duke class '28."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Belridge Labs — Arihan Dixit, Duke class '28."
+        }
+      ]
+    },
+    {
+      "name": "Selatan Capital",
+      "description": "Modular methane capture and destruction for landfill emissions",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Selatan Capital — Chloe Lowman, Duke class '27.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Chloe Lowman",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Selatan Capital",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Chloe Lowman with Selatan Capital; graduate year 2027. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Selatan Capital — Chloe Lowman, Duke class '27."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Selatan Capital — Chloe Lowman, Duke class '27."
+        }
+      ]
+    },
+    {
+      "name": "Deep Marine Innovations",
+      "description": "Bio-inspired autonomous underwater vehicle technology",
+      "website": "https://deepmarineinnovations.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Deep Marine Innovations — Adam Berthold, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Adam Berthold",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Deep Marine Innovations",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Adam Berthold with Deep Marine Innovations; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Deep Marine Innovations — Adam Berthold, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Deep Marine Innovations — Adam Berthold, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "The Land of Can",
+      "description": "Children's books and resources emphasizing strengths",
+      "website": "https://thelandofcan.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: The Land of Can — Riya Jain, Duke class '28.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Riya Jain",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for The Land of Can",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Riya Jain with The Land of Can; graduate year 2028. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: The Land of Can — Riya Jain, Duke class '28."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: The Land of Can — Riya Jain, Duke class '28."
+        }
+      ]
+    },
+    {
+      "name": "Girls in Quantum",
+      "description": "Education and mentoring to increase women in quantum technology",
+      "website": "https://www.girlsinquantum.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Girls in Quantum — Elisa Torres Durney, Duke class '28.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Elisa Torres Durney",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Girls in Quantum",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Elisa Torres Durney with Girls in Quantum; graduate year 2028. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Girls in Quantum — Elisa Torres Durney, Duke class '28."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Girls in Quantum — Elisa Torres Durney, Duke class '28."
+        }
+      ]
+    },
+    {
+      "name": "Grid Intelligence",
+      "description": "Grid- and market-aware battery dispatch coordination",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Grid Intelligence — Ava LeBron, Duke class '27.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ava LeBron",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Grid Intelligence",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Ava LeBron with Grid Intelligence; graduate year 2027. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Grid Intelligence — Ava LeBron, Duke class '27."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Grid Intelligence — Ava LeBron, Duke class '27."
+        }
+      ]
+    },
+    {
+      "name": "Helian",
+      "description": "Automated FDA medical device compliance operations",
+      "website": "https://www.helian.ai",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Helian — John Buxton, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "John Buxton",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Helian",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names John Buxton with Helian; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Helian — John Buxton, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Helian — John Buxton, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Jeani",
+      "description": "Movement analytics for long-term mobility and health",
+      "website": "https://www.jeanihealth.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Jeani — Ewan Bradley, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ewan Bradley",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Jeani",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Ewan Bradley with Jeani; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Jeani — Ewan Bradley, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Jeani — Ewan Bradley, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "koPo",
+      "description": "Fitness class booking and community discovery",
+      "website": "https://www.kopo.world",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: koPo — Kushaan Kapoor, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kushaan Kapoor",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for koPo",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Kushaan Kapoor with koPo; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: koPo — Kushaan Kapoor, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: koPo — Kushaan Kapoor, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Liberata",
+      "description": "Academic open access publishing and quality incentives",
+      "website": "https://liberata.info",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Liberata — Han Zhang, Duke class '31.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Han Zhang",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Liberata",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Han Zhang with Liberata; graduate year 2031. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'31",
+            "gradYear": 2031,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Liberata — Han Zhang, Duke class '31."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Liberata — Han Zhang, Duke class '31."
+        }
+      ]
+    },
+    {
+      "name": "Liv-Sanitas",
+      "description": "Risk stratification and personalized liver health platform",
+      "website": "https://liv-sanitas.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Liv-Sanitas — Koundinya Desiraju Sarad, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Koundinya Desiraju Sarad",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Liv-Sanitas",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Koundinya Desiraju Sarad with Liv-Sanitas; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Liv-Sanitas — Koundinya Desiraju Sarad, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Liv-Sanitas — Koundinya Desiraju Sarad, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "MedPull",
+      "description": "Multilingual AI healthcare patient intake",
+      "website": "https://medpull.org",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: MedPull — Kanthi Makineedi, Duke class '27.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kanthi Makineedi",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for MedPull",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Kanthi Makineedi with MedPull; graduate year 2027. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: MedPull — Kanthi Makineedi, Duke class '27."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: MedPull — Kanthi Makineedi, Duke class '27."
+        }
+      ]
+    },
+    {
+      "name": "momnt.",
+      "description": "Wearable device managing time spent on distracting applications",
+      "website": "https://getmomnt.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: momnt. — Sean Fang, Duke class '28.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Sean Fang",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for momnt.",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Sean Fang with momnt.; graduate year 2028. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: momnt. — Sean Fang, Duke class '28."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: momnt. — Sean Fang, Duke class '28."
+        }
+      ]
+    },
+    {
+      "name": "Mr. Drop",
+      "description": "Eye-drop delivery device producing a fine mist",
+      "website": "https://mrdrop.carrd.co",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Mr. Drop — Anika Mohan, Duke class '28.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Anika Mohan",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Mr. Drop",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Anika Mohan with Mr. Drop; graduate year 2028. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Mr. Drop — Anika Mohan, Duke class '28."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Mr. Drop — Anika Mohan, Duke class '28."
+        }
+      ]
+    },
+    {
+      "name": "NanoPoly Resources",
+      "description": "Reproducible substrates for nanoplastics research",
+      "website": "https://nanopolyresources.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: NanoPoly Resources — Lauren Shiell, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Lauren Shiell",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for NanoPoly Resources",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Lauren Shiell with NanoPoly Resources; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: NanoPoly Resources — Lauren Shiell, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: NanoPoly Resources — Lauren Shiell, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Nowa",
+      "description": "Blockchain transaction compliance and money-laundering detection",
+      "website": "https://nowa.sh",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Nowa — Luciano Juvinski, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Luciano Juvinski",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Nowa",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Luciano Juvinski with Nowa; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Nowa — Luciano Juvinski, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Nowa — Luciano Juvinski, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Pacto",
+      "description": "Golf sunscreen designed to keep a dry grip",
+      "website": "https://www.gopacto.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Pacto — Dani Abisambra, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Dani Abisambra",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Pacto",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Dani Abisambra with Pacto; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Pacto — Dani Abisambra, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Pacto — Dani Abisambra, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Sand Intelligence",
+      "description": "AI automation for service-business administrative workflows",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Sand Intelligence — Arnav Dhar, Duke class '29.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Arnav Dhar",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Sand Intelligence",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Arnav Dhar with Sand Intelligence; graduate year 2029. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Sand Intelligence — Arnav Dhar, Duke class '29."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Sand Intelligence — Arnav Dhar, Duke class '29."
+        }
+      ]
+    },
+    {
+      "name": "Serv Technologies Group",
+      "description": "Customer behavior and intelligence software for drive-through restaurants",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Serv Technologies Group — Jasper Svenson, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jasper Svenson",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Serv Technologies Group",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Jasper Svenson with Serv Technologies Group; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Serv Technologies Group — Jasper Svenson, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Serv Technologies Group — Jasper Svenson, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Silk",
+      "description": "Personal shopping copilot using purchase and preference data",
+      "website": "https://www.silk-shopping.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Silk — Ryan Bullock, Duke class '27.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ryan Bullock",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Silk",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Ryan Bullock with Silk; graduate year 2027. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Silk — Ryan Bullock, Duke class '27."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Silk — Ryan Bullock, Duke class '27."
+        }
+      ]
+    },
+    {
+      "name": "Sticky Jams",
+      "description": "Bluetooth speaker insert for wrestling headgear",
+      "website": "https://www.stickyjams.net",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Sticky Jams — Vincent Lee, Duke class '28.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Vincent Lee",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Sticky Jams",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Vincent Lee with Sticky Jams; graduate year 2028. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Sticky Jams — Vincent Lee, Duke class '28."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Sticky Jams — Vincent Lee, Duke class '28."
+        }
+      ]
+    },
+    {
+      "name": "StratoPlanner",
+      "description": "Neuroscience-informed planning tools for neurodivergent users",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: StratoPlanner — Ellie Reyna, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ellie Reyna",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for StratoPlanner",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Ellie Reyna with StratoPlanner; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: StratoPlanner — Ellie Reyna, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: StratoPlanner — Ellie Reyna, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Students Who Sit",
+      "description": "Student babysitter marketplace for university communities",
+      "website": "https://studentswhosit.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Students Who Sit — Sydelle Bernstein, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Sydelle Bernstein",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Students Who Sit",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Sydelle Bernstein with Students Who Sit; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Students Who Sit — Sydelle Bernstein, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Students Who Sit — Sydelle Bernstein, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Vertex",
+      "description": "AI-powered conversation memory and relationship profiles",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Vertex — Adil K Gazder, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Adil K Gazder",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Vertex",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Adil K Gazder with Vertex; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Vertex — Adil K Gazder, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Vertex — Adil K Gazder, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Toilemetry",
+      "description": "Clinical smart-toilet technology for hospital urine monitoring",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Toilemetry — Ben Neubert, Duke class '27.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ben Neubert",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Toilemetry",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Ben Neubert with Toilemetry; graduate year 2027. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Toilemetry — Ben Neubert, Duke class '27."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Toilemetry — Ben Neubert, Duke class '27."
+        }
+      ]
+    },
+    {
+      "name": "TripSync",
+      "description": "Collaborative trip and event planning tools",
+      "website": "https://startling-fox-7ad51e.netlify.app",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: TripSync — Ella Sheehan, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ella Sheehan",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for TripSync",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Ella Sheehan with TripSync; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: TripSync — Ella Sheehan, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: TripSync — Ella Sheehan, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "uncharted",
+      "description": "AI and machine learning workflows for small investment firms",
+      "website": "https://www.uncharted-group.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: uncharted — Benedikt Krob, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Benedikt Krob",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for uncharted",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Benedikt Krob with uncharted; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: uncharted — Benedikt Krob, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: uncharted — Benedikt Krob, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "Vector",
+      "description": "Personal planning and biometrics chief-of-staff for students",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Vector — Elias Kremer, Duke class '29.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Elias Kremer",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for Vector",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Elias Kremer with Vector; graduate year 2029. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Vector — Elias Kremer, Duke class '29."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Vector — Elias Kremer, Duke class '29."
+        }
+      ]
+    },
+    {
+      "name": "VoxIntel AI",
+      "description": "AI real-time sales coaching and call guidance",
+      "website": "https://www.voxintelai.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: VoxIntel AI — Y.B. Carr, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Y.B. Carr",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for VoxIntel AI",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Y.B. Carr with VoxIntel AI; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: VoxIntel AI — Y.B. Carr, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: VoxIntel AI — Y.B. Carr, Duke class '26."
+        }
+      ]
+    },
+    {
+      "name": "WeGotYou",
+      "description": "Confidential adolescent telemedicine and care navigation",
+      "website": "https://www.wegotyouusa.com",
+      "sourceUrl": "https://entrepreneurship.duke.edu/startup-showcase-2026-featured-companies/",
+      "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: WeGotYou — Shayna Dahan, Duke class '26.",
+      "orgPlace": "Duke Startup Showcase 2026",
+      "campusIds": [
+        "univ_duke"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Shayna Dahan",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Duke Startup Showcase 2026 featured venture team for WeGotYou",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named startup builder in Duke 2026 showcase; cofounder title not explicitly established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Duke official 2026 showcase names Shayna Dahan with WeGotYou; graduate year 2026. Team representative is not automatically cofounder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: WeGotYou — Shayna Dahan, Duke class '26."
+          },
+          "excerpt": "Duke Innovation & Entrepreneurship Startup Showcase 2026: WeGotYou — Shayna Dahan, Duke class '26."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}

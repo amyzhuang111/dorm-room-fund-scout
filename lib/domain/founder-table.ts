@@ -144,10 +144,49 @@ export interface ProjectTableRow {
   verified: boolean;
 }
 
+/**
+ * A verified program roster is source evidence, even if no separate launch,
+ * news or funding signal was recorded. Display it as a roster note, not as
+ * proof of launch or traction. This makes newly imported Stanford/Cornell
+ * founders discoverable in the existing /founders table without fabricating
+ * activity or promoting unrelated hackathon participants.
+ */
+function projectRosterNotes(db: ReturnType<typeof getDb>, projectIds: string[]): Map<string, string> {
+  const notes = new Map<string, string>();
+  for (let index = 0; index < projectIds.length; index += 350) {
+    const ids = projectIds.slice(index, index + 350);
+    const marks = ids.map(() => "?").join(",");
+    const claims = db.prepare(
+      `SELECT entity_id AS project_id, value_json, excerpt
+         FROM claims
+        WHERE entity_type='project' AND claim_type='program_membership'
+          AND entity_id IN (${marks})
+        ORDER BY retrieved_at DESC`
+    ).all(...ids) as { project_id: string; value_json: string | null; excerpt: string | null }[];
+    for (const claim of claims) {
+      if (notes.has(claim.project_id)) continue;
+      let program: string | null = null;
+      try {
+        const value = JSON.parse(claim.value_json || "{}") as { org?: unknown };
+        if (typeof value.org === "string") program = cleanLabel(value.org);
+      } catch {
+        // Invalid structured data: fall back to the observed excerpt only.
+      }
+      const observed = cleanLabel(claim.excerpt);
+      const text = program
+        ? `Listed in ${program}.`
+        : observed ? `Program roster: ${observed.slice(0, 220)}` : null;
+      if (text) notes.set(claim.project_id, text);
+    }
+  }
+  return notes;
+}
+
 interface ProjectHit {
   person_id: string;
   project_id: string;
   project_name: string;
+  project_kind: string;
   description: string | null;
   signal_tier: string | null;
   obs: string | null;
@@ -167,7 +206,7 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
     hits.push(
       ...db
         .prepare(
-          `SELECT r.person_id as person_id, p.id as project_id, p.name as project_name, p.description as description, p.signal_tier as signal_tier,
+          `SELECT r.person_id as person_id, p.id as project_id, p.name as project_name, p.kind as project_kind, p.description as description, p.signal_tier as signal_tier,
                   s.current_observation as obs, s.source_date as source_date, s.created_at as created_at
              FROM person_project_roles r
              JOIN projects p ON p.id = r.project_id
@@ -188,6 +227,7 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
     grouped.set(hit.project_id, list);
   }
 
+  const rosterNotes = projectRosterNotes(db, [...grouped.keys()]);
   const rows: ProjectTableRow[] = [];
   for (const [projectId, projectHits] of grouped) {
     const members = new Map<string, FounderTableRow>();
@@ -212,6 +252,7 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
       }
     }
     const parsed = parseSignalCopy(obs);
+    const rosterNote = projectHits.some((hit) => hit.project_kind === "company") ? rosterNotes.get(projectId) ?? null : null;
     const mates = [...members.values()]
       .map((person) => ({ id: person.id, name: person.name, tier: person.tier, signalAt: person.signalAt }))
       .sort((a, b) => a.name.localeCompare(b.name));
@@ -220,8 +261,8 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
       id: projectId,
       name: cleanLabel(projectName) ?? quotedName(obs) ?? mates[0]?.name ?? "",
       event: parsed.event,
-      detail: cleanLabel(description) ?? parsed.detail,
-      full: parsed.full ?? cleanLabel(description),
+      detail: cleanLabel(description) ?? parsed.detail ?? rosterNote,
+      full: parsed.full ?? cleanLabel(description) ?? rosterNote,
       signalAt,
       tier: bestTier([projectTier, ...mates.map((mate) => mate.tier)]),
       campus: campus?.campus ?? null,

@@ -1,0 +1,123 @@
+{
+  "retrievedAt": "2026-11-03T08:14:00.000Z",
+  "companies": [
+    {
+      "name": "Uplift Microhome",
+      "description": "Modular reusable disaster and emergency housing",
+      "website": null,
+      "sourceUrl": "https://mitsloan.mit.edu/press/classroom-to-crisis-solution-uplift-microhome-wins-2026-mit-100k-competition",
+      "excerpt": "MIT $100K Launch 2026 finalist: Uplift Microhome; co-founded by Charlie Nitschelm and Trevor O’Leary.",
+      "orgPlace": "MIT $100K 2026 Launch",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Charlie Nitschelm",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT Leaders for Global Operations student and cofounder",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "MIT Sloan June 2026 official press release explicitly names the cofounders and their distinct MIT/HBS institutions.",
+          "excerpt": "MIT $100K Launch 2026 finalist: Uplift Microhome; co-founded by Charlie Nitschelm and Trevor O’Leary."
+        },
+        {
+          "name": "Trevor O’Leary",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Business School student and cofounder",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "MIT Sloan June 2026 official press release explicitly names the cofounders and their distinct MIT/HBS institutions.",
+          "excerpt": "MIT $100K Launch 2026 finalist: Uplift Microhome; co-founded by Charlie Nitschelm and Trevor O’Leary."
+        }
+      ]
+    },
+    {
+      "name": "Mohan",
+      "description": "Generative AI models for three-dimensional subsurface resource exploration",
+      "website": null,
+      "sourceUrl": "https://mitsloan.mit.edu/press/classroom-to-crisis-solution-uplift-microhome-wins-2026-mit-100k-competition",
+      "excerpt": "MIT $100K Launch 2026 finalist: Mohan.",
+      "orgPlace": "MIT $100K 2026 Launch",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Iceberg Systems",
+      "description": "Autonomous risk detection for critical infrastructure",
+      "website": null,
+      "sourceUrl": "https://mitsloan.mit.edu/press/classroom-to-crisis-solution-uplift-microhome-wins-2026-mit-100k-competition",
+      "excerpt": "MIT $100K Launch 2026 finalist: Iceberg Systems.",
+      "orgPlace": "MIT $100K 2026 Launch",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Pixology",
+      "description": "AI sales and sponsorship materials for sports media rights",
+      "website": null,
+      "sourceUrl": "https://www.mit100k.org/launch2022-copy",
+      "excerpt": "MIT $100K Launch 2026 finalist: Pixology.",
+      "orgPlace": "MIT $100K 2026 Launch",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "NeuralPhysics",
+      "description": "Physics foundation model for engineering and hardware",
+      "website": null,
+      "sourceUrl": "https://www.mit100k.org/launch2022-copy",
+      "excerpt": "MIT $100K Launch 2026 finalist: NeuralPhysics.",
+      "orgPlace": "MIT $100K 2026 Launch",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "DesignFlowAI",
+      "description": "Engineering design workflow automation",
+      "website": null,
+      "sourceUrl": "https://www.mit100k.org/launch2022-copy",
+      "excerpt": "MIT $100K Launch 2026 finalist: DesignFlowAI.",
+      "orgPlace": "MIT $100K 2026 Launch",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Auto/lab",
+      "description": "Automated hardware and laboratory experimentation",
+      "website": null,
+      "sourceUrl": "https://www.mit100k.org/launch2022-copy",
+      "excerpt": "MIT $100K Launch 2026 finalist: Auto/lab.",
+      "orgPlace": "MIT $100K 2026 Launch",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    }
+  ],
+  "potential": [],
+  "links": []
+}

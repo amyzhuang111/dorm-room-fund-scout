@@ -1,0 +1,32 @@
+# Validate that /founders uses the same current DB as Startup Scout.
+# A Vercel deployment URL is immutable: new DB/UI changes deploy a new URL.
+name: Verify latest founders desk source data
+
+on:
+  push:
+    branches:
+      - codex/sync-founder-desk-latest-cohorts-2026-11-03
+    paths:
+      - ".github/workflows/verify-founder-desk-sync.yml"
+      - "lib/domain/founder-table.ts"
+      - "scripts/audit/check-founders-latest-2026.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  founder-desk-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Check newly sourced founders and program evidence on /founders
+        run: ./node_modules/.bin/tsx scripts/audit/check-founders-latest-2026.ts
+      - name: Regression test existing founders/company explorer
+        run: npm run test:directory
