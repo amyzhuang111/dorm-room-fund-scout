@@ -28,15 +28,15 @@ export type AtlasData = {
   generatedAt: string;
 };
 export const ATLAS_COLORS = [
-  "#e990a8",
-  "#55b7c9",
-  "#a29ac8",
-  "#72b695",
-  "#82a9d5",
-  "#e6a17f",
-  "#b7bc79",
-  "#be83b8",
-  "#859ba6",
+  "#c330ef",
+  "#44d6b1",
+  "#506fee",
+  "#f2e94f",
+  "#ff806b",
+  "#8a48ed",
+  "#7ce5d5",
+  "#e8a34f",
+  "#448bf1",
 ];
 export function safeAtlasUrl(value: string | null | undefined): string | null {
   if (!value) return null;
