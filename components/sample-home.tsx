@@ -14,6 +14,8 @@ import type { HeroStats } from "@/lib/domain/hero-stats";
 import { buildPeakShell } from "@/lib/domain/peak-shell";
 import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { undergradRankFields } from "@/lib/domain/pitchbook-model";
+import { filterFacetCompanies } from "@/lib/domain/sample-facets";
+import { emptyFacets, type FacetState } from "@/lib/domain/facet-url";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
@@ -55,7 +57,11 @@ export function SampleHome({
   const data = loadDirectory();
   const totals = loadCorpusTotals();
   const foundersListed = totals.foundersListed;
-  const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
+  const directoryFacets = { ...emptyFacets(), ...facetExtras, sector: sector ?? null, kind: kind ?? null, campus: campusId ?? null, query } as FacetState;
+  const countryIds = directoryFacets.country ? new Set(stats.universities.filter((u) => u.country === directoryFacets.country).map((u) => u.id)) : null;
+  const matched = listed
+    ? filterFacetCompanies(data.cards.filter((c) => !countryIds || Boolean(c.schoolId && countryIds.has(c.schoolId))), directoryFacets) as DirectoryCard[]
+    : searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
   // Map home loads companies client-side; skip card SSR to keep HTML ~210 KB.

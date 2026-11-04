@@ -16,6 +16,7 @@ export interface FacetCompany {
   signals: number;
   logoUrl?: string | null;
   founders?: string[];
+  description?: string | null;
   sectorId?: string | null;
   sector?: string | null;
   stage?: string | null;
@@ -292,7 +293,7 @@ export function filterFacetCompanies(
       return false;
     }
     if (tokens.length) {
-      const hay = [company.name, company.sector ?? "", company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
+      const hay = [company.name, company.description ?? "", company.sector ?? "", company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
       if (!tokens.every((token) => hay.includes(token))) return false;
     }
     return true;
@@ -309,7 +310,7 @@ export function directoryCardSubtitle(card: {
 }): string {
   const signal =
     card.signalLabel === "Acquisition"
-      ? "Acquired"
+      ? "Acquisition signal"
       : card.signalLabel ?? null;
   return [card.school, card.hqRegion, card.sector, card.stage, signal].filter(Boolean).join(" · ");
 }

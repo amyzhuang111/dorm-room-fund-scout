@@ -19,6 +19,7 @@ import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
 import { CurrentViewDock } from "@/components/current-view-dock";
+import { CompanyReviewActions } from "./company-review-actions";
 import {
   applyFacets,
   emptyFacets,
@@ -193,7 +194,7 @@ function endSliceInsight(cards: DirectoryCard[]): EndSliceInsight | null {
 export function SampleInstrumentBrowse({
   feed,
   cards: cardsProp,
-  total,
+  total: initialTotal,
   pages,
   sector,
   kind,
@@ -206,7 +207,7 @@ export function SampleInstrumentBrowse({
   kinds,
   campuses,
   companies,
-  moreHref,
+  moreHref: initialMoreHref,
   clearCampusHref,
   initialFacets,
 }: {
@@ -248,6 +249,8 @@ export function SampleInstrumentBrowse({
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
+  const [catalogError, setCatalogError] = useState(false);
+  const [catalogAttempt, setCatalogAttempt] = useState(0);
   const [founderLinks, setFounderLinks] = useState<Record<string, { name: string; linkedinUrl: string }[]>>({});
   const [rightTab, setRightTab] = useState<"feed" | "overlays">("feed");
   /** Right instrument starts closed so the ledger owns the width (Monitor-style peek). */
@@ -257,37 +260,27 @@ export function SampleInstrumentBrowse({
     let cancel = false;
     void loadDirectoryClient()
       .then((data) => {
-        if (!cancel) setCatalog(data.cards);
+        if (!cancel) { setCatalog(data.cards); setCatalogError(false); }
       })
-      .catch(() => {});
+      .catch(() => { if (!cancel) setCatalogError(true); });
     return () => {
       cancel = true;
     };
-  }, []);
+  }, [catalogAttempt]);
 
   const companiesLive = catalog ?? companies;
   // When ?more>1, expand the ledger from the client catalog so SSR stays ≤1 page.
   const cards = useMemo(() => {
-    if (pages <= 1 || !catalog || catalog.length === 0) return cardsProp;
+    if (!catalog) return cardsProp;
     const PAGE = 14;
-    let matched = (catalog as DirectoryCard[]).filter((card) => {
-      if (sector && card.sectorId !== sector) return false;
-      if (kind && card.signalKind !== kind) return false;
-      if (campus && card.schoolId !== campus) return false;
-      return true;
-    });
-    const tokens = (query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
-    if (tokens.length) {
-      matched = matched.filter((card) => {
-        const hay = [card.name, card.description ?? "", ...(card.founders ?? [])].join("\n").toLowerCase();
-        return tokens.every((token) => hay.includes(token));
-      });
-    }
+    const countryIds = facets.country ? new Set(campuses.filter((c) => c.country === facets.country).map((c) => c.id)) : null;
+    const scoped = countryIds ? catalog.filter((c) => c.schoolId && countryIds.has(c.schoolId)) : catalog;
+    const matched = applyFacets(scoped, facets) as DirectoryCard[];
     const ordered = [...matched];
     if (feed === "leaderboard") {
       ordered.sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
       const page = ordered.filter((c) => c.signals > 0).slice(0, Math.max(1, pages) * PAGE);
-      return page.length > 0 ? page : cardsProp;
+      return page;
     }
     if (sort === "name") ordered.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
     else if (sort === "recent") {
@@ -302,7 +295,7 @@ export function SampleInstrumentBrowse({
         return a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
       });
     } else if (sort === "stage") {
-      const STAGE = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
+      const STAGE = ["Accelerator", "Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
       const rank = (stage: string | null) => {
         if (!stage) return STAGE.length + 1;
         const i = STAGE.indexOf(stage);
@@ -319,9 +312,16 @@ export function SampleInstrumentBrowse({
       });
     }
     const page = ordered.slice(0, Math.max(1, pages) * PAGE);
-    return page.length > 0 ? page : cardsProp;
-  }, [pages, catalog, cardsProp, feed, sector, kind, campus, query, sort]);
-  const boardCompanies = useMemo(() => applyFacets(companiesLive, facets), [companiesLive, facets]);
+    return page;
+  }, [pages, catalog, cardsProp, feed, facets, campuses, sort]);
+  const boardCompanies = useMemo(() => {
+    const countryIds = facets.country ? new Set(campuses.filter((c) => c.country === facets.country).map((c) => c.id)) : null;
+    const scoped = countryIds ? companiesLive.filter((c) => c.schoolId && countryIds.has(c.schoolId)) : companiesLive;
+    const matched = applyFacets(scoped, facets);
+    return feed === "leaderboard" ? matched.filter((c) => c.signals > 0) : matched;
+  }, [companiesLive, facets, campuses, feed]);
+  const total = catalog ? boardCompanies.length : initialTotal;
+  const moreHref = catalog ? browseHref({ feed, sort, facets, more: pages + 1 }) : initialMoreHref;
   /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
   const signaledMatch = useMemo(
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
@@ -490,7 +490,6 @@ export function SampleInstrumentBrowse({
   useEffect(() => {
     const ids = cards.slice(0, 40).map((c) => c.id);
     if (ids.length === 0) {
-      setFounderLinks({});
       return;
     }
     let cancel = false;
@@ -578,7 +577,7 @@ export function SampleInstrumentBrowse({
               Showing
             </p>
             <p className="mt-1 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-              <span data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
+              <span data-match-count="">{total.toLocaleString("en-US")}</span>
               <span className="mx-1.5 text-[18px] font-semibold tracking-normal text-[color:var(--fg-3,#5C647A)]">of</span>
               <span className="text-[22px] font-bold text-[color:var(--fg,#0B0E17)]" data-total-count="">
                 {total.toLocaleString("en-US")}
@@ -683,7 +682,7 @@ export function SampleInstrumentBrowse({
                   ).map(([id, label]) => (
                     <Link
                       key={id}
-                      href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                      href={browseHref({ feed, facets, sort: id })}
                       className={`inline-flex h-8 items-center rounded-sm border px-3 font-mono text-[11px] font-medium ${sortChip(sort === id)}`}
                     >
                       {label}
@@ -783,7 +782,7 @@ export function SampleInstrumentBrowse({
                 return (
                   <Link
                     key={id}
-                    href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                    href={browseHref({ feed, facets, sort: id })}
                     className={`flex h-9 flex-1 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
                       i > 0 ? "border-l border-[color:var(--cobalt,#2F4FD8)]/20" : ""
                     } ${
@@ -843,25 +842,20 @@ export function SampleInstrumentBrowse({
               >
                 <span>Filter</span>
                 <span className="font-mono text-[12px] font-bold tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  {boardCompanies.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")}
+                  {total.toLocaleString("en-US")} matches
                 </span>
               </button>
               <div className="flex items-baseline justify-between gap-2 px-0.5" data-showing-count="">
-                <p className="min-w-0 truncate font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <p className="min-w-0 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                   Showing{" "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
                   {" of "}
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
-                  {deskCampusTop ? (
-                    <>
-                      {" · "}
-                      {deskCampusTop.label} leads
-                    </>
-                  ) : null}
                 </p>
                 <button
                   type="button"
                   data-export-filtered-mobile=""
+                  disabled={!catalog}
                   onClick={() => exportFilteredCsv(boardCompanies)}
                   className="shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
                 >
@@ -895,14 +889,15 @@ export function SampleInstrumentBrowse({
 
         {/* One strong ledger stage · map-stage language: cobalt frame, ruled rows.
             Browse-more (pages > 1): sticky row-range, section dividers, end mark. */}
+        {catalogError ? <div className="mb-3 border border-border-c p-3 text-sm" role="alert">The full directory could not load. This page still shows stored records. <button type="button" className="min-h-11 px-2 text-link underline" onClick={() => { setCatalogError(false); setCatalogAttempt((n) => n + 1); }}>Retry directory</button></div> : null}
         {cards.length === 0 ? (
-          <p className="text-[13px] text-[color:var(--fg-2,#3F465C)]">
+          <div className="workspace-empty" role="status"><h2>No matching companies</h2><p className="text-[13px] text-[color:var(--fg-2,#3F465C)]">
             {query
               ? `No companies match "${query}".`
               : campusName && campusTotal === 0
                 ? `No companies are stored for ${campusName}.`
                 : "No companies in this category."}
-          </p>
+          </p><button type="button" onClick={() => commitFacet(emptyFacets())}>Clear all filters</button><Link href="/companies?unverified=1">Check unverified records →</Link></div>
         ) : (
           <div data-ledger-expanded={pages > 1 ? "1" : "0"}>
             {pages > 1 ? (
@@ -1011,6 +1006,7 @@ export function SampleInstrumentBrowse({
                       showCampusSeal={showCampusSeal}
                       evidenceRich={feed === "directory" && pages > 1}
                     />
+                    <div className="ledger-review"><CompanyReviewActions id={card.id} name={card.name} /></div>
                   </li>
                 );
               })}
@@ -1351,7 +1347,7 @@ export function SampleInstrumentBrowse({
               <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
                 Filters
                 <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--ember,#D96B1C)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
+                  {total.toLocaleString("en-US")}
                 </span>
                 <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
                   of {total.toLocaleString("en-US")}
@@ -1380,7 +1376,7 @@ export function SampleInstrumentBrowse({
                     return (
                       <Link
                         key={id}
-                        href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                        href={browseHref({ feed, facets, sort: id })}
                         className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
                           active
                             ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"

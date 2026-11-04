@@ -19,16 +19,20 @@ import {
   type FacetState,
 } from "./sample-instrument";
 import { SampleTheme } from "./sample-theme";
+import { browseHref } from "@/lib/domain/facet-url";
+import { CompanyReviewActions } from "./company-review-actions";
 
 export function SampleCompanyShell({
   children,
   companies,
   campuses,
   dossier,
+  peerTotals,
 }: {
   children: ReactNode;
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
+  peerTotals?: { campus: number; sector: number };
   /** Local company beat - name / campus / year / ids. Not the global dispatch count. */
   dossier?: {
     id?: string;
@@ -40,6 +44,7 @@ export function SampleCompanyShell({
     sector?: string | null;
     primaryProgram?: string | null;
     founders?: string[];
+    founderIdentity?: { name: string; school: string | null; program: string | null; enrollment: string | null; confirmed: boolean }[];
     founderConfirmed?: boolean;
     signals?: number;
     operatingStatus?: string | null;
@@ -73,24 +78,7 @@ export function SampleCompanyShell({
   const filtered = useMemo(() => applyFacets(facetCompanies, facets), [facetCompanies, facets]);
   function onFacetChange(next: FacetState) {
     setFacets(next);
-    const params = new URLSearchParams({ sample: "1" });
-    if (next.sector) params.set("sector", next.sector);
-    if (next.kind) params.set("kind", next.kind);
-    if (next.campus) params.set("campus", next.campus);
-    if (next.query.trim()) params.set("q", next.query.trim());
-    if (next.hqRegion) params.set("hq", next.hqRegion);
-    if (
-      next.sector ||
-      next.kind ||
-      next.campus ||
-      next.query.trim() ||
-      next.foundedYear ||
-      next.status ||
-      next.flag ||
-      next.hqRegion
-    ) {
-      router.push(`/companies?${params.toString()}`);
-    }
+    router.push(browseHref({ facets: next }));
   }
 
   const signaled = filtered.filter((c) => c.signals > 0).length;
@@ -108,7 +96,7 @@ export function SampleCompanyShell({
     return peers.length ? peers : null;
   }, [peerSource, dossier?.sectorId]);
   // Side-column count: campus peers including this company (preferred), else sector - never global 2,513.
-  const wireCount = campusPeers?.length ?? sectorPeers?.length ?? signaled;
+  const wireCount = catalog ? (campusPeers?.length ?? sectorPeers?.length ?? signaled) : (peerTotals?.campus || peerTotals?.sector || signaled);
   const campusShort = dossier?.schoolId
     ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "Campus")
     : (dossier?.campus ?? "Campus").replace(/^University of (?:California, )?/, "").replace(/ University$/, "");
@@ -121,6 +109,8 @@ export function SampleCompanyShell({
   // Explicit: the subject company is included in the campus peer count.
   const wireIncludeNote = campusPeers ? "includes this company" : sectorPeers ? "includes this company" : null;
   const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
+  const similar = peerSource.filter((c) => c.id !== dossier?.id && Boolean(dossier?.sectorId && c.sectorId === dossier.sectorId))
+    .sort((a, b) => Number(b.schoolId === dossier?.schoolId) - Number(a.schoolId === dossier?.schoolId) || b.signals - a.signals || a.name.localeCompare(b.name)).slice(0, 6);
 
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)] bg-[#FFFFFF]" data-company-shell="white" style={{ background: "#FFFFFF" }}>
@@ -251,7 +241,7 @@ export function SampleCompanyShell({
         </div>
         {/* r55: mobile product strip — site belongs to Campus Scout even if the shot trims sticky nav */}
         <div
-          className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] bg-[#FFFFFF] pb-2 sm:hidden"
+          className="mb-2 hidden items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] bg-[#FFFFFF] pb-2"
           data-company-product-chrome=""
         >
           <Link
@@ -266,7 +256,7 @@ export function SampleCompanyShell({
             Map
           </Link>
         </div>
-        <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-colophon="">
+        <div className="mb-3 hidden sm:flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-colophon="">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">On this campus</p>
           <p className="min-w-0 flex-1 text-right font-mono text-[11px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
@@ -308,10 +298,6 @@ export function SampleCompanyShell({
               <div className="min-w-0 flex-1">
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus</p>
                 <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2 font-mono text-[13px] tabular-nums text-[color:var(--fg,#0B0E17)]">
-                  <span className="text-[22px] font-bold leading-none text-[color:var(--cobalt,#2F4FD8)]">
-                    {(dossier?.signals ?? 0) > 0 ? (dossier?.signals ?? 0).toLocaleString("en-US") : (wireCount > 0 ? wireCount.toLocaleString("en-US") : "0")}
-                  </span>
-                  <span className="text-[11px] text-[color:var(--fg-3,#5C647A)]">{(dossier?.signals ?? 0) > 0 ? "signals" : "on wire"}</span>
                   <span className="truncate font-semibold text-[color:var(--fg,#0B0E17)]">
                     {dossier?.campus || (dossier?.schoolId ? shortCampusLabel(dossier.schoolId, "") : "Campus not on record")}
                     {dossier?.stage ? ` · ${dossier.stage}` : ""}
@@ -343,7 +329,7 @@ export function SampleCompanyShell({
                 ) : null}
               </div>
             ) : null}
-            <div className="flex gap-2.5 px-3 py-2">
+            <div className="flex gap-2.5 px-3 py-2" data-company-title-block="">
               <div className="mt-1 shrink-0">
                 {dossier?.logoUrl ? (
                   <span data-dossier-logo=""><LogoMark name={dossier.name} logoUrl={dossier.logoUrl} size={44} /></span>
@@ -366,7 +352,7 @@ export function SampleCompanyShell({
               </div>
             </div>
             <div className="border-t border-[color:var(--line,#E1E5EF)] px-3 py-2">
-            <p className="flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <p className="hidden flex-wrap gap-x-2 gap-y-0.5 font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
               {dossier?.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
               {dossier?.stage ? (
                 <span>
@@ -399,7 +385,7 @@ export function SampleCompanyShell({
                 </span>
               ) : null}
             </p>
-            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-signal-plate="">
+            <p className="hidden mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-signal-plate="">
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
               {" "}
               {wireUnit}
@@ -408,16 +394,18 @@ export function SampleCompanyShell({
             {dossier?.founders && dossier.founders.length > 0 ? (
               <div className="mt-1.5" data-dossier-founders-lead="" data-full-record-founders-peek="">
                 <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
-                <p className="mt-0.5 text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  {dossier.founders.slice(0, 4).join(" · ")}
+                <p className="hidden mt-0.5 text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  {dossier.founders.join(" · ")}
                 </p>
-                {dossier.founderConfirmed ? (
+                {dossier.founderConfirmed && !dossier.founderIdentity?.length ? (
                   <p className="mt-1">
-                    <span className="rounded border border-link px-1 text-[10px] font-medium uppercase tracking-wide text-link" data-full-record-confirmed="">confirmed</span>
+                    <span className="rounded border border-link px-1 text-[10px] font-medium uppercase tracking-wide text-link" data-full-record-confirmed="">CONFIRMED LinkedIn identity</span>
                   </p>
                 ) : null}
               </div>
             ) : null}
+            {dossier?.founderIdentity?.length ? <ul className="mt-1 space-y-2" data-founder-identity-summary="">{dossier.founderIdentity.map((f) => <li key={f.name}><p className="text-[14px] font-semibold">{f.name} {f.confirmed ? <span className="text-[10px] font-medium text-link" data-full-record-confirmed="">CONFIRMED LinkedIn</span> : <span className="text-[11px] font-normal text-muted">Identity unverified</span>}</p><p className="text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]">{[f.school, f.program, f.enrollment].filter(Boolean).join(" · ") || "School and class year not on record"}</p></li>)}</ul> : null}
+            {dossier?.id ? <div className="mt-2"><CompanyReviewActions id={dossier.id} name={dossier.name} url={dossier.websiteUrl} /></div> : null}
             {/* Peer signal strip · titled section; hide identical scrape dates */}
             <div className="mt-2 border-t border-[color:var(--line,#E1E5EF)] pt-1.5" data-dossier-peers-section="">
             <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
@@ -449,7 +437,7 @@ export function SampleCompanyShell({
                       {at && !scrapeOnly ? (
                         <span className="shrink-0">{at}</span>
                       ) : at && scrapeOnly && i === 0 ? (
-                        <span className="shrink-0 text-[color:var(--fg-3,#5C647A)]">Indexed {at}</span>
+                        <span className="shrink-0 text-[color:var(--fg-3,#5C647A)]">Source {at}</span>
                       ) : null}
                     </li>
                   );
@@ -480,6 +468,7 @@ export function SampleCompanyShell({
             {/* Mobile wire strip omitted on company: hero already lists campus peers. */}
             <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5 pb-4 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:pb-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
               {children}
+              <section className="similar-companies"><h2>Similar companies</h2><p>Same recorded sector{dossier?.sector ? `: ${dossier.sector}` : ""}. Shared campus appears first; signal count breaks ties.</p>{similar.length ? <ul>{similar.map((c) => <li key={c.id}><Link href={`/startup/${c.id}`}><strong>{c.name}</strong><span>{c.schoolId === dossier?.schoolId ? "Same campus" : c.school ?? c.sector ?? "Sector peer"}</span></Link><Link href={`/compare?ids=${encodeURIComponent(dossier?.id ?? "")},${encodeURIComponent(c.id)}`}>Compare pair</Link></li>)}</ul> : <p>{catalog ? "No other companies with this sector are on record." : "Loading sector peers…"}</p>}</section>
             </div>
           </div>
           <aside className="hidden min-w-0 lg:block" data-dossier-wire="">

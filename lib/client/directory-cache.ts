@@ -10,9 +10,14 @@ export function loadDirectoryClient(): Promise<DirectoryData> {
   const existing = (window as DirectoryWindow).__directoryPromise;
   if (existing) return existing;
   if (!pending) {
-    pending = fetch("/data/sample-directory.json").then(async (res) => {
+    const request = fetch("/data/sample-directory.json").then(async (res) => {
       if (!res.ok) throw new Error("directory");
       return (await res.json()) as DirectoryData;
+    });
+    pending = request.catch((error: unknown) => {
+      pending = null;
+      delete (window as DirectoryWindow).__directoryPromise;
+      throw error;
     });
     (window as DirectoryWindow).__directoryPromise = pending;
   }
