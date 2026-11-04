@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ATLAS_COLORS,
+  atlasConnectors,
   atlasHash,
   atlasLayout,
   type AtlasData,
@@ -40,7 +41,6 @@ export function NetworkAtlas() {
   const drag = useRef<{ x: number; y: number; startX:number; startY:number; moved: boolean } | null>(null);
   const touches = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef(0);
-  const idleDelay = useRef(0);
   useEffect(() => {
     const controller = new AbortController();
     fetch("/api/network/atlas", {
@@ -131,6 +131,9 @@ export function NetworkAtlas() {
         }
     return m;
   }, [data]);
+  const connectors = useMemo(() => data ? atlasConnectors(data) : [], [data]);
+  const connectorByNode = useMemo(() => new Map(connectors.slice(0, 20).map(c => [c.i, c])), [connectors]);
+  const [showConnectors, setShowConnectors] = useState(true);
   const related = useMemo(() => {
     const s = new Set<number>();
     if (selected === null || !data) return s;
@@ -185,17 +188,15 @@ export function NetworkAtlas() {
     v.x = cx - size.current.w / 2 - (cx - size.current.w / 2 - v.x) * k;
     v.y = cy - size.current.h / 2 - (cy - size.current.h / 2 - v.y) * k;
     v.zoom = next;
-    idleDelay.current = 1800;
   }
   function choose(i: number) {
-    idleDelay.current = 1800;
     setSelected(i);
     setNearby([]);
     const p = projected.current.find((p) => p.i === i);
     if (p) setAnchor({ x: p.x, y: p.y });
   }
   function focus(i: number) {
-    idleDelay.current = 1800;
+    host.current?.scrollIntoView({ block: "center", behavior: "smooth" });
     view.current = { ...initialView(), zoom: 4 };
     const scale = Math.min(size.current.w * 0.45, size.current.h * 0.43) * 4;
     view.current.x = -positions[i].x * scale;
@@ -258,11 +259,10 @@ export function NetworkAtlas() {
     const tick = (time: number) => {
       const dt = Math.min(40, time - last);
       last = time;
-      idleDelay.current = Math.max(0, idleDelay.current - dt);
       const { w, h } = size.current;
       const v = view.current;
       const key = [w,h,v.x,v.y,v.zoom,v.yaw,v.pitch].join(":");
-      const orbiting = running && selected === null && !drag.current && idleDelay.current <= 0 && !document.hidden;
+      const orbiting = running && !document.hidden;
       if (!orbiting && key === drawnKey) { frame=requestAnimationFrame(tick);return; }
       drawnKey = key;
       if (orbiting) {
@@ -293,7 +293,7 @@ export function NetworkAtlas() {
         };
       });
       projected.current = screen;
-      const detail = Math.max(0, Math.min(1, (v.zoom - 2.8) / 3.2));
+      const detail = Math.max(0, Math.min(1, (v.zoom - 2) / 3.5));
       if (detail > 0 && !document.documentElement.matches('[data-theme="night"]')) {
         ctx.fillStyle = `rgba(248,247,239,${detail * 0.8})`;
         ctx.fillRect(0, 0, w, h);
@@ -364,7 +364,7 @@ export function NetworkAtlas() {
         const active = selected === null
           ? !hasFilter || highlighted.has(p.i)
           : related.has(p.i);
-        const opacity = active ? 0.92 : 0.12;
+        const opacity = active ? 0.78 : 0.09;
         ctx.globalAlpha = opacity * (1 - detail);
         const r =
           Math.max(2, Math.min(8, 3.6 * Math.sqrt(v.zoom))) +
@@ -385,8 +385,8 @@ export function NetworkAtlas() {
           const seed = atlasHash(n.id);
           // A mix of tiny points, wisps and occasional broad color pools lets
           // individual records breathe at close range without hiding any.
-          const radius = (seed % 5 === 0 ? 40 + seed % 38 : 7 + seed % 20) * detail;
-          ctx.globalAlpha = opacity * detail * (seed % 5 === 0 ? 0.88 : 0.62);
+          const radius = (seed % 5 === 0 ? 50 + seed % 48 : 9 + seed % 24) * detail;
+          ctx.globalAlpha = opacity * detail * (seed % 5 === 0 ? 0.64 : 0.44);
           ctx.save();
           ctx.translate(p.x, p.y);
           ctx.rotate((seed % 628) / 100);
@@ -410,6 +410,28 @@ export function NetworkAtlas() {
         }
       }
       ctx.globalAlpha = 1;
+      if (showConnectors) {
+        const occupied: {x:number;y:number}[] = [];
+        for (const c of connectors.slice(0, 20)) {
+          const p = screen[c.i];
+          if (!p || (hasFilter && !highlighted.has(c.i)) ||
+              (selected !== null && !related.has(c.i)) ||
+              p.x < 20 || p.x > w - 20 || p.y < 60 || p.y > h - 30) continue;
+          ctx.strokeStyle = "#77749b";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(p.x, p.y, 7, 0, Math.PI * 2); ctx.stroke();
+          ctx.fillStyle = "#4c4669";
+          ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2); ctx.fill();
+          if (selected !== null || occupied.length >= 5 || p.x > w - 160 || occupied.some(o => Math.abs(o.x-p.x)<165 && Math.abs(o.y-p.y)<35)) continue;
+          occupied.push(p);
+          const label = data.nodes[c.i].name.slice(0, 24);
+          ctx.font = "11px sans-serif";
+          const tw = ctx.measureText(label).width;
+          ctx.fillStyle = "rgba(255,255,252,.92)";
+          ctx.fillRect(p.x+10,p.y-11,tw+10,21);
+          ctx.fillStyle = "#4c4669"; ctx.fillText(label,p.x+15,p.y+3);
+        }
+      }
       // Labels appear only around the focused record, never thousands of overlapping boxes.
       if (selected !== null && v.zoom > 2) {
         const occupied: { x: number; y: number }[] = [];
@@ -450,6 +472,8 @@ export function NetworkAtlas() {
     data,
     positions,
     running,
+    connectors,
+    showConnectors,
     basis,
     colorBy,
     highlighted,
@@ -615,6 +639,16 @@ export function NetworkAtlas() {
             </div>
           </>
         )}
+        <details className={styles.connectorList} open>
+          <summary>Superconnectors <span>◎</span></summary>
+          <p className={styles.note}>Most recorded links across networks and startups. Coverage, not a measure of influence.</p>
+          {connectors.filter(c => !hasFilter || highlighted.has(c.i)).slice(0, 5).map(c => (
+            <button key={c.id} onClick={() => { setList(false); setFiltersOpen(false); focus(c.i); }}>
+              <span>{data.nodes[c.i].name}<small>{c.affiliations} networks · {c.direct} founding links</small></span><span>↗</span>
+            </button>
+          ))}
+          {!connectors.some(c => !hasFilter || highlighted.has(c.i)) && <p className={styles.note}>No records with multiple networks and a founding link in this selection.</p>}
+        </details>
       </aside>
       <div className={styles.main}>
         <div className={styles.toolbar}>
@@ -710,10 +744,8 @@ export function NetworkAtlas() {
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
               drag.current = { x: e.clientX, y: e.clientY, startX:e.clientX,startY:e.clientY,moved: false };
               pinch.current = 0;
-              idleDelay.current = 1800;
             }}
             onPointerMove={(e) => {
-              idleDelay.current = 1800;
               if (!touches.current.has(e.pointerId)) return;
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
               const t = [...touches.current.values()];
@@ -740,7 +772,6 @@ export function NetworkAtlas() {
               drag.current = null;
             }}
             onPointerUp={(e) => {
-              idleDelay.current = 1800;
               touches.current.delete(e.pointerId);
               const d = drag.current;
               drag.current = null;
@@ -784,8 +815,8 @@ export function NetworkAtlas() {
               className={styles.card}
               aria-label={`Details for ${current.name}`}
               style={{
-                left: `clamp(12px, ${anchor.x + 16}px, calc(100% - 312px))`,
-                top: `clamp(66px, ${anchor.y - 30}px, calc(100% - 400px))`,
+                left: `clamp(12px, ${anchor.x + 16}px, calc(100% - 352px))`,
+                top: `clamp(66px, ${anchor.y - 30}px, calc(100% - 440px))`,
               }}
             >
               <button
@@ -795,9 +826,31 @@ export function NetworkAtlas() {
               >
                 ×
               </button>
-              <div className={styles.eyebrow}>{current.kind}</div>
-              <h3>{current.name}</h3>
-              {current.description && <p>{current.description}</p>}
+              <div className={styles.cardHeader}>
+                <span className={styles.avatar} aria-hidden="true">{current.name.split(/\s+/).slice(0,2).map(n => n[0]).join("")}</span>
+                <div><div className={styles.eyebrow}>{current.kind}</div><h3>{current.name}</h3></div>
+              </div>
+              {connectorByNode.has(selected!) && <div className={styles.connectorBadge}>◎ Superconnector · {connectorByNode.get(selected!)!.score} recorded links</div>}
+              {current.description && <p className={styles.description}>{current.description}</p>}
+              <div className={styles.links}>
+                <a
+                  href={
+                    current.kind === "startup"
+                      ? `/startup/${encodeURIComponent(current.id)}`
+                      : `/founder/discover?q=${encodeURIComponent(current.name)}`
+                  }
+                >
+                  Full record ↗
+                </a>
+                {current.links.map((l) => (
+                  <a key={l.url} href={l.url} target="_blank" rel="noreferrer">
+                    {/linkedin\.com/i.test(l.url) ? `LinkedIn${/unverified/i.test(l.label) ? " (unverified)" : ""}` : l.label} ↗
+                  </a>
+                ))}
+              </div>
+              {!current.links.some(l => /linkedin\.com/i.test(l.url)) && <p className={styles.missingLink}>LinkedIn not recorded</p>}
+              {!current.links.some(l => /website|site/i.test(l.label)) && <p className={styles.missingLink}>Website not recorded</p>}
+              <div className={styles.cardSection}>
               {current.places.map((p, i) => (
                 <p key={i} className={styles.muted}>
                   {p.basis === "campus" ? p.campus : "Headquarters"}
@@ -814,44 +867,23 @@ export function NetworkAtlas() {
                   )}
                 </p>
               ))}
-              <div className={styles.links}>
-                <a
-                  href={
-                    current.kind === "startup"
-                      ? `/startup/${encodeURIComponent(current.id)}`
-                      : `/founder/discover?q=${encodeURIComponent(current.name)}`
-                  }
-                >
-                  Full record ↗
-                </a>
-                {current.links.map((l) => (
-                  <a key={l.url} href={l.url} target="_blank" rel="noreferrer">
-                    {l.label} ↗
-                  </a>
-                ))}
               </div>
-              {!current.links.length && (
-                <p className={styles.note}>
-                  No verified public profile link is recorded yet.
-                </p>
-              )}
               {peers.length > 0 && (
                 <>
                   <div className={styles.eyebrow}>
-                    {current.kind === "founder" ? "SOLID LINE · FOUNDED" : "SOLID LINE · FOUNDED BY"}
+                    {current.kind === "founder" ? "Founded" : "Founders"}
                   </div>
                   {peers.map((i) => (
-                    <button
+                    <div key={i} className={styles.peerRow}><button
                       className={styles.peer}
-                      key={i}
                       onClick={() => focus(i)}
                     >
                       {data.nodes[i].name} ↗
-                    </button>
+                    </button><div className={styles.peerLinks}>{data.nodes[i].links.map(l => <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>)}</div></div>
                   ))}
                 </>
               )}
-              {(nodeGroups.get(selected!) ?? []).length > 0 && <p className={styles.note}>Choose an affiliation below to reveal its dashed purple lines. Shared membership does not mean a personal connection.</p>}
+              {(nodeGroups.get(selected!) ?? []).length > 0 && <details className={styles.cardSection}><summary>Networks <span>{nodeGroups.get(selected!)!.length}</span></summary><p className={styles.note}>Choose a network to show shared affiliations. Membership does not mean a personal connection.</p>
               {(nodeGroups.get(selected!) ?? []).map((g) => (
                 <div className={styles.membership} key={g.id}>
                   <button
@@ -868,7 +900,7 @@ export function NetworkAtlas() {
                     </a>
                   )}
                 </div>
-              ))}
+              ))}</details>}
               {nearby.length > 0 && (
                 <details>
                   <summary>Other nearby tiles ({nearby.length})</summary>
@@ -896,6 +928,7 @@ export function NetworkAtlas() {
             Show connections
           </label>
           <span>Each tile / dot = one founder or startup</span>
+          <label><input type="checkbox" checked={showConnectors} onChange={e => setShowConnectors(e.target.checked)} /> ◎ Superconnectors</label>
           <span className={styles.lineKey}><i /> Founded this startup</span>
           <span className={`${styles.lineKey} ${styles.sharedKey}`}><i /> Shared affiliation</span>
           <span>Choose a network to reveal its shared affiliations.</span>
