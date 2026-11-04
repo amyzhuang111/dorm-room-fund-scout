@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import type { FounderLead } from "@/lib/domain/founder-index";
-import type { WeekItem } from "@/lib/domain/hero-stats";
 
 const COUNT = "font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]";
 
@@ -82,104 +81,6 @@ export function CurrentViewStrip({
         ) : null}
       </div>
     </aside>
-  );
-}
-
-/** Fix 5 — lineage side panels (Scout white, not cream glass). */
-export function LineagePanels({
-  companies,
-  week,
-  campusId,
-  campusName,
-}: {
-  companies: FacetCompany[];
-  week: WeekItem[];
-  campusId: string | null;
-  campusName: string | null;
-}) {
-  const programs = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const c of companies) {
-      if (campusId && c.schoolId !== campusId) continue;
-      const names = c.programs?.length ? c.programs : c.primaryProgram ? [c.primaryProgram] : [];
-      for (const name of names) {
-        const key = name.trim();
-        if (!key) continue;
-        counts.set(key, (counts.get(key) ?? 0) + 1);
-      }
-    }
-    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 8);
-  }, [companies, campusId]);
-
-  const recent = useMemo(() => {
-    const needle = (campusName ?? "").toLowerCase();
-    return week
-      .filter((item) => {
-        if (!campusId && !needle) return true;
-        if (needle && item.campus.toLowerCase().includes(needle)) return true;
-        if (campusId && item.campusSlug && item.campusSlug === campusId) return true;
-        return false;
-      })
-      .filter((item) => !/^(penn mobile|penn clubs|penn courses)$/i.test(item.event.trim()))
-      .slice(0, 6);
-  }, [week, campusId, campusName]);
-
-  if (programs.length === 0 && recent.length === 0) return null;
-
-  return (
-    <div className="mb-3 grid gap-3 lg:grid-cols-2" data-fold-lineage="">
-      {programs.length > 0 ? (
-        <section className="rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5" aria-label="Programs in view">
-          <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Programs</h2>
-          <ol className="mt-1.5 space-y-1">
-            {programs.map(([name, count]) => (
-              <li key={name} className="flex items-baseline justify-between gap-2 text-[13px]">
-                <span className="min-w-0 truncate text-[color:var(--fg,#0B0E17)]">{name}</span>
-                <span className={`shrink-0 font-mono text-[12px] ${COUNT}`}>{count.toLocaleString("en-US")}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
-      ) : null}
-      {recent.length > 0 ? (
-        <section className="rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5" aria-label="Recent signals">
-          <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Recent signals</h2>
-          <ol className="mt-1.5 space-y-1.5">
-            {recent.map((item) => {
-              const title = item.event.trim() || item.detail?.trim() || item.category || item.type;
-              const when = item.at ? new Date(item.at) : null;
-              const dateLabel =
-                when && !Number.isNaN(when.getTime())
-                  ? when.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })
-                  : null;
-              const snippet = item.event.trim() && item.detail?.trim() ? item.detail.trim() : null;
-              const body = (
-                <>
-                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{title}</span>
-                  <span className="text-[color:var(--fg-3,#5C647A)]"> · {item.campus}</span>
-                  {dateLabel ? <span className="text-[color:var(--fg-3,#5C647A)]"> · {dateLabel}</span> : null}
-                  {item.tag ? <span className="text-[color:var(--cobalt,#2F4FD8)]"> · {item.tag}</span> : null}
-                  {snippet ? (
-                    <span className="mt-0.5 line-clamp-2 block text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">{snippet}</span>
-                  ) : null}
-                </>
-              );
-              return (
-                <li key={item.id} className="text-[13px] leading-5">
-                  {item.url ? (
-                    <a href={item.url} target="_blank" rel="noreferrer" className="hover:underline">
-                      {body}
-                    </a>
-                  ) : (
-                    body
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </section>
-      ) : null}
-    </div>
   );
 }
 
