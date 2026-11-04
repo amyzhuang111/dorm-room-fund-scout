@@ -21,11 +21,11 @@ export function GlobeFoldSkeleton({
         <p className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)]">
           <span>
             <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{companyCount.toLocaleString("en-US")}</span>
-            {" companies"}
+            {" vetted companies"}
           </span>
           <span>
             <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founders"}
+            {" founders on those companies"}
           </span>
           <span>
             <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>

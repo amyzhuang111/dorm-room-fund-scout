@@ -22,7 +22,7 @@ import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 import { founderMatches, type FounderLead } from "@/lib/domain/founder-index";
-import type { FacetCompany } from "@/lib/domain/sample-facets";
+import type { FacetCompany, FacetSeed } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
@@ -73,63 +73,65 @@ function browseHref(opts: {
 
 function PeakShareLite({
   shell,
-  foundersListed: _foundersListed,
+  foundersListed,
+  companyTotal,
   campusesOnMap: _campusesOnMap,
   topCampuses: _topCampuses = [],
 }: {
   shell: PeakShell;
   foundersListed: number;
+  companyTotal: number;
   campusesOnMap: number;
   topCampuses?: TopCampus[];
 }) {
-  void _foundersListed;
   void _campusesOnMap;
   void _topCampuses;
   const peakCount = shell.peakCount;
   const peakLabel = shell.peakLabel;
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
+  const datedLine = `Busiest dated month ${peakLabel}: ${peakCount.toLocaleString("en-US")} of ${shell.dated.toLocaleString("en-US")} dated signals (${pct}%) · ${shell.quiet.toLocaleString("en-US")} with no dated signal`;
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8" data-fold-redesign="seal-dispatch">
       <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-6 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Busiest month</p>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Vetted companies</p>
             <p className="mt-1 h-[52px] overflow-hidden font-mono text-[72px] font-bold leading-none tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
-              {peakCount.toLocaleString("en-US")}
-              <span className="mx-2 text-[28px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[36px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
+              {companyTotal.toLocaleString("en-US")}
             </p>
             <p className="mt-1.5 max-w-[36rem] text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
-              {peakLabel} is <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span>
-              {" of dated signals"}
+              {foundersListed.toLocaleString("en-US")} founders on these companies
             </p>
             <div className="mt-2 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
-            <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-              {shell.dated.toLocaleString("en-US")} dated
-              {shell.earlierValid > 0 ? ` · ${shell.earlierValid.toLocaleString("en-US")} earlier` : ""}
-              {shell.undatedMonth > 0 ? ` · ${shell.undatedMonth.toLocaleString("en-US")} undated` : ""}
-              {" · "}
-              {shell.quiet.toLocaleString("en-US")} no signal
-              {shell.noDate > 0 ? ` · ${shell.noDate.toLocaleString("en-US")} no date` : ""}
+            <p
+              className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]"
+              data-chrono-caption=""
+              data-chrono-peak={String(peakCount)}
+              data-chrono-dated={String(shell.dated)}
+              data-chrono-earlier={String(shell.earlierValid)}
+              data-chrono-month-unknown={String(shell.undatedMonth)}
+              data-chrono-window={String(shell.inWindow)}
+            >
+              {datedLine}
             </p>
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Founders</p>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Founders on file</p>
+            <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Not adjusted for scan depth</p>
             <div className="mt-2 h-[8rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
       </div>
       <div className="border-b border-[color:var(--line,#E1E5EF)] pb-2 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Busiest month</p>
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Vetted companies</p>
         <p className="mt-2 h-10 overflow-hidden font-mono text-[40px] font-bold leading-none tracking-[-0.06em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
-          {peakCount.toLocaleString("en-US")}
-          <span className="mx-1.5 text-[18px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-          <span className="text-[24px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
+          {companyTotal.toLocaleString("en-US")}
         </p>
         <p className="mt-2 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
-          {peakLabel} is <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span> of dated signals
+          {foundersListed.toLocaleString("en-US")} founders on these companies
         </p>
         <div className="mt-2 h-14" data-fold-peak-bars-mobile-reserve="" aria-hidden="true" />
+        <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{datedLine}</p>
         <div className="mt-2 h-10 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
       </div>
     </div>
@@ -139,6 +141,7 @@ function PeakShareLite({
 function PeakShareSlot({
   companies,
   foundersListed,
+  companyTotal,
   campusesOnMap,
   topCampuses = [],
   shell,
@@ -146,6 +149,7 @@ function PeakShareSlot({
 }: {
   companies: FacetCompany[];
   foundersListed: number;
+  companyTotal: number;
   campusesOnMap: number;
   topCampuses?: TopCampus[];
   shell?: PeakShell | null;
@@ -158,13 +162,14 @@ function PeakShareSlot({
     <div className={`relative min-h-0 ${mobileDeck ? "mb-0" : "mb-2"}`} data-fold-peak-slot="" data-fold-peak-reserve="" data-fold-peak-deck={mobileDeck ? "1" : undefined}>
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
-          <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
+          <PeakShareLite shell={shell} foundersListed={foundersListed} companyTotal={companyTotal} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
         ) : null}
       </div>
       <div className={showLive ? undefined : "absolute left-0 right-0 top-0 opacity-0 pointer-events-none"} data-fold-peak-live-wrap="" aria-hidden={!showLive || undefined}>
         <FoldPeakShare
           companies={companies}
           foundersListed={foundersListed}
+          companyTotal={companyTotal}
           campusesOnMap={campusesOnMap}
           topCampuses={topCampuses}
           shell={shell}
@@ -510,6 +515,7 @@ export function SampleHomeClient(props: {
   cardCount: number;
   signalCompanyCount: number;
   foundersListed: number;
+  facetSeed?: FacetSeed | null;
   newestHome: { label: string; detail: string } | null;
   peakShell?: PeakShell | null;
   directoryUrl?: string;
@@ -534,6 +540,7 @@ export function SampleHomeClient(props: {
     stats,
     cardCount,
     foundersListed,
+    facetSeed = null,
     peakShell = null,
     directoryUrl = "/data/sample-directory.json",
     place = "map",
@@ -686,6 +693,7 @@ export function SampleHomeClient(props: {
                   <PeakShareSlot
                     companies={companies}
                     foundersListed={foundersListed}
+                    companyTotal={cardCount}
                     campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
                     topCampuses={topCampuses}
                     shell={peakShell}
@@ -779,6 +787,7 @@ export function SampleHomeClient(props: {
                         <PeakShareSlot
                           companies={companies}
                           foundersListed={foundersListed}
+                          companyTotal={cardCount}
                           campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
                           topCampuses={topCampuses}
                           shell={peakShell}
@@ -855,6 +864,7 @@ export function SampleHomeClient(props: {
             kinds={kinds}
             campuses={campuses}
             companies={companies}
+            facetSeed={facetSeed}
             moreHref={browseHref({
               feed,
               sector,

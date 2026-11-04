@@ -214,6 +214,34 @@ export function hqRegionPills(companies: FacetCompany[], topN = 8): { visible: F
   };
 }
 
+/** Counts for the company filters before the directory JSON has loaded in the browser. */
+export function listedFacetSeed(companies: FacetCompany[]): {
+  total: number;
+  statuses: { id: StatusId; label: string; count: number }[];
+  years: FacetCount[];
+  sectors: { visible: FacetCount[]; more: FacetCount[]; moreCount: number };
+  hq: { visible: FacetCount[]; more: FacetCount[]; moreCount: number };
+} {
+  const counts = new Map<StatusId, number>();
+  for (const company of companies) {
+    const id = statusOf(company);
+    counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  return {
+    total: companies.length,
+    statuses: (Object.keys(STATUS_LABEL) as StatusId[]).map((id) => ({
+      id,
+      label: STATUS_LABEL[id],
+      count: counts.get(id) ?? 0,
+    })),
+    years: foundedYearBuckets(companies),
+    sectors: sectorPills(companies, 10),
+    hq: hqRegionPills(companies, 8),
+  };
+}
+
+export type FacetSeed = ReturnType<typeof listedFacetSeed>;
+
 /** Plural-safe signal unit for directory cards. */
 export function signalsUnit(count: number): string {
   return count === 1 ? "signal" : "signals";

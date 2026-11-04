@@ -122,7 +122,13 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   if (isEmpty(website)) missing.push("Website");
   if (isEmpty(companyLi)) missing.push("Company LinkedIn");
   if (isEmpty(project.founderLinks)) missing.push("Founders");
-  if (isEmpty(project.signals) && isEmpty(project.latestSignalNote)) missing.push("Signals");
+  const hasSignalEvidence =
+    !isEmpty(project.signals) ||
+    !isEmpty(project.latestSignalNote) ||
+    !isEmpty(profile.rounds) ||
+    !isEmpty(funding) ||
+    !isEmpty(profile.investors);
+  if (!hasSignalEvidence) missing.push("Signals");
 
   const hqText = !isEmpty(profile.hq) ? profile.hq?.text : null;
   const teamText = !isEmpty(profile.teamSize) ? profile.teamSize?.text : null;

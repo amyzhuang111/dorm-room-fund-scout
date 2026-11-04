@@ -7,7 +7,7 @@ import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadiusByFounders, markerSizeLegend } from "@/lib/domain/marker-radius";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
-import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
+import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import { CompanyLocationLayer } from "./company-location-layer";
 import mapStyles from "./company-location-map.module.css";
@@ -710,11 +710,9 @@ export function TileGlobe({
   }, [companies, pinned]);
   const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
 
-  // One campus count: the campuses actually drawn on the globe.
-  const universeCounts = catalogReady
-    ? sampleSurfaceCounts(companies, campuses)
-    : { companies: companyCount, foundersListed, campusesOnMap: campuses.length };
-  const campusesOnMap = universeCounts.campusesOnMap;
+  // Keep the server founder count. Summing founder-name slots after hydrate
+  // counts the same person twice and disagrees with the vetted list.
+  const campusesOnMap = campuses.length;
 
   const rankedCampuses = useMemo(() => campusFoundersRanked(campuses), [campuses]);
   const topCampuses = useMemo(() => campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE), [campuses]);
@@ -728,7 +726,7 @@ export function TileGlobe({
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
           <Link href="/companies" className="pointer-events-auto hover:underline">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
-            {" companies"}
+            {" vetted companies"}
           </Link>
           {catalogReady ? (
             <span>
@@ -742,13 +740,13 @@ export function TileGlobe({
           </span>
           {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
           <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
-            <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-            {" founders"}
+            <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
+            {" founders on those companies"}
             {foundersIndexed > 0 ? (
               <>
                 {" · "}
                 <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-                {" indexed"}
+                {" in the full index"}
               </>
             ) : null}
           </Link>
