@@ -1,0 +1,13 @@
+{
+  "ok": false,
+  "errors": [
+    {
+      "page": "home",
+      "label": "founders-indexed",
+      "expected": 3501,
+      "actual": 3205,
+      "source": "data-count=founders-indexed vs snapshot.foundersIndexed"
+    }
+  ],
+  "wrote": "/tmp/campus-mobile-compat/reviews/count-consistency.json"
+}

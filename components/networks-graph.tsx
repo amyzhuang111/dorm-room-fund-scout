@@ -1081,7 +1081,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           onPointerUp={(event) => event.stopPropagation()} onWheel={(event) => event.stopPropagation()}
           role="group" aria-label="Map zoom controls" data-network-in-map-zoom="">
           <button type="button" aria-label="Zoom out network" title="Zoom out" data-network-zoom-out=""
-            className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            className="grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
               camRef.current.scale = Math.max(0.7, camRef.current.scale / 1.35);
               velRef.current.vScale = 0;
@@ -1089,7 +1089,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
               bump((value) => value + 1);
             }}>−</button>
           <button type="button" aria-label="Zoom in network" title="Zoom in" data-network-zoom-in=""
-            className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            className="grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
               camRef.current.scale = Math.min(5.5, camRef.current.scale * 1.35);
               velRef.current.vScale = 0;
@@ -1097,7 +1097,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
               bump((value) => value + 1);
             }}>+</button>
           <button type="button" aria-label="Fit all network clusters" title="Fit whole ecosystem" data-network-zoom-fit=""
-            className="h-10 rounded-md px-3 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            className="h-11 min-h-11 rounded-md px-3 text-[14px] font-semibold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
               camRef.current = { x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale };
               velRef.current = { vx: 0, vy: 0, vScale: 0 };

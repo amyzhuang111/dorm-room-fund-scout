@@ -1,0 +1,9 @@
+atTop {"hasNav":true,"navTop":0,"navBottom":93,"navHeight":93,"hasDeskTabs":true,"hasProductChrome":true,"hasWhiteShellAttr":true,"bodyBg":"rgb(255, 255, 255)","shellBg":"rgb(255, 255, 255)","headerBg":"rgb(255, 255, 255)","sample":"halflight","wordmark":true}
+OK proj_9GUOmdEYxbuH: site nav in viewport @scrollY=0
+OK proj_9GUOmdEYxbuH: body white rgb(255, 255, 255)
+OK proj_9GUOmdEYxbuH: company shell white rgb(255, 255, 255)
+OK proj_9GUOmdEYxbuH: header white rgb(255, 255, 255)
+OK proj_9GUOmdEYxbuH: product chrome present
+afterScroll {"scrollY":160,"navTop":0,"navBottom":93,"headerPos":"sticky","stickyOk":true}
+OK proj_9GUOmdEYxbuH: sticky nav survives hero scroll
+PASS check-company-chrome { pages: 1 }

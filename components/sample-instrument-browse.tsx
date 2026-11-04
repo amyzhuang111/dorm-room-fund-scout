@@ -591,7 +591,7 @@ export function SampleInstrumentBrowse({
                 type="button"
                 data-export-filtered=""
                 onClick={() => exportFilteredCsv(boardCompanies)}
-                className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
               >
                 Export CSV
               </button>
@@ -698,7 +698,7 @@ export function SampleInstrumentBrowse({
               type="button"
               data-filter-chip={String(chip.key)}
               onClick={() => commitFacet({ ...facets, ...chip.clear })}
-              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium"
+              className="inline-flex h-11 min-h-11 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[14px] font-medium"
             >
               {chip.label}
               <span className="font-mono text-[10px] text-[color:var(--ember,#D96B1C)]" aria-hidden>x</span>
@@ -708,7 +708,7 @@ export function SampleInstrumentBrowse({
             type="button"
             data-export-filtered-mobile=""
             onClick={() => exportFilteredCsv(boardCompanies)}
-            className="ml-auto font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+            className="ml-auto inline-flex min-h-11 min-w-11 items-center font-mono text-[14px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
           >
             Export CSV
           </button>
@@ -855,7 +855,7 @@ export function SampleInstrumentBrowse({
             >
               <button
                 type="button"
-                className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
+                className="flex min-h-11 w-full items-center justify-between gap-3 px-3.5 py-3 text-left text-[14px]"
                 onClick={() => setMobileFiltersOpen(true)}
                 aria-expanded={mobileFiltersOpen}
                 aria-controls="mobile-filter-sheet"
@@ -1577,7 +1577,7 @@ function LedgerRow({
                 rel="noreferrer"
                 title={founder.name}
                 aria-label={`${founder.name} on LinkedIn`}
-                className="inline-flex h-6 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex h-11 min-h-11 min-w-11 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
                 onClick={(event) => event.stopPropagation()}
               >
                 in

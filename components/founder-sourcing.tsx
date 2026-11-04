@@ -57,6 +57,7 @@ export function FounderResults({
   campusId,
   campusName,
   foundersListed = 0,
+  foundersIndexed = 0,
   peek,
   filtersOnly = false,
   onClearCampus,
@@ -69,6 +70,8 @@ export function FounderResults({
   campusName: string | null;
   /** Founder-name slots on company cards  -  may be below the searchable index. */
   foundersListed?: number;
+  /** Shared corpus total for the unfiltered index label. */
+  foundersIndexed?: number;
   /** When set, show a compact overlay peek of N cards (no mobile min-height reserve). */
   peek?: number;
   /** r53: mount filter selects without cards (deck sheet rest state). */
@@ -142,7 +145,7 @@ export function FounderResults({
             {status === "ready" ? (
               <>
                 <span className="font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]" data-count={unfiltered ? "founders-indexed" : undefined}>
-                  {matches.length.toLocaleString("en-US")}
+                  {(unfiltered && foundersIndexed > 0 ? foundersIndexed : matches.length).toLocaleString("en-US")}
                 </span>
                 {campusId === "missing"
                   ? " with no campus on record"

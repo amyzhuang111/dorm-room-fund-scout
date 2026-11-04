@@ -8,6 +8,7 @@ export interface FounderTableRow {
   id: string;
   name: string;
   tier: string | null;
+  tierBasis: string | null;
   campus: string | null;
   campusId: string | null;
   campusSlug: string | null;
@@ -52,6 +53,7 @@ export function loadFounderTable(universityId?: string): FounderTableRow[] {
         id: founder.id,
         name: founder.name,
         tier: founder.signalTier,
+        tierBasis: founder.signalTierBasis,
         campus: founder.universityName ? shortCampusLabel(campusId ?? "", founder.universityName) : null,
         campusId,
         campusSlug: campusId && founder.universityName ? campusSlug(shortCampusLabel(campusId, founder.universityName)) : null,
@@ -127,6 +129,7 @@ export interface ProjectMate {
   id: string;
   name: string;
   tier: string | null;
+  tierBasis: string | null;
   signalAt: string | null;
 }
 
@@ -138,6 +141,7 @@ export interface ProjectTableRow {
   full: string | null;
   signalAt: string | null;
   tier: string | null;
+  tierBasis: string | null;
   campus: string | null;
   campusSlug: string | null;
   people: ProjectMate[];
@@ -189,6 +193,7 @@ interface ProjectHit {
   project_kind: string;
   description: string | null;
   signal_tier: string | null;
+  signal_tier_basis: string | null;
   obs: string | null;
   source_date: string | null;
   created_at: string | null;
@@ -206,7 +211,7 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
     hits.push(
       ...db
         .prepare(
-          `SELECT r.person_id as person_id, p.id as project_id, p.name as project_name, p.kind as project_kind, p.description as description, p.signal_tier as signal_tier,
+          `SELECT r.person_id as person_id, p.id as project_id, p.name as project_name, p.kind as project_kind, p.description as description, p.signal_tier as signal_tier, p.signal_tier_basis as signal_tier_basis,
                   s.current_observation as obs, s.source_date as source_date, s.created_at as created_at
              FROM person_project_roles r
              JOIN projects p ON p.id = r.project_id
@@ -236,13 +241,17 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
     let signalRank = Number.NEGATIVE_INFINITY;
     let description: string | null = null;
     let projectTier: string | null = null;
+    let projectTierBasis: string | null = null;
     let projectName: string | null = null;
     for (const hit of projectHits) {
       const person = byId.get(hit.person_id);
       if (person) members.set(person.id, person);
       projectName = projectName ?? hit.project_name;
       description = description ?? hit.description;
-      projectTier = projectTier ?? hit.signal_tier;
+      if (!projectTier && hit.signal_tier) {
+        projectTier = hit.signal_tier;
+        projectTierBasis = hit.signal_tier_basis;
+      }
       const at = dated(hit.source_date) ?? hit.created_at;
       const rank = signalTime(hit.created_at);
       if (rank >= signalRank) {
@@ -254,9 +263,16 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
     const parsed = parseSignalCopy(obs);
     const rosterNote = projectHits.some((hit) => hit.project_kind === "company") ? rosterNotes.get(projectId) ?? null : null;
     const mates = [...members.values()]
-      .map((person) => ({ id: person.id, name: person.name, tier: person.tier, signalAt: person.signalAt }))
+      .map((person) => ({ id: person.id, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }))
       .sort((a, b) => a.name.localeCompare(b.name));
     const campus = majorityCampus([...members.values()]);
+    const tier = bestTier([projectTier, ...mates.map((mate) => mate.tier)]);
+    const tierBasis =
+      (tier && projectTier === tier ? projectTierBasis : null) ||
+      mates.find((mate) => mate.tier === tier)?.tierBasis ||
+      projectTierBasis ||
+      mates.find((mate) => mate.tierBasis)?.tierBasis ||
+      null;
     rows.push({
       id: projectId,
       name: cleanLabel(projectName) ?? quotedName(obs) ?? mates[0]?.name ?? "",
@@ -264,7 +280,8 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
       detail: cleanLabel(description) ?? parsed.detail ?? rosterNote,
       full: parsed.full ?? cleanLabel(description) ?? rosterNote,
       signalAt,
-      tier: bestTier([projectTier, ...mates.map((mate) => mate.tier)]),
+      tier,
+      tierBasis,
       campus: campus?.campus ?? null,
       campusSlug: campus?.campusSlug ?? null,
       people: mates,
@@ -283,14 +300,21 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
       full: parsed.full,
       signalAt: person.signalAt,
       tier: person.tier,
+      tierBasis: person.tierBasis,
       campus: person.campus,
       campusSlug: person.campusSlug,
-      people: [{ id: person.id, name: person.name, tier: person.tier, signalAt: person.signalAt }],
+      people: [{ id: person.id, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }],
       verified: person.verified,
     });
   }
 
-  rows.sort((a, b) => signalTime(b.signalAt) - signalTime(a.signalAt) || a.name.localeCompare(b.name));
+  // Rank by tier first (S+ → Unranked), then recency.
+  rows.sort(
+    (a, b) =>
+      (TIER_RANK[a.tier ?? "Unranked"] ?? 7) - (TIER_RANK[b.tier ?? "Unranked"] ?? 7) ||
+      signalTime(b.signalAt) - signalTime(a.signalAt) ||
+      a.name.localeCompare(b.name),
+  );
   return rows;
 }
 

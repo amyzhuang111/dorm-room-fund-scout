@@ -214,11 +214,11 @@ function MapFoldSheet({
 }) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  const heightRef = useRef(120);
+  const heightRef = useRef(108);
   const springRef = useRef<number | null>(null);
   // r53b: compact peek so ≥80% of the home map stays unobstructed @375.
   // r59: spring-settle on expand / snap; drag stays 1:1 with the finger.
-  const REST = 120;
+  const REST = 108;
   const DECK = 300;
   const [height, setHeight] = useState(REST);
   heightRef.current = height;
@@ -509,6 +509,7 @@ export function SampleHomeClient(props: {
   cardCount: number;
   signalCompanyCount: number;
   foundersListed: number;
+  foundersIndexed: number;
   newestHome: { label: string; detail: string } | null;
   peakShell?: PeakShell | null;
   directoryUrl?: string;
@@ -533,6 +534,7 @@ export function SampleHomeClient(props: {
     stats,
     cardCount,
     foundersListed,
+    foundersIndexed,
     peakShell = null,
     directoryUrl = "/data/sample-directory.json",
     place = "map",
@@ -671,7 +673,7 @@ export function SampleHomeClient(props: {
                 companies={companies}
                 companyCount={cardCount}
                 foundersListed={foundersListed}
-                foundersIndexed={founders.length || undefined}
+                foundersIndexed={foundersIndexed}
                 highlightCampusIds={highlightCampusIds}
               />
 
@@ -719,6 +721,7 @@ export function SampleHomeClient(props: {
                     campusId={mapCampusId}
                     campusName={mapCampusName}
                     foundersListed={foundersListed}
+                    foundersIndexed={foundersIndexed}
                     filtersOnly
                     onClearCampus={clearCampus}
                     onMissingCampus={() => {
@@ -738,6 +741,7 @@ export function SampleHomeClient(props: {
                     campusId={mapCampusId}
                     campusName={mapCampusName}
                     foundersListed={foundersListed}
+                    foundersIndexed={foundersIndexed}
                     onClearCampus={clearCampus}
                     onMissingCampus={() => {
                       const next = new URLSearchParams(search.toString());
@@ -772,7 +776,7 @@ export function SampleHomeClient(props: {
                       <FoldOpenLaneHero
                         shell={openLane}
                         companyTotal={cardCount}
-                        foundersIndexed={founders.length || foundersListed}
+                        foundersIndexed={foundersIndexed}
                       />
                       <div className="border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-open-lane-peak="">
                         <PeakShareSlot
@@ -793,6 +797,7 @@ export function SampleHomeClient(props: {
                       campusId={mapCampusId}
                       campusName={mapCampusName}
                       foundersListed={foundersListed}
+                    foundersIndexed={foundersIndexed}
                       peek={3}
                       onClearCampus={clearCampus}
                       onMissingCampus={() => {
@@ -889,7 +894,7 @@ export function SampleHomeClient(props: {
 
 function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
   return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--cobalt,#2F4FD8)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
+    <Link href={href} role="tab" aria-selected={active} className={`grid h-11 min-h-11 min-w-11 place-items-center border-b-2 px-2.5 font-mono text-[14px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--cobalt,#2F4FD8)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
       {children}
     </Link>
   );

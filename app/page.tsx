@@ -5,6 +5,7 @@ import { GlobeBoot } from "@/components/map-boot";
 import { SampleHome, type Feed } from "@/components/sample-home";
 import { loadDirectory } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
+import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 
 function feedOf(value: string | undefined): Feed {
   if (value === "leaderboard" || value === "world") return value;
@@ -21,7 +22,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     const query = qs.toString();
     redirect(query ? `/companies?${query}` : "/companies");
   }
-  if (sp.view === "network") redirect("/map/network");
+  if (sp.view === "network") redirect("/networks");
   // Browse feeds live under /companies; keep ?sample=1 as a harmless alias.
   if (sp.feed === "directory" || sp.feed === "leaderboard") {
     const qs = new URLSearchParams();
@@ -35,8 +36,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   const feed = feedOf(sp.feed);
   const stats = loadHeroStats();
   const directory = loadDirectory();
-  let foundersListed = 0;
-  for (const card of directory.cards) foundersListed += card.founders.length;
+  const totals = loadCorpusTotals();
+  const foundersListed = totals.foundersListed;
+  const companyCount = totals.investableCompanies;
   const plotted = stats.universities.filter((university) => university.lat != null && university.lon != null);
   const top = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))[0];
   return (
@@ -46,9 +48,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
         fallback={
           <div className="sample-paper">
             <GlobeFoldSkeleton
-              companyCount={directory.cards.length}
+              companyCount={companyCount}
               foundersListed={foundersListed}
-              campusesOnMap={plotted.length}
+              campusesOnMap={totals.campusesOnMap}
               dataThrough={stats.updatedAt}
               topName={top?.name ?? ""}
               topFounders={top?.founderCount ?? 0}

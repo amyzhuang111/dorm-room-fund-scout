@@ -12,6 +12,7 @@ import {
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 import { buildPeakShell } from "@/lib/domain/peak-shell";
+import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
@@ -51,8 +52,8 @@ export function SampleHome({
   const campusId = campusRow?.id;
   const listed = place === "explore" && (feed === "directory" || feed === "leaderboard");
   const data = loadDirectory();
-  let foundersListed = 0;
-  for (const card of data.cards) foundersListed += card.founders.length;
+  const totals = loadCorpusTotals();
+  const foundersListed = totals.foundersListed;
   const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
@@ -149,9 +150,10 @@ export function SampleHome({
       kinds={data.kinds}
       campuses={campuses}
       stats={clientStats}
-      cardCount={data.cards.length}
+      cardCount={totals.investableCompanies}
       signalCompanyCount={data.cards.filter((c) => c.signals > 0).length}
       foundersListed={foundersListed}
+      foundersIndexed={totals.foundersIndexed}
       newestHome={newestHome}
       peakShell={peakShell}
       directoryUrl="/data/sample-directory.json"

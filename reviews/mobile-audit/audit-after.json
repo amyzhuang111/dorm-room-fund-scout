@@ -1,0 +1,231 @@
+{
+  "after": {
+    "home@320": {
+      "status": 200,
+      "overflow": false,
+      "docW": 320,
+      "vw": 320,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "founders@320": {
+      "status": 200,
+      "overflow": false,
+      "docW": 320,
+      "vw": 320,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "companies@320": {
+      "status": 200,
+      "overflow": false,
+      "docW": 320,
+      "vw": 320,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "data@320": {
+      "status": 200,
+      "overflow": false,
+      "docW": 320,
+      "vw": 320,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "campuses@320": {
+      "status": 200,
+      "overflow": false,
+      "docW": 320,
+      "vw": 320,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "deals@320": {
+      "status": 200,
+      "overflow": false,
+      "docW": 320,
+      "vw": 320,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "networks@320": {
+      "status": 200,
+      "overflow": false,
+      "docW": 320,
+      "vw": 320,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "home@375": {
+      "status": 200,
+      "overflow": false,
+      "docW": 375,
+      "vw": 375,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "founders@375": {
+      "status": 200,
+      "overflow": false,
+      "docW": 375,
+      "vw": 375,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "companies@375": {
+      "status": 200,
+      "overflow": false,
+      "docW": 375,
+      "vw": 375,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "data@375": {
+      "status": 200,
+      "overflow": false,
+      "docW": 375,
+      "vw": 375,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "campuses@375": {
+      "status": 200,
+      "overflow": false,
+      "docW": 375,
+      "vw": 375,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "deals@375": {
+      "status": 200,
+      "overflow": false,
+      "docW": 375,
+      "vw": 375,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "networks@375": {
+      "status": 200,
+      "overflow": false,
+      "docW": 375,
+      "vw": 375,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "home@390": {
+      "status": 200,
+      "overflow": false,
+      "docW": 390,
+      "vw": 390,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "founders@390": {
+      "status": 200,
+      "overflow": false,
+      "docW": 390,
+      "vw": 390,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "companies@390": {
+      "status": 200,
+      "overflow": false,
+      "docW": 390,
+      "vw": 390,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "data@390": {
+      "status": 200,
+      "overflow": false,
+      "docW": 390,
+      "vw": 390,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "campuses@390": {
+      "status": 200,
+      "overflow": false,
+      "docW": 390,
+      "vw": 390,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "deals@390": {
+      "status": 200,
+      "overflow": false,
+      "docW": 390,
+      "vw": 390,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "networks@390": {
+      "status": 200,
+      "overflow": false,
+      "docW": 390,
+      "vw": 390,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "home@430": {
+      "status": 200,
+      "overflow": false,
+      "docW": 430,
+      "vw": 430,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "founders@430": {
+      "status": 200,
+      "overflow": false,
+      "docW": 430,
+      "vw": 430,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "companies@430": {
+      "status": 200,
+      "overflow": false,
+      "docW": 430,
+      "vw": 430,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "data@430": {
+      "status": 200,
+      "overflow": false,
+      "docW": 430,
+      "vw": 430,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "campuses@430": {
+      "status": 200,
+      "overflow": false,
+      "docW": 430,
+      "vw": 430,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "deals@430": {
+      "status": 200,
+      "overflow": false,
+      "docW": 430,
+      "vw": 430,
+      "tapFails": [],
+      "tapFailCount": 0
+    },
+    "networks@430": {
+      "status": 200,
+      "overflow": false,
+      "docW": 430,
+      "vw": 430,
+      "tapFails": [],
+      "tapFailCount": 0
+    }
+  },
+  "overflows": [],
+  "tapFails": [],
+  "campusDetail": "/campus/penn"
+}

@@ -1,0 +1,69 @@
+desk-1440 {
+  "failedCopy": false,
+  "loadingCopy": false,
+  "founderCards": 3,
+  "filtersPresent": true,
+  "filterSelects": 4,
+  "optionCounts": [
+    129,
+    30,
+    26,
+    8
+  ],
+  "emptyFilters": false,
+  "campusStrip": true,
+  "peakCampuses": true,
+  "foundersHttp": [
+    200,
+    200
+  ]
+}
+mobile-375 {
+  "failedCopy": false,
+  "loadingCopy": false,
+  "founderCards": 28,
+  "filtersPresent": true,
+  "filterSelects": 4,
+  "optionCounts": [
+    129,
+    30,
+    26,
+    8
+  ],
+  "emptyFilters": false,
+  "campusStrip": true,
+  "peakCampuses": true,
+  "foundersHttp": [
+    200,
+    200
+  ]
+}
+full-record-1440 {
+  "founders": {
+    "top": 81,
+    "bottom": 276,
+    "inFold": true
+  },
+  "identity": {
+    "top": 385,
+    "bottom": 650,
+    "inFold": true
+  },
+  "confirmedTop": 179,
+  "capital": {
+    "top": 309,
+    "bottom": 376,
+    "inFold": true
+  },
+  "links": {
+    "top": 425,
+    "bottom": 474,
+    "inFold": true
+  },
+  "capitalInFold": true,
+  "linksInFold": true,
+  "foundersStillHigh": true,
+  "identityStillHigh": true,
+  "confirmedStillHigh": true
+}
+PASS founder fold loaded

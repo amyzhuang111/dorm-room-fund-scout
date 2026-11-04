@@ -14,7 +14,7 @@ import {
 } from "@/lib/domain/directory";
 import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 
-export const CORPUS_PAGE_SIZE = 40;
+export const CORPUS_PAGE_SIZE = 25;
 
 export type CorpusSort = DirectorySort | "signals" | "founded";
 

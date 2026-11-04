@@ -101,18 +101,17 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   const campuses = useMemo(() => [...new Set(rows.map((row) => row.campus).filter(Boolean))] as string[], [rows]);
   const verifiedFilled = rows.filter((row) => row.verified).length;
-  const tierFilled = rows.filter((row) => row.tier).length;
   const dateFilled = rows.filter((row) => row.signalAt).length;
   const mostlyEmpty = (filled: number) => rows.length === 0 || filled / rows.length < 0.5;
   const head = rows.slice(0, 20);
   const autoVerified = verifiedFilled > 0 && head.length > 0 && head.filter((row) => row.verified).length / head.length >= 0.25;
-  const autoTier = campusLocked ? !mostlyEmpty(tierFilled) : true;
   const autoDate = campusLocked ? !mostlyEmpty(dateFilled) : true;
   const [verifiedChoice, setVerifiedChoice] = useState<boolean | null>(null);
-  const [tierChoice, setTierChoice] = useState<boolean | null>(null);
   const [dateChoice, setDateChoice] = useState<boolean | null>(null);
+  const [tierReasonId, setTierReasonId] = useState<string | null>(null);
   const showVerified = verifiedChoice ?? autoVerified;
-  const showTier = tierChoice ?? autoTier;
+  // Tier is always visible and ranked by default (task: mobile-compat / founders).
+  const showTier = true;
   const showDate = dateChoice ?? autoDate;
 
   const filtered = rows.filter((row) => {
@@ -195,7 +194,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
-      <p className="mb-3 text-[13px] leading-5 text-fg sm:mb-4 sm:text-[14px]">
+      <p className="mb-3 text-[14px] leading-5 text-fg sm:mb-4">
         <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
         {" / "}
         <span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal
@@ -234,12 +233,6 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
               <div className="absolute right-0 z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] text-fg shadow-[var(--shadow-menu)]" data-columns-panel="">
                 {campusLocked && (
                   <label className="flex items-center gap-2 py-1">
-                    <input type="checkbox" checked={showTier} onChange={(event) => setTierChoice(event.target.checked)} />
-                    Tier
-                  </label>
-                )}
-                {campusLocked && (
-                  <label className="flex items-center gap-2 py-1">
                     <input type="checkbox" checked={showDate} onChange={(event) => setDateChoice(event.target.checked)} />
                     Date
                   </label>
@@ -258,8 +251,62 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
           </button>
         </div>
       </div>
-      <div className="mt-3 max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
-        <table className="w-full min-w-[720px] table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg">
+      {/* Mobile: stacked cards. Desk: sticky first column + horizontal scroll. */}
+      <div className="mt-3 max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong sm:overflow-x-auto" data-projects-scroll="">
+        <ul className="divide-y divide-line sm:hidden" data-projects-cards="">
+          {ordered.map((row, index) => {
+            const text = row.detail || row.full;
+            const reasonOpen = tierReasonId === row.id;
+            return (
+              <li key={row.id} className="px-2 py-3" data-project-card="">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    className="mt-1 h-11 w-11 shrink-0"
+                    checked={selected.includes(row.id)}
+                    onChange={() => toggle(row.id)}
+                    aria-label={`Select ${row.name || row.people[0]?.name || "project"}`}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <button type="button" className="flex min-h-11 w-full items-center gap-2 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
+                      <AvatarStack people={row.people} />
+                      <span className="min-w-0 truncate text-[14px] font-medium text-fg">{plainText(row.name) || "n/a"}</span>
+                    </button>
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-fg-2">
+                      {row.tier ? (
+                        <button
+                          type="button"
+                          className={`${tierClass(row.tier)} min-h-11 px-2`}
+                          data-tier={row.tier}
+                          data-tier-reason-trigger=""
+                          aria-expanded={reasonOpen}
+                          onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
+                        >
+                          {row.tier}
+                        </button>
+                      ) : null}
+                      {!campusLocked && row.campus ? (
+                        row.campusSlug ? (
+                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-11 items-center text-link">{plainText(row.campus)}</Link>
+                        ) : (
+                          <span>{plainText(row.campus)}</span>
+                        )
+                      ) : null}
+                      {row.verified ? <span className="text-ok">Verified</span> : null}
+                    </div>
+                    {reasonOpen && row.tierBasis ? (
+                      <p className="mt-2 text-[14px] leading-5 text-fg" data-tier-reason="">{plainText(row.tierBasis)}</p>
+                    ) : null}
+                    <button type="button" className="mt-2 min-h-11 w-full text-left text-[14px] leading-5 text-fg" onClick={() => { setCursor(index); setOpenId(row.id); }}>
+                      {text ? plainText(text) : "No signal yet"}
+                    </button>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        <table className="hidden w-full min-w-[720px] table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg sm:table">
           <thead className="sticky top-0 z-20">
             <tr className="h-9 text-[14px] text-fg">
               <th className="sticky top-0 z-20 w-8 overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium" />
@@ -309,7 +356,33 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                         {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-link">Verified</span> : null}
                       </span>
                     </td>
-                    {showTier && <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>}
+                    {showTier && (
+                      <td className={`${pad} px-2`}>
+                        {row.tier ? (
+                          <button
+                            type="button"
+                            className={`${tierClass(row.tier)} min-h-11 min-w-11`}
+                            data-tier={row.tier}
+                            data-tier-reason-trigger=""
+                            aria-expanded={tierReasonId === row.id}
+                            title={row.tierBasis ?? undefined}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setTierReasonId(tierReasonId === row.id ? null : row.id);
+                            }}
+                          >
+                            {row.tier}
+                          </button>
+                        ) : (
+                          <Empty />
+                        )}
+                        {tierReasonId === row.id && row.tierBasis ? (
+                          <p className="mt-1 max-w-[14rem] text-[14px] leading-5 text-fg" data-tier-reason="">
+                            {plainText(row.tierBasis)}
+                          </p>
+                        ) : null}
+                      </td>
+                    )}
                     {!campusLocked && (
                       <td className={`${pad} truncate px-2`}>
                         {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{plainText(row.campus)}</Link> : plainText(row.campus) || <Empty />}
@@ -335,11 +408,16 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         {ordered.length === 0 && (quietCount === 0 || showQuiet) && <p className="px-2 py-6 text-[14px] text-fg-2">No projects match. Clear filters.</p>}
       </div>
       {open && (
-        <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6">
-          <button type="button" className="text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
+        <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]" data-project-sheet="">
+          <button type="button" className="inline-flex min-h-11 min-w-11 items-center text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
           <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{plainText(open.name || open.people[0]?.name) || "n/a"}</h2>
           <p className="mt-1 text-[14px] text-fg-2">{plainText(open.campus) ?? "Campus not on record"}</p>
-          {open.tier ? <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier}</span></p> : null}
+          {open.tier ? (
+            <p className="mt-4">
+              <span className={tierClass(open.tier)} data-tier={open.tier}>{open.tier}</span>
+              {open.tierBasis ? <span className="mt-2 block text-[14px] leading-5 text-fg" data-tier-reason="">{plainText(open.tierBasis)}</span> : null}
+            </p>
+          ) : null}
           {open.event ? <p className="mt-4 text-[14px] text-fg-2">{plainText(open.event)}</p> : null}
           <p className="mt-4 text-[15px] leading-6">{plainText(open.full) ?? "No signal text is stored for this project."}</p>
           <ul className="mt-4 space-y-2">
@@ -357,7 +435,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         </aside>
       )}
       {selected.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-40 flex h-12 items-center gap-4 border-t border-line bg-raised px-6 text-[14px]">
+        <div className="fixed inset-x-0 bottom-0 z-40 flex min-h-12 items-center gap-4 border-t border-line bg-raised px-6 pb-[env(safe-area-inset-bottom)] text-[14px]">
           <span className="num">{selected.length} selected</span>
           <button type="button" className="rounded border border-line bg-bg px-3 py-1" onClick={() => {
             for (const id of selected) {

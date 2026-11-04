@@ -1,0 +1,89 @@
+PASS 1-ask-q-strip-unit: ask-browse.test.ts
+PASS 2-3-overlay-counts-unit: overlay-counts.test.ts (statusOf + founders unit)
+PASS 1-ask-q-strip-dom: clean N=1; polluted q still zeros (Open filtered must omit q)
+PASS 1-ask-cmdk-open: q omitted; N=1225 url=/companies?sector=fintech&campus=univ_penn&stage=Seed
+PASS 1b-stanford-ai: N=33 /companies?sector=ai_agents&campus=univ_stanford
+PASS 1b-mit-robotics: N=13 /companies?sector=robotics_hardware&campus=univ_mit
+PASS 1b-berkeley-seed: N=2 /companies?campus=univ_berkeley&stage=Seed
+PASS 1b-legacy-slug-zeros: ai-agents still zeros (mapping must use ai_agents)
+PASS 2-status-match: Active 1211
+PASS 2-status-acquired: Acquired 7
+PASS 3-campus-unit: Penn founders 758; unit founders
+PASS 4-overlay-click: sector=ai_agents in URL
+PASS 5-mobile-map-tap-dpr3: real-touch taps hit 10/10 after Clear @375 DPR=3
+PASS 5-mobile-map-tap-dpr2: real-touch taps hit 10/10 after Clear @375 DPR=2
+{
+  "ok": true,
+  "results": [
+    {
+      "id": "1-ask-q-strip-unit",
+      "ok": true,
+      "detail": "ask-browse.test.ts"
+    },
+    {
+      "id": "2-3-overlay-counts-unit",
+      "ok": true,
+      "detail": "overlay-counts.test.ts (statusOf + founders unit)"
+    },
+    {
+      "id": "1-ask-q-strip-dom",
+      "ok": true,
+      "detail": "clean N=1; polluted q still zeros (Open filtered must omit q)"
+    },
+    {
+      "id": "1-ask-cmdk-open",
+      "ok": true,
+      "detail": "q omitted; N=1225 url=/companies?sector=fintech&campus=univ_penn&stage=Seed"
+    },
+    {
+      "id": "1b-stanford-ai",
+      "ok": true,
+      "detail": "N=33 /companies?sector=ai_agents&campus=univ_stanford"
+    },
+    {
+      "id": "1b-mit-robotics",
+      "ok": true,
+      "detail": "N=13 /companies?sector=robotics_hardware&campus=univ_mit"
+    },
+    {
+      "id": "1b-berkeley-seed",
+      "ok": true,
+      "detail": "N=2 /companies?campus=univ_berkeley&stage=Seed"
+    },
+    {
+      "id": "1b-legacy-slug-zeros",
+      "ok": true,
+      "detail": "ai-agents still zeros (mapping must use ai_agents)"
+    },
+    {
+      "id": "2-status-match",
+      "ok": true,
+      "detail": "Active 1211"
+    },
+    {
+      "id": "2-status-acquired",
+      "ok": true,
+      "detail": "Acquired 7"
+    },
+    {
+      "id": "3-campus-unit",
+      "ok": true,
+      "detail": "Penn founders 758; unit founders"
+    },
+    {
+      "id": "4-overlay-click",
+      "ok": true,
+      "detail": "sector=ai_agents in URL"
+    },
+    {
+      "id": "5-mobile-map-tap-dpr3",
+      "ok": true,
+      "detail": "real-touch taps hit 10/10 after Clear @375 DPR=3"
+    },
+    {
+      "id": "5-mobile-map-tap-dpr2",
+      "ok": true,
+      "detail": "real-touch taps hit 10/10 after Clear @375 DPR=2"
+    }
+  ]
+}

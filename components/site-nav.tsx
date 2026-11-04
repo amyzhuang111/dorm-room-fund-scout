@@ -38,8 +38,8 @@ export function SiteNav() {
 
   return (
     <div className="border-b border-line bg-[#FFFFFF]" data-site-nav="merged">
-      <div className="flex h-12 items-center gap-4 px-5">
-        <Link href="/" className="wordmark shrink-0">
+      <div className="flex min-h-12 items-center gap-4 px-5 pt-[env(safe-area-inset-top)]">
+        <Link href="/" className="wordmark inline-flex min-h-11 items-center shrink-0">
           <span className="mark" aria-hidden />
           Campus Scout
         </Link>
@@ -62,14 +62,14 @@ export function SiteNav() {
           </button>
         </div>
         <div className="ml-auto flex items-center gap-2 md:hidden">
-          <button type="button" className="text-sm text-fg" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+          <button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[14px] text-fg" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
             Menu
           </button>
         </div>
       </div>
       {/* Desk tabs always on for mobile — not tucked behind Menu */}
       <nav
-        className="flex h-10 items-end gap-5 overflow-x-auto px-5 md:hidden"
+        className="flex min-h-11 items-stretch gap-1 overflow-x-auto px-3 md:hidden"
         aria-label="Desks"
         data-mobile-desk-tabs=""
       >
@@ -77,26 +77,26 @@ export function SiteNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`subtab shrink-0 ${item.match(pathname) ? "is-active" : ""}`}
+            className={`subtab inline-flex min-h-11 shrink-0 items-center px-2 text-[14px] ${item.match(pathname) ? "is-active" : ""}`}
           >
             {item.label}
           </Link>
         ))}
       </nav>
       {open ? (
-        <div className="space-y-1 border-t border-line px-5 py-3 md:hidden">
+        <div className="space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden">
           {NAV.map((item) => (
-            <Link key={item.id} href={item.href} className="block py-1 text-sm text-fg" onClick={() => setOpen(false)}>
+            <Link key={item.id} href={item.href} className="flex min-h-11 items-center text-[14px] text-fg" onClick={() => setOpen(false)}>
               {item.label}
             </Link>
           ))}
-          <button type="button" className="block py-1 text-sm text-fg" onClick={openAsk}>
-            Ask anything ⌘K
+          <button type="button" className="flex min-h-11 w-full items-center text-[14px] text-fg" onClick={openAsk}>
+            Ask anything
           </button>
-          <Link href="/methodology" className="block py-1 text-sm text-fg-2" onClick={() => setOpen(false)}>
+          <Link href="/methodology" className="flex min-h-11 items-center text-[14px] text-fg-2" onClick={() => setOpen(false)}>
             Methodology
           </Link>
-          <Link href="/settings" className="block py-1 text-sm text-fg-2" onClick={() => setOpen(false)}>
+          <Link href="/settings" className="flex min-h-11 items-center text-[14px] text-fg-2" onClick={() => setOpen(false)}>
             Settings
           </Link>
         </div>

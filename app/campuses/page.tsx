@@ -2,6 +2,7 @@ import Link from "next/link";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { listUniversities } from "@/lib/domain/queries";
 import { CampusesTheme } from "@/components/campuses-theme";
+import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 
 export default function CampusesPage() {
   const rows = listUniversities()
@@ -12,8 +13,7 @@ export default function CampusesPage() {
     }))
     .sort((a, b) => b.founderCount - a.founderCount || a.label.localeCompare(b.label));
   const withFounders = rows.filter((row) => row.founderCount > 0);
-  const totalFounders = withFounders.reduce((n, row) => n + row.founderCount, 0);
-  const totalCompanies = withFounders.reduce((n, row) => n + row.companyCount, 0);
+  const totals = loadCorpusTotals();
   const top = withFounders.slice(0, 10);
 
   return (
@@ -24,21 +24,23 @@ export default function CampusesPage() {
           <p className="scout-kicker">Explore</p>
           <h1 className="mt-1 scout-display text-[36px] leading-[1.05] sm:text-[48px]">Campuses</h1>
           <p
-            className="mt-3 max-w-xl bg-[color:var(--bg,#FFFFFF)] font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]"
+            className="mt-3 max-w-xl bg-[color:var(--bg,#FFFFFF)] font-mono text-[14px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]"
             data-campuses-stats=""
           >
-            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{withFounders.length.toLocaleString("en-US")}</span>
+            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]" data-count="campuses-with-founders">{withFounders.length.toLocaleString("en-US")}</span>
+            {" of "}
+            <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="campuses-total">{totals.campusesTotal.toLocaleString("en-US")}</span>
             {" campuses with promoted founders"}
             <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totalFounders.toLocaleString("en-US")}</span>
-            {" founders"}
+            <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="founders-listed">{totals.foundersListed.toLocaleString("en-US")}</span>
+            {" founders listed"}
             <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totalCompanies.toLocaleString("en-US")}</span>
-            {" companies"}
+            <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="investable-companies">{totals.investableCompanies.toLocaleString("en-US")}</span>
+            {" investable companies"}
           </p>
           <Link
             href="/companies?feed=leaderboard"
-            className="mt-3 inline-flex h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[11px] font-semibold text-white"
+            className="mt-3 inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[14px] font-semibold text-white"
           >
             Companies by campus
           </Link>
@@ -84,11 +86,11 @@ export default function CampusesPage() {
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">On this desk</p>
                 <p className="mt-2 scout-figure text-[40px] leading-none">{withFounders.length.toLocaleString("en-US")}</p>
                 <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">campuses with founders</p>
-                <p className="mt-3 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{totalFounders.toLocaleString("en-US")}</span>
-                  {" founders · "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totalCompanies.toLocaleString("en-US")}</span>
-                  {" companies"}
+                <p className="mt-3 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{totals.foundersListed.toLocaleString("en-US")}</span>
+                  {" founders listed · "}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totals.investableCompanies.toLocaleString("en-US")}</span>
+                  {" investable companies"}
                 </p>
                 <p className="mt-2 font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">
                   Lead: {top[0]?.label ?? "n/a"} · {top[0] ? top[0].founderCount.toLocaleString("en-US") : "0"} founders

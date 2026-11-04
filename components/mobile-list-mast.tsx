@@ -28,10 +28,10 @@ export function MobileListMast({
         {sealLabel ? <CampusSeal label={sealLabel} size="lg" className="mt-1" /> : null}
         <div className="min-w-0 flex-1">
           <p className="m-kicker">{kicker}</p>
-          <p className="m-figure mt-2 overflow-hidden">
-            {figure}
-            {figureSuffix ? <span className="m-figure-sub ml-2">{" "}{figureSuffix}</span> : null}
-          </p>
+          <div className="mt-2 flex flex-col gap-2">
+            <p className="m-figure overflow-hidden whitespace-nowrap leading-none">{figure}</p>
+            {figureSuffix ? <p className="m-figure-sub leading-snug">{figureSuffix}</p> : null}
+          </div>
           <p className="m-takeaway mt-2">{takeaway}</p>
           {meta ? <p className="m-meta mt-2">{meta}</p> : null}
         </div>

@@ -1,0 +1,25 @@
+OK /@375 home-map unobstructed=81.4%
+OK /@375 overlays=1 overlay-on-text=0 overlay-on-control=0
+OK /companies@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /companies?more=2@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /companies?feed=leaderboard@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /founders@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /campuses@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /data@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /signals@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /startup/proj_9GUOmdEYxbuH@375 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /@1440 overlays=2 overlay-on-text=0 overlay-on-control=0
+OK /companies@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /companies?more=2@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /companies?feed=leaderboard@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /founders@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /campuses@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /data@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /signals@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+OK /startup/proj_9GUOmdEYxbuH@1440 overlays=0 overlay-on-text=0 overlay-on-control=0
+Wrote reviews/overlay.json
+PASS check-overlay {
+  overlayOnText: 0,
+  overlayOnControl: 0,
+  homeMapUnobstructedPct375: 81.4
+}

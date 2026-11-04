@@ -1,19 +1,19 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3460",
+  "base": "http://127.0.0.1:3477",
   "collisions": [],
   "pages": [
     {
       "route": "/",
       "viewport": "375",
-      "nodeCount": 36,
+      "nodeCount": 41,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies",
       "viewport": "375",
-      "nodeCount": 49,
+      "nodeCount": 47,
       "collisions": [],
       "collisionCount": 0
     },
@@ -27,105 +27,105 @@
     {
       "route": "/companies?feed=leaderboard",
       "viewport": "375",
-      "nodeCount": 42,
+      "nodeCount": 39,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/founders",
       "viewport": "375",
-      "nodeCount": 47,
+      "nodeCount": 40,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/campuses",
       "viewport": "375",
-      "nodeCount": 57,
+      "nodeCount": 60,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/data",
       "viewport": "375",
-      "nodeCount": 70,
+      "nodeCount": 76,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/signals",
       "viewport": "375",
-      "nodeCount": 55,
+      "nodeCount": 49,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/startup/proj_9GUOmdEYxbuH",
       "viewport": "375",
-      "nodeCount": 56,
+      "nodeCount": 49,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/",
       "viewport": "1440",
-      "nodeCount": 114,
+      "nodeCount": 187,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies",
       "viewport": "1440",
-      "nodeCount": 142,
+      "nodeCount": 144,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies?more=2",
       "viewport": "1440",
-      "nodeCount": 168,
+      "nodeCount": 171,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies?feed=leaderboard",
       "viewport": "1440",
-      "nodeCount": 125,
+      "nodeCount": 123,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/founders",
       "viewport": "1440",
-      "nodeCount": 135,
+      "nodeCount": 90,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/campuses",
       "viewport": "1440",
-      "nodeCount": 124,
+      "nodeCount": 121,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/data",
       "viewport": "1440",
-      "nodeCount": 262,
+      "nodeCount": 186,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/signals",
       "viewport": "1440",
-      "nodeCount": 64,
+      "nodeCount": 65,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/startup/proj_9GUOmdEYxbuH",
       "viewport": "1440",
-      "nodeCount": 116,
+      "nodeCount": 118,
       "collisions": [],
       "collisionCount": 0
     }
