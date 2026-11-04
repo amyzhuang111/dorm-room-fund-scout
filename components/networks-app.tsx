@@ -248,25 +248,19 @@ export function NetworksApp() {
               Network map
             </h2>
             <p className="mb-1 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
-              Every founder and company, colored by campus. Dark hubs are programs and funds. Hover a founder, drag a node, scroll to zoom.
+              Search above or browse the network list to open founder, startup, and source details. Use the map to explore nearby connections.
             </p>
             <p className="mb-1 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
               Campus-colored founders and program hubs. Scroll to zoom.
             </p>
           </div>
           <div className="relative md:min-h-0" data-network-map-and-inspector="">
-            <NetworksGraph
-              mapFocus={mapFocus}
-              investorHubs={data.investorHubs}
-              onSelectCompany={(id) => setCompanyId(id)}
-              onSelectNetwork={(id) => chooseNetwork(id, true)}
-            />
             {graphInspectorOpen && active ? (
               <aside
                 data-network-map-inspector=""
                 role="region"
                 aria-label={`Selected network: ${active.label}`}
-                className="absolute right-3 top-[8.75rem] z-[50] max-h-[min(58vh,430px)] w-[min(350px,calc(100%-1.5rem))] overflow-y-auto rounded-xl border border-[color:var(--line)] bg-white p-3 shadow-[0_16px_45px_rgba(18,29,58,0.2)] sm:top-20 sm:p-4"
+                className="mx-auto mb-3 w-[calc(100%-2rem)] max-w-[1352px] rounded-xl border border-[color:var(--line)] bg-white p-3 sm:p-4"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -281,7 +275,7 @@ export function NetworksApp() {
                   <button type="button" onClick={() => setGraphInspectorOpen(false)}
                     aria-label="Close network details" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[color:var(--line)] text-lg text-[color:var(--fg-2)] hover:bg-[#f3f5fb]">×</button>
                 </div>
-                <div className="mt-3 space-y-1.5" data-network-map-members="">
+                <div className="mt-3 grid gap-2 sm:grid-cols-2" data-network-map-members="">
                   {(members.length ? members : fullMembers).slice(0, 4).map((member) => (
                     <NetworkMemberEntry
                       key={`${member.founderId}-${member.companyId}`}
@@ -304,6 +298,12 @@ export function NetworksApp() {
                 {shareFeedback ? <p role="status" className="mt-2 text-[11px] text-[color:var(--fg-2)]">{shareFeedback}</p> : null}
               </aside>
             ) : null}
+            <NetworksGraph
+              mapFocus={mapFocus}
+              investorHubs={data.investorHubs}
+              onSelectCompany={(id) => setCompanyId(id)}
+              onSelectNetwork={(id) => chooseNetwork(id, true)}
+            />
           </div>
         </section>
 
