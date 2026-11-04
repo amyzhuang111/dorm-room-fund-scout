@@ -15,7 +15,7 @@ assert.equal(matchPitchbookUniversity("Washington University"), "univ_washu");
 assert.equal(matchPitchbookUniversity("Cornell University"), "univ_cornell");
 assert.equal(matchPitchbookUniversity("Cornell Tech"), "univ_cornell_tech");
 assert.equal(matchPitchbookUniversity("Queen's University"), "univ_queens");
-assert.equal(matchPitchbookUniversity("Tel Aviv University"), null);
+assert.equal(matchPitchbookUniversity("Tel Aviv University"), "univ_tau");
 assert.equal(matchPitchbookUniversity("University of Wisconsin, Madison"), "univ_wisc");
 assert.equal(matchPitchbookUniversity("Brigham Young University"), "univ_byu");
 assert.equal(matchPitchbookUniversity("Pennsylvania State University (Penn State)"), "univ_psu");
@@ -47,7 +47,15 @@ assert.equal(matchPitchbookUniversity("University of California, Irvine"), "univ
 assert.equal(matchPitchbookUniversity("George Washington University"), "univ_gw");
 assert.equal(matchPitchbookUniversity("Rensselaer Polytechnic"), "univ_rpi");
 assert.equal(matchPitchbookUniversity("Syracuse University"), "univ_syracuse");
-assert.equal(matchPitchbookUniversity("University of Oxford"), null);
+assert.equal(matchPitchbookUniversity("University of Oxford"), "univ_oxford");
+assert.equal(matchPitchbookUniversity("Technion - Israel Institute of Technology"), "univ_technion");
+assert.equal(matchPitchbookUniversity("Hebrew University"), "univ_hebrew");
+assert.equal(matchPitchbookUniversity("Western University"), "univ_western");
+assert.equal(matchPitchbookUniversity("Delhi University, India"), "univ_delhi");
+assert.equal(matchPitchbookUniversity("Ben Gurion University"), "univ_bgu");
+assert.equal(matchPitchbookUniversity("Birla Institute of Technology and Science (BITS Pilani)"), "univ_bits");
+assert.equal(matchPitchbookUniversity("Indian Institute of Technology, Bombay"), "univ_iit_bombay");
+assert.equal(matchPitchbookUniversity("Zhejiang University (Zheda)"), "univ_zhejiang");
 assert.notEqual(matchPitchbookUniversity("Cornell University"), "univ_cornell_tech");
 
 assert.equal(formatCapitalUsd(139394.26021627351 * 1_000_000), "$139.4B");
