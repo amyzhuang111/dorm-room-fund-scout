@@ -454,8 +454,15 @@ later. Does not count, with the reason found when each was checked:
   entries, so recency cannot be told.
 - **Tech-map flags** ("studentFounded" in the SFU/UBC tech maps): third-party,
   unverified.
-- **Web searches for individual obscure founders**: a 12-company pilot confirmed
-  none (eight returned nothing; common names matched other people).
+- **Web searches for individual obscure founders**: low yield. A first 12-company
+  pilot confirmed none (eight returned nothing; common names matched other people).
+  A second, better-targeted round (12 hidden companies from 2025-26 Y Combinator
+  batches, founder name + campus) confirmed **1** from an official page (Robocurve:
+  Harvard's math department names the founder a senior, class of 2026; batch f),
+  held 1 that rests on a third-party aggregator only (Verdex: Dartmouth '25), and
+  found nothing usable for 10, including a name collision (Multiplier matched a
+  different company founded in 2018). Expect roughly 1 in 12, and accept only an
+  official university or company source stating a class year or student status.
 
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
 `unverified recency` now passed the gate. Each was listed by a university
