@@ -11,6 +11,7 @@ import { listSignalsForUniversity, listSources, listUniversities, type Universit
 import { getDb } from "@/lib/db/client";
 import { listUnverifiedCompanies } from "@/lib/domain/unverified-companies";
 import { plainText } from "@/lib/display/plain-text";
+import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
 
 const TABS = ["founders", "companies", "signals", "network"] as const;
 
@@ -92,6 +93,9 @@ export default async function CampusPage({
             <span>{label}</span>
           </p>
           <h1 className="page-title text-[24px] leading-[1.25] sm:text-[inherit] sm:leading-[inherit]">{university.name}</h1>
+          <p className="mt-1 font-mono text-[11px] font-semibold tabular-nums tracking-wide text-[color:var(--cobalt,#2F4FD8)]" data-hero-stat="">
+            {university.founderCount.toLocaleString("en-US")} founders · {affiliated.length.toLocaleString("en-US")} companies · {topTier.toLocaleString("en-US")} top tier
+          </p>
           <p className="mt-1 hidden text-[14px] text-fg sm:mt-2 sm:block">{university.country ?? "Country not recorded"}</p>
           <p className="mt-2 font-mono text-[13px] tabular-nums leading-5 text-fg-2 sm:hidden" data-campus-stats-mobile="">
             <span className="font-bold text-fg">{university.founderCount.toLocaleString("en-US")}</span> founders ·{" "}
@@ -150,7 +154,7 @@ export default async function CampusPage({
               {signals.map((signal) => (
                 <li key={signal.id} className="py-3">
                   <p className="text-[15px] font-medium">{signal.project_name}</p>
-                  <p className="mt-1 text-[14px] text-fg-2">{signal.current_observation}</p>
+                  <p className="mt-1 text-[14px] text-fg-2" title={signal.current_observation ?? undefined}>{ellipsisAtBoundary(plainText(signal.current_observation) || "", 160)}</p>
                   <p className="mt-1 text-[14px] text-fg-2">{signal.signal_type}{signal.source_date ? ` · ${signal.source_date}` : ""}</p>
                 </li>
               ))}

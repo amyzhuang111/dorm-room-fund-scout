@@ -330,7 +330,7 @@ export function TileGlobe({
           id: "campus-labels",
           type: "symbol",
           source: "campuses",
-          filter: ["<=", ["get", "labelRank"], 12],
+          filter: ["<=", ["get", "labelRank"], 24],
           layout: {
             "text-field": ["get", "shortLabel"],
             "text-font": ["Noto Sans Regular"],
@@ -891,9 +891,14 @@ export function TileGlobe({
               data-fold-legend-toggle=""
               onClick={() => setLegendOpen((v) => !v)}
             >
-              Markers
+              Campus markers
               <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "\u2212" : "+"}</span>
             </button>
+            {!legendOpen ? (
+              <p className="mt-1 max-w-[11rem] rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/90 px-1.5 py-1 font-mono text-[9px] leading-3 text-[color:var(--fg-3,#5C647A)]" data-fold-legend-hint="">
+                Size = founders
+              </p>
+            ) : null}
             {legendOpen ? (
               <div
                 id="fold-map-legend-body"

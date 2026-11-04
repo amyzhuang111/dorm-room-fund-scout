@@ -170,7 +170,7 @@ export function NetworksApp() {
           <p className="hidden max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:block sm:text-sm sm:leading-normal" data-networks-context="">
             Find the founders and startups linked to a program, university accelerator, lab or fund. Open a network to see its documented founder-company relationships.
           </p>
-          <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
+          <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="" data-hero-stat="">
             <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
             <span data-networks-count="founders">{data.totals.foundersLinked.toLocaleString("en-US")}</span> linked founders
             <span className="hidden sm:inline">
@@ -372,7 +372,7 @@ export function NetworksApp() {
                   <li key={row.id} className={deskHide}>
                     <button
                       type="button"
-                      className={`flex w-full items-start gap-2 px-2.5 py-2 text-left transition-colors sm:gap-3 sm:px-3 sm:py-2.5 ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                      className={`flex w-full items-start gap-2 border-l-2 px-2.5 py-2 text-left transition-colors sm:gap-3 sm:px-3 sm:py-2.5 ${selected ? "border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze)] ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/40" : "border-l-transparent hover:bg-[#f7f8fc]"}`}
                       onClick={() => chooseNetwork(row.id)}
                       aria-pressed={selected}
                     >
@@ -383,7 +383,7 @@ export function NetworksApp() {
                         <span className="block whitespace-normal break-words text-[13px] font-medium leading-snug text-[color:var(--fg)] sm:text-sm">
                           {row.label}
                         </span>
-                        <span className="hidden text-[11px] text-[color:var(--fg-3)] sm:block">{KIND_LABEL[row.kind]}</span>
+                        <span className="mt-0.5 block font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)] sm:text-[11px]" data-network-kind="">{KIND_LABEL[row.kind]}</span>
                       </span>
                       <span className="shrink-0 pt-0.5 text-[12px] tabular-nums text-[color:var(--fg)] sm:text-sm">
                         {row.founderCount.toLocaleString("en-US")}

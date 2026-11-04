@@ -280,8 +280,9 @@ export function companyInitials(name: string): string {
   return `${parts[0]!.charAt(0)}${parts[1]!.charAt(0)}`.toUpperCase();
 }
 
-function NeutralMark({ name, cls }: { name: string; cls: string }) {
+function NeutralMark({ name, cls, ink }: { name: string; cls: string; ink?: string }) {
   const initials = companyInitials(name).slice(0, 2);
+  const color = ink || "#2F4FD8";
   const text =
     cls.includes("h-11") || cls.includes("h-12")
       ? "text-[12px]"
@@ -292,10 +293,16 @@ function NeutralMark({ name, cls }: { name: string; cls: string }) {
           : "text-[8px]";
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-full border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono ${text} font-bold tracking-tight text-[color:var(--cobalt,#2F4FD8)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-full font-mono ${text} font-bold tracking-tight`}
+      style={{
+        color,
+        border: `1px solid color-mix(in srgb, ${color} 55%, transparent)`,
+        background: `linear-gradient(145deg, color-mix(in srgb, ${color} 12%, #FFFFFF), color-mix(in srgb, ${color} 22%, #EEF1FB))`,
+      }}
       aria-hidden
       title={name}
       data-logo-fallback="seal"
+      data-campus-ink={color}
     >
       {initials}
     </span>
@@ -307,11 +314,14 @@ export function LogoMark({
   logoUrl,
   mark,
   size = 20,
+  campusInk,
 }: {
   name: string;
   logoUrl?: string | null;
   mark?: string;
   size?: number;
+  /** Campus-derived ink so monograms encode real campus identity. */
+  campusInk?: string | null;
 }) {
   void mark;
   const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : size <= 36 ? "h-9 w-9" : size <= 44 ? "h-11 w-11" : "h-12 w-12";
@@ -335,7 +345,7 @@ export function LogoMark({
       />
     );
   }
-  return <NeutralMark name={name} cls={cls} />;
+  return <NeutralMark name={name} cls={cls} ink={campusInk || undefined} />;
 }
 
 export function LogoPill({

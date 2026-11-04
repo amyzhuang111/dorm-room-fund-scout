@@ -7,6 +7,8 @@ import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
+import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
+import { campusInk } from "@/lib/display/campus-ink";
 import { directoryCardSubtitle, type StatusId } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
@@ -628,6 +630,9 @@ export function SampleInstrumentBrowse({
 
       {/* Col 2 · ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
+        <p className="mb-1.5 font-mono text-[11px] font-semibold tabular-nums tracking-wide text-[color:var(--cobalt,#2F4FD8)]" data-hero-stat="">
+          {total.toLocaleString("en-US")} {caption} · {signaledMatch.toLocaleString("en-US")} with a signal · live corpus
+        </p>
         {/* Single count hero lives in the Filters column. Ledger keeps sort + optional signal strip. */}
         <div
           className={`mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:mb-2 lg:pb-2 ${
@@ -1502,7 +1507,7 @@ function LedgerRow({
       {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
       {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
       {card.logoUrl ? (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} campusInk={campusInk(card.schoolId || card.school)} />
       ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
@@ -1517,7 +1522,7 @@ function LedgerRow({
           </>
         )
       ) : (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} campusInk={campusInk(card.schoolId || card.school)} />
       )}
       <div className="min-w-0 flex-1">
         <p
@@ -1530,20 +1535,20 @@ function LedgerRow({
           {card.name}
         </p>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
-            {subtitle}
+          <p className="mt-0.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]" title={subtitle}>
+            {ellipsisAtBoundary(subtitle, 96)}
           </p>
         ) : null}
         {why ? (
-          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
+          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="" title={why}>
             <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
-            <span className="mt-0.5 block">{why}</span>
+            <span className="mt-0.5 block">{ellipsisAtBoundary(why, 120)}</span>
           </p>
         ) : (
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "flex flex-wrap gap-x-1" : "whitespace-nowrap overflow-hidden text-ellipsis"}`} data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>

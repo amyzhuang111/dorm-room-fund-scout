@@ -170,6 +170,7 @@ export interface ProjectTableRow {
   tier: string | null;
   tierBasis: string | null;
   campus: string | null;
+  campusId: string | null;
   campusSlug: string | null;
   people: ProjectMate[];
   verified: boolean;
@@ -321,6 +322,7 @@ function buildProjectRows(universityId?: string): ProjectTableRow[] {
       tier,
       tierBasis,
       campus: campus?.campus ?? null,
+      campusId: campus?.campusId ?? null,
       campusSlug: campus?.campusSlug ?? null,
       people: mates,
       verified: [...members.values()].some((person) => person.verified),
@@ -341,6 +343,7 @@ function buildProjectRows(universityId?: string): ProjectTableRow[] {
       tier: person.tier,
       tierBasis: person.tierBasis,
       campus: person.campus,
+      campusId: person.campusId,
       campusSlug: person.campusSlug,
       people: [{ id: person.id, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }],
       verified: person.verified,
@@ -358,11 +361,11 @@ function buildProjectRows(universityId?: string): ProjectTableRow[] {
   return rows;
 }
 
-function majorityCampus(people: FounderTableRow[]): { campus: string; campusSlug: string | null } | null {
-  const counts = new Map<string, { campus: string; campusSlug: string | null; count: number }>();
+function majorityCampus(people: FounderTableRow[]): { campus: string; campusId: string | null; campusSlug: string | null } | null {
+  const counts = new Map<string, { campus: string; campusId: string | null; campusSlug: string | null; count: number }>();
   for (const person of people) {
     if (!person.campus) continue;
-    const current = counts.get(person.campus) ?? { campus: person.campus, campusSlug: person.campusSlug, count: 0 };
+    const current = counts.get(person.campus) ?? { campus: person.campus, campusId: person.campusId, campusSlug: person.campusSlug, count: 0 };
     current.count += 1;
     counts.set(person.campus, current);
   }

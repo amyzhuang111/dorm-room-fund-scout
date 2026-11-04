@@ -378,8 +378,9 @@ export function MobileCampusSegments({
       <p className="mb-1 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-campus-segments-kicker="">
         {kicker}
       </p>
+      <div className="relative" data-fold-campus-fade="">
       <ol
-        className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-1.5 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(90deg,#000_0%,#000_calc(100%-1.25rem),transparent)]"
         data-fold-peak-campus-rank-mobile=""
         role="listbox"
         aria-label="Filter campus"
@@ -419,7 +420,7 @@ export function MobileCampusSegments({
               >
                 <span className={`font-mono text-[9px] tabular-nums ${active ? "text-white/80" : "text-[color:var(--fg-3,#5C647A)]"}`}>{String(i + 1).padStart(2, "0")}</span>
                 <CampusSeal label={campus.name} size="sm" />
-                <span className="max-w-[4.5rem] truncate text-[11px] font-semibold tracking-tight" data-fold-peak-campus-label="">
+                <span className="whitespace-nowrap text-[11px] font-semibold tracking-tight" data-fold-peak-campus-label="">
                   {short}
                 </span>
                 <span className={`font-mono text-[11px] font-bold tabular-nums ${active ? "text-white" : "text-[color:var(--cobalt,#2F4FD8)]"}`}>
@@ -430,6 +431,7 @@ export function MobileCampusSegments({
           );
         })}
       </ol>
+      </div>
     </div>
   );
 }

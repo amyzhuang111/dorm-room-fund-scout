@@ -19,11 +19,13 @@ const NAV = [
 
 /** Always-visible mobile desk row (Taste r33 blind: Menu-only hurt all 3 raters). */
 const DESK_TABS = [
-  { href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
-  { href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
-  { href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
+  { href: "/", label: "Map", match: (p: string) => p === "/" || p.startsWith("/map") },
   { href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
+  { href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
+  { href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
+  { href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
   { href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
+  { href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
 ] as const;
 
 export function SiteNav() {
@@ -101,7 +103,7 @@ export function SiteNav() {
       </div>
       {/* Desk tabs always on for mobile — not tucked behind Menu */}
       <nav
-        className={`max-w-full min-h-9 items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 md:hidden ${onCompaniesDesk ? "hidden" : "flex"}`}
+        className="flex max-w-full min-h-9 items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 md:hidden"
         aria-label="Desks"
         data-mobile-desk-tabs=""
       >

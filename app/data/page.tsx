@@ -91,8 +91,14 @@ export default async function DataExplorerPage({
       <DataTheme />
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
-          <p className="scout-kicker">Corpus</p>
+          <p className="scout-kicker">Company table</p>
           <h1 className="mt-1.5 scout-display text-[28px] leading-[1.15] sm:text-[40px] sm:leading-none">Full data</h1>
+          <p className="mt-1 font-mono text-[11px] font-semibold tabular-nums tracking-wide text-[color:var(--cobalt,#2F4FD8)]" data-hero-stat="">
+            {universeTotal.toLocaleString("en-US")} vetted companies · stage · sector · signals on file
+          </p>
+          <p className="mt-1 max-w-2xl text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-corpus-explain="">
+            Every investable company in the corpus with the fields we store — not a sample.
+          </p>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>
             {" vetted companies in this view · page "}
@@ -180,7 +186,7 @@ export default async function DataExplorerPage({
         >
           {pageCampusRanks[0] ? <CampusSeal label={pageCampusRanks[0].label} size="md" /> : null}
           <div className="min-w-0 flex-1">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Corpus on this page</p>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On this page</p>
             <p className="mt-0.5 font-mono text-[13px] tabular-nums leading-4 text-[color:var(--fg,#0B0E17)]">
               <span className="text-[18px] font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>
               {" companies"}
@@ -239,19 +245,30 @@ export default async function DataExplorerPage({
             </tr>
           </thead>
           <tbody className="divide-y divide-[color:var(--line,#E1E5EF)]">
-            {result.rows.map((row) => (
+            {result.rows.map((row) => {
+              const whyBits = [row.signalLabel, row.stage, row.sector, row.primaryProgram].filter(Boolean) as string[];
+              const why = whyBits.slice(0, 3).join(" · ");
+              return (
               <tr key={row.id} className="c-r align-top" data-corpus-row="">
                 <td className="c-n">
                   <span className="c-mark">
-                    <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} />
+                    <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} campus={row.campus} />
                   </span>
-                  <Link href={`/startup/${row.id}`} className="c-a min-h-11 min-w-11 inline-flex items-center">
-                    {row.name}
-                  </Link>
+                  <span className="c-n-stack min-w-0">
+                    <Link href={`/startup/${row.id}`} className="c-a min-h-11 min-w-11 inline-flex items-center font-semibold">
+                      {row.name}
+                    </Link>
+                    {why ? (
+                      <span className="c-why block text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]" data-why-here="">
+                        <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[color:var(--ember,#D96B1C)]">Why </span>
+                        {why}
+                      </span>
+                    ) : null}
+                  </span>
                 </td>
-                <td className="c-m c-m1">{cell(row.campus)}</td>
-                <td className="c-m">{cell(row.stage)}</td>
-                <td className="c-m">{cell(row.sector)}</td>
+                <td className="c-m c-m1" data-field="campus">{cell(row.campus)}</td>
+                <td className="c-m" data-field="stage">{cell(row.stage)}</td>
+                <td className="c-m" data-field="sector">{cell(row.sector)}</td>
                 <td className="c-d c-d-m c-num">{cell(formatCorpusDate(row.foundedYear))}</td>
                 <td className="c-d c-d-m c-sig">{row.signals.toLocaleString("en-US")}</td>
                 <td className="c-d c-num">{cell(formatCorpusDate(row.latestSignalAt))}</td>
@@ -269,7 +286,8 @@ export default async function DataExplorerPage({
                   )}
                 </td>
               </tr>
-            ))}
+            );
+            })}
             {result.rows.length === 0 ? (
               <tr>
                 <td colSpan={12} className="px-2.5 py-6 text-center text-[color:var(--fg-3,#5C647A)]">
