@@ -7,8 +7,7 @@ import { LogoMark } from "@/components/sample-instrument";
 import { TagChips, type TagChip } from "@/components/tag-chips";
 import { campusInk } from "@/lib/display/campus-ink";
 import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
-import { humanizeEnumText } from "@/lib/display/enum-labels";
-import { stripLeadingName, stripUrls } from "@/lib/display/strip-urls";
+import { sanitizePitch } from "@/lib/display/sanitize-pitch";
 
 const ROW_PAGE = 60;
 const control =
@@ -16,18 +15,6 @@ const control =
 const selectControl = `${control} pr-8 bg-[length:12px] bg-[right_12px_center] bg-no-repeat`;
 const SELECT_ARROW =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235C647A' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")";
-
-function plainText(value: string | null | undefined, name?: string | null): string | null {
-  if (!value) return null;
-  const stripped = stripLeadingName(stripUrls(value), name);
-  const text = humanizeEnumText(
-    (stripped || "")
-      .replace(/[\u2014\u2013]/g, " · ")
-      .replace(/\s+/g, " ")
-      .trim(),
-  );
-  return text || null;
-}
 
 function tierLabel(tier: string | null): string {
   if (!tier) return "Listed";
@@ -291,7 +278,7 @@ export function FounderDirectory({
       <div className="mt-2 grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]" data-founders-spread="">
         <ul className="grid grid-cols-1 gap-0 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)] md:grid-cols-2 md:gap-3 md:divide-y-0 md:border-t-0 lg:grid-cols-2 xl:grid-cols-3" data-founder-cards="">
           {ordered.map((row) => {
-            const pitch = plainText(row.signal, row.name);
+            const pitch = sanitizePitch(row.signal, row.name);
             const backers = (row.programs || []).slice(0, 3);
             const label = tierLabel(row.tier);
             const ink = campusInk(row.campusId || row.campus);

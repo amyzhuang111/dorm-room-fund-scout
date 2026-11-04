@@ -20,7 +20,7 @@ import { resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
 import { TagChips, type TagChip } from "@/components/tag-chips";
-import { stripUrls } from "@/lib/display/strip-urls";
+import { sanitizePitch } from "@/lib/display/sanitize-pitch";
 import {
   applyFacets,
   emptyFacets,
@@ -618,7 +618,7 @@ export function SampleInstrumentBrowse({
       {/* Col 2 · ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
         {/* Universe count lives once in the Vetted toggle; ledger only adds the signal read. */}
-        <p className="mb-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-hero-stat="">
+        <p className="mb-2 hidden text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:block" data-hero-stat="">
           <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{signaledMatch.toLocaleString("en-US")}</span>
           {" with a signal"}
           {deskCampusTop ? (
@@ -726,7 +726,7 @@ export function SampleInstrumentBrowse({
               pageSignaledCount={pageSignaled}
               kicker="Companies in this batch"
               sealLabel={pageCampusRanks[0]?.label}
-              figure={`${pageFrom.toLocaleString("en-US")}-${cards.length.toLocaleString("en-US")}`}
+              figure={`${pageFrom.toLocaleString("en-US")} to ${cards.length.toLocaleString("en-US")}`}
               figureSuffix={`of ${total.toLocaleString("en-US")}`}
               takeaway={
                 pageCampusRanks[0]
@@ -1198,7 +1198,7 @@ export function SampleInstrumentBrowse({
               Show more
             </Link>
             <p className="text-[12px] text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
-              {"Companies 1–"}
+              {"Showing "}
               <span className="font-medium tabular-nums text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
               {" on this page"}
             </p>
@@ -1252,6 +1252,19 @@ export function SampleInstrumentBrowse({
             {!rightOpen ? (
               <div className={`${PANEL} relative overflow-hidden p-3`} data-companies-side-ranks="">
                 <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Campuses on this desk</p>
+                {(() => {
+                  const top = pageCampusRanks.slice(0, 8);
+                  const covered = top.reduce((n, row) => n + row.companies, 0);
+                  return top.length ? (
+                    <p className="mt-1.5 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-side-ranks-share="">
+                      {`Top ${top.length} campus${top.length === 1 ? "" : "es"}: `}
+                      <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{covered.toLocaleString("en-US")}</span>
+                      {" of "}
+                      <span className="tabular-nums">{total.toLocaleString("en-US")}</span>
+                      {" companies"}
+                    </p>
+                  ) : null;
+                })()}
                 <ol className="mt-2 space-y-1.5">
                   {pageCampusRanks.slice(0, 8).map((row, i) => (
                     <li key={row.label} className="flex items-baseline justify-between gap-2 text-[13px]">
@@ -1509,7 +1522,7 @@ function LedgerRow({
   /** r57: richer stage/program chips on continued mobile batches (companies-more). */
   evidenceRich?: boolean;
 }) {
-  const pitch = stripUrls((card.description || "").trim()) || "";
+  const pitch = sanitizePitch(card.description) || "";
   const meta = signalMeta(card);
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   const desk = directoryRank(card);
@@ -1598,7 +1611,7 @@ function LedgerRow({
             })),
           ].filter(Boolean) as TagChip[]}
         />
-        <span className="sr-only" data-card-chips="" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined} />
+        <span className="sr-only" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined} />
         {founderLinks.length > 0 ? (
           <span className="mt-2 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
             {founderLinks.slice(0, 3).map((founder) => (

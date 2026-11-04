@@ -110,30 +110,24 @@ export default async function DataExplorerPage({
         data-corpus-fill-rates=""
       >
         <span className="sr-only" data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
-        {" older alumni out · "}
-        <span data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
-        {" unchecked · on file Stage "}
         <span className="tabular-nums" data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
-        {fill.total === universeTotal ? (
-          <>
-            {" filed"}
-            <span className="sr-only" data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
-          </>
-        ) : (
-          <>
-            {" of "}
-            <span className="tabular-nums" data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
-          </>
-        )}
-        {" · Sector "}
+        {" companies list a stage. "}
+        <span className="tabular-nums" data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
+        {" founders who graduated before 2023 are left out. "}
         <span className="tabular-nums" data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
-        {" · Founded "}
+        {" have a sector"}
+        {", "}
         <span className="tabular-nums" data-count="fill-founded">{fill.founded.toLocaleString("en-US")}</span>
-        {" · Funding "}
+        {" a founded year"}
+        {", "}
         <span className="tabular-nums" data-count="fill-funding">{fill.funding.toLocaleString("en-US")}</span>
-        {" · Site "}
+        {" funding"}
+        {", and "}
         <span className="tabular-nums" data-count="fill-website">{fill.website.toLocaleString("en-US")}</span>
+        {" a site. "}
+        <span className="tabular-nums" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
+        {" rows still need a recency check."}
+        <span className="sr-only" data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
       </p>
 
       <CorpusFilters
@@ -300,10 +294,12 @@ export default async function DataExplorerPage({
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <p className="text-[14px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-data-page-range="">
+          {"Showing "}
           {(result.total === 0 ? 0 : (result.page - 1) * result.pageSize + 1).toLocaleString("en-US")}
-          {"–"}
+          {" to "}
           {Math.min(result.page * result.pageSize, result.total).toLocaleString("en-US")}
-          {unfiltered ? " on this page" : ` of ${result.total.toLocaleString("en-US")}`}
+          {" of "}
+          {(unfiltered ? universeTotal : result.total).toLocaleString("en-US")}
         </p>
         <div className="flex items-center gap-2">
           {result.page > 1 ? (

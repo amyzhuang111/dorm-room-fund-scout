@@ -1,7 +1,8 @@
 /**
  * Hard gate: no em dash (U+2014) or en dash (U+2013) in visible page text.
  *
- * Pass 1 (Playwright): document.body.innerText on the core routes, after hydration.
+ * Pass 1 (Playwright): document.body.innerText on core routes AFTER hydration,
+ *   at both 390 and 1440 (catches client-inserted en/em dashes).
  * Pass 2 (HTML crawl): every dossier route, /startup/<id> for all companies in
  *   public/data/candidates.json plus every companyId in public/data/founders.json,
  *   and the founder pages. Server HTML with <script>/<style>/<template> removed,
@@ -18,7 +19,7 @@ const BASE = (process.env.BASE || "http://127.0.0.1:3460").replace(/\/$/, "");
 const CONCURRENCY = Number(process.env.CONCURRENCY || 12);
 const OUT = process.env.OUT || "reviews/no-dash.json";
 const SAMPLE_ID = process.env.SAMPLE_ID || "proj_9GUOmdEYxbuH";
-const CORE = ["/", "/founders", "/methodology", "/signals", `/startup/${SAMPLE_ID}`, "/map/network", "/campuses/penn", "/campuses"];
+const CORE = ["/", "/companies", "/founders", "/data", "/networks", "/methodology", "/signals", `/startup/${SAMPLE_ID}`, "/map/network", "/campuses/penn", "/campuses", "/campuses/stanford", "/campuses/mit", "/campuses/berkeley"];
 const FOUNDER_PAGES = ["/founders", "/founder/network", "/founder/discover", "/founder/shortlist"];
 
 const campusIndex = (() => {
@@ -89,17 +90,38 @@ function htmlText(html) {
 const failures = [];
 let checked = 0;
 
-// Pass 1
+// Pass 1 — rendered DOM after hydration at both widths, every core route
+const VIEWPORTS = [
+  { w: 390, h: 844, mobile: true },
+  { w: 1440, h: 900, mobile: false },
+];
+const UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-for (const route of CORE) {
-  const res = await page.goto(`${BASE}${route}`, { waitUntil: "networkidle", timeout: 90000 });
-  checked++;
-  if (!res || res.status() >= 400) { failures.push({ pass: "innerText", route, status: res?.status() ?? 0 }); continue; }
-  const text = await page.evaluate(() => document.body.innerText);
-  const n = (text.match(DASHES) || []).length;
-  console.log(`[innerText] ${route}: dashes=${n}`);
-  if (n) failures.push({ pass: "innerText", route, dashes: n, samples: snippets(text) });
+for (const vp of VIEWPORTS) {
+  const context = await browser.newContext({
+    viewport: { width: vp.w, height: vp.h },
+    ...(vp.mobile
+      ? { deviceScaleFactor: 3, isMobile: true, hasTouch: true, userAgent: UA }
+      : { deviceScaleFactor: 2 }),
+  });
+  await context.route(/vercel\.live/, (r) => r.abort());
+  const page = await context.newPage();
+  for (const route of CORE) {
+    const res = await page.goto(`${BASE}${route}`, { waitUntil: "load", timeout: 90000 });
+    checked++;
+    if (!res || res.status() >= 400) {
+      failures.push({ pass: "innerText", vp: vp.w, route, status: res?.status() ?? 0 });
+      continue;
+    }
+    // Wait for client hydration so client-only strings are in the DOM
+    await page.waitForFunction(() => !/Loading/i.test(document.body?.innerText || ""), null, { timeout: 25000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+    const text = await page.evaluate(() => document.body.innerText);
+    const n = (text.match(DASHES) || []).length;
+    console.log(`[innerText ${vp.w}] ${route}: dashes=${n}`);
+    if (n) failures.push({ pass: "innerText", vp: vp.w, route, dashes: n, samples: snippets(text) });
+  }
+  await context.close();
 }
 await browser.close();
 

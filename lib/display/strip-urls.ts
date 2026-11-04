@@ -4,9 +4,6 @@ export function stripUrls(value: string | null | undefined): string | null {
   const cleaned = value
     .replace(/https?:\/\/[^\s)\]>'"]+/gi, " ")
     .replace(/\bwww\.[^\s)\]>'"]+/gi, " ")
-    // Internal verification boilerplate that leaked into pitches
-    .replace(/\bconfirmed LinkedIn[^·.|]*?(?=[·.|]|$)/gi, " ")
-    .replace(/\bbecause the profile title is[^·.|]*?(?=[·.|]|$)/gi, " ")
     .replace(/\s*[·|,;:]\s*(?=[·|,;:]|$)/g, " ")
     .replace(/\s{2,}/g, " ")
     .trim();
