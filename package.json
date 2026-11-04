@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "prebuild": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && tsx scripts/data/apply-reviewed-patches.ts && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts && tsx scripts/precompute-founder-table.ts",
+    "prebuild": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && tsx scripts/data/apply-recovered-rows.ts && tsx scripts/data/apply-reviewed-patches.ts && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts && tsx scripts/precompute-founder-table.ts",
     "start": "next start",
     "lint": "eslint",
     "enrich:apify-linkedin": "tsx scripts/enrich/apify-linkedin-lookup.ts",
@@ -56,6 +56,7 @@
     "precompute:networks": "tsx scripts/precompute-founder-networks.ts",
     "import:scouting-list": "node scripts/ingest/import-scouting-list-2026-11-03.mjs",
     "test:restore": "tsx scripts/data/restore-lib.test.ts",
+    "test:recovered": "tsx scripts/data/recovered-lib.test.ts",
     "test:scouting-list": "node --test scripts/ingest/import-scouting-list-2026-11-03.test.mjs"
   },
   "dependencies": {

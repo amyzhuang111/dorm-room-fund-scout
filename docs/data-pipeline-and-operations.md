@@ -75,9 +75,37 @@ PRs was discarded: **59 reviewed company restores and the collector's 217 people
 76 projects**, plus data that had been on `main` for longer (compared with the state
 just before it: -1,000 people, -325 companies, -1,703 claims, -196 signals; it also
 added 293 people, 374 projects and 2,534 claims of its own). The code from the
-other PRs was untouched. Two repo checks (`test:ask-retrieve` and
-`scripts/audit/check-founders-latest-2026.ts`, which expects the company
-"Luminarch") fail on `main` since that merge, with or without the patches below.
+other PRs was untouched. Two repo checks failed on `main` after that merge: `scripts/audit/check-founders-latest-2026.ts` (it
+expects the company "Luminarch", which was lost; it passes again after the
+recovery below) and `test:ask-retrieve` (still failing, see below).
+
+### Recovery (additive-only)
+
+Everything lost still existed, with its original ids, in the database as of PR
+#147. `data/exports/recovered-rows-2026-11-04.json` holds the rows that were
+missing from the promoted database, and `scripts/data/apply-recovered-rows.ts`
+(in `prebuild`, before the reviewed patches) re-inserts them with
+`INSERT OR IGNORE`, so **existing rows are never modified** and re-running does
+nothing. Recovered: 505 projects (309 companies + 196 hackathon projects), 970
+people and their claims, affiliations, roles, facts, relationships, signals and
+snapshots (10,657 rows). Ids are the originals, so `/startup/proj_...` links work
+again. A row is restored only if everything it points to exists (current
+database or the restored set).
+
+Deliberately **not** restored: 16 companies and 30 people whose names already
+exist under a different id in the promoted corpus (treated as duplicates, with
+their dependent rows), and anything depending on them. Name equality is a weak
+test for people (two different "Kevin Wang"s are possible), so those 30 may
+include a few real people. It also does not undo the other session's changes:
+rows the promoted corpus modified (verification fields, descriptions) keep its
+values. Verified on a copy of the promoted database: 0 existing rows modified,
+`integrity_check` ok, no new foreign-key violations (14 already existed), 21 of
+22 checks pass. The one failure, `test:ask-retrieve`, fails on the promoted
+database as it stands and with only the recovered rows added, and passes on the
+pre-promotion database: HaptE is vetted in both, but its verification status
+differs ("partial" in the promoted corpus), which changes the retrieval
+ranking the test asserts. It is a pre-existing failure, not caused by the
+recovery.
 
 How to avoid repeating it:
 
