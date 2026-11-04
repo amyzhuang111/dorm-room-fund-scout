@@ -1523,7 +1523,7 @@ function LedgerRow({
   /** r57: richer stage/program chips on continued mobile batches (companies-more). */
   evidenceRich?: boolean;
 }) {
-  const pitch = sanitizePitch(card.description) || "";
+  const pitch = sanitizePitch(card.description, card.name) || "";
   const meta = signalMeta(card);
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   const desk = directoryRank(card);

@@ -12,6 +12,7 @@ import { getDb } from "@/lib/db/client";
 import { listUnverifiedCompanies } from "@/lib/domain/unverified-companies";
 import { plainText } from "@/lib/display/plain-text";
 import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
+import { sanitizePitch } from "@/lib/display/sanitize-pitch";
 
 const TABS = ["founders", "companies", "signals", "network"] as const;
 
@@ -154,7 +155,12 @@ export default async function CampusPage({
               {signals.map((signal) => (
                 <li key={signal.id} className="py-3">
                   <p className="text-[15px] font-medium">{signal.project_name}</p>
-                  <p className="mt-1 text-[14px] text-fg-2" title={signal.current_observation ?? undefined}>{ellipsisAtBoundary(plainText(signal.current_observation) || "", 160)}</p>
+                  {(() => {
+                    const observation = sanitizePitch(plainText(signal.current_observation), signal.project_name);
+                    return observation ? (
+                      <p className="mt-1 text-[14px] text-fg-2" title={observation} data-card-pitch="">{ellipsisAtBoundary(observation, 160)}</p>
+                    ) : null;
+                  })()}
                   <p className="mt-1 text-[14px] text-fg-2">{signal.signal_type}{signal.source_date ? ` · ${signal.source_date}` : ""}</p>
                 </li>
               ))}

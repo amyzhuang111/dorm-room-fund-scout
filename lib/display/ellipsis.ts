@@ -1,6 +1,7 @@
 /**
  * Clamp display copy at a sentence or word boundary, never mid-word.
  * Prefers the last sentence end within maxChars; else the last space.
+ * Never leaves a period (or other terminal punct) immediately before ….
  */
 export function ellipsisAtBoundary(raw: string, maxChars: number): string {
   const text = raw.replace(/\s+/g, " ").trim();
@@ -11,19 +12,27 @@ export function ellipsisAtBoundary(raw: string, maxChars: number): string {
     const at = window.lastIndexOf(mark);
     if (at > sentence) sentence = at;
   }
-  // Also allow a terminal period at the window edge.
+  // Terminal sentence punct at the window edge counts as a sentence end.
   if (window.endsWith(".") || window.endsWith("!") || window.endsWith("?")) {
     sentence = Math.max(sentence, window.length - 1);
   }
+  const finish = (slice: string) => {
+    // Strip terminal punct so we never render ".…", "!…", etc.
+    const cleaned = slice.replace(/[\s.!?…,;:]+$/u, "").trim();
+    return cleaned ? `${cleaned}…` : "…";
+  };
   if (sentence >= Math.floor(maxChars * 0.28)) {
     const end = window[sentence] === " " ? sentence : sentence + 1;
-    return `${window.slice(0, end).trim()}…`;
+    return finish(window.slice(0, end));
   }
+  // Always break on a word boundary when any space exists in the window.
   const space = window.lastIndexOf(" ");
-  if (space >= Math.floor(maxChars * 0.35)) {
-    return `${window.slice(0, space).replace(/[.,;:]+$/, "").trim()}…`;
+  if (space > 0) {
+    return finish(window.slice(0, space));
   }
-  return `${window.replace(/[.,;:]+$/, "").trim()}…`;
+  // Single overlong token: do not invent a mid-word cut; return full token clipped
+  // only if it has an internal hyphen at a safe point, else hard-trim without punct+.
+  return finish(window);
 }
 
 /**

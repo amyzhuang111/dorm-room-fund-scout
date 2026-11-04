@@ -300,6 +300,7 @@ export function FounderDirectory({
             const pitch = sanitizePitch(
               [row.signal, ...demotedBits].filter(Boolean).join(" · "),
               row.name,
+              row.company,
             );
             const label = tierLabel(row.tier);
             const ink = campusInk(row.campusId || row.campus);

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
 import { plainText } from "@/lib/display/plain-text";
 import { ellipsisAtBoundary, WRAP_FULL } from "@/lib/display/ellipsis";
+import { sanitizePitch } from "@/lib/display/sanitize-pitch";
 import { campusInk, CAMPUS_INK_LEGEND } from "@/lib/display/campus-ink";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { LogoMark } from "./sample-instrument";
@@ -382,7 +383,8 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
             const reasonOpen = tierReasonId === row.id;
             const markName = row.name || row.people[0]?.name || "Project";
             const ink = campusInk(row.campusId || row.campus);
-            const clamped = text ? ellipsisAtBoundary(plainText(text) || "", 84) : null;
+            const cleaned = text ? sanitizePitch(plainText(text), markName) : null;
+            const clamped = cleaned ? ellipsisAtBoundary(cleaned, 84) : null;
             const tierTitle =
               row.tier === "S+"
                 ? "S+ top signal tier"
@@ -439,7 +441,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     <button type="button" className="mt-0.5 hidden min-h-8 w-full text-left text-[13px] leading-5 text-fg-2 sm:block" onClick={() => { setCursor(index); setOpenId(row.id); }} title={text ? plainText(text) ?? undefined : undefined}>
                       {clamped || "No signal yet"}
                     </button>
-                    <p className={`mt-1 ${WRAP_FULL} text-[14px] leading-5 text-fg-2 sm:hidden`} title={text ? plainText(text) ?? undefined : undefined} data-card-pitch="">
+                    <p className={`mt-1 ${WRAP_FULL} text-[14px] leading-5 text-fg-2 sm:hidden`} title={cleaned ?? undefined} data-card-pitch="">
                       {clamped || row.event || "Open for signal"}
                     </p>
                 </div>
@@ -479,6 +481,8 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                 const date = !row.signalAt || sameDay ? null : relativeTime(row.signalAt);
                 const quiet = !hasSignal(row);
                 const text = row.detail || (!group.event ? row.full : null);
+                const markName = row.name || row.people[0]?.name || "Project";
+                const cleaned = text ? sanitizePitch(plainText(text), markName) : null;
                 const stripe = index % 2 === 1 ? "bg-raised" : "";
                 return (
                   <tr
@@ -531,7 +535,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     )}
                     <td className={`${pad} px-2`}>
                       {text ? (
-                        <span className={`${WRAP_FULL} text-[14px] leading-5 text-fg`} title={plainText(row.full ?? text)}>{ellipsisAtBoundary(plainText(text) || "", 110)}</span>
+                        <span className={`${WRAP_FULL} text-[14px] leading-5 text-fg`} title={cleaned ?? undefined}>{cleaned ? ellipsisAtBoundary(cleaned, 110) : null}</span>
                       ) : (
                         <span className="text-[14px] text-fg-2">No signal yet</span>
                       )}

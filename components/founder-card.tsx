@@ -1,3 +1,4 @@
+import { sanitizePitch } from "@/lib/display/sanitize-pitch";
 import { memo } from "react";
 import Link from "next/link";
 import type { FounderRow } from "@/lib/domain/queries";
@@ -58,9 +59,9 @@ export const FounderCard = memo(function FounderCard({
       {founder.founderStatus === "potential" && founder.potentialSignal && (
         <p className="mt-2 text-sm text-foreground">{founder.potentialSignal}</p>
       )}
-      {founder.founderStatus !== "potential" && founder.strongestEvidence && (
-        <p className={`mt-2 text-sm text-foreground ${open ? "" : "line-clamp-3"}`}>{founder.strongestEvidence}</p>
-      )}
+      {founder.founderStatus !== "potential" && sanitizePitch(founder.strongestEvidence, founder.name) ? (
+        <p className={`mt-2 text-sm text-foreground ${open ? "" : "line-clamp-3"}`} data-card-pitch="">{sanitizePitch(founder.strongestEvidence, founder.name)}</p>
+      ) : null}
       {founder.reviewNotes.length > 0 && (
         <p className={`mt-2 text-xs text-muted ${open ? "" : "line-clamp-2"}`}>{founder.reviewNotes.join(" ")}</p>
       )}
