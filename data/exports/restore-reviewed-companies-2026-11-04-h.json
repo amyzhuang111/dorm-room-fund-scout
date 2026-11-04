@@ -1,0 +1,30 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Batch h: per-company web research restricted to the founder's own university domain, its student newspaper and ycombinator.com (round 4: 12 hidden 2025-26 YC-batch companies; 3 confirmed from official university pages). Founders are matched by name plus the company/YC bio (school, major), so a name collision is possible but unlikely; each entry names the exact source.",
+  "restore": [
+    {
+      "id": "proj_2XNtqFfSlERK",
+      "name": "Topological",
+      "why": "Founders Nicole Ma and Zeyneb Kaya: Stanford Profiles lists Ma as an undergraduate in Computer Science and Kaya as a master's student in Computer Science (admitted autumn 2025)",
+      "evidence": "Stanford Profiles: Nicole Ma, Undergraduate, Computer Science; Zeyneb Nahide Kaya, master's student, Computer Science, admitted autumn 2025",
+      "eligibilityUrl": "https://profiles.stanford.edu/nicole-ma"
+    },
+    {
+      "id": "proj_eoR5PpMX36Dx",
+      "name": "Most Robotic",
+      "why": "Founder Claire Mao appears in MIT's official Class of 2026 commencement graduate list; co-founder Lucy Cai is MIT class of 2025 per an MIT center page",
+      "evidence": "MIT Commencement 2026 graduates name book: Claire Yue Han Mao; MIT Priscilla King Gray Public Service Center: 'Social Impact Internships: Lucy Cai (25)'",
+      "eligibilityUrl": "https://commencement.mit.edu/sites/default/files/MIT.Commencement.2026.Graduates.Name.Book%20v2-tagged.pdf"
+    },
+    {
+      "id": "proj_l9Qd080kbL1_",
+      "name": "Epicenter",
+      "why": "Founder Braden Wong is Yale class of 2024: Yale Daily News profile ('24, then a junior) and Yale's 2024 Class Day committee page",
+      "evidence": "Yale Daily News (2022-12-09): 'Braedon Wong 24'; Yale Class Day 2024 leadership page lists him",
+      "eligibilityUrl": "https://yaledailynews.com/blog/2022/12/09/entrepreneurship-at-and-after-yale-a-profile-of-a-braedon-wong-24-and-zach-dewitt-09/"
+    }
+  ]
+}

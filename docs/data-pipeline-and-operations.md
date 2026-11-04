@@ -474,6 +474,15 @@ later. Does not count, with the reason found when each was checked:
   Amazon), and the rest held for lack of a class year (Lumius: Duke PhD alumni;
   FlowManual: Harvard dropouts; Luca IQ: Harvard MBAs). Restricting domains removes
   aggregator noise and name collisions; roughly 1 in 6 on that targeting.
+  A fourth round (12 more, up to two per campus, domains extended to USC, NYU, UT
+  Austin, UCLA, Georgia Tech, Brown, Dartmouth, Northwestern and Rice) confirmed **3**
+  from official university pages (Topological: Stanford Profiles lists the founders
+  as an undergraduate and a master's student admitted autumn 2025; Most Robotic: MIT's
+  Class of 2026 commencement book and an MIT page listing '25; Epicenter: Yale Daily
+  News and Yale's Class Day 2024 page, class of 2024; batch h) and showed 2 to be
+  old (Evergrove's CEO, a Waterloo alum from 2018; Palisade's founder, Princeton '21).
+  Across rounds 3 and 4: 5 confirmed of 24, about 1 in 5. Matching is by name plus the
+  company or YC bio, so a collision is possible; each entry names its exact source.
 
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
 `unverified recency` now passed the gate. Each was listed by a university
