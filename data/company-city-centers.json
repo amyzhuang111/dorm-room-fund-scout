@@ -942,6 +942,36 @@
       "latitude": 28.53834,
       "longitude": -81.37924,
       "sourceUrl": "https://www.geonames.org/4167147/"
+    },
+    {
+      "storedLabel": "New Haven, CT",
+      "id": "4839366",
+      "city": "New Haven",
+      "country": "US",
+      "region": "CT",
+      "latitude": 41.30815,
+      "longitude": -72.92816,
+      "sourceUrl": "https://www.geonames.org/4839366/"
+    },
+    {
+      "storedLabel": "Columbia, SC",
+      "id": "4575352",
+      "city": "Columbia",
+      "country": "US",
+      "region": "SC",
+      "latitude": 34.00071,
+      "longitude": -81.03481,
+      "sourceUrl": "https://www.geonames.org/4575352/"
+    },
+    {
+      "storedLabel": "Portland, OR",
+      "id": "5746545",
+      "city": "Portland",
+      "country": "US",
+      "region": "OR",
+      "latitude": 45.52345,
+      "longitude": -122.67621,
+      "sourceUrl": "https://www.geonames.org/5746545/"
     }
   ]
 }

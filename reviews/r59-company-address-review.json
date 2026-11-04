@@ -2,14 +2,14 @@
   "checkedAt": "2026-11-04",
   "scope": "Review inventory for every existing company. Website discovery is not verification. Pending records do not have published coordinates. No raw address candidates, private addresses, emails or contact names retained here.",
   "googleMapsAutomaticSync": false,
-  "databaseModified": false,
+  "databaseModified": true,
   "counts": {
-    "candidate_needs_verification": 187,
-    "held_from_publication": 33,
-    "new_import_not_reviewed": 1203,
-    "no_address_found_on_checked_pages": 452,
-    "published_business_address": 154,
-    "source_unavailable": 446
+    "candidate_needs_verification": 184,
+    "held_from_publication": 32,
+    "new_import_not_reviewed": 1196,
+    "no_address_found_on_checked_pages": 450,
+    "published_business_address": 204,
+    "source_unavailable": 441
   },
   "records": [
     {
@@ -365,15 +365,17 @@
     {
       "projectId": "proj_P-4GfrY3mGvi",
       "company": "AdaptaPlay",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:59.797Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company contact page explicitly publishes the Tech Square business address. The company-provided office address, not its Georgia Tech affiliation, establishes the location. Government point has ZIP 30313; company mailing ZIP 30332 retained.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://adaptaplay.org/",
         "https://adaptaplay.org/contact/",
         "https://adaptaplay.org/about/"
-      ]
+      ],
+      "addressSource": "https://adaptaplay.org/contact/",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_38CLDX9KEFL_",
@@ -730,20 +732,20 @@
       "checkedPages": []
     },
     {
-      "projectId": "proj_yTsIek7JT4YO",
-      "company": "agora",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:00.681Z",
-      "discoveryStatus": "unavailable",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_jRCyQwIq8J1u",
       "company": "Agora",
       "status": "source_unavailable",
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:00.683Z",
+      "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_yTsIek7JT4YO",
+      "company": "agora",
+      "status": "source_unavailable",
+      "reason": "No official website recorded for this company.",
+      "checkedAt": "2026-11-03T06:14:00.681Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
     },
@@ -865,16 +867,19 @@
     {
       "projectId": "proj_ajGSsjrIJvih",
       "company": "AirCaps",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:00.872Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Current company terms explicitly publish the address. District CoWork commercial workspace. Building point, not exclusive tenancy or guaranteed headquarters.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://aircaps.com/",
         "https://aircaps.com/contact",
         "https://aircaps.com/privacy",
-        "https://aircaps.com/terms"
-      ]
+        "https://aircaps.com/terms",
+        "https://apps.apple.com/lt/app/aircaps-app/id6756796225"
+      ],
+      "addressSource": "https://aircaps.com/terms",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_C0LKUVPR0bss",
@@ -2081,21 +2086,21 @@
       "checkedPages": []
     },
     {
-      "projectId": "proj_pub_0be5f63429f73139b718",
-      "company": "Arrow Analytics",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_3V3u0Oo0AO1u",
       "company": "Arrow Analytics",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_pub_0be5f63429f73139b718",
+      "company": "Arrow Analytics",
+      "status": "new_import_not_reviewed",
+      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
     },
     {
@@ -2110,11 +2115,17 @@
     {
       "projectId": "proj_oGZDlPDszAe0",
       "company": "Arth – Art of Health",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_Viy-gur-74lj",
@@ -2908,6 +2919,21 @@
       ]
     },
     {
+      "projectId": "proj_STe8m0OKby-Q",
+      "company": "Axia AI",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_n3xqW2Am3pL2",
       "company": "AxionOrbital Space",
       "status": "no_address_found_on_checked_pages",
@@ -3087,11 +3113,16 @@
     {
       "projectId": "proj_XfG9QaZTq2zZ",
       "company": "Base Operations",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Current company privacy policy, federal small-business award profile, and company location listing agree on this commercial office address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.baseoperations.com/privacy",
+        "https://www.sbir.gov/portfolio/2660708"
+      ],
+      "addressSource": "https://www.baseoperations.com/privacy",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_ZNwiMUVJu-cp",
@@ -3146,6 +3177,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_JFVtUvxSO_AZ",
+      "company": "Battery Safety Technologies",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_8dR85UInuqWK",
       "company": "Beacon Bio",
       "status": "new_import_not_reviewed",
@@ -3162,6 +3208,21 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_YtiNq1UzptdM",
+      "company": "Bearing",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_ZWyaOz8hg0KY",
@@ -3560,11 +3621,16 @@
     {
       "projectId": "proj_SefCWU_OwMzm",
       "company": "Biomotum",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Federal business-award recipient address agrees with the company's public Portland demo-day workplace announcement. Older residential Flagstaff address excluded.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://taggs.hhs.gov/Detail/RecipDetail?arg_EntityId=kl%2BXDLdom1EIXopQcm6TqQ%3D%3D",
+        "https://www.linkedin.com/posts/biomotum_demo-day-in-portland-oregon-come-check-activity-7097232147677155329-poLa"
+      ],
+      "addressSource": "https://taggs.hhs.gov/Detail/RecipDetail?arg_EntityId=kl%2BXDLdom1EIXopQcm6TqQ%3D%3D",
+      "evidenceType": "public_business_award_record"
     },
     {
       "projectId": "proj_ey-VzHKDXs7m",
@@ -3702,11 +3768,17 @@
     {
       "projectId": "proj_eiym61dUgq05",
       "company": "BlockBridge",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:05.235Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_JDmTOb42Cy7Z",
@@ -4372,6 +4444,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_sYX8ltsCiFvG",
+      "company": "Cadenova",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_OO32AhKJBtUH",
       "company": "Cado",
       "status": "published_business_address",
@@ -4585,6 +4672,15 @@
       "company": "Canopy Nepal",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_4e6ohfcNlXx9",
+      "company": "Capacitive",
+      "status": "new_import_not_reviewed",
+      "reason": "Added or restored after the original discovery pass. No workplace address inferred without independent evidence.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -5172,15 +5268,6 @@
       ]
     },
     {
-      "projectId": "proj_qJRv8zLZ5_zl",
-      "company": "ChargeBay",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_ZKPppKlW2bGv",
       "company": "ChargeBay",
       "status": "new_import_not_reviewed",
@@ -5188,6 +5275,20 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_qJRv8zLZ5_zl",
+      "company": "ChargeBay",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company contact page identifies its headquarters at this commercial office building. Privacy page agrees on street address but lists a different suite, so the published map record intentionally omits the suite. The duplicate company alias is not counted as another address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": [
+        "https://chargebay.app/contact-us/",
+        "https://chargebay.app/privacy-policy/"
+      ],
+      "addressSource": "https://chargebay.app/contact-us/",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_b5SEpOHbKQVK",
@@ -5624,9 +5725,9 @@
     {
       "projectId": "proj_0fHzfaJOUxLh",
       "company": "Clearly AI",
-      "status": "held_from_publication",
-      "reason": "Company contact page and LinkedIn show different street addresses; no unambiguous Google Maps company match.",
-      "checkedAt": "2026-11-03",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company contact page calls this its Seattle headquarters and explicitly offers visits by appointment. Commercial office facility; older residential legal address excluded.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://clearly-ai.com/",
@@ -5634,7 +5735,9 @@
         "https://clearly-ai.com/contact",
         "https://clearly-ai.com/about-us"
       ],
-      "reviewSources": []
+      "reviewSources": [],
+      "addressSource": "https://clearly-ai.com/contact",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_VuSsgI0BybzK",
@@ -5900,6 +6003,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_cNXxvlqyQv4O",
+      "company": "cocreate",
+      "status": "new_import_not_reviewed",
+      "reason": "Added or restored after the original discovery pass. No workplace address inferred without independent evidence.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_QcBc-VqIH46J",
       "company": "Code Four",
       "status": "source_unavailable",
@@ -5907,6 +6019,21 @@
       "checkedAt": "2026-11-03T06:14:08.552Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_evtOT79oElDF",
+      "company": "Coffee Elf",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_DoqAbc0HAZBK",
@@ -6785,6 +6912,21 @@
       "checkedAt": "2026-11-03T06:14:10.538Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_6s6czEAcBy15",
+      "company": "Daps",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_dSLWDFhk-mNm",
@@ -8782,6 +8924,21 @@
       "addressSource": "https://finny.com/about-us/"
     },
     {
+      "projectId": "proj_qxm1r1I-QUc3",
+      "company": "FinOptiv AI",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_BLLH8b-vRmcf",
       "company": "Finsaku",
       "status": "source_unavailable",
@@ -8951,11 +9108,15 @@
     {
       "projectId": "proj_DEIx3QXl4aTe",
       "company": "Flora Haven",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company publishes a customer-facing floral boutique and event venue at this commercial building, including public opening hours. Building point, not an inferred campus address.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://florahaven.com/"
+      ],
+      "addressSource": "https://florahaven.com/",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_78AsjO-hfUfd",
@@ -9075,21 +9236,21 @@
       "checkedPages": []
     },
     {
-      "projectId": "proj_gnJ8y7SB35CG",
-      "company": "Foregger Energy Solutions",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_QlcvqTSsEOUx",
       "company": "Foregger Energy Solutions",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_gnJ8y7SB35CG",
+      "company": "Foregger Energy Solutions",
+      "status": "new_import_not_reviewed",
+      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
     },
     {
@@ -9565,6 +9726,21 @@
       "checkedPages": [
         "https://www.galini.ai/"
       ]
+    },
+    {
+      "projectId": "proj_z8S4tCbB7R3t",
+      "company": "Gamsa Foods",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_jgh2cCqkPQD7",
@@ -10154,6 +10330,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_kEmTN45zXbd5",
+      "company": "Groverton",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_rd5ixKOeYze_",
       "company": "Growth & Progress Realty",
       "status": "new_import_not_reviewed",
@@ -10165,11 +10356,15 @@
     {
       "projectId": "proj_bHnixJm4Xxwa",
       "company": "GrowthFactor",
-      "status": "source_unavailable",
-      "reason": "Recorded website could not be adequately read in this pass.",
-      "checkedAt": "2026-11-03T06:13:54.414Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company terms identify its legal contact at this commercial office building. The legal notice section establishes the address independently of product demo examples.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.growthfactor.ai/terms-of-service"
+      ],
+      "addressSource": "https://www.growthfactor.ai/terms-of-service",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_qLyEqan0suw0",
@@ -10687,6 +10882,21 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_ggBFcMLL0-gd",
+      "company": "Hello Steady",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_87cmmKcmvD_U",
@@ -11453,6 +11663,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_HEUSp74BkJG-",
+      "company": "Instinct",
+      "status": "new_import_not_reviewed",
+      "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_rCFiM1dSMjV7",
       "company": "Instinct",
       "status": "no_address_found_on_checked_pages",
@@ -11462,15 +11681,6 @@
       "checkedPages": [
         "https://instinct.xyz/"
       ]
-    },
-    {
-      "projectId": "proj_HEUSp74BkJG-",
-      "company": "Instinct",
-      "status": "new_import_not_reviewed",
-      "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
-      "checkedAt": null,
-      "discoveryStatus": "not_attempted",
-      "checkedPages": []
     },
     {
       "projectId": "proj_64rhKgZP8uyZ",
@@ -11599,16 +11809,18 @@
     {
       "projectId": "proj_KRbGOl8xUnQj",
       "company": "Inventive AI",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:21.307Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company contact-information page identifies this address and names the matching founders. Hacker Dojo commercial shared workspace. Address node selected, without claiming exclusive occupancy.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.inventive.ai/",
         "https://www.inventive.ai/contact-information",
         "https://www.inventive.ai/about",
         "https://www.inventive.ai/privacy"
-      ]
+      ],
+      "addressSource": "https://www.inventive.ai/contact-information",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_cR9S6NwGW9YB",
@@ -12145,21 +12357,21 @@
       ]
     },
     {
-      "projectId": "proj_8HT7aOV-tKMO",
-      "company": "Kairos Health",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:22.302Z",
-      "discoveryStatus": "unavailable",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_3ca9d567db4d1c66b3",
       "company": "Kairos Health",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_8HT7aOV-tKMO",
+      "company": "Kairos Health",
+      "status": "source_unavailable",
+      "reason": "No official website recorded for this company.",
+      "checkedAt": "2026-11-03T06:14:22.302Z",
+      "discoveryStatus": "unavailable",
       "checkedPages": []
     },
     {
@@ -13402,6 +13614,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_aZwQSA05-IDr",
+      "company": "Local Civics",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_gfjrOQx8qT3Z",
       "company": "LocalLink",
       "status": "source_unavailable",
@@ -14055,6 +14282,21 @@
         "https://joinmarble.ai/privacy",
         "https://joinmarble.ai/terms"
       ]
+    },
+    {
+      "projectId": "proj_BHIdNu2iNkhO",
+      "company": "MarginArc",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_wCnaKwcamcQU",
@@ -15820,6 +16062,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_ivNh9FzV09ak",
+      "company": "nMonica",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_pZnneLoXy9oj",
       "company": "No Logo",
       "status": "source_unavailable",
@@ -15951,11 +16208,16 @@
     {
       "projectId": "proj_51l7zunQuAri",
       "company": "NuCyRNA Therapeutics",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:31.113Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Operator explicitly lists NuCyRNA as a current resident venture and provides the physical lab address and paid workspace details. Specific lab building geometry chosen; nearby interpolated address points excluded. Residency is not asserted as corporate headquarters.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ],
+      "addressSource": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_846o_lRJxFmW",
@@ -16332,6 +16594,21 @@
         "https://www.omnara.com/privacy",
         "https://www.omnara.com/terms"
       ]
+    },
+    {
+      "projectId": "proj_K8XIQvRKg2Xk",
+      "company": "OneRange",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_3e4kV5RmgQDx",
@@ -17419,11 +17696,17 @@
     {
       "projectId": "proj_VMHJUYGprJai",
       "company": "Perpetua",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:13:57.184Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_PqxwLcUNk5ao",
@@ -17750,11 +18033,17 @@
     {
       "projectId": "proj_elmKwRUWcK3g",
       "company": "Plasmole",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:36.440Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_8KqLEo84Gx24",
@@ -18075,6 +18364,21 @@
         "https://www.pranadoc.com/privacy",
         "https://www.pranadoc.com/terms"
       ]
+    },
+    {
+      "projectId": "proj_BmdoIQ7JjtOj",
+      "company": "Prana Health",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_gitaYHjB4ZHE",
@@ -18633,11 +18937,16 @@
     {
       "projectId": "proj_oP20zkcwZ8Nr",
       "company": "Qatalyst Health",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company terms and privacy page agree on this commercial innovation-center building. Public trade-association member directory corroborates the same suite.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.qatalysthealth.com/terms-of-service.html",
+        "https://www.schca.org/wp-content/uploads/sites/31/2025/07/2025-Membership-Directory.pdf"
+      ],
+      "addressSource": "https://www.qatalysthealth.com/terms-of-service.html",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_cFyU9_w5SXcJ",
@@ -18667,6 +18976,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_Hs-W6289qBtS",
+      "company": "Quad A Research Labs",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_dYI-Zhht8OJl",
       "company": "Quadcore Innovations",
       "status": "new_import_not_reviewed",
@@ -18674,6 +18998,21 @@
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_P0vPCQTKjVDC",
+      "company": "Quaderer Media Group",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_DwvL4Er8tCqX",
@@ -19160,6 +19499,21 @@
       ]
     },
     {
+      "projectId": "proj_LOx54CslM_N2",
+      "company": "Reason Technologies",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_EuELyl5VeUBq",
       "company": "ReasonBlocks",
       "status": "no_address_found_on_checked_pages",
@@ -19294,11 +19648,17 @@
     {
       "projectId": "proj_CWdxPYts0SiE",
       "company": "Regbase",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_SkLG0wi5BNt2",
@@ -19480,11 +19840,15 @@
     {
       "projectId": "proj_yRIkfq4o2zgY",
       "company": "ResiQuant",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company terms revised July 1, 2026 explicitly identify these as its offices. Commercial office tower; address point independently matched to the municipal address database.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.resiquant.ai/policy/terms-of-service"
+      ],
+      "addressSource": "https://www.resiquant.ai/policy/terms-of-service",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_-n3KqNpWgIlg",
@@ -19726,6 +20090,36 @@
       ]
     },
     {
+      "projectId": "proj_K2WWQnitpAlw",
+      "company": "RiskRemedy",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
+      "projectId": "proj_BDgT2KZUrBsl",
+      "company": "Rivea",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_QIcrl08fMyCG",
       "company": "River",
       "status": "no_address_found_on_checked_pages",
@@ -19864,6 +20258,15 @@
       ]
     },
     {
+      "projectId": "proj_DDpAPdpxMi1q",
+      "company": "Robocurve",
+      "status": "new_import_not_reviewed",
+      "reason": "Added or restored after the original discovery pass. No workplace address inferred without independent evidence.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_mA-juqqrDFvJ",
       "company": "RoboDock",
       "status": "no_address_found_on_checked_pages",
@@ -19875,6 +20278,21 @@
         "https://robodock.tech/contact-us",
         "https://robodock.tech/privacy-policy"
       ]
+    },
+    {
+      "projectId": "proj_AcmbUqd4UlUf",
+      "company": "Rockhopper",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_tGFV48hv7eJi",
@@ -20144,21 +20562,21 @@
       "checkedPages": []
     },
     {
-      "projectId": "proj_iE-y6UJHi6xL",
-      "company": "SAIL",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:42.274Z",
-      "discoveryStatus": "unavailable",
-      "checkedPages": []
-    },
-    {
       "projectId": "proj_GsNktTM8hixS",
       "company": "SAIL",
       "status": "new_import_not_reviewed",
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_iE-y6UJHi6xL",
+      "company": "SAIL",
+      "status": "source_unavailable",
+      "reason": "No official website recorded for this company.",
+      "checkedAt": "2026-11-03T06:14:42.274Z",
+      "discoveryStatus": "unavailable",
       "checkedPages": []
     },
     {
@@ -20333,6 +20751,21 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_ewuFsjG5KG5J",
+      "company": "Sara Technology",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_Tfx35LxPeobQ",
@@ -20559,6 +20992,21 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_gj9hjzCztiU-",
+      "company": "Scoutify",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_IG1h3Y1kLSIY",
@@ -21124,6 +21572,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_EqChUUaksfYI",
+      "company": "Silhouet",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_Y-tTAxmBBRvX",
       "company": "Silimate",
       "status": "no_address_found_on_checked_pages",
@@ -21507,6 +21970,21 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_033aUFXYwXsa",
+      "company": "Snova",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_NOQLQAW3OxqY",
       "company": "Snowlake",
       "status": "candidate_needs_verification",
@@ -21590,6 +22068,21 @@
         "https://www.thegarage.northwestern.edu/contact"
       ],
       "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
+      "projectId": "proj_WowcaYLSN6Vg",
+      "company": "Solano",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
       "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
@@ -21777,11 +22270,17 @@
     {
       "projectId": "proj_GYRyymIZ1Ldx",
       "company": "Spacely",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_-MC8UgiYaOP4",
@@ -22389,6 +22888,21 @@
       "checkedPages": [
         "https://subvysion.com/"
       ]
+    },
+    {
+      "projectId": "proj_7oybxNf3jSjL",
+      "company": "Sumly",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_J-JpZ-kZF4Nl",
@@ -23752,17 +24266,35 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_Yn6TdmHjWNw4",
+      "company": "Toscana USA",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
       "projectId": "proj_yh2n7Xv33CA2",
       "company": "TovenAI",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:50.468Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Current company homepage publishes this commercial office/showroom building address. Older residential Brooklyn legal address excluded; no claim of exclusive suite occupancy.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://toven.ai/",
         "https://toven.ai/privacy",
-        "https://toven.ai/terms"
-      ]
+        "https://toven.ai/terms",
+        "https://www.noahre.com/properties/134-spring-street-44337562903"
+      ],
+      "addressSource": "https://toven.ai/",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_BiTFDdeF2AIL",
@@ -24581,14 +25113,19 @@
     {
       "projectId": "proj_tUVZJm2HcD73",
       "company": "Vega",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:52.476Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.joinvega.com/",
-        "https://www.joinvega.com/info"
-      ]
+        "https://www.joinvega.com/info",
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_BoDorKKbgrMv",
@@ -24740,11 +25277,17 @@
     {
       "projectId": "proj_no-B3AtRXht7",
       "company": "Verteel",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_T9xpzO00RZ0g",
@@ -24922,6 +25465,21 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_OwuJAHxOmoeF",
+      "company": "Vitality Lab",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched venture name and named founder(s) to the operator's current 2026–2027 cohort. The operator identifies a physical co-working space at 69 Charlton Street and requires a paid desk tenancy for full-time founders. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. General university affiliation alone does not establish this address.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_attempted",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://entrepreneurship.columbia.edu/startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl"
+      ],
+      "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_xRR6rn1cyrGe",
@@ -25753,7 +26311,7 @@
       ]
     }
   ],
-  "productionBase": "7d4d3bbe2eca823b2965070ed155c9581bb30007",
+  "productionBase": "8514707f58c6f554dc7c041cea7331b86d5a0104",
   "mergedRecords": [
     {
       "company": "Winko",
@@ -25820,7 +26378,13 @@
       }
     }
   ],
-  "databaseChange": "No database change. Additive reviewed workplace records for existing public-directory companies.",
+  "databaseChange": "Additive reviewed build-time patch restores 29 existing companies whose only exclusion was unverified recency, now resolved by the current 2026–2027 Columbia Startup Lab resident roster. No new company rows, duplicate companies, founder/enrollment/funding/HQ/gate changes, or committed database binary.",
   "retiredRecords": [],
-  "productionDirectorySnapshot": "Verified deployed directory for merge 59ae9ce595c569dfbd6c88e7ad1bb36d3f64b7ce; includes 111 additional records beyond the temporary database build."
+  "productionDirectorySnapshot": {
+    "source": "Production directory plus 29 reviewed current-resident visibility restorations; local map resolution tested on a database copy.",
+    "productionCompaniesBefore": 2478,
+    "companiesAfter": 2507,
+    "checkedAt": "2026-11-04"
+  },
+  "databaseBinaryModified": false
 }
