@@ -8,10 +8,11 @@ import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
 import { directoryCardSubtitle, type StatusId } from "@/lib/domain/sample-facets";
-import type { FacetCompany } from "@/lib/domain/sample-facets";
+import type { FacetCompany, FacetSeed } from "@/lib/domain/sample-facets";
 import {
   CAMPUS_COUNT_UNIT,
   buildOverlayCounts,
+  overlayCampusRows,
   type OverlayRow,
 } from "@/lib/domain/overlay-counts";
 import { resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
@@ -205,6 +206,7 @@ export function SampleInstrumentBrowse({
   kinds,
   campuses,
   companies,
+  facetSeed = null,
   moreHref,
   clearCampusHref,
   initialFacets,
@@ -224,6 +226,7 @@ export function SampleInstrumentBrowse({
   kinds: DirectoryFilter[];
   campuses: { id: string; name: string; country: string; founders: number }[];
   companies: FacetCompany[];
+  facetSeed?: FacetSeed | null;
   moreHref: string;
   clearCampusHref: string;
   initialFacets?: Partial<FacetState>;
@@ -314,6 +317,7 @@ export function SampleInstrumentBrowse({
     return page.length > 0 ? page : cardsProp;
   }, [pages, catalog, cardsProp, feed, sector, kind, campus, query, sort]);
   const boardCompanies = useMemo(() => applyFacets(companiesLive, facets), [companiesLive, facets]);
+  const matchCount = catalog ? boardCompanies.length : (facetSeed?.total ?? total);
   /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
   const signaledMatch = useMemo(
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
@@ -491,9 +495,25 @@ export function SampleInstrumentBrowse({
       founders: c.founders,
     }));
     // Status from the same statusOf() as FacetRail; campus counts are founders (same unit as FacetRail).
+    if (!catalog && facetSeed) {
+      return {
+        status: facetSeed.statuses
+          .filter((row) => row.count > 0)
+          .map((row) => ({ id: row.id, label: row.label, count: row.count, facet: "status" as const })),
+        sector: facetSeed.sectors.visible.slice(0, 6).map((row) => ({
+          id: row.id,
+          label: row.label,
+          count: row.count,
+          facet: "sector" as const,
+        })),
+        campus: overlayCampusRows(campusRows),
+        campusUnit: CAMPUS_COUNT_UNIT,
+        total: matchCount,
+      };
+    }
     const built = buildOverlayCounts(companiesLive, campusRows);
-    return { ...built, total: boardCompanies.length };
-  }, [companiesLive, campuses, boardCompanies.length]);
+    return { ...built, total: matchCount };
+  }, [companiesLive, campuses, boardCompanies.length, matchCount, catalog, facetSeed]);
 
   function applyOverlayRow(row: OverlayRow) {
     if (row.facet === "status") {
@@ -518,7 +538,7 @@ export function SampleInstrumentBrowse({
       : "border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
   const kicker = feed === "leaderboard" ? "Signals" : "Companies";
-  const caption = total === 1 ? "company" : "companies";
+  const caption = total === 1 ? "vetted company" : "vetted companies";
   const subline =
     feed === "leaderboard"
       ? "Ordered by how many signals are stored"
@@ -551,14 +571,14 @@ export function SampleInstrumentBrowse({
           >
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filters</p>
             <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-              <span data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
+              <span data-match-count="">{matchCount.toLocaleString("en-US")}</span>
               <span className="mx-1.5 text-[18px] font-semibold tracking-normal text-[color:var(--fg-3,#5C647A)]">of</span>
               <span className="text-[22px] font-bold text-[color:var(--fg,#0B0E17)]" data-total-count="">
                 {total.toLocaleString("en-US")}
               </span>
             </p>
             <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {feed === "leaderboard" ? "on the signal desk" : "companies"}
+              {feed === "leaderboard" ? "on the signal desk" : caption}
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-2" data-filter-chips="" aria-label="Active filters">
               {chipDefs.map((chip) => (
@@ -603,8 +623,9 @@ export function SampleInstrumentBrowse({
               campuses={campuses}
               facets={facets}
               onChange={commitFacet}
+              seed={catalog ? null : facetSeed}
               index
-              caption={feed === "leaderboard" ? "Signals" : "Companies"}
+              caption={feed === "leaderboard" ? "Signals" : "Vetted companies"}
             />
           </div>
           {/* Compact current-view logo strip (P0). Keep short so rails stay primary. */}
@@ -864,7 +885,7 @@ export function SampleInstrumentBrowse({
                 <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
                   Filters
                   <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
-                    {boardCompanies.length.toLocaleString("en-US")}
+                    {matchCount.toLocaleString("en-US")}
                   </span>
                   <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
                     of {total.toLocaleString("en-US")}
@@ -1335,7 +1356,7 @@ export function SampleInstrumentBrowse({
               <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
                 Filters
                 <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--ember,#D96B1C)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
+                  {matchCount.toLocaleString("en-US")}
                 </span>
                 <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
                   of {total.toLocaleString("en-US")}
@@ -1377,7 +1398,7 @@ export function SampleInstrumentBrowse({
                   })}
                 </div>
               ) : null}
-              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense sheet />
+              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} seed={catalog ? null : facetSeed} dense sheet />
             </div>
           </div>
         </div>

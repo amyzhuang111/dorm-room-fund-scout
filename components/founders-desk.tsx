@@ -48,7 +48,7 @@ export function FoundersDesk({
   return (
     <div data-founders-desk="" data-founders-loaded={rows ? "1" : "0"}>
       <p className="mt-2 text-[14px] text-fg-2">
-        <span className="num">{count.toLocaleString("en-US")}</span> founders
+        <span className="num">{count.toLocaleString("en-US")}</span> people in this index
       </p>
       {vettedFounders ? (
         <p className="mt-1 max-w-3xl text-[13px] text-fg-3" data-founders-scope="">

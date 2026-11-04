@@ -20,6 +20,7 @@ import {
   statusOf,
   type FacetCompany,
   type FacetCount,
+  type FacetSeed,
   type FlagId,
   type RecencyId,
   type StatusId,
@@ -521,6 +522,7 @@ export function FacetRail({
   index = false,
   caption = "Narrow the map",
   indexCount,
+  seed = null,
 }: {
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
@@ -539,6 +541,8 @@ export function FacetRail({
   caption?: string;
   /** Live count figure for index column header. */
   indexCount?: number;
+  /** Server counts painted before the company catalog hydrates. */
+  seed?: FacetSeed | null;
 }) {
   const countryScoped = useMemo(() => {
     if (!facets.country) return campuses;
@@ -553,12 +557,16 @@ export function FacetRail({
 
   const [hqExpanded, setHqExpanded] = useState(false);
   const [sectorExpanded, setSectorExpanded] = useState(false);
-  const sectorPack = useMemo(() => sectorPills(baseCompanies, 10), [baseCompanies]);
+  const sectorPackLive = useMemo(() => sectorPills(baseCompanies, 10), [baseCompanies]);
+  const useSeed = Boolean(seed) && companies.length === 0;
+  const sectorPack = useSeed && seed ? seed.sectors : sectorPackLive;
   const sectorRows = sectorExpanded ? [...sectorPack.visible, ...sectorPack.more] : sectorPack.visible;
+  const listedTotal = useSeed && seed ? seed.total : baseCompanies.length;
   const kinds = useMemo(() => countBy(baseCompanies, (c) => c.signalKind, (id) => baseCompanies.find((c) => c.signalKind === id)?.signalLabel ?? id), [baseCompanies]);
   const stages = useMemo(() => countBy(baseCompanies, (c) => c.stage, (id) => id), [baseCompanies]);
-  const years = useMemo(() => foundedYearBuckets(baseCompanies), [baseCompanies]);
-  const statuses = useMemo(() => {
+  const yearsLive = useMemo(() => foundedYearBuckets(baseCompanies), [baseCompanies]);
+  const years = useSeed && seed ? seed.years : yearsLive;
+  const statusesLive = useMemo(() => {
     const counts = new Map<StatusId, number>();
     for (const company of baseCompanies) {
       const id = statusOf(company);
@@ -571,12 +579,14 @@ export function FacetRail({
       count: counts.get(id) ?? 0,
     }));
   }, [baseCompanies]);
+  const statuses = useSeed && seed ? seed.statuses : statusesLive;
   const flags = useMemo(() => {
     return (Object.keys(FLAG_LABEL) as FlagId[])
       .map((id) => ({ id, label: FLAG_LABEL[id], count: baseCompanies.filter((c) => hasFlag(c, id)).length }))
       .filter((item) => item.count > 0);
   }, [baseCompanies]);
-  const hqPills = useMemo(() => hqRegionPills(baseCompanies, 8), [baseCompanies]);
+  const hqPillsLive = useMemo(() => hqRegionPills(baseCompanies, 8), [baseCompanies]);
+  const hqPills = useSeed && seed ? seed.hq : hqPillsLive;
   const hqRegions = hqExpanded ? [...hqPills.visible, ...hqPills.more] : hqPills.visible;
   const recency = useMemo(() => {
     const counts = new Map<RecencyId, number>();
@@ -719,7 +729,7 @@ export function FacetRail({
         <div id="facet-status" className="shrink-0 scroll-mt-16 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" data-facet-status-pin="">
           <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Status</p>
           <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">
-            <FacetRow facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label="All" />
+            <FacetRow facet="status" count={listedTotal} active={!facets.status} onClick={() => set({ status: null })} label="All" />
             {statuses.map((item) => (
               <FacetRow key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={item.label} dot={STATUS_DOT[item.id]} />
             ))}
@@ -729,7 +739,7 @@ export function FacetRail({
       <div className="min-h-0 flex-1 overflow-y-auto">
         {editorial ? null : (
           <FacetGroup title="Status" dense={editorial}>
-            <FacetRow facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label="All" />
+            <FacetRow facet="status" count={listedTotal} active={!facets.status} onClick={() => set({ status: null })} label="All" />
             {statuses.map((item) => (
               <FacetRow key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={item.label} dot={STATUS_DOT[item.id]} />
             ))}
@@ -747,7 +757,7 @@ export function FacetRail({
 <FacetGroup title="Founded year" dense={editorial}>
           <FacetRow
             facet="year"
-            count={baseCompanies.length}
+            count={listedTotal}
             active={facets.foundedYear == null && !facets.yearMissing}
             onClick={() => set({ foundedYear: null, yearMissing: false })}
             label="All"
@@ -774,7 +784,7 @@ export function FacetRail({
           })}
         </FacetGroup>
         <FacetGroup title="HQ city" dense={editorial}>
-          <FacetRow facet="hq" count={baseCompanies.length} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label="All" />
+          <FacetRow facet="hq" count={listedTotal} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label="All" />
           {hqRegions.map((item) => (
             <FacetRow
               key={item.id}
@@ -797,7 +807,7 @@ export function FacetRail({
           ) : null}
         </FacetGroup>
         <FacetGroup title="Sector" dense={editorial}>
-          <FacetRow facet="sector" count={baseCompanies.length} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label="All" />
+          <FacetRow facet="sector" count={listedTotal} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label="All" />
           {sectorRows.map((item) => {
             const missing = item.id === NOT_ON_RECORD;
             return (
@@ -837,7 +847,7 @@ export function FacetRail({
         </FacetGroup>
         <FacetGroup title="Campus" defaultOpen={false} dense={editorial}>
           <p className="px-2 pb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)]" data-campus-count-unit="founders">
-            Counts are founders
+            Promoted founders, once per campus
           </p>
           {campusRows.map((campus) => (
             <FacetRow
