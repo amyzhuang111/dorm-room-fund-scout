@@ -862,6 +862,56 @@
       "latitude": 47.36667,
       "longitude": 8.55,
       "sourceUrl": "https://www.geonames.org/2657896/"
+    },
+    {
+      "storedLabel": "Santa Cruz, CA",
+      "id": "5393052",
+      "city": "Santa Cruz",
+      "country": "US",
+      "region": "CA",
+      "latitude": 36.97412,
+      "longitude": -122.0308,
+      "sourceUrl": "https://www.geonames.org/5393052/"
+    },
+    {
+      "storedLabel": "Watertown, MA",
+      "id": "4954611",
+      "city": "Watertown",
+      "country": "US",
+      "region": "MA",
+      "latitude": 42.37093,
+      "longitude": -71.18283,
+      "sourceUrl": "https://www.geonames.org/4954611/"
+    },
+    {
+      "storedLabel": "Aurora, CO",
+      "id": "5412347",
+      "city": "Aurora",
+      "country": "US",
+      "region": "CO",
+      "latitude": 39.72943,
+      "longitude": -104.83192,
+      "sourceUrl": "https://www.geonames.org/5412347/"
+    },
+    {
+      "storedLabel": "Huntington Beach, CA",
+      "id": "5358705",
+      "city": "Huntington Beach",
+      "country": "US",
+      "region": "CA",
+      "latitude": 33.6603,
+      "longitude": -117.99923,
+      "sourceUrl": "https://www.geonames.org/5358705/"
+    },
+    {
+      "storedLabel": "South San Francisco, CA",
+      "id": "5397765",
+      "city": "South San Francisco",
+      "country": "US",
+      "region": "CA",
+      "latitude": 37.65466,
+      "longitude": -122.40775,
+      "sourceUrl": "https://www.geonames.org/5397765/"
     }
   ]
 }
