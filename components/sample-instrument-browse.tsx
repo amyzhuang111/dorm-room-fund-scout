@@ -529,18 +529,17 @@ export function SampleInstrumentBrowse({
       ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white"
       : "border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
-  const kicker = feed === "leaderboard" ? "Signals" : "Companies";
-  const caption = total === 1 ? "company" : "companies";
+  const caption = feed === "leaderboard" ? "By signals" : "Companies";
   const subline =
     feed === "leaderboard"
-      ? "Ordered by how many signals are stored"
+      ? "Most signals first"
       : sort === "recent"
         ? "Newest signal first"
         : sort === "name"
           ? "Alphabetical"
           : sort === "stage"
             ? "Ordered by stage"
-            : "Ranked from signals, founders, programs, and stage";
+            : "Ranked by signals, founders, programs, and stage";
 
   return (
     <div
@@ -636,7 +635,6 @@ export function SampleInstrumentBrowse({
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
               <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                 {caption}
                 {campusName ? (
