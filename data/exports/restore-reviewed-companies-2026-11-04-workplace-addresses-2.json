@@ -1,0 +1,267 @@
+{
+  "checkedAt": "2026-11-04",
+  "reviewScope": "Additive visibility review of existing university-linked profiles using current named company/workspace evidence. No new company rows or founder, enrollment, funding, HQ, scoring or gate-logic changes.",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "restore": [
+    {
+      "id": "proj_5tzhRTUuqt3r",
+      "name": "Aethryx",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_tVYWz08MLa6G",
+      "name": "AgentSure PTE. LTD",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_L9iGIvZA36UU",
+      "name": "Alpha Y Omega",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Q_SXZWFC2xR_",
+      "name": "AMPLICITY",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_n8SjL-sm1vza",
+      "name": "Arculus Solutions, Inc.",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_rne7g5T9oG1k",
+      "name": "Arkkus Health",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_yKJjSguqeOmf",
+      "name": "Auryon Innovations Pte. Ltd.",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_4zaOZJqK0hMH",
+      "name": "Campaign Canvas",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_6EaemKaSKLQa",
+      "name": "CostObserver",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_kT3ShNDT4mQe",
+      "name": "Cura",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_4vnDwKUKai6q",
+      "name": "Curve Labs",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_0RDrt-EPEJsu",
+      "name": "DeepStore AI",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Jr5yhfEB000M",
+      "name": "Eazy AI Pte. Ltd.",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_QtYq0asJaS44",
+      "name": "EDVION TECHNOLOGIES PTE. LTD.",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj__jCbLfwJbq2C",
+      "name": "EXPISCORE PTE. LTD.",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_R5jr3x-sI5rh",
+      "name": "Gwenth Pte Ltd",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_pcIKoFUjhYX0",
+      "name": "Horaion AI",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_hX9xjNMzQmsK",
+      "name": "I Sarathy",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_itFCAzuGSgGR",
+      "name": "Imaji AI",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_jWCL4Qxk0mEO",
+      "name": "Jiangtou (Tianjin) Technology Development Co., Ltd.",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_IGyHoVeOhzeV",
+      "name": "Kelvix",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_ittsJZs6s1Rs",
+      "name": "Kurtosis Labs",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_zMtWH6Bg1csK",
+      "name": "Nexsoss",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_PBQmPAUQIuNe",
+      "name": "Odyssea AI",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_xQKPeFyWZYXT",
+      "name": "Open Border AI Multimodal",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_qo_nWUthbAfs",
+      "name": "Oystera",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_XdIRNT_crQ1s",
+      "name": "Phaseshift",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_jKdEDsvgHh6j",
+      "name": "Pixelance",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_-Mb4AhXTQbOr",
+      "name": "Podsee",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_w9m-Q1SHgcTh",
+      "name": "ReRoot SG",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj__qimj3l5Gx29",
+      "name": "Revuify",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_LlT5cDLcmuo0",
+      "name": "Typespaces AI",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_QEdATvdjc0dy",
+      "name": "Weav8",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_LIQvZvS8n2qS",
+      "name": "XForge Mobile",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_He-V-eO_EDql",
+      "name": "Zhejiang Polar Code Technology",
+      "sourceUrl": "https://iie.smu.edu.sg/big",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_30bkcBIFdWaE",
+      "name": "Globi",
+      "sourceUrl": "https://researchpark.illinois.edu/globi-social/",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_J6mR9euwpZ1Q",
+      "name": "Dark Matter Robotics",
+      "sourceUrl": "https://researchpark.illinois.edu/dark-matter-robotics/",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_5VabDTFzFZ6f",
+      "name": "Yummy Future",
+      "sourceUrl": "https://researchpark.illinois.edu/yummy-future/",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_3eSsqeIxtvHq",
+      "name": "Adept Materials",
+      "sourceUrl": "https://www.adeptmaterials.com/contact-us",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_YEQ7rJul2UoP",
+      "name": "Heliotrope Photonics",
+      "sourceUrl": "https://heliotropephotonics.com/contact-us/",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_cwp28deVVrjH",
+      "name": "Sora Fuel",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/2014480/000201448026000004/primary_doc.xml",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_V5sLCh0C4PuZ",
+      "name": "Boston Materials",
+      "sourceUrl": "https://www.bomaterials.com/privacy-policy/",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_mejDWIF4kHHa",
+      "name": "Solidec",
+      "sourceUrl": "https://greentown.org/members/solidec",
+      "reason": "Existing company identity matches current named operator or company evidence of business activity. Directory visibility review only; does not verify graduation year, current enrollment, investment eligibility, or funding."
+    }
+  ]
+}

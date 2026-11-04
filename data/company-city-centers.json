@@ -992,6 +992,26 @@
       "latitude": 42.81424,
       "longitude": -73.93957,
       "sourceUrl": "https://www.geonames.org/5136454/"
+    },
+    {
+      "storedLabel": "Billerica, MA",
+      "id": "4930577",
+      "city": "Billerica",
+      "country": "US",
+      "region": "MA",
+      "latitude": 42.55843,
+      "longitude": -71.26895,
+      "sourceUrl": "https://www.geonames.org/4930577/"
+    },
+    {
+      "storedLabel": "Houston, TX",
+      "id": "4699066",
+      "city": "Houston",
+      "country": "US",
+      "region": "TX",
+      "latitude": 29.76328,
+      "longitude": -95.36327,
+      "sourceUrl": "https://www.geonames.org/4699066/"
     }
   ]
 }
