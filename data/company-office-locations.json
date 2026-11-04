@@ -715,6 +715,21 @@
       "coordinateSource": "https://geosearch.planninglabs.nyc/v2/search?text=33+Irving+Place+Manhattan&size=2",
       "coordinateMethod": "NYC Planning PAD address point 94762, postal code 10003",
       "checkedAt": "2026-11-04"
+    },
+    {
+      "projectId": "proj_5ZRSLDZAL3zV",
+      "company": "BetterBasket",
+      "kind": "published_business_address",
+      "address": "530 Howard Street, San Francisco, CA, USA",
+      "cityId": "5391959",
+      "longitude": -122.39712829298807,
+      "latitude": 37.78810743866223,
+      "sourceUrl": "https://betterbasket.com/company",
+      "excerpt": "BetterBasket 530 Howard St, San Francisco, CA",
+      "corroboratingSource": "https://www.chadmitchellassociates.com/",
+      "coordinateSource": "https://data.sf.gov/resource/3mea-di5p.json?address_number=530&street_name=HOWARD&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 364900",
+      "checkedAt": "2026-11-04"
     }
   ]
 }

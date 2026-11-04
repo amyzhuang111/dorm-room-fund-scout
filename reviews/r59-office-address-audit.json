@@ -1,11 +1,11 @@
 {
   "checkedAt": "2026-11-04",
-  "companies": 1573,
-  "cityMapped": 698,
-  "sourcedAddressPoints": 48,
+  "companies": 1633,
+  "cityMapped": 699,
+  "sourcedAddressPoints": 49,
   "cityOnly": 650,
-  "cityUnknown": 875,
-  "withoutSourcedAddress": 1525,
+  "cityUnknown": 934,
+  "withoutSourcedAddress": 1584,
   "websiteDiscovery": {
     "attemptedRecords": 1225,
     "no_address_found_on_checked_pages": 497,
@@ -24,7 +24,7 @@
   ],
   "pending": "Remaining candidates need individual company/office verification and authoritative coordinates. No automatic publication and no artificial scattering.",
   "databaseModified": false,
-  "databaseSHA256": "E7FA7ADF0E563CC27F46D865842E903C6FF48A66466CCA15E894E0143543E5F8",
+  "databaseSHA256": "E3987AB3609008CF46113B09E0C1FDB69FA7DC683C5DD1775CC3B3BC7E7A4CC0",
   "locations": [
     {
       "projectId": "proj_9GUOmdEYxbuH",
@@ -740,20 +740,35 @@
       "coordinateSource": "https://geosearch.planninglabs.nyc/v2/search?text=33+Irving+Place+Manhattan&size=2",
       "coordinateMethod": "NYC Planning PAD address point 94762, postal code 10003",
       "checkedAt": "2026-11-04"
+    },
+    {
+      "projectId": "proj_5ZRSLDZAL3zV",
+      "company": "BetterBasket",
+      "kind": "published_business_address",
+      "address": "530 Howard Street, San Francisco, CA, USA",
+      "cityId": "5391959",
+      "longitude": -122.39712829298807,
+      "latitude": 37.78810743866223,
+      "sourceUrl": "https://betterbasket.com/company",
+      "excerpt": "BetterBasket 530 Howard St, San Francisco, CA",
+      "corroboratingSource": "https://www.chadmitchellassociates.com/",
+      "coordinateSource": "https://data.sf.gov/resource/3mea-di5p.json?address_number=530&street_name=HOWARD&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 364900",
+      "checkedAt": "2026-11-04"
     }
   ],
-  "distinctBuildingPoints": 42,
+  "distinctBuildingPoints": 43,
   "reviewLedger": "reviews/r59-company-address-review.json",
   "reviewStatusCounts": {
-    "candidate_needs_verification": 196,
-    "held_from_publication": 30,
-    "new_import_not_reviewed": 348,
-    "no_address_found_on_checked_pages": 487,
-    "published_business_address": 48,
+    "candidate_needs_verification": 197,
+    "held_from_publication": 33,
+    "new_import_not_reviewed": 408,
+    "no_address_found_on_checked_pages": 482,
+    "published_business_address": 49,
     "source_unavailable": 464
   },
-  "productionBase": "fa09249f2b0b6665f8fae8a684aade58e89564ab",
-  "newImportsNotAddressReviewed": 348,
+  "productionBase": "c97f97437115efea808dd48d024d18757c25d200",
+  "newImportsNotAddressReviewed": 408,
   "databaseChange": "Address enrichment only in this pass; the committed company database is unchanged. Earlier duplicate merges remain recorded in the review ledger.",
   "followupDiscovery": {
     "checkedAt": "2026-11-04",
@@ -765,7 +780,7 @@
     "recordsHeld": 7,
     "scope": "Rechecked the previously recorded official pages for San Francisco address candidates. Automated matches include false positives and are not verification. Only the six individually reviewed additions were published; remaining records retain their previous review status."
   },
-  "directoryReconciliation": "Added pending review records for the 25 companies restored in PR #136; this address-only change does not modify the database.",
+  "directoryReconciliation": "Added pending review records for the 25 companies restored in PR #136; this address-only change does not modify the database. After a later upstream import, added 406 pending records and retained 346 out-of-directory reviews in retiredRecords. Current review coverage matches the production directory; this address-only change does not modify the database.",
   "additionalAddressReview": {
     "checkedAt": "2026-11-04",
     "attemptedRecords": 46,
@@ -786,6 +801,18 @@
       "addressesPublished": 5,
       "scope": "Rechecked recorded official pages for 68 additional New York candidates, with separate manual research on company-hosted events, membership profiles, exhibitor profiles and municipal business records in San Francisco. Published only five individually reviewed addresses. The four San Francisco additions came from supplemental manual research, not the 68-record website scan. Other unverified records retain their previous review status. Two additional leads have refreshed pending-review explanations; neither has published coordinates.",
       "pendingRecordsUpdated": 2
+    },
+    {
+      "checkedAt": "2026-11-04",
+      "attemptedRecords": 200,
+      "attemptedPages": 491,
+      "successfulPages": 482,
+      "recordsWithAddressLikeSnippets": 17,
+      "addressesPublished": 1,
+      "recordsHeld": 3,
+      "pendingRecordsUpdated": 1,
+      "scope": "Rechecked recorded official pages for 200 additional San Francisco companies, including a second pass over newly linked legal/contact pages for the first 100. One address was individually verified against company-published evidence, commercial property information and the municipal address-point dataset. Three postal-service addresses were held, and one other lead remains pending public company evidence. Automated matches include false positives; other records retain their previous review status. Supplemental research also checked municipal business records and public company/event pages. Directory membership changed during research; the scan refers to the directory before the later import. Review coverage is reconciled to the current production directory, retaining retired review records separately."
     }
-  ]
+  ],
+  "retiredReviewRecords": 346
 }
