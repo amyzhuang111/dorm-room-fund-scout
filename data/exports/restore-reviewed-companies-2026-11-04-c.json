@@ -1,0 +1,1885 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Program-evidenced restore. Each company has no linked founder, but its listing in a university STUDENT program states current_student (and, for Cornell eLab, a cohort year >= 2023: a student enrolled in 2023 or later cannot have graduated before 2023). Each program's own eligibility rule was read from a public page (see eligibilityUrl). Evidence is program-level, not per-founder, so it is weaker than the earlier two batches. Excluded: names that are a person's name, initiatives/entities/descriptions, duplicates of vetted companies, and anyone older or faculty.",
+  "restore": [
+    {
+      "id": "proj_M9tLID-m8r4Z",
+      "name": "1854 Reserve",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "1854 Reserve \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_7BmHDkU3w9Q8",
+      "name": "1Climate",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "1Climate \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_azjhR_EgTGxN",
+      "name": "1Room",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "1Room \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_HIJgXlJAR32K",
+      "name": "4 for 4",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "4 for 4 \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_L2bBxU0WSCn_",
+      "name": "A33",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "A33 \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_x_yrvjyKrYw8",
+      "name": "ADAPT",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "ADAPT \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ZKwUKZm70j6-",
+      "name": "Adolescent Health Champions",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Adolescent Health Champions \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_Xh4n1eUaBoI9",
+      "name": "Aduek",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Aduek \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_Mw_TIws6cio-",
+      "name": "AdvancedEdLink",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "AdvancedEdLink \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_2Z9HAqfKEru9",
+      "name": "Adventus Robotics",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Adventus Robotics \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_fZNoYdCU2F8_",
+      "name": "Advocait",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Advocait \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_sa5z5OFhuMU2",
+      "name": "AerroTerra",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "AerroTerra \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_l55vXnsK5iq1",
+      "name": "AgX",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "AgX \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_Hldh81CFd8Zo",
+      "name": "AI Pathology",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "AI Pathology \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_hBhPEZiR9qBQ",
+      "name": "AIRQUA",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "AIRQUA \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_wopGH65ZqBgH",
+      "name": "Akademi.al",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Akademi.al \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_Xz4r23pbz3nQ",
+      "name": "Al Misrah Tailoring",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Al Misrah Tailoring \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_te6ttFaAngWX",
+      "name": "Alfred",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Alfred \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_3cRM96lwyb3l",
+      "name": "Allergen Maps",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Allergen Maps \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_7zrNcq461rA2",
+      "name": "Almond Fintech",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Almond Fintech \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_TKPbbflf26Ff",
+      "name": "Alnu Health",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Alnu Health \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_YXFUPxGi0Xi3",
+      "name": "Alpha Beta STEM Academy",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Alpha Beta STEM Academy \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ZtcRff3VNoJ5",
+      "name": "Amimi",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Amimi \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_-3aSnSkbp0Fi",
+      "name": "Amira",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Amira \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_6HeBj8qwSESi",
+      "name": "Amity",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Amity \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_iV6I7IwFwDUJ",
+      "name": "Analog Social",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Analog Social \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_E455kUJIbsal",
+      "name": "Anise Health",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Anise Health \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_glEpVlAagMM8",
+      "name": "Anka Space",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Anka Space \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_XaHNWNYMFisy",
+      "name": "Anurassaa",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Anurassaa \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_BiRH8lIfkEkq",
+      "name": "AnyAPI",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "AnyAPI \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_MI3rCy65m5Pj",
+      "name": "Aptemiz, Inc",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Aptemiz, Inc \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_mczv8SUkybld",
+      "name": "Arbolito Ventures",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Arbolito Ventures \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_iDb8mpst0D7e",
+      "name": "Arcanist",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Arcanist \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ikGc9pIMJDyd",
+      "name": "Archslate Inc.",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Archslate Inc. \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_UgIzCL11Euob",
+      "name": "AREA",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "AREA \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_kfvAKYqpk74k",
+      "name": "Argus Systems",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Argus Systems \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_LNdewu4dK-4d",
+      "name": "Arqen.AI",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Arqen.AI \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_Viy-gur-74lj",
+      "name": "articuler.ai",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "articuler.ai \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_dAMlGc6zuxhU",
+      "name": "Ascendance US Inc.",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Ascendance US Inc. \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_qtcJ5_KRAZO2",
+      "name": "Asian Women Development Plan International",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Asian Women Development Plan International \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_iA_gMYtTEalr",
+      "name": "AsiansAhead",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "AsiansAhead \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_MdB8aF3Fxkdl",
+      "name": "Assemblr",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Assemblr \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_J0vGrU2QfOY5",
+      "name": "Assembly Labs",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Assembly Labs \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_zfdkpMfgVaNO",
+      "name": "Astrolabe Solutions",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Astrolabe Solutions \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_Tdukvj8_g6rB",
+      "name": "Atarea",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Atarea \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_cN2xYBi2fsse",
+      "name": "Atharv Public School",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Atharv Public School \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_s7vkqrqEaxpC",
+      "name": "Athlea",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Athlea \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_cnO4-4MqSwkP",
+      "name": "Atrium Audio",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Atrium Audio \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_x4m77nsGp9hT",
+      "name": "AugMend Health",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "AugMend Health \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_rxAkh78SeBxc",
+      "name": "Aunt Flo's Kitchen",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Aunt Flo's Kitchen \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_fYDSHXHslC7J",
+      "name": "Aureal",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Aureal \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_-kqo-ZyE2IHr",
+      "name": "Aurora & Lei Press",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Aurora & Lei Press \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_P65SfKIqKpgj",
+      "name": "Auxin Security",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Auxin Security \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_LNsfIiS9kMEU",
+      "name": "Auxiom AI",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Auxiom AI \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_ZpWMD8WO9Oxe",
+      "name": "Aware.ai",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Aware.ai \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_DgDh6eFNbgPB",
+      "name": "B2B Renew",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "B2B Renew \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_S4gkSft-zE2K",
+      "name": "BAM",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "BAM \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_GMUUCvqmoPYf",
+      "name": "Bandelier Technologies",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Bandelier Technologies \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_fBEXknghFDoG",
+      "name": "Bartega",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Bartega \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_XfG9QaZTq2zZ",
+      "name": "Base Operations",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Base Operations \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_8dR85UInuqWK",
+      "name": "Beacon Bio",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Beacon Bio \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ZWyaOz8hg0KY",
+      "name": "Beat AI",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Beat AI \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_8VNgM9abwZOC",
+      "name": "Beckley Retreats",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Beckley Retreats \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_eRkiz-cP2rd-",
+      "name": "BellBot",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "BellBot \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_xvuS5ILN287n",
+      "name": "Bemellou",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Bemellou \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_1QB_p3l-2e1X",
+      "name": "Bench Agent",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Bench Agent \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_RTAm9uJhGUMH",
+      "name": "Bern",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Bern \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_FY8sX_t8yNDw",
+      "name": "Bespoque",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Bespoque \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_mtuZ3DanFYet",
+      "name": "Binary Holographics Corporation",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Binary Holographics Corporation \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_MVpN4vMKQNfb",
+      "name": "BioBoat",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "BioBoat \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ey-VzHKDXs7m",
+      "name": "BIOPOD Co.",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "BIOPOD Co. \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_yv_ZAV7eAsod",
+      "name": "Bleu Story",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Bleu Story \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_p7b_u67YoDVI",
+      "name": "Bleuspace",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Bleuspace \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_Ok-1hMxnlfyL",
+      "name": "Block Entertainment LLC",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Block Entertainment LLC \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_NaV5LE0hu_Tt",
+      "name": "Blossom Academy",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Blossom Academy \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_K2NPx3Cf0mUV",
+      "name": "Blue Horse Entries",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Blue Horse Entries \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_f-TWG9LY3VPg",
+      "name": "Bluesense AI Inc",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Bluesense AI Inc \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_Hgyshh7oGqtY",
+      "name": "BonePixel",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "BonePixel \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ZxsP44EqC-A_",
+      "name": "Bridge Automation & Tech Support",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Bridge Automation & Tech Support \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_KfjA8FdrERSU",
+      "name": "Brigance",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Brigance \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_22MMKDt8K0--",
+      "name": "Bring the Buzz Over",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Bring the Buzz Over \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_Rn7_B1RWZ7Fk",
+      "name": "Build Lab",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Build Lab \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_e8W4s81J0si1",
+      "name": "BusFactor",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "BusFactor \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_cS-CzYsQhO7N",
+      "name": "BXPORTS",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "BXPORTS \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_8Vb2X1ZrS6_d",
+      "name": "C16",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "C16 \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_OO32AhKJBtUH",
+      "name": "Cado",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Cado \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_8e11ynk0UxfK",
+      "name": "Cala",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Cala \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_8YuZvAAgYrfq",
+      "name": "CampusVault Storage LLC",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "CampusVault Storage LLC \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_CcoA7vFq8DrD",
+      "name": "Candor Intelligence",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Candor Intelligence \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ulu6-CP9cnz5",
+      "name": "Canopy Nepal",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Canopy Nepal \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ywWqWFqcmnWG",
+      "name": "Carb Counting App",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Carb Counting App \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_VuLEC3N5s54b",
+      "name": "CarbonTag",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CarbonTag \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_-pBs7K0a1NTk",
+      "name": "CarePort Health",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CarePort Health \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_S0zvNNnB6Get",
+      "name": "CareROI",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CareROI \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_2BQ6K-ULICQr",
+      "name": "Cartograph",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Cartograph \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_NkfYCuP6MWVz",
+      "name": "Casa Pastell",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Casa Pastell \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_u1YBg1-lzXX8",
+      "name": "CashEx",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CashEx \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_jdNc4hde-jKV",
+      "name": "CassVita Inc.",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CassVita Inc. \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_0XKGtlZgulYB",
+      "name": "CBase AI",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CBase AI \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_ZMILPHGllACM",
+      "name": "Cellforma",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Cellforma \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_bYY0XN2goosV",
+      "name": "Celsius Bio",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Celsius Bio \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_HC-2wMlTEhle",
+      "name": "Central Tendency",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Central Tendency \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_h6wgiJvXCJb1",
+      "name": "CerberusAI",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CerberusAI \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_EkCnZSGTXS6L",
+      "name": "Change The Tune",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Change The Tune \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj___kf205OojbX",
+      "name": "Cherish",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Cherish \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_xnJIhLdnxLxq",
+      "name": "ChoLab",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "ChoLab \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_0lLH6GRsCSPB",
+      "name": "Cirble.org",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Cirble.org \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_UIlNbBNdojVo",
+      "name": "CircleBlaq",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CircleBlaq \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_Pg-QQVrCvKI3",
+      "name": "Citadel of Quality Education",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Citadel of Quality Education \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_n7F2Q2TDIxGf",
+      "name": "CityGov",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CityGov \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_0gtlfXOm8dbR",
+      "name": "Civic Roundtable",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Civic Roundtable \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_2KUtoodp3TXf",
+      "name": "Classy AI",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Classy AI \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_CKF2l_mJgO5C",
+      "name": "CLBB NeuroLaw Library",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CLBB NeuroLaw Library \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_VuSsgI0BybzK",
+      "name": "Clearstone",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Clearstone \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_8UDbIsVI9g9h",
+      "name": "Clinical Research Trial Match System (CRTMS)",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Clinical Research Trial Match System (CRTMS) \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_-AVI4ROaJMet",
+      "name": "Co-Flourish",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "Co-Flourish \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_F3NGHuzFu0eu",
+      "name": "CoachMila.ai",
+      "why": "listed in Harvard Innovation Labs Student i-lab with status current_student; eligibility: a venture needs at least one degree-seeking Harvard student leader (or a Harvard postdoc/clinical fellow)",
+      "evidence": "CoachMila.ai \u00b7 Harvard University \u00b7 Harvard Innovation Labs \u2014 Student i-lab \u00b7 current_student",
+      "eligibilityUrl": "https://innovationlabs.harvard.edu/labs/student-i-lab/apply"
+    },
+    {
+      "id": "proj_yudi0uE0W7-L",
+      "name": "College Compass",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "College Compass \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_iCHqLZSr7bRw",
+      "name": "Contact Us",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Contact Us \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_9ZHoRpVQ_B1a",
+      "name": "CranioMag",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "CranioMag \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_MW8kcdp7hz-a",
+      "name": "Crcle Inc.",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Crcle Inc. \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_3dO-pAvw5rnf",
+      "name": "CRIT",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "CRIT \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_EBZ-ntSCMXi-",
+      "name": "CultureCare",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "CultureCare \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_rI3oEqV4z42r",
+      "name": "CupStop",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "CupStop \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_8OWnxl2e3oMJ",
+      "name": "Dr. Milou",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Dr. Milou \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_CdPit9mJEP-B",
+      "name": "EcoMatia LLC",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "EcoMatia LLC \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_MhGG7gzaDSe6",
+      "name": "Ember Learning",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Ember Learning \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_cJ7ZcDIRf0wk",
+      "name": "Essel company",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Essel company \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_W3IsoPTHYza-",
+      "name": "Evallos Labs",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Evallos Labs \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_K_1zxl1-f7q6",
+      "name": "EZNRG AI",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "EZNRG AI \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_F8PPsMTxhJ38",
+      "name": "FeedLogic",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "FeedLogic \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_5XOfPENwHgKD",
+      "name": "FemSalud",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "FemSalud \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_-KhlLz4ktJRt",
+      "name": "FieldBuilt Systems",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "FieldBuilt Systems \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_GOgBQ2rdcdG9",
+      "name": "Filmify",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Filmify \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_ORyEdJP0Vba9",
+      "name": "Fork",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Fork \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_CCupC-q7Ugq6",
+      "name": "ForOurLastNames",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "ForOurLastNames \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_0ENB06VE2U9m",
+      "name": "Fremen Space",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Fremen Space \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_8wjJ7U47vTDp",
+      "name": "Fruji Foods",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Fruji Foods \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_yBn8OxadJa38",
+      "name": "Gakimas",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Gakimas \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_mHo7gL0Kq1fV",
+      "name": "Genesis",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Genesis \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_eafKb0ElIFFj",
+      "name": "GiftedGrooves",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "GiftedGrooves \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_VlscrFDYOOBu",
+      "name": "Girls in Quantum",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Girls in Quantum \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_W1dSiiKJj7Jr",
+      "name": "glimmr",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "glimmr \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_HhGs4Q1OoGq0",
+      "name": "GO\u2082",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "GO\u2082 \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_j6_OURZenH_9",
+      "name": "GradeWiz",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "GradeWiz \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_0rwp1xxfXB0k",
+      "name": "GreeneAcres Processing",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "GreeneAcres Processing \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_GtRd3Puquaqr",
+      "name": "Hackney",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Hackney \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_XwF4J1Hygiio",
+      "name": "Harmoniq",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Harmoniq \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_jAh9beXMgpS5",
+      "name": "HealthShades",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "HealthShades \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_fUgtapMnJHW-",
+      "name": "Heer",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Heer \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_fG6tMuMTcm4G",
+      "name": "Hermit",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Hermit \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_bTbyihvFeSH6",
+      "name": "Hillman Hall",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Hillman Hall \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_5A-6aWYAAyaf",
+      "name": "Homies Edition",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Homies Edition \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_8H-YnyS3vqYh",
+      "name": "How Sanguine Dinner Experiences",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "How Sanguine Dinner Experiences \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_8_Il9wv6dfZx",
+      "name": "HydroPing",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "HydroPing \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_viYPFAL9qqLP",
+      "name": "HYSS",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "HYSS \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_voy9fIv2R-aI",
+      "name": "Inara Data",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Inara Data \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_ASd7wScwUcRI",
+      "name": "InkSight",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "InkSight \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_0YfZQJ_v3wVM",
+      "name": "Irisight",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Irisight \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_e7IZDukBPMS_",
+      "name": "JOUS",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "JOUS \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_KUgx2IarOZQC",
+      "name": "JukeBox.am",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "JukeBox.am \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_iRXBlsE1UQuA",
+      "name": "Jumpstart Startups",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Jumpstart Startups \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_LBrUtm7FPLI7",
+      "name": "JunkBoys",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "JunkBoys \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_2vWS_9_e1CqI",
+      "name": "Kalisi",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Kalisi \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_CRSeNd2Nkr5T",
+      "name": "KALMAN SPACE",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "KALMAN SPACE \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_BX0rZfNkQLRT",
+      "name": "KasperAI",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "KasperAI \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_0gQrLKr3pS2O",
+      "name": "Katallst",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Katallst \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_mFjjBoGa_Jsr",
+      "name": "KAVE",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "KAVE \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_CNYU5inh0Tjf",
+      "name": "Kinetic Robotics",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Kinetic Robotics \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_jYK8w5ci_7-x",
+      "name": "Kounslr",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Kounslr \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_gtsMdF_K92Jm",
+      "name": "Kova",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Kova \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_CiNT6sOTa9uE",
+      "name": "LeakLogik",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "LeakLogik \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_Quma5pliZq--",
+      "name": "Let Divvy",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Let Divvy \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_d4gGN_sZGGty",
+      "name": "Let's Get Visa",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Let's Get Visa \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_kAHz_b8tQc10",
+      "name": "Locket Cybersecurity",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Locket Cybersecurity \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_0U4P8bCWR7CZ",
+      "name": "Lokaresto",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Lokaresto \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_5fvgmkkvrdF4",
+      "name": "LoveRoots",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "LoveRoots \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj__C71haM_jouq",
+      "name": "Luminate Participants",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Luminate Participants \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_ex7blXuM5AQa",
+      "name": "Lunch Bunch",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Lunch Bunch \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_noz2YaIpoohr",
+      "name": "MAP Machine",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "MAP Machine \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_ylIsL5Wo_AoG",
+      "name": "Marvin's Landing",
+      "why": "listed in Cornell eLab with status current_student (cohort 2027); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Marvin's Landing \u00b7 Cornell University \u00b7 Cornell eLab Class of 2027 \u00b7 current_student \u00b7 2027",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_EHRsB3cLM4G8",
+      "name": "MatchaBridge",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "MatchaBridge \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_bma2zAaXaoMt",
+      "name": "Max's Music Box",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Max's Music Box \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_gF15paSytyK1",
+      "name": "McPhail Patents and Research LLC",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "McPhail Patents and Research LLC \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_be1ZtUNDEEfJ",
+      "name": "Men's Health Clinic",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Men's Health Clinic \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_7sIUGFAGP33Q",
+      "name": "MeOH",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "MeOH \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_1MEr5nsPoPEc",
+      "name": "Metis",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Metis \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_4opPqZOO5WTA",
+      "name": "Miles Christian Technology Partners LLC",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Miles Christian Technology Partners LLC \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_EM_6wKXbJ1V5",
+      "name": "Mirri Diabetes",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Mirri Diabetes \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_wIhcpd0CYpSr",
+      "name": "Mizoma Africa",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Mizoma Africa \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_DNvfFucohXTG",
+      "name": "Modern Fly Fishing Co",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Modern Fly Fishing Co \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_uwyActVCIL7H",
+      "name": "Moodscapes",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Moodscapes \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_HgPTJ7wnpFRz",
+      "name": "Mr. EzPz",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Mr. EzPz \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_ENy7Q2eA6559",
+      "name": "Muddbites",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Muddbites \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_DdMi3uiibV4l",
+      "name": "MUMU",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "MUMU \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_fai64oU3Sl2k",
+      "name": "MyRoots",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "MyRoots \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_-3iMd0as0-pq",
+      "name": "NanoChill Technologies Inc.",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "NanoChill Technologies Inc. \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_YmsJdvbCb0lJ",
+      "name": "NewVox",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "NewVox \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_3OvOMmvsx8h7",
+      "name": "Nexus Gaming",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Nexus Gaming \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_e_GGBsxCFnqa",
+      "name": "NIL Revival",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "NIL Revival \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_6ILlAciGiJDm",
+      "name": "NileData AI",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "NileData AI \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_zxmNVwNyDWB7",
+      "name": "of Atlas",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "of Atlas \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_jie_fJzaLFjS",
+      "name": "Olux",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Olux \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_LOKuioTyoXVR",
+      "name": "OnSight",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "OnSight \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_P7nnAGyw6I4B",
+      "name": "Open Sport Sense",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Open Sport Sense \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_rsD0_Ti6s9Br",
+      "name": "Our Space",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Our Space \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_CSF6K19GY4hX",
+      "name": "PhytoFlock",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "PhytoFlock \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_pub_4abdf77ebf4b0438881c",
+      "name": "PipeLine",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Pipeline \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_vLqoNu9OyFtb",
+      "name": "PoliStock",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "PoliStock \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_vbFri6lPlHHn",
+      "name": "Polyidus",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Polyidus \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_HyQwSziUCgwX",
+      "name": "POMWear",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "POMWear \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_TKqVz_agyUs1",
+      "name": "Poppy's",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Poppy's \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_SJMaqpsLXO2i",
+      "name": "PrepPack",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "PrepPack \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_xFqDZU7iffzp",
+      "name": "Proactive AI",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Proactive AI \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_xXncOxf1q6Z6",
+      "name": "Proactive AI - XPLAIN",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Proactive AI - XPLAIN \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_oopRlt_XIOlJ",
+      "name": "Prysm",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Prysm \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_Mk3FeIVZVbNr",
+      "name": "QuickSlot Health Inc.",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "QuickSlot Health Inc. \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_RkDRRr_umQ4w",
+      "name": "Raccoon Dynamics",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Raccoon Dynamics \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_9hd_7l_w3VnE",
+      "name": "RackFlow",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "RackFlow \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_T4gfsWDpzoyz",
+      "name": "Rastenya",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Rastenya \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_Rqc0G7rVCdOG",
+      "name": "Rebite",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Rebite \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_-n3KqNpWgIlg",
+      "name": "Resonant",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Resonant \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_2X9gCP9vzx5G",
+      "name": "ReWear",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "ReWear \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_pjo41HHCdwm8",
+      "name": "Rex",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Rex \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_rCERXU0oCcJj",
+      "name": "RRender.ai",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "RRender.ai \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_1lwTv8JzE3UZ",
+      "name": "SandStop Pro",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "SandStop Pro \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_CSOv6kL4MeTD",
+      "name": "Scobii!",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Scobii! \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_hQNMKYNjaRGz",
+      "name": "Semasis",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Semasis \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_av0X0dntSmJp",
+      "name": "Shadow Bin",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Shadow Bin \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_zxN2vVOBau9n",
+      "name": "SMPL Burger",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "SMPL Burger \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_9vq5rXiLdCi_",
+      "name": "SocialTree",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "SocialTree \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_q7Yg7jFcDp3w",
+      "name": "Soft Mattr",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Soft Mattr \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_G8hAIr9oKMES",
+      "name": "Solis",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Solis \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_W1Ne2Ny1fWhz",
+      "name": "Somnia",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Somnia \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_fSRGdNva3Ixi",
+      "name": "SpectralDNA",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "SpectralDNA \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_wlH-mGK52MSs",
+      "name": "spekld",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "spekld \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_8iG1fLH4cdVh",
+      "name": "Spyke Automation",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Spyke Automation \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_m61_940i6M79",
+      "name": "StartSomething",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "StartSomething \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_1c5tPfrjMR1x",
+      "name": "StratoPlanner",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "StratoPlanner \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_34QIJGTubuSy",
+      "name": "Swan & Lake",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Swan & Lake \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_KddMzBSc99FE",
+      "name": "SwiftXR",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "SwiftXR \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_sWd53KHyBAlZ",
+      "name": "TacticZ",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "TacticZ \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_dYa1Iktf_tpI",
+      "name": "Techy Seniors Systems",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Techy Seniors Systems \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_OhFEfHYLs0gz",
+      "name": "Tedio",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Tedio \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_DALslRX-ivbJ",
+      "name": "Teks",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Teks \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_X6r6cI9EYUfF",
+      "name": "Teral",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Teral \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_lq_dBi8EYGRY",
+      "name": "Ternary Point Holdings LLC",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Ternary Point Holdings LLC \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_LFmRM35FPnBF",
+      "name": "TestLift",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "TestLift \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_Wgq4dshXNPE7",
+      "name": "The Outdoor Wholesaler",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "The Outdoor Wholesaler \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_mGIAFyIs5BnU",
+      "name": "The Right to Warmth",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "The Right to Warmth \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_QzkKfgGm9YUV",
+      "name": "Thera",
+      "why": "listed in Cornell eLab with status current_student (cohort 2024); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Thera \u00b7 Cornell University \u00b7 Cornell eLab Class of 2024 \u00b7 current_student \u00b7 2024",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_v2T0jaHGFWbZ",
+      "name": "Thriftr",
+      "why": "listed in Cornell eLab with status current_student (cohort 2026); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Thriftr \u00b7 Cornell University \u00b7 Cornell eLab Class of 2026 \u00b7 current_student \u00b7 2026",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_TEXIdvlyB5Nl",
+      "name": "Throttle",
+      "why": "listed in Cornell eLab with status current_student (cohort 2027); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Throttle \u00b7 Cornell University \u00b7 Cornell eLab Class of 2027 \u00b7 current_student \u00b7 2027",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_JmA4X03JTuHs",
+      "name": "Track Financial",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Track Financial \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_10HeZDkt68Ye",
+      "name": "Turna YZ",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Turna YZ \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_es91wY4GnWGZ",
+      "name": "Umana Meals and Nutrition",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Umana Meals and Nutrition \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    },
+    {
+      "id": "proj_0vb3qe3iUxzw",
+      "name": "uncharted",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "uncharted \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_j7AMqAxvw0NX",
+      "name": "UnSure",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "UnSure \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_gb_DmEUBESa4",
+      "name": "UPlate",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "UPlate \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_Zsw8WVYHKZe5",
+      "name": "VentureSocial",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "VentureSocial \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_H5CbrRCCISbE",
+      "name": "Vibe Robotics",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "Vibe Robotics \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_GapddaB6uA49",
+      "name": "VitaWave Tech",
+      "why": "listed in Purdue HIVE Ventures with status current_student; eligibility: supports student-led startups; applicants need a Purdue email",
+      "evidence": "VitaWave Tech, Inc. \u00b7 Purdue University \u00b7 Purdue HIVE Ventures \u00b7 current_student",
+      "eligibilityUrl": "https://engineering.purdue.edu/HIVE"
+    },
+    {
+      "id": "proj_kz0e4qfUT-Vs",
+      "name": "WhatWay",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "WhatWay \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_FdNTHlX4CXfS",
+      "name": "Wild Horizon",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Wild Horizon \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_SRUHqDADklas",
+      "name": "Willie's Wallet",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "Willie's Wallet \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_ia4ltpPOsiO-",
+      "name": "X-Factor Participants",
+      "why": "listed in Northwestern Garage Resident Startups with status current_student; eligibility: programs are 'open to all full-time, degree-seeking Northwestern students'",
+      "evidence": "X-Factor Participants \u00b7 Northwestern University \u00b7 The Garage (Resident Startups) \u00b7 current_student",
+      "eligibilityUrl": "https://thegarage.northwestern.edu/programs"
+    },
+    {
+      "id": "proj_HCFhSp3gr9v3",
+      "name": "Xerov\u00e9",
+      "why": "listed in Duke Startup Showcase 2025 with status current_student; eligibility: spotlights ventures of student founders from across Duke",
+      "evidence": "Xerov\u00e9 \u00b7 Duke University \u00b7 Duke Startup Showcase 2025 \u00b7 current_student",
+      "eligibilityUrl": "https://www.today.duke.edu/2025/04/duke-students-showcase-their-startups"
+    },
+    {
+      "id": "proj_hujcQwHyeFbZ",
+      "name": "Zest",
+      "why": "listed in Cornell eLab with status current_student (cohort 2025); eligibility: Cornell's student accelerator: open to undergraduate and graduate/professional students; a credit-bearing course",
+      "evidence": "Zest \u00b7 Cornell University \u00b7 Cornell eLab Class of 2025 \u00b7 current_student \u00b7 2025",
+      "eligibilityUrl": "https://experience.cornell.edu/opportunities/elab/requirements"
+    }
+  ]
+}

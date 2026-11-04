@@ -65,6 +65,44 @@ never run at the same time.
 requests" must be on (Settings → Actions → General), or the collector cannot
 open its PR. It is on as of 2026-11-04.
 
+### Incident: a PR carrying its own database replaced the data (2026-11-04)
+
+PR #149 ("Promote Campus Scout latest build ... to main", a Cursor-session branch)
+merged eight minutes after the second restore batch. Its description says conflict
+resolution "kept this build's UI/corpus", so its copy of `campus-universe.db` won.
+Because the file cannot be merged, everything committed to the database by other
+PRs was discarded: **59 reviewed company restores and the collector's 217 people /
+76 projects**, plus data that had been on `main` for longer (compared with the state
+just before it: -1,000 people, -325 companies, -1,703 claims, -196 signals; it also
+added 293 people, 374 projects and 2,534 claims of its own). The code from the
+other PRs was untouched. Two repo checks (`test:ask-retrieve` and
+`scripts/audit/check-founders-latest-2026.ts`, which expects the company
+"Luminarch") fail on `main` since that merge, with or without the patches below.
+
+How to avoid repeating it:
+
+- **Decisions that are small, reviewed and repeatable should not live only in the
+  binary.** They live as reviewed lists plus an idempotent patch step that runs in
+  `prebuild` (next section), so they are re-applied on top of whatever database is
+  committed.
+- Before promoting a branch, compare its database with `main`'s (row counts per
+  table) and say in the PR what it drops.
+- Anyone replacing the database should expect that every earlier data PR is
+  discarded and re-run the collectors and patches.
+
+### Reviewed patches (applied at build time)
+
+`prebuild` runs `scripts/data/apply-reviewed-patches.ts`, which applies every
+`data/exports/restore-reviewed-companies-*.json` list, in file-name order, using
+the shared logic in `scripts/data/restore-lib.ts`. It is idempotent: a company is
+touched only while it is still a company, still hidden, and its `excluded_reason`
+is empty or one of the list's `fromReasons` (restoring clears that reason). Like
+the scouting-list import it changes the database **in the build**, not the
+committed file, so the live site can differ from `data/campus-universe.db`.
+Preview without touching the real file:
+`CAMPUS_UNIVERSE_DB_PATH=/tmp/scratch.db npx tsx scripts/data/apply-reviewed-patches.ts --dry-run`.
+`npm run test:restore` covers the logic.
+
 ### The binary-conflict rule
 
 `campus-universe.db` cannot be merged. If two branches both change it, the
@@ -282,6 +320,26 @@ reason turned out to be a mix. On 2026-11-04 each was read individually:
   acquired companies.
 - 2 left hidden: no founder linked, so recency cannot be checked.
 
+**Third batch (2026-11-04, program-evidenced, weaker evidence):** 268 more
+companies (`data/exports/restore-reviewed-companies-2026-11-04-c.json`). None has
+a linked founder, so the recency gate cannot pass them. Each was instead listed
+by a university **student** program with status `current_student`, and each
+program's own eligibility rule was read from a public page (listed per company in
+the file): Cornell eLab (69; credit-bearing student accelerator, undergraduate and
+graduate students; cohort year 2024 or later), Harvard Innovation Labs Student
+i-lab (85; a venture needs a degree-seeking Harvard student leader, or a Harvard
+postdoc/clinical fellow), Northwestern Garage Resident Startups (43; programs
+"open to all full-time, degree-seeking Northwestern students"), Purdue HIVE
+Ventures (43; student-led startups), Duke Startup Showcase 2025 (28; student
+founders). A student enrolled in 2023 or later cannot have graduated before
+2023, which is why a cohort year of 2023+ is enough for the rule's threshold.
+**This is program-level evidence, not per-founder evidence**, so it is weaker
+than the first two batches; the Harvard rule also allows a postdoc or clinical
+fellow, who is not a student. Excluded from this batch: person-name scrape
+artifacts ("Gabi Wang, Kellogg '26"), initiatives/foundations/LLCs/descriptions,
+4 duplicates of vetted companies, and anyone with an older-alumni or faculty
+signal.
+
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
 `unverified recency` now passed the gate. Each was listed by a university
 entrepreneurship program with student founders (30 Cornell eLab, 3 Harvard
@@ -330,7 +388,8 @@ npx tsc --noEmit
 ```
 
 On 2026-11-04 the 18 `test:*` suites checked plus the two CI audits passed (20
-of 20) against a fresh copy of the committed database.
+of 20) against a fresh copy of the committed database, before the promotion
+incident above; `test:restore` is a new unit test for the restore logic.
 
 **Tests that read the live database go stale.** Three failed because code or
 data had moved on (a map radius constant, a company's campus list and
