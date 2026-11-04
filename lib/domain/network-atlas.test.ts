@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { getDb } from "../db/client";
 import { buildNetworkAtlas } from "./network-atlas-data";
 import { atlasLayout, safeAtlasUrl } from "./network-atlas";
+
+// Guard the integration: a mobile merge previously restored the legacy graph
+// while all atlas data tests still passed for an unused component.
+const networkPage = readFileSync("components/networks-app.tsx", "utf8");
+assert.match(networkPage, /<NetworkAtlas\s*\/>/, "Networks must mount the full-record atlas");
+assert.doesNotMatch(networkPage, /<NetworksGraph\b/, "Legacy graph must not replace the atlas");
 
 const data = buildNetworkAtlas();
 const db = getDb();
