@@ -313,8 +313,15 @@ for (const vp of VIEWPORTS) {
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 90000 });
-  await page.waitForSelector("[data-dispatch-map-stage], [data-company-location-map]", { timeout: 60000 }).catch(() => {});
-  await page.waitForTimeout(2500);
+  await page.waitForSelector("[data-dispatch-map-stage]", { timeout: 60000 }).catch(() => {});
+  await page.waitForTimeout(2000);
+  // Current-view card only mounts in Startup HQs mode.
+  const hqBtn = page.locator('[aria-label="Map locations"] button').filter({ hasText: /HQs/i }).first();
+  if (await hqBtn.count()) {
+    await hqBtn.click();
+    await page.waitForTimeout(2500);
+  }
+  await page.waitForSelector("section[aria-label='Startups on the map'], [data-company-location-map]", { timeout: 60000 }).catch(() => {});
   // Ensure collapsed (default on desktop ≥1024)
   const hideBtn = page.locator('section[aria-label="Startups on the map"] button[aria-label="Collapse startups in view"]');
   if (await hideBtn.count()) {

@@ -46,12 +46,25 @@ const campusIndex = (() => {
 })();
 const CAMPUS_PAGES = [...new Set(campusIndex)];
 
-const candidates = JSON.parse(fs.readFileSync("public/data/candidates.json", "utf8"));
-const founders = JSON.parse(fs.readFileSync("public/data/founders.json", "utf8"));
-const ids = new Set(candidates.map((c) => c.id));
+function loadJson(path) {
+  try {
+    if (!fs.existsSync(path)) return null;
+    return JSON.parse(fs.readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+}
+const candidates = loadJson("public/data/candidates.json") || [];
+const founders = loadJson("public/data/founders.json") || [];
+const ids = new Set((Array.isArray(candidates) ? candidates : []).map((c) => c.id).filter(Boolean));
+for (const f of Array.isArray(founders) ? founders : []) if (f.companyId) ids.add(f.companyId);
 const companyCount = ids.size;
-for (const f of founders) if (f.companyId) ids.add(f.companyId);
-const CRAWL = [...FOUNDER_PAGES, ...CAMPUS_PAGES, ...[...ids].map((id) => `/startup/${id}`)];
+// Always crawl founder + campus desks (campus source labels were the live dash miss).
+// Company dossiers only when local precompute artifacts exist.
+const CRAWL = [...new Set([...FOUNDER_PAGES, ...CAMPUS_PAGES, ...[...ids].map((id) => `/startup/${id}`)])];
+if (!ids.size) {
+  console.warn("check-no-dash: public/data/candidates.json missing — crawling CORE + campus pages only");
+}
 
 const DASHES = /[\u2013\u2014]/g;
 function snippets(text) {
