@@ -25,3 +25,12 @@ export function ellipsisAtBoundary(raw: string, maxChars: number): string {
   }
   return `${window.replace(/[.,;:]+$/, "").trim()}…`;
 }
+
+/**
+ * CSS classes (see app/globals.css). 2-line wrap that never applies
+ * text-overflow:ellipsis (Tailwind line-clamp would cut mid-word).
+ */
+export const WRAP_2 = "wrap-2";
+
+/** Full wrap, no clamp, no ellipsis. */
+export const WRAP_FULL = "wrap-full";

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
 import { plainText } from "@/lib/display/plain-text";
-import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
+import { ellipsisAtBoundary, WRAP_2, WRAP_FULL } from "@/lib/display/ellipsis";
 import { campusInk, CAMPUS_INK_LEGEND } from "@/lib/display/campus-ink";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { LogoMark } from "./sample-instrument";
@@ -406,7 +406,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                 <div className="min-w-0">
                     <button type="button" className="flex min-h-9 w-full items-center gap-2 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
                       <LogoMark name={markName} logoUrl={row.logoUrl} size={28} campusInk={ink} />
-                      <span className="min-w-0 flex-1 truncate text-[14px] font-semibold leading-5 text-fg">{plainText(row.name) || "n/a"}</span>
+                      <span className={`min-w-0 flex-1 ${WRAP_2} text-[14px] font-semibold leading-5 text-fg`}>{plainText(row.name) || "n/a"}</span>
                       {row.tier ? (
                         <span
                           className={`${tierClass(row.tier)} shrink-0`}
@@ -418,10 +418,10 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                         </span>
                       ) : null}
                     </button>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0 text-[11px] leading-4 text-fg-2">
+                    <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] leading-4 text-fg-2" data-project-meta="">
                       {!campusLocked && row.campus ? (
                         row.campusSlug ? (
-                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-11 items-center text-link">{plainText(row.campus)}</Link>
+                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex items-center py-0.5 text-link">{plainText(row.campus)}</Link>
                         ) : (
                           <span>{plainText(row.campus)}</span>
                         )
@@ -431,7 +431,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                       {row.tierBasis ? (
                         <button
                           type="button"
-                          className="min-h-11 text-[11px] text-link"
+                          className="py-0.5 text-[11px] text-link"
                           data-tier-reason-trigger=""
                           aria-expanded={reasonOpen}
                           onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
@@ -446,7 +446,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     <button type="button" className="mt-0.5 hidden min-h-8 w-full text-left text-[13px] leading-5 text-fg-2 sm:block" onClick={() => { setCursor(index); setOpenId(row.id); }} title={text ? plainText(text) ?? undefined : undefined}>
                       {clamped || "No signal yet"}
                     </button>
-                    <p className="mt-0.5 line-clamp-1 text-[12px] leading-4 text-fg-3 sm:hidden" title={text ? plainText(text) ?? undefined : undefined}>
+                    <p className={`mt-0.5 ${WRAP_2} text-[12px] leading-5 text-fg-3 sm:hidden`} title={text ? plainText(text) ?? undefined : undefined}>
                       {clamped || row.event || "Open for signal"}
                     </p>
                 </div>
@@ -457,13 +457,13 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
         <table className="hidden w-full min-w-[720px] table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg sm:table">
           <thead className="sticky top-0 z-20">
             <tr className="h-9 text-[14px] text-fg">
-              <th className="sticky top-0 z-20 w-8 overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium" />
-              <th className="sticky top-0 z-20 w-[30%] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Project</th>
-              {showTier && <th className="sticky top-0 z-20 w-[72px] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
-              {!campusLocked && <th className="sticky top-0 z-20 w-[16%] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
-              <th className="sticky top-0 z-20 overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Signal</th>
-              {showDate && <th className="sticky top-0 z-20 w-[88px] overflow-hidden truncate border-b border-line-strong bg-bg px-2 text-right font-medium">Date</th>}
-              {showVerified && <th className="sticky top-0 z-20 w-[76px] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
+              <th className="sticky top-0 z-20 w-8 overflow-hidden border-b border-line-strong bg-bg px-2 font-medium" />
+              <th className="sticky top-0 z-20 w-[30%] overflow-hidden border-b border-line-strong bg-bg px-2 font-medium">Project</th>
+              {showTier && <th className="sticky top-0 z-20 w-[72px] overflow-hidden border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
+              {!campusLocked && <th className="sticky top-0 z-20 w-[16%] overflow-hidden border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
+              <th className="sticky top-0 z-20 overflow-hidden border-b border-line-strong bg-bg px-2 font-medium">Signal</th>
+              {showDate && <th className="sticky top-0 z-20 w-[88px] overflow-hidden border-b border-line-strong bg-bg px-2 text-right font-medium">Date</th>}
+              {showVerified && <th className="sticky top-0 z-20 w-[76px] overflow-hidden border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
             </tr>
           </thead>
           <tbody>
@@ -499,7 +499,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     <td className={`${pad} px-2`}>
                       <span className="flex min-w-0 items-center gap-2">
                         <AvatarStack people={row.people} />
-                        <span className="min-w-0 truncate font-medium text-fg">{plainText(row.name) || <Empty />}</span>
+                        <span className={`min-w-0 ${WRAP_2} font-medium text-fg`}>{plainText(row.name) || <Empty />}</span>
                         {campusLocked && !showTier && row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}
                         {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-link">Verified</span> : null}
                       </span>
@@ -532,13 +532,13 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                       </td>
                     )}
                     {!campusLocked && (
-                      <td className={`${pad} truncate px-2`}>
+                      <td className={`${pad} ${WRAP_FULL} px-2`}>
                         {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{plainText(row.campus)}</Link> : plainText(row.campus) || <Empty />}
                       </td>
                     )}
                     <td className={`${pad} px-2`}>
                       {text ? (
-                        <span className="clamp-2 max-h-10 overflow-hidden text-[14px] leading-5 text-fg" title={plainText(row.full ?? text)}>{ellipsisAtBoundary(plainText(text) || "", 140)}</span>
+                        <span className={`max-h-10 overflow-hidden ${WRAP_2} text-[14px] leading-5 text-fg`} title={plainText(row.full ?? text)}>{ellipsisAtBoundary(plainText(text) || "", 140)}</span>
                       ) : (
                         <span className="text-[14px] text-fg-2">No signal yet</span>
                       )}

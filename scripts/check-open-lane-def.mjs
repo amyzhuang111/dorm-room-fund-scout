@@ -48,6 +48,27 @@ const expectedRaw = execFileSync(
 ).trim();
 const expected = JSON.parse(expectedRaw.split("\n").filter(Boolean).at(-1));
 
+// Prefer the live BASE corpus (same JSON the home figure hydrates from). Fall back to public/data.
+async function loadLiveJson(rel) {
+  try {
+    const res = await fetch(`${BASE}${rel}`, { headers: EXTRA.extraHTTPHeaders || {} });
+    if (!res.ok) throw new Error(String(res.status));
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+const liveFounders = await loadLiveJson("/data/founders.json");
+const liveDir = await loadLiveJson("/data/sample-directory.json");
+const tmpDir = fs.mkdtempSync(path.join("/tmp", "open-lane-"));
+const foundersPath = liveFounders
+  ? path.join(tmpDir, "founders.json")
+  : "public/data/founders.json";
+const dirPath = liveDir
+  ? path.join(tmpDir, "sample-directory.json")
+  : "public/data/sample-directory.json";
+if (liveFounders) fs.writeFileSync(foundersPath, JSON.stringify(liveFounders));
+if (liveDir) fs.writeFileSync(dirPath, JSON.stringify(liveDir));
 const corpusRaw = execFileSync(
   process.execPath,
   [
@@ -56,14 +77,15 @@ const corpusRaw = execFileSync(
     `
 import fs from "node:fs";
 import { buildOpenLaneShell, founderIsOpenLane } from "./lib/domain/open-lane.ts";
-const founders = JSON.parse(fs.readFileSync("public/data/founders.json","utf8"));
-const dir = JSON.parse(fs.readFileSync("public/data/sample-directory.json","utf8"));
+const founders = JSON.parse(fs.readFileSync(process.env.FOUNDERS_PATH,"utf8"));
+const dir = JSON.parse(fs.readFileSync(process.env.DIR_PATH,"utf8"));
 const cards = Array.isArray(dir) ? dir : (dir.cards || []);
 const investable = new Set(cards.map((c) => c.id).filter(Boolean));
 const shell = buildOpenLaneShell(founders, investable);
 const open = founders.filter((f) => founderIsOpenLane(f, investable));
 const outside = open.filter((f) => !f.companyId || !investable.has(f.companyId));
 console.log(JSON.stringify({
+  source: process.env.CORPUS_SOURCE,
   investableCompanies: investable.size,
   openLaneCount: shell.count,
   strong: shell.strong,
@@ -73,9 +95,19 @@ console.log(JSON.stringify({
 }));
 `,
   ],
-  { encoding: "utf8", cwd: process.cwd() },
+  {
+    encoding: "utf8",
+    cwd: process.cwd(),
+    env: {
+      ...process.env,
+      FOUNDERS_PATH: foundersPath,
+      DIR_PATH: dirPath,
+      CORPUS_SOURCE: liveFounders && liveDir ? "live-base" : "public-data",
+    },
+  },
 ).trim();
 const corpus = JSON.parse(corpusRaw.split("\n").filter(Boolean).at(-1));
+pass(`corpus: open-lane computed from ${corpus.source} (investable=${corpus.investableCompanies}, open=${corpus.openLaneCount})`);
 
 const report = {
   ok: true,

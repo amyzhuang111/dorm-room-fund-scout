@@ -14,6 +14,7 @@ import {
   founderIsOpenLane,
   type OpenLaneShell,
 } from "@/lib/domain/open-lane";
+import { WRAP_2, WRAP_FULL } from "@/lib/display/ellipsis";
 
 const DECK_PAGE = 12;
 const STRONG = new Set(["funding", "launch", "accelerator", "award"]);
@@ -163,16 +164,16 @@ export function MobileFounderDeck({
                     <CampusSeal label={founder.campus} size="lg" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-founder-name="">
+                    <h3 className={`${WRAP_2} text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]`} data-founder-name="">
                       {founder.name}
                     </h3>
                     <p className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]" data-founder-campus-company="">
                       {founder.companyId ? (
                         <LogoMark name={founder.company || "Company"} logoUrl={`/company-logos/${founder.companyId}.webp`} size={14} />
                       ) : null}
-                      <span className="truncate font-semibold text-[color:var(--fg,#0B0E17)]">{founder.company || "Company missing"}</span>
+                      <span className={`${WRAP_FULL} font-semibold text-[color:var(--fg,#0B0E17)]`}>{founder.company || "Company missing"}</span>
                     </p>
-                    <p className="mt-0.5 truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                    <p className={`mt-0.5 ${WRAP_FULL} font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]`}>
                       {founder.campus}
                       {founder.gradYear != null ? ` · ${founder.gradYear}` : ""}
                       {founder.sector ? ` · ${founder.sector}` : ""}
@@ -331,11 +332,11 @@ export function MobileFounderPeek({
               data-founder-peek-chip=""
             >
               <CampusSeal label={founder.campus} size="sm" />
-              <span className="min-w-0 truncate leading-none">
-                <span className="block truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]" data-founder-name="">
+              <span className={`min-w-0 ${WRAP_2} leading-none`}>
+                <span className={`block ${WRAP_FULL} text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]`} data-founder-name="">
                   {founder.name}
                 </span>
-                <span className="mt-0.5 block truncate font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
+                <span className={`mt-0.5 block ${WRAP_FULL} font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]`}>
                   {chip ? chip.label : founder.company || founder.campus || "Signal"}
                 </span>
               </span>
@@ -380,12 +381,12 @@ export function MobileCampusSegments({
       </p>
       <div className="relative" data-fold-campus-fade="">
       <ol
-        className="flex gap-1.5 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(90deg,#000_0%,#000_calc(100%-1.25rem),transparent)]"
+        className="flex gap-1.5 overflow-x-auto scroll-smooth pr-14 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_proximity]"
         data-fold-peak-campus-rank-mobile=""
         role="listbox"
         aria-label="Filter campus"
       >
-        <li className="shrink-0">
+        <li className="shrink-0 [scroll-snap-align:start]">
           <button
             type="button"
             role="option"
@@ -403,9 +404,16 @@ export function MobileCampusSegments({
         </li>
         {top.map((campus, i) => {
           const active = selectedId === campus.id;
-          const short = campus.name.replace(/^University of (?:California, )?/, "").replace(/ University$/, "");
+          const short = (() => {
+            const base = campus.name.replace(/^University of (?:California, )?/, "").replace(/ University$/, "");
+            // Fit whole chips at 390: abbreviate the longest open-lane labels.
+            if (/northwestern/i.test(base)) return "NW";
+            if (/boston/i.test(base)) return "BU";
+            if (/columbia/i.test(base)) return "Columbia";
+            return base;
+          })();
           return (
-            <li key={campus.id} className="shrink-0" data-fold-peak-campus-item="">
+            <li key={campus.id} className="shrink-0 [scroll-snap-align:start]" data-fold-peak-campus-item="">
               <button
                 type="button"
                 role="option"
@@ -431,6 +439,11 @@ export function MobileCampusSegments({
           );
         })}
       </ol>
+        <div
+          aria-hidden
+          data-fold-campus-fade-edge=""
+          className="pointer-events-none absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-[color:var(--bg,#FFFFFF)] from-35% via-[color:var(--bg,#FFFFFF)]/85 to-transparent"
+        />
       </div>
     </div>
   );

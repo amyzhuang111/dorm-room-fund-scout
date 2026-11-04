@@ -7,7 +7,7 @@ import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
-import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
+import { ellipsisAtBoundary, WRAP_2, WRAP_FULL } from "@/lib/display/ellipsis";
 import { campusInk } from "@/lib/display/campus-ink";
 import { directoryCardSubtitle, type StatusId } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
@@ -837,7 +837,7 @@ export function SampleInstrumentBrowse({
                 </span>
               </button>
               <div className="flex items-baseline justify-between gap-2 px-0.5" data-showing-count="">
-                <p className="min-w-0 truncate font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <p className={`min-w-0 ${WRAP_FULL} font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]`}>
                   Showing{" "}
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{boardCompanies.length.toLocaleString("en-US")}</span>
                   {" of "}
@@ -1021,7 +1021,7 @@ export function SampleInstrumentBrowse({
                             </span>
                             <CampusSeal label={row.label} size="md" />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className={`${WRAP_2} text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]`}>{row.label}</p>
                               <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" companies"}
@@ -1117,12 +1117,12 @@ export function SampleInstrumentBrowse({
                             <div className="min-w-0 flex-1">
                               <Link
                                 href={`/startup/${card.id}`}
-                                className="block truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)]"
+                                className={`block ${WRAP_2} text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)]`}
                               >
                                 {card.name}
                               </Link>
                               <p className="mt-0.5 flex flex-wrap items-center gap-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
-                                <span className="truncate">{card.school || "Campus missing"}</span>
+                                <span className={WRAP_FULL}>{card.school || "Campus missing"}</span>
                                 {card.signalLabel ? (
                                   <span className="inline-flex h-[16px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1 font-semibold text-[color:var(--cobalt,#2F4FD8)]">
                                     {card.signalLabel}
@@ -1143,7 +1143,7 @@ export function SampleInstrumentBrowse({
                             </span>
                             <CampusSeal label={row.label} size="sm" />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className={`${WRAP_2} text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]`}>{row.label}</p>
                               <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" cos"}
@@ -1447,7 +1447,7 @@ function OverlayCountBlock({
                   active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""
                 }`}
               >
-                <span className={`truncate font-medium ${active ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>{row.label}</span>
+                <span className={`${WRAP_FULL} font-medium ${active ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>{row.label}</span>
                 <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.count.toLocaleString("en-US")}</span>
               </button>
             </li>
@@ -1528,7 +1528,7 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              ? `${WRAP_2} text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5`
               : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
@@ -1548,7 +1548,7 @@ function LedgerRow({
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "flex flex-wrap gap-x-1" : "whitespace-nowrap overflow-hidden text-ellipsis"}`} data-card-facts="">
+          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "flex flex-wrap gap-x-1" : "flex flex-wrap gap-x-1 gap-y-0.5"}`} data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>
@@ -1583,7 +1583,7 @@ function LedgerRow({
                 }}
               >
                 in
-                <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
+                <span className={`max-w-[7rem] ${WRAP_2} font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]`}>{founder.name}</span>
               </button>
             ))}
           </span>

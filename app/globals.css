@@ -875,7 +875,7 @@ html[data-sample="halflight"] body {
     font-weight: 400;
     color: var(--fg-3, #5C647A);
   }
-  .sample-paper .campus-index-row .campus-name { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sample-paper .campus-index-row .campus-name { font-size: 15px; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: break-word; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
   .sample-paper .campus-index-row .campus-country {
     display: block;
     grid-column: auto;
@@ -1140,19 +1140,26 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-fund {
     max-width: 11rem;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
   [data-corpus-cards] .c-n {
     font-size: 14px;
   }
-  /* r48: single-line company names — avoids wrap self-collisions in card rows */
+  /* 2-line company names — word boundary wrap, no CSS ellipsis mid-word cut */
   [data-corpus-cards] .c-a {
-    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     min-width: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 }
 
@@ -1405,7 +1412,8 @@ details:not([open]) > :not(summary) {
 [data-fold-sheet-founders] [data-founder-why],
 [data-fold-sheet-founders] [data-founder-meta] {
   display: -webkit-box !important;
-  -webkit-line-clamp: 1 !important;
+  -webkit-line-clamp: 2 !important;
+  text-overflow: clip !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
 }
@@ -1469,16 +1477,22 @@ details:not([open]) > :not(summary) {
   margin-top: 0.15rem !important;
   padding-top: 0.15rem !important;
   max-height: none !important;
-  overflow: hidden !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
   border-top-width: 1px !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+[data-fold-sheet-peak] [data-fold-peak-campus-rank-mobile]::-webkit-scrollbar { display: none; }
 [data-fold-sheet-peak] [data-fold-peak-campus-rank-mobile] li {
-  min-width: 0;
+  min-width: auto !important;
+  flex-shrink: 0 !important;
 }
 [data-fold-sheet-peak] [data-fold-peak-campus-label] {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 3.25rem !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  white-space: nowrap !important;
 }
 
 
@@ -1620,7 +1634,8 @@ details:not([open]) > :not(summary) {
 [data-fold-sheet-founders] [data-founder-signal],
 [data-fold-sheet-founders] [data-founder-campus] {
   display: -webkit-box !important;
-  -webkit-line-clamp: 1 !important;
+  -webkit-line-clamp: 2 !important;
+  text-overflow: clip !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
   font-size: 12px !important;
@@ -1735,10 +1750,14 @@ details:not([open]) > :not(summary) {
   margin-top: 8px !important;
   font-size: 11px !important;
   line-height: 1.25 !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  text-overflow: clip !important;
   max-width: 100% !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow-wrap: anywhere !important;
 }
 [data-fold-sheet-founders] [data-why-worth] {
   margin-top: 8px !important;
@@ -2197,5 +2216,54 @@ html:has([data-networks-cream]) [data-site-nav] {
   }
   [data-projects-cards] [data-project-card] {
     scroll-margin-bottom: 0.5rem;
+  }
+}
+
+
+
+/* Word-boundary wraps — never text-overflow:ellipsis (mid-word cut). */
+.wrap-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  /* Keep line boxes from overlapping (check-collisions uses getClientRects). */
+  line-height: 1.5;
+}
+.wrap-full {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Mid-word clip gate: never apply CSS text-overflow ellipsis on visible copy. */
+[data-founder-name],
+[data-founder-cohort],
+[data-project-card] [data-project-meta],
+[data-card-facts],
+[data-showing-count] p,
+[data-corpus-cards] .c-a,
+[data-corpus-cards] .c-m,
+[data-corpus-cards] .c-fund,
+[data-fold-peak-campus-label] {
+  text-overflow: clip !important;
+}
+
+/* Founders cards: keep 44px taps but kill the empty band between name and Verified. */
+@media (max-width: 639px) {
+  [data-project-card] [data-project-meta] {
+    margin-top: -14px;
+  }
+  [data-project-card] [data-project-meta] a[href],
+  [data-project-card] [data-project-meta] button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding-block: 0.35rem;
   }
 }

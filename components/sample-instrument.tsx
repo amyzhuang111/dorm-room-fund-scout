@@ -26,6 +26,7 @@ import {
   type StatusId,
 } from "@/lib/domain/sample-facets";
 import corpusSnapshot from "../data/corpus-snapshot.json";
+import { WRAP_2, WRAP_FULL } from "@/lib/display/ellipsis";
 
 export { preferLogoCompanies };
 
@@ -109,7 +110,7 @@ export function ScoutSignalPodium({
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="flex min-w-0 items-center gap-2">
                     <CampusSeal label={row.label} size={i === 0 ? "md" : "sm"} />
-                    <span className={`min-w-0 truncate font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
+                    <span className={`min-w-0 ${WRAP_2} font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
                   </span>
                   <span className={`shrink-0 font-mono font-bold tabular-nums text-[color:var(--ember,#D96B1C)] ${i < 3 ? "text-[18px]" : "text-[14px]"}`}>{row.founders.toLocaleString("en-US")}</span>
                 </div>
@@ -179,10 +180,10 @@ export function ScoutEndColophon({
         </p>
         <div className="mt-3">
           <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Named on slice</p>
-          <a href={namedHref} className="mt-1 block truncate text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+          <a href={namedHref} className={`mt-1 block ${WRAP_2} text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline`}>
             {namedCompany}
           </a>
-          <p className="mt-0.5 truncate font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">{namedMeta}</p>
+          <p className={`mt-0.5 ${WRAP_FULL} font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]`}>{namedMeta}</p>
         </div>
       </div>
       {nextPrograms.length ? (
@@ -194,7 +195,7 @@ export function ScoutEndColophon({
                 <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
+                <span className={`min-w-0 flex-1 ${WRAP_2} text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]`}>{prog.label}</span>
                 <span className="shrink-0 font-mono text-[15px] font-bold text-[color:var(--ember,#D96B1C)]">{prog.count.toLocaleString("en-US")}</span>
               </li>
             ))}
@@ -250,7 +251,7 @@ export function ScoutAtlasPlate({
             {rows.map((row) => (
               <li key={row.rank + row.label} className="flex items-baseline gap-2.5 py-2.5">
                 <span className="w-5 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.rank}</span>
-                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</span>
+                <span className={`min-w-0 flex-1 ${WRAP_2} text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]`}>{row.label}</span>
                 <span className="shrink-0 font-mono text-[15px] font-bold tabular-nums text-[color:var(--fg,#0B0E17)]">{row.value}</span>
                 {row.unit ? <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">{row.unit}</span> : null}
               </li>
@@ -384,7 +385,7 @@ export function LogoPill({
           {initials}
         </span>
       )}
-      <span className="min-w-0 truncate">{name}</span>
+      <span className={`min-w-0 ${WRAP_FULL}`}>{name}</span>
     </Link>
   );
 }
@@ -461,7 +462,7 @@ function FacetRow({
       />
       {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: dot }} aria-hidden /> : null}
       {icon && !dot ? <span className="font-mono text-[9px] leading-none text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>{icon}</span> : null}
-      <span className={`min-w-0 flex-1 truncate text-[11px] ${active ? "font-semibold text-[color:var(--fg,#0B0E17)]" : emphasis ? "font-semibold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>
+      <span className={`min-w-0 flex-1 ${WRAP_FULL} text-[11px] ${active ? "font-semibold text-[color:var(--fg,#0B0E17)]" : emphasis ? "font-semibold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>
         {label}
       </span>
       {count != null ? (
@@ -731,8 +732,8 @@ export function FacetRail({
                   >
                     <LogoMark name={company.name} logoUrl={company.logoUrl ?? null} size={18} />
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[12px] font-semibold text-[color:var(--fg,#0B0E17)]">{company.name}</span>
-                      <span className="block truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                      <span className={`block ${WRAP_2} text-[12px] font-semibold text-[color:var(--fg,#0B0E17)]`}>{company.name}</span>
+                      <span className={`block ${WRAP_FULL} font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]`}>
                         {[company.school, company.sector].filter(Boolean).join(" · ") || "Company"}
                       </span>
                     </span>
@@ -1577,7 +1578,7 @@ export function BarRow({
     <>
       <div className="flex items-baseline gap-1.5 font-mono text-[11px]">
         <span className={`${COUNT} w-4 shrink-0 text-right text-[11px] tracking-tight`}>{String(rank).padStart(2, "0")}</span>
-        <span className="min-w-0 flex-1 truncate font-sans text-[color:var(--fg,#0B0E17)]">{label}</span>
+        <span className={`min-w-0 flex-1 ${WRAP_FULL} font-sans text-[color:var(--fg,#0B0E17)]`}>{label}</span>
         <span className={`${COUNT} shrink-0 text-[11px]`}>{value.toLocaleString("en-US")}</span>
       </div>
       <div className="ml-5 mt-0.5 h-1.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
@@ -1608,7 +1609,7 @@ export function SignalFeedRow({ company, index }: { company: FacetCompany; index
       <span className={`${COUNT} mt-0.5 w-5 shrink-0 text-right text-[12px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
       <LogoMark name={company.name} logoUrl={company.logoUrl} size={22} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{company.name}</span>
+        <span className={`block ${WRAP_2} text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]`}>{company.name}</span>
         <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
           <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold tracking-[0.02em] text-[color:var(--cobalt,#2F4FD8)]">{kind}</span>
           {date ? (
@@ -1724,7 +1725,7 @@ export function IntelligenceBoards({
                 <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden title={item.label}>
                   {companyInitials(item.label).slice(0, 2)}
                 </span>
-                <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg,#0B0E17)]">{item.label}</span>
+                <span className={`min-w-0 flex-1 ${WRAP_FULL} font-medium text-[color:var(--fg,#0B0E17)]`}>{item.label}</span>
                 <span
                   className={`${COUNT} shrink-0 text-[11px]`}
                   {...(isYcProgramLabel(item.label) && item.count === YC_MEMBERSHIP_EXPECTED
@@ -1778,7 +1779,7 @@ export function IntelligenceBoards({
           <li key={item.id}>
             <Link href={`/companies?sector=${encodeURIComponent(item.id)}`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#D96B1C)]">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: sectorDot(item.id) }} aria-hidden />
-              <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{item.label}</span>
+              <span className={`min-w-0 flex-1 ${WRAP_FULL} text-[color:var(--fg,#0B0E17)]`}>{item.label}</span>
               <span className={`${COUNT} shrink-0`}>{item.count.toLocaleString("en-US")}</span>
             </Link>
           </li>
@@ -2024,8 +2025,8 @@ export function MobileFilterDock({
       : "block whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]";
   const captionCls =
     tone === "ember"
-      ? "mt-0.5 block truncate text-[13px] font-semibold text-white"
-      : "mt-0.5 block truncate text-[13px] font-semibold text-[color:var(--fg,#0B0E17)]";
+      ? `mt-0.5 block ${WRAP_2} text-[13px] font-semibold text-white`
+      : `mt-0.5 block ${WRAP_2} text-[13px] font-semibold text-[color:var(--fg,#0B0E17)]`;
   const countCls =
     tone === "ember"
       ? "shrink-0 font-mono text-[12px] font-bold tabular-nums text-white"
@@ -2085,7 +2086,7 @@ export function DispatchWire({
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[9px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
                   {initials}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg,#0B0E17)]">{company.name}</span>
+                <span className={`min-w-0 flex-1 ${WRAP_2} text-[12px] font-medium text-[color:var(--fg,#0B0E17)]`}>{company.name}</span>
                 <span className={`${COUNT} shrink-0 text-[11px]`}>{company.signals.toLocaleString("en-US")}</span>
               </Link>
             </li>
