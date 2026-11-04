@@ -1,0 +1,179 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Companies hidden as 'unverified recency' that PASS the project's own recency gate on today's data (a founder is a current student / recent grad / grad year >= 2023), and were each listed by a university entrepreneurship program with student founders. Their founder records arrived after the 2026-11-02 accuracy pass, so the gate never re-ran for them.",
+  "restore": [
+    {
+      "id": "proj_3woB6XmvNt-D",
+      "name": "Air Right Exchange of America (AREA)",
+      "why": "listed by Harvard Innovation Labs \u2014 Ventures; founder(s) Joey Ravenna (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_fsQjPEYDGHyg",
+      "name": "Anvil",
+      "why": "listed by Cornell eLab companies; founder(s) Paul Trusov (current_student, 2029, basis verified)"
+    },
+    {
+      "id": "proj_vCrlH-THtWEj",
+      "name": "Asian Aunties",
+      "why": "listed by Cornell eLab companies; founder(s) Eunice Lee (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_8QptouD7TW2O",
+      "name": "A\u00ebr",
+      "why": "listed by Cornell eLab companies; founder(s) Shirin Ghorbani (current_student, 2028, basis verified), Eva Ho (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_ReS4dQRgNRJI",
+      "name": "Brand Muse",
+      "why": "listed by Harvard Innovation Labs \u2014 Ventures; founder(s) Miles Francis (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_rhjtVIe5cvYf",
+      "name": "CommuniCare",
+      "why": "listed by Cornell eLab companies; founder(s) Samhita Korukonda (current_student, 2027, basis verified), Yuvna Musuku (current_student, 2027, basis verified), Ralph Ho (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_x2wZkMIz6sum",
+      "name": "CONTEXTOS",
+      "why": "listed by Cornell eLab companies; founder(s) Hadi Saif (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_SWJpJ09xlk5m",
+      "name": "Dalia",
+      "why": "listed by Cornell eLab companies; founder(s) Eashan Vagish (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_sODK11mmBRw3",
+      "name": "Diwan Coffee",
+      "why": "listed by Cornell eLab companies; founder(s) Rayaan Lodi (current_student, 2028, basis verified), Noor Sattar (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_x2kgZvOQo8xj",
+      "name": "DRVN",
+      "why": "listed by Cornell eLab companies; founder(s) Howard Zheng (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_AZDpicSbB46K",
+      "name": "ekimul",
+      "why": "listed by Cornell eLab companies; founder(s) Sheng Cui (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_YSw9qjZjzX5p",
+      "name": "Evergreen Bites",
+      "why": "listed by Cornell eLab companies; founder(s) Darian Pan (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_Xy-PsR-qFzMU",
+      "name": "Fandia",
+      "why": "listed by Cornell eLab companies; founder(s) Alvin Fang (current_student, 2027, basis verified), Sheng Cui (current_student, 2027, basis verified), Taikary Jiang (current_student, 2027, basis verified), Michael Zhong (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_Oq4beCCZicO2",
+      "name": "FirmAtlas",
+      "why": "listed by Cornell eLab companies; founder(s) Peter Karacs (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_2_H08FWSha6r",
+      "name": "Gild",
+      "why": "listed by Cornell eLab companies; founder(s) Adriana Burnett (current_student, 2027, basis verified), Sarah Van Horn (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_zC_rO4tIHI-R",
+      "name": "Global Playground",
+      "why": "listed by Cornell eLab companies; founder(s) Danish Hussain Yar (current_student, 2028, basis verified), Yalda Hussain Yar (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_do0V01OkG7je",
+      "name": "HailIQ",
+      "why": "listed by Cornell eLab companies; founder(s) Noel Blackwell (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_lMu0v53umj7T",
+      "name": "IronThreads",
+      "why": "listed by Cornell eLab companies; founder(s) Daniel Aranda (current_student, 2029, basis verified), Charlie De Sena (current_student, 2030, basis verified)"
+    },
+    {
+      "id": "proj_fDTcTDLnOEQ9",
+      "name": "ItsLife",
+      "why": "listed by Cornell eLab companies; founder(s) Xuehao Zang (current_student, 2029, basis verified)"
+    },
+    {
+      "id": "proj_3xj_bzQw0h_X",
+      "name": "lilac",
+      "why": "listed by Harvard Innovation Labs \u2014 Ventures; founder(s) Grace Wu (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_wxpyiFvZSbXr",
+      "name": "Memento",
+      "why": "listed by Cornell eLab companies; founder(s) Grace Chen (current_student, 2028, basis verified), Matias Riveros-Amado (current_student, 2029, basis verified), Isabella Salducco (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_Y0Mb3Qtx2LRq",
+      "name": "Mino",
+      "why": "listed by Cornell eLab companies; founder(s) Hoan Le (current_student, 2027, basis verified), Min Namkoong (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_KfXCj9sLSyjt",
+      "name": "N\u00fcey",
+      "why": "listed by Cornell eLab companies; founder(s) Valeria Ortiz (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_XghMm8fwDAXO",
+      "name": "Project EIA",
+      "why": "listed by Cornell eLab companies; founder(s) Tim Wurst (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_vjwcsTh_IIyR",
+      "name": "Redtail Studios",
+      "why": "listed by Cornell eLab companies; founder(s) Santiago Fernandez (current_student, 2027, basis verified), Alejandro Cercio (current_student, 2027, basis verified), Mauricio SIlba (current_student, 2027, basis verified), Amritha Parimala (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_wHTvbMzEpile",
+      "name": "Reharmonize",
+      "why": "listed by Cornell eLab companies; founder(s) Ethan Tai (current_student, 2029, basis verified)"
+    },
+    {
+      "id": "proj_pub_b66cfe4659b391dd77dd",
+      "name": "Serv Technologies Group",
+      "why": "listed by Duke Startup Showcase page; founder(s) Jasper Svenson (recent_grad, 2026, basis inferred); WEAKEST: recency inferred, not verified"
+    },
+    {
+      "id": "proj_cZ7WA4zGDIFj",
+      "name": "Silo Labs",
+      "why": "listed by Cornell eLab companies; founder(s) Yaron Klein (current_student, 2027, basis verified), Sahil Desai (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_5xEomR72nOJ4",
+      "name": "STRIDE RUNNING COMPANY",
+      "why": "listed by Cornell eLab companies; founder(s) Brooke Wilcox (current_student, 2028, basis verified), Kate Stiens (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_Af5iPwBancR1",
+      "name": "Syndeo",
+      "why": "listed by Cornell eLab companies; founder(s) Jackson Hutchison (current_student, 2029, basis verified)"
+    },
+    {
+      "id": "proj_n7Vi0xRsetBk",
+      "name": "Thrive Time",
+      "why": "listed by Cornell eLab companies; founder(s) Justin Bertelsen (current_student, 2027, basis verified)"
+    },
+    {
+      "id": "proj_xRR6rn1cyrGe",
+      "name": "Vitamin VVV",
+      "why": "listed by Cornell eLab companies; founder(s) Viki Ding (current_student, 2029, basis verified)"
+    },
+    {
+      "id": "proj_kuOoeuf9aoMt",
+      "name": "Zana",
+      "why": "listed by Cornell eLab companies; founder(s) Ezana Kavuma (current_student, 2028, basis verified)"
+    },
+    {
+      "id": "proj_NCW5Uu0JoHEl",
+      "name": "Zybit",
+      "why": "listed by Cornell eLab companies; founder(s) Jad Alsouss (current_student, 2029, basis verified), Asad Rizvi (current_student, 2029, basis verified), Gabe Meredith (current_student, 2029, basis verified)"
+    }
+  ]
+}
