@@ -19,3 +19,7 @@ assert.match(peopleCorpusToCsv(matches),/elab-welcomes-32-student-startups/);
 assert.match(corpusToCsv(projects.slice(0,1)),/source_urls/);
 assert.match(peopleCorpusToCsv([{...matches[0],name:'=HYPERLINK("bad")'}]),/'=HYPERLINK/);
 console.log(JSON.stringify({projects:projects.length,scout:scout.length,people:people.length,knownYears:people.filter(p=>p.graduationYear!=null).length,checkedYears:people.filter(p=>p.yearChecked).length}));
+
+const roleEvidence=people.find(p=>p.id==='person_97kSwtX7_f2s');
+assert.ok(roleEvidence?.sourceUrls.includes('https://devpost.com/software/orca-net'),'Person must retain the evidence cited by their project-role claim');
+assert.equal(roleEvidence?.yearSourceUrl,null,'An enrollment source is not a class-year source when no year is known');
