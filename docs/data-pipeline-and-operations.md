@@ -391,6 +391,27 @@ artifacts ("Gabi Wang, Kellogg '26"), initiatives/foundations/LLCs/descriptions,
 4 duplicates of vetted companies, and anyone with an older-alumni or faculty
 signal.
 
+**Fourth batch (2026-11-04, listing text, 70 companies):** after batch c and the other
+session's class-year import, re-running the gate on the fully built database
+passes only 1 company (the easy wins are used up: 3,426 hidden companies have no
+founder on record, 408 have founders without known years). Batch d
+(`data/exports/restore-reviewed-companies-2026-11-04-d.json`) takes the hidden
+companies whose **own listing text states student status or a class year for the
+founders**: UndergradVC competition winners ("Aubrey Zoodsma '26"), other
+competition results (undergraduate/Student Division/MBA '26 tracks), Brown B-Lab
+2026 teams, Duke Startup Showcase 2026, the 2026 NYU Entrepreneurs Challenge,
+VentureCat 2026, the 2025 eLab Summer Accelerator ("undergraduate entrepreneurs"),
+CMU Project Olympus Spark Grants (the record prints the rule "have a current
+student founder/co-founder") and McGinnis undergraduate-track placements. This is
+per-founder text, stronger than batch c, but still not a person record. Class year
+2023 or later meets the rule's threshold. **Excluded on purpose:** the Penn
+Health-Tech entries (their cards say the page does *not* name a student founder, a
+false positive of any keyword search), CMU VentureBridge as a program (it lists
+Analogical Engines, whose founders include a CMU professor), NUS Furnace and UNC
+EVC (eligibility not verified), the two third-party "student-founded" tech-map
+flags, person-name artifacts, initiative/entity names, a generic placeholder name,
+and duplicates of vetted companies. Vetted 2,294 -> 2,364.
+
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
 `unverified recency` now passed the gate. Each was listed by a university
 entrepreneurship program with student founders (30 Cornell eLab, 3 Harvard
