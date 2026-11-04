@@ -740,29 +740,31 @@ export function TileGlobe({
               {" signaled"}
             </span>
           ) : null}
-          <span className="hidden lg:inline">
-            <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" schools with a pin"}
-          </span>
-          {campusesWithFounders > 0 ? (
-            <Link href="/campuses" className="pointer-events-auto hidden hover:underline lg:inline">
-              <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
-              {" campuses with promoted founders"}
-            </Link>
-          ) : null}
-          {/* Compact founder counts (checks need data-count + data-founder-count-note). Desk only — phone keeps the short pill. */}
-          <Link href="/founders" className="pointer-events-auto hidden hover:underline lg:inline" data-founder-count-note="">
-            <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founders on those companies"}
-            {foundersIndexed > 0 ? (
-              <>
-                {" · "}
-                <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-                {" in the full index"}
-              </>
+          <span className="hidden lg:contents" data-fold-counts-desk="">
+            <span>
+              <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
+              {" schools with a pin"}
+            </span>
+            {campusesWithFounders > 0 ? (
+              <Link href="/campuses" className="pointer-events-auto hover:underline">
+                <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
+                {" campuses with promoted founders"}
+              </Link>
             ) : null}
-          </Link>
-          {dataThrough ? <span className="hidden text-[color:var(--fg-3,#5C647A)] lg:inline">Updated {absoluteDate(dataThrough)}</span> : null}
+            {/* Compact founder counts (checks need data-count + data-founder-count-note). Desk only — phone keeps the short pill. */}
+            <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
+              <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
+              {" founders on those companies"}
+              {foundersIndexed > 0 ? (
+                <>
+                  {" · "}
+                  <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
+                  {" in the full index"}
+                </>
+              ) : null}
+            </Link>
+            {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
+          </span>
         </p>
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>

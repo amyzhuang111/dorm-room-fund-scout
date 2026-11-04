@@ -2005,10 +2005,18 @@ html:has([data-networks-cream]) [data-site-nav] {
   button, a[href], [role="button"], [role="tab"] {
     min-width: 44px !important;
   }
-  /* inline anchors ignore min-height unless they participate in flex/block formatting */
-  a[href]:not(.block):not(.flex):not(.inline-flex):not(.grid) {
+  /* inline anchors ignore min-height unless they participate in flex/block formatting.
+     Respect .hidden — otherwise display:inline-flex !important un-hides desk-only links. */
+  a[href]:not(.block):not(.flex):not(.inline-flex):not(.grid):not(.hidden) {
     display: inline-flex !important;
     align-items: center;
+  }
+  /* Fold counts pill is a dense meta row above map modes, not a 44px tap stack. */
+  [data-fold-counts] a[href] {
+    min-height: 0 !important;
+    min-width: 0 !important;
+    display: inline !important;
+    align-items: baseline;
   }
   input, textarea, select {
     min-height: 44px !important;
