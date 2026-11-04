@@ -6,9 +6,9 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/copy-maplibre.mjs && next dev",
     "build": "next build --webpack",
-    "prebuild": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && node scripts/ingest/reconcile-corpus-2026-11-04.mjs && tsx scripts/data/apply-recovered-rows.ts && node scripts/ingest/import-verified-class-years-2026-11-04.mjs && tsx scripts/data/apply-reviewed-patches.ts && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts && tsx scripts/precompute-founder-table.ts",
+    "prebuild": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && node scripts/ingest/reconcile-corpus-2026-11-04.mjs && tsx scripts/data/apply-recovered-rows.ts && node scripts/ingest/import-verified-class-years-2026-11-04.mjs && tsx scripts/data/apply-reviewed-patches.ts && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts && tsx scripts/precompute-founder-table.ts && node scripts/copy-maplibre.mjs",
     "start": "next start",
     "lint": "eslint",
     "enrich:apify-linkedin": "tsx scripts/enrich/apify-linkedin-lookup.ts",

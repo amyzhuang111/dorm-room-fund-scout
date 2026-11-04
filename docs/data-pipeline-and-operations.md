@@ -107,6 +107,29 @@ differs ("partial" in the promoted corpus), which changes the retrieval
 ranking the test asserts. It is a pre-existing failure, not caused by the
 recovery.
 
+### Guarding against it (three layers)
+
+1. **Automated check.** `.github/workflows/db-drop-guard.yml` runs
+   `scripts/audit/db-drop-guard.py` on every PR that touches the database. It
+   compares per-table row counts between the PR's database and the **current tip of
+   the base branch** and fails if any table lost more than max(25 rows, 1%). A
+   stale copy of the database shows up as a drop, which is exactly the #149 case
+   (tested against it: it flags affiliations, gate_results, people,
+   person_project_roles, projects, relationships, signals and snapshots). It counts
+   rows only, so it cannot tell a deliberate cleanup from an accident: a deliberate
+   one needs the label `allow-db-shrink` and a PR description that says what is
+   removed. The news-fetch job commits straight to `main` without a PR and is not
+   covered.
+2. **Make it blocking.** A check only warns unless it is required: Settings ->
+   Branches -> branch protection rule for `main` -> require status checks -> add
+   "DB drop guard". This is a repository setting for the owner to change.
+3. **Rules the other sessions read.** The sessions that caused this are AI agents
+   that read `AGENTS.md` (and `CLAUDE.md`, which includes it) at the start of every
+   session. It now has an explicit section: do not commit the database unless that
+   is the point of the PR, never resolve a conflict by keeping your own copy,
+   prefer data-as-code lists, run the guard before opening a database PR, and never
+   promote a branch without comparing databases.
+
 How to avoid repeating it:
 
 - **Decisions that are small, reviewed and repeatable should not live only in the
@@ -367,6 +390,27 @@ fellow, who is not a student. Excluded from this batch: person-name scrape
 artifacts ("Gabi Wang, Kellogg '26"), initiatives/foundations/LLCs/descriptions,
 4 duplicates of vetted companies, and anyone with an older-alumni or faculty
 signal.
+
+**Fourth batch (2026-11-04, listing text, 70 companies):** after batch c and the other
+session's class-year import, re-running the gate on the fully built database
+passes only 1 company (the easy wins are used up: 3,426 hidden companies have no
+founder on record, 408 have founders without known years). Batch d
+(`data/exports/restore-reviewed-companies-2026-11-04-d.json`) takes the hidden
+companies whose **own listing text states student status or a class year for the
+founders**: UndergradVC competition winners ("Aubrey Zoodsma '26"), other
+competition results (undergraduate/Student Division/MBA '26 tracks), Brown B-Lab
+2026 teams, Duke Startup Showcase 2026, the 2026 NYU Entrepreneurs Challenge,
+VentureCat 2026, the 2025 eLab Summer Accelerator ("undergraduate entrepreneurs"),
+CMU Project Olympus Spark Grants (the record prints the rule "have a current
+student founder/co-founder") and McGinnis undergraduate-track placements. This is
+per-founder text, stronger than batch c, but still not a person record. Class year
+2023 or later meets the rule's threshold. **Excluded on purpose:** the Penn
+Health-Tech entries (their cards say the page does *not* name a student founder, a
+false positive of any keyword search), CMU VentureBridge as a program (it lists
+Analogical Engines, whose founders include a CMU professor), NUS Furnace and UNC
+EVC (eligibility not verified), the two third-party "student-founded" tech-map
+flags, person-name artifacts, initiative/entity names, a generic placeholder name,
+and duplicates of vetted companies. Vetted 2,294 -> 2,364.
 
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
 `unverified recency` now passed the gate. Each was listed by a university

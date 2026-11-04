@@ -3,6 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ATLAS_COLORS,
   atlasConnectors,
+  anchorAtlasSelection,
+  atlasSummary,
   atlasHash,
   atlasLayout,
   type AtlasData,
@@ -31,8 +33,7 @@ export function NetworkAtlas() {
   const [lines, setLines] = useState(true),
     [list, setList] = useState(false),
     [page, setPage] = useState(0);
-  const [anchor, setAnchor] = useState({ x: 24, y: 24 }),
-    [nearby, setNearby] = useState<number[]>([]);
+  const [nearby, setNearby] = useState<number[]>([]);
   const canvas = useRef<HTMLCanvasElement>(null),
     host = useRef<HTMLDivElement>(null);
   const view = useRef<View>(initialView()),
@@ -43,13 +44,12 @@ export function NetworkAtlas() {
   const pinch = useRef(0);
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/network/atlas", {
-      signal: controller.signal,
-      cache: "no-store",
-    })
-      .then((r) => {
-        if (!r.ok) throw Error();
-        return r.json();
+    fetch("/data/network-atlas.json", { signal: controller.signal })
+      .then(async (r) => {
+        if (r.ok) return r.json();
+        const fallback = await fetch("/api/network/atlas", { signal: controller.signal });
+        if (!fallback.ok) throw Error();
+        return fallback.json();
       })
       .then((d) => {
         setData(d);
@@ -192,8 +192,6 @@ export function NetworkAtlas() {
   function choose(i: number) {
     setSelected(i);
     setNearby([]);
-    const p = projected.current.find((p) => p.i === i);
-    if (p) setAnchor({ x: p.x, y: p.y });
   }
   function focus(i: number) {
     host.current?.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -202,7 +200,6 @@ export function NetworkAtlas() {
     view.current.x = -positions[i].x * scale;
     view.current.y = -positions[i].y * scale;
     choose(i);
-    setAnchor({ x: size.current.w / 2, y: size.current.h / 2 });
   }
   useEffect(() => {
     const el = canvas.current,
@@ -281,7 +278,7 @@ export function NetworkAtlas() {
         roll = v.yaw * 0.35,
         rollCos = Math.cos(roll),
         rollSin = Math.sin(roll);
-      const screen = positions.map((p, i) => {
+      const screen = anchorAtlasSelection(positions.map((p, i) => {
         const z = -p.x * sin + p.z * cos;
         const x = p.x * cos + p.z * sin;
         const y = p.y * Math.cos(v.pitch) - z * Math.sin(v.pitch);
@@ -291,7 +288,7 @@ export function NetworkAtlas() {
           x: w / 2 + v.x + (x * rollCos - y * rollSin) * scale,
           y: h / 2 + v.y + (x * rollSin + y * rollCos) * scale,
         };
-      });
+      }), selected, w, h);
       projected.current = screen;
       const detail = Math.max(0, Math.min(1, (v.zoom - 2) / 3.5));
       if (detail > 0 && !document.documentElement.matches('[data-theme="night"]')) {
@@ -364,7 +361,7 @@ export function NetworkAtlas() {
         const active = selected === null
           ? !hasFilter || highlighted.has(p.i)
           : related.has(p.i);
-        const opacity = active ? 0.78 : 0.09;
+        const opacity = active ? 0.9 : 0.3;
         ctx.globalAlpha = opacity * (1 - detail);
         const r =
           Math.max(2, Math.min(8, 3.6 * Math.sqrt(v.zoom))) +
@@ -641,10 +638,10 @@ export function NetworkAtlas() {
         )}
         <details className={styles.connectorList} open>
           <summary>Superconnectors <span>◎</span></summary>
-          <p className={styles.note}>Most recorded links across networks and startups. Coverage, not a measure of influence.</p>
+          <p className={styles.note}>Ranked by distinct network types and campuses across founding links, then link count. Recorded coverage, not influence.</p>
           {connectors.filter(c => !hasFilter || highlighted.has(c.i)).slice(0, 5).map(c => (
             <button key={c.id} onClick={() => { setList(false); setFiltersOpen(false); focus(c.i); }}>
-              <span>{data.nodes[c.i].name}<small>{c.affiliations} networks · {c.direct} founding links</small></span><span>↗</span>
+              <span>{data.nodes[c.i].name}<small>{c.networkTypes} network types · {c.campuses} campuses</small></span><span>↗</span>
             </button>
           ))}
           {!connectors.some(c => !hasFilter || highlighted.has(c.i)) && <p className={styles.note}>No records with multiple networks and a founding link in this selection.</p>}
@@ -760,7 +757,11 @@ export function NetworkAtlas() {
               if (d) {
                 const dx = e.clientX - d.x,
                   dy = e.clientY - d.y;
-                if (Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>4) d.moved = true;
+                if (Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>4) {
+                  d.moved = true;
+                  // Dragging deliberately leaves the anchored detail view.
+                  if (selected !== null) setSelected(null);
+                }
                 view.current.x += dx;
                 view.current.y += dy;
                 d.x = e.clientX;
@@ -815,8 +816,8 @@ export function NetworkAtlas() {
               className={styles.card}
               aria-label={`Details for ${current.name}`}
               style={{
-                left: `clamp(12px, ${anchor.x + 16}px, calc(100% - 352px))`,
-                top: `clamp(66px, ${anchor.y - 30}px, calc(100% - 440px))`,
+                right: 12,
+                top: 66,
               }}
             >
               <button
@@ -831,7 +832,7 @@ export function NetworkAtlas() {
                 <div><div className={styles.eyebrow}>{current.kind}</div><h3>{current.name}</h3></div>
               </div>
               {connectorByNode.has(selected!) && <div className={styles.connectorBadge}>◎ Superconnector · {connectorByNode.get(selected!)!.score} recorded links</div>}
-              {current.description && <p className={styles.description}>{current.description}</p>}
+              {current.description && <p className={styles.description}>{atlasSummary(current.description)}</p>}
               <div className={styles.links}>
                 <a
                   href={
@@ -842,7 +843,7 @@ export function NetworkAtlas() {
                 >
                   Full record ↗
                 </a>
-                {current.links.map((l) => (
+                {[...current.links].sort((a,b) => Number(!/website|linkedin/i.test(a.label)) - Number(!/website|linkedin/i.test(b.label))).map((l) => (
                   <a key={l.url} href={l.url} target="_blank" rel="noreferrer">
                     {/linkedin\.com/i.test(l.url) ? `LinkedIn${/unverified/i.test(l.label) ? " (unverified)" : ""}` : l.label} ↗
                   </a>
@@ -850,6 +851,21 @@ export function NetworkAtlas() {
               </div>
               {!current.links.some(l => /linkedin\.com/i.test(l.url)) && <p className={styles.missingLink}>LinkedIn not recorded</p>}
               {!current.links.some(l => /website|site/i.test(l.label)) && <p className={styles.missingLink}>Website not recorded</p>}
+              {peers.length > 0 && (
+                <>
+                  <div className={styles.eyebrow}>
+                    {current.kind === "founder" ? "Founded" : "Founders"}
+                  </div>
+                  {peers.map((i) => (
+                    <div key={i} className={styles.peerRow}><button
+                      className={styles.peer}
+                      onClick={() => focus(i)}
+                    >
+                      {data.nodes[i].name} ↗
+                    </button><div className={styles.peerLinks}>{data.nodes[i].links.map(l => <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>)}</div></div>
+                  ))}
+                </>
+              )}
               <div className={styles.cardSection}>
               {current.places.map((p, i) => (
                 <p key={i} className={styles.muted}>
@@ -868,21 +884,6 @@ export function NetworkAtlas() {
                 </p>
               ))}
               </div>
-              {peers.length > 0 && (
-                <>
-                  <div className={styles.eyebrow}>
-                    {current.kind === "founder" ? "Founded" : "Founders"}
-                  </div>
-                  {peers.map((i) => (
-                    <div key={i} className={styles.peerRow}><button
-                      className={styles.peer}
-                      onClick={() => focus(i)}
-                    >
-                      {data.nodes[i].name} ↗
-                    </button><div className={styles.peerLinks}>{data.nodes[i].links.map(l => <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>)}</div></div>
-                  ))}
-                </>
-              )}
               {(nodeGroups.get(selected!) ?? []).length > 0 && <details className={styles.cardSection}><summary>Networks <span>{nodeGroups.get(selected!)!.length}</span></summary><p className={styles.note}>Choose a network to show shared affiliations. Membership does not mean a personal connection.</p>
               {(nodeGroups.get(selected!) ?? []).map((g) => (
                 <div className={styles.membership} key={g.id}>

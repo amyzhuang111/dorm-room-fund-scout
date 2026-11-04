@@ -21,6 +21,18 @@ const nextConfig: NextConfig = {
   // The SQLite file isn't reachable by Next's static import tracing (it's opened
   // via a runtime fs path in lib/db/client.ts), so it has to be listed explicitly
   // or Vercel's serverless functions won't have it bundled.
+  async headers() {
+    return [
+      {
+        source: "/data/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=3600, stale-while-revalidate=86400" }],
+      },
+      {
+        source: "/vendor/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      },
+    ];
+  },
   async redirects() {
     return [
       { source: "/map", destination: "/networks", permanent: false },
@@ -43,7 +55,13 @@ const nextConfig: NextConfig = {
     // The database is opened by a runtime path, and better-sqlite3 picks a
     // prebuild for the deploy architecture. Include both explicitly so a
     // Vercel function is not missing the file the tracer did not follow.
-    "/**": ["./data/campus-universe.db", "./data/snapshots/**/*", "./node_modules/better-sqlite3/prebuilds/**/*"],
+    "/**": [
+      "./data/campus-universe.db",
+      "./data/snapshots/**/*",
+      "./node_modules/better-sqlite3/prebuilds/**/*",
+      "./public/data/founder-table.json",
+      "./public/data/network-atlas.json",
+    ],
   },
 };
 

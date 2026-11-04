@@ -21,6 +21,16 @@ export function databasePath(): string {
   return DB_PATH;
 }
 
+/** File version for in-process memos. A write bumps mtime or size. */
+export function databaseStamp(): string {
+  try {
+    const st = fs.statSync(databasePath());
+    return `${st.mtimeMs}:${st.size}`;
+  } catch {
+    return "missing";
+  }
+}
+
 let _db: Database.Database | null = null;
 
 export function getDb(): Database.Database {

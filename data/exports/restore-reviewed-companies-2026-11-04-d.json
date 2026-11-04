@@ -1,0 +1,429 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Batch d. Companies hidden as 'unverified recency' with no linked founder, whose own listing text states student status or a class year for the founders (competition results, program rosters), or whose program rule is printed in the record. Stronger than batch c (per-founder text, not only a program label). Excluded: Penn Health-Tech entries (the card says it does NOT name a student founder), CMU VentureBridge (includes a faculty venture) except McGinnis undergraduate-track placements, NUS Furnace/UNC EVC (eligibility not verified), person-name artifacts, initiative/entity names, duplicates of vetted companies, anything already restored. Class year >= 2023 meets the rule's threshold.",
+  "restore": [
+    {
+      "id": "proj_K3zEew3iCCwD",
+      "name": "ActionBar",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2024: ActionBar"
+    },
+    {
+      "id": "proj_2vyAdOXbfglm",
+      "name": "AduCare",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "AduCare \u00b7 Rensselaer Polytechnic Institute \u00b7 Change the World Challenge \u00b7 Cognitive decline tracking venture; Spring 2023 RPI Change the World Challenge winner by Nathan Smith '25 and Anqesha Murray '24."
+    },
+    {
+      "id": "proj_eohLoEgQykJa",
+      "name": "Agrinova",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Agrinova \u00b7 Boston University \u00b7 Summer Accelerator \u00b7 2025 BU Summer Accelerator cohort (Meritxell Ortodo '26)."
+    },
+    {
+      "id": "proj_-4WQn-HAoIU3",
+      "name": "Ali Mustafa Games",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2024: Ali Mustafa Games"
+    },
+    {
+      "id": "proj_swNg5FOOoGur",
+      "name": "Antioch Technologies",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Antioch Technologies \u00b7 Boston University \u00b7 Summer Accelerator \u00b7 2026 BU NVC semi-finalist and Summer Accelerator cohort (Mark Lucas '26)."
+    },
+    {
+      "id": "proj_-33WC5wEWF5N",
+      "name": "Asclepii",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Asclepii \u00b7 Case Western Reserve University \u00b7 Morgenthaler-Pavey Startup Competition \u00b7 2025 CWRU Morgenthaler-Pavey Venture Track winner; Franco Kraiselburd (CWR '25)."
+    },
+    {
+      "id": "proj_7dFi-5JR-m2l",
+      "name": "Astrea",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Astrea \u00b7 Furman University \u00b7 Rinker Paladin Pitch Competition \u00b7 Custom sorority jewelry venture; Furman Paladin Pitch 2023 finalist, launched Spring 2024 (Aubrey Zoodsma '26)."
+    },
+    {
+      "id": "proj_pub_246bd27faf3b394d0428",
+      "name": "Avid",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "Spring 2026 TVLIC Texas Champion ($15K) + Sustainability Innovation Award; founder Fred Lindseth MBA '26"
+    },
+    {
+      "id": "proj_x_QaHxSAqbGq",
+      "name": "Bahar Mar Robotics",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2024: Bahar Mar Robotics"
+    },
+    {
+      "id": "proj_QGovldjOlERi",
+      "name": "Bam! Bottle",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: Bam! Bottle"
+    },
+    {
+      "id": "proj_kgR50Jo3x2nk",
+      "name": "Basics OS",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "Undergraduate 1st place, McGinnis 2026"
+    },
+    {
+      "id": "proj_Vc0EwxLvai-R",
+      "name": "Basilisk Robotics",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: Basilisk Robotics"
+    },
+    {
+      "id": "proj_Oarl5B-EJFhn",
+      "name": "Caboodl",
+      "why": "2026 McGinnis Venture Competition, undergraduate track placement",
+      "evidence": "The 2026 McGinnis Venture Competition named Caboodl third place in the undergraduate track."
+    },
+    {
+      "id": "proj_pub_228380f128807b53de01",
+      "name": "Casa AI",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "MN Cup 2026 Student Division winner ($25K); founders Lalitaditya Divakarla (PhD cand.), Srinivas Preetham Addepalli ('26)"
+    },
+    {
+      "id": "proj_V51Ql7EqCRQS",
+      "name": "CollegeCoach",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "CollegeCoach \u00b7 Furman University \u00b7 Rinker Paladin Pitch Competition \u00b7 Soccer coaching platform; Furman Paladin Pitch 2023 finalist (Ivan Agyaakwah '25)."
+    },
+    {
+      "id": "proj_pub_cd7189616d5cd76a78d0",
+      "name": "Coveted",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "3rd place (tie) $2,500, 'Cuse Tank 2026; founder Naheem Cadiz '28"
+    },
+    {
+      "id": "proj_pub_fb017554d5a6772fc3b4",
+      "name": "Deep Marine Innovations",
+      "why": "Duke Startup Showcase 2026 team member listed with Duke class year",
+      "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Deep Marine Innovations \u2014 Adam Berthold, Duke class '26."
+    },
+    {
+      "id": "proj_PBxKleimOcn6",
+      "name": "Delilah",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Delilah \u00b7 Florida State University \u00b7 Jim Moran College of Entrepreneurship \u00b7 AI legislation platform (Joseph Visconti '25); Top 100 App Store, FSU JMC alumni venture."
+    },
+    {
+      "id": "proj_uPt-wgetE_fS",
+      "name": "Dot",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Dot \u00b7 Lehigh University \u00b7 Eureka! Venture Program \u00b7 Cashless transaction platform for immigrant students. Founded by Dulra Amolegbe '26 through Lehigh's Eureka! Venture Program ecosystem."
+    },
+    {
+      "id": "proj_n50yBKz6wsW9",
+      "name": "EVAL Gaming",
+      "why": "2025 eLab Summer Accelerator cohort of 'undergraduate entrepreneurs'",
+      "evidence": "The 2025 eLab Summer Accelerator cohort: ... EVAL Gaming. Fifteen dynamic undergraduate entrepreneurs ... are spending their summers immersed in the journey of building intentional, impactful ventures."
+    },
+    {
+      "id": "proj_pub_5c9b0a60b9be6aaaa078",
+      "name": "Frutecho",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "2nd place $7,500, 'Cuse Tank 2026; founder Carolina Aguayo-Pla '27"
+    },
+    {
+      "id": "proj_5CVlsIke36B-",
+      "name": "FuturHand",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: FuturHand"
+    },
+    {
+      "id": "proj_-7YEa70PLnZ6",
+      "name": "Galen Health",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2024: Galen Health"
+    },
+    {
+      "id": "proj_-X9i2ToZL1qb",
+      "name": "Geddit",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "Best Undergraduate Venture ($10K), McCloskey; founder Akhente Borotho"
+    },
+    {
+      "id": "proj_iA5WYISzZWk2",
+      "name": "GoldRush Energy",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "GoldRush Energy \u00b7 Furman University \u00b7 Rinker Paladin Pitch Competition \u00b7 Furman Paladin Pitch 2025 Johnny Flynn Award winner ($10K); Jackson Price '25."
+    },
+    {
+      "id": "proj_7gdoCjciq8Ju",
+      "name": "Grid Intelligence",
+      "why": "Duke Startup Showcase 2026 team member listed with Duke class year",
+      "evidence": "Duke Innovation & Entrepreneurship Startup Showcase 2026: Grid Intelligence \u2014 Ava LeBron, Duke class '27."
+    },
+    {
+      "id": "proj_inRZLgrz1yNw",
+      "name": "Groovy Labs",
+      "why": "Brown B-Lab 2026 venture team listed with class years ('26-'29)",
+      "evidence": "Groovy Labs \u00b7 Brown University \u00b7 Brown B-Lab 2026 \u00b7 current_student \u00b7 2026"
+    },
+    {
+      "id": "proj_pub_8b7855649d93e5297dca",
+      "name": "Hardshell",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "$1.1M pre-seed; founders Andrew Schoka (Darden '26), Hunter Moore (date from LinkedIn post ID)"
+    },
+    {
+      "id": "proj_di6ttVv1npmD",
+      "name": "House of Bones Theater Company",
+      "why": "2025 eLab Summer Accelerator cohort of 'undergraduate entrepreneurs'",
+      "evidence": "The 2025 eLab Summer Accelerator cohort: ... House of Bones Theater Company. Fifteen dynamic undergraduate entrepreneurs ... are spending their summers immersed in the journey of building intentional, impactful ventures."
+    },
+    {
+      "id": "proj_38LktM9JvJ3U",
+      "name": "Illegal Oats",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Illegal Oats \u00b7 University of Denver \u00b7 Harry Trueblood Innovation Collaboratory \u00b7 Ento-granola venture by Clare Whetzel, finance class of 2023, named on the Harry Trueblood Innovation Collaboratory page and on the Entrepr"
+    },
+    {
+      "id": "proj_NGdKslFHu0ys",
+      "name": "Immersive SHU Campus Map App",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Immersive SHU Campus Map App \u00b7 Sacred Heart University \u00b7 Pioneer Pitch Competition \u00b7 First-place winner at Sacred Heart University's inaugural Pioneer Pitch Competition (January 2026). Founded by Rodney Osumo '28."
+    },
+    {
+      "id": "proj_2Fmz-VRbwbId",
+      "name": "InstantReplay",
+      "why": "2025 eLab Summer Accelerator cohort of 'undergraduate entrepreneurs'",
+      "evidence": "The 2025 eLab Summer Accelerator cohort: ... InstantReplay. Fifteen dynamic undergraduate entrepreneurs ... are spending their summers immersed in the journey of building intentional, impactful ventures."
+    },
+    {
+      "id": "proj_WreaJRjnjJ2I",
+      "name": "JO by Juliana",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "JO by Juliana \u00b7 Boston College \u00b7 Strakosch Venture Competition \u00b7 2025 Boston College Strakosch Venture Competition 2nd place ($5K; Juliana Owen '25)."
+    },
+    {
+      "id": "proj_4da43REe1Oa6",
+      "name": "Juicy EV, Inc.",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: Juicy EV, Inc."
+    },
+    {
+      "id": "proj_ZH4BmglS_Cf5",
+      "name": "LINK",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "LINK \u00b7 Monmouth University \u00b7 HawkTank Business Pitch Competition \u00b7 Clinical trial matching platform founded by Alex Kalina '25. Monmouth University HawkTank 2024 winner, then 10th annual UPitchNJ statewide winner (May 20"
+    },
+    {
+      "id": "proj_JTCDT4MI_Crg",
+      "name": "Living Outside",
+      "why": "Brown B-Lab 2026 venture team listed with class years ('26-'29)",
+      "evidence": "Living Outside \u00b7 Brown University \u00b7 Brown B-Lab 2026 \u00b7 current_student \u00b7 2026"
+    },
+    {
+      "id": "proj_Rz8OuaqhadOP",
+      "name": "LKRM",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "LKRM \u00b7 Furman University \u00b7 FutureX Venture Residency \u00b7 Furman FutureX venture residency participant (Andrew Farrell '25)."
+    },
+    {
+      "id": "proj_AcAUcnaanfMi",
+      "name": "Locava",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Locava \u00b7 Lafayette College \u00b7 Big Idea Pitch Competition \u00b7 Social discovery platform. 2025 Lafayette Big Idea Competition winner (Dunne '27, Gottfried '27, Melgar '27)."
+    },
+    {
+      "id": "proj_LL1kimKauP33",
+      "name": "Lorraine Library",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Lorraine Library \u00b7 Boston College \u00b7 Elevator Pitch Competition \u00b7 2024 Boston College Elevator Pitch 1st place (Emma Mooney '28)."
+    },
+    {
+      "id": "proj_ZDxNB89ySRr4",
+      "name": "Lyric's Lip Company",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Lyric's Lip Company \u00b7 Bucknell University \u00b7 2025 Bucknell BizPitch second place ($3,500); cosmetics venture by Lyric Abdul-Rasheed '26."
+    },
+    {
+      "id": "proj_pub_35ee4eb46a47ca40fb2d",
+      "name": "Miirror",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "1st place $12,500, 2026 'Cuse Tank (LaunchPad); founders Bri Gordon '28, Julia Rodenberger '28"
+    },
+    {
+      "id": "proj_vd1vHovZldNH",
+      "name": "MonteValle",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "MonteValle \u00b7 Furman University \u00b7 Rinker Paladin Pitch Competition \u00b7 Sustainable reeds venture; Furman Paladin Pitch 2022 winner ($10K), launched Spring 2025 (Alexa Valdovinos '25)."
+    },
+    {
+      "id": "proj_ukVlGuc_6OMr",
+      "name": "Nyck AI",
+      "why": "VentureCat 2026 student startup team listed with class years",
+      "evidence": "Nyck AI \u2014 Marc Davis \u201926; Kevin Wang \u201927 \u2014 VentureCat 2026 student startup team."
+    },
+    {
+      "id": "proj_va2XebcPn4kW",
+      "name": "OS Keyboard",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "Undergraduate 2nd, McGinnis 2026"
+    },
+    {
+      "id": "proj_xl17ELAYNXCQ",
+      "name": "Perflection AI",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: Perflection AI"
+    },
+    {
+      "id": "proj_pub_f3922d0bd4e78f9783e1",
+      "name": "Phloat",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "3rd place (tie) $2,500, 'Cuse Tank 2026; founder Nathan Brekke G'27"
+    },
+    {
+      "id": "proj_f5id3fmvTrMR",
+      "name": "PianoCam",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: PianoCam"
+    },
+    {
+      "id": "proj_pub_02ff37255e965662bb2b",
+      "name": "PilliPops",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "1st place $25K, 2026 Clapp IDEA Competition; founder Aspen Villas (MSM'26)"
+    },
+    {
+      "id": "proj_iybv479PGpRq",
+      "name": "ProductivityPeriod",
+      "why": "Brown B-Lab 2026 venture team listed with class years ('26-'29)",
+      "evidence": "ProductivityPeriod \u00b7 Brown University \u00b7 Brown B-Lab 2026 \u00b7 current_student \u00b7 2026"
+    },
+    {
+      "id": "proj_pub_692a244deff2ac43dcfd",
+      "name": "Provenance",
+      "why": "competition result naming the founder(s) with a class year or an undergraduate/student/MBA track",
+      "evidence": "3rd place, Strakosch 2026; founders Andr\u00e9 Assun\u00e7\u00e3o '28, Grant Drinkwater '28"
+    },
+    {
+      "id": "proj_rvhBF5a-lacS",
+      "name": "Q&Q AI",
+      "why": "Brown B-Lab 2026 venture team listed with class years ('26-'29)",
+      "evidence": "Q&Q AI \u00b7 Brown University \u00b7 Brown B-Lab 2026 \u00b7 current_student \u00b7 2026"
+    },
+    {
+      "id": "proj_nLqpK4dxco-a",
+      "name": "RAGTime",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "RAGTime \u00b7 Boston College \u00b7 Elevator Pitch Competition \u00b7 2024 Boston College Elevator Pitch 3rd place (Henry Wang '25)."
+    },
+    {
+      "id": "proj_X1UW-EUN3A2I",
+      "name": "Relayd, Inc.",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: Relayd, Inc."
+    },
+    {
+      "id": "proj_3TMFefSJA3_u",
+      "name": "Sabi",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Sabi \u00b7 Wesleyan University \u00b7 Patricelli Center New Venture Awards \u00b7 2026 Wesleyan New Venture Awards winner ($8K). Founded by Naomi Ivie '27 through the Patricelli Center grant competition."
+    },
+    {
+      "id": "proj_1zQyQPVivB2h",
+      "name": "Sancho, Inc.",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: Sancho, Inc."
+    },
+    {
+      "id": "proj_knoeocSbQLaB",
+      "name": "Simplicity Tech Solutions",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Simplicity Tech Solutions \u00b7 Rensselaer Polytechnic Institute \u00b7 Change the World Challenge \u00b7 Navigation for visually impaired; 2023 RPI Change the World Challenge winner by Sheldon Jackson '23 (also known as Soundscape)."
+    },
+    {
+      "id": "proj_KKvXr90ZpxU4",
+      "name": "Soarce",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Soarce \u00b7 University of Central Florida \u00b7 UCF alumni advanced materials venture (Derek Saltzman '23, Mason Mincey '23); Forbes 30 Under 30 2026."
+    },
+    {
+      "id": "proj_sS0dA1QpqLrM",
+      "name": "SourceFill",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "SourceFill \u00b7 Temple University \u00b7 2026 Temple BYOBB undergraduate winner ($10K); supply chain platform."
+    },
+    {
+      "id": "proj_pub_c74d567c22f7907d85c7",
+      "name": "StarStack",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "StarStack \u00b7 Rensselaer Polytechnic Institute \u00b7 Severino Center for Technological Entrepreneurship \u00b7 3D printer STEM kit venture. 2026 RPI Apex Award winner ($15K). Founded by Sam Kudarauskas '28 and Liam Gavin '26."
+    },
+    {
+      "id": "proj_pub_f7c889d27e4368c3ecf2",
+      "name": "Systema Med",
+      "why": "2026 NYU Entrepreneurs Challenge team listed with class years",
+      "evidence": "Systema Med \u2014 2026 NYU Entrepreneurs Challenge team: Julio La Torre; Garman Xu \u201927."
+    },
+    {
+      "id": "proj_cRiv8svr5rBm",
+      "name": "ThermaIV",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "ThermaIV \u00b7 Bucknell University \u00b7 Bucknell BizPitch Competition \u00b7 Self-heating IV bag venture by Elizabeth Malley '26. 2025 Bucknell BizPitch first-place winner ($6K)."
+    },
+    {
+      "id": "proj_wIFAocCLZzm-",
+      "name": "To The Trade",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "To The Trade \u00b7 Boston College \u00b7 Strakosch Venture Competition \u00b7 2025 Boston College Strakosch Venture Competition 1st place ($10K; Emma Mooney '28)."
+    },
+    {
+      "id": "proj_KHVKNi5mEOJT",
+      "name": "uFinLit",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "uFinLit \u00b7 St. John's University \u00b7 Financial literacy app by Alexandra Cicala '27; secured funding December 2025."
+    },
+    {
+      "id": "proj_pub_fdf785a5ad61ab05c81e",
+      "name": "VenueHopper",
+      "why": "2026 NYU Entrepreneurs Challenge team listed with class years",
+      "evidence": "VenueHopper \u2014 2026 NYU Entrepreneurs Challenge team: Stonny Liu \u201923; Sharon Melzer \u201927."
+    },
+    {
+      "id": "proj_c8DfNRDwWi1w",
+      "name": "Vitalis",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Vitalis \u00b7 New York University \u00b7 InnoVention \u00b7 2025 NYU InnoVention Audience Favorite, founded by Tandon undergraduate Asser El Ashwah, for tendon-repair biomaterials. A separate YOPE x NYU Founder Award of $100,000 is me"
+    },
+    {
+      "id": "proj_WwMrOSWMKglx",
+      "name": "Vitaliti",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Vitaliti \u00b7 Boston College \u00b7 Strakosch Venture Competition \u00b7 2023 Boston College Strakosch Venture Competition 1st place (Zarah Lakhani '24)."
+    },
+    {
+      "id": "proj_P-A-ufU01-0d",
+      "name": "Wohlsein",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Wohlsein \u00b7 Boston College \u00b7 Elevator Pitch Competition \u00b7 2024 Boston College Elevator Pitch 2nd place (Lucas Schmidt '26)."
+    },
+    {
+      "id": "proj_rUyaU3vHTEQ-",
+      "name": "WokOn",
+      "why": "Spark Grants eligibility printed in the record: 'have a current student founder/co-founder' (grant year 2024/2025)",
+      "evidence": "Eligibility: ... have a current student founder/co-founder. | 2025: WokOn"
+    },
+    {
+      "id": "proj_SO_2xJ-MBoMo",
+      "name": "Zernike Precision Optics",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "Zernike Precision Optics \u00b7 Rose-Hulman Institute of Technology \u00b7 Rose Angels \u00b7 Custom aspheric-lens manufacturer founded 2025 (Elijah Johnson, Andrew Nichols, Evan O'Brien, Ryan Brown '25); Rose Angels funded."
+    },
+    {
+      "id": "proj_MwaKbfV8lSN7",
+      "name": "ZuLeris Interactive",
+      "why": "UndergradVC listing names the founder(s) with a class year or an undergraduate/student-led award",
+      "evidence": "ZuLeris Interactive \u00b7 University of Central Florida \u00b7 UCF digital twin defense tech startup (Zack Zuniga, Liam Etan '24); E4D program graduate."
+    }
+  ]
+}

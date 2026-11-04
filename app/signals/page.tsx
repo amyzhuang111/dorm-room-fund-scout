@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { plainText } from "@/lib/display/plain-text";
-import { getDb } from "@/lib/db/client";
+import { databaseStamp, getDb } from "@/lib/db/client";
 import { listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 import { domainKey, isHidden } from "@/lib/domain/feedback";
@@ -106,7 +106,18 @@ interface PrecollegeFeedRow {
   excerpt: string;
 }
 
+let precollegeMemo: { stamp: string; rows: PrecollegeFeedRow[] } | null = null;
+let signalsMemo: { stamp: string; rows: SignalRow[] } | null = null;
+
 function listPrecollegeFeed(): PrecollegeFeedRow[] {
+  const stamp = databaseStamp();
+  if (precollegeMemo?.stamp === stamp) return precollegeMemo.rows;
+  const rows = queryPrecollegeFeed();
+  precollegeMemo = { stamp, rows };
+  return rows;
+}
+
+function queryPrecollegeFeed(): PrecollegeFeedRow[] {
   const db = getDb();
   return db
     .prepare(
@@ -122,6 +133,14 @@ function listPrecollegeFeed(): PrecollegeFeedRow[] {
 }
 
 function listAllSignals(): SignalRow[] {
+  const stamp = databaseStamp();
+  if (signalsMemo?.stamp === stamp) return signalsMemo.rows;
+  const rows = queryAllSignals();
+  signalsMemo = { stamp, rows };
+  return rows;
+}
+
+function queryAllSignals(): SignalRow[] {
   const db = getDb();
   return db
     .prepare(

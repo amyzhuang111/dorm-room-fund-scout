@@ -2,7 +2,7 @@
  * Full-corpus explorer rows from real directory + company_facts fields only.
  * Nothing invented; missing values stay null and render as Not available.
  */
-import { getDb } from "@/lib/db/client";
+import { databaseStamp, getDb } from "@/lib/db/client";
 import {
   buildDirectoryFromDb,
   type DirectoryCard,
@@ -133,7 +133,17 @@ export function cardToCorpusRow(
   };
 }
 
+let corpusMemo: { stamp: string; rows: CorpusRow[] } | null = null;
+
 export function loadCorpusRows(): CorpusRow[] {
+  const stamp = databaseStamp();
+  if (corpusMemo?.stamp === stamp) return corpusMemo.rows;
+  const rows = loadCorpusRowsUncached();
+  corpusMemo = { stamp, rows };
+  return rows;
+}
+
+function loadCorpusRowsUncached(): CorpusRow[] {
   const { cards } = buildDirectoryFromDb({ includeAll: true });
   const db = getDb();
   const extras = factMaps();

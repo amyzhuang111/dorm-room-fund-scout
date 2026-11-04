@@ -153,7 +153,12 @@ export default async function CampusPage({
       </div>
       <div className="mt-3 grid max-w-full gap-x-6 gap-y-4 sm:mt-8 sm:gap-y-8 lg:grid-cols-12">
         <div className="min-w-0 max-w-full lg:col-span-8">
-          {tab === "founders" && <FoundersDesk campusId={university.id} campusLocked initialCount={founders.length} />}
+          {tab === "founders" && (
+            <>
+              <link rel="preload" as="fetch" href="/data/founder-table.json" />
+              <FoundersDesk campusId={university.id} campusLocked initialCount={founders.length} />
+            </>
+          )}
           {tab === "companies" && (
             <>
             <ul>
