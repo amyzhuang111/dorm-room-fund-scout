@@ -37,6 +37,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   const directory = loadDirectory();
   const foundersListed = countFoundersListed();
   const plotted = stats.universities.filter((university) => university.lat != null && university.lon != null);
+  const campusesWithFounders = stats.universities.filter((university) => university.founderCount > 0).length;
   const top = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))[0];
   return (
     <>
@@ -49,6 +50,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
               companyCount={directory.cards.length}
               foundersListed={foundersListed}
               campusesOnMap={plotted.length}
+              campusesWithFounders={campusesWithFounders}
               dataThrough={stats.updatedAt}
               topName={top?.name ?? ""}
               topFounders={top?.founderCount ?? 0}

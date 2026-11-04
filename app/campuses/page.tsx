@@ -23,6 +23,7 @@ export default function CampusesPage() {
     slug: campusSlug(shortCampusLabel(university.id, university.name)),
   }));
   const withFounders = rows.filter((row) => row.founderCount > 0);
+  const plotted = rows.filter((row) => row.lat != null && row.lon != null);
   const ranked = withFounders
     .filter((row) => row.sourcesConfigured >= SCAN_FLOOR)
     .sort(
@@ -62,7 +63,7 @@ export default function CampusesPage() {
             {" companies linked to a campus"}
           </p>
           <p className="mt-2 max-w-xl text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
-            The company list is {vettedCompanies.toLocaleString("en-US")} vetted companies, with {vettedFounders.toLocaleString("en-US")} founders on those companies. The founder index is {indexPeople.toLocaleString("en-US")} people, including hackathon teams. Rank below is founders per source, and only for campuses with at least {SCAN_FLOOR} sources.
+            The map plots {plotted.length.toLocaleString("en-US")} schools with a pin, including schools with no promoted founder. This page is the {withFounders.length.toLocaleString("en-US")} campuses that have one. The company list is {vettedCompanies.toLocaleString("en-US")} vetted companies, with {vettedFounders.toLocaleString("en-US")} founders on those companies. The founder index is {indexPeople.toLocaleString("en-US")} people, including hackathon teams. Rank below is founders per source, and only for campuses with at least {SCAN_FLOOR} sources.
           </p>
           <Link
             href="/companies?feed=leaderboard"

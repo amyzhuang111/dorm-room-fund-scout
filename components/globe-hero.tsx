@@ -53,6 +53,7 @@ function GlobeBlock({
   const router = useRouter();
   const search = useSearchParams();
   const campuses = plottedCampuses(stats);
+  const campusesWithFounders = stats.universities.filter((university) => university.founderCount > 0).length;
   const requested = search.get("campus");
   const selectedId = campuses.some((campus) => campus.id === requested) ? requested : null;
   const top = [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0];
@@ -70,6 +71,7 @@ function GlobeBlock({
     companyCount,
     foundersListed,
     campusesOnMap: campuses.length,
+    campusesWithFounders,
     dataThrough: stats.updatedAt,
     topName: top?.name ?? "",
     topFounders: top?.founders ?? 0,
@@ -84,6 +86,7 @@ function GlobeBlock({
         companyCount={companyCount}
         foundersListed={foundersListed}
         foundersIndexed={foundersIndexed}
+        campusesWithFounders={campusesWithFounders}
         selectedId={selectedId}
         onSelect={onSelect}
         dataThrough={stats.updatedAt}

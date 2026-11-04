@@ -103,6 +103,7 @@ export function TileGlobe({
   companyCount = 0,
   foundersListed = 0,
   foundersIndexed = 0,
+  campusesWithFounders = 0,
   selectedId,
   onSelect,
   className = "",
@@ -117,6 +118,8 @@ export function TileGlobe({
   foundersListed?: number;
   /** Rows in the searchable founder index (founders.json). May exceed foundersListed. */
   foundersIndexed?: number;
+  /** Campuses page list: schools with a promoted founder. A subset of the pins. */
+  campusesWithFounders?: number;
   selectedId?: string | null;
   onSelect: (id: string) => void;
   className?: string;
@@ -736,8 +739,14 @@ export function TileGlobe({
           ) : null}
           <span>
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" campuses on map"}
+            {" schools with a pin"}
           </span>
+          {campusesWithFounders > 0 ? (
+            <Link href="/campuses" className="pointer-events-auto hover:underline">
+              <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
+              {" campuses with promoted founders"}
+            </Link>
+          ) : null}
           {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
           <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
             <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
@@ -752,7 +761,7 @@ export function TileGlobe({
           </Link>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Student founder intelligence, by campus. Click a campus to see its founders."}</p>
+        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
