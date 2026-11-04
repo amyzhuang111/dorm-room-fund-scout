@@ -1,0 +1,62 @@
+# Fails a pull request that makes the committed database LOSE data.
+#
+# data/campus-universe.db is a binary file that cannot be merged. A PR that carries
+# its own copy replaces everything other PRs added since it branched (2026-11-04:
+# PR #149 dropped ~1,000 people, 325 companies and 1,703 claims, and nothing flagged
+# it). This compares per-table row counts between the PR's database and the CURRENT
+# tip of the base branch, so a stale copy shows up as a drop.
+#
+# A deliberate cleanup is allowed by labeling the PR `allow-db-shrink` (say what it
+# removes and why in the PR). To make this block merging, mark the check
+# "DB drop guard" as required in branch protection (Settings -> Branches).
+
+name: DB drop guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    paths:
+      - "data/campus-universe.db"
+      - "scripts/audit/db-drop-guard.py"
+      - ".github/workflows/db-drop-guard.yml"
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  guard:
+    name: DB drop guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Deliberate shrink? (label allow-db-shrink)
+        id: label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          labels=$(gh pr view "$PR" --json labels --jq '[.labels[].name] | join(",")')
+          echo "labels: ${labels:-none}"
+          case ",$labels," in *,allow-db-shrink,*) echo "skip=true" >> "$GITHUB_OUTPUT" ;; *) echo "skip=false" >> "$GITHUB_OUTPUT" ;; esac
+
+      - name: Compare row counts with the base branch's current database
+        if: steps.label.outputs.skip != 'true'
+        env:
+          BASE: ${{ github.base_ref }}
+        run: |
+          if git cat-file -e "origin/$BASE:data/campus-universe.db" 2>/dev/null && [ -f data/campus-universe.db ]; then
+            git show "origin/$BASE:data/campus-universe.db" > /tmp/base.db
+            python3 scripts/audit/db-drop-guard.py /tmp/base.db data/campus-universe.db | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No database on one side; nothing to compare."
+          fi
+
+      - name: Skipped (allow-db-shrink)
+        if: steps.label.outputs.skip == 'true'
+        run: |
+          echo "Skipped (PR is labeled allow-db-shrink). The PR description must say what it removes and why." | tee -a "$GITHUB_STEP_SUMMARY"

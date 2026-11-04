@@ -107,6 +107,29 @@ differs ("partial" in the promoted corpus), which changes the retrieval
 ranking the test asserts. It is a pre-existing failure, not caused by the
 recovery.
 
+### Guarding against it (three layers)
+
+1. **Automated check.** `.github/workflows/db-drop-guard.yml` runs
+   `scripts/audit/db-drop-guard.py` on every PR that touches the database. It
+   compares per-table row counts between the PR's database and the **current tip of
+   the base branch** and fails if any table lost more than max(25 rows, 1%). A
+   stale copy of the database shows up as a drop, which is exactly the #149 case
+   (tested against it: it flags affiliations, gate_results, people,
+   person_project_roles, projects, relationships, signals and snapshots). It counts
+   rows only, so it cannot tell a deliberate cleanup from an accident: a deliberate
+   one needs the label `allow-db-shrink` and a PR description that says what is
+   removed. The news-fetch job commits straight to `main` without a PR and is not
+   covered.
+2. **Make it blocking.** A check only warns unless it is required: Settings ->
+   Branches -> branch protection rule for `main` -> require status checks -> add
+   "DB drop guard". This is a repository setting for the owner to change.
+3. **Rules the other sessions read.** The sessions that caused this are AI agents
+   that read `AGENTS.md` (and `CLAUDE.md`, which includes it) at the start of every
+   session. It now has an explicit section: do not commit the database unless that
+   is the point of the PR, never resolve a conflict by keeping your own copy,
+   prefer data-as-code lists, run the guard before opening a database PR, and never
+   promote a branch without comparing databases.
+
 How to avoid repeating it:
 
 - **Decisions that are small, reviewed and repeatable should not live only in the
