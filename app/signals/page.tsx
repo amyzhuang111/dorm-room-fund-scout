@@ -114,30 +114,30 @@ function listAllSignals(): SignalRow[] {
   const db = getDb();
   return db
     .prepare(
-      `SELECT s.id, s.project_id, p.kind as project_kind, p.name as project_name, p.website_url, p.primary_link,
+      `WITH pu AS (
+         SELECT ppr.project_id AS pid, a.university_id AS uid
+           FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
+          WHERE a.university_id IS NOT NULL
+         UNION
+         SELECT r.source_entity_id, r.target_entity_id
+           FROM relationships r
+          WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university'
+       ), pun AS (
+         SELECT pu.pid AS pid,
+                group_concat(u.name, ' · ' ORDER BY u.id) AS names,
+                group_concat(u.id, ',' ORDER BY u.id) AS ids
+           FROM pu JOIN universities u ON u.id = pu.uid
+          GROUP BY pu.pid
+       )
+       SELECT s.id, s.project_id, p.kind as project_kind, p.name as project_name, p.website_url, p.primary_link,
               (SELECT pe.name FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id WHERE ppr.project_id = p.id AND ppr.role LIKE '%founder%' LIMIT 1) as founder_name,
-              (SELECT group_concat(name, ' · ') FROM (
-                 SELECT DISTINCT u.name as name FROM (
-                   SELECT a.university_id as id FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
-                    WHERE ppr.project_id = s.project_id AND a.university_id IS NOT NULL
-                   UNION
-                   SELECT r.target_entity_id FROM relationships r
-                    WHERE r.source_entity_type = 'project' AND r.source_entity_id = s.project_id AND r.target_entity_type = 'university'
-                 ) ids JOIN universities u ON u.id = ids.id
-              )) as university_name,
-              (SELECT group_concat(id, ',') FROM (
-                 SELECT DISTINCT u.id as id FROM (
-                   SELECT a.university_id as id FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
-                    WHERE ppr.project_id = s.project_id AND a.university_id IS NOT NULL
-                   UNION
-                   SELECT r.target_entity_id FROM relationships r
-                    WHERE r.source_entity_type = 'project' AND r.source_entity_id = s.project_id AND r.target_entity_type = 'university'
-                 ) ids JOIN universities u ON u.id = ids.id
-              )) as university_ids,
+              pun.names as university_name,
+              pun.ids as university_ids,
               s.signal_type, s.current_observation, s.significance_note, s.source_date, s.created_at,
               (SELECT src.name FROM claims c JOIN sources src ON src.id = c.source_id WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) ORDER BY c.retrieved_at DESC LIMIT 1) as source_name,
               (SELECT c.source_url FROM claims c WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) AND c.source_url IS NOT NULL AND c.source_url != '' ORDER BY c.retrieved_at DESC LIMIT 1) as source_url
        FROM signals s JOIN projects p ON p.id = s.project_id
+       LEFT JOIN pun ON pun.pid = s.project_id
        ORDER BY (s.source_date IS NULL OR trim(s.source_date) = ''), s.source_date DESC, s.created_at DESC`
     )
     .all() as SignalRow[];
