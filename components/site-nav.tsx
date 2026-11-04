@@ -3,33 +3,26 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useUserPipeline } from "./user-pipeline-provider";
 
-/** One flat nav (Map + desks + Signals + Work). No second Explore umbrella. */
+/** Public nav: Map, Companies, Campuses, Founders, Signals. */
 const NAV = [
   { id: "map", href: "/", label: "Map", match: (p: string) => p === "/" || p.startsWith("/map") },
   { id: "companies", href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
   { id: "campuses", href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
   { id: "founders", href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
-  { id: "networks", href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
   { id: "signals", href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
-  { id: "data", href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
-  { id: "work", href: "/work/shortlist", label: "Work", match: (p: string) => p.startsWith("/work") },
 ] as const;
 
 /** Always-visible mobile desk row (Taste r33 blind: Menu-only hurt all 3 raters). */
 const DESK_TABS = [
+  { href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
   { href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
   { href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
-  { href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
-  { href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
-  { href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
+  { href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
 ] as const;
 
 export function SiteNav() {
   const pathname = usePathname();
-  const pipeline = useUserPipeline();
-  const local = pipeline.storage === "local";
   const [open, setOpen] = useState(false);
 
   function openAsk() {
@@ -47,18 +40,12 @@ export function SiteNav() {
           {NAV.map((item) => (
             <Link key={item.id} href={item.href} className={`nav-link ${item.match(pathname) ? "is-active" : ""}`}>
               {item.label}
-              {item.id === "work" && local ? (
-                <span
-                  className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-[#c8c8d2] align-middle"
-                  title={pipeline.notice ?? "Pipeline entries are saved only in this browser."}
-                />
-              ) : null}
             </Link>
           ))}
         </nav>
         <div className="ml-auto hidden items-center md:flex">
           <button type="button" className="ask-field" onClick={openAsk}>
-            Ask anything ⌘K
+            Ask anything ⌘K · Ctrl+K
           </button>
         </div>
         <div className="ml-auto flex items-center gap-2 md:hidden">
@@ -91,7 +78,7 @@ export function SiteNav() {
             </Link>
           ))}
           <button type="button" className="block py-1 text-sm text-fg" onClick={openAsk}>
-            Ask anything ⌘K
+            Ask anything ⌘K · Ctrl+K
           </button>
           <Link href="/methodology" className="block py-1 text-sm text-fg-2" onClick={() => setOpen(false)}>
             Methodology

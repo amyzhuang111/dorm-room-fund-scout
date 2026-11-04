@@ -74,10 +74,10 @@ export const FLAG_LABEL: Record<FlagId, string> = {
   founders: "Has named founders",
 };
 
-/** Status from stored operating_status + acquisition signals only. */
+/** Company status is operating_status only. An acquisition signal is a signal, not a status. */
 export function statusOf(company: FacetCompany): StatusId {
   if (company.operatingStatus === "dead") return "closed";
-  if (company.operatingStatus === "acquired" || company.signalKind === "acquisition") return "acquired";
+  if (company.operatingStatus === "acquired") return "acquired";
   return "active";
 }
 

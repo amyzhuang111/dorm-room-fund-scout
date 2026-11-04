@@ -33,6 +33,7 @@ export function GlobeFoldSkeleton({
           </span>
           {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
+        <p className="mt-1 text-[13px] text-[color:var(--fg,#0B0E17)]">Student founder intelligence, by campus.</p>
       </div>
       <div
         className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFFFFF]"

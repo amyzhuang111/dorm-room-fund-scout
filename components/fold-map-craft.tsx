@@ -120,6 +120,7 @@ export function LineagePanels({
         if (campusId && item.campusSlug && item.campusSlug === campusId) return true;
         return false;
       })
+      .filter((item) => !/^(penn mobile|penn clubs|penn courses)$/i.test(item.event.trim()))
       .slice(0, 6);
   }, [week, campusId, campusName]);
 

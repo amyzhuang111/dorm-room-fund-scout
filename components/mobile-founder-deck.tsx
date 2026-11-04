@@ -120,7 +120,7 @@ export function MobileFounderDeck({
     >
       <div className="mb-2 flex items-baseline justify-between gap-2 px-0.5">
         <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-          {lane === "open" ? "Open lane" : "Founders"}
+          {lane === "open" ? "No top fund yet" : "Founders"}
           <span className="ml-2 tabular-nums text-[color:var(--fg-3,#5C647A)]">
             {(lane === "open" ? openCount : matches.length).toLocaleString("en-US")}
           </span>
@@ -294,7 +294,7 @@ export function MobileFounderPeek({
     >
       <div className="relative z-[2] mb-0.5 flex items-baseline justify-between gap-2">
         <p className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-          {lane === "open" ? "Open lane" : "Founders"}
+          {lane === "open" ? "No top fund yet" : "Founders"}
           <span className="ml-1.5 tabular-nums text-[color:var(--fg,#0B0E17)]" data-fold-open-lane-peek-figure="">
             {figure.toLocaleString("en-US")}
           </span>

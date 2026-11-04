@@ -1113,7 +1113,7 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
   const peak = bars.find((b) => b.peak) ?? bars[bars.length - 1]!;
   const aside = [
     detail.earlierValid > 0 ? `${detail.earlierValid.toLocaleString("en-US")} earlier` : null,
-    detail.undatedMonth > 0 ? `${detail.undatedMonth.toLocaleString("en-US")} year-only` : null,
+    detail.undatedMonth > 0 ? `${detail.undatedMonth.toLocaleString("en-US")} month missing` : null,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -1200,7 +1200,7 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
               className={`w-full max-w-[1.75rem] rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/35"}`}
               style={{ height: `${Math.max(6, Math.round((b.count / max) * 52))}px` }}
             />
-            <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#5C647A)]">{b.short}</span>
+            <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#5C647A)]">{b.short} {b.id.slice(2, 4)}</span>
           </li>
         ))}
       </ol>

@@ -53,22 +53,20 @@ export default function MethodologyPage() {
           people and the project evidence attached to them · including hackathon submissions, which are founder evidence, not startups.
           <strong> Startup Scout</strong> tracks only formed (or plausibly forming) companies. A Cal Hacks/PennApps/TreeHacks submission
           enters as a project attached to its founders; it only becomes a Startup Scout candidate once there&apos;s independent evidence
-          it&apos;s an actual (or plausibly forming) company · never automatically. Internally this is the <code className="font-mono text-xs">kind</code>{" "}
-          field on a project (<code className="font-mono text-xs">project</code> vs. <code className="font-mono text-xs">company</code>);
-          Startup Scout&apos;s queries only ever read <code className="font-mono text-xs">kind=&apos;company&apos;</code>.
+          it&apos;s an actual (or plausibly forming) company · never automatically. A record is either a project or a company.
+          Startup Scout only reads companies.
         </p>
       </section>
 
       <section id="promotion">
         <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Founder candidate promotion</h2>
         <p className="mt-1 text-sm text-muted">
-          Founder Scout Discover does not show every resolved person · only <strong>promoted</strong> candidates, per a deterministic rule
-          in <code className="font-mono text-xs">lib/domain/promotion.ts</code>: a person is promoted if they&apos;re linked to a real
+          Founder Scout Discover does not show every resolved person · only <strong>promoted</strong> candidates. A person is promoted if they&apos;re linked to a real
           company as a founder, hold a named leadership/technical-lead role, hold any specific named role (not a generic
           &quot;team member&quot; placeholder), or appear with a real role on 2+ distinct projects (repeat building). Club membership,
           hackathon attendance alone, or a directory listing never promotes someone by itself. A Devpost hackathon gallery&apos;s public
           team-member list never tells us who owned what, so every hackathon team member is recorded with the honest, non-differentiated
-          role <code className="font-mono text-xs">team_member</code> · not <code className="font-mono text-xs">founder</code> · unless
+          role team member · not founder · unless
           they separately hold a leadership role elsewhere.
         </p>
       </section>
@@ -77,7 +75,7 @@ export default function MethodologyPage() {
         <h2 className="text-sm font-semibold text-foreground">Founder Signal</h2>
         <p className="mt-1 text-sm text-muted">
           Separate from source tier · a source&apos;s tier says how useful it is to scan, not how strong any individual person&apos;s
-          evidence is. <code className="font-mono text-xs">lib/scoring/founder-signal.ts</code> computes 8 dimensions (ability to build,
+          evidence is. The score uses 8 dimensions (ability to build,
           technical depth, repeat building, shipping velocity, project ambition, external validation, collaborator quality, momentum) from
           real rows only · unknown is never coerced to zero, and dimensions with no reliable deterministic source (technical depth, project
           ambition, momentum) always report unknown rather than being guessed at. A headline Founder Signal number only shows once real
@@ -135,7 +133,7 @@ export default function MethodologyPage() {
         <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Open lane on the map</h2>
         <p className="mt-1 text-sm text-muted">
           The desk map fold shows how many strong student founders still have no top fund on record. The wording below is
-          generated from <code className="font-mono text-xs">lib/domain/open-lane.ts</code> so it cannot drift from the matcher.
+          generated from the same rule the map uses, so the words cannot drift from the count.
         </p>
         <p className="mt-3 text-sm text-foreground" data-methodology-open-lane-def="">
           <span data-methodology-open-lane-def-strong="">{openLaneStrongDefinition()}</span>{" "}
