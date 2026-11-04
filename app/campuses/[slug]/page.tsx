@@ -9,6 +9,7 @@ import { loadFounderTable } from "@/lib/domain/founder-table";
 import { SIGNALS_THIS_WEEK_LABEL, signalsThisWeek } from "@/lib/domain/hero-stats";
 import { listSignalsForUniversity, listSources, listUniversities, type UniversitySummary } from "@/lib/domain/queries";
 import { getDb } from "@/lib/db/client";
+import { listUnverifiedCompanies } from "@/lib/domain/unverified-companies";
 
 const TABS = ["founders", "companies", "signals", "network"] as const;
 
@@ -64,6 +65,7 @@ export default async function CampusPage({
   const university = resolveUniversity(slug);
   if (!university) notFound();
   const label = shortCampusLabel(university.id, university.name);
+  const unverifiedHere = listUnverifiedCompanies({ campus: university.id, pageSize: 1 }).total;
   const tab = TABS.includes(sp.tab as (typeof TABS)[number]) ? (sp.tab as (typeof TABS)[number]) : "founders";
   const founders = loadFounderTable(university.id);
   const topTier = founders.filter((row) => row.tier === "S" || row.tier === "S+").length;
@@ -116,6 +118,7 @@ export default async function CampusPage({
         <div className="lg:col-span-8">
           {tab === "founders" && <FoundersDesk campusId={university.id} campusLocked initialCount={founders.length} />}
           {tab === "companies" && (
+            <>
             <ul>
               {affiliated.map((company) => (
                 <li key={company.id} className="flex h-8 items-center justify-between gap-3 border-b border-line">
@@ -123,8 +126,18 @@ export default async function CampusPage({
                   <span className="num shrink-0 text-[14px] text-fg-2">{company.people.toLocaleString("en-US")}</span>
                 </li>
               ))}
-              {affiliated.length === 0 && <li className="text-[14px] text-fg-2">No affiliated companies are stored for {label}.</li>}
+              {affiliated.length === 0 && <li className="text-[14px] text-fg-2">No vetted companies are stored for {label}.</li>}
             </ul>
+            {unverifiedHere > 0 && (
+              <p className="mt-4 text-[14px] text-fg-2" data-campus-unverified="">
+                {unverifiedHere.toLocaleString("en-US")} more {unverifiedHere === 1 ? "company is" : "companies are"} reported at {label}, but their
+                founders are not confirmed as current students or recent graduates.{" "}
+                <Link href={`/companies?unverified=1&campus=${university.id}`} className="text-link underline">
+                  View unverified companies
+                </Link>
+              </p>
+            )}
+            </>
           )}
           {tab === "signals" && (
             <ul className="divide-y divide-line">
