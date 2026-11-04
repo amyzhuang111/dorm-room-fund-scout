@@ -97,7 +97,7 @@ export default async function DataExplorerPage({
             {universeTotal.toLocaleString("en-US")} vetted companies · stage · sector · signals on file
           </p>
           <p className="mt-1 max-w-2xl text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-corpus-explain="">
-            Every investable company in the corpus with the fields we store — not a sample.
+            Every investable company in the corpus with the fields we store, not a sample.
           </p>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>

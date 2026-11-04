@@ -224,31 +224,28 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
 
   return (
     <div>
-      <p className="mb-1.5 text-[12px] leading-5 text-fg-2 sm:hidden" data-showing-founders="">
-        <span className="num font-bold text-fg">{filtered.length.toLocaleString("en-US")}</span>
-        {" / "}
-        <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span>
-        {" projects"}
-        {typeof searchableFounderCount === "number" ? (
-          <span className="text-fg-3">
-            {" · "}
-            <span className="num font-bold text-fg" data-count="founders-searchable">
-              {searchableFounderCount.toLocaleString("en-US")}
+      <div className="mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 sm:hidden" data-founders-legends="">
+        <p className="text-[11px] leading-4 text-fg-2" data-showing-founders="">
+          <span className="num font-bold text-fg">{filtered.length.toLocaleString("en-US")}</span>
+          {"/"}
+          <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span>
+          {typeof searchableFounderCount === "number" ? (
+            <span className="text-fg-3">
+              {" · "}
+              <span className="num font-bold text-fg" data-count="founders-searchable">
+                {searchableFounderCount.toLocaleString("en-US")}
+              </span>
+              {" founders"}
             </span>
-            {" founders"}
-          </span>
-        ) : null}
-      </p>
-      <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 sm:hidden" data-founders-legends="">
-        <p className="font-mono text-[10px] tabular-nums text-fg-3" data-tier-legend="">
-          <span className="font-semibold text-fg-2">Tier</span>
-          {" · S+ top signal · S strong · A–D ranked"}
+          ) : null}
         </p>
-        <p className="flex flex-wrap items-center gap-1.5 font-mono text-[10px] text-fg-3" data-campus-ink-legend="">
-          <span className="font-semibold text-fg-2">Monogram</span>
+        <p className="font-mono text-[9px] tabular-nums text-fg-3" data-tier-legend="">
+          S+ top · S strong · A-D
+        </p>
+        <p className="flex flex-wrap items-center gap-1 font-mono text-[9px] text-fg-3" data-campus-ink-legend="">
           {CAMPUS_INK_LEGEND.map((row) => (
-            <span key={row.label} className="inline-flex items-center gap-1">
-              <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: row.color }} aria-hidden />
+            <span key={row.label} className="inline-flex items-center gap-0.5">
+              <span className="inline-block h-2 w-2 rounded-full" style={{ background: row.color }} aria-hidden />
               {row.label}
             </span>
           ))}
@@ -388,27 +385,27 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
         </div>
       </div>
       {/* Mobile: stacked cards. Desk: sticky first column + horizontal scroll. */}
-      <div className="mt-2 max-h-[calc(100dvh-148px)] overflow-auto border-t border-line-strong sm:mt-3 sm:max-h-[calc(100dvh-220px)] sm:overflow-x-auto" data-projects-scroll="">
+      <div className="mt-2 max-h-[calc(100dvh-132px)] overflow-auto border-t border-line-strong sm:mt-3 sm:max-h-[calc(100dvh-220px)] sm:overflow-x-auto" data-projects-scroll="">
         <ul className="divide-y divide-line sm:hidden" data-projects-cards="">
           {ordered.map((row, index) => {
             const text = row.detail || row.full;
             const reasonOpen = tierReasonId === row.id;
             const markName = row.name || row.people[0]?.name || "Project";
             const ink = campusInk(row.campusId || row.campus);
-            const clamped = text ? ellipsisAtBoundary(plainText(text) || "", 110) : null;
+            const clamped = text ? ellipsisAtBoundary(plainText(text) || "", 84) : null;
             const tierTitle =
               row.tier === "S+"
-                ? "S+ — top signal tier"
+                ? "S+ top signal tier"
                 : row.tier === "S"
-                  ? "S — strong signal tier"
+                  ? "S strong signal tier"
                   : row.tier
-                    ? `${row.tier} — ranked signal tier`
+                    ? `${row.tier} ranked signal tier`
                     : undefined;
             return (
-              <li key={row.id} className="px-1 py-2" data-project-card="">
+              <li key={row.id} className="px-1 py-1.5" data-project-card="">
                 <div className="min-w-0">
-                    <button type="button" className="flex min-h-10 w-full items-center gap-2.5 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
-                      <LogoMark name={markName} logoUrl={row.logoUrl} size={32} campusInk={ink} />
+                    <button type="button" className="flex min-h-9 w-full items-center gap-2 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
+                      <LogoMark name={markName} logoUrl={row.logoUrl} size={28} campusInk={ink} />
                       <span className="min-w-0 flex-1 truncate text-[14px] font-semibold leading-5 text-fg">{plainText(row.name) || "n/a"}</span>
                       {row.tier ? (
                         <span
