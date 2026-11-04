@@ -560,18 +560,18 @@ export function SampleInstrumentBrowse({
             data-filters-index-hero=""
             data-n-of-m=""
           >
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filters</p>
-            <p className="mt-1 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]" data-showing-label="">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Filters</p>
+            <p className="mt-1 text-[14px] text-[color:var(--fg-3,#5C647A)]" data-showing-label="">
               Showing
             </p>
-            <p className="mt-1 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-              <span data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
-              <span className="mx-1.5 text-[18px] font-semibold tracking-normal text-[color:var(--fg-3,#5C647A)]">of</span>
-              <span className="text-[22px] font-bold text-[color:var(--fg,#0B0E17)]" data-total-count="">
+            <p className="mt-1 text-[28px] font-semibold leading-none tracking-tight text-[color:var(--fg,#0B0E17)]">
+              <span className="font-mono tabular-nums" data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
+              <span className="mx-1.5 text-[16px] font-medium text-[color:var(--fg-3,#5C647A)]">of</span>
+              <span className="font-mono tabular-nums text-[20px]" data-total-count="">
                 {total.toLocaleString("en-US")}
               </span>
             </p>
-            <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+            <p className="mt-1.5 text-[14px] text-[color:var(--fg-2,#3F465C)]">
               {feed === "leaderboard" ? "on the signal desk" : "companies"}
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-2" data-filter-chips="" aria-label="Active filters">
@@ -630,8 +630,12 @@ export function SampleInstrumentBrowse({
 
       {/* Col 2 · ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
-        <p className="mb-1.5 font-mono text-[11px] font-semibold tabular-nums tracking-wide text-[color:var(--cobalt,#2F4FD8)]" data-hero-stat="">
-          {total.toLocaleString("en-US")} {caption} · {signaledMatch.toLocaleString("en-US")} with a signal · live corpus
+        <p className="mb-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-hero-stat="">
+          <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+          {" "}{caption}
+          {" · "}
+          <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{signaledMatch.toLocaleString("en-US")}</span>
+          {" with a signal"}
         </p>
         {/* Single count hero lives in the Filters column. Ledger keeps sort + optional signal strip. */}
         <div
@@ -726,14 +730,16 @@ export function SampleInstrumentBrowse({
 
           {feed === "directory" && pages > 1 ? (
             <MobileListMast
+              continued
+              pageSignaledCount={pageSignaled}
               kicker="Companies in this batch"
               sealLabel={pageCampusRanks[0]?.label}
               figure={`${pageFrom.toLocaleString("en-US")}-${cards.length.toLocaleString("en-US")}`}
               figureSuffix={`of ${total.toLocaleString("en-US")}`}
               takeaway={
                 pageCampusRanks[0]
-                  ? `${pageCampusRanks[0].label} tops this batch · ${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} signaled · ${pageCampusRanks.length.toLocaleString("en-US")} campuses`
-                  : `${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} on this page have a signal`
+                  ? `${pageCampusRanks[0].label} tops this batch · ${pageCampusRanks.length.toLocaleString("en-US")} campuses`
+                  : `on this page`
               }
               meta={`${pageCampusRanks.length.toLocaleString("en-US")} campuses in range · sort stays below`}
             />
@@ -1480,34 +1486,35 @@ function LedgerRow({
   /** r57: richer stage/program chips on continued mobile batches (companies-more). */
   evidenceRich?: boolean;
 }) {
-  const subtitle = directoryCardSubtitle(card);
+  const pitch = (card.description || "").trim();
   const meta = signalMeta(card);
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
+  const desk = directoryRank(card);
+  const tierLabel = desk.tier === 0 ? "Core" : desk.tier === 1 ? "Watch" : "Listed";
+  const backers = (card.programs?.length ? card.programs : card.primaryProgram ? [card.primaryProgram] : []).slice(0, 3);
+  const yearOrBatch = card.foundedYear != null ? String(card.foundedYear) : null;
   return (
     <Link
       href={`/startup/${card.id}`}
       data-card-signals={card.signals}
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
-      className={`group flex min-h-11 items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
-        ranked ? "gap-2 py-2.5 sm:gap-2.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2 py-2 sm:gap-3 sm:py-3"
-      } ${selected ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55 ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/35" : ""}`}
+      data-card-tier={tierLabel}
+      className={`group flex min-h-11 items-start gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-4 transition-colors duration-150 ease-out last:border-b-0 active:scale-[0.995] sm:gap-3.5 sm:px-4 sm:py-5 lg:hover:bg-[color:var(--bg-2,#F7F8FC)] ${
+        selected ? "bg-[color:var(--bg-2,#F7F8FC)]" : ""
+      }`}
     >
       {rank != null ? (
         <span
-          className={`shrink-0 text-right font-mono font-bold tabular-nums tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${
-            ranked
-              ? "mt-0 w-9 text-[22px] leading-none sm:w-10 sm:text-[24px] lg:w-11 lg:text-[26px]"
-              : "mt-0.5 w-6 text-[16px] leading-none sm:w-8 sm:text-[20px]"
+          className={`mt-1 shrink-0 text-right font-mono font-semibold tabular-nums tracking-tight text-[color:var(--fg-3,#5C647A)] ${
+            ranked ? "w-8 text-[15px] sm:w-9 sm:text-[16px]" : "w-6 text-[13px] sm:w-7"
           }`}
         >
           {String(rank).padStart(2, "0")}
         </span>
       ) : null}
-      {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
-      {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
       {card.logoUrl ? (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} campusInk={campusInk(card.schoolId || card.school)} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 44 : 48} campusInk={campusInk(card.schoolId || card.school)} />
       ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
@@ -1522,60 +1529,71 @@ function LedgerRow({
           </>
         )
       ) : (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} campusInk={campusInk(card.schoolId || card.school)} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 44 : 48} campusInk={campusInk(card.schoolId || card.school)} />
       )}
       <div className="min-w-0 flex-1">
-        <p
-          className={
-            ranked
-              ? `${WRAP_2} text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5`
-              : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
-          }
-        >
-          {card.name}
-        </p>
-        {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]" title={subtitle}>
-            {ellipsisAtBoundary(subtitle, 96)}
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <p className="break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px] sm:leading-6">
+            {card.name}
+          </p>
+          {card.school ? (
+            <span className="text-[13px] text-[color:var(--fg-3,#5C647A)]">{card.school}</span>
+          ) : null}
+        </div>
+        {pitch ? (
+          <p className="mt-1 max-w-2xl text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" title={pitch} data-card-pitch="">
+            {ellipsisAtBoundary(pitch, 140)}
           </p>
         ) : null}
         {why ? (
-          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="" title={why}>
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
-            <span className="mt-0.5 block">{ellipsisAtBoundary(why, 120)}</span>
-          </p>
+          <p className="sr-only" data-why-here="" title={why}>{why}</p>
         ) : (
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
-        {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "flex flex-wrap gap-x-1" : "flex flex-wrap gap-x-1 gap-y-0.5"}`} data-card-facts="">
-            {card.foundedYear != null ? (
-              <span>
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>
-                {" founded"}
-              </span>
-            ) : null}
-            {card.foundedYear != null && card.primaryProgram ? <span aria-hidden> · </span> : null}
-            {card.primaryProgram ? <span className="text-[color:var(--fg-2,#3F465C)]">{card.primaryProgram}</span> : null}
-            {(card.foundedYear != null || card.primaryProgram) && (card.founders?.length ?? 0) > 0 ? <span aria-hidden> · </span> : null}
-            {(card.founders?.length ?? 0) > 0 ? (
-              <span>
-                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{card.founders.length.toLocaleString("en-US")}</span>
-                {card.founders.length === 1 ? " founder" : " founders"}
-              </span>
-            ) : null}
-          </p>
-        ) : null}
-
+        <span className="mt-2.5 flex flex-wrap items-center gap-1.5" data-card-chips="" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined}>
+          <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] font-medium text-[color:var(--fg,#0B0E17)]" data-card-tier-chip="">
+            {tierLabel}
+          </span>
+          {yearOrBatch ? (
+            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-card-year="">
+              {yearOrBatch}
+            </span>
+          ) : null}
+          {card.stage ? (
+            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]" data-evidence-chip="stage">
+              {card.stage}
+            </span>
+          ) : null}
+          {card.sector ? (
+            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] uppercase tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]" data-card-sector="">
+              {card.sector}
+            </span>
+          ) : null}
+          {meta ? (
+            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]" data-evidence-chip="signal">
+              {meta.primary}
+            </span>
+          ) : null}
+          {backers.map((backer) => (
+            <span
+              key={backer}
+              className="inline-flex h-6 max-w-[12rem] items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 text-[12px] text-[color:var(--fg,#0B0E17)]"
+              data-card-backer=""
+              title={backer}
+            >
+              <span className={WRAP_FULL}>{backer}</span>
+            </span>
+          ))}
+        </span>
         {founderLinks.length > 0 ? (
-          <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
+          <span className="mt-2 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
             {founderLinks.slice(0, 3).map((founder) => (
               <button
                 key={founder.linkedinUrl}
                 type="button"
                 title={founder.name}
                 aria-label={`${founder.name} on LinkedIn`}
-                className="inline-flex h-11 min-h-11 min-w-11 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex h-9 min-h-9 items-center gap-1 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 text-[12px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--fg-2,#3F465C)]"
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -1583,43 +1601,15 @@ function LedgerRow({
                 }}
               >
                 in
-                <span className={`max-w-[7rem] ${WRAP_2} font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]`}>{founder.name}</span>
+                <span className={`max-w-[7rem] ${WRAP_FULL}`}>{founder.name}</span>
               </button>
             ))}
           </span>
         ) : null}
-        {meta || (evidenceRich && (card.stage || card.primaryProgram)) ? (
-          <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined}>
-            {meta ? (
-              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" data-evidence-chip="signal">
-                {meta.primary}
-              </span>
-            ) : null}
-            {evidenceRich && card.stage ? (
-              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--ember,#D96B1C)] lg:hidden" data-evidence-chip="stage">
-                {card.stage}
-              </span>
-            ) : null}
-            {evidenceRich && card.primaryProgram && card.primaryProgram !== meta?.primary ? (
-              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)] lg:hidden" data-evidence-chip="program">
-                {card.primaryProgram}
-              </span>
-            ) : null}
-            {meta?.secondary ? (
-              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:hidden" data-evidence-chip="date">
-                {meta.secondary}
-              </span>
-            ) : null}
-          </span>
-        ) : null}
       </div>
       {ranked && card.signals > 0 ? (
-        <span className="mt-0.5 shrink-0 font-mono text-[13px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)] sm:text-[14px]">
+        <span className="mt-1 shrink-0 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg-3,#5C647A)] sm:text-[14px]">
           {card.signals.toLocaleString("en-US")}
-        </span>
-      ) : !ranked && meta?.secondary ? (
-        <span className="mt-0.5 hidden shrink-0 self-center font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)] sm:inline">
-          {meta.secondary}
         </span>
       ) : null}
     </Link>

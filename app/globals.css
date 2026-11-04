@@ -912,43 +912,45 @@ html[data-sample="halflight"] body {
   .sample-paper .campus-index-row .desk-only-num { display: none; }
 }
 
-/* corpus desk short classes (HTML budget) */
+/* corpus desk short classes (HTML budget) — calm directory craft */
 [data-corpus-cards] .c-table {
   width: 100%;
   min-width: 52rem;
   border-collapse: collapse;
   text-align: left;
-  font-size: 12px;
-  line-height: 1rem;
+  font-size: 14px;
+  line-height: 1.35;
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  color: var(--fg, #0B0E17);
 }
 @media (min-width: 640px) {
-  [data-corpus-cards] .c-table { min-width: 100%; font-size: 11px; }
+  [data-corpus-cards] .c-table { min-width: 100%; font-size: 14px; }
 }
 [data-corpus-cards] .c-head {
-  background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 50%, transparent);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--cobalt, #2F4FD8);
+  background: var(--bg-2, #F7F8FC);
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fg-3, #5C647A);
 }
 [data-corpus-cards] .c-th {
   white-space: nowrap;
   border-bottom: 1px solid var(--line, #E1E5EF);
-  padding: 0.5rem 0.625rem;
+  padding: 0.75rem 0.75rem;
   font-weight: 600;
 }
 [data-corpus-cards] .c-th-n {
   position: sticky;
   left: 0;
   z-index: 2;
-  background: var(--cobalt-haze, #E8ECFA);
+  background: var(--bg-2, #F7F8FC);
 }
 [data-corpus-cards] .c-th-m {
   position: sticky;
   left: 7.5rem;
   z-index: 2;
-  background: var(--cobalt-haze, #E8ECFA);
+  background: var(--bg-2, #F7F8FC);
 }
 @media (min-width: 640px) {
   [data-corpus-cards] .c-th-m { position: static; background: transparent; }
@@ -957,7 +959,7 @@ html[data-sample="halflight"] body {
 [data-corpus-cards] td.c-n,
 [data-corpus-cards] td.c-m,
 [data-corpus-cards] td.c-d {
-  padding: 0.5rem 0.625rem;
+  padding: 0.85rem 0.75rem;
 }
 [data-corpus-cards] td.c-n {
   position: sticky;
@@ -989,17 +991,17 @@ html[data-sample="halflight"] body {
   font-weight: 700;
 }
 [data-corpus-cards] .c-a:hover {
-  color: var(--cobalt, #2F4FD8);
+  color: var(--fg, #0B0E17);
   text-decoration: underline;
 }
 [data-corpus-cards] .c-num { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-variant-numeric: tabular-nums; }
 [data-corpus-cards] .c-sig {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  color: var(--cobalt, #2F4FD8);
+  font-weight: 600;
+  color: var(--fg, #0B0E17);
 }
-[data-corpus-cards] .c-link { color: var(--cobalt, #2F4FD8); text-decoration: underline; }
+[data-corpus-cards] .c-link { color: var(--fg, #0B0E17); text-decoration: underline; text-underline-offset: 2px; }
 
 /* corpus row marks: desk hides mobile mark chrome */
 [data-corpus-cards] .c-mark {

@@ -41,7 +41,7 @@ export function FoundersDesk({
 
   return (
     <div data-founders-desk="" data-founders-loaded={rows ? "1" : "0"}>
-      <div className="mt-3 sm:mt-6">
+      <div className="mt-2 sm:mt-3">
         {error ? <p className="text-[14px] text-[color:var(--ember,#D96B1C)]">Could not load the founder table.</p> : null}
         {!rows && !error ? (
           <p className="text-[14px] text-fg-3" data-founders-loading="">

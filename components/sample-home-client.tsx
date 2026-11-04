@@ -91,31 +91,31 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8" data-fold-redesign="seal-dispatch">
-      <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
-        <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-6 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
+      <div className="mb-1 hidden min-h-[9.5rem] lg:block" data-fold-peak-desk="">
+        <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-1 h-[52px] overflow-hidden font-mono text-[72px] font-bold leading-none tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">Peak share</p>
+            <p className="mt-1 h-[40px] overflow-hidden font-mono text-[40px] font-semibold leading-none tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-figure="">
               {peakCount.toLocaleString("en-US")}
-              <span className="mx-2 text-[28px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[36px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
+              <span className="mx-1.5 text-[18px] font-medium tracking-normal text-[color:var(--fg-3,#5C647A)]">/</span>
+              <span className="text-[22px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)]">{shell.dated.toLocaleString("en-US")}</span>
             </p>
-            <p className="mt-1.5 max-w-[36rem] text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
-              {peakLabel} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span>
+            <p className="mt-1.5 max-w-[36rem] text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-fold-peak-caption="">
+              {peakLabel} took <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{pct}%</span>
               {" of every dated signal on record"}
             </p>
-            <div className="mt-2 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
-            <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-              {shell.dated.toLocaleString("en-US")} dated
+            <div className="mt-2 h-[3.5rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
+            <p className="mt-1.5 text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+              <span className="font-mono">{shell.dated.toLocaleString("en-US")}</span> dated
               {shell.earlierValid > 0 ? ` · ${shell.earlierValid.toLocaleString("en-US")} earlier` : ""}
               {shell.undatedMonth > 0 ? ` · ${shell.undatedMonth.toLocaleString("en-US")} undated` : ""}
               {" · "}
-              {shell.quiet.toLocaleString("en-US")} quiet
+              <span className="font-mono">{shell.quiet.toLocaleString("en-US")}</span> quiet
             </p>
           </div>
-          <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Desk rank</p>
-            <div className="mt-2 h-[8rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
+          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">Desk rank</p>
+            <div className="mt-2 h-[7rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
       </div>
@@ -477,7 +477,7 @@ function MapStageOverlays({
   return createPortal(
     <div className="pointer-events-none absolute inset-0 z-[5] flex flex-col" data-fold-map-overlays="" data-fold-desk-bleed="1">
       <div
-        className="pointer-events-auto z-[6] mx-2 mt-2 shrink-0 rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-2 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
+        className="pointer-events-auto z-[6] mx-2 mt-2 shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-2 shadow-[0_10px_32px_rgba(11,14,23,0.08)] backdrop-blur-[2px]"
         data-fold-overlay-mast=""
         data-fold-mast=""
       >
@@ -485,7 +485,7 @@ function MapStageOverlays({
       </div>
       <div className="relative min-h-0 flex-1" data-fold-overlay-body="">
         <aside
-          className={`pointer-events-auto absolute bottom-2 left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+          className={`pointer-events-auto absolute bottom-2 left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_10px_32px_rgba(11,14,23,0.08)] backdrop-blur-[2px] ${
             peakOpen ? "w-[min(340px,34%)]" : "w-auto"
           }`}
           data-fold-overlay-peak=""
@@ -493,7 +493,7 @@ function MapStageOverlays({
           data-fold-panel-collapsed={peakOpen ? "0" : "1"}
         >
           <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open lane</p>
+            <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Open lane</p>
             <button
               type="button"
               className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
@@ -507,7 +507,7 @@ function MapStageOverlays({
           {peakOpen ? <div className="p-2.5">{peak}</div> : null}
         </aside>
         <aside
-          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(300px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(300px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_10px_32px_rgba(11,14,23,0.08)] backdrop-blur-[2px] ${
             foundersOpen ? "" : "!w-auto !bottom-auto"
           }`}
           data-fold-overlay-founders=""
@@ -515,7 +515,7 @@ function MapStageOverlays({
           data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
         >
           <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founders</p>
+            <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Founders</p>
             <button
               type="button"
               className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"

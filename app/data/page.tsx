@@ -89,36 +89,30 @@ export default async function DataExplorerPage({
   return (
     <div className="sample-paper mx-auto max-w-[1200px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
       <DataTheme />
-      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-        <div>
-          <p className="scout-kicker">Company table</p>
-          <h1 className="mt-1.5 scout-display text-[28px] leading-[1.15] sm:text-[40px] sm:leading-none">Full data</h1>
-          <p className="mt-1 font-mono text-[11px] font-semibold tabular-nums tracking-wide text-[color:var(--cobalt,#2F4FD8)]" data-hero-stat="">
-            {universeTotal.toLocaleString("en-US")} vetted companies · stage · sector · signals on file
-          </p>
-          <p className="mt-1 max-w-2xl text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-corpus-explain="">
-            Every investable company in the corpus with the fields we store, not a sample.
-          </p>
-          <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>
-            {" vetted companies in this view · page "}
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
+      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3">
+        <div className="min-w-0">
+          <h1 className="text-[28px] font-semibold leading-none tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[32px]">Full data</h1>
+          <p className="mt-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-hero-stat="" data-corpus-explain="">
+            <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{universeTotal.toLocaleString("en-US")}</span>
+            {" vetted companies · page "}
+            <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{result.page}</span>
             {" of "}
-            {result.pageCount.toLocaleString("en-US")}
+            <span className="font-mono tabular-nums">{result.pageCount.toLocaleString("en-US")}</span>
             {" · "}
-            {CORPUS_PAGE_SIZE} per page
+            {CORPUS_PAGE_SIZE}
+            {" per page"}
           </p>
         </div>
         <a
           href="/data/export"
-          className="hidden h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:inline-flex"
+          className="hidden h-10 min-h-10 items-center rounded-md border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--fg-2,#3F465C)] sm:inline-flex"
           data-corpus-csv=""
         >
           Download CSV
         </a>
         <a
           href="/data/export"
-          className="inline-flex h-11 min-h-11 items-center font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
+          className="inline-flex h-10 min-h-10 items-center text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline sm:hidden"
           data-corpus-csv-mobile=""
         >
           CSV export
@@ -126,46 +120,27 @@ export default async function DataExplorerPage({
       </div>
 
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 hidden text-[13px] leading-5 text-[color:var(--fg-3,#5C647A)] sm:block"
         data-recency-funnel=""
-      >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Vetted list</span>
-        {" · "}
-        <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        {" kept, the same companies as Companies and the map. A company stays in that list when a founder is a current student or graduated in 2023 or later."}
-        {" "}
-        <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
-        {" older-alumni companies are left out of it."}
-        {" "}
-        <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
-        {" are not yet checked and are not in the vetted list."}
-      </p>
-
-      <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-corpus-fill-rates=""
       >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">On file</span>
-        {" · Stage: "}
-        <span data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
-        {" of "}
-        <span data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
-        {" · Sector: "}
-        <span data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
-        {" of "}
-        {fill.total.toLocaleString("en-US")}
-        {" · Founded: "}
-        <span data-count="fill-founded">{fill.founded.toLocaleString("en-US")}</span>
-        {" of "}
-        {fill.total.toLocaleString("en-US")}
-        {" · Funding: "}
-        <span data-count="fill-funding">{fill.funding.toLocaleString("en-US")}</span>
-        {" of "}
-        {fill.total.toLocaleString("en-US")}
-        {" · Website: "}
-        <span data-count="fill-website">{fill.website.toLocaleString("en-US")}</span>
-        {" of "}
-        {fill.total.toLocaleString("en-US")}
+        <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
+        {" vetted · "}
+        <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
+        {" older alumni out · "}
+        <span data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
+        {" unchecked · on file Stage "}
+        <span className="font-mono tabular-nums" data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
+        {"/"}
+        <span className="font-mono tabular-nums" data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
+        {" · Sector "}
+        <span className="font-mono tabular-nums" data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
+        {" · Founded "}
+        <span className="font-mono tabular-nums" data-count="fill-founded">{fill.founded.toLocaleString("en-US")}</span>
+        {" · Funding "}
+        <span className="font-mono tabular-nums" data-count="fill-funding">{fill.funding.toLocaleString("en-US")}</span>
+        {" · Site "}
+        <span className="font-mono tabular-nums" data-count="fill-website">{fill.website.toLocaleString("en-US")}</span>
       </p>
 
       <CorpusFilters
@@ -226,7 +201,7 @@ export default async function DataExplorerPage({
       </div>
 
       {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
-      <div className="mt-2 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch] sm:mt-3" data-corpus-table="" data-corpus-cards="">
+      <div className="mt-3 overflow-x-auto border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch] sm:mt-4" data-corpus-table="" data-corpus-cards="">
         <table className="c-table">
           <thead className="c-head">
             <tr>
@@ -259,9 +234,7 @@ export default async function DataExplorerPage({
                       {row.name}
                     </Link>
                     {why ? (
-                      <span className="c-why mt-0.5 block text-[11px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-why-here="">
-                        <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[color:var(--ember,#D96B1C)]">Why</span>
-                        <span className="text-[color:var(--fg-3,#5C647A)]"> · </span>
+                      <span className="c-why mt-0.5 block text-[13px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-why-here="">
                         {why}
                       </span>
                     ) : null}
@@ -301,7 +274,7 @@ export default async function DataExplorerPage({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-        <p className="font-mono text-[14px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+        <p className="text-[14px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
           Showing {(result.total === 0 ? 0 : (result.page - 1) * result.pageSize + 1).toLocaleString("en-US")}
           {" to "}
           {Math.min(result.page * result.pageSize, result.total).toLocaleString("en-US")}
@@ -310,12 +283,12 @@ export default async function DataExplorerPage({
         </p>
         <div className="flex items-center gap-2">
           {result.page > 1 ? (
-            <Link href={hrefFor({ page: String(result.page - 1) })} className="inline-flex h-11 min-h-11 items-center border border-[color:var(--line-strong,#C5CAD8)] px-3 font-mono text-[11px] font-semibold">
+            <Link href={hrefFor({ page: String(result.page - 1) })} className="inline-flex h-10 min-h-10 items-center border border-[color:var(--line-strong,#C5CAD8)] px-3 text-[14px] font-semibold">
               Previous
             </Link>
           ) : null}
           {result.page < result.pageCount ? (
-            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-11 min-h-11 items-center border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white">
+            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-10 min-h-10 items-center border border-[color:var(--fg,#0B0E17)] bg-[color:var(--fg,#0B0E17)] px-3 text-[14px] font-semibold text-white">
               Next
             </Link>
           ) : null}

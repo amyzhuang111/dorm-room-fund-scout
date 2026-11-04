@@ -35,7 +35,7 @@ export interface TileCampus {
 export type TileCompany = FacetCompany;
 
 const BRAND = "#2F4FD8";
-const COUNT = "font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]";
+const COUNT = "font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
   "United States": "#2F4FD8",
@@ -132,7 +132,7 @@ export function TileGlobe({
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   /** r44 bigmap default; fit() replaces on mount. */
-  const [stageHeight, setStageHeight] = useState(640);
+  const [stageHeight, setStageHeight] = useState(720);
   const hitPadRef = useRef(64);
   const nearestMaxRef = useRef(100);
   const campusesRef = useRef(campuses);
@@ -729,58 +729,56 @@ export function TileGlobe({
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
       {/* Own row above map modes on phone — never absolute over HQs/World/Pause tabs. */}
       {/* Phone: short pill on its own row (full leading). Desk: full counts. Never absolute over map modes. */}
-      <div className={`${locationsMode ? mapStyles.hqCounts : ""} mb-2 flex w-full max-w-full flex-wrap items-end justify-start gap-x-2 gap-y-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-1.5 lg:mb-2 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0`} data-fold-counts="">
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[11px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:text-[12px]" data-fold-counts-line="">
+      <div className={`${locationsMode ? mapStyles.hqCounts : ""} mb-2 flex w-full max-w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 lg:mb-3`} data-fold-counts="">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:text-[14px]" data-fold-counts-line="" data-hero-stat="">
           <Link href="/companies" className="pointer-events-auto whitespace-nowrap hover:underline" data-fold-counts-companies="">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
-            {" vetted companies"}
+            {" vetted"}
           </Link>
           {catalogReady ? (
-            <span className="inline-flex min-h-11 items-center whitespace-nowrap">
+            <span className="whitespace-nowrap">
               <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
-              {" signaled"}
+              {" signaled"}
             </span>
           ) : null}
           <span className="hidden lg:contents" data-fold-counts-desk="">
-            <span>
+            <span className="whitespace-nowrap">
               <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" schools with a pin"}
+              {" campuses"}
             </span>
             {campusesWithFounders > 0 ? (
-              <Link href="/campuses" className="pointer-events-auto hover:underline">
+              <Link href="/campuses" className="pointer-events-auto whitespace-nowrap hover:underline">
                 <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
-                {" campuses with promoted founders"}
+                {" with founders"}
               </Link>
             ) : null}
-            {/* Compact founder counts (checks need data-count + data-founder-count-note). Desk only — phone keeps the short pill. */}
-            <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
+            <Link href="/founders" className="pointer-events-auto whitespace-nowrap hover:underline" data-founder-count-note="">
               <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-              {" founders on those companies"}
+              {" listed"}
               {foundersIndexed > 0 ? (
                 <>
                   {" · "}
                   <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-                  {" in the full index"}
+                  {" indexed"}
                 </>
               ) : null}
             </Link>
             {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
           </span>
         </p>
-        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
-          <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
-            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-0 flex-1 px-1.5 text-[11px] sm:min-w-11 sm:px-3 sm:text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}><span className="sm:hidden">HQs</span><span className="hidden sm:inline">Startup HQs</span></button>
-            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-0 flex-1 px-1.5 bg-white text-[11px] text-[#2f4fd8] sm:min-w-11 sm:px-3 sm:text-[14px]"><span className="sm:hidden">World</span><span className="hidden sm:inline">World view</span></button>
-            <button type="button" aria-pressed={rotationEnabled} title="Rotation pauses while using the map, at city zoom, and for reduced motion" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-0 flex-1 px-1.5 bg-white text-[11px] text-[#2f4fd8] sm:min-w-11 sm:px-3 sm:text-[14px]">{rotationEnabled ? (<><span className="sm:hidden">Pause</span><span className="hidden sm:inline">Pause rotation</span></>) : (<><span className="sm:hidden">Rotate</span><span className="hidden sm:inline">Rotate globe</span></>)}</button>
-            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-0 flex-1 px-1.5 text-[11px] sm:min-w-11 sm:px-3 sm:text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
+        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[13px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)]"><span className="max-sm:sr-only">Map</span>
+          <span className={`${mapStyles.mapModes} ml-auto inline-flex overflow-hidden rounded-full border border-[color:var(--line,#E1E5EF)] bg-white shadow-sm`} role="group" aria-label="Map locations">
+            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-10 min-w-0 flex-1 px-2 text-[12px] sm:min-w-11 sm:px-3 sm:text-[13px] ${locationsMode ? "bg-[color:var(--fg,#0B0E17)] text-white" : "bg-white text-[color:var(--fg-2,#3F465C)]"}`}><span className="sm:hidden">HQs</span><span className="hidden sm:inline">Startup HQs</span></button>
+            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-10 min-w-0 flex-1 px-2 bg-white text-[12px] text-[color:var(--fg-2,#3F465C)] sm:min-w-11 sm:px-3 sm:text-[13px]"><span className="sm:hidden">World</span><span className="hidden sm:inline">World view</span></button>
+            <button type="button" aria-pressed={rotationEnabled} title="Rotation pauses while using the map, at city zoom, and for reduced motion" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-10 min-w-0 flex-1 px-2 bg-white text-[12px] text-[color:var(--fg-2,#3F465C)] sm:min-w-11 sm:px-3 sm:text-[13px]">{rotationEnabled ? (<><span className="sm:hidden">Pause</span><span className="hidden sm:inline">Pause rotation</span></>) : (<><span className="sm:hidden">Rotate</span><span className="hidden sm:inline">Rotate globe</span></>)}</button>
+            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-10 min-w-0 flex-1 px-2 text-[12px] sm:min-w-11 sm:px-3 sm:text-[13px] ${!locationsMode ? "bg-[color:var(--fg,#0B0E17)] text-white" : "bg-white text-[color:var(--fg-2,#3F465C)]"}`}>Campuses</button>
           </span>
         </h2>
         <div
-          className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-white`}
+          className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--line,#E1E5EF)] bg-white`}
           style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
           role={expandedMap ? "dialog" : undefined}
           aria-modal={expandedMap ? true : undefined}
@@ -882,7 +880,7 @@ export function TileGlobe({
             </div>
           ) : null}
           {/* r49: collapsible legend tucked bottom-left — never over Program/filters or stats. */}
-          <div className={`pointer-events-auto absolute left-2 top-2 z-20 max-w-[168px] lg:top-auto lg:bottom-2 ${locationsMode ? "hidden" : ""}`} data-fold-map-legend="">
+          <div className={`pointer-events-auto absolute left-2 top-2 z-20 max-w-[168px] lg:left-auto lg:right-2 lg:top-auto lg:bottom-2 ${locationsMode ? "hidden" : ""}`} data-fold-map-legend="">
             <button
               type="button"
               className="inline-flex h-7 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] shadow-sm"

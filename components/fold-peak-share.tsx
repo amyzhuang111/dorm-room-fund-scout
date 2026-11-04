@@ -54,14 +54,14 @@ export function FoldPeakShare({
   return (
     <div className="mb-0" data-fold-peak-identity="" data-fold-baseline="8" data-fold-peak-shell={live ? "live" : "ssr"} data-fold-redesign="seal-dispatch">
       {/* Desk: Seal Dispatch — cobalt peak + seal desk rank */}
-      <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[9.5rem] lg:block" data-fold-peak-desk="">
         <div
           className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-6 border-b border-[color:var(--line,#E1E5EF)] pb-3"
           data-fold-peak-share=""
         >
           <div className="min-w-0">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Vetted companies</p>
-            <p className="mt-1 h-[52px] overflow-hidden font-mono text-[72px] font-bold leading-none tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">Vetted companies</p>
+            <p className="mt-1 h-[52px] overflow-hidden font-mono text-[40px] font-semibold leading-none tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-figure="">
               {companyTotal.toLocaleString("en-US")}
             </p>
             <p className="mt-1.5 max-w-[36rem] text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
@@ -110,7 +110,7 @@ export function FoldPeakShare({
             </p>
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Founders on file</p>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">Founders on file</p>
             <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Not adjusted for scan depth</p>
             {topCampuses.length > 0 ? (
               <ol className="mt-2 space-y-2" data-fold-peak-campus-rank="">
@@ -140,8 +140,8 @@ export function FoldPeakShare({
 
       {/* Mobile: stacked Seal Dispatch — caption under figure, bars below (no side overlap) */}
       <div className="border-b border-[color:var(--line,#E1E5EF)] pb-2 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Vetted companies</p>
-        <p className="mt-2 h-10 overflow-hidden font-mono text-[40px] font-bold leading-none tracking-[-0.06em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
+        <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">Vetted companies</p>
+        <p className="mt-2 h-10 overflow-hidden font-mono text-[36px] font-semibold leading-none tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-figure="">
           {companyTotal.toLocaleString("en-US")}
         </p>
         <p className="mt-2 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">

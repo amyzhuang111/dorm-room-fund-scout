@@ -153,8 +153,6 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
   const ordered = useMemo(() => groups.flatMap((group) => group.rows), [groups]);
   const hiddenRows = Math.max(0, totalListed - ordered.length);
   const open = ordered.find((row) => row.id === openId) ?? null;
-  const withSignal = rows.filter((row) => row.full || row.detail || row.event || row.signalAt).length;
-  const noSignal = rows.length - withSignal;
 
   const shortlistPeople = useCallback((row: ProjectTableRow) => {
     for (const person of row.people) {
@@ -251,15 +249,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
           ))}
         </p>
       </div>
-      {/* Desktop stats; mobile keeps one quiet count line so results stay above the fold. */}
-      <p className="mb-2 hidden text-[14px] leading-5 text-fg sm:mb-4 sm:block">
-        <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
-        {" / "}
-        <span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal
-        {" / "}
-        <span className="num">{noSignal.toLocaleString("en-US")}</span> with no signal yet
-        {verifiedFilled > 0 ? <>{" / "}<span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</> : null}
-      </p>
+      {/* Page hero already carries the one-line corpus intro; skip duplicate desk stats. */}
       {/* Mobile: search + Filters sheet. Desk: full filter row. */}
       <div className="flex items-center gap-1.5 sm:hidden" data-data-explorer-filters="" role="group" aria-label="Filters">
         <input
@@ -402,11 +392,11 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     ? `${row.tier} ranked signal tier`
                     : undefined;
             return (
-              <li key={row.id} className="px-1 py-1" data-project-card="">
+              <li key={row.id} className="border-b border-line px-1 py-3 last:border-b-0" data-project-card="">
                 <div className="min-w-0">
                     <button type="button" className="flex min-h-9 w-full items-center gap-2 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
-                      <LogoMark name={markName} logoUrl={row.logoUrl} size={28} campusInk={ink} />
-                      <span className={`min-w-0 flex-1 ${WRAP_FULL} text-[14px] font-semibold leading-5 text-fg`}>{plainText(row.name) || "n/a"}</span>
+                      <LogoMark name={markName} logoUrl={row.logoUrl} size={40} campusInk={ink} />
+                      <span className={`min-w-0 flex-1 ${WRAP_FULL} text-[16px] font-semibold leading-5 text-fg`}>{plainText(row.name) || "n/a"}</span>
                       {row.tier ? (
                         <span
                           className={`${tierClass(row.tier)} shrink-0`}
@@ -418,20 +408,23 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                         </span>
                       ) : null}
                     </button>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] leading-4 text-fg-2" data-project-meta="">
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5" data-project-meta="" data-card-chips="">
+                      {row.tier ? (
+                        <span className={`${tierClass(row.tier)} !text-[12px]`} data-tier={row.tier}>{row.tier}</span>
+                      ) : null}
                       {!campusLocked && row.campus ? (
                         row.campusSlug ? (
-                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex items-center py-0.5 text-link">{plainText(row.campus)}</Link>
+                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex h-6 items-center rounded-full border border-line bg-bg px-2 text-[12px] text-fg-2">{plainText(row.campus)}</Link>
                         ) : (
-                          <span>{plainText(row.campus)}</span>
+                          <span className="inline-flex h-6 items-center rounded-full border border-line bg-bg px-2 text-[12px] text-fg-2">{plainText(row.campus)}</span>
                         )
                       ) : null}
-                      {row.verified ? <span className="text-ok">Verified</span> : null}
-                      {row.event ? <span className="text-fg-3">{plainText(row.event)}</span> : null}
+                      {row.verified ? <span className="inline-flex h-6 items-center rounded-full border border-line bg-bg px-2 text-[12px] text-ok">Verified</span> : null}
+                      {row.event ? <span className="inline-flex h-6 max-w-[14rem] items-center rounded-full border border-line bg-raised px-2 text-[12px] text-fg">{plainText(row.event)}</span> : null}
                       {row.tierBasis ? (
                         <button
                           type="button"
-                          className="py-0.5 text-[11px] text-link"
+                          className="inline-flex h-6 items-center px-1 text-[12px] text-link"
                           data-tier-reason-trigger=""
                           aria-expanded={reasonOpen}
                           onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
@@ -446,7 +439,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     <button type="button" className="mt-0.5 hidden min-h-8 w-full text-left text-[13px] leading-5 text-fg-2 sm:block" onClick={() => { setCursor(index); setOpenId(row.id); }} title={text ? plainText(text) ?? undefined : undefined}>
                       {clamped || "No signal yet"}
                     </button>
-                    <p className={`mt-0.5 ${WRAP_FULL} text-[12px] leading-5 text-fg-3 sm:hidden`} title={text ? plainText(text) ?? undefined : undefined}>
+                    <p className={`mt-1 ${WRAP_FULL} text-[14px] leading-5 text-fg-2 sm:hidden`} title={text ? plainText(text) ?? undefined : undefined} data-card-pitch="">
                       {clamped || row.event || "Open for signal"}
                     </p>
                 </div>

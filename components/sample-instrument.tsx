@@ -408,9 +408,9 @@ function facetAnchorId(title: string): string {
 function FacetGroup({ title, children, defaultOpen = true, dense = false }: { title: string; children: ReactNode; defaultOpen?: boolean; dense?: boolean }) {
   const anchor = facetAnchorId(title);
   return (
-    <details id={anchor} className={`scroll-mt-16 border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-2 py-1.5" : "px-2.5 py-2"}`} open={defaultOpen} data-facet-group={anchor}>
-      <summary className={`cursor-pointer font-mono text-[10px] font-medium uppercase ${dense ? "tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]"}`}>{title}</summary>
-      <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">{children}</div>
+    <details id={anchor} className={`scroll-mt-16 border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-2 py-2" : "px-2.5 py-2.5"}`} open={defaultOpen} data-facet-group={anchor}>
+      <summary className="cursor-pointer text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{title}</summary>
+      <div className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]">{children}</div>
     </details>
   );
 }
@@ -462,11 +462,11 @@ function FacetRow({
       />
       {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: dot }} aria-hidden /> : null}
       {icon && !dot ? <span className="font-mono text-[9px] leading-none text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>{icon}</span> : null}
-      <span className={`min-w-0 flex-1 ${WRAP_FULL} text-[11px] ${active ? "font-semibold text-[color:var(--fg,#0B0E17)]" : emphasis ? "font-semibold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>
+      <span className={`min-w-0 flex-1 ${WRAP_FULL} text-[14px] leading-5 ${active ? "font-semibold text-[color:var(--fg,#0B0E17)]" : emphasis ? "font-semibold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>
         {label}
       </span>
       {count != null ? (
-        <span className={`shrink-0 font-mono text-[11px] tabular-nums ${active || emphasis ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>
+        <span className={`shrink-0 font-mono text-[12px] tabular-nums ${active || emphasis ? "font-bold text-[color:var(--fg,#0B0E17)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>
           {` · ${count.toLocaleString("en-US")}`}
         </span>
       ) : null}
@@ -666,7 +666,7 @@ export function FacetRail({
         {/* Index column: parent already owns the Filters + N of M hero. Sheet keeps its own. */}
         {index ? null : dense && !sheet ? null : (
           <>
-            <p className={`font-mono text-[10px] uppercase ${sheet || dense ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">
               Filters
             </p>
             {sheet && indexCount != null ? (
@@ -695,7 +695,7 @@ export function FacetRail({
             <a
               key={id}
               href={`#${id}`}
-              className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]/50"
+              className="inline-flex h-7 items-center rounded-full border border-[color:var(--line,#E1E5EF)] px-2.5 text-[12px] font-medium text-[color:var(--fg-2,#3F465C)] hover:border-[color:var(--fg-2,#3F465C)]"
               onClick={(event) => {
                 event.preventDefault();
                 document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -746,7 +746,7 @@ export function FacetRail({
       </div>
       {editorial ? (
         <div id="facet-status" className="shrink-0 scroll-mt-16 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" data-facet-status-pin="">
-          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Status</p>
+          <p className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Status</p>
           <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">
             <FacetRow facet="status" count={listedTotal} active={!facets.status} onClick={() => set({ status: null })} label="All" />
             {statuses.map((item) => (
