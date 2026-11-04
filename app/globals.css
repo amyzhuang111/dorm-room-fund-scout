@@ -717,8 +717,8 @@ html[data-sample="halflight"] body {
     line-height: 1.25 !important;
   }
   .sample-paper [data-company-mobile-hero] [data-company-name-lead] {
-    font-size: 28px !important;
-    line-height: 1.05 !important;
+    font-size: 26px !important;
+    line-height: 1.25 !important;
     letter-spacing: -0.02em;
   }
   .sample-paper [data-company-full-record] h2,
@@ -836,7 +836,7 @@ html[data-sample="halflight"] body {
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  line-height: 1.25;
+  line-height: 1.45;
   color: var(--fg, #0B0E17);
 }
 .sample-paper .campus-index-row .campus-country {
@@ -2102,5 +2102,31 @@ html:has([data-networks-cream]) [data-site-nav] {
   [data-company-card] .mt-0\.5.text-\[12px\],
   .sample-paper [data-ledger-stage] p.text-\[12px\].leading-4 {
     line-height: 1.35 !important;
+  }
+}
+
+
+/* mobile-line-collision-floor
+   Range.getClientRects on wrapped text collide when leading ≤ ~1.2 at 375.
+   Floor body/meta/kicker wraps so line boxes cannot overlap themselves. */
+@media (max-width: 639px) {
+  .sample-paper p:not(.scout-display):not([data-fold-peak-figure]):not(.page-title):not([data-company-name-lead]),
+  .sample-paper li,
+  .sample-paper td,
+  .sample-paper [data-showing-founders],
+  .sample-paper [data-founders-searchable-note],
+  .sample-paper .campus-name,
+  .sample-paper [data-dossier-spread-mobile] p:not([data-company-name-lead]),
+  .sample-paper [data-dossier-timeline] p:not([data-company-name-lead]) {
+    line-height: 1.45 !important;
+  }
+  .sample-paper [data-company-name-lead] {
+    line-height: 1.25 !important;
+  }
+  /* Kickers like "Scout dossier" need gap from the title below */
+  .sample-paper [data-dossier-spread-mobile] .scout-kicker,
+  .sample-paper [data-dossier-timeline] .scout-kicker {
+    line-height: 1.45 !important;
+    margin-bottom: 0.35rem !important;
   }
 }

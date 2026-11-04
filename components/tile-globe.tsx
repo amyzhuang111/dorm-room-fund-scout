@@ -726,8 +726,9 @@ export function TileGlobe({
 
   return (
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
-      <div className={`${locationsMode ? mapStyles.hqCounts : ""} pointer-events-none absolute right-2 top-2 z-20 mb-0 ml-auto flex max-w-[70%] flex-wrap items-end justify-end gap-x-2 gap-y-0.5 rounded-sm bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 shadow-sm backdrop-blur-[2px] lg:pointer-events-auto lg:static lg:mb-2 lg:ml-0 lg:max-w-none lg:justify-between lg:gap-x-4 lg:gap-y-1 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none`} data-fold-counts="" style={locationsMode ? {position:"relative",maxWidth:"none",top:"auto",right:"auto",margin:0} : undefined}>
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
+      {/* Own row above map modes on phone — never absolute over HQs/World/Pause tabs. */}
+      <div className={`${locationsMode ? mapStyles.hqCounts : ""} mb-2 flex w-full max-w-full flex-wrap items-end justify-start gap-x-2 gap-y-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-1.5 lg:mb-2 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0`} data-fold-counts="">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 text-[11px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:text-[12px]">
           <Link href="/companies" className="pointer-events-auto hover:underline">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" vetted companies"}
@@ -817,7 +818,7 @@ export function TileGlobe({
           ) : null}
           {!locationsMode && pinned ? (
             <div
-              className="absolute bottom-8 left-3 z-30 w-[min(300px,calc(100%-1.5rem))] rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 text-left shadow-sm"
+              className="absolute bottom-[calc(var(--fold-sheet-rest,108px)+12px)] left-3 z-30 w-[min(300px,calc(100%-1.5rem))] rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 text-left shadow-sm lg:bottom-8"
               data-fold-entity-card=""
               data-entity-selected={pinned.id}
             >

@@ -223,6 +223,7 @@ function MapFoldSheet({
   const DECK = 300;
   const [height, setHeight] = useState(REST);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mapSelected, setMapSelected] = useState(false);
   heightRef.current = height;
   useEffect(() => {
     const sync = () => setMenuOpen(document.documentElement.getAttribute("data-nav-menu-open") === "1");
@@ -231,6 +232,26 @@ function MapFoldSheet({
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-nav-menu-open"] });
     return () => mo.disconnect();
   }, []);
+  useEffect(() => {
+    const syncSel = () => setMapSelected(!!document.querySelector("[data-entity-selected]"));
+    syncSel();
+    const mo = new MutationObserver(syncSel);
+    mo.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-entity-selected"] });
+    // Also watch for card mount/unmount
+    const mo2 = new MutationObserver(syncSel);
+    mo2.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      mo.disconnect();
+      mo2.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    const restPx = menuOpen || mapSelected ? 0 : REST;
+    document.documentElement.style.setProperty("--fold-sheet-rest", `${restPx}px`);
+    return () => {
+      document.documentElement.style.removeProperty("--fold-sheet-rest");
+    };
+  }, [menuOpen, mapSelected]);
   const minH = 100;
   const clampH = (h: number) => {
     const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
@@ -325,7 +346,7 @@ function MapFoldSheet({
     }
   };
 
-  if (menuOpen) {
+  if (menuOpen || mapSelected) {
     return (
       <div
         ref={sheetRef}
@@ -333,7 +354,8 @@ function MapFoldSheet({
         data-fold-map-sheet=""
         data-fold-sheet-mode={mode}
         data-fold-sheet-rest={String(REST)}
-        data-fold-sheet-hidden-for-menu="1"
+        data-fold-sheet-hidden-for-menu={menuOpen ? "1" : undefined}
+        data-fold-sheet-hidden-for-selection={mapSelected ? "1" : undefined}
         aria-hidden="true"
         style={{ height: 0 }}
       />

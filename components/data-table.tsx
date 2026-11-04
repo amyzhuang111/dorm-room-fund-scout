@@ -222,7 +222,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
 
   return (
     <div>
-      <p className="mb-2 text-[12px] leading-4 text-fg-2 sm:hidden" data-showing-founders="">
+      <p className="mb-2 text-[12px] leading-6 text-fg-2 sm:hidden" data-showing-founders="">
         Showing <span className="num font-bold text-fg">{filtered.length.toLocaleString("en-US")}</span> of{" "}
         <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span> project rows
         {typeof searchableFounderCount === "number" ? (
@@ -231,7 +231,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
             <span className="num font-bold text-fg" data-count="founders-searchable">
               {searchableFounderCount.toLocaleString("en-US")}
             </span>
-            {" searchable founders (names in the index; one person can map to several companies, so this can exceed the row count)"}
+            { " searchable founders" }
           </span>
         ) : null}
       </p>

@@ -358,6 +358,106 @@ for (const vp of VIEWPORTS) {
   await page.close();
 }
 
+
+// (3) Idle @390: stats pill must not cover World/Pause/Campuses map mode tabs.
+// (4) Globe tap @390: Selected card must sit above the Open lane sheet (or sheet hidden).
+{
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 3,
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+  });
+  await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 90000 });
+  await page.waitForTimeout(2500);
+  const pill = await page.evaluate(() => {
+    const counts = document.querySelector("[data-fold-counts]");
+    const modes = [...document.querySelectorAll('[aria-label="Map locations"] button')];
+    if (!counts) return { ok: false, reason: "no-counts" };
+    const cr = counts.getBoundingClientRect();
+    const hit = modes.filter((b) => {
+      const r = b.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) return false;
+      const x1 = Math.max(cr.left, r.left), y1 = Math.max(cr.top, r.top);
+      const x2 = Math.min(cr.right, r.right), y2 = Math.min(cr.bottom, r.bottom);
+      return x2 > x1 + 2 && y2 > y1 + 2;
+    }).map((b) => (b.textContent || "").trim());
+    const cs = getComputedStyle(counts);
+    const clipped = Number(cs.lineHeight) > 0 && cr.height + 0.5 < Number.parseFloat(cs.lineHeight);
+    // Descenders: paragraph inside should not be overflow-hidden clipped
+    const p = counts.querySelector("p");
+    const pr = p ? p.getBoundingClientRect() : cr;
+    const descendersCut = p ? pr.bottom > cr.bottom + 1 : false;
+    return {
+      ok: hit.length === 0 && !descendersCut,
+      hit,
+      descendersCut,
+      countsH: Math.round(cr.height),
+      countsBottom: Math.round(cr.bottom),
+      modeTop: modes[0] ? Math.round(modes[0].getBoundingClientRect().top) : null,
+    };
+  });
+  report.pillOverTabs390 = pill;
+  if (!pill.ok) {
+    report.ok = false;
+    fail(`pill-over-tabs@390: counts cover modes ${JSON.stringify(pill.hit)} descendersCut=${pill.descendersCut}`);
+  } else {
+    console.log(`OK pill-over-tabs@390 counts clear of map modes (h=${pill.countsH})`);
+  }
+
+  // Select a campus (Open lane chip or map tap) so the Selected card mounts.
+  const chip = page.locator("[data-fold-map-sheet] button, [data-fold-map-sheet] a, [data-fold-sheet-body] button").filter({ hasText: /Penn/i }).first();
+  if (await chip.count()) {
+    await chip.click({ force: true });
+    await page.waitForTimeout(900);
+  }
+  if (!(await page.locator("[data-entity-selected], [data-fold-entity-card]").count())) {
+    const box = await page.locator("[data-dispatch-map-stage]").boundingBox();
+    if (box) {
+      for (const [fx, fy] of [[0.72, 0.42], [0.30, 0.45], [0.55, 0.50]]) {
+        await page.mouse.click(box.x + box.width * fx, box.y + box.height * fy);
+        await page.waitForTimeout(900);
+        if (await page.locator("[data-entity-selected], [data-fold-entity-card]").count()) break;
+      }
+    }
+  }
+  await page.waitForTimeout(400);
+  const sel = await page.evaluate(() => {
+    const card = document.querySelector("[data-fold-entity-card]");
+    const sheet = document.querySelector("[data-fold-map-sheet]");
+    if (!card) return { ok: false, reason: "no-selected-card" };
+    const cr = card.getBoundingClientRect();
+    const sheetHidden =
+      !sheet ||
+      sheet.getAttribute("data-fold-sheet-hidden-for-selection") === "1" ||
+      sheet.getAttribute("data-fold-sheet-hidden-for-menu") === "1" ||
+      getComputedStyle(sheet).display === "none" ||
+      sheet.getBoundingClientRect().height < 8;
+    let overlap = 0;
+    if (sheet && !sheetHidden) {
+      const sr = sheet.getBoundingClientRect();
+      const x1 = Math.max(cr.left, sr.left), y1 = Math.max(cr.top, sr.top);
+      const x2 = Math.min(cr.right, sr.right), y2 = Math.min(cr.bottom, sr.bottom);
+      if (x2 > x1 && y2 > y1) overlap = (x2 - x1) * (y2 - y1);
+    }
+    return {
+      ok: sheetHidden || overlap < 24,
+      sheetHidden,
+      overlap: Math.round(overlap),
+      cardBottom: Math.round(cr.bottom),
+      sheetTop: sheet ? Math.round(sheet.getBoundingClientRect().top) : null,
+      selected: card.getAttribute("data-entity-selected"),
+    };
+  });
+  report.selectedCardUnderSheet390 = sel;
+  if (!sel.ok) {
+    report.ok = false;
+    fail(`selected-card-under-sheet@390: ${JSON.stringify(sel)}`);
+  } else {
+    console.log(`OK selected-card-under-sheet@390 sheetHidden=${sel.sheetHidden} overlap=${sel.overlap}`);
+  }
+  await page.close();
+}
+
 await browser.close();
 fs.mkdirSync("reviews", { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(report, null, 2));

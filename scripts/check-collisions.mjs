@@ -25,8 +25,13 @@ const ROUTES = [
   "/companies?feed=leaderboard",
   "/founders",
   "/campuses",
+  "/campuses/penn",
+  "/campuses/stanford",
+  "/campuses/mit",
   "/data",
   "/signals",
+  "/networks",
+  "/methodology",
   "/startup/proj_9GUOmdEYxbuH",
 ];
 

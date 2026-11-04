@@ -354,8 +354,8 @@ export function SampleCompanyShell({
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="scout-kicker">Scout dossier</p>
-                <p className="mt-0.5 text-[26px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
+                <p className="scout-kicker mb-1.5">Scout dossier</p>
+                <p className="text-[26px] font-bold leading-7 tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
                   {dossier?.name ?? "Company"}
                 </p>
                 {dossier?.pitch ? (
