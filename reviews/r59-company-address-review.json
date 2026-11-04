@@ -4,12 +4,12 @@
   "googleMapsAutomaticSync": false,
   "databaseModified": false,
   "counts": {
-    "candidate_needs_verification": 188,
-    "held_from_publication": 34,
-    "new_import_not_reviewed": 1244,
+    "candidate_needs_verification": 187,
+    "held_from_publication": 33,
+    "new_import_not_reviewed": 1203,
     "no_address_found_on_checked_pages": 452,
-    "published_business_address": 104,
-    "source_unavailable": 453
+    "published_business_address": 154,
+    "source_unavailable": 446
   },
   "records": [
     {
@@ -1025,8 +1025,8 @@
     {
       "projectId": "proj_AwGUYMhSdSl6",
       "company": "Alex",
-      "status": "held_from_publication",
-      "reason": "Company legal pages and the active San Francisco business registration identify different business locations. Current office location needs corroboration before publishing coordinates.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Active San Francisco business-location record names Apriora Inc. doing business as Alex. The company website confirms the same legal identity. Commercial office building; location field, not the registered-agent or mailing field.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
@@ -1034,8 +1034,11 @@
         "https://www.alex.com/customer-stories/how-tier4-group-cuts-38-of-fraudulent-applications-with-alex",
         "https://www.alex.com/privacy-policy",
         "https://www.alex.com/terms-of-service",
-        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper(ownership_name)%20like%20'%25APRIORA%25'&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=12"
-      ]
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper(ownership_name)%20like%20'%25APRIORA%25'&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=12",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?uniqueid=1395307-07-251-1172602"
+      ],
+      "addressSource": "https://data.sfgov.org/resource/g8m3-pdis.json?uniqueid=1395307-07-251-1172602",
+      "evidenceType": "municipal_business_location_record"
     },
     {
       "projectId": "proj_te6ttFaAngWX",
@@ -1416,11 +1419,17 @@
     {
       "projectId": "proj_6HeBj8qwSESi",
       "company": "Amity",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_AinjgFGoFJSb",
@@ -1663,11 +1672,17 @@
     {
       "projectId": "proj_BiRH8lIfkEkq",
       "company": "AnyAPI",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_tHZ62-e34XiK",
@@ -1816,11 +1831,15 @@
     {
       "projectId": "proj_ItYsr0m1F0Ya",
       "company": "Aquon",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:02.662Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company contact page explicitly identifies this as its New York office. The published office address, not general university affiliation, establishes the location.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.aquon.ai/contact"
+      ],
+      "addressSource": "https://www.aquon.ai/contact",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_EBOlK80YaOQi",
@@ -1834,11 +1853,17 @@
     {
       "projectId": "proj_mczv8SUkybld",
       "company": "Arbolito Ventures",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_MdHaKznqUu3o",
@@ -3270,11 +3295,17 @@
     {
       "projectId": "proj_xvuS5ILN287n",
       "company": "Bemellou",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_1QB_p3l-2e1X",
@@ -4343,11 +4374,17 @@
     {
       "projectId": "proj_OO32AhKJBtUH",
       "company": "Cado",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_ZeLST9Mz6OQq",
@@ -8423,11 +8460,17 @@
     {
       "projectId": "proj_K_1zxl1-f7q6",
       "company": "EZNRG AI",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_luqcGtpluSxq",
@@ -8564,11 +8607,17 @@
     {
       "projectId": "proj_F8PPsMTxhJ38",
       "company": "FeedLogic",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_SA5dFj2vPjY3",
@@ -9732,11 +9781,17 @@
     {
       "projectId": "proj_W1dSiiKJj7Jr",
       "company": "glimmr",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_zC_rO4tIHI-R",
@@ -10205,11 +10260,17 @@
     {
       "projectId": "proj_GtRd3Puquaqr",
       "company": "Hackney",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_GonoZZNvcuoB",
@@ -10321,11 +10382,17 @@
     {
       "projectId": "proj_LwM7Ck5rjinh",
       "company": "HaptE",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:13:50.378Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_67X5Q_NmsUUF",
@@ -10953,11 +11020,17 @@
     {
       "projectId": "proj_WGMzmw8xU6py",
       "company": "HydroFlo",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:13:50.491Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_8_Il9wv6dfZx",
@@ -11593,11 +11666,17 @@
     {
       "projectId": "proj_0YfZQJ_v3wVM",
       "company": "Irisight",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_pz2vorIT6Irw",
@@ -11936,11 +12015,17 @@
     {
       "projectId": "proj_KUgx2IarOZQC",
       "company": "JukeBox.am",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_D1HeWhcHaVSJ",
@@ -12173,11 +12258,17 @@
     {
       "projectId": "proj_BX0rZfNkQLRT",
       "company": "KasperAI",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_s_omwAT0ZISM",
@@ -12193,11 +12284,17 @@
     {
       "projectId": "proj_0gQrLKr3pS2O",
       "company": "Katallst",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_Th5E7EN464Nh",
@@ -12330,11 +12427,17 @@
     {
       "projectId": "proj_CNYU5inh0Tjf",
       "company": "Kinetic Robotics",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_mu1gGmFuXZ8i",
@@ -12862,11 +12965,17 @@
     {
       "projectId": "proj_CiNT6sOTa9uE",
       "company": "LeakLogik",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_OJVjz-Xvr8Ip",
@@ -13313,11 +13422,17 @@
     {
       "projectId": "proj_kAHz_b8tQc10",
       "company": "Locket Cybersecurity",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_CCojDI2BruLw",
@@ -13518,11 +13633,17 @@
     {
       "projectId": "proj_toS0RgF9AoSK",
       "company": "LumaLift",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:25.856Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_ndqWPhZwpuN9",
@@ -13714,11 +13835,16 @@
     {
       "projectId": "proj_lWssomhxR1tf",
       "company": "MacroCycle",
-      "status": "new_import_not_reviewed",
-      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company contact address corroborated by its federal small-business award profile. The Engine commercial lab building, not a private residence.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://macrocycle.tech/",
+        "https://www.sbir.gov/portfolio/2448345"
+      ],
+      "addressSource": "https://macrocycle.tech/",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_08Q5qMCRB9wu",
@@ -14111,11 +14237,17 @@
     {
       "projectId": "proj_EHRsB3cLM4G8",
       "company": "MatchaBridge",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_4VYkdYKVWMeh",
@@ -15022,11 +15154,17 @@
     {
       "projectId": "proj_ENy7Q2eA6559",
       "company": "Muddbites",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_CSjiN49bqdqw",
@@ -15397,11 +15535,16 @@
     {
       "projectId": "proj_pJM6CyKBm7ua",
       "company": "NeuroBionics",
-      "status": "new_import_not_reviewed",
-      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company-filed SEC principal business address corroborated by current company terms. Commercial office/lab building. Building geometry selected; the unrelated auto-repair point at the same street address was excluded.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.sec.gov/Archives/edgar/data/2100415/000210041525000001/xslFormDX01/primary_doc.xml",
+        "https://neurobionics.io/terms-conditions/"
+      ],
+      "addressSource": "https://www.sec.gov/Archives/edgar/data/2100415/000210041525000001/xslFormDX01/primary_doc.xml",
+      "evidenceType": "company_filed_principal_business_address"
     },
     {
       "projectId": "proj_n2mRuh2hmyX7",
@@ -15514,11 +15657,17 @@
     {
       "projectId": "proj_YmsJdvbCb0lJ",
       "company": "NewVox",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_mWdEp_ISM5f4",
@@ -15602,20 +15751,32 @@
     {
       "projectId": "proj_e_GGBsxCFnqa",
       "company": "NIL Revival",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_6ILlAciGiJDm",
       "company": "NileData AI",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_Qkmtkaor2HkA",
@@ -16211,11 +16372,17 @@
     {
       "projectId": "proj_LOKuioTyoXVR",
       "company": "OnSight",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_LUTbVu8OBmEE",
@@ -16266,11 +16433,17 @@
     {
       "projectId": "proj_P7nnAGyw6I4B",
       "company": "Open Sport Sense",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_6lufLz3USGV2",
@@ -17784,11 +17957,17 @@
     {
       "projectId": "proj_HyQwSziUCgwX",
       "company": "POMWear",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_S1FBkW-FW2oZ",
@@ -18563,11 +18742,17 @@
     {
       "projectId": "proj_Mk3FeIVZVbNr",
       "company": "QuickSlot Health Inc.",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_sbvRl6l5HL5C",
@@ -18655,11 +18840,17 @@
     {
       "projectId": "proj_9hd_7l_w3VnE",
       "company": "RackFlow",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_pub_0c5fb215ebe500c2fb54",
@@ -19325,11 +19516,17 @@
     {
       "projectId": "proj_mLkOqpS9Grux",
       "company": "Restless",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:13:57.531Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_uhMNdF5sKRto",
@@ -19427,11 +19624,17 @@
     {
       "projectId": "proj_2X9gCP9vzx5G",
       "company": "ReWear",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_pjo41HHCdwm8",
@@ -20101,11 +20304,17 @@
     {
       "projectId": "proj_1lwTv8JzE3UZ",
       "company": "SandStop Pro",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_1aEe-tdcOEcE",
@@ -20213,14 +20422,18 @@
     {
       "projectId": "proj_v0WjCTDIBU9Y",
       "company": "Schemata",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:43.197Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Active municipal business-location record for the simulation company Schemata Inc.; commercial office tower. The current commercial location is used instead of the older residential address in legal text.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.schemata.com/",
-        "https://www.schemata.com/terms-and-conditions"
-      ]
+        "https://www.schemata.com/terms-and-conditions",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?uniqueid=1406204-12-251-1177369",
+        "https://schemata.com/"
+      ],
+      "addressSource": "https://data.sfgov.org/resource/g8m3-pdis.json?uniqueid=1406204-12-251-1177369",
+      "evidenceType": "municipal_business_location_record"
     },
     {
       "projectId": "proj_h8JoQ2jN5uNO",
@@ -20692,11 +20905,17 @@
     {
       "projectId": "proj_av0X0dntSmJp",
       "company": "Shadow Bin",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_TFKUNONmX5eT",
@@ -21301,11 +21520,16 @@
     {
       "projectId": "proj_KKvXr90ZpxU4",
       "company": "Soarce",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Company contact address corroborated by its 2026 SEC filing. GuideWell Innovation CoRE commercial innovation/lab facility, not a residence.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.soarceusa.com/about",
+        "https://www.sec.gov/Archives/edgar/data/2115221/000211522126000002/primary_doc.xml"
+      ],
+      "addressSource": "https://www.soarceusa.com/about",
+      "evidenceType": "company_publication"
     },
     {
       "projectId": "proj_A5LLw4t8jfkV",
@@ -21356,11 +21580,17 @@
     {
       "projectId": "proj_q7Yg7jFcDp3w",
       "company": "Soft Mattr",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_XIVXPdNSJQTh",
@@ -21432,11 +21662,17 @@
     {
       "projectId": "proj_W1Ne2Ny1fWhz",
       "company": "Somnia",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_g-gE9B8OzKgL",
@@ -21782,11 +22018,17 @@
     {
       "projectId": "proj_8iG1fLH4cdVh",
       "company": "Spyke Automation",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_8jRh32ZecMNL",
@@ -22385,11 +22627,17 @@
     {
       "projectId": "proj_PN2zojaf_UJL",
       "company": "Symbia",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:13:51.012Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_hc0pfgjuBwNd",
@@ -22777,11 +23025,17 @@
     {
       "projectId": "proj_dYa1Iktf_tpI",
       "company": "Techy Seniors Systems",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_3DVD6LTazxIr",
@@ -22804,11 +23058,17 @@
     {
       "projectId": "proj_OhFEfHYLs0gz",
       "company": "Tedio",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_DALslRX-ivbJ",
@@ -24037,11 +24297,17 @@
     {
       "projectId": "proj_j7AMqAxvw0NX",
       "company": "UnSure",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_8hr68VyjaRVQ",
@@ -24391,11 +24657,17 @@
     {
       "projectId": "proj_Zsw8WVYHKZe5",
       "company": "VentureSocial",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_pub_fdf785a5ad61ab05c81e",
@@ -24935,11 +25207,17 @@
     {
       "projectId": "proj_kz0e4qfUT-Vs",
       "company": "WhatWay",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_mgk2py0BCuOr",
@@ -25012,11 +25290,17 @@
     {
       "projectId": "proj_SRUHqDADklas",
       "company": "Willie's Wallet",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_pegbm19faQB2",
@@ -25141,11 +25425,17 @@
     {
       "projectId": "proj_KX072qIOEJhJ",
       "company": "Xpnse AI",
-      "status": "source_unavailable",
-      "reason": "No official website recorded for this company.",
-      "checkedAt": "2026-11-03T06:14:53.996Z",
+      "status": "published_business_address",
+      "reason": "Individually reviewed workplace evidence and address/building point. Matched the named venture and Northwestern affiliation to the operator's current Fall 2026 resident roster. The operator explicitly says resident teams use The Garage as their office and receive a dedicated desk and 24/7 access. This is a confirmed shared resident workspace, not an independently verified corporate headquarters. The university affiliation alone was not used to assign the address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.thegarage.northwestern.edu/startups-founders",
+        "https://www.thegarage.northwestern.edu/programs/the-residency-program",
+        "https://www.thegarage.northwestern.edu/contact"
+      ],
+      "addressSource": "https://www.thegarage.northwestern.edu/startups-founders",
+      "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
       "projectId": "proj_zXkjzqRFn_PJ",
@@ -25463,7 +25753,7 @@
       ]
     }
   ],
-  "productionBase": "174f574e26e2506a0f95350798abf27ef8214187",
+  "productionBase": "7d4d3bbe2eca823b2965070ed155c9581bb30007",
   "mergedRecords": [
     {
       "company": "Winko",
@@ -25530,7 +25820,7 @@
       }
     }
   ],
-  "databaseChange": "No database change in this address batch. Inventory reconciled against the current main database plus its existing production prebuild recovery/import patches.",
+  "databaseChange": "No database change. Additive reviewed workplace records for existing public-directory companies.",
   "retiredRecords": [],
   "productionDirectorySnapshot": "Verified deployed directory for merge 59ae9ce595c569dfbd6c88e7ad1bb36d3f64b7ce; includes 111 additional records beyond the temporary database build."
 }
