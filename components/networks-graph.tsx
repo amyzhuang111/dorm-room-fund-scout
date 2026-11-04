@@ -718,7 +718,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       }
       if (poster) {
         const fit = Math.min(size.w / poster.w, size.h / poster.h);
-        cam.scale = clamp(cam.scale, 2.8, 5.5);
+        cam.scale = clamp(cam.scale, 0.3, 5.5);
         const scale = fit * cam.scale;
         const centerX = poster.w / 2 - cam.x / scale;
         const centerY = poster.h / 2 - cam.y / scale;
