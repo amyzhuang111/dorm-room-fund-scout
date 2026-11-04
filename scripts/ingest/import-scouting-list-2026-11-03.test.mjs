@@ -12,12 +12,14 @@ const schema = fs.readFileSync(new URL('../../lib/db/schema.sql', import.meta.ur
 function fixture() {
   const db = new DatabaseSync(':memory:');
   db.exec(schema);
+  db.exec('ALTER TABLE projects ADD COLUMN excluded_reason TEXT');
   for (const campusId of new Set([...entries.map(e => e.campusId).filter(Boolean), 'univ_rice', 'univ_seton_hall_university'])) {
     db.prepare('INSERT INTO universities(id,name) VALUES (?,?)').run(campusId, campusId);
   }
   for (const entry of entries.filter(e => e.existingProjectId)) {
     db.prepare(`INSERT INTO projects (id,name,kind,verification_status,verification_note,last_verified_at)
       VALUES (?,?,'company','confirmed','Existing sourced evidence','2026-09-27')`).run(entry.existingProjectId, entry.name);
+    if (entry.restoreForReview) db.prepare("UPDATE projects SET is_investable_candidate=0, excluded_reason='unverified recency' WHERE id=?").run(entry.existingProjectId);
   }
   for (const [pid, name, campus] of [['pure_seton', 'PURE', 'univ_seton_hall_university'], ['kairos_rice', 'Kairos Health', 'univ_rice']]) {
     db.prepare("INSERT INTO projects(id,name,kind) VALUES (?,?,'company')").run(pid, name);
@@ -28,7 +30,7 @@ function fixture() {
 }
 
 function counts(db) {
-  const tables = ['projects','people','affiliations','claims','notes','sources','relationships','person_project_roles','gate_results','funding_events','company_facts'];
+  const tables = ['projects','people','affiliations','claims','notes','sources','relationships','person_project_roles','gate_results','funding_events','company_facts','accuracy_audit'];
   return Object.fromEntries(tables.map(t => [t, db.prepare(`SELECT count(*) AS n FROM ${t}`).get().n]));
 }
 
@@ -48,6 +50,9 @@ test('imports all 21 records without merging school/name collisions or promoting
     assert.equal(db.prepare('SELECT count(*) AS n FROM company_facts').get().n, 0);
     assert.equal(db.prepare("SELECT count(*) AS n FROM people WHERE enrollment_status IS NOT NULL").get().n, 0);
     assert.equal(db.prepare("SELECT count(*) AS n FROM projects WHERE verification_status='confirmed'").get().n, 10);
+    for (const entry of entries.filter(e => e.restoreForReview)) {
+      assert.equal(db.prepare('SELECT is_investable_candidate FROM projects WHERE id=?').get(entry.existingProjectId).is_investable_candidate, 1);
+    }
     assert.deepEqual(db.prepare('PRAGMA foreign_key_check').all(), []);
     const firstCounts = counts(db);
     const second = applyScoutingList(db, entries, '2026-11-04T23:00:00.000Z');
@@ -91,6 +96,9 @@ test('integrates idempotently with the actual catalog while preserving prior evi
     assert.ok(created <= 10);
     assert.equal(counts(db).projects - before.projects, created);
     assert.equal(counts(db).funding_events, before.funding_events);
+    for (const row of result.filter(r => r.disposition !== 'source')) {
+      assert.equal(db.prepare('SELECT is_investable_candidate FROM projects WHERE id=?').get(row.id).is_investable_candidate, 1, row.name);
+    }
     for (const previous of evidence) {
       assert.deepEqual(db.prepare('SELECT id,verification_status,verification_note,last_verified_at,signal_tier FROM projects WHERE id=?').get(previous.id), previous);
     }

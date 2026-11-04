@@ -109,7 +109,8 @@
     "school": "Purdue",
     "campusId": "univ_purdue",
     "backersOrProgram": "Purdue NVC 2026",
-    "reportedSource": "Web"
+    "reportedSource": "Web",
+    "restoreForReview": true
   },
   {
     "key": "vitawave",
@@ -128,7 +129,8 @@
     "school": "Purdue",
     "campusId": "univ_purdue",
     "backersOrProgram": "Purdue NVC 2026",
-    "reportedSource": "Web"
+    "reportedSource": "Web",
+    "restoreForReview": true
   },
   {
     "key": "kova-group",
@@ -138,7 +140,8 @@
     "school": "Purdue",
     "campusId": "univ_purdue",
     "backersOrProgram": "Purdue NVC 2026",
-    "reportedSource": "Web"
+    "reportedSource": "Web",
+    "restoreForReview": true
   },
   {
     "key": "pure--pure-poker",

@@ -106,6 +106,22 @@ export function applyScoutingList(db, entries, now = new Date().toISOString()) {
       } else if (entry.website && !existing.website_url) {
         db.prepare('UPDATE projects SET website_url=?, updated_at=? WHERE id=?').run(entry.website, now, projectId);
       }
+      // These explicitly requested Purdue leads were previously hidden only
+      // because recency was unverified. Return them to review without changing
+      // their verification warning, enrollment evidence, scores, or gates.
+      if (existing && entry.restoreForReview && !existing.is_investable_candidate) {
+        if (existing.excluded_reason !== 'unverified recency') {
+          throw new Error(`Review restoration requires inspecting the exclusion: ${entry.name}`);
+        }
+        db.prepare('UPDATE projects SET is_investable_candidate=1, excluded_reason=NULL, updated_at=? WHERE id=?').run(now, projectId);
+        const reason = 'User requested this lead be added for review. Previous exclusion: unverified recency. The original verification warning remains in place.';
+        db.prepare(`INSERT OR IGNORE INTO accuracy_audit
+          (id,entity_type,entity_id,action,field,old_value,new_value,reason,checked_at,idempotency_key)
+          VALUES (?,'project',?,'restore_for_review','is_investable_candidate','0','1',?,?,?)`)
+          .run(id('audit', entry.key), projectId, reason, now, `${BATCH}:${entry.key}:restore`);
+        db.prepare(`INSERT OR IGNORE INTO notes (id,entity_type,entity_id,body,author) VALUES (?,'project',?,?,'scout')`)
+          .run(id('note', entry.key, 'restored-for-review'), projectId, reason);
+      }
 
       const supplied = Object.fromEntries(Object.entries({
         name: entry.name, school: entry.school, location: entry.location, funding: entry.funding,
