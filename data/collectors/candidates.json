@@ -69,7 +69,7 @@
     {
       "id": "univ_brandeis_deishacks2022",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_deishacks2022_devpost",
       "sourceName": "DeisHacks 2022 (Devpost gallery)",
       "galleryUrl": "https://deishacks2022.devpost.com/project-gallery",
@@ -82,12 +82,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 145 registrations; Feb 04 - 06, 2022; organizer: Brandeis University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Brandeis University."
+      "notes": "Discovered via Devpost search (organizer match); 145 registrations; Feb 04 - 06, 2022; organizer: Brandeis University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Brandeis University.",
+      "reviewNote": "Rejected 2026-11-04: event 2022 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_brandeis_deishacks_2024",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_deishacks_2024_devpost",
       "sourceName": "DeisHacks 2024 (Devpost gallery)",
       "galleryUrl": "https://deishacks-2024.devpost.com/project-gallery",
@@ -100,12 +101,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 121 registrations; Jan 26 - 28, 2024; organizer: Brandeis University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Brandeis University."
+      "notes": "Discovered via Devpost search (organizer match); 121 registrations; Jan 26 - 28, 2024; organizer: Brandeis University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Brandeis University.",
+      "reviewNote": "Approved 2026-11-04: organizer Brandeis University; venue Brandeis library. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_brandeis_deishacks_2023",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_deishacks_2023_devpost",
       "sourceName": "DeisHacks 2023 (Devpost gallery)",
       "galleryUrl": "https://deishacks-2023.devpost.com/project-gallery",
@@ -118,7 +120,8 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 116 registrations; Feb 03 - 05, 2023; organizer: Brandeis University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Brandeis University."
+      "notes": "Discovered via Devpost search (organizer match); 116 registrations; Feb 03 - 05, 2023; organizer: Brandeis University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Brandeis University.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_calpoly_kiro_hacks_cal_poly",
@@ -136,12 +139,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 228 registrations; May 02 - 03, 2026; organizer: CS+AI Cal Poly. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California Polytechnic State University."
+      "notes": "Discovered via Devpost search (organizer match); 228 registrations; May 02 - 03, 2026; organizer: CS+AI Cal Poly. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California Polytechnic State University.",
+      "reviewNote": "Held 2026-11-04: venue 'Cal Poly Multi Activity Center' not confirmed as San Luis Obispo vs Pomona"
     },
     {
       "id": "univ_calpoly_broncohacks_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_broncohacks_2026_devpost",
       "sourceName": "Broncohacks 2026 (Devpost gallery)",
       "galleryUrl": "https://broncohacks-2026.devpost.com/project-gallery",
@@ -154,7 +158,8 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 161 registrations; Apr 25 - 26, 2026; organizer: Computer Science Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California Polytechnic State University."
+      "notes": "Discovered via Devpost search (venue match); 161 registrations; Apr 25 - 26, 2026; organizer: Computer Science Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California Polytechnic State University.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_csu_hackhayward26",
@@ -172,7 +177,8 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 122 registrations; Mar 21 - 22, 2026; organizer: California State University, East Bay. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California State University."
+      "notes": "Discovered via Devpost search (organizer match); 122 registrations; Mar 21 - 22, 2026; organizer: California State University, East Bay. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California State University.",
+      "reviewNote": "Held 2026-11-04: hosted by Cal State East Bay; univ_csu is the generic system entry"
     },
     {
       "id": "univ_csu_hackhayward_2025",
@@ -190,12 +196,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 102 registrations; Mar 01 - 02, 2025; organizer: California State University, East Bay. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California State University."
+      "notes": "Discovered via Devpost search (organizer match); 102 registrations; Mar 01 - 02, 2025; organizer: California State University, East Bay. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to California State University.",
+      "reviewNote": "Held 2026-11-04: hosted by Cal State East Bay; univ_csu is the generic system entry"
     },
     {
       "id": "univ_case_western_hackcwru_012025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_hackcwru_012025_devpost",
       "sourceName": "HackCWRU 2026: Ideas into Impact (Devpost gallery)",
       "galleryUrl": "https://hackcwru-012025.devpost.com/project-gallery",
@@ -208,12 +215,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 164 registrations; Jan 23 - 25, 2026; organizer: HackCWRU. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Case Western Reserve University."
+      "notes": "Discovered via Devpost search (venue match); 164 registrations; Jan 23 - 25, 2026; organizer: HackCWRU. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Case Western Reserve University.",
+      "reviewNote": "Approved 2026-11-04: organizer HackCWRU; venue Case Western Reserve University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_case_western_hackcwru_v",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackcwru_v_devpost",
       "sourceName": "hackCWRU V (Devpost gallery)",
       "galleryUrl": "https://hackcwru-v.devpost.com/project-gallery",
@@ -226,12 +234,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 110 registrations; Feb 16 - 18, 2018; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Case Western Reserve University."
+      "notes": "Discovered via Devpost search (venue match); 110 registrations; Feb 16 - 18, 2018; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Case Western Reserve University.",
+      "reviewNote": "Rejected 2026-11-04: event 2018 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_gw_hackital2017",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackital2017_devpost",
       "sourceName": "Hackital 2017 (Devpost gallery)",
       "galleryUrl": "https://hackital2017.devpost.com/project-gallery",
@@ -244,12 +253,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 179 registrations; Nov 11 - 12, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to George Washington University."
+      "notes": "Discovered via Devpost search (venue match); 179 registrations; Nov 11 - 12, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to George Washington University.",
+      "reviewNote": "Rejected 2026-11-04: event 2017 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_imperial_claude_hackathon_at_imperial",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_claude_hackathon_at_imperial_devpost",
       "sourceName": "Claude Hackathon at Imperial College London | Claude Builder Club @ Imperial (Devpost gallery)",
       "galleryUrl": "https://claude-hackathon-at-imperial.devpost.com/project-gallery",
@@ -262,12 +272,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 131 registrations; Mar 24, 2026; organizer: Claude Builder Club @ Imperial. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Imperial College London."
+      "notes": "Discovered via Devpost search (organizer match); 131 registrations; Mar 24, 2026; organizer: Claude Builder Club @ Imperial. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Imperial College London.",
+      "reviewNote": "Approved 2026-11-04: organizer Claude Builder Club @ Imperial. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_imperial_ic_hack_26",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_ic_hack_26_devpost",
       "sourceName": "IC Hack 26 (Devpost gallery)",
       "galleryUrl": "https://ic-hack-26.devpost.com/project-gallery",
@@ -280,12 +291,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 402 registrations; Jan 31 - Feb 01, 2026; organizer: DoCSoc. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Imperial College London."
+      "notes": "Discovered via Devpost search (venue match); 402 registrations; Jan 31 - Feb 01, 2026; organizer: DoCSoc. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Imperial College London.",
+      "reviewNote": "Approved 2026-11-04: organizer DoCSoc; venue Imperial College London. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_imperial_ic_hack_25",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_ic_hack_25_devpost",
       "sourceName": "IC Hack 25 (Devpost gallery)",
       "galleryUrl": "https://ic-hack-25.devpost.com/project-gallery",
@@ -298,12 +310,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 265 registrations; Feb 01 - 02, 2025; organizer: DoCSoc. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Imperial College London."
+      "notes": "Discovered via Devpost search (venue match); 265 registrations; Feb 01 - 02, 2025; organizer: DoCSoc. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Imperial College London.",
+      "reviewNote": "Approved 2026-11-04: organizer DoCSoc; venue Imperial College London. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_ithaca_bigred_hacks_2022",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_bigred_hacks_2022_devpost",
       "sourceName": "Cornell BigRed//Hacks 2022 (Devpost gallery)",
       "galleryUrl": "https://bigred-hacks-2022.devpost.com/project-gallery",
@@ -316,7 +329,8 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 204 registrations; Oct 14 - 16, 2022; organizer: BigRed//Hacks. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Ithaca College."
+      "notes": "Discovered via Devpost search (venue match); 204 registrations; Oct 14 - 16, 2022; organizer: BigRed//Hacks. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Ithaca College.",
+      "reviewNote": "Rejected 2026-11-04: event 2022 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_lehigh_lehigh_collegiate_hackathon",
@@ -334,12 +348,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 191 registrations; Oct 19 - 20, 2024; organizer: Lehigh CSBA. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Lehigh University."
+      "notes": "Discovered via Devpost search (organizer match); 191 registrations; Oct 19 - 20, 2024; organizer: Lehigh CSBA. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Lehigh University.",
+      "reviewNote": "Held 2026-11-04: online multi-school regional event hosted by Lehigh CSBA; weak single-university link"
     },
     {
       "id": "univ_lehigh_leh_laf_2023",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_leh_laf_2023_devpost",
       "sourceName": "Leh-Laf Hackathon (Devpost gallery)",
       "galleryUrl": "https://leh-laf-2023.devpost.com/project-gallery",
@@ -352,12 +367,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 148 registrations; Oct 31 - Nov 12, 2023; organizer: Lehigh CSBA. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Lehigh University."
+      "notes": "Discovered via Devpost search (organizer match); 148 registrations; Oct 31 - Nov 12, 2023; organizer: Lehigh CSBA. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Lehigh University.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_lehigh_lehighhacks2023",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_lehighhacks2023_devpost",
       "sourceName": "Lehigh Hacks for Change (Devpost gallery)",
       "galleryUrl": "https://lehighhacks2023.devpost.com/project-gallery",
@@ -370,12 +386,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 131 registrations; Mar 22 - Apr 02, 2023; organizer: Lehigh CSBA, WiCS, LCC & LBC. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Lehigh University."
+      "notes": "Discovered via Devpost search (organizer match); 131 registrations; Mar 22 - Apr 02, 2023; organizer: Lehigh CSBA, WiCS, LCC & LBC. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Lehigh University.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_miami_university_um_horizon_ai_hackathon_2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_um_horizon_ai_hackathon_2025_devpost",
       "sourceName": "University of Miami Horizon AI Hackathon 2025 (Devpost gallery)",
       "galleryUrl": "https://um-horizon-ai-hackathon-2025.devpost.com/project-gallery",
@@ -388,12 +405,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 187 registrations; Feb 22 - 23, 2025; organizer: College of Engineering - Univ of Miami. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Miami University."
+      "notes": "Discovered via Devpost search (organizer match); 187 registrations; Feb 22 - 23, 2025; organizer: College of Engineering - Univ of Miami. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Miami University.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_miami_university_techtogether_miami",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_techtogether_miami_devpost",
       "sourceName": "TechTogether Miami (Devpost gallery)",
       "galleryUrl": "https://techtogether-miami.devpost.com/project-gallery",
@@ -406,12 +424,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (title match); 138 registrations; Feb 11 - 13, 2022; organizer: TechTogether. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Miami University."
+      "notes": "Discovered via Devpost search (title match); 138 registrations; Feb 11 - 13, 2022; organizer: TechTogether. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Miami University.",
+      "reviewNote": "Rejected 2026-11-04: event 2022 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_morgan_state_morganhacks_2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_morganhacks_2025_devpost",
       "sourceName": "MorganHacks 2025 (Devpost gallery)",
       "galleryUrl": "https://morganhacks-2025.devpost.com/project-gallery",
@@ -424,12 +443,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 108 registrations; Apr 26 - 27, 2025; organizer: Morgan State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Morgan State University."
+      "notes": "Discovered via Devpost search (organizer match); 108 registrations; Apr 26 - 27, 2025; organizer: Morgan State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Morgan State University.",
+      "reviewNote": "Approved 2026-11-04: organizer Morgan State University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_morgan_state_msu_hackai_2024",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_msu_hackai_2024_devpost",
       "sourceName": "Morgan State University HackAI 2024 (Devpost gallery)",
       "galleryUrl": "https://msu-hackai-2024.devpost.com/project-gallery",
@@ -442,12 +462,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 105 registrations; Oct 03 - 26, 2024; organizer: Morgan State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Morgan State University."
+      "notes": "Discovered via Devpost search (organizer match); 105 registrations; Oct 03 - 26, 2024; organizer: Morgan State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Morgan State University.",
+      "reviewNote": "Approved 2026-11-04: organizer Morgan State University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_morgan_state_codelincmsu2",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_codelincmsu2_devpost",
       "sourceName": "codeLinc 2 at Morgan State University (Devpost gallery)",
       "galleryUrl": "https://codelincmsu2.devpost.com/project-gallery",
@@ -460,12 +481,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 151 registrations; Apr 15 - 16, 2023; organizer: Lincoln Financial Group. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Morgan State University."
+      "notes": "Discovered via Devpost search (venue match); 151 registrations; Apr 15 - 16, 2023; organizer: Lincoln Financial Group. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Morgan State University.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_ncsu_hackncstate2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_hackncstate2026_devpost",
       "sourceName": "[Invite Only] Hack_NCState 2026 (Devpost gallery)",
       "galleryUrl": "https://hackncstate2026.devpost.com/project-gallery",
@@ -478,12 +500,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 358 registrations; Feb 14 - 15, 2026; organizer: North Carolina State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to North Carolina State University."
+      "notes": "Discovered via Devpost search (organizer match); 358 registrations; Feb 14 - 15, 2026; organizer: North Carolina State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to North Carolina State University.",
+      "reviewNote": "Approved 2026-11-04: organizer North Carolina State University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_ncsu_hackncstate2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_hackncstate2025_devpost",
       "sourceName": "Hack_NCState 2025 (Devpost gallery)",
       "galleryUrl": "https://hackncstate2025.devpost.com/project-gallery",
@@ -496,12 +519,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 301 registrations; Feb 08 - 09, 2025; organizer: North Carolina State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to North Carolina State University."
+      "notes": "Discovered via Devpost search (organizer match); 301 registrations; Feb 08 - 09, 2025; organizer: North Carolina State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to North Carolina State University.",
+      "reviewNote": "Approved 2026-11-04: organizer North Carolina State University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_ncsu_hackncstate2024",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_hackncstate2024_devpost",
       "sourceName": "Hack_NCState 2024 (Devpost gallery)",
       "galleryUrl": "https://hackncstate2024.devpost.com/project-gallery",
@@ -514,12 +538,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 251 registrations; Feb 03 - 04, 2024; organizer: North Carolina State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to North Carolina State University."
+      "notes": "Discovered via Devpost search (organizer match); 251 registrations; Feb 03 - 04, 2024; organizer: North Carolina State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to North Carolina State University.",
+      "reviewNote": "Approved 2026-11-04: organizer North Carolina State University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_rpi_hackrpi_x_2023",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackrpi_x_2023_devpost",
       "sourceName": "HackRPI X (Devpost gallery)",
       "galleryUrl": "https://hackrpi-x-2023.devpost.com/project-gallery",
@@ -532,12 +557,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 298 registrations; Nov 04 - 05, 2023; organizer: Rensselaer Polytechnic Institute. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rensselaer Polytechnic Institute."
+      "notes": "Discovered via Devpost search (organizer match); 298 registrations; Nov 04 - 05, 2023; organizer: Rensselaer Polytechnic Institute. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rensselaer Polytechnic Institute.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_rpi_hackrpi_2019",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackrpi_2019_devpost",
       "sourceName": "HackRPI (Devpost gallery)",
       "galleryUrl": "https://hackrpi-2019.devpost.com/project-gallery",
@@ -550,12 +576,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 201 registrations; Mar 16 - 17, 2019; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rensselaer Polytechnic Institute."
+      "notes": "Discovered via Devpost search (venue match); 201 registrations; Mar 16 - 17, 2019; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rensselaer Polytechnic Institute.",
+      "reviewNote": "Rejected 2026-11-04: event 2019 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_rpi_hackrpi2016",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackrpi2016_devpost",
       "sourceName": "HackRPI 2016 (Devpost gallery)",
       "galleryUrl": "https://hackrpi2016.devpost.com/project-gallery",
@@ -568,12 +595,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 169 registrations; Nov 12 - 13, 2016; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rensselaer Polytechnic Institute."
+      "notes": "Discovered via Devpost search (venue match); 169 registrations; Nov 12 - 13, 2016; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rensselaer Polytechnic Institute.",
+      "reviewNote": "Rejected 2026-11-04: event 2016 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_rit_wichacks_26",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_wichacks_26_devpost",
       "sourceName": "WiCHacks '26 (Devpost gallery)",
       "galleryUrl": "https://wichacks-26.devpost.com/project-gallery",
@@ -586,12 +614,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 137 registrations; Feb 28 - Mar 01, 2026; organizer: Women in Computing at RIT. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rochester Institute of Technology."
+      "notes": "Discovered via Devpost search (venue match); 137 registrations; Feb 28 - Mar 01, 2026; organizer: Women in Computing at RIT. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rochester Institute of Technology.",
+      "reviewNote": "Approved 2026-11-04: organizer Women in Computing at RIT; venue RIT. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_rit_wichacks2018",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_wichacks2018_devpost",
       "sourceName": "WiCHacks 2018 (Devpost gallery)",
       "galleryUrl": "https://wichacks2018.devpost.com/project-gallery",
@@ -604,12 +633,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 123 registrations; Feb 10 - 11, 2018; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rochester Institute of Technology."
+      "notes": "Discovered via Devpost search (venue match); 123 registrations; Feb 10 - 11, 2018; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rochester Institute of Technology.",
+      "reviewNote": "Rejected 2026-11-04: event 2018 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_rit_brickhack",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_brickhack_devpost",
       "sourceName": "BrickHack (Devpost gallery)",
       "galleryUrl": "https://brickhack.devpost.com/project-gallery",
@@ -622,12 +652,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 117 registrations; Apr 18 - 19, 2015; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rochester Institute of Technology."
+      "notes": "Discovered via Devpost search (venue match); 117 registrations; Apr 18 - 19, 2015; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Rochester Institute of Technology.",
+      "reviewNote": "Rejected 2026-11-04: event 2015 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_smu_sg_dothackathon",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_dothackathon_devpost",
       "sourceName": ".HACKathon (Devpost gallery)",
       "galleryUrl": "https://dothackathon.devpost.com/project-gallery",
@@ -640,12 +671,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 171 registrations; Jul 31 - Aug 02, 2025; organizer: Singapore Management University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Singapore Management University."
+      "notes": "Discovered via Devpost search (organizer match); 171 registrations; Jul 31 - Aug 02, 2025; organizer: Singapore Management University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Singapore Management University.",
+      "reviewNote": "Approved 2026-11-04: organizer Singapore Management University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_smu_sg_dothack_heap_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_dothack_heap_2026_devpost",
       "sourceName": "SMU .Hack Enrichment Application Programme 2026 (Devpost gallery)",
       "galleryUrl": "https://dothack-heap-2026.devpost.com/project-gallery",
@@ -658,12 +690,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 113 registrations; May 15 - Jul 24, 2026; organizer: Singapore Management University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Singapore Management University."
+      "notes": "Discovered via Devpost search (organizer match); 113 registrations; May 15 - Jul 24, 2026; organizer: Singapore Management University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Singapore Management University.",
+      "reviewNote": "Approved 2026-11-04: organizer Singapore Management University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_smu_sg_dothack_heap_2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_dothack_heap_2025_devpost",
       "sourceName": "SMU .Hack Enrichment Application Programme 2025 (Devpost gallery)",
       "galleryUrl": "https://dothack-heap-2025.devpost.com/project-gallery",
@@ -676,12 +709,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 103 registrations; Jun 12 - Jul 18, 2025; organizer: Singapore Management University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Singapore Management University."
+      "notes": "Discovered via Devpost search (organizer match); 103 registrations; Jun 12 - Jul 18, 2025; organizer: Singapore Management University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Singapore Management University.",
+      "reviewNote": "Approved 2026-11-04: organizer Singapore Management University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_stevens_hackjps26",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackjps26_devpost",
       "sourceName": "HackJPS 2026 (Devpost gallery)",
       "galleryUrl": "https://hackjps26.devpost.com/project-gallery",
@@ -694,12 +728,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 142 registrations; May 29 - 31, 2026; organizer: John P. Stevens High School. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Stevens Institute of Technology."
+      "notes": "Discovered via Devpost search (organizer match); 142 registrations; May 29 - 31, 2026; organizer: John P. Stevens High School. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Stevens Institute of Technology.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_stevens_stevens_quackhacks_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_stevens_quackhacks_2026_devpost",
       "sourceName": "Stevens QuackHacks 2026 (Devpost gallery)",
       "galleryUrl": "https://stevens-quackhacks-2026.devpost.com/project-gallery",
@@ -712,12 +747,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (title match); 195 registrations; Feb 28 - Mar 01, 2026; organizer: MLH. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Stevens Institute of Technology."
+      "notes": "Discovered via Devpost search (title match); 195 registrations; Feb 28 - Mar 01, 2026; organizer: MLH. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Stevens Institute of Technology.",
+      "reviewNote": "Approved 2026-11-04: title names Stevens; venue SIT Babbio Building (Stevens Institute of Technology). Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_temple_owlhacks_fall_2023",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_owlhacks_fall_2023_devpost",
       "sourceName": "OwlHacks Fall 2023 (Devpost gallery)",
       "galleryUrl": "https://owlhacks-fall-2023.devpost.com/project-gallery",
@@ -730,12 +766,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 112 registrations; Sep 23 - 24, 2023; organizer: temple university. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Temple University."
+      "notes": "Discovered via Devpost search (organizer match); 112 registrations; Sep 23 - 24, 2023; organizer: temple university. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Temple University.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_temple_owlhacks_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_owlhacks_2026_devpost",
       "sourceName": "OwlHacks 2026 (Devpost gallery)",
       "galleryUrl": "https://owlhacks-2026.devpost.com/project-gallery",
@@ -748,12 +785,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 142 registrations; Sep 26 - 27, 2026; organizer: Major League Hacking. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Temple University."
+      "notes": "Discovered via Devpost search (venue match); 142 registrations; Sep 26 - 27, 2026; organizer: Major League Hacking. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Temple University.",
+      "reviewNote": "Approved 2026-11-04: venue Temple University SERC. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_tamu_build4good_2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_build4good_2025_devpost",
       "sourceName": "Build4Good 2025 (Devpost gallery)",
       "galleryUrl": "https://build4good-2025.devpost.com/project-gallery",
@@ -766,12 +804,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 184 registrations; Mar 29, 2025; organizer: Texas A&M Computing Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Texas A&M University."
+      "notes": "Discovered via Devpost search (organizer match); 184 registrations; Mar 29, 2025; organizer: Texas A&M Computing Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Texas A&M University.",
+      "reviewNote": "Approved 2026-11-04: organizer Texas A&M Computing Society; venue Texas A&M. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_tamu_build4good_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_build4good_2026_devpost",
       "sourceName": "Build4Good 2026 (Devpost gallery)",
       "galleryUrl": "https://build4good-2026.devpost.com/project-gallery",
@@ -784,12 +823,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 160 registrations; Mar 28 - 29, 2026; organizer: Texas A&M Computing Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Texas A&M University."
+      "notes": "Discovered via Devpost search (organizer match); 160 registrations; Mar 28 - 29, 2026; organizer: Texas A&M Computing Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Texas A&M University.",
+      "reviewNote": "Approved 2026-11-04: organizer Texas A&M Computing Society; venue Texas A&M. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_arizona_innovationhacks_2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_innovationhacks_2025_devpost",
       "sourceName": "InnovationHacks 2025 (Devpost gallery)",
       "galleryUrl": "https://innovationhacks-2025.devpost.com/project-gallery",
@@ -802,12 +842,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 147 registrations; Apr 19 - 20, 2025; organizer: Arizona State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Arizona."
+      "notes": "Discovered via Devpost search (organizer match); 147 registrations; Apr 19 - 20, 2025; organizer: Arizona State University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Arizona.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_arizona_hack_arizona_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_hack_arizona_2026_devpost",
       "sourceName": "Hack Arizona 2026 (Devpost gallery)",
       "galleryUrl": "https://hack-arizona-2026.devpost.com/project-gallery",
@@ -820,12 +861,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 126 registrations; Apr 25 - 26, 2026; organizer: Hack Arizona. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Arizona."
+      "notes": "Discovered via Devpost search (organizer match); 126 registrations; Apr 25 - 26, 2026; organizer: Hack Arizona. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Arizona.",
+      "reviewNote": "Approved 2026-11-04: organizer Hack Arizona; venue UArizona Health Sciences Innovation Building. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_ubc_hellohacks_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_hellohacks_2026_devpost",
       "sourceName": "HelloHacks (Devpost gallery)",
       "galleryUrl": "https://hellohacks-2026.devpost.com/project-gallery",
@@ -838,12 +880,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 102 registrations; Sep 26 - 27, 2026; organizer: UBC BizTech. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of British Columbia."
+      "notes": "Discovered via Devpost search (venue match); 102 registrations; Sep 26 - 27, 2026; organizer: UBC BizTech. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of British Columbia.",
+      "reviewNote": "Approved 2026-11-04: organizer UBC BizTech; venue UBC. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_ucsb_sb_hacks_x",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_sb_hacks_x_devpost",
       "sourceName": "SB Hacks X (Devpost gallery)",
       "galleryUrl": "https://sb-hacks-x.devpost.com/project-gallery",
@@ -856,12 +899,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 215 registrations; Jan 13 - 14, 2024; organizer: ucsb. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of California, Santa Barbara."
+      "notes": "Discovered via Devpost search (organizer match); 215 registrations; Jan 13 - 14, 2024; organizer: ucsb. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of California, Santa Barbara.",
+      "reviewNote": "Approved 2026-11-04: organizer ucsb; venue Corwin Pavilion (UCSB). Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_ucf_gemiknights",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_gemiknights_devpost",
       "sourceName": "GemiKnights  (Devpost gallery)",
       "galleryUrl": "https://gemiknights.devpost.com/project-gallery",
@@ -874,12 +918,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 167 registrations; Jun 28, 2025; organizer: Knight Hacks. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Central Florida."
+      "notes": "Discovered via Devpost search (venue match); 167 registrations; Jun 28, 2025; organizer: Knight Hacks. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Central Florida.",
+      "reviewNote": "Approved 2026-11-04: organizer Knight Hacks; venue University of Central Florida. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_ucf_knight_hacks_2017",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_knight_hacks_2017_devpost",
       "sourceName": "Knight Hacks 2017 (Devpost gallery)",
       "galleryUrl": "https://knight-hacks-2017.devpost.com/project-gallery",
@@ -892,12 +937,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 141 registrations; Oct 07 - 08, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Central Florida."
+      "notes": "Discovered via Devpost search (venue match); 141 registrations; Oct 07 - 08, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Central Florida.",
+      "reviewNote": "Rejected 2026-11-04: event 2017 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_cincinnati_revuc_vii",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_revuc_vii_devpost",
       "sourceName": "Revolution UC (Devpost gallery)",
       "galleryUrl": "https://revuc-vii.devpost.com/project-gallery",
@@ -910,12 +956,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 131 registrations; Mar 03 - 04, 2018; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Cincinnati."
+      "notes": "Discovered via Devpost search (venue match); 131 registrations; Mar 03 - 04, 2018; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Cincinnati.",
+      "reviewNote": "Rejected 2026-11-04: event 2018 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_colorado_d_incuvator_18979",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_d_incuvator_18979_devpost",
       "sourceName": "App BOLD Design-a-thon (Devpost gallery)",
       "galleryUrl": "https://d-incuvator-18979.devpost.com/project-gallery",
@@ -928,12 +975,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 110 registrations; Feb 02 - 04, 2024; organizer: University of Colorado Denver. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Colorado Boulder."
+      "notes": "Discovered via Devpost search (organizer match); 110 registrations; Feb 02 - 04, 2024; organizer: University of Colorado Denver. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Colorado Boulder.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_colorado_hackcu3",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackcu3_devpost",
       "sourceName": "HackCU III (Devpost gallery)",
       "galleryUrl": "https://hackcu3.devpost.com/project-gallery",
@@ -946,12 +994,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 140 registrations; Apr 22 - 23, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Colorado Boulder."
+      "notes": "Discovered via Devpost search (venue match); 140 registrations; Apr 22 - 23, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Colorado Boulder.",
+      "reviewNote": "Rejected 2026-11-04: event 2017 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_denver_d_incuvator_18979",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_d_incuvator_18979_devpost",
       "sourceName": "App BOLD Design-a-thon (Devpost gallery)",
       "galleryUrl": "https://d-incuvator-18979.devpost.com/project-gallery",
@@ -964,12 +1013,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 110 registrations; Feb 02 - 04, 2024; organizer: University of Colorado Denver. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Denver."
+      "notes": "Discovered via Devpost search (organizer match); 110 registrations; Feb 02 - 04, 2024; organizer: University of Colorado Denver. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Denver.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_uga_robotech_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_robotech_2026_devpost",
       "sourceName": "Robotech 2026 (Devpost gallery)",
       "galleryUrl": "https://robotech-2026.devpost.com/project-gallery",
@@ -982,12 +1032,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 118 registrations; Jan 23 - 25, 2026; organizer: Georgia Tech IEEE. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Georgia."
+      "notes": "Discovered via Devpost search (organizer match); 118 registrations; Jan 23 - 25, 2026; organizer: Georgia Tech IEEE. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Georgia.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_houston_codered_odyssey",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_codered_odyssey_devpost",
       "sourceName": "CodeRED Odyssey (Devpost gallery)",
       "galleryUrl": "https://codered-odyssey.devpost.com/project-gallery",
@@ -1000,12 +1051,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 177 registrations; Oct 30, 2022; organizer: CougarCS. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Houston."
+      "notes": "Discovered via Devpost search (venue match); 177 registrations; Oct 30, 2022; organizer: CougarCS. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Houston.",
+      "reviewNote": "Rejected 2026-11-04: event 2022 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_houston_codered_genesis",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_codered_genesis_devpost",
       "sourceName": "CodeRED: Genesis  (Devpost gallery)",
       "galleryUrl": "https://codered-genesis.devpost.com/project-gallery",
@@ -1018,12 +1070,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 172 registrations; Feb 10 - 11, 2024; organizer: CodeRED. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Houston."
+      "notes": "Discovered via Devpost search (venue match); 172 registrations; Feb 10 - 11, 2024; organizer: CodeRED. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Houston.",
+      "reviewNote": "Approved 2026-11-04: organizer CodeRED; venue University of Houston Student Center South. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_umass_hackumass_v",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackumass_v_devpost",
       "sourceName": "HackUMass V (Devpost gallery)",
       "galleryUrl": "https://hackumass-v.devpost.com/project-gallery",
@@ -1036,12 +1089,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 296 registrations; Nov 03 - 05, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Massachusetts Amherst."
+      "notes": "Discovered via Devpost search (venue match); 296 registrations; Nov 03 - 05, 2017; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Massachusetts Amherst.",
+      "reviewNote": "Rejected 2026-11-04: event 2017 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_miami_um_horizon_ai_hackathon_2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_um_horizon_ai_hackathon_2025_devpost",
       "sourceName": "University of Miami Horizon AI Hackathon 2025 (Devpost gallery)",
       "galleryUrl": "https://um-horizon-ai-hackathon-2025.devpost.com/project-gallery",
@@ -1054,12 +1108,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 187 registrations; Feb 22 - 23, 2025; organizer: College of Engineering - Univ of Miami. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Miami."
+      "notes": "Discovered via Devpost search (organizer match); 187 registrations; Feb 22 - 23, 2025; organizer: College of Engineering - Univ of Miami. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Miami.",
+      "reviewNote": "Approved 2026-11-04: organizer College of Engineering, Univ of Miami; venue UM Lakeside Expo Center. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_miami_techtogether_miami",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_techtogether_miami_devpost",
       "sourceName": "TechTogether Miami (Devpost gallery)",
       "galleryUrl": "https://techtogether-miami.devpost.com/project-gallery",
@@ -1072,12 +1127,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (title match); 138 registrations; Feb 11 - 13, 2022; organizer: TechTogether. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Miami."
+      "notes": "Discovered via Devpost search (title match); 138 registrations; Feb 11 - 13, 2022; organizer: TechTogether. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Miami.",
+      "reviewNote": "Rejected 2026-11-04: event 2022 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_umn_minnehack_2022",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_minnehack_2022_devpost",
       "sourceName": "MinneHack 2022 (Devpost gallery)",
       "galleryUrl": "https://minnehack-2022.devpost.com/project-gallery",
@@ -1090,12 +1146,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 134 registrations; Jan 22 - 23, 2022; organizer: ACM UMN. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Minnesota."
+      "notes": "Discovered via Devpost search (venue match); 134 registrations; Jan 22 - 23, 2022; organizer: ACM UMN. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Minnesota.",
+      "reviewNote": "Rejected 2026-11-04: event 2022 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_university_of_new_haven_yhack2014",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_yhack2014_devpost",
       "sourceName": "YHack 2014 (Devpost gallery)",
       "galleryUrl": "https://yhack2014.devpost.com/project-gallery",
@@ -1108,12 +1165,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 406 registrations; Nov 02, 2014; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of New Haven."
+      "notes": "Discovered via Devpost search (venue match); 406 registrations; Nov 02, 2014; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of New Haven.",
+      "reviewNote": "Rejected 2026-11-04: event 2014 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_pitt_pittchallenge2023",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_pittchallenge2023_devpost",
       "sourceName": "Pitt Challenge 2023 (Devpost gallery)",
       "galleryUrl": "https://pittchallenge2023.devpost.com/project-gallery",
@@ -1126,12 +1184,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 120 registrations; Sep 15 - 17, 2023; organizer: University of Pittsburgh. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Pittsburgh."
+      "notes": "Discovered via Devpost search (organizer match); 120 registrations; Sep 15 - 17, 2023; organizer: University of Pittsburgh. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Pittsburgh.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_pitt_steelhacksxiii",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_steelhacksxiii_devpost",
       "sourceName": "SteelHacks XIII (Devpost gallery)",
       "galleryUrl": "https://steelhacksxiii.devpost.com/project-gallery",
@@ -1144,12 +1203,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 452 registrations; Sep 19 - 20, 2026; organizer: PittCSC. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Pittsburgh."
+      "notes": "Discovered via Devpost search (venue match); 452 registrations; Sep 19 - 20, 2026; organizer: PittCSC. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Pittsburgh.",
+      "reviewNote": "Approved 2026-11-04: organizer PittCSC; venue University of Pittsburgh Posvar Hall. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_rochester_wichacks_26",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_wichacks_26_devpost",
       "sourceName": "WiCHacks '26 (Devpost gallery)",
       "galleryUrl": "https://wichacks-26.devpost.com/project-gallery",
@@ -1162,12 +1222,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 137 registrations; Feb 28 - Mar 01, 2026; organizer: Women in Computing at RIT. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Rochester."
+      "notes": "Discovered via Devpost search (venue match); 137 registrations; Feb 28 - Mar 01, 2026; organizer: Women in Computing at RIT. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Rochester.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_usf_hackabull_2023",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackabull_2023_devpost",
       "sourceName": "HackaBull 2023 (Devpost gallery)",
       "galleryUrl": "https://hackabull-2023.devpost.com/project-gallery",
@@ -1180,12 +1241,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 219 registrations; Mar 25 - 26, 2023; organizer: University of South Florida. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of South Florida."
+      "notes": "Discovered via Devpost search (organizer match); 219 registrations; Mar 25 - 26, 2023; organizer: University of South Florida. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of South Florida.",
+      "reviewNote": "Rejected 2026-11-04: event 2023 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_usf_hackabull_2019",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackabull_2019_devpost",
       "sourceName": "HACKABULL 2019 (Devpost gallery)",
       "galleryUrl": "https://hackabull-2019.devpost.com/project-gallery",
@@ -1198,12 +1260,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 113 registrations; Mar 23 - 24, 2019; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of South Florida."
+      "notes": "Discovered via Devpost search (venue match); 113 registrations; Mar 23 - 24, 2019; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of South Florida.",
+      "reviewNote": "Rejected 2026-11-04: event 2019 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_university_of_texas_at_dallas_hackutd_vi",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hackutd_vi_devpost",
       "sourceName": "HackUTD VI (Devpost gallery)",
       "galleryUrl": "https://hackutd-vi.devpost.com/project-gallery",
@@ -1216,12 +1279,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 346 registrations; Nov 09 - 10, 2019; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Texas at Dallas."
+      "notes": "Discovered via Devpost search (venue match); 346 registrations; Nov 09 - 10, 2019; organizer: n/a. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Texas at Dallas.",
+      "reviewNote": "Rejected 2026-11-04: event 2019 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_university_of_texas_at_dallas_hackai_2025",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_hackai_2025_devpost",
       "sourceName": "HackAI 2025 (Devpost gallery)",
       "galleryUrl": "https://hackai-2025.devpost.com/project-gallery",
@@ -1234,12 +1298,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 269 registrations; Apr 19 - 20, 2025; organizer: Artificial Intelligence Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Texas at Dallas."
+      "notes": "Discovered via Devpost search (venue match); 269 registrations; Apr 19 - 20, 2025; organizer: Artificial Intelligence Society. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Texas at Dallas.",
+      "reviewNote": "Approved 2026-11-04: organizer AI Society; venue UT Dallas. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_university_of_texas_at_dallas_nths_hack_2026",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_nths_hack_2026_devpost",
       "sourceName": "NTHS Hack 2026: Hack the next frontier (Devpost gallery)",
       "galleryUrl": "https://nths-hack-2026.devpost.com/project-gallery",
@@ -1252,12 +1317,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (venue match); 105 registrations; Mar 28, 2026; organizer: ACM@UTD. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Texas at Dallas."
+      "notes": "Discovered via Devpost search (venue match); 105 registrations; Mar 28, 2026; organizer: ACM@UTD. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to University of Texas at Dallas.",
+      "reviewNote": "Rejected 2026-11-04: host university does not match this university (e.g. a different school, a high-school event, or an organizer for another campus)"
     },
     {
       "id": "univ_vcu_megahack_vcu",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "approved",
       "sourceId": "src_megahack_vcu_devpost",
       "sourceName": "MegaHack@VCU (Devpost gallery)",
       "galleryUrl": "https://megahack-vcu.devpost.com/project-gallery",
@@ -1270,12 +1336,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 157 registrations; Jan 27 - 28, 2024; organizer: VIrginia Commonwealth University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Virginia Commonwealth University."
+      "notes": "Discovered via Devpost search (organizer match); 157 registrations; Jan 27 - 28, 2024; organizer: VIrginia Commonwealth University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Virginia Commonwealth University.",
+      "reviewNote": "Approved 2026-11-04: organizer Virginia Commonwealth University. Event 2024 or later. Affiliation stays unverified."
     },
     {
       "id": "univ_vcu_ramhacks2021",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_ramhacks2021_devpost",
       "sourceName": "RamHacks 2021 (Devpost gallery)",
       "galleryUrl": "https://ramhacks2021.devpost.com/project-gallery",
@@ -1288,12 +1355,13 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 102 registrations; Sep 25 - 26, 2021; organizer: VIrginia Commonwealth University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Virginia Commonwealth University."
+      "notes": "Discovered via Devpost search (organizer match); 102 registrations; Sep 25 - 26, 2021; organizer: VIrginia Commonwealth University. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Virginia Commonwealth University.",
+      "reviewNote": "Rejected 2026-11-04: event 2021 (before 2024: people likely graduated)"
     },
     {
       "id": "univ_wpi_hack_wpi_2022",
       "collector": "devpost",
-      "status": "candidate",
+      "status": "rejected",
       "sourceId": "src_hack_wpi_2022_devpost",
       "sourceName": "Hack@WPI 2022 (Devpost gallery)",
       "galleryUrl": "https://hack-wpi-2022.devpost.com/project-gallery",
@@ -1306,7 +1374,8 @@
         "maxProjectFetches": 24,
         "maxFetches": 90
       },
-      "notes": "Discovered via Devpost search (organizer match); 111 registrations; Jan 14 - 16, 2022; organizer: Worcester Polytechnic Institute. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Worcester Polytechnic Institute."
+      "notes": "Discovered via Devpost search (organizer match); 111 registrations; Jan 14 - 16, 2022; organizer: Worcester Polytechnic Institute. NEEDS HUMAN REVIEW: confirm the event is genuinely tied to Worcester Polytechnic Institute.",
+      "reviewNote": "Rejected 2026-11-04: event 2022 (before 2024: people likely graduated)"
     }
   ]
 }
