@@ -28,16 +28,33 @@ export type AtlasData = {
   generatedAt: string;
 };
 export const ATLAS_COLORS = [
-  "#c330ef",
-  "#44d6b1",
-  "#506fee",
-  "#f2e94f",
-  "#ff806b",
-  "#8a48ed",
-  "#7ce5d5",
-  "#e8a34f",
-  "#448bf1",
+  "#c66af4", // orchid
+  "#72dfbc", // mint
+  "#6889f5", // cornflower
+  "#eee77b", // lemon
+  "#f7a493", // coral
+  "#a687ed", // lilac
+  "#a4e7dc", // sea glass
+  "#eed5a4", // warm light
+  "#8dbcf3", // sky
 ];
+
+/** A coverage metric, not a claim of influence or personal acquaintance. */
+export function atlasConnectors(data: AtlasData) {
+  const affiliations = data.nodes.map(() => new Set<string>());
+  const neighbors = data.nodes.map(() => new Set<number>());
+  for (const g of data.groups) for (const i of g.members) affiliations[i]?.add(g.id);
+  for (const [a, b] of data.companies) {
+    if (a === b) continue;
+    neighbors[a]?.add(b);
+    neighbors[b]?.add(a);
+  }
+  return data.nodes.map((node, i) => ({
+    i, id: node.id, affiliations: affiliations[i].size,
+    direct: neighbors[i].size, score: affiliations[i].size + neighbors[i].size,
+  })).filter(n => n.affiliations >= 2 && n.direct >= 1)
+    .sort((a, b) => b.score - a.score || b.affiliations - a.affiliations || a.id.localeCompare(b.id));
+}
 export function safeAtlasUrl(value: string | null | undefined): string | null {
   if (!value) return null;
   try {
