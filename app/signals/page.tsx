@@ -208,7 +208,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   return (
     <div className="mx-auto max-w-[1100px] px-3 pb-10 pt-5 sm:px-6 sm:pb-12 sm:pt-8" data-signals-page="">
       <p className="scout-kicker">Activity</p>
-      <h1 className="mt-0.5 scout-display text-[28px] leading-none text-[color:var(--fg,#0B0E17)] sm:text-[40px]">Signals</h1>
+      <h1 className="mt-1.5 scout-display text-[28px] leading-[1.15] text-[color:var(--fg,#0B0E17)] sm:text-[40px] sm:leading-none">Signals</h1>
       <p className="mt-1.5 max-w-2xl text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">
         Recent company and founder activity, by date, for every campus that has a stored signal.
       </p>

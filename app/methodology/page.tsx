@@ -26,7 +26,7 @@ export default function MethodologyPage() {
         <p className="num text-[12px] text-fg-3">Rules reviewed 2026-09-18</p>
         <p className="page-eyebrow mt-3">How a record is scored</p>
         <h1 className="page-title">Methodology</h1>
-        <p className="pull my-8">A default is never presented as your fund&apos;s official rubric.</p>
+        <p className="pull my-8 leading-[1.35]">A default is never presented as your fund&apos;s official rubric.</p>
         <p className="mt-1 text-[17px] leading-7 text-fg-2">
           This is a scouting workspace any fund can use. Every rule below is tagged with where it came
           from · a published policy, internal sourcing guidance, or a proposed product default · so a default is never presented as your fund&apos;s

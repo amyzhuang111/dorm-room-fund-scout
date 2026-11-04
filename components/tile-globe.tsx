@@ -727,8 +727,9 @@ export function TileGlobe({
   return (
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
       {/* Own row above map modes on phone — never absolute over HQs/World/Pause tabs. */}
+      {/* Phone: short pill on its own row (full leading). Desk: full counts. Never absolute over map modes. */}
       <div className={`${locationsMode ? mapStyles.hqCounts : ""} mb-2 flex w-full max-w-full flex-wrap items-end justify-start gap-x-2 gap-y-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-1.5 lg:mb-2 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0`} data-fold-counts="">
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 text-[11px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:text-[12px]">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[11px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:text-[12px]" data-fold-counts-line="">
           <Link href="/companies" className="pointer-events-auto hover:underline">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" vetted companies"}
@@ -739,18 +740,18 @@ export function TileGlobe({
               {" signaled"}
             </span>
           ) : null}
-          <span>
+          <span className="hidden lg:inline">
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" schools with a pin"}
           </span>
           {campusesWithFounders > 0 ? (
-            <Link href="/campuses" className="pointer-events-auto hover:underline">
+            <Link href="/campuses" className="pointer-events-auto hidden hover:underline lg:inline">
               <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
               {" campuses with promoted founders"}
             </Link>
           ) : null}
-          {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
-          <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
+          {/* Compact founder counts (checks need data-count + data-founder-count-note). Desk only — phone keeps the short pill. */}
+          <Link href="/founders" className="pointer-events-auto hidden hover:underline lg:inline" data-founder-count-note="">
             <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
             {" founders on those companies"}
             {foundersIndexed > 0 ? (
@@ -761,7 +762,7 @@ export function TileGlobe({
               </>
             ) : null}
           </Link>
-          {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
+          {dataThrough ? <span className="hidden text-[color:var(--fg-3,#5C647A)] lg:inline">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>

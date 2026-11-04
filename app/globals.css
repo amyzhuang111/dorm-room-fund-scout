@@ -1422,13 +1422,15 @@ details:not([open]) > :not(summary) {
   [data-fold-counts] {
     margin-bottom: 0.25rem !important;
   }
-  /* Single dense counts line — more globe below without floating over map controls */
-  [data-fold-counts] > p:first-child {
+  /* Short phone pill — full leading, no max-height clip (clipped overflow rects
+     were falsely intersecting the map legend in check-overlay). */
+  [data-fold-counts] > p:first-child,
+  [data-fold-counts] [data-fold-counts-line] {
     gap: 0.35rem 0.65rem !important;
-    font-size: 10px !important;
-    line-height: 1.25 !important;
-    max-height: 2.6em !important;
-    overflow: hidden !important;
+    font-size: 11px !important;
+    line-height: 1.45 !important;
+    max-height: none !important;
+    overflow: visible !important;
   }
   /* Peek sheet covers the stage bottom; hide custom map credit + maplibre attrib so sheet is not flagged as overlay-on-control */
   [data-fold-bigmap-stage] [data-map-credit],
@@ -2108,25 +2110,35 @@ html:has([data-networks-cream]) [data-site-nav] {
 
 /* mobile-line-collision-floor
    Range.getClientRects on wrapped text collide when leading ≤ ~1.2 at 375.
-   Floor body/meta/kicker wraps so line boxes cannot overlap themselves. */
+   Floor body/meta/kicker/title wraps globally (not only under .sample-paper). */
 @media (max-width: 639px) {
-  .sample-paper p:not(.scout-display):not([data-fold-peak-figure]):not(.page-title):not([data-company-name-lead]),
+  .sample-paper p:not(.scout-display):not([data-fold-peak-figure]):not([data-company-name-lead]),
   .sample-paper li,
   .sample-paper td,
   .sample-paper [data-showing-founders],
   .sample-paper [data-founders-searchable-note],
   .sample-paper .campus-name,
   .sample-paper [data-dossier-spread-mobile] p:not([data-company-name-lead]),
-  .sample-paper [data-dossier-timeline] p:not([data-company-name-lead]) {
+  .sample-paper [data-dossier-timeline] p:not([data-company-name-lead]),
+  [data-campus-page] p,
+  [data-campus-stats-mobile],
+  .pull {
     line-height: 1.45 !important;
+  }
+  .page-title {
+    line-height: 1.25 !important;
   }
   .sample-paper [data-company-name-lead] {
     line-height: 1.25 !important;
   }
-  /* Kickers like "Scout dossier" need gap from the title below */
+  /* Kickers need gap from the display title below */
+  .sample-paper .scout-kicker,
   .sample-paper [data-dossier-spread-mobile] .scout-kicker,
   .sample-paper [data-dossier-timeline] .scout-kicker {
     line-height: 1.45 !important;
     margin-bottom: 0.35rem !important;
+  }
+  .sample-paper .scout-display {
+    line-height: 1.15 !important;
   }
 }

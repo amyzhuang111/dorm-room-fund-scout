@@ -92,7 +92,7 @@ export default async function DataExplorerPage({
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
+          <h1 className="mt-1.5 scout-display text-[28px] leading-[1.15] sm:text-[40px] sm:leading-none">Full data</h1>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>
             {" vetted companies in this view · page "}

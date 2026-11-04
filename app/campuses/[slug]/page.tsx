@@ -91,9 +91,9 @@ export default async function CampusPage({
             <span> / </span>
             <span>{label}</span>
           </p>
-          <h1 className="page-title text-[24px] leading-7 sm:text-[inherit] sm:leading-[inherit]">{university.name}</h1>
+          <h1 className="page-title text-[24px] leading-[1.25] sm:text-[inherit] sm:leading-[inherit]">{university.name}</h1>
           <p className="mt-1 hidden text-[14px] text-fg sm:mt-2 sm:block">{university.country ?? "Country not recorded"}</p>
-          <p className="mt-2 font-mono text-[13px] tabular-nums leading-4 text-fg-2 sm:hidden" data-campus-stats-mobile="">
+          <p className="mt-2 font-mono text-[13px] tabular-nums leading-5 text-fg-2 sm:hidden" data-campus-stats-mobile="">
             <span className="font-bold text-fg">{university.founderCount.toLocaleString("en-US")}</span> founders ·{" "}
             <span className="font-bold text-fg">{topTier.toLocaleString("en-US")}</span> top tier ·{" "}
             <span className="font-bold text-fg">{signalsWeek.toLocaleString("en-US")}</span> {SIGNALS_THIS_WEEK_LABEL.toLowerCase()}
