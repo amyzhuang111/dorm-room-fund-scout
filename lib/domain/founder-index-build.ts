@@ -2,13 +2,11 @@ import { getDb } from "../db/client";
 import { shortCampusLabel } from "./campuses";
 import type { FounderLead } from "./founder-index";
 import { listFounders } from "./queries";
+import { canonicalizeTag } from "@/lib/display/canonical-tag";
 import { sectorLabel } from "./sectors";
 
 function programLabel(name: string): string {
-  const trimmed = name.trim();
-  if (!trimmed) return "";
-  if (/venture\s*lab\s*vip-?x/i.test(trimmed) || /^penn\s+venture\s+lab$/i.test(trimmed)) return "Penn Venture Lab";
-  return trimmed;
+  return canonicalizeTag(name).chip ?? "";
 }
 
 function isUsableSourceUrl(url: string | null | undefined): url is string {

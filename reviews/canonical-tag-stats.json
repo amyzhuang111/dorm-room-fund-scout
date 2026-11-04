@@ -1,0 +1,71 @@
+{
+  "uniqueRaws": 703,
+  "mapped": 110,
+  "demoted": 306,
+  "keptShortUnmapped": 354,
+  "noChip": 239,
+  "mappedSamples": [
+    {
+      "raw": "Free Ventures S2026; YC X2026",
+      "chip": "Free Ventures"
+    },
+    {
+      "raw": "TreeHacks 2026: TreeHacks 2026 Winner [Y Combinator] Build an Iconic YC Company with AI (1",
+      "chip": "Y Combinator"
+    },
+    {
+      "raw": "a16z speedrun SR005",
+      "chip": "a16z Speedrun SR005"
+    },
+    {
+      "raw": "Y Combinator Winter 2023",
+      "chip": "YC W23"
+    },
+    {
+      "raw": "Y Combinator",
+      "chip": "Y Combinator"
+    },
+    {
+      "raw": "Accel Leadership Program fellow",
+      "chip": "Accel Scholars"
+    },
+    {
+      "raw": "Y Combinator Fall 2026",
+      "chip": "YC F26"
+    },
+    {
+      "raw": "Y Combinator Winter 2025",
+      "chip": "YC W25"
+    },
+    {
+      "raw": "MIT delta v",
+      "chip": "MIT delta v"
+    },
+    {
+      "raw": "Y Combinator Summer 2024",
+      "chip": "YC S24"
+    },
+    {
+      "raw": "Y Combinator Fall 2025",
+      "chip": "YC F25"
+    },
+    {
+      "raw": "President's Innovation/Sustainability Prize 2020",
+      "chip": "Penn Sustainability Prize"
+    }
+  ],
+  "demotedSamples": [
+    "Morgenthaler-Pavey Startup Competition",
+    "Harvard Innovation Labs — Student i-lab",
+    "Rothberg Catalyzer Fund / EPIC Engineering Pitch Competition",
+    "Project Olympus Spark Grant 2024",
+    "Free Ventures S2026; YC X2026",
+    "TreeHacks 2026: TreeHacks 2026 Winner [Y Combinator] Build an Iconic YC Company with AI (1",
+    "Columbia Startup Lab 2026-2027",
+    "T. Denny Sanford Innovation and Entrepreneurship Institute",
+    "Y Combinator Winter 2023",
+    "Spears Institute for Entrepreneurial Leadership",
+    "Accel Leadership Program fellow",
+    "Y Combinator Fall 2026"
+  ]
+}

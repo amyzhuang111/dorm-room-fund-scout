@@ -3,6 +3,7 @@ import { databasePath, getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { localCompanyLogoUrl } from "./local-logos";
 import { humanizeEnumText } from "@/lib/display/enum-labels";
+import { canonicalizeTag } from "@/lib/display/canonical-tag";
 import { listFoundersForPage } from "./queries";
 
 const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5, talent: 6, Unranked: 7 };
@@ -25,6 +26,8 @@ export interface FounderTableRow {
   verified: boolean;
   logoUrl: string | null;
   programs: string[];
+  /** Canonical chip label → source URL (claim URL preserved across remap). */
+  programSources?: Record<string, string>;
 }
 
 // The database file does not change while an instance runs (read-only bundle on
@@ -75,12 +78,14 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
   }
 
   const programsByProject = new Map<string, string[]>();
+  const programSourcesByProject = new Map<string, Record<string, string>>();
+  const demotedByProject = new Map<string, string[]>();
   try {
     for (const row of db.prepare(
-      `SELECT entity_id AS project_id, value_json, excerpt
+      `SELECT entity_id AS project_id, value_json, excerpt, source_url
          FROM claims
         WHERE entity_type='project' AND claim_type='program_membership'`
-    ).all() as { project_id: string; value_json: string | null; excerpt: string | null }[]) {
+    ).all() as { project_id: string; value_json: string | null; excerpt: string | null; source_url: string | null }[]) {
       let label: string | null = null;
       try {
         const value = JSON.parse(row.value_json || "{}") as { org?: unknown };
@@ -90,9 +95,23 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
       }
       if (!label) label = cleanLabel(row.excerpt);
       if (!label) continue;
-      const list = programsByProject.get(row.project_id) ?? [];
-      if (!list.includes(label)) list.push(label);
-      programsByProject.set(row.project_id, list);
+      const canonical = canonicalizeTag(label);
+      if (canonical.chip) {
+        const list = programsByProject.get(row.project_id) ?? [];
+        if (!list.includes(canonical.chip)) list.push(canonical.chip);
+        programsByProject.set(row.project_id, list);
+        const url = row.source_url?.trim();
+        if (url && /^https?:\/\//i.test(url)) {
+          const map = programSourcesByProject.get(row.project_id) ?? {};
+          if (!map[canonical.chip]) map[canonical.chip] = url;
+          programSourcesByProject.set(row.project_id, map);
+        }
+      }
+      if (canonical.demoted) {
+        const demoted = demotedByProject.get(row.project_id) ?? [];
+        if (!demoted.includes(canonical.demoted)) demoted.push(canonical.demoted);
+        demotedByProject.set(row.project_id, demoted);
+      }
     }
   } catch {
     // Older databases may lack claims; cards simply omit backer chips.
@@ -115,13 +134,30 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         company: founder.linkedCompany?.name ?? founder.possibleCompany?.name ?? founder.projects.find((project) => project.kind === "company")?.name ?? null,
         companyId,
         year: years.get(founder.id) ?? null,
-        signal: scrubDash(signal?.text ?? founder.strongestEvidence),
+        signal: scrubDash(
+          (() => {
+            const base = signal?.text ?? founder.strongestEvidence;
+            const extra = companyId ? demotedByProject.get(companyId) ?? [] : [];
+            if (!extra.length) return base;
+            const parts = [base, ...extra].filter((part): part is string => Boolean(part && part.trim()));
+            // Prefer a single evidence string; skip demotions already contained in base.
+            const merged: string[] = [];
+            for (const part of parts) {
+              const t = part.replace(/\s+/g, " ").trim();
+              if (!t) continue;
+              if (merged.some((have) => have.includes(t) || t.includes(have))) continue;
+              merged.push(t);
+            }
+            return merged[0] ?? null;
+          })(),
+        ),
         signalType: signal?.type ?? null,
         signalAt: signal?.at ?? null,
         score: founder.founderSignal.founderSignal,
         verified: founder.verificationStatus === "confirmed",
         logoUrl: companyId ? localCompanyLogoUrl(companyId) : null,
         programs: companyId ? (programsByProject.get(companyId) ?? []) : [],
+        programSources: companyId ? programSourcesByProject.get(companyId) : undefined,
       };
     });
   rows.sort(

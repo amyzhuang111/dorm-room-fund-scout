@@ -1,3 +1,4 @@
+import { canonicalizeTag } from "@/lib/display/canonical-tag";
 /** Stored fields the company list is allowed to rank on. No database access. */
 export interface RankCard {
   signals: number;
@@ -33,9 +34,7 @@ const STAGE_TRACTION: Record<string, number> = {
 };
 
 function programLabel(name: string): string {
-  const trimmed = name.trim();
-  if (/venture\s*lab\s*vip-?x/i.test(trimmed) || /^penn\s+venture\s+lab$/i.test(trimmed)) return "Penn Venture Lab";
-  return trimmed;
+  return canonicalizeTag(name).chip ?? name.trim();
 }
 
 /** A funding, launch, or acquisition signal. One award or unlabeled signal is weak. */

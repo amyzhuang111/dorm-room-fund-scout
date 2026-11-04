@@ -1,7 +1,6 @@
 "use client";
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { titleCaseTag } from "@/lib/display/tag-label";
 
 export type TagChip = {
   key: string;
@@ -12,7 +11,7 @@ export type TagChip = {
 };
 
 const BASE =
-  "inline-flex h-7 max-w-[14rem] shrink-0 items-center overflow-hidden text-ellipsis whitespace-nowrap rounded-full border border-[color:var(--line,#E1E5EF)] px-2.5 text-[12px] leading-none text-[color:var(--fg,#0B0E17)]";
+  "inline-flex h-7 max-w-[14rem] shrink-0 items-center rounded-full border border-[color:var(--line,#E1E5EF)] px-2.5 text-[12px] leading-none text-[color:var(--fg,#0B0E17)]";
 const TONE: Record<NonNullable<TagChip["tone"]>, string> = {
   default: "bg-[color:var(--bg,#FFFFFF)] font-medium",
   soft: "bg-[color:var(--bg-2,#F7F8FC)]",
@@ -33,7 +32,7 @@ export function TagChips({
   const prepared = useMemo(
     () =>
       chips
-        .map((c) => ({ ...c, label: titleCaseTag(c.label) }))
+        .map((c) => ({ ...c, label: (c.label || "").replace(/\s+/g, " ").trim() }))
         .filter((c) => c.label),
     [chips],
   );

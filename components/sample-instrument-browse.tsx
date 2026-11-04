@@ -21,6 +21,7 @@ import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
 import { TagChips, type TagChip } from "@/components/tag-chips";
 import { sanitizePitch } from "@/lib/display/sanitize-pitch";
+import { canonicalizeTag } from "@/lib/display/canonical-tag";
 import {
   applyFacets,
   emptyFacets,
@@ -1527,7 +1528,24 @@ function LedgerRow({
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   const desk = directoryRank(card);
   const tierLabel = desk.tier === 0 ? "Core" : desk.tier === 1 ? "Watch" : "Listed";
-  const backers = (card.programs?.length ? card.programs : card.primaryProgram ? [card.primaryProgram] : []).slice(0, 3);
+  const backerChips = (() => {
+    const raw = card.programs?.length ? card.programs : card.primaryProgram ? [card.primaryProgram] : [];
+    const out: TagChip[] = [];
+    for (const backer of raw) {
+      const canonical = canonicalizeTag(backer);
+      if (!canonical.chip) continue;
+      if (out.some((chip) => chip.label === canonical.chip)) continue;
+      out.push({
+        key: `b-${canonical.chip}`,
+        label: canonical.chip,
+        tone: "soft",
+        title: canonical.chip,
+        attrs: { "data-card-backer": "" },
+      });
+      if (out.length >= 3) break;
+    }
+    return out;
+  })();
   const yearOrBatch = card.foundedYear != null ? String(card.foundedYear) : null;
   return (
     <Link
@@ -1602,13 +1620,7 @@ function LedgerRow({
             ...(meta
               ? [{ key: "signal", label: meta.primary, attrs: { "data-evidence-chip": "signal" } }]
               : []),
-            ...backers.map((backer) => ({
-              key: `b-${backer}`,
-              label: backer,
-              tone: "soft" as const,
-              title: backer,
-              attrs: { "data-card-backer": "" },
-            })),
+            ...backerChips,
           ].filter(Boolean) as TagChip[]}
         />
         <span className="sr-only" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined} />

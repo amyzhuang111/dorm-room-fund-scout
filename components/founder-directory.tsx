@@ -8,6 +8,7 @@ import { TagChips, type TagChip } from "@/components/tag-chips";
 import { campusInk } from "@/lib/display/campus-ink";
 import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
 import { sanitizePitch } from "@/lib/display/sanitize-pitch";
+import { canonicalizeTag } from "@/lib/display/canonical-tag";
 
 const ROW_PAGE = 60;
 const control =
@@ -278,21 +279,35 @@ export function FounderDirectory({
       <div className="mt-2 grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]" data-founders-spread="">
         <ul className="grid grid-cols-1 gap-0 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)] md:grid-cols-2 md:gap-3 md:divide-y-0 md:border-t-0 lg:grid-cols-2 xl:grid-cols-3" data-founder-cards="">
           {ordered.map((row) => {
-            const pitch = sanitizePitch(row.signal, row.name);
-            const backers = (row.programs || []).slice(0, 3);
+            const demotedBits: string[] = [];
+            const backerChips: TagChip[] = [];
+            for (const backer of row.programs || []) {
+              const canonical = canonicalizeTag(backer);
+              if (canonical.demoted) demotedBits.push(canonical.demoted);
+              if (!canonical.chip) continue;
+              const sourceUrl = row.programSources?.[canonical.chip] ?? row.programSources?.[backer];
+              backerChips.push({
+                key: `b-${canonical.chip}`,
+                label: canonical.chip,
+                tone: "soft" as const,
+                title: canonical.chip,
+                attrs: {
+                  "data-card-backer": "",
+                  ...(sourceUrl ? { "data-source-url": sourceUrl } : {}),
+                },
+              });
+            }
+            const pitch = sanitizePitch(
+              [row.signal, ...demotedBits].filter(Boolean).join(" · "),
+              row.name,
+            );
             const label = tierLabel(row.tier);
             const ink = campusInk(row.campusId || row.campus);
             const chips: TagChip[] = [
               { key: "tier", label: row.tier || label, attrs: { "data-card-tier-chip": "", "data-tier": row.tier ?? undefined } },
               ...(row.campus ? [{ key: "campus", label: row.campus }] : []),
               ...(row.year != null ? [{ key: "year", label: String(row.year), tone: "mono" as const, attrs: { "data-card-year": "" } }] : []),
-              ...backers.map((backer) => ({
-                key: `b-${backer}`,
-                label: backer,
-                tone: "soft" as const,
-                title: backer,
-                attrs: { "data-card-backer": "" },
-              })),
+              ...backerChips.slice(0, 3),
               ...(row.verified ? [{ key: "verified", label: "Verified", tone: "ok" as const }] : []),
             ];
             return (

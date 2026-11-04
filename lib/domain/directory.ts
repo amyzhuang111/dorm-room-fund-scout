@@ -5,6 +5,7 @@ import { campusSlug, shortCampusLabel } from "./campuses";
 import { directoryRank, whyItsHere } from "./directory-rank";
 import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
 import { localCompanyLogoUrl } from "./local-logos";
+import { canonicalizeTag } from "@/lib/display/canonical-tag";
 
 export { directoryRank, whyItsHere };
 
@@ -363,12 +364,12 @@ export function buildDirectoryFromDb(): DirectoryData {
   const programsByProject = new Map<string, string[]>();
   for (const row of db
     .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor'`)
-    .all() as { project_id: string; value_text: string | null }[]) {
-    const name = String(row.value_text ?? "").trim();
-    if (!name) continue;
-    if (!programByProject.has(row.project_id)) programByProject.set(row.project_id, name);
+    .all() as { project_id: string; value_text: string }[]) {
+    if (!row.value_text?.trim()) continue;
+    const chip = canonicalizeTag(row.value_text).chip;
+    if (!chip) continue;
     const list = programsByProject.get(row.project_id) ?? [];
-    if (!list.includes(name)) list.push(name);
+    if (!list.includes(chip)) list.push(chip);
     programsByProject.set(row.project_id, list);
   }
 
