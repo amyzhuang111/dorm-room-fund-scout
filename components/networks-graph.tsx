@@ -116,6 +116,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const [poster, setPoster] = useState<Poster | null>(null);
   const [deals, setDeals] = useState<Record<string, Deal>>({});
   const [size, setSize] = useState({ w: 1200, h: 640 });
+  const [renderFailed, setRenderFailed] = useState(false);
+  const [clickedFounder, setClickedFounder] = useState<string | null>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const [selectedHub, setSelectedHub] = useState<string | null>(null);
   const [legendOtherOpen, setLegendOtherOpen] = useState(false);
@@ -205,6 +207,21 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     setFocusedNode(founder);
     setZoomScale(scale);
   }, [mapFocus, poster, size.w, size.h]);
+
+  useEffect(() => {
+    if (!poster || mapFocus) return;
+    const index = poster.featuredId ? poster.foIds.indexOf(poster.featuredId) : 0;
+    if (index < 0) return;
+    const scale = 3.4;
+    const fit = Math.min(size.w / poster.w, size.h / poster.h);
+    camRef.current = {
+      scale,
+      x: (poster.w / 2 - poster.x[index]) * fit * scale,
+      y: (poster.h / 2 - poster.y[index]) * fit * scale,
+    };
+    velRef.current = { vx: 0, vy: 0, vScale: 0 };
+    setZoomScale(scale);
+  }, [poster, mapFocus, size.w, size.h]);
 
   const founderCount = poster?.foIds.length ?? 0;
 
@@ -568,7 +585,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         }
         ctx.beginPath();
         ctx.fillStyle = `rgba(15,23,42,${0.9 * fade})`;
-        ctx.arc(pt.x, pt.y, Math.max(2.6, baseR), 0, Math.PI * 2);
+        ctx.rect(pt.x - 3, pt.y - 3, 6, 6);
         ctx.fill();
         continue;
       }
@@ -778,6 +795,14 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       // Inertial pan / zoom
       const vel = velRef.current;
       const cam = camRef.current;
+      if (![cam.x, cam.y, cam.scale].every(Number.isFinite)) {
+        cam.x = 0;
+        cam.y = 0;
+        cam.scale = 3.4;
+        vel.vx = 0;
+        vel.vy = 0;
+        vel.vScale = 0;
+      }
       if (!reducedRef.current) {
         if (Math.abs(vel.vx) > 0.02 || Math.abs(vel.vy) > 0.02) {
           cam.x += vel.vx;
@@ -824,12 +849,25 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (wrapRef.current?.getAttribute("data-networks-current-scale") !== scaleTag) {
         wrapRef.current?.setAttribute("data-networks-current-scale", scaleTag);
       }
-      draw();
+      if (poster) {
+        const fit = Math.min(size.w / poster.w, size.h / poster.h);
+        const marginX = poster.w * fit * cam.scale * 0.4;
+        const marginY = poster.h * fit * cam.scale * 0.4;
+        cam.x = clamp(cam.x, -marginX, marginX);
+        cam.y = clamp(cam.y, -marginY, marginY);
+      }
+      try {
+        draw();
+      } catch (error) {
+        console.error("Network map rendering failed", error);
+        setRenderFailed(true);
+        return;
+      }
       rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => { alive = false; cancelAnimationFrame(rafRef.current); };
-  }, [draw, poster]);
+  }, [draw, poster, size]);
 
   const hitTest = useCallback(
     (sx: number, sy: number): number => {
@@ -923,11 +961,6 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     const hit = hitTest(sx, sy);
     velRef.current.vx = 0;
     velRef.current.vy = 0;
-    if (hit >= 0 && poster && poster.kind[hit] !== 2 && !reducedRef.current) {
-      dragNodeRef.current = hit;
-      (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
-      return;
-    }
     dragRef.current = { x: sx, y: sy, cx: camRef.current.x, cy: camRef.current.y };
     (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
   };
@@ -960,7 +993,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     if (poster.kind[hit] === 0) {
       const fid = poster.foIds[hit];
       const deal = fid ? deals[fid] : null;
-      if (deal?.companyId) onSelectCompany?.(deal.companyId);
+      setClickedFounder(fid ?? null);
+      setFocusedNode(hit);
     } else if (poster.kind[hit] === 1) {
       const cid = poster.coIds[hit - founderCount];
       if (cid) onSelectCompany?.(cid);
@@ -971,7 +1005,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     event.preventDefault();
     const dir = event.deltaY > 0 ? -1 : 1;
     // Smooth inertial zoom toward cursor
-    velRef.current.vScale += dir * 0.045;
+    velRef.current.vScale = 0;
     const rect = wrapRef.current?.getBoundingClientRect();
     if (rect && poster) {
       const sx = event.clientX - rect.left;
@@ -984,8 +1018,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       const worldY = (sy - ((size.h - poster.h * fit) / 2 + cam.y + (poster.h * (fit - before)) / 2)) / before;
       const nextScale = clamp(cam.scale * (1 + dir * 0.04), 0.7, 5.5);
       const after = fit * nextScale;
-      cam.x += worldX * (before - after);
-      cam.y += worldY * (before - after);
+      cam.x += (worldX - poster.w / 2) * (before - after);
+      cam.y += (worldY - poster.h / 2) * (before - after);
       cam.scale = nextScale;
     }
   };
@@ -1052,12 +1086,29 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     return poster.campusLabels.slice(0, 10);
   }, [poster]);
 
+  if (renderFailed) {
+    return <div role="alert" className="p-4">The map could not render. <a href="#network-roster" className="underline">Browse founders and startups</a><button type="button" className="ml-4 min-h-11 underline" onClick={() => window.location.reload()}>Reload map</button></div>;
+  }
+
   if (!poster) {
     return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>;
   }
 
   return (
     <div className="w-full overflow-visible" data-networks-desk="">
+      {clickedFounder ? (
+        <aside aria-label="Selected founder" className="m-3 rounded-lg border border-[color:var(--line)] bg-white p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="font-semibold">{deals[clickedFounder]?.founderName ?? "Founder"}</h3>
+              <p className="text-sm">{deals[clickedFounder]?.companyName ?? "Startup details available in profile"}</p>
+              <a className="inline-flex min-h-11 items-center font-medium text-[color:var(--cobalt)] underline" href={`/founder/discover?q=${encodeURIComponent(deals[clickedFounder]?.founderName ?? clickedFounder)}`}>Open founder profile</a>
+              {deals[clickedFounder]?.companyId ? <button type="button" className="ml-4 min-h-11 text-[color:var(--cobalt)] underline" onClick={() => onSelectCompany?.(deals[clickedFounder].companyId!)}>Open startup</button> : null}
+            </div>
+            <button type="button" className="min-h-11 px-3" onClick={() => setClickedFounder(null)}>Close</button>
+          </div>
+        </aside>
+      ) : null}
       <div
         ref={wrapRef}
         className="relative w-full min-w-0 max-w-full touch-manipulation overflow-hidden bg-[#f2f4ef] max-md:!h-[52vh]"
@@ -1108,7 +1159,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
             }}>Fit</button>
         </div>
         <p className="pointer-events-none absolute left-3 top-3 z-[5] max-w-[calc(100%-13rem)] rounded-md bg-white/90 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm" data-network-map-hint="">
-          Start with a cluster · drag to move · zoom for founders
+          Click a founder or startup to open details
         </p>
 
         {/* Large editorial callouts removed: they covered the map and drew
