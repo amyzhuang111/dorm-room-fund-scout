@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { plainText } from "@/lib/display/plain-text";
 import { getDb } from "@/lib/db/client";
@@ -14,6 +15,8 @@ import { LogoMark } from "@/components/sample-instrument";
 import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 import { PrecollegeBadges } from "@/components/badges";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
+
+export const metadata: Metadata = { title: "Signals" };
 
 interface SignalRow {
   id: string;

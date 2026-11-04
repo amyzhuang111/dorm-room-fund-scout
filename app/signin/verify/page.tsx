@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { VerifyMagicLink } from "@/components/verify-magic-link";
 import { logMissingAuthEnv, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 import { authMethods } from "@/lib/auth/send-email";
+
+export const metadata: Metadata = { title: "Check your email" };
 
 export const dynamic = "force-dynamic";
 

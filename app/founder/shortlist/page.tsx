@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { plainTextDeep } from "@/lib/display/plain-text";
 import { permanentRedirect } from "next/navigation";
 import { FounderShortlistApp } from "@/components/founder-shortlist-app";
@@ -6,6 +7,8 @@ import { mergedParamHref } from "@/lib/domain/entity-redirects";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { listFounderStatusCounts, listFoundersForPage, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
+
+export const metadata: Metadata = { title: "Founder shortlist" };
 
 export default async function FounderShortlistPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   await requireMemberPage("/founder/shortlist");

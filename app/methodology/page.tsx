@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import fs from "node:fs";
 import path from "node:path";
 import { RUBRIC_DIMENSIONS, RUBRIC_VERSION } from "@/lib/scoring/rubric";
@@ -8,6 +9,8 @@ import {
   openLaneTopFundDefinition,
   openLaneDeskDefinition,
 } from "@/lib/domain/open-lane";
+
+export const metadata: Metadata = { title: "Methodology" };
 
 function loadRecencyFunnel() {
   try {
