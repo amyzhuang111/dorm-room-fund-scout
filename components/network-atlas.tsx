@@ -40,7 +40,6 @@ export function NetworkAtlas() {
   const drag = useRef<{ x: number; y: number; startX:number; startY:number; moved: boolean } | null>(null);
   const touches = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef(0);
-  const idleDelay = useRef(0);
   useEffect(() => {
     const controller = new AbortController();
     fetch("/api/network/atlas", {
@@ -185,17 +184,14 @@ export function NetworkAtlas() {
     v.x = cx - size.current.w / 2 - (cx - size.current.w / 2 - v.x) * k;
     v.y = cy - size.current.h / 2 - (cy - size.current.h / 2 - v.y) * k;
     v.zoom = next;
-    idleDelay.current = 1800;
   }
   function choose(i: number) {
-    idleDelay.current = 1800;
     setSelected(i);
     setNearby([]);
     const p = projected.current.find((p) => p.i === i);
     if (p) setAnchor({ x: p.x, y: p.y });
   }
   function focus(i: number) {
-    idleDelay.current = 1800;
     view.current = { ...initialView(), zoom: 4 };
     const scale = Math.min(size.current.w * 0.45, size.current.h * 0.43) * 4;
     view.current.x = -positions[i].x * scale;
@@ -258,11 +254,10 @@ export function NetworkAtlas() {
     const tick = (time: number) => {
       const dt = Math.min(40, time - last);
       last = time;
-      idleDelay.current = Math.max(0, idleDelay.current - dt);
       const { w, h } = size.current;
       const v = view.current;
       const key = [w,h,v.x,v.y,v.zoom,v.yaw,v.pitch].join(":");
-      const orbiting = running && selected === null && !drag.current && idleDelay.current <= 0 && !document.hidden;
+      const orbiting = running && !document.hidden;
       if (!orbiting && key === drawnKey) { frame=requestAnimationFrame(tick);return; }
       drawnKey = key;
       if (orbiting) {
@@ -710,10 +705,8 @@ export function NetworkAtlas() {
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
               drag.current = { x: e.clientX, y: e.clientY, startX:e.clientX,startY:e.clientY,moved: false };
               pinch.current = 0;
-              idleDelay.current = 1800;
             }}
             onPointerMove={(e) => {
-              idleDelay.current = 1800;
               if (!touches.current.has(e.pointerId)) return;
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
               const t = [...touches.current.values()];
@@ -740,7 +733,6 @@ export function NetworkAtlas() {
               drag.current = null;
             }}
             onPointerUp={(e) => {
-              idleDelay.current = 1800;
               touches.current.delete(e.pointerId);
               const d = drag.current;
               drag.current = null;
