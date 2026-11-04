@@ -412,6 +412,43 @@ EVC (eligibility not verified), the two third-party "student-founded" tech-map
 flags, person-name artifacts, initiative/entity names, a generic placeholder name,
 and duplicates of vetted companies. Vetted 2,294 -> 2,364.
 
+**Fifth batch (2026-11-04, official program rule + cohort year, 111 companies):**
+`data/exports/restore-reviewed-companies-2026-11-04-e.json`. Two programs whose
+**official rule requires a current student founder** and whose entries state a
+cohort year: MIT delta v (rule from MIT's Orbit knowledge base: "at least one
+current MIT student co-founder"; cohorts 2023-2025, 54 companies) and the Georgia
+KickStart Fund (rule from the fund's apply page: "at least one current University
+of Georgia student as a founder or co-founder"; `cohort_year` 2023-2026, 57
+companies). A student enrolled in 2023 or later cannot have graduated before 2023,
+so a cohort year of 2023+ meets the rule's threshold; **114 earlier-cohort entries
+(2019-2022) stay hidden** because those founders could have graduated before 2023.
+Evidence is the program rule plus the cohort year, not a person record. Vetted
+2,364 -> 2,475.
+
+#### What counts as evidence for a hidden company (and what does not)
+
+Counts: the founder's own record with a class year or student status (the gate);
+listing text that names the founder with a class year; a program whose **official**
+rule requires a current student founder **and** an entry with a cohort year 2023 or
+later. Does not count, with the reason found when each was checked:
+
+- **UndergradVC listings** (about 720 still hidden): the site does not define
+  "student-founded"; it has toggles to include alumni and faculty spinouts and
+  lists entries like the Edward L. Kaplan '71 New Venture Challenge. Only entries
+  whose text names a class year qualify.
+- **Penn Health-Tech cards**: they say the page does *not* name a student founder
+  (a keyword search for "student founder" flags them anyway).
+- **CMU VentureBridge**: includes a venture founded by a CMU professor.
+- **SMU IIE / BIG programme**: has accepted non-SMU founders since 2009.
+- **UC LAUNCH**: admits a UC student, alum, faculty or staff member.
+- **USF Student Innovation Incubator, Ole Miss Rebel Student Venture Fund**:
+  student-focused but cumulative back to about 2014 with no cohort years in the
+  entries, so recency cannot be told.
+- **Tech-map flags** ("studentFounded" in the SFU/UBC tech maps): third-party,
+  unverified.
+- **Web searches for individual obscure founders**: a 12-company pilot confirmed
+  none (eight returned nothing; common names matched other people).
+
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
 `unverified recency` now passed the gate. Each was listed by a university
 entrepreneurship program with student founders (30 Cornell eLab, 3 Harvard

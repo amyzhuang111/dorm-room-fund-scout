@@ -1,0 +1,786 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Batch e. Hidden companies listed in programs whose OFFICIAL rule requires a current student founder, with a stated cohort year >= 2023 (a student enrolled in 2023 or later cannot have graduated before 2023): MIT delta v (rule from MIT's Orbit knowledge base) and the Georgia KickStart Fund (rule from the fund's apply page). Evidence is program rule + cohort year, not a person record. Cohorts before 2023 are excluded. SMU IIE (admits non-SMU founders), UC LAUNCH (admits alumni/faculty/staff), USF Student Innovation Incubator and Ole Miss Rebel Student Venture Fund (no cohort years; cumulative since ~2014) were considered and not used.",
+  "restore": [
+    {
+      "id": "proj_YJ-hmtviVxt2",
+      "name": "A Healthy Reminder",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "A Healthy Reminder \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_38CLDX9KEFL_",
+      "name": "AddSynth",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "AddSynth \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_Nnu4jSfEKMpj",
+      "name": "Afia's Leaf",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Afia's Leaf \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_Hvd9niY4MBAX",
+      "name": "Agrichat AI",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Agrichat AI\" in the 2023 cohort and links https://ncsu.agrichat.ai/6ee4a92e-353e-468c-97cb-813459197d77. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_gheTn78ZST8u",
+      "name": "Algae Tree",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Algae Tree \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_RuNFSykIzoXo",
+      "name": "All Unique Objects",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"All Unique Objects\" in the 2024 cohort and links https://www.alluniqueobjects.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_6y09LmNAu6d7",
+      "name": "AMG Detection",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "AMG Detection \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_928w4cJaxy42",
+      "name": "Art by Grey",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Art by Grey \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_H8rxEDUsfcNs",
+      "name": "Athens Scoop",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Athens Scoop \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_OMK0JK8FWaEr",
+      "name": "AthleteMetrix",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "AthleteMetrix \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_qBgz1rX82AnE",
+      "name": "AutoAce",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"AutoAce\" in the 2025 cohort and links https://www.autoace.ai/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_xDRUOqPjWzq4",
+      "name": "Bandit Rides",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Bandit Rides \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_CkDTjExmDd9j",
+      "name": "Boston Quantum",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Boston Quantum\" in the 2023 cohort and links https://bostonquantum.io/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_WDMGi0YUIn2I",
+      "name": "Carbion",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Carbion\" in the 2025 cohort and links https://carbion.webflow.io/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_9zQ70_mxdWS5",
+      "name": "CLNR",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "CLNR \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj__UNbooTBQN2Q",
+      "name": "Cognify",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Cognify\" in the 2025 cohort and links https://www.getcognify.ai/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_YNOcH1Fg22EO",
+      "name": "Continuity",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Continuity\" in the 2024 cohort and links http://continuity.bio/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_wJ-QsEC8cJJE",
+      "name": "cru",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"cru\" in the 2023 cohort and links https://trycru.com/en/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_MZsk_yoEAw7e",
+      "name": "Dawgtown Moving",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Dawgtown Moving \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_nCOzZEOGeXyP",
+      "name": "Detail Dawgs",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Detail Dawgs \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_9Ta4wYmMnkEv",
+      "name": "Dope Coffee",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Dope Coffee \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_vqOofw0c3Abb",
+      "name": "DormSync",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "DormSync \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_kxaZFz6apmO3",
+      "name": "Durability",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Durability\" in the 2025 cohort and links https://mydurability.ai/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_B_yEiYIOvAQb",
+      "name": "Eagle Grip Golf",
+      "why": "Georgia KickStart Fund cohort 2026; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Eagle Grip Golf \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_BOtlCBDq47ba",
+      "name": "Effingo",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Effingo \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj__WG4AJ0_UpGu",
+      "name": "eggPlan",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"eggPlan\" in the 2025 cohort and links https://eggplan.co/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_ZZtAvnPhtai7",
+      "name": "Eki Agrivoltaics",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Eki Agrivoltaics\" in the 2023 cohort and links https://www.ekiagrivoltaics.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj__LztXk8EYDvm",
+      "name": "EngNotebook",
+      "why": "Georgia KickStart Fund cohort 2026; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "EngNotebook \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_GVi_Y9SuJh5B",
+      "name": "EQORE",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"EQORE\" in the 2024 cohort and links https://www.eqore.net/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_JN4zgEYttIn8",
+      "name": "ExamRocket",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "ExamRocket \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_GTY_HUjXB_Xv",
+      "name": "Expat AI",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Expat AI\" in the 2024 cohort and links https://www.expatusa.ai/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_M5JdN_4qlBip",
+      "name": "fascia",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"fascia\" in the 2023 cohort and links https://www.fascia.ai/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_8gBKyBIEWKk-",
+      "name": "Fazenda da Mamma",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Fazenda da Mamma\" in the 2023 cohort and links https://www.fazendadamamma.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_SwWgYS3Duwyz",
+      "name": "Fire Truck Rentals of Atlanta",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Fire Truck Rentals of Atlanta \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_knCWFFT3aIhw",
+      "name": "Fount",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Fount\" in the 2024 cohort and links https://www.fountai.co/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_vNaIu0SANzwP",
+      "name": "Gees",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Gees\" in the 2025 cohort and links https://www.gees.co/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_Sow2EeppeUDT",
+      "name": "Genesis Landscaping",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Genesis Landscaping \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_g3XpdOKNZVC9",
+      "name": "gravity",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "gravity \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_piXAHoB8HrKx",
+      "name": "Ground3d",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Ground3d\" in the 2025 cohort and links https://ground3d.xyz/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_GonoZZNvcuoB",
+      "name": "Hailey's Healthy Hangout",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Hailey's Healthy Hangout \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj__2XFQX58ZLrX",
+      "name": "HauntFest",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "HauntFest \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj__hSnhQPLQ7RJ",
+      "name": "Health Galaxy",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Health Galaxy\" in the 2024 cohort and links https://healthgalaxy.org/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_1ztOfoNV-IgX",
+      "name": "Heart of Moisture",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Heart of Moisture \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_MknFkEG6WMuu",
+      "name": "Helios Analytics",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Helios Analytics \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_3sADXyzw1Im4",
+      "name": "Helix Carbon",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Helix Carbon\" in the 2024 cohort and links https://helixcarbon.co/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_CqmaHXWi34E3",
+      "name": "High Level Acquisition",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "High Level Acquisition \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_UfokiC67LuEZ",
+      "name": "Initium",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Initium \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_uApxGedZA7XP",
+      "name": "Intendere",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Intendere\" in the 2024 cohort and links https://intendere.app/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_RX4Vi0UQlEtF",
+      "name": "Jane",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Jane\" in the 2023 cohort and links https://jane.energy/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_lB4AUOJmFrxV",
+      "name": "Juzogo",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Juzogo \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_J7T4i82YF5IP",
+      "name": "KYCO Rentals",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "KYCO Rentals \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_VMsYTXfbZ_Qo",
+      "name": "Kyma",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Kyma\" in the 2025 cohort and links https://kyma.health/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_PO9yI59yor2m",
+      "name": "LeadQualify",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"LeadQualify\" in the 2024 cohort and links https://leadqualify.ai/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_P8Iz2qC4eaWy",
+      "name": "Lifta",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Lifta \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_w9PmFtYqgONh",
+      "name": "LNK Energies",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"LNK Energies\" in the 2025 cohort and links https://lnkenergies.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_7M9jac6S4uKi",
+      "name": "LymeAlert",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"LymeAlert\" in the 2024 cohort and links https://www.lymealert.info/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_lWssomhxR1tf",
+      "name": "MacroCycle",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"MacroCycle\" in the 2023 cohort and links https://www.macrocycle.tech/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_dFEomOIGo55R",
+      "name": "MakerSharks",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"MakerSharks\" in the 2024 cohort and links https://makersharks.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_6Lt77nmJj4qf",
+      "name": "Mashi",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Mashi\" in the 2024 cohort and links https://matchwithmashi.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_myrp6ThodnEG",
+      "name": "medikana",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"medikana\" in the 2023 cohort and links https://www.medikana.io/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_BuGRFaOdaGp2",
+      "name": "Mendhai Health",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Mendhai Health\" in the 2025 cohort and links https://mendhaihealth.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_FP3uU7mv2gk_",
+      "name": "Midnight Snackzzz",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Midnight Snackzzz \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_UnzILi0A6cca",
+      "name": "Mindful Sprouts",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Mindful Sprouts \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_6RDyfRQTn7OU",
+      "name": "MoonTrace",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "MoonTrace \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_7jnxhl_dRyOT",
+      "name": "nami",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"nami\" in the 2025 cohort and links https://www.namicleans.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_pJM6CyKBm7ua",
+      "name": "NeuroBionics",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"NeuroBionics\" in the 2023 cohort and links https://neurobionics.io/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_WFwb8T-vATjU",
+      "name": "NeuroDrive",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "NeuroDrive \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_kfLlLhhR09rK",
+      "name": "Niche Supplements",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Niche Supplements \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_U3P_huh4NRGt",
+      "name": "NONA Technologies",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"NONA Technologies\" in the 2023 cohort and links https://www.nona-technologies.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_VI0T9PeYcFBN",
+      "name": "nurtur",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"nurtur\" in the 2023 cohort and links https://nurturcare.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_V0awIqqcm18U",
+      "name": "N\u00e4hren",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "N\u00e4hren \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_-WT9WK2YHj3C",
+      "name": "OGMA",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"OGMA\" in the 2024 cohort and links https://www.ogma-bio.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_6lufLz3USGV2",
+      "name": "OpenLake",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "OpenLake \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_Ur5Gl5Xy56ai",
+      "name": "Otomo",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Otomo\" in the 2024 cohort and links https://www.otomohealth.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_xu8Tf1Gk0_Mj",
+      "name": "Pancho",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Pancho\" in the 2025 cohort and links https://hipancho.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_hguEkDv7kEEb",
+      "name": "PhenomenalBreed",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "PhenomenalBreed \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_H1Fh6kbczRJp",
+      "name": "Pictora",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Pictora \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_zPUFFcamg0mA",
+      "name": "Pigeon",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Pigeon \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_X23GOUcbmx9e",
+      "name": "Plantfi",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Plantfi \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_S1FBkW-FW2oZ",
+      "name": "Pool Protection Technologies",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Pool Protection Technologies \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_W5FphwiDNAL1",
+      "name": "Power Shot",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Power Shot \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_TcTJXDQYQ0GY",
+      "name": "Prayr",
+      "why": "Georgia KickStart Fund cohort 2026; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Prayr \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_vpV0DImUbNAw",
+      "name": "ProGuide",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "ProGuide \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_rfcc5Z7pO1fw",
+      "name": "Psyche",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Psyche\" in the 2024 cohort and links https://www.psychecare.org/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_dM-n77__Nsu0",
+      "name": "Putt Athens",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Putt Athens \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_yGUWta671S8S",
+      "name": "Qadence",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Qadence\" in the 2025 cohort and links https://qadence.health/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_rkLOVwxKh3Vc",
+      "name": "Quacked",
+      "why": "Georgia KickStart Fund cohort 2026; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Quacked \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_WuJwgjrJPyhK",
+      "name": "ReHome",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"ReHome\" in the 2023 cohort and links https://rehomemarketplace.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_CbeNh6EU28rL",
+      "name": "Sakhi",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Sakhi\" in the 2024 cohort and links https://sakhi-health.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_fdwM__XvGN3Q",
+      "name": "Seak",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Seak\" in the 2023 cohort and links https://seak.ai/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_iIymEl14ReXF",
+      "name": "Sensopore",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Sensopore\" in the 2025 cohort and links https://sensopore.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_RQ6QFrq_RwbN",
+      "name": "Shine Edutainment",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Shine Edutainment \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_TkbtS2h0XVeb",
+      "name": "Skyfall Space",
+      "why": "Georgia KickStart Fund cohort 2026; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Skyfall Space \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_Jtj2bnGvTR1Q",
+      "name": "Soundboard",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Soundboard\" in the 2023 cohort and links https://joinsoundboard.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_1dQHHY5DnCZJ",
+      "name": "Spheric Bio",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Spheric Bio\" in the 2025 cohort and links https://www.sphericbio.health/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_8jRh32ZecMNL",
+      "name": "SquadSave",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "SquadSave \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_smXmc5kNjAOX",
+      "name": "Sunroof Coffee",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Sunroof Coffee \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_s0j8jbt8390P",
+      "name": "Switch",
+      "why": "Georgia KickStart Fund cohort 2026; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Switch \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_jbj6RhtW537h",
+      "name": "Syl",
+      "why": "Georgia KickStart Fund cohort 2025; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "Syl \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_9Z8TMbFddT_1",
+      "name": "T33",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"T33\" in the 2023 cohort and links https://www.t33.dental/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_3wOmZU-BA9c2",
+      "name": "Tapestry",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Tapestry\" in the 2025 cohort and links https://tapestryagents.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_YZp893OFSqku",
+      "name": "Tarragon Systems",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Tarragon Systems\" in the 2024 cohort and links https://www.tarragonsystems.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_VOKN57rMxvLQ",
+      "name": "The Girls Trip Co",
+      "why": "Georgia KickStart Fund cohort 2023; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "The Girls Trip Co \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_7n_RePy9RF6t",
+      "name": "TLS",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "TLS \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_SHSwOx_hARHi",
+      "name": "Torque",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Torque\" in the 2025 cohort and links https://torquepe.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_kH8Zf9fLMnUV",
+      "name": "Trazo",
+      "why": "MIT delta v cohort 2025; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Trazo\" in the 2025 cohort and links http://trazo.design/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_4thEFVjLCmX6",
+      "name": "TruEdge Sports",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "TruEdge Sports \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_XXVdLlFjonxq",
+      "name": "UpTo",
+      "why": "Georgia KickStart Fund cohort 2024; funding is open to ventures with at least one current University of Georgia student as a founder or co-founder",
+      "evidence": "UpTo \u00b7 University of Georgia \u00b7 Georgia KickStart Fund \u00b7 unknown",
+      "eligibilityUrl": "https://gakickstartfund.uga.edu/apply-for-a-grant"
+    },
+    {
+      "id": "proj_89qIHHAonj-F",
+      "name": "Vertical Horizons",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Vertical Horizons\" in the 2024 cohort and links https://www.vertical-horizons.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_3FxgiBOFNDsS",
+      "name": "Vikri.io",
+      "why": "MIT delta v cohort 2024; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Vikri.io\" in the 2024 cohort and links https://www.vikri.io/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    },
+    {
+      "id": "proj_bp1uKOo0vOjG",
+      "name": "Yoku AI",
+      "why": "MIT delta v cohort 2023; MIT's official knowledge base: delta v teams must have at least one current MIT student co-founder",
+      "evidence": "MIT delta v's past-teams page lists \"Yoku AI\" in the 2023 cohort and links https://www.yoku-ai.com/. The page does not name founders.",
+      "eligibilityUrl": "https://orbit-kb.mit.edu/hc/en-us/sections/201313313-MIT-deltav"
+    }
+  ]
+}
