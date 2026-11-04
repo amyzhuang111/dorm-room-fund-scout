@@ -187,7 +187,7 @@ export function NetworksApp() {
           <a className="py-2 underline-offset-4 hover:underline" href="#network-roster">Founder links</a>
         </nav>
         <div className="order-1 mx-auto grid w-full max-w-[1400px] items-start gap-4 px-4 py-4 sm:px-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
-          <aside aria-labelledby="popular-networks-heading" className="rounded-xl border border-[color:var(--line)] bg-white p-3">
+          <aside aria-labelledby="popular-networks-heading" className="order-2 min-w-0 rounded-xl border border-[color:var(--line)] bg-white p-3 lg:order-1">
             <h2 id="popular-networks-heading" className="px-2 text-base font-semibold">Top networks</h2>
             <p className="px-2 pb-2 text-xs text-[color:var(--fg-2)]">Choose a network to see its founders and startups.</p>
             {displayedNetworks.length === 0 ? <p className="px-2 text-sm">No matching networks.</p> : null}
@@ -197,7 +197,7 @@ export function NetworksApp() {
                 value={networkKind}
                 onChange={(event) => { setNetworkKind(event.target.value as NetworkKind | "all"); setDesktopHubsOpen(false); }}
                 aria-label="Filter networks by type"
-                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]"
+                className="mt-1 h-12 w-full rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]"
               >
                 <option value="all">All types</option>
                 <option value="accelerator">Accelerators</option>
@@ -206,7 +206,7 @@ export function NetworksApp() {
                 <option value="lab">Labs</option>
               </select>
             </label>
-            <ol className="divide-y divide-[color:var(--line)]">
+            <ol className="max-h-64 overflow-y-auto overscroll-contain divide-y divide-[color:var(--line)] lg:max-h-none">
               {displayedNetworks.slice(0, 5).map((row, index) => (
                 <li key={row.id}>
                   <button type="button" aria-pressed={graphInspectorOpen && row.id === activeNetwork}
@@ -224,7 +224,7 @@ export function NetworksApp() {
             </ol>
             <a href="#top-networks-heading" className="inline-flex min-h-10 items-center px-2 text-sm font-semibold text-[color:var(--cobalt)] hover:underline">Browse all networks</a>
           </aside>
-        <section id="network-map" aria-labelledby="graph-heading" className="min-w-0 scroll-mt-24 rounded-xl border border-[color:var(--line)] bg-white">
+        <section id="network-map" aria-labelledby="graph-heading" className="order-1 min-w-0 scroll-mt-24 overflow-hidden rounded-xl lg:order-2 border border-[color:var(--line)] bg-white">
           <div className="mx-auto max-w-[1400px] px-4 pt-2 sm:px-6">
             <h2 id="graph-heading" className="sr-only">
               Network map
@@ -238,7 +238,7 @@ export function NetworksApp() {
           </div>
           <div className="border-b border-[color:var(--line)] px-3 pb-3">
           <div className="flex items-center" data-network-quick-find="">
-            <label className="min-w-[210px] flex-[1_1_340px] text-[11px] font-semibold text-[color:var(--fg-2)]">
+            <label className="min-w-0 flex-1 text-[11px] font-semibold text-[color:var(--fg-2)]">
               Search a founder, startup, campus, program or fund
               <input
                 type="search"
@@ -249,7 +249,7 @@ export function NetworksApp() {
                 }}
                 placeholder="Search founders, startups, or networks…"
                 aria-label="Find founders, startups and networks"
-                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]"
+                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-base text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]"
               />
             </label>
           </div>
@@ -263,7 +263,7 @@ export function NetworksApp() {
                   key={match.network.id}
                   type="button"
                   onClick={() => selectSearchResult(match)}
-                  className="flex min-h-10 w-full items-center justify-between gap-3 rounded px-2 text-left text-xs hover:bg-[color:var(--cobalt-haze)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+                  className="flex min-h-12 w-full items-center justify-between gap-3 rounded px-2 text-left text-xs hover:bg-[color:var(--cobalt-haze)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
                   data-network-quick-result={match.network.id}
                 >
                   <span className="min-w-0 font-semibold">{match.network.label}</span>
