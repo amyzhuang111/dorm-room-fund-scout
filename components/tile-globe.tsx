@@ -729,38 +729,40 @@ export function TileGlobe({
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
       {/* Own row above map modes on phone — never absolute over HQs/World/Pause tabs. */}
       {/* Phone: short pill on its own row (full leading). Desk: full counts. Never absolute over map modes. */}
-      <div className={`${locationsMode ? mapStyles.hqCounts : ""} mb-2 flex w-full max-w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 lg:mb-3`} data-fold-counts="">
+      <div className={`${locationsMode ? mapStyles.hqCounts : ""} mb-2 flex w-full max-w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 sm:px-4 lg:mb-3 lg:px-5`} data-fold-counts="">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:text-[14px]" data-fold-counts-line="" data-hero-stat="">
-          <Link href="/companies" className="pointer-events-auto whitespace-nowrap hover:underline" data-fold-counts-companies="">
+          <Link href="/companies" className="pointer-events-auto inline-flex items-center gap-1 whitespace-nowrap hover:underline" data-fold-counts-companies="">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
-            {" vetted"}
+            <span>vetted</span>
           </Link>
           {catalogReady ? (
-            <span className="whitespace-nowrap">
+            <span className="inline-flex items-center gap-1 whitespace-nowrap">
               <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
-              {" signaled"}
+              <span>signaled</span>
             </span>
           ) : null}
           <span className="hidden lg:contents" data-fold-counts-desk="">
-            <span className="whitespace-nowrap">
+            <span className="inline-flex items-center gap-1 whitespace-nowrap">
               <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" campuses"}
+              <span>campuses</span>
             </span>
             {campusesWithFounders > 0 ? (
-              <Link href="/campuses" className="pointer-events-auto whitespace-nowrap hover:underline">
+              <Link href="/campuses" className="pointer-events-auto inline-flex items-center gap-1 whitespace-nowrap hover:underline">
                 <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
-                {" with founders"}
+                <span>with founders</span>
               </Link>
             ) : null}
-            <Link href="/founders" className="pointer-events-auto whitespace-nowrap hover:underline" data-founder-count-note="">
-              <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-              {" listed"}
+            <Link href="/founders" className="pointer-events-auto inline-flex flex-wrap items-center gap-1 whitespace-nowrap hover:underline" data-founder-count-note="">
+              <span className="inline-flex items-center gap-1">
+                <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
+                <span>listed</span>
+              </span>
               {foundersIndexed > 0 ? (
-                <>
-                  {" · "}
+                <span className="inline-flex items-center gap-1">
+                  <span aria-hidden>·</span>
                   <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-                  {" indexed"}
-                </>
+                  <span>indexed</span>
+                </span>
               ) : null}
             </Link>
             {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}

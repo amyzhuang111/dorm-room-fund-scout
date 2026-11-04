@@ -6,6 +6,7 @@ import type { FounderTableRow } from "@/lib/domain/founder-table";
 import { LogoMark } from "@/components/sample-instrument";
 import { campusInk } from "@/lib/display/campus-ink";
 import { ellipsisAtBoundary, WRAP_FULL } from "@/lib/display/ellipsis";
+import { humanizeEnumText } from "@/lib/display/enum-labels";
 
 const ROW_PAGE = 60;
 const control =
@@ -13,10 +14,12 @@ const control =
 
 function plainText(value: string | null | undefined): string | null {
   if (!value) return null;
-  const text = value
-    .replace(/[\u2014\u2013]/g, " · ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const text = humanizeEnumText(
+    value
+      .replace(/[\u2014\u2013]/g, " · ")
+      .replace(/\s+/g, " ")
+      .trim(),
+  );
   return text || null;
 }
 

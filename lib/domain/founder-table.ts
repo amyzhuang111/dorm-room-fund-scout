@@ -2,6 +2,7 @@ import fs from "node:fs";
 import { databasePath, getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { localCompanyLogoUrl } from "./local-logos";
+import { humanizeEnumText } from "@/lib/display/enum-labels";
 import { listFoundersForPage } from "./queries";
 
 const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5, talent: 6, Unranked: 7 };
@@ -160,7 +161,7 @@ function bestTier(values: (string | null | undefined)[]): string | null {
 
 function scrubDash(value: string | null | undefined): string | null {
   if (!value) return null;
-  return value.replace(/[\u2014\u2013]/g, " · ").replace(/[ \t]{2,}/g, " ").trim() || null;
+  return humanizeEnumText(value.replace(/[\u2014\u2013]/g, " · ").replace(/[ \t]{2,}/g, " ").trim()) || null;
 }
 
 function cleanLabel(value: string | null | undefined): string | null {

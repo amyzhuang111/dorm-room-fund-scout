@@ -621,15 +621,16 @@ export function SampleInstrumentBrowse({
               caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
           </div>
-          {/* Compact current-view logo strip (P0). Keep short so rails stay primary. */}
-          <div className="mt-2">
-            <CurrentViewDock companies={dockCompanies} max={20} />
-          </div>
+          {/* Logo strip moved out of the filter rail so Flags / Raised funding stay tappable. */}
         </div>
       </aside>
 
       {/* Col 2 · ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
+        {/* Current-view logos live under the ledger, never over the filter rail. */}
+        <div className="mb-3 hidden lg:block" data-browse-logo-strip="">
+          <CurrentViewDock companies={dockCompanies} max={20} />
+        </div>
         <p className="mb-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-hero-stat="">
           <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
           {" "}{caption}

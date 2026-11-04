@@ -142,6 +142,7 @@ function PeakShareSlot({
   campusesOnMap,
   topCampuses = [],
   shell,
+  companyTotal = 0,
   mobileDeck = false,
 }: {
   companies: FacetCompany[];
@@ -149,6 +150,8 @@ function PeakShareSlot({
   campusesOnMap: number;
   topCampuses?: TopCampus[];
   shell?: PeakShell | null;
+  /** Vetted company total from loadCorpusTotals / cardCount. Required for the Seal Dispatch figure. */
+  companyTotal?: number;
   mobileDeck?: boolean;
 }) {
   const [live, setLive] = useState(false);
@@ -165,6 +168,7 @@ function PeakShareSlot({
         <FoldPeakShare
           companies={companies}
           foundersListed={foundersListed}
+          companyTotal={companyTotal}
           campusesOnMap={campusesOnMap}
           topCampuses={topCampuses}
           shell={shell}
@@ -744,6 +748,7 @@ export function SampleHomeClient(props: {
                   <PeakShareSlot
                     companies={companies}
                     foundersListed={foundersListed}
+                    companyTotal={cardCount}
                     campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
                     topCampuses={topCampuses}
                     shell={peakShell}
@@ -839,6 +844,7 @@ export function SampleHomeClient(props: {
                         <PeakShareSlot
                           companies={companies}
                           foundersListed={foundersListed}
+                          companyTotal={cardCount}
                           campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
                           topCampuses={topCampuses}
                           shell={peakShell}
