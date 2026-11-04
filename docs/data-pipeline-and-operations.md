@@ -28,6 +28,28 @@ judgment call or an unverified assumption, it says so.
   instead of querying at request time. **A locally checked-out copy has no
   `public/data/` until you run `npm run prebuild`.**
 
+### The scouting-list import (why the live numbers differ from the committed database)
+
+`prebuild` runs `scripts/ingest/import-scouting-list-2026-11-03.mjs`, which reads
+the user-submitted leads in `data/imports/scouting-list-2026-11-03.json` (21
+records: the same list as the "Startup Scouting Tracker" spreadsheet) and writes
+them into the database **at build time**. Running it on a scratch copy of the
+committed database (verified 2026-11-04) gives exactly the live site's numbers:
+
+| | Committed DB | After the import (= live) |
+|---|---|---|
+| Vetted companies | 1,607 | **1,620** (+10 new companies, +3 hidden ones moved to vetted) |
+| Unverified companies | 4,137 | **4,134** |
+| All companies | 5,990 | 6,000 |
+| People | 7,043 | 7,048 |
+
+The leads are the user's own list and are labeled "user-reported"; the tracker
+itself says its facts "have not been independently reverified". To preview the
+effect without touching the real file:
+`CAMPUS_UNIVERSE_DB_PATH=/tmp/scratch.db node scripts/ingest/import-scouting-list-2026-11-03.mjs`.
+Because it runs on every build, a CSV export taken from the live site can
+differ from the committed database by exactly these rows.
+
 ### Scheduled jobs (`.github/workflows/`)
 
 | Workflow | When | What it does |
@@ -75,7 +97,7 @@ not being confused by the counts.
 
 | Where | Number | Meaning |
 |---|---|---|
-| Homepage / `/companies` | **Vetted companies** (1,573 in the committed database; the live site showed 1,586, which appears to be the build-time import of user-submitted leads, a guess not confirmed by running the import) | `projects` with `kind = 'company'` and `is_investable_candidate = 1` |
+| Homepage / `/companies` | **Vetted companies** (1,607 in the committed database; the live site shows 13 more, 1,620, because the build runs the scouting-list import, see below) | `projects` with `kind = 'company'` and `is_investable_candidate = 1` |
 | Homepage | **Founders** | Distinct *people* (by person id) with any role on a vetted company: `countFoundersListed()` in `lib/domain/directory.ts` |
 | `/founders` | **Founders** (larger) | *Promoted* people (below), across every company and project, including hackathon entries |
 | `/networks` | founders on the map / with a mapped network | Unique founders in the network graph vs. those with at least one network link |
@@ -328,6 +350,14 @@ browser.
 - 352 people carry only a `linkedin_unverified` marker with no URL (3,167 have
   a confirmed one). It looks like a deliberate demotion in the 2026-11-02
   accuracy pass; not confirmed.
+- Eight people have `enrollment_status = 'recent_alumni'`, a spelling the
+  recency gate does not recognize (it only knows `recent_grad`). None is a
+  founder of a hidden company today, so nothing is wrong yet, but a future import
+  could slip through. Normalizing the spelling is a one-line fix.
+- Spreadsheets in a user's Downloads (missing-LinkedIn list, DRF alumni recheck,
+  scouting tracker) were checked on 2026-11-04 as possible sources of class
+  years: none adds any (the first two have no class-year data filled in; the
+  tracker's few years are already in the import above).
 - Two records (including AfterQuery) have a `last_verified_at` earlier than the
   fetch date in their own note.
 - Held Devpost candidates: Cal Poly KiroHacks, Lehigh Valley Collegiate
