@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
 import { plainText } from "@/lib/display/plain-text";
-import { ellipsisAtBoundary, WRAP_2, WRAP_FULL } from "@/lib/display/ellipsis";
+import { ellipsisAtBoundary, WRAP_FULL } from "@/lib/display/ellipsis";
 import { campusInk, CAMPUS_INK_LEGEND } from "@/lib/display/campus-ink";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { LogoMark } from "./sample-instrument";
@@ -406,7 +406,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                 <div className="min-w-0">
                     <button type="button" className="flex min-h-9 w-full items-center gap-2 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
                       <LogoMark name={markName} logoUrl={row.logoUrl} size={28} campusInk={ink} />
-                      <span className={`min-w-0 flex-1 ${WRAP_2} text-[14px] font-semibold leading-5 text-fg`}>{plainText(row.name) || "n/a"}</span>
+                      <span className={`min-w-0 flex-1 ${WRAP_FULL} text-[14px] font-semibold leading-5 text-fg`}>{plainText(row.name) || "n/a"}</span>
                       {row.tier ? (
                         <span
                           className={`${tierClass(row.tier)} shrink-0`}
@@ -446,7 +446,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     <button type="button" className="mt-0.5 hidden min-h-8 w-full text-left text-[13px] leading-5 text-fg-2 sm:block" onClick={() => { setCursor(index); setOpenId(row.id); }} title={text ? plainText(text) ?? undefined : undefined}>
                       {clamped || "No signal yet"}
                     </button>
-                    <p className={`mt-0.5 ${WRAP_2} text-[12px] leading-5 text-fg-3 sm:hidden`} title={text ? plainText(text) ?? undefined : undefined}>
+                    <p className={`mt-0.5 ${WRAP_FULL} text-[12px] leading-5 text-fg-3 sm:hidden`} title={text ? plainText(text) ?? undefined : undefined}>
                       {clamped || row.event || "Open for signal"}
                     </p>
                 </div>
@@ -499,7 +499,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     <td className={`${pad} px-2`}>
                       <span className="flex min-w-0 items-center gap-2">
                         <AvatarStack people={row.people} />
-                        <span className={`min-w-0 ${WRAP_2} font-medium text-fg`}>{plainText(row.name) || <Empty />}</span>
+                        <span className={`min-w-0 ${WRAP_FULL} font-medium text-fg`}>{plainText(row.name) || <Empty />}</span>
                         {campusLocked && !showTier && row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}
                         {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-link">Verified</span> : null}
                       </span>
@@ -538,7 +538,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     )}
                     <td className={`${pad} px-2`}>
                       {text ? (
-                        <span className={`max-h-10 overflow-hidden ${WRAP_2} text-[14px] leading-5 text-fg`} title={plainText(row.full ?? text)}>{ellipsisAtBoundary(plainText(text) || "", 140)}</span>
+                        <span className={`${WRAP_FULL} text-[14px] leading-5 text-fg`} title={plainText(row.full ?? text)}>{ellipsisAtBoundary(plainText(text) || "", 110)}</span>
                       ) : (
                         <span className="text-[14px] text-fg-2">No signal yet</span>
                       )}

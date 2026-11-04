@@ -69,9 +69,9 @@
 
 .dbCta { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 4px; font-size: 11px; }
 .dbCta a { color: #2f4fd8; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; min-height: 28px; display: inline-flex; align-items: center; }
-.logoDock { display: flex; flex-wrap: wrap; gap: 4px; max-height: 56px; overflow-y: auto; overscroll-behavior: contain; margin: 4px 0 2px; padding: 2px; }
-.logoChip { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 52px; min-height: 52px; padding: 4px 2px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; pointer-events: auto; }
-.logoChip span { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 8px; line-height: 10px; color: #162039; text-align: center; }
+.logoDock { display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; overscroll-behavior: contain; margin: 4px 0 2px; padding: 2px; }
+.logoChip { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 72px; min-height: 56px; padding: 4px 3px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; pointer-events: auto; }
+.logoChip span { width: 100%; overflow: visible; text-overflow: clip; white-space: normal; overflow-wrap: break-word; word-break: normal; font-size: 8px; line-height: 10px; color: #162039; text-align: center; }
 .logoChip[aria-pressed="true"] { border-color: #2f4fd8; background: #e8ecfa; }
 .logoChip:hover { border-color: #2f4fd8; }
 .cardTitle { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; min-width: 0; }
@@ -101,8 +101,8 @@
   .logoPeekHead { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 12px; }
   .logoPeekHead strong { color: #2f4fd8; font-variant-numeric: tabular-nums; }
   .logoPeekHead button { min-height: 32px; font-size: 11px; font-weight: 600; color: #2f4fd8; }
-  .logoPeek .logoDock { max-height: 64px; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
-  .logoPeek .logoChip { width: 48px; min-height: 48px; flex-shrink: 0; }
+  .logoPeek .logoDock { max-height: 88px; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
+  .logoPeek .logoChip { width: 72px; min-height: 56px; flex-shrink: 0; }
   :global([data-map-expanded="true"]) .logoPeek { display: none; }
 }
 

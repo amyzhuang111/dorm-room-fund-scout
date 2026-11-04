@@ -327,16 +327,16 @@ export function MobileFounderPeek({
           return (
             <div
               key={founder.id}
-              className="relative inline-flex h-10 max-w-[14rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2"
+              className="relative inline-flex min-h-10 max-w-[18rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-1"
               data-founder-card=""
               data-founder-peek-chip=""
             >
               <CampusSeal label={founder.campus} size="sm" />
-              <span className={`min-w-0 ${WRAP_2} leading-none`}>
-                <span className={`block ${WRAP_FULL} text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]`} data-founder-name="">
+              <span className="min-w-0">
+                <span className={`block ${WRAP_FULL} text-[11px] font-semibold leading-4 text-[color:var(--fg,#0B0E17)]`} data-founder-name="">
                   {founder.name}
                 </span>
-                <span className={`mt-0.5 block ${WRAP_FULL} font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]`}>
+                <span className={`mt-0.5 block ${WRAP_FULL} font-mono text-[9px] leading-[12px] text-[color:var(--fg-3,#5C647A)]`}>
                   {chip ? chip.label : founder.company || founder.campus || "Signal"}
                 </span>
               </span>

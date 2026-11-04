@@ -128,14 +128,14 @@ export function LineagePanels({
   if (programs.length === 0 && recent.length === 0) return null;
 
   return (
-    <div className="mb-3 grid gap-3 lg:grid-cols-2" data-fold-lineage="">
+    <div className="mb-3 grid gap-3" data-fold-lineage="">
       {programs.length > 0 ? (
         <section className="rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5" aria-label="Programs in view">
           <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Programs</h2>
           <ol className="mt-1.5 space-y-1">
             {programs.map(([name, count]) => (
-              <li key={name} className="flex items-baseline justify-between gap-2 text-[13px]">
-                <span className="min-w-0 truncate text-[color:var(--fg,#0B0E17)]">{name}</span>
+              <li key={name} className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3 text-[13px] leading-5">
+                <span className="hyphens-none whitespace-normal text-[color:var(--fg,#0B0E17)] [overflow-wrap:normal] [word-break:normal]">{name}</span>
                 <span className={`shrink-0 font-mono text-[12px] ${COUNT}`}>{count.toLocaleString("en-US")}</span>
               </li>
             ))}

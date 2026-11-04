@@ -1,6 +1,9 @@
 /**
- * Fail if any visible leaf text uses CSS text-overflow:ellipsis while overflowing
- * (mid-word clip). Scans key routes at 390 and 1440.
+ * Fail if any visible leaf text is clipped mid-flow via:
+ *   - text-overflow: ellipsis while overflowing, OR
+ *   - -webkit-line-clamp while overflowing (scrollWidth or scrollHeight), OR
+ *   - overflow:hidden/clip + nowrap while scrollWidth overflows
+ * Scans key routes at 390 and 1440.
  * Usage: BASE=http://127.0.0.1:3460 node scripts/check-midword-clip.mjs
  */
 import { chromium } from "playwright";
@@ -80,22 +83,42 @@ for (const vp of VIEWPORTS) {
           if (cs.display === "none" || cs.visibility === "hidden" || Number(cs.opacity) === 0) continue;
           const r = e.getBoundingClientRect();
           if (r.width < 2 || r.height < 2) continue;
-          const overflowing = e.scrollWidth > e.clientWidth + 1;
-          if (!overflowing) continue;
-          if (cs.textOverflow !== "ellipsis") continue;
-          // Skip pure horizontal scrollers (chips lane) — parent overflow-x scroll.
-          let scrollParent = false;
-          let a = e.parentElement;
-          while (a) {
-            const o = getComputedStyle(a).overflowX;
-            if (o === "auto" || o === "scroll") {
-              scrollParent = true;
-              break;
+
+          const clamp = cs.webkitLineClamp;
+          const hasClamp = Boolean(clamp && clamp !== "none");
+          const hasEllipsis = cs.textOverflow === "ellipsis";
+          const nowrapHidden =
+            (cs.whiteSpace === "nowrap" || cs.whiteSpace === "pre") &&
+            (cs.overflowX === "hidden" || cs.overflow === "hidden" || cs.overflow === "clip");
+          if (!hasEllipsis && !hasClamp && !nowrapHidden) continue;
+
+          const overflowX = e.scrollWidth > e.clientWidth + 1;
+          const overflowY = e.scrollHeight > e.clientHeight + 1;
+          if (!overflowX && !overflowY) continue;
+
+          // Chip/rail nowrap inside a scroller is intentional; ellipsis + line-clamp
+          // mid-word clips are never OK, even inside a logo dock scroller.
+          if (!hasEllipsis && !hasClamp) {
+            let scrollParent = false;
+            let a = e.parentElement;
+            while (a) {
+              const o = getComputedStyle(a);
+              if (
+                o.overflowX === "auto" ||
+                o.overflowX === "scroll" ||
+                o.overflowY === "auto" ||
+                o.overflowY === "scroll"
+              ) {
+                scrollParent = true;
+                break;
+              }
+              a = a.parentElement;
             }
-            a = a.parentElement;
+            if (scrollParent) continue;
           }
-          if (scrollParent) continue;
-          out.push(text.slice(0, 64));
+
+          const why = hasEllipsis ? "ellipsis" : hasClamp ? `line-clamp:${clamp}` : "nowrap-hidden";
+          out.push(`${why} ${text.slice(0, 56)}`);
           if (out.length >= 24) break;
         }
         return out;
@@ -103,9 +126,9 @@ for (const vp of VIEWPORTS) {
       const key = `${vp.w}${route}`;
       if (hits.length) {
         report.hits.push({ at: key, n: hits.length, sample: hits.slice(0, 8) });
-        fail(`${key}: ${hits.length} CSS-ellipsis mid-word clips e.g. ${JSON.stringify(hits.slice(0, 3))}`);
+        fail(`${key}: ${hits.length} mid-word clips e.g. ${JSON.stringify(hits.slice(0, 3))}`);
       } else {
-        pass(`${key}: no CSS-ellipsis overflow`);
+        pass(`${key}: no mid-word / line-clamp overflow`);
       }
     } catch (err) {
       fail(`${vp.w}${route}: ${err instanceof Error ? err.message : String(err)}`);
