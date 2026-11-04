@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-/** Public nav: Map, Companies, Campuses, Founders, Signals. */
+/** Public nav keeps Networks, the current map desk. */
 const NAV = [
   { id: "map", href: "/", label: "Map", match: (p: string) => p === "/" || p.startsWith("/map") },
   { id: "companies", href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
   { id: "campuses", href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
   { id: "founders", href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
+  { id: "networks", href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
   { id: "signals", href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
 ] as const;
 
@@ -18,6 +19,7 @@ const DESK_TABS = [
   { href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
   { href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
   { href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
+  { href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
   { href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
 ] as const;
 
