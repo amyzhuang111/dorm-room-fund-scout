@@ -11,6 +11,7 @@ import {
   searchDirectory,
   sortDirectory,
 } from "@/lib/domain/directory";
+import { cleanCsvDate, cleanCsvList, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
 import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 
 export const CORPUS_PAGE_SIZE = 25;
@@ -261,42 +262,38 @@ export function corpusToCsv(rows: CorpusRow[]): string {
     "founder_count",
     "founders",
     "website",
-    "funding", "record_type", "scouting_status", "verification_status", "source_urls",
+    "funding",
+    "record_type",
+    "scouting_status",
+    "verification_status",
+    "source_urls",
   ];
-  const esc = (v: string | number | null | undefined) => {
-    if (v == null || v === "") return "";
-    const raw = String(v);
-    const s = /^[=+@\-\t\r]/.test(raw) ? `'${raw}` : raw;
-    if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-    return s;
-  };
-  const lines = [headers.join(",")];
-  for (const r of rows) {
-    lines.push(
-      [
-        r.id,
-        r.name,
-        r.campus,
-        r.sector,
-        r.stage,
-        r.foundedYear,
-        r.hq,
-        r.status,
-        r.signals,
-        r.latestSignalAt,
-        r.signalLabel,
-        r.primaryProgram,
-        r.ycBatch,
-        r.founderCount,
-        r.founders.join(" · "),
-        r.website,
-        r.fundingText, r.kind, r.scoutingStatus, r.verification, r.sourceUrls.join(" | "),
-      ]
-        .map(esc)
-        .join(",")
-    );
-  }
-  return lines.join("\n") + "\n";
+  return encodeCsv([
+    headers,
+    ...rows.map((r) => [
+      cleanCsvText(r.id),
+      cleanCsvText(r.name),
+      cleanCsvText(r.campus),
+      cleanCsvText(r.sector),
+      cleanCsvText(r.stage),
+      r.foundedYear,
+      cleanCsvText(r.hq),
+      cleanCsvText(r.status),
+      r.signals,
+      cleanCsvDate(r.latestSignalAt),
+      cleanCsvText(r.signalLabel),
+      cleanCsvText(r.primaryProgram),
+      cleanCsvText(r.ycBatch),
+      r.founderCount,
+      cleanCsvList(r.founders),
+      cleanCsvUrl(r.website),
+      cleanCsvText(r.fundingText),
+      cleanCsvText(r.kind),
+      cleanCsvText(r.scoutingStatus),
+      cleanCsvText(r.verification),
+      cleanCsvUrls(r.sourceUrls),
+    ]),
+  ]);
 }
 
 export interface CorpusFillRates {

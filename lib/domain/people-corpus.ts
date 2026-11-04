@@ -1,3 +1,4 @@
+import { cleanCsvList, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
 import { getDb } from "@/lib/db/client";
 
 export interface PersonCorpusRow {
@@ -34,7 +35,21 @@ export function filterPeopleCorpus(opts:PeopleOptions={}):PersonCorpusRow[]{
   return loadPeopleCorpus().filter(p=>(!q||[p.name,...p.campuses.map(c=>c.name),...p.projects.map(c=>c.name)].join(' ').toLocaleLowerCase().includes(q)) && (!opts.campus||p.campuses.some(c=>c.id===opts.campus)) && (!opts.status||p.founderStatus===opts.status) && (!opts.year || (opts.year==='known'?p.graduationYear!=null:opts.year==='unknown'?p.graduationYear==null:String(p.graduationYear)===opts.year)));
 }
 export function peopleCorpusToCsv(rows:PersonCorpusRow[]):string{
-  const escape=(value:unknown)=>{const raw=String(value??'');const safe=/^[=+@\-\t\r]/.test(raw)?`'${raw}`:raw;return `"${safe.replace(/"/g,'""')}"`;};
   const headers=['person_id','name','school_ids','schools','class_year','year_verification','year_source_url','year_evidence','founder_status','enrollment_status','profile_verification','project_ids','projects_and_roles','source_urls'];
-  return [headers,...rows.map(p=>[p.id,p.name,p.campuses.map(c=>c.id).join(' | '),p.campuses.map(c=>c.name).join(' | '),p.graduationYear,p.yearChecked?'Explicit individual class year verified':p.graduationYear==null?'Unknown':'Stored year; not rechecked',p.yearSourceUrl,p.yearEvidence,p.founderStatus,p.enrollmentStatus,p.verification,p.projects.map(c=>c.id).join(' | '),p.projects.map(c=>`${c.name} (${c.role})`).join(' | '),p.sourceUrls.join(' | ')])].map(r=>r.map(escape).join(',')).join('\r\n')+'\r\n';
+  return encodeCsv([headers,...rows.map(p=>[
+    cleanCsvText(p.id),
+    cleanCsvText(p.name),
+    cleanCsvList(p.campuses.map(c=>c.id)),
+    cleanCsvList(p.campuses.map(c=>c.name)),
+    p.graduationYear,
+    p.yearChecked?'Explicit individual class year verified':p.graduationYear==null?'':'Stored year; not rechecked',
+    cleanCsvUrl(p.yearSourceUrl),
+    cleanCsvText(p.yearEvidence),
+    cleanCsvText(p.founderStatus),
+    cleanCsvText(p.enrollmentStatus),
+    cleanCsvText(p.verification),
+    cleanCsvList(p.projects.map(c=>c.id)),
+    cleanCsvList(p.projects.map(c=>{const name=cleanCsvText(c.name);const role=cleanCsvText(c.role);return name&&role?`${name} (${role})`:name||role;})),
+    cleanCsvUrls(p.sourceUrls),
+  ])]);
 }

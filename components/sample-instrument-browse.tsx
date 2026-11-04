@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDialogFocus } from "./use-dialog-focus";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
+import { cleanCsvDate, cleanCsvList, cleanCsvText, encodeCsv } from "@/lib/display/csv";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
@@ -73,42 +74,24 @@ function browseHref(opts: {
 }
 
 function exportFilteredCsv(rows: FacetCompany[]) {
-  const header = [
-    "id",
-    "name",
-    "sector",
-    "stage",
-    "campus",
-    "founded_year",
-    "hq",
-    "status",
-    "signals",
-    "latest_signal",
-    "program",
-    "founders",
-  ];
-  const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
-  const lines = [header.join(",")];
-  for (const row of rows) {
-    const status = statusOf(row);
-    lines.push(
-      [
-        esc(row.id),
-        esc(row.name),
-        esc(row.sector ?? ""),
-        esc(row.stage ?? ""),
-        esc(row.school ?? ""),
-        row.foundedYear == null ? "" : String(row.foundedYear),
-        esc(row.hqRegion ?? ""),
-        status,
-        String(row.signals ?? 0),
-        esc(row.latestSignalAt ?? ""),
-        esc(row.primaryProgram ?? ""),
-        esc((row.founders ?? []).join("; ")),
-      ].join(","),
-    );
-  }
-  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const csv = encodeCsv([
+    ["id", "name", "sector", "stage", "campus", "founded_year", "hq", "status", "signals", "latest_signal", "program", "founders"],
+    ...rows.map((row) => [
+      cleanCsvText(row.id),
+      cleanCsvText(row.name),
+      cleanCsvText(row.sector),
+      cleanCsvText(row.stage),
+      cleanCsvText(row.school),
+      row.foundedYear,
+      cleanCsvText(row.hqRegion),
+      cleanCsvText(statusOf(row)),
+      row.signals ?? 0,
+      cleanCsvDate(row.latestSignalAt),
+      cleanCsvText(row.primaryProgram),
+      cleanCsvList(row.founders ?? []),
+    ]),
+  ]);
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

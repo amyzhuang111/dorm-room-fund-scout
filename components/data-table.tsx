@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
+import { cleanCsvList, cleanCsvText, encodeCsv } from "@/lib/display/csv";
 import { plainText } from "@/lib/display/plain-text";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { LogoMark } from "./sample-instrument";
@@ -186,15 +187,17 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   function exportCsv() {
     const picked = rows.filter((row) => selected.includes(row.id));
-    const lines = [
-      "project,tier,campus,people,signal",
-      ...picked.map((row) =>
-        [row.name, row.tier ?? "", row.campus ?? "", row.people.map((person) => person.name).join("; "), row.full ?? row.detail ?? ""]
-          .map((value) => `"${value.replace(/"/g, '""')}"`)
-          .join(","),
-      ),
-    ];
-    const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+    const csv = encodeCsv([
+      ["project", "tier", "campus", "people", "signal"],
+      ...picked.map((row) => [
+        cleanCsvText(row.name),
+        cleanCsvText(row.tier),
+        cleanCsvText(row.campus),
+        cleanCsvList(row.people.map((person) => person.name)),
+        cleanCsvText(row.full ?? row.detail ?? row.event),
+      ]),
+    ]);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
