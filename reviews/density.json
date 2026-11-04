@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3460",
+  "base": "http://127.0.0.1:3477",
   "baselineSource": "baked-e100551",
   "baseline": {
     "companies@375": {
@@ -51,34 +51,34 @@
       "fully": 2,
       "intersecting": 3,
       "halfVisible": 2,
-      "firstTop": 425,
+      "firstTop": 436,
       "rows": [
         {
           "i": 0,
-          "top": 425,
-          "h": 170,
+          "top": 436,
+          "h": 185,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 170
+          "visibleH": 185
         },
         {
           "i": 1,
-          "top": 595,
-          "h": 170,
+          "top": 621,
+          "h": 135,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 170
+          "visibleH": 135
         },
         {
           "i": 2,
-          "top": 766,
-          "h": 164,
+          "top": 757,
+          "h": 185,
           "fully": false,
           "intersecting": true,
           "halfVisible": false,
-          "visibleH": 47
+          "visibleH": 55
         }
       ],
       "selector": "[data-card-signals]",
@@ -88,44 +88,44 @@
       "nDom": 28,
       "fully": 3,
       "intersecting": 4,
-      "halfVisible": 4,
-      "firstTop": 213,
+      "halfVisible": 3,
+      "firstTop": 225,
       "rows": [
         {
           "i": 0,
-          "top": 213,
-          "h": 170,
+          "top": 225,
+          "h": 209,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 170
+          "visibleH": 209
         },
         {
           "i": 1,
-          "top": 383,
-          "h": 170,
+          "top": 434,
+          "h": 159,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 170
+          "visibleH": 159
         },
         {
           "i": 2,
-          "top": 554,
-          "h": 164,
+          "top": 594,
+          "h": 209,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 164
+          "visibleH": 209
         },
         {
           "i": 3,
-          "top": 718,
-          "h": 140,
+          "top": 803,
+          "h": 199,
           "fully": false,
           "intersecting": true,
-          "halfVisible": true,
-          "visibleH": 94
+          "halfVisible": false,
+          "visibleH": 9
         }
       ],
       "selector": "[data-card-signals]",
@@ -133,64 +133,64 @@
     },
     "company-sim@375": {
       "nDom": 6,
-      "fully": 6,
+      "fully": 5,
       "intersecting": 6,
-      "halfVisible": 6,
-      "firstTop": 553,
+      "halfVisible": 5,
+      "firstTop": 577,
       "rows": [
         {
           "i": 0,
-          "top": 553,
-          "h": 22,
+          "top": 577,
+          "h": 44,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 22
+          "visibleH": 44
         },
         {
           "i": 1,
-          "top": 577,
-          "h": 22,
+          "top": 623,
+          "h": 44,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 22
+          "visibleH": 44
         },
         {
           "i": 2,
-          "top": 601,
-          "h": 22,
+          "top": 669,
+          "h": 44,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 22
+          "visibleH": 44
         },
         {
           "i": 3,
-          "top": 625,
-          "h": 22,
+          "top": 715,
+          "h": 44,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 22
+          "visibleH": 44
         },
         {
           "i": 4,
-          "top": 649,
-          "h": 22,
+          "top": 761,
+          "h": 44,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 22
+          "visibleH": 44
         },
         {
           "i": 5,
-          "top": 673,
-          "h": 22,
-          "fully": true,
+          "top": 807,
+          "h": 44,
+          "fully": false,
           "intersecting": true,
-          "halfVisible": true,
-          "visibleH": 22
+          "halfVisible": false,
+          "visibleH": 5
         }
       ],
       "selector": "[data-dossier-signal-timeline] > li",
@@ -201,34 +201,34 @@
       "fully": 2,
       "intersecting": 3,
       "halfVisible": 3,
-      "firstTop": 445,
+      "firstTop": 457,
       "rows": [
         {
           "i": 0,
-          "top": 445,
-          "h": 167,
+          "top": 457,
+          "h": 187,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 167
+          "visibleH": 187
         },
         {
           "i": 1,
-          "top": 613,
-          "h": 167,
+          "top": 645,
+          "h": 137,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 167
+          "visibleH": 137
         },
         {
           "i": 2,
-          "top": 781,
-          "h": 161,
+          "top": 783,
+          "h": 187,
           "fully": false,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 119
+          "visibleH": 117
         }
       ],
       "selector": "[data-card-signals]",
@@ -237,36 +237,27 @@
     "companies-more@1440": {
       "nDom": 28,
       "fully": 2,
-      "intersecting": 3,
+      "intersecting": 2,
       "halfVisible": 2,
-      "firstTop": 550,
+      "firstTop": 562,
       "rows": [
         {
           "i": 0,
-          "top": 550,
-          "h": 167,
+          "top": 562,
+          "h": 193,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 167
+          "visibleH": 193
         },
         {
           "i": 1,
-          "top": 718,
-          "h": 167,
+          "top": 756,
+          "h": 143,
           "fully": true,
           "intersecting": true,
           "halfVisible": true,
-          "visibleH": 167
-        },
-        {
-          "i": 2,
-          "top": 886,
-          "h": 161,
-          "fully": false,
-          "intersecting": true,
-          "halfVisible": false,
-          "visibleH": 14
+          "visibleH": 143
         }
       ],
       "selector": "[data-card-signals]",
@@ -325,7 +316,7 @@
       "peak": 1,
       "ranks": 1,
       "bars": 1,
-      "founderCards": 12
+      "founderCards": 1
     },
     "fold@1440": {
       "peak": 1,
@@ -345,34 +336,34 @@
         "fully": 2,
         "intersecting": 3,
         "halfVisible": 2,
-        "firstTop": 425,
+        "firstTop": 436,
         "rows": [
           {
             "i": 0,
-            "top": 425,
-            "h": 170,
+            "top": 436,
+            "h": 185,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 170
+            "visibleH": 185
           },
           {
             "i": 1,
-            "top": 595,
-            "h": 170,
+            "top": 621,
+            "h": 135,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 170
+            "visibleH": 135
           },
           {
             "i": 2,
-            "top": 766,
-            "h": 164,
+            "top": 757,
+            "h": 185,
             "fully": false,
             "intersecting": true,
             "halfVisible": false,
-            "visibleH": 47
+            "visibleH": 55
           }
         ],
         "selector": "[data-card-signals]",
@@ -394,44 +385,44 @@
         "nDom": 28,
         "fully": 3,
         "intersecting": 4,
-        "halfVisible": 4,
-        "firstTop": 213,
+        "halfVisible": 3,
+        "firstTop": 225,
         "rows": [
           {
             "i": 0,
-            "top": 213,
-            "h": 170,
+            "top": 225,
+            "h": 209,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 170
+            "visibleH": 209
           },
           {
             "i": 1,
-            "top": 383,
-            "h": 170,
+            "top": 434,
+            "h": 159,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 170
+            "visibleH": 159
           },
           {
             "i": 2,
-            "top": 554,
-            "h": 164,
+            "top": 594,
+            "h": 209,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 164
+            "visibleH": 209
           },
           {
             "i": 3,
-            "top": 718,
-            "h": 140,
+            "top": 803,
+            "h": 199,
             "fully": false,
             "intersecting": true,
-            "halfVisible": true,
-            "visibleH": 94
+            "halfVisible": false,
+            "visibleH": 9
           }
         ],
         "selector": "[data-card-signals]",
@@ -442,7 +433,7 @@
         "fully": 3
       },
       "controlLive": null,
-      "detail": "cand half=4 fully=3 | floor half=3 fully=3"
+      "detail": "cand half=3 fully=3 | floor half=3 fully=3"
     },
     {
       "key": "company-sim@375",
@@ -451,64 +442,64 @@
       "fullyOk": true,
       "candidate": {
         "nDom": 6,
-        "fully": 6,
+        "fully": 5,
         "intersecting": 6,
-        "halfVisible": 6,
-        "firstTop": 553,
+        "halfVisible": 5,
+        "firstTop": 577,
         "rows": [
           {
             "i": 0,
-            "top": 553,
-            "h": 22,
+            "top": 577,
+            "h": 44,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 22
+            "visibleH": 44
           },
           {
             "i": 1,
-            "top": 577,
-            "h": 22,
+            "top": 623,
+            "h": 44,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 22
+            "visibleH": 44
           },
           {
             "i": 2,
-            "top": 601,
-            "h": 22,
+            "top": 669,
+            "h": 44,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 22
+            "visibleH": 44
           },
           {
             "i": 3,
-            "top": 625,
-            "h": 22,
+            "top": 715,
+            "h": 44,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 22
+            "visibleH": 44
           },
           {
             "i": 4,
-            "top": 649,
-            "h": 22,
+            "top": 761,
+            "h": 44,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 22
+            "visibleH": 44
           },
           {
             "i": 5,
-            "top": 673,
-            "h": 22,
-            "fully": true,
+            "top": 807,
+            "h": 44,
+            "fully": false,
             "intersecting": true,
-            "halfVisible": true,
-            "visibleH": 22
+            "halfVisible": false,
+            "visibleH": 5
           }
         ],
         "selector": "[data-dossier-signal-timeline] > li",
@@ -519,7 +510,7 @@
         "fully": 3
       },
       "controlLive": null,
-      "detail": "cand half=6 fully=6 | floor half=3 fully=3"
+      "detail": "cand half=5 fully=5 | floor half=3 fully=3"
     },
     {
       "key": "companies@1440",
@@ -531,34 +522,34 @@
         "fully": 2,
         "intersecting": 3,
         "halfVisible": 3,
-        "firstTop": 445,
+        "firstTop": 457,
         "rows": [
           {
             "i": 0,
-            "top": 445,
-            "h": 167,
+            "top": 457,
+            "h": 187,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 167
+            "visibleH": 187
           },
           {
             "i": 1,
-            "top": 613,
-            "h": 167,
+            "top": 645,
+            "h": 137,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 167
+            "visibleH": 137
           },
           {
             "i": 2,
-            "top": 781,
-            "h": 161,
+            "top": 783,
+            "h": 187,
             "fully": false,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 119
+            "visibleH": 117
           }
         ],
         "selector": "[data-card-signals]",
@@ -579,36 +570,27 @@
       "candidate": {
         "nDom": 28,
         "fully": 2,
-        "intersecting": 3,
+        "intersecting": 2,
         "halfVisible": 2,
-        "firstTop": 550,
+        "firstTop": 562,
         "rows": [
           {
             "i": 0,
-            "top": 550,
-            "h": 167,
+            "top": 562,
+            "h": 193,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 167
+            "visibleH": 193
           },
           {
             "i": 1,
-            "top": 718,
-            "h": 167,
+            "top": 756,
+            "h": 143,
             "fully": true,
             "intersecting": true,
             "halfVisible": true,
-            "visibleH": 167
-          },
-          {
-            "i": 2,
-            "top": 886,
-            "h": 161,
-            "fully": false,
-            "intersecting": true,
-            "halfVisible": false,
-            "visibleH": 14
+            "visibleH": 143
           }
         ],
         "selector": "[data-card-signals]",
@@ -693,7 +675,7 @@
         "peak": 1,
         "ranks": 1,
         "bars": 1,
-        "founderCards": 12
+        "founderCards": 1
       },
       "floor": {
         "peak": 1,
@@ -701,7 +683,7 @@
         "bars": 1,
         "founderCards": 1
       },
-      "detail": "cand peak=1 ranks=1 bars=1 cards=12 | floor peak=1 ranks=1 bars=1 cards=1"
+      "detail": "cand peak=1 ranks=1 bars=1 cards=1 | floor peak=1 ranks=1 bars=1 cards=1"
     },
     {
       "key": "fold@1440",

@@ -1,7 +1,7 @@
 import type { FounderSignalRow } from "@/lib/domain/founder-signals";
 import { SignalTierBadge } from "./badges";
 
-const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5 };
+const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5, talent: 6, Unranked: 7 };
 
 export function FounderSignalsTable({ rows }: { rows: FounderSignalRow[] }) {
   if (rows.length === 0) return null;

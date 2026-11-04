@@ -1,0 +1,19 @@
+OK home: open-lane definition visible
+OK home: strong definition matches open-lane.ts
+OK home: top-fund definition matches open-lane.ts
+OK home: desk definition matches open-lane.ts
+OK home: full definition matches open-lane.ts
+OK home: data-fold-open-lane-def-full matches
+OK corpus: every open-lane founder company is investable (n=117)
+OK corpus: investable desk is 1,633
+OK home: figure 117 equals computed open-lane set
+OK methodology: strong definition matches open-lane.ts
+OK methodology: top-fund definition matches open-lane.ts
+OK methodology: desk definition matches open-lane.ts
+OK methodology: visible definition matches open-lane.ts
+OK methodology: full definition matches open-lane.ts
+PASS check-open-lane-def {
+  wrote: 'reviews/open-lane-def.json',
+  openLaneCount: 117,
+  investableCompanies: 1633
+}

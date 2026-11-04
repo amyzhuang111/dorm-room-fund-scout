@@ -1,0 +1,179 @@
+[
+  {
+    "name": "Student Spots",
+    "university": "Bentley University",
+    "campusId": "univ_bentley",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526",
+    "program": "Bentley E-Hub Incubator Phase 03 Awardees 2025-26",
+    "source": "src_bentley_phase03_2026_11_03",
+    "description": "Named Phase 03 / pitch awardee; page presents current Bentley student founders (cohort 2025-26).",
+    "founders": [
+      {
+        "name": "Jack Blumsack",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      },
+      {
+        "name": "Jonathan Bragg",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bentley_phase03"
+  },
+  {
+    "name": "Jobly",
+    "university": "Bentley University",
+    "campusId": "univ_bentley",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526",
+    "program": "Bentley E-Hub Incubator Phase 03 Awardees 2025-26",
+    "source": "src_bentley_phase03_2026_11_03",
+    "description": "Named Phase 03 / pitch awardee; page presents current Bentley student founders (cohort 2025-26).",
+    "founders": [
+      {
+        "name": "Niko Konstantinidis",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      },
+      {
+        "name": "Chapin Scaggs",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bentley_phase03"
+  },
+  {
+    "name": "Capsō",
+    "university": "Bentley University",
+    "campusId": "univ_bentley",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526",
+    "program": "Bentley E-Hub Incubator Phase 03 Awardees 2025-26",
+    "source": "src_bentley_phase03_2026_11_03",
+    "description": "Named Phase 03 / pitch awardee; page presents current Bentley student founders (cohort 2025-26).",
+    "founders": [
+      {
+        "name": "Stelios Papapanagiotou",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bentley_phase03"
+  },
+  {
+    "name": "Shattrn",
+    "university": "Bentley University",
+    "campusId": "univ_bentley",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526",
+    "program": "Bentley E-Hub Incubator Phase 03 Awardees 2025-26",
+    "source": "src_bentley_phase03_2026_11_03",
+    "description": "Named Phase 03 / pitch awardee; page presents current Bentley student founders (cohort 2025-26).",
+    "founders": [
+      {
+        "name": "Alec Hawley",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      },
+      {
+        "name": "Aidan Murphy",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bentley_phase03"
+  },
+  {
+    "name": "Right Run",
+    "university": "Bentley University",
+    "campusId": "univ_bentley",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526",
+    "program": "Bentley E-Hub Incubator Phase 03 Awardees 2025-26",
+    "source": "src_bentley_phase03_2026_11_03",
+    "description": "Named Phase 03 / pitch awardee; page presents current Bentley student founders (cohort 2025-26).",
+    "founders": [
+      {
+        "name": "Ryan Ogren",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bentley_phase03"
+  },
+  {
+    "name": "Klonos",
+    "university": "Bentley University",
+    "campusId": "univ_bentley",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526",
+    "program": "Bentley E-Hub Incubator Phase 03 Awardees 2025-26",
+    "source": "src_bentley_phase03_2026_11_03",
+    "description": "Named Phase 03 / pitch awardee; page presents current Bentley student founders (cohort 2025-26).",
+    "founders": [
+      {
+        "name": "Joe Rizzo",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.bentley.edu/centers/entrepreneurship-hub/phase-03-awardees-202526"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bentley_phase03"
+  }
+]

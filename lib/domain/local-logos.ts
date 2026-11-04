@@ -38,7 +38,16 @@ function load(): Map<string, string> {
 /** Local cached logo path under /company-logos, or null when none was verified. */
 export function localCompanyLogoUrl(companyId: string | null | undefined): string | null {
   if (!companyId) return null;
-  return load().get(companyId) ?? null;
+  const fromManifest = load().get(companyId);
+  if (fromManifest) return fromManifest;
+  // Files dropped after process start (logo fetch) still count as real verified marks.
+  const file = path.join(process.cwd(), "public", "company-logos", `${companyId}.webp`);
+  if (fs.existsSync(file)) {
+    const rel = `/company-logos/${companyId}.webp`;
+    load().set(companyId, rel);
+    return rel;
+  }
+  return null;
 }
 
 export function localLogoCoverage(): { withLogo: number; totalCached: number; totalCompanies: number } {

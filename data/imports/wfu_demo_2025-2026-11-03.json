@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Final Whistle Wealth",
+    "university": "Wake Forest University",
+    "campusId": "univ_wake_forest",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/",
+    "program": "WFU Startup Lab Demo Day 2025",
+    "source": "src_wfu_demo_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(WFU student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "wfu_demo_2025"
+  },
+  {
+    "name": "Mira",
+    "university": "Wake Forest University",
+    "campusId": "univ_wake_forest",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/",
+    "program": "WFU Startup Lab Demo Day 2025",
+    "source": "src_wfu_demo_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(WFU student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "wfu_demo_2025"
+  },
+  {
+    "name": "Proffy",
+    "university": "Wake Forest University",
+    "campusId": "univ_wake_forest",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/",
+    "program": "WFU Startup Lab Demo Day 2025",
+    "source": "src_wfu_demo_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(WFU student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "wfu_demo_2025"
+  },
+  {
+    "name": "Room Ready",
+    "university": "Wake Forest University",
+    "campusId": "univ_wake_forest",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/",
+    "program": "WFU Startup Lab Demo Day 2025",
+    "source": "src_wfu_demo_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(WFU student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "wfu_demo_2025"
+  },
+  {
+    "name": "uflex",
+    "university": "Wake Forest University",
+    "campusId": "univ_wake_forest",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/",
+    "program": "WFU Startup Lab Demo Day 2025",
+    "source": "src_wfu_demo_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(WFU student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "wfu_demo_2025"
+  },
+  {
+    "name": "Zibt",
+    "university": "Wake Forest University",
+    "campusId": "univ_wake_forest",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/",
+    "program": "WFU Startup Lab Demo Day 2025",
+    "source": "src_wfu_demo_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(WFU student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.wfu.edu/2025/05/09/startup-lab-demo-day-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "wfu_demo_2025"
+  }
+]

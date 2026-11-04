@@ -1,0 +1,152 @@
+[
+  {
+    "name": "CardioLink",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student",
+    "program": "Stevens Ansary 2025",
+    "source": "src_stevens_ansary_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_2025"
+  },
+  {
+    "name": "DensiSense",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student",
+    "program": "Stevens Ansary 2025",
+    "source": "src_stevens_ansary_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_2025"
+  },
+  {
+    "name": "HeraHealth",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student",
+    "program": "Stevens Ansary 2025",
+    "source": "src_stevens_ansary_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_2025"
+  },
+  {
+    "name": "CellVax",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student",
+    "program": "Stevens Ansary 2025",
+    "source": "src_stevens_ansary_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_2025"
+  },
+  {
+    "name": "C-ALL",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student",
+    "program": "Stevens Ansary 2025",
+    "source": "src_stevens_ansary_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_2025"
+  },
+  {
+    "name": "Savor",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student",
+    "program": "Stevens Ansary 2025",
+    "source": "src_stevens_ansary_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/news/capstone-excellence-showcased-stevens-2025-innovation-expo-brings-student"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_2025"
+  }
+]

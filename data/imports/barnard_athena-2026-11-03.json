@@ -1,0 +1,59 @@
+[
+  {
+    "name": "MabLab",
+    "university": "Barnard College",
+    "campusId": "univ_barnard_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://athenacenter.barnard.edu/field-notes-startupsummit2024",
+    "program": "Athena Startup Summit 2024",
+    "source": "src_barnard_athena_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Vienna Sparks",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://athenacenter.barnard.edu/field-notes-startupsummit2024"
+      },
+      {
+        "name": "Skye Lam",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://athenacenter.barnard.edu/field-notes-startupsummit2024"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "barnard_athena"
+  },
+  {
+    "name": "Skolay",
+    "university": "Barnard College",
+    "campusId": "univ_barnard_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://athenacenter.barnard.edu/field-notes-startupsummit2024",
+    "program": "Athena Startup Summit 2024",
+    "source": "src_barnard_athena_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Samantha Greenspan",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://athenacenter.barnard.edu/field-notes-startupsummit2024"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "alumni class before 2023",
+    "_source_key": "barnard_athena"
+  }
+]

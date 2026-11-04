@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
 import { plainText } from "@/lib/display/plain-text";
 import { relativeTime } from "@/lib/domain/relative-time";
+import { LogoMark } from "./sample-instrument";
 import { useFeedback } from "./feedback-provider";
 import { useUserPipeline } from "./user-pipeline-provider";
 
@@ -108,18 +109,18 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   const campuses = useMemo(() => [...new Set(rows.map((row) => row.campus).filter(Boolean))] as string[], [rows]);
   const verifiedFilled = rows.filter((row) => row.verified).length;
-  const tierFilled = rows.filter((row) => row.tier).length;
   const dateFilled = rows.filter((row) => row.signalAt).length;
   const mostlyEmpty = (filled: number) => rows.length === 0 || filled / rows.length < 0.5;
   const head = rows.slice(0, 20);
   const autoVerified = verifiedFilled > 0 && head.length > 0 && head.filter((row) => row.verified).length / head.length >= 0.25;
-  const autoTier = campusLocked ? !mostlyEmpty(tierFilled) : true;
   const autoDate = campusLocked ? !mostlyEmpty(dateFilled) : true;
   const [verifiedChoice, setVerifiedChoice] = useState<boolean | null>(null);
-  const [tierChoice, setTierChoice] = useState<boolean | null>(null);
   const [dateChoice, setDateChoice] = useState<boolean | null>(null);
+  const [tierReasonId, setTierReasonId] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const showVerified = verifiedChoice ?? autoVerified;
-  const showTier = tierChoice ?? autoTier;
+  // Tier is always visible and ranked by default (task: mobile-compat / founders).
+  const showTier = true;
   const showDate = dateChoice ?? autoDate;
 
   const filtered = rows.filter((row) => {
@@ -202,6 +203,13 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     URL.revokeObjectURL(url);
   }
 
+
+  const activeFilterCount =
+    (tier ? 1 : 0) +
+    (!campusLocked && campus ? 1 : 0) +
+    (verifiedOnly ? 1 : 0) +
+    (showQuiet ? 1 : 0);
+
   const pad = compact ? "py-2" : "py-3";
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
   const control = "inline-flex h-11 min-h-11 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg sm:h-9 sm:min-h-0";
@@ -214,7 +222,12 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
-      <p className="mb-3 text-[13px] leading-5 text-fg sm:mb-4 sm:text-[14px]">
+      <p className="mb-2 text-[12px] leading-4 text-fg-2 sm:hidden" data-showing-founders="">
+        Showing <span className="num font-bold text-fg">{filtered.length.toLocaleString("en-US")}</span> of{" "}
+        <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span> projects
+      </p>
+      {/* Desktop stats; mobile keeps one quiet count line so results stay above the fold. */}
+      <p className="mb-2 hidden text-[14px] leading-5 text-fg sm:mb-4 sm:block">
         <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
         {" / "}
         <span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal
@@ -222,9 +235,84 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         <span className="num">{noSignal.toLocaleString("en-US")}</span> with no signal yet
         {verifiedFilled > 0 ? <>{" / "}<span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</> : null}
       </p>
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters" data-data-explorer-filters="">
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-11 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none sm:h-9" />
+      {/* Mobile: search + Filters sheet. Desk: full filter row. */}
+      <div className="flex items-center gap-2 sm:hidden" data-data-explorer-filters="" role="group" aria-label="Filters">
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search company or founder"
+          className="h-11 min-h-11 flex-1 rounded border border-line bg-raised px-3 text-[14px] text-fg outline-none"
+        />
+        <button
+          type="button"
+          className={`${control} relative shrink-0 ${filtersOpen || activeFilterCount > 0 ? "border-link" : ""}`}
+          aria-expanded={filtersOpen}
+          data-filters-toggle=""
+          onClick={() => setFiltersOpen((value) => !value)}
+        >
+          Filters
+          {activeFilterCount > 0 ? (
+            <span className="num ml-1.5 inline-grid h-5 min-w-5 place-items-center rounded-full bg-link px-1 text-[11px] font-medium text-white">
+              {activeFilterCount}
+            </span>
+          ) : null}
+        </button>
+      </div>
+      {filtersOpen ? (
+        <div
+          className="mt-2 space-y-2 rounded border border-line bg-raised p-3 sm:hidden"
+          data-filters-sheet=""
+          role="group"
+          aria-label="Filter options"
+        >
+          <select value={tier} onChange={(event) => setTier(event.target.value)} className={`${control} w-full`} aria-label="Tier">
+            <option value="">Tier</option>
+            {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
+          </select>
+          {!campusLocked && (
+            <select value={campus} onChange={(event) => setCampus(event.target.value)} className={`${control} w-full`} aria-label="Campus">
+              <option value="">Campus</option>
+              {campuses.map((value) => <option key={value}>{value}</option>)}
+            </select>
+          )}
+          {verifiedFilled > 0 && (
+            <button type="button" className={`${control} w-full justify-between ${verifiedOnly ? "border-link" : ""}`} onClick={() => setVerifiedOnly((value) => !value)}>
+              Verified only
+            </button>
+          )}
+          {quietCount > 0 && (
+            <button type="button" className={`${control} w-full justify-between`} onClick={() => setShowQuiet((value) => !value)}>
+              {showQuiet ? "Hide no-signal rows" : "Show no-signal rows"}
+            </button>
+          )}
+          {(campusLocked || verifiedFilled > 0) && (
+            <div className="space-y-1 border-t border-line pt-2 text-[14px]" data-columns-panel="">
+              <p className="text-fg-2">Columns</p>
+              {campusLocked && (
+                <label className="flex min-h-11 items-center gap-2">
+                  <input type="checkbox" checked={showDate} onChange={(event) => setDateChoice(event.target.checked)} />
+                  Date
+                </label>
+              )}
+              {verifiedFilled > 0 && (
+                <label className="flex min-h-11 items-center gap-2">
+                  <input type="checkbox" checked={showVerified} onChange={(event) => setVerifiedChoice(event.target.checked)} />
+                  Verified
+                </label>
+              )}
+            </div>
+          )}
+          <button type="button" className={`${control} w-full`} onClick={() => setCompact((value) => !value)}>
+            {compact ? "Comfortable density" : "Compact density"}
+          </button>
+          <button type="button" className={`${control} w-full border-link text-link`} onClick={() => setFiltersOpen(false)}>
+            Done
+          </button>
+        </div>
+      ) : null}
+      <div className="mt-2 hidden flex-wrap items-center gap-2 sm:mt-0 sm:flex sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters" data-data-explorer-filters-desk="">
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search company or founder" className="h-9 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none" />
           <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
             <option value="">Tier</option>
             {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
@@ -246,17 +334,11 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             </button>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-2 border-l border-line pl-3" role="group" aria-label="View">
+        <div className="flex flex-wrap items-center gap-2 sm:border-l sm:border-line sm:pl-3" role="group" aria-label="View">
           {(campusLocked || verifiedFilled > 0) && (
             <details className="relative">
               <summary className={`${control} cursor-pointer list-none`}>Columns</summary>
               <div className="absolute right-0 z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] text-fg shadow-[var(--shadow-menu)]" data-columns-panel="">
-                {campusLocked && (
-                  <label className="flex items-center gap-2 py-1">
-                    <input type="checkbox" checked={showTier} onChange={(event) => setTierChoice(event.target.checked)} />
-                    Tier
-                  </label>
-                )}
                 {campusLocked && (
                   <label className="flex items-center gap-2 py-1">
                     <input type="checkbox" checked={showDate} onChange={(event) => setDateChoice(event.target.checked)} />
@@ -277,8 +359,54 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
           </button>
         </div>
       </div>
-      <div className="mt-3 max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
-        <table className="w-full min-w-[720px] table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg">
+      {/* Mobile: stacked cards. Desk: sticky first column + horizontal scroll. */}
+      <div className="mt-2 max-h-[calc(100dvh-160px)] overflow-auto border-t border-line-strong sm:mt-3 sm:max-h-[calc(100dvh-220px)] sm:overflow-x-auto" data-projects-scroll="">
+        <ul className="divide-y divide-line sm:hidden" data-projects-cards="">
+          {ordered.map((row, index) => {
+            const text = row.detail || row.full;
+            const reasonOpen = tierReasonId === row.id;
+            const markName = row.name || row.people[0]?.name || "Project";
+            return (
+              <li key={row.id} className="px-1 py-3" data-project-card="">
+                <div className="min-w-0">
+                    <button type="button" className="flex min-h-11 w-full items-center gap-3 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
+                      <LogoMark name={markName} logoUrl={row.logoUrl} size={36} />
+                      <span className="min-w-0 truncate text-[14px] font-medium text-fg">{plainText(row.name) || "n/a"}</span>
+                    </button>
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-fg-2">
+                      {row.tier ? (
+                        <button
+                          type="button"
+                          className={`${tierClass(row.tier)} min-h-11 px-2`}
+                          data-tier={row.tier}
+                          data-tier-reason-trigger=""
+                          aria-expanded={reasonOpen}
+                          onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
+                        >
+                          {row.tier}
+                        </button>
+                      ) : null}
+                      {!campusLocked && row.campus ? (
+                        row.campusSlug ? (
+                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-11 items-center text-link">{plainText(row.campus)}</Link>
+                        ) : (
+                          <span>{plainText(row.campus)}</span>
+                        )
+                      ) : null}
+                      {row.verified ? <span className="text-ok">Verified</span> : null}
+                    </div>
+                    {reasonOpen && row.tierBasis ? (
+                      <p className="mt-2 text-[14px] leading-5 text-fg" data-tier-reason="">{plainText(row.tierBasis)}</p>
+                    ) : null}
+                    <button type="button" className="mt-1 min-h-11 w-full text-left text-[14px] leading-5 text-fg" onClick={() => { setCursor(index); setOpenId(row.id); }}>
+                      {text ? plainText(text) : "No signal yet"}
+                    </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        <table className="hidden w-full min-w-[720px] table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg sm:table">
           <thead className="sticky top-0 z-20">
             <tr className="h-9 text-[14px] text-fg">
               <th className="sticky top-0 z-20 w-8 overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium" />
@@ -328,7 +456,33 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                         {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-link">Verified</span> : null}
                       </span>
                     </td>
-                    {showTier && <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>}
+                    {showTier && (
+                      <td className={`${pad} px-2`}>
+                        {row.tier ? (
+                          <button
+                            type="button"
+                            className={`${tierClass(row.tier)} min-h-11 min-w-11`}
+                            data-tier={row.tier}
+                            data-tier-reason-trigger=""
+                            aria-expanded={tierReasonId === row.id}
+                            title={row.tierBasis ?? undefined}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setTierReasonId(tierReasonId === row.id ? null : row.id);
+                            }}
+                          >
+                            {row.tier}
+                          </button>
+                        ) : (
+                          <Empty />
+                        )}
+                        {tierReasonId === row.id && row.tierBasis ? (
+                          <p className="mt-1 max-w-[14rem] text-[14px] leading-5 text-fg" data-tier-reason="">
+                            {plainText(row.tierBasis)}
+                          </p>
+                        ) : null}
+                      </td>
+                    )}
                     {!campusLocked && (
                       <td className={`${pad} truncate px-2`}>
                         {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{plainText(row.campus)}</Link> : plainText(row.campus) || <Empty />}
@@ -368,11 +522,16 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         {ordered.length === 0 && (quietCount === 0 || showQuiet) && <p className="px-2 py-6 text-[14px] text-fg-2">No projects match. Clear filters.</p>}
       </div>
       {open && (
-        <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6">
-          <button type="button" className="text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
+        <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]" data-project-sheet="">
+          <button type="button" className="inline-flex min-h-11 min-w-11 items-center text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
           <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{plainText(open.name || open.people[0]?.name) || "n/a"}</h2>
           <p className="mt-1 text-[14px] text-fg-2">{plainText(open.campus) ?? "Campus not on record"}</p>
-          {open.tier ? <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier}</span></p> : null}
+          {open.tier ? (
+            <p className="mt-4">
+              <span className={tierClass(open.tier)} data-tier={open.tier}>{open.tier}</span>
+              {open.tierBasis ? <span className="mt-2 block text-[14px] leading-5 text-fg" data-tier-reason="">{plainText(open.tierBasis)}</span> : null}
+            </p>
+          ) : null}
           {open.event ? <p className="mt-4 text-[14px] text-fg-2">{plainText(open.event)}</p> : null}
           <p className="mt-4 text-[15px] leading-6">{plainText(open.full) ?? "No signal text is stored for this project."}</p>
           <ul className="mt-4 space-y-2">
@@ -390,7 +549,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         </aside>
       )}
       {selected.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-40 flex h-12 items-center gap-4 border-t border-line bg-raised px-6 text-[14px]">
+        <div className="fixed inset-x-0 bottom-0 z-40 flex min-h-12 items-center gap-4 border-t border-line bg-raised px-6 pb-[env(safe-area-inset-bottom)] text-[14px]">
           <span className="num">{selected.length} selected</span>
           <button type="button" className="rounded border border-line bg-bg px-3 py-1" onClick={() => {
             for (const id of selected) {

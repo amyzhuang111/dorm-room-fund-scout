@@ -1,0 +1,102 @@
+[
+  {
+    "name": "FireTechAI",
+    "university": "Texas Tech University",
+    "campusId": "univ_ttu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php",
+    "program": "TTU iLaunch Fall 2025",
+    "source": "src_ttu_ilaunch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Rafael Reyes Ramirez",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ttu_ilaunch_2025"
+  },
+  {
+    "name": "Bitebuddy.AI",
+    "university": "Texas Tech University",
+    "campusId": "univ_ttu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php",
+    "program": "TTU iLaunch Fall 2025",
+    "source": "src_ttu_ilaunch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Muhammad Meeran",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ttu_ilaunch_2025"
+  },
+  {
+    "name": "ResidAlly",
+    "university": "Texas Tech University",
+    "campusId": "univ_ttu",
+    "affiliation_type": "community",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php",
+    "program": "TTU iLaunch Fall 2025",
+    "source": "src_ttu_ilaunch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Keya Malhotra",
+        "affiliation_type": "community",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "community / non-student entry",
+    "_source_key": "ttu_ilaunch_2025"
+  },
+  {
+    "name": "Wounded Wilson",
+    "university": "Texas Tech University",
+    "campusId": "univ_ttu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php",
+    "program": "TTU iLaunch Fall 2025",
+    "source": "src_ttu_ilaunch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Jacob Gann",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.depts.ttu.edu/research/research-park/Startup_Program_and_Events/Ideation/iLaunch/2025-finalists.php"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ttu_ilaunch_2025"
+  }
+]

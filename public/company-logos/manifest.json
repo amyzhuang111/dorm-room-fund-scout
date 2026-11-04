@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-02T21:28:07.108Z",
+  "generatedAt": "2026-11-04T05:48:09.521Z",
   "totalCompanies": 2508,
-  "withLogo": 1403,
+  "withLogo": 1455,
   "noWebsite": 894,
   "noLogo": 162,
   "logos": {
@@ -14059,6 +14059,550 @@
       "kind": "icon",
       "name": "Proximal",
       "host": "proximal.ai"
+    },
+    "proj_A8kQarc7Xwbn": {
+      "path": "/company-logos/proj_A8kQarc7Xwbn.webp",
+      "bytes": 4420,
+      "width": 128,
+      "height": 128,
+      "source": "https://web-cdn.bsky.app/static/apple-touch-icon.png",
+      "kind": "apple-touch",
+      "name": "PreMan",
+      "host": "bsky.app"
+    },
+    "proj_PN2zojaf_UJL": {
+      "path": "/company-logos/proj_PN2zojaf_UJL.webp",
+      "bytes": 1820,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.symbia.studio/apple-icon.png?apple-icon.078ror85i28d9.png",
+      "kind": "apple-touch",
+      "name": "Symbia",
+      "host": "symbia.studio"
+    },
+    "proj_dMTOB_Q2-3MJ": {
+      "path": "/company-logos/proj_dMTOB_Q2-3MJ.webp",
+      "bytes": 1826,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.doseup.app/icon?d2af36cea1942e67",
+      "kind": "icon",
+      "name": "DoseUp",
+      "host": "doseup.app"
+    },
+    "proj_h2TXOqesCZ4k": {
+      "path": "/company-logos/proj_h2TXOqesCZ4k.webp",
+      "bytes": 1282,
+      "width": 128,
+      "height": 128,
+      "source": "https://framerusercontent.com/images/FmaVTwvGy09JS7lnan3deEtr0.png",
+      "kind": "icon",
+      "name": "AethexAI",
+      "host": "aethexai.com"
+    },
+    "proj_VA3RjLxEYh4f": {
+      "path": "/company-logos/proj_VA3RjLxEYh4f.webp",
+      "bytes": 808,
+      "width": 128,
+      "height": 128,
+      "source": "https://aaru.com/favicon.svg",
+      "kind": "icon",
+      "name": "Aaru",
+      "host": "aaru.com"
+    },
+    "proj_SQJsug0luE0Z": {
+      "path": "/company-logos/proj_SQJsug0luE0Z.webp",
+      "bytes": 5068,
+      "width": 128,
+      "height": 128,
+      "source": "https://images.squarespace-cdn.com/content/v1/68b1d903dad24d46dcf3e666/7a2b7b76-6b82-476c-a316-ed087840e204/favicon.ico?format=100w",
+      "kind": "icon",
+      "name": "Actile Technologies",
+      "host": "actile.tech"
+    },
+    "proj_gy-Y7Z2l0KpJ": {
+      "path": "/company-logos/proj_gy-Y7Z2l0KpJ.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Cengine",
+      "host": "eventbrite.com"
+    },
+    "proj_cl24eT7Sxjez": {
+      "path": "/company-logos/proj_cl24eT7Sxjez.webp",
+      "bytes": 3074,
+      "width": 128,
+      "height": 128,
+      "source": "https://aka8888.net/assets/slots-2026/shared/main-icon.png",
+      "kind": "icon",
+      "name": "Capivara",
+      "host": "aka8888.net"
+    },
+    "proj_miptUwaLOuK4": {
+      "path": "/company-logos/proj_miptUwaLOuK4.webp",
+      "bytes": 6312,
+      "width": 128,
+      "height": 128,
+      "source": "https://colokmaju.cloud/img/fav_coloksgp-5_.png",
+      "kind": "icon",
+      "name": "Too Collective",
+      "host": "coloksgp28.com"
+    },
+    "proj_VhU5BncdeR1X": {
+      "path": "/company-logos/proj_VhU5BncdeR1X.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Caboodle",
+      "host": "eventbrite.com"
+    },
+    "proj_Gs7PWD3IDnQw": {
+      "path": "/company-logos/proj_Gs7PWD3IDnQw.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Alopex Golf",
+      "host": "eventbrite.com"
+    },
+    "proj_aAXefdB4oIiW": {
+      "path": "/company-logos/proj_aAXefdB4oIiW.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "IvyTech Design LLC",
+      "host": "eventbrite.com"
+    },
+    "proj_BrjL9m6xoGdO": {
+      "path": "/company-logos/proj_BrjL9m6xoGdO.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Airalux Medical",
+      "host": "eventbrite.com"
+    },
+    "proj_9i1_mWNX0FRO": {
+      "path": "/company-logos/proj_9i1_mWNX0FRO.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Aimless",
+      "host": "eventbrite.com"
+    },
+    "proj_yvJVxRPyrP2z": {
+      "path": "/company-logos/proj_yvJVxRPyrP2z.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Spine Bionics",
+      "host": "eventbrite.com"
+    },
+    "proj_KYip0NjSbVDy": {
+      "path": "/company-logos/proj_KYip0NjSbVDy.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "LilyLoop",
+      "host": "eventbrite.com"
+    },
+    "proj_-iebV_vNovNK": {
+      "path": "/company-logos/proj_-iebV_vNovNK.webp",
+      "bytes": 3628,
+      "width": 128,
+      "height": 128,
+      "source": "https://popeyelabs.co/wp-content/uploads/2026/05/cropped-favicon-2-180x180.webp",
+      "kind": "apple-touch",
+      "name": "PopEye",
+      "host": "popeyelabs.co"
+    },
+    "proj_dNimNbHmjrHK": {
+      "path": "/company-logos/proj_dNimNbHmjrHK.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "ToxiSense",
+      "host": "eventbrite.com"
+    },
+    "proj_Z-WASUUP_4qU": {
+      "path": "/company-logos/proj_Z-WASUUP_4qU.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Fleeted",
+      "host": "eventbrite.com"
+    },
+    "proj_BH9so-JwtWbf": {
+      "path": "/company-logos/proj_BH9so-JwtWbf.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Ossum Technologies",
+      "host": "eventbrite.com"
+    },
+    "proj_bXvXfz__P-ZI": {
+      "path": "/company-logos/proj_bXvXfz__P-ZI.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Clédo",
+      "host": "eventbrite.com"
+    },
+    "proj_-hnbM0DiHJaa": {
+      "path": "/company-logos/proj_-hnbM0DiHJaa.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Felicity",
+      "host": "eventbrite.com"
+    },
+    "proj_u9YOwo74eKPT": {
+      "path": "/company-logos/proj_u9YOwo74eKPT.webp",
+      "bytes": 3570,
+      "width": 128,
+      "height": 128,
+      "source": "https://shinkei.systems/apple-touch-icon.png",
+      "kind": "apple-touch",
+      "name": "Shinkei Systems",
+      "host": "shinkei.systems"
+    },
+    "proj_yO-URQVgwpAu": {
+      "path": "/company-logos/proj_yO-URQVgwpAu.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "EmployAI",
+      "host": "eventbrite.com"
+    },
+    "proj_yLfV6NNNzDNB": {
+      "path": "/company-logos/proj_yLfV6NNNzDNB.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "SecureFlow",
+      "host": "eventbrite.com"
+    },
+    "proj_Pw_MSR6zoTWo": {
+      "path": "/company-logos/proj_Pw_MSR6zoTWo.webp",
+      "bytes": 9260,
+      "width": 128,
+      "height": 128,
+      "source": "https://jalanjourney.com/images/JJLogo_thumbnail.png",
+      "kind": "icon",
+      "name": "EmBrace",
+      "host": "jalanjourney.com"
+    },
+    "proj_Pf627W_nNItb": {
+      "path": "/company-logos/proj_Pf627W_nNItb.webp",
+      "bytes": 7972,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.daisyum.com/favicon.ico",
+      "kind": "favicon.ico",
+      "name": "Daisy AI",
+      "host": "daisyum.com"
+    },
+    "proj_KYolYkGPuzYr": {
+      "path": "/company-logos/proj_KYolYkGPuzYr.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Prism Optics",
+      "host": "eventbrite.com"
+    },
+    "proj_XJ3b3Bv6Ij7G": {
+      "path": "/company-logos/proj_XJ3b3Bv6Ij7G.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "certitude",
+      "host": "eventbrite.com"
+    },
+    "proj_IoC1qc0dL_ZZ": {
+      "path": "/company-logos/proj_IoC1qc0dL_ZZ.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "FloDx",
+      "host": "eventbrite.com"
+    },
+    "proj_7W83cxxna8ps": {
+      "path": "/company-logos/proj_7W83cxxna8ps.webp",
+      "bytes": 1118,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.kindredk12.com/apple-touch-icon.png",
+      "kind": "apple-touch",
+      "name": "Kindred K-12",
+      "host": "kindredk12.com"
+    },
+    "proj_ybRc088txNjR": {
+      "path": "/company-logos/proj_ybRc088txNjR.webp",
+      "bytes": 2726,
+      "width": 128,
+      "height": 128,
+      "source": "https://framerusercontent.com/images/OrNFfaO9jGL7aH3lX2NjC1rNGDc.png",
+      "kind": "icon",
+      "name": "LAINEY",
+      "host": "soulful-spot-863475.framer.app"
+    },
+    "proj_qQ8rwBWTsGI4": {
+      "path": "/company-logos/proj_qQ8rwBWTsGI4.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Mindful",
+      "host": "eventbrite.com"
+    },
+    "proj_D-gEo_ONoS2G": {
+      "path": "/company-logos/proj_D-gEo_ONoS2G.webp",
+      "bytes": 916,
+      "width": 128,
+      "height": 128,
+      "source": "https://framerusercontent.com/images/I0lPcRfegsnhVOou7iS4Ow0z9dU.png",
+      "kind": "apple-touch",
+      "name": "Medibound",
+      "host": "medibound.com"
+    },
+    "proj_0BlCIUmfn7VX": {
+      "path": "/company-logos/proj_0BlCIUmfn7VX.webp",
+      "bytes": 5380,
+      "width": 128,
+      "height": 128,
+      "source": "https://arulhealth.com/favicon.png",
+      "kind": "icon",
+      "name": "Arul Health",
+      "host": "arulhealth.com"
+    },
+    "proj_DLpQUTTm1qE9": {
+      "path": "/company-logos/proj_DLpQUTTm1qE9.webp",
+      "bytes": 1456,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.cancerkidsfirst.org/favicon.ico",
+      "kind": "favicon.ico",
+      "name": "Cancer Kids First",
+      "host": "cancerkidsfirst.org"
+    },
+    "proj_-zQGWdCxEV3I": {
+      "path": "/company-logos/proj_-zQGWdCxEV3I.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Stride",
+      "host": "eventbrite.com"
+    },
+    "proj_LccfefASAxdE": {
+      "path": "/company-logos/proj_LccfefASAxdE.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Musmo HealthTech",
+      "host": "eventbrite.com"
+    },
+    "proj_VS6Rfn-_oN5r": {
+      "path": "/company-logos/proj_VS6Rfn-_oN5r.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "SignAiture",
+      "host": "eventbrite.com"
+    },
+    "proj_HMbq-mktEL2z": {
+      "path": "/company-logos/proj_HMbq-mktEL2z.webp",
+      "bytes": 3300,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.evbstatic.com/s3-build/perm_001/8730ae/django/images/touch_icons/apple-touch-icon-180x180.png",
+      "kind": "apple-touch",
+      "name": "Stentix",
+      "host": "eventbrite.com"
+    },
+    "proj_IhvFKPlvieFr": {
+      "path": "/company-logos/proj_IhvFKPlvieFr.webp",
+      "bytes": 1606,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.bizjournals.com/favicon.ico",
+      "kind": "favicon.ico",
+      "name": "Overture Therapeutics",
+      "host": "bizjournals.com"
+    },
+    "proj_Dxn2IQyBVpmo": {
+      "path": "/company-logos/proj_Dxn2IQyBVpmo.webp",
+      "bytes": 852,
+      "width": 128,
+      "height": 128,
+      "source": "https://images.squarespace-cdn.com/content/v1/67d18ff9c11a681ff6f48916/013a2c6e-8ba6-43a8-9c69-096935fbe507/favicon.ico?format=100w",
+      "kind": "icon",
+      "name": "Mona",
+      "host": "trymona.com"
+    },
+    "proj_ruCFhWwxx9s_": {
+      "path": "/company-logos/proj_ruCFhWwxx9s_.webp",
+      "bytes": 8476,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.monitairhealth.com/apple-icon.png?apple-icon.41d5d1d9.png",
+      "kind": "apple-touch",
+      "name": "MonitAir",
+      "host": "monitairhealth.com"
+    },
+    "proj_uviNqxXCa-ob": {
+      "path": "/company-logos/proj_uviNqxXCa-ob.webp",
+      "bytes": 2098,
+      "width": 128,
+      "height": 128,
+      "source": "https://pathcisionmedicine.com/_app/immutable/assets/favicon.niKikIWK.png",
+      "kind": "icon",
+      "name": "PathCision Medicine",
+      "host": "pathcisionmedicine.com"
+    },
+    "proj_b22qFS1fsKbJ": {
+      "path": "/company-logos/proj_b22qFS1fsKbJ.webp",
+      "bytes": 3870,
+      "width": 128,
+      "height": 128,
+      "source": "https://findneuro.com/assets/White_500px.png",
+      "kind": "icon",
+      "name": "FIND Neuro",
+      "host": "findneuro.com"
+    },
+    "proj_ky-eStlBnGI7": {
+      "path": "/company-logos/proj_ky-eStlBnGI7.webp",
+      "bytes": 6434,
+      "width": 128,
+      "height": 128,
+      "source": "https://images.squarespace-cdn.com/content/v1/56210b0ee4b00f43cb541212/1582496965872-69ZHIA5L8IQXGQ2ATC7A/favicon.ico?format=100w",
+      "kind": "icon",
+      "name": "Iceberg Systems",
+      "host": "mit100k.org"
+    },
+    "proj_hn185RJPvi8d": {
+      "path": "/company-logos/proj_hn185RJPvi8d.webp",
+      "bytes": 5750,
+      "width": 128,
+      "height": 128,
+      "source": "https://frontpageafricaonline.com/wp-content/uploads/2026/05/newfpa-logo.png",
+      "kind": "apple-touch",
+      "name": "Surna Technologies",
+      "host": "frontpageafricaonline.com"
+    },
+    "proj_H8HbRyBRh3tS": {
+      "path": "/company-logos/proj_H8HbRyBRh3tS.webp",
+      "bytes": 4734,
+      "width": 128,
+      "height": 128,
+      "source": "https://known.com/apple-touch-icon.png",
+      "kind": "apple-touch",
+      "name": "Known Dating",
+      "host": "known.com"
+    },
+    "proj_jCI-60_8HU_R": {
+      "path": "/company-logos/proj_jCI-60_8HU_R.webp",
+      "bytes": 2112,
+      "width": 128,
+      "height": 128,
+      "source": "https://orbstack.dev/img/icon128.png",
+      "kind": "apple-touch",
+      "name": "OrbStack",
+      "host": "orbstack.dev"
+    },
+    "proj_3xAQSR8a1F6q": {
+      "path": "/company-logos/proj_3xAQSR8a1F6q.webp",
+      "bytes": 5326,
+      "width": 128,
+      "height": 128,
+      "source": "https://fillinnstation.com/img/gacorslot.webp",
+      "kind": "icon",
+      "name": "Gatekeep Labs",
+      "host": "fillinnstation.com"
+    },
+    "proj_WeF_c4qlsVjS": {
+      "path": "/company-logos/proj_WeF_c4qlsVjS.webp",
+      "bytes": 5562,
+      "width": 128,
+      "height": 128,
+      "source": "https://cdn.prod.website-files.com/68b13bad76f946d733e2ac0b/68b13bad76f946d733e2ad28_RLogo.png",
+      "kind": "apple-touch",
+      "name": "Paratus Health",
+      "host": "paratushealth.com"
+    },
+    "proj_-L1dnganO8kC": {
+      "path": "/company-logos/proj_-L1dnganO8kC.webp",
+      "bytes": 852,
+      "width": 128,
+      "height": 128,
+      "source": "https://video.golpoai.com/GolpoLogo1.jpeg",
+      "kind": "apple-touch",
+      "name": "Golpo",
+      "host": "video.golpoai.com"
+    },
+    "proj_aDl2FGTqfFw1": {
+      "path": "/company-logos/proj_aDl2FGTqfFw1.webp",
+      "bytes": 3300,
+      "source": "https://www.google.com/s2/favicons?domain=orchardrobotics.com&sz=128",
+      "name": "Orchard Robotics"
+    },
+    "proj_Bmaw5r3gKNnU": {
+      "path": "/company-logos/proj_Bmaw5r3gKNnU.webp",
+      "bytes": 3438,
+      "source": "https://www.google.com/s2/favicons?domain=partee.systems&sz=128",
+      "name": "PARTEE"
+    },
+    "proj_Nc30e58CrH89": {
+      "path": "/company-logos/proj_Nc30e58CrH89.webp",
+      "bytes": 4588,
+      "source": "https://www.google.com/s2/favicons?domain=orble-tea.com&sz=128",
+      "name": "Munch Industries"
+    },
+    "proj_pub_20ea44865d124e6594dc": {
+      "path": "/company-logos/proj_pub_20ea44865d124e6594dc.webp",
+      "bytes": 2356,
+      "source": "https://framerusercontent.com/images/OlabZ8jGR797z0GieCjNMOFKcw.png",
+      "name": "Daemo AI"
     }
   },
   "blockedRemoved": 48

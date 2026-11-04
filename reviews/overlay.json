@@ -1,16 +1,16 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3460",
+  "base": "http://127.0.0.1:3477",
   "pages": [
     {
       "route": "/",
       "viewport": "375",
-      "overlayCount": 2,
+      "overlayCount": 1,
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
       "onControl": [],
-      "homeMapUnobstructedPct": 82.5
+      "homeMapUnobstructedPct": 81.4
     },
     {
       "route": "/companies",
@@ -95,7 +95,7 @@
     {
       "route": "/",
       "viewport": "1440",
-      "overlayCount": 3,
+      "overlayCount": 2,
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
@@ -187,5 +187,5 @@
     "overlayOnText": 0,
     "overlayOnControl": 0
   },
-  "homeMapUnobstructedPct375": 82.5
+  "homeMapUnobstructedPct375": 81.4
 }

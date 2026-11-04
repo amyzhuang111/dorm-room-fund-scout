@@ -1,0 +1,23 @@
+Measuring candidate http://127.0.0.1:3477 …
+http://127.0.0.1:3477 companies@375 half=2 fully=2 intersecting=3 firstTop=436
+http://127.0.0.1:3477 companies-more@375 half=3 fully=3 intersecting=4 firstTop=225
+http://127.0.0.1:3477 company-sim@375 half=5 fully=5 intersecting=6 firstTop=577
+http://127.0.0.1:3477 companies@1440 half=3 fully=2 intersecting=3 firstTop=457
+http://127.0.0.1:3477 companies-more@1440 half=2 fully=2 intersecting=2 firstTop=562
+http://127.0.0.1:3477 company-sim@1440 half=4 fully=4 intersecting=4 firstTop=417
+Measuring fold density http://127.0.0.1:3477 …
+http://127.0.0.1:3477 fold@375 peak=1 ranks=1 bars=1 founderCards=1
+http://127.0.0.1:3477 fold@1440 peak=1 ranks=1 bars=1 founderCards=3
+PASS companies@375: cand half=2 fully=2 | floor half=2 fully=2
+PASS companies-more@375: cand half=3 fully=3 | floor half=3 fully=3
+PASS company-sim@375: cand half=5 fully=5 | floor half=3 fully=3
+PASS companies@1440: cand half=3 fully=2 | floor half=3 fully=2
+PASS companies-more@1440: cand half=2 fully=2 | floor half=2 fully=2
+PASS company-sim@1440: cand half=4 fully=4 | floor half=4 fully=4
+PASS fold@375: cand peak=1 ranks=1 bars=1 cards=1 | floor peak=1 ranks=1 bars=1 cards=1
+PASS fold@1440: cand peak=1 ranks=1 bars=1 cards=3 | floor peak=1 ranks=1 bars=1 cards=2
+{
+  "ok": true,
+  "wrote": "reviews/density.json",
+  "failed": []
+}

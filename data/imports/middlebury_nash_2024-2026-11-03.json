@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Leed Athletics",
+    "university": "Middlebury College",
+    "campusId": "univ_middlebury_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.williamgnash.org/latest/winner-of-the-middlebury-college-inaugural-will-nash-prize%3A-morgan-lee-and-her-start-up%2C-leed-athletics-",
+    "program": "Middlebury Will Nash Prize 2024",
+    "source": "src_middlebury_nash_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Morgan Lee",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.williamgnash.org/latest/winner-of-the-middlebury-college-inaugural-will-nash-prize%3A-morgan-lee-and-her-start-up%2C-leed-athletics-"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "middlebury_nash_2024"
+  }
+]

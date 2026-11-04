@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE } from "@/lib/domain/corpus-explorer";
+import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE, loadCorpusFillRates } from "@/lib/domain/corpus-explorer";
 import { buildDirectoryFromDb } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { loadRecencyFunnel } from "@/lib/domain/recency-funnel";
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
+import { formatCorpusDate } from "@/lib/domain/corpus-totals";
+import { CorpusFilters } from "@/components/corpus-filters";
 
 export const metadata: Metadata = { title: "Data" };
 
@@ -14,7 +16,11 @@ export const dynamic = "force-dynamic";
 
 /** Quiet blank - middot only (no em/en dashes, no "Not available" flood). */
 function blank() {
-  return <span className="c-b text-[color:var(--fg-3,#5C647A)]">·</span>;
+  return (
+    <span className="c-b text-[color:var(--fg-3,#5C647A)]" aria-label="not on file">
+      ·
+    </span>
+  );
 }
 
 function cell(value: string | number | null | undefined) {
@@ -34,9 +40,14 @@ export default async function DataExplorerPage({
   const sector = sp.sector || undefined;
   const campus = sp.campus || undefined;
   const result = paginateCorpus({ q, sector, campus, sort, page });
-  const { sectors } = buildDirectoryFromDb();
-  const campuses = loadHeroStats().universities;
+  const { sectors: sectorFilters } = buildDirectoryFromDb();
+  // Keep select options tiny in RSC HTML (id + label only) — full university rows blow the 210 KB gate.
+  const sectors = sectorFilters.map((s) => ({ id: s.id, label: s.label }));
+  const campuses = loadHeroStats()
+    .universities.slice(0, 20)
+    .map((c) => ({ id: c.id, name: c.name }));
   const recency = loadRecencyFunnel();
+  const fill = loadCorpusFillRates();
 
   const pageCampusRanks = (() => {
     const map = new Map<string, { label: string; companies: number; signaled: number }>();
@@ -79,7 +90,7 @@ export default async function DataExplorerPage({
         <div>
           <p className="scout-kicker">Corpus</p>
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
-          <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" vetted companies in this view · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
@@ -91,14 +102,14 @@ export default async function DataExplorerPage({
         </div>
         <a
           href="/data/export"
-          className="hidden h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white sm:inline-flex"
+          className="hidden h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:inline-flex"
           data-corpus-csv=""
         >
           Download CSV
         </a>
         <a
           href="/data/export"
-          className="inline-flex h-9 items-center font-mono text-[12px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
+          className="inline-flex h-11 min-h-11 items-center font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
           data-corpus-csv-mobile=""
         >
           CSV export
@@ -106,7 +117,7 @@ export default async function DataExplorerPage({
       </div>
 
       <p
-        className="mt-1.5 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 py-1 font-mono text-[10px] leading-4 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:px-2.5 sm:py-2 sm:text-[11px] sm:leading-5"
+        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-recency-funnel=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Vetted list</span>
@@ -121,68 +132,44 @@ export default async function DataExplorerPage({
         {" are not yet checked and are not in the vetted list."}
       </p>
 
-      <form
-        method="get"
-        action="/data"
-        className="mt-1.5 space-y-1.5 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pb-2 sm:mt-2 sm:flex sm:flex-wrap sm:items-end sm:gap-1.5 sm:space-y-0 sm:pb-2"
-        data-corpus-filters=""
+      <p
+        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        data-corpus-fill-rates=""
       >
-        <label className="block min-w-0 sm:flex-[1_1_10rem]">
-          <span className="sr-only">Search</span>
-          <input
-            name="q"
-            defaultValue={q}
-            placeholder="Search name or founder"
-            className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[12px]"
-          />
-        </label>
-        <div className="grid grid-cols-2 gap-2 sm:contents">
-          <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
-            <span className="sr-only">Sector</span>
-            <select name="sector" defaultValue={sector || ""} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px] sm:h-8 sm:text-[11px]">
-              <option value="">All sectors</option>
-              {sectors.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
-            <span className="sr-only">Campus</span>
-            <select name="campus" defaultValue={campus || ""} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px] sm:h-8 sm:text-[11px]">
-              <option value="">All campuses</option>
-              {campuses.slice(0, 40).map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="flex gap-2 sm:contents">
-          <label className="min-w-0 flex-1 sm:min-w-[6.5rem] sm:flex-none">
-            <span className="sr-only">Sort</span>
-            <select name="sort" defaultValue={sp.sort || "rank"} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px] sm:h-8 sm:text-[11px]">
-              <option value="rank">Rank</option>
-              <option value="recent">Newest signal</option>
-              <option value="name">Name</option>
-              <option value="stage">Stage</option>
-              <option value="signals">Signal count</option>
-              <option value="founded">Founded year</option>
-            </select>
-          </label>
-          <button
-            type="submit"
-            className="inline-flex h-8 flex-none items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white sm:h-8 sm:px-3 sm:text-[11px]"
-          >
-            Apply
-          </button>
-        </div>
-      </form>
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">On file</span>
+        {" · Stage: "}
+        <span data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
+        {" of "}
+        <span data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
+        {" · Sector: "}
+        <span data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
+        {" · Founded: "}
+        <span data-count="fill-founded">{fill.founded.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
+        {" · Funding: "}
+        <span data-count="fill-funding">{fill.funding.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
+        {" · Website: "}
+        <span data-count="fill-website">{fill.website.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
+      </p>
+
+      <CorpusFilters
+        q={q}
+        sector={sector || ""}
+        campus={campus || ""}
+        sort={sp.sort || "rank"}
+        sectors={sectors}
+        campuses={campuses}
+      />
 
       {/* r49 mobile: compact corpus summary + top ranks above table; keep a few rows in fold. */}
-      <div className="mt-2 sm:hidden" data-corpus-campus-ranks="">
+      <div className="mt-2 hidden" data-corpus-campus-ranks="">
         <div
           className="flex items-center gap-2 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-2 py-1.5"
           data-corpus-campus-lead=""
@@ -253,24 +240,18 @@ export default async function DataExplorerPage({
               <tr key={row.id} className="c-r align-top" data-corpus-row="">
                 <td className="c-n">
                   <span className="c-mark">
-                    {row.logoUrl ? (
-                      <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} />
-                    ) : row.campus ? (
-                      <CampusSeal label={row.campus} size="sm" />
-                    ) : (
-                      <CorpusRowMark name={row.name} website={row.website} />
-                    )}
+                    <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} />
                   </span>
-                  <Link href={`/startup/${row.id}`} className="c-a">
+                  <Link href={`/startup/${row.id}`} className="c-a min-h-11 min-w-11 inline-flex items-center">
                     {row.name}
                   </Link>
                 </td>
                 <td className="c-m c-m1">{cell(row.campus)}</td>
                 <td className="c-m">{cell(row.stage)}</td>
                 <td className="c-m">{cell(row.sector)}</td>
-                <td className="c-d c-d-m c-num">{cell(row.foundedYear)}</td>
+                <td className="c-d c-d-m c-num">{cell(formatCorpusDate(row.foundedYear))}</td>
                 <td className="c-d c-d-m c-sig">{row.signals.toLocaleString("en-US")}</td>
-                <td className="c-d c-num">{cell(row.latestSignalAt)}</td>
+                <td className="c-d c-num">{cell(formatCorpusDate(row.latestSignalAt))}</td>
                 <td className="c-d">{cell(row.primaryProgram)}</td>
                 <td className="c-d">{cell(row.ycBatch)}</td>
                 <td className="c-d c-num">{row.founderCount > 0 ? row.founderCount.toLocaleString("en-US") : blank()}</td>
@@ -298,7 +279,7 @@ export default async function DataExplorerPage({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-        <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+        <p className="font-mono text-[14px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
           Showing {(result.total === 0 ? 0 : (result.page - 1) * result.pageSize + 1).toLocaleString("en-US")}
           {" to "}
           {Math.min(result.page * result.pageSize, result.total).toLocaleString("en-US")}
@@ -307,12 +288,12 @@ export default async function DataExplorerPage({
         </p>
         <div className="flex items-center gap-2">
           {result.page > 1 ? (
-            <Link href={hrefFor({ page: String(result.page - 1) })} className="inline-flex h-8 items-center border border-[color:var(--line-strong,#C5CAD8)] px-3 font-mono text-[11px] font-semibold">
+            <Link href={hrefFor({ page: String(result.page - 1) })} className="inline-flex h-11 min-h-11 items-center border border-[color:var(--line-strong,#C5CAD8)] px-3 font-mono text-[11px] font-semibold">
               Previous
             </Link>
           ) : null}
           {result.page < result.pageCount ? (
-            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-8 items-center border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white">
+            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-11 min-h-11 items-center border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white">
               Next
             </Link>
           ) : null}

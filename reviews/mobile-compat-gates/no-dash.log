@@ -1,0 +1,21 @@
+[innerText] /: dashes=0
+[innerText] /founders: dashes=0
+[innerText] /methodology: dashes=0
+[innerText] /signals: dashes=0
+[innerText] /startup/proj_9GUOmdEYxbuH: dashes=0
+[innerText] /map/network: dashes=0
+{
+  "base": "http://127.0.0.1:3477",
+  "innerTextRoutes": 6,
+  "crawlRoutes": 2301,
+  "companies": 1633,
+  "dossiers": 2297,
+  "founderPages": 4,
+  "statusCounts": {
+    "200": 2301
+  },
+  "crawlDashes": 0,
+  "checked": 2307,
+  "failed": 0
+}
+PASS: no dashes

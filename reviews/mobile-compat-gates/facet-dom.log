@@ -1,0 +1,228 @@
+{
+  "strip": {
+    "founders": 2414,
+    "campuses": 166
+  },
+  "fold": {
+    "founders": 2414,
+    "campuses": 166
+  },
+  "founderHome": {
+    "searchInputs": 1,
+    "results": true,
+    "cards": 3,
+    "why": "Why worth a lookY Combinator · Keye",
+    "whyNodes": [
+      {
+        "text": "Why worth a lookY Combinator · Keye",
+        "blank": false
+      },
+      {
+        "text": "Why worth a lookFunding at Molagri",
+        "blank": false
+      },
+      {
+        "text": "Why worth a lookAccelerator at Peer",
+        "blank": false
+      }
+    ],
+    "browse": false,
+    "demoWord": false,
+    "globeState": "ready",
+    "loadingGlobeCopy": false,
+    "earUnkStub": false,
+    "jargon": false,
+    "filters": true,
+    "chronograph": false,
+    "foundersIndexedFold": 3501,
+    "foundersIndexedStrip": 3501,
+    "countNote": true,
+    "countryLegend": false,
+    "samplePillAbsent": true
+  },
+  "mobileOrder": {
+    "filtersAboveMap": false,
+    "cardAboveMap": false,
+    "mapDominant": true,
+    "foundersUsable": true,
+    "mapHeightRatio": 0.8805418719211823,
+    "ft": 1054,
+    "ct": 872,
+    "mt": 230.6875,
+    "mh": 715
+  },
+  "campusFilter": {
+    "url": "?campus=univ_penn",
+    "text": "Founders758 at University of Pennsylvania · Clear campusFoundersFiltersProgramAny programPenn Venture Lab (240)Y Combinator (81)a16z Speedrun (7)General Catalyst (5)Sorenson Capita",
+    "clear": true
+  },
+  "campusFoundersTop": {
+    "metric": "founders",
+    "rows": [
+      {
+        "text": "01Penn758founders",
+        "founders": 758
+      },
+      {
+        "text": "02Stanford314founders",
+        "founders": 314
+      },
+      {
+        "text": "03Berkeley247founders",
+        "founders": 247
+      },
+      {
+        "text": "04MIT239founders",
+        "founders": 239
+      },
+      {
+        "text": "05Harvard174founders",
+        "founders": 174
+      },
+      {
+        "text": "06Columbia160founders",
+        "founders": 160
+      },
+      {
+        "text": "07Princeton106founders",
+        "founders": 106
+      },
+      {
+        "text": "08Santa Clara104founders",
+        "founders": 104
+      },
+      {
+        "text": "09CMU101founders",
+        "founders": 101
+      },
+      {
+        "text": "10Cornell84founders",
+        "founders": 84
+      }
+    ]
+  },
+  "ycMembershipNodes": [
+    {
+      "count": 323,
+      "text": "Y Combinator323"
+    },
+    {
+      "count": 323,
+      "text": "323"
+    }
+  ],
+  "ycPrimaryLeak": [],
+  "moreLabels": [
+    "More cities · 67",
+    "More sectors · 157"
+  ],
+  "yearSum": 1633,
+  "statusSum": 1633,
+  "sectorCollapsed": 1476,
+  "sectorMore": 157,
+  "sectorCovered": 1633,
+  "sectorExpanded": 1633,
+  "hqCollapsed": 1566,
+  "hqMore": 67,
+  "hqCovered": 1633,
+  "hqExpanded": 1633,
+  "namedSectorVisible": 1056,
+  "statusActive": 1619,
+  "statusAcquired": 7,
+  "statusClosed": 7,
+  "statusSumBuckets": 1633,
+  "flags": [
+    {
+      "label": "Founded in 2026 · 157",
+      "count": 157
+    },
+    {
+      "label": "Raised funding · 957",
+      "count": 957
+    },
+    {
+      "label": "Has named founders · 1,465",
+      "count": 1465
+    }
+  ],
+  "chrono": null,
+  "companiesLabels": {
+    "emDashInUi": false,
+    "earUnkStub": false,
+    "jargon": false,
+    "chronoPresent": false,
+    "signalsLanded": true,
+    "signalMonths": [
+      "2020-10",
+      "2025-09",
+      "2026-02",
+      "2026-03",
+      "2026-04",
+      "2026-05",
+      "2026-06",
+      "2026-07",
+      "2026-08"
+    ],
+    "signalsAside": "29 year-only · not on the chart",
+    "emDashInSignalsAside": false,
+    "peak": "34",
+    "peakMonth": "2026-04",
+    "window": 71,
+    "earlier": 0,
+    "monthUnknown": 29,
+    "dated": 100
+  },
+  "pageSignalMast": {
+    "shown": 15,
+    "withSignal": 15,
+    "withDated": 2,
+    "rowCount": 28,
+    "hasSignalCopy": true,
+    "hasDatedCopy": false
+  },
+  "ok": {
+    "year": true,
+    "status": true,
+    "sectorCollapsedPlusMore": true,
+    "sectorExpanded": true,
+    "hqCollapsedPlusMore": true,
+    "hqExpanded": true,
+    "flagsDiffer": true,
+    "newIsFoundedYear": true,
+    "foundedLabel": true,
+    "activeIsTight": true,
+    "countsAgree": true,
+    "founderSearch": true,
+    "founderWhyAddsNewInfo": true,
+    "founderCampusFilter": true,
+    "mapHasNoCompanyBrowse": true,
+    "noDemoWord": true,
+    "foundersIndexedReconciled": true,
+    "noCountryLegend": true,
+    "samplePillAbsent": true,
+    "pageSignaledMatchesCards": true,
+    "mobileFoundersAboveMap": true,
+    "deskFoundersAboveFold1440": true,
+    "noEmDashInUi": true,
+    "statusBuckets": true,
+    "moreObvious": true,
+    "campusAllCampusesExpand": true,
+    "campusFoundersTopTen": true,
+    "ycMembershipEverywhere": true,
+    "ycNoPrimary561Leak": true,
+    "globeReadyNoSkeleton": true,
+    "founderFiltersPresent": true,
+    "earUnkRemoved": true,
+    "plainLabelsNoJargon": true,
+    "chronographGoneFromHome": true,
+    "chronographHonestyIfPresent": true,
+    "signalsLandedPlain": true
+  }
+}
+OK company full record panel
+OK full-record signal source links: 2
+OK /data corpus explorer
+OK /data CSV download
+OK nav Data link present
+/data HTML 159.7 KB
+PASS facet DOM sums == 1633

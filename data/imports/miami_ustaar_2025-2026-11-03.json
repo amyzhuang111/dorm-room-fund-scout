@@ -1,0 +1,127 @@
+[
+  {
+    "name": "Titl",
+    "university": "University of Miami",
+    "campusId": "univ_miami",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html",
+    "program": "USTAAR 2025",
+    "source": "src_miami_ustaar_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(UM student team)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "miami_ustaar_2025"
+  },
+  {
+    "name": "SimuStride",
+    "university": "University of Miami",
+    "campusId": "univ_miami",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html",
+    "program": "USTAAR 2025",
+    "source": "src_miami_ustaar_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(UM student team)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "miami_ustaar_2025"
+  },
+  {
+    "name": "ChargeBay",
+    "university": "University of Miami",
+    "campusId": "univ_miami",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html",
+    "program": "USTAAR 2025",
+    "source": "src_miami_ustaar_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(UM student team)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "miami_ustaar_2025"
+  },
+  {
+    "name": "PUREEF",
+    "university": "University of Miami",
+    "campusId": "univ_miami",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html",
+    "program": "USTAAR 2025",
+    "source": "src_miami_ustaar_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(UM student team)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "miami_ustaar_2025"
+  },
+  {
+    "name": "VasoPass",
+    "university": "University of Miami",
+    "campusId": "univ_miami",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html",
+    "program": "USTAAR 2025",
+    "source": "src_miami_ustaar_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(UM student team)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.miami.edu/stories/2025/05/student-innovators-garner-a-boost-of-support.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "miami_ustaar_2025"
+  }
+]

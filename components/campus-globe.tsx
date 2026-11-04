@@ -113,7 +113,7 @@ export function CampusGlobe({
         glowColor: GLOW,
         markers: [],
         opacity: 1,
-        onRender: (state) => {
+        onRender: (state: any) => {
           const current = frame.current;
           if (!current.dragging) {
             const spinning = Math.abs(current.velPhi) > 0.00008 || Math.abs(current.velTheta) > 0.00008;

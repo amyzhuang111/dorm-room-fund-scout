@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Veren Surgical",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperial.ac.uk/news/articles/2026/finalists-chosen-for-imperials-flagship-competition-for-new-startups/",
+    "program": "Imperial VCC 2026 finalists",
+    "source": "src_imperial_vcc_2026_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperial.ac.uk/news/articles/2026/finalists-chosen-for-imperials-flagship-competition-for-new-startups/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2026"
+  },
+  {
+    "name": "Byte",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperial.ac.uk/news/articles/2026/finalists-chosen-for-imperials-flagship-competition-for-new-startups/",
+    "program": "Imperial VCC 2026 finalists",
+    "source": "src_imperial_vcc_2026_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperial.ac.uk/news/articles/2026/finalists-chosen-for-imperials-flagship-competition-for-new-startups/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2026"
+  },
+  {
+    "name": "GenScan AI",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperial.ac.uk/news/articles/2026/finalists-chosen-for-imperials-flagship-competition-for-new-startups/",
+    "program": "Imperial VCC 2026 finalists",
+    "source": "src_imperial_vcc_2026_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperial.ac.uk/news/articles/2026/finalists-chosen-for-imperials-flagship-competition-for-new-startups/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2026"
+  }
+]

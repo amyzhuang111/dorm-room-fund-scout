@@ -1,0 +1,102 @@
+[
+  {
+    "name": "AntlerArmour",
+    "university": "Drexel University",
+    "campusId": "univ_drexel_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university",
+    "program": "Drexel Future Fest 2026",
+    "source": "src_drexel_future_fest_2026_2026_11_03",
+    "description": "Future Fest 2026 named student pitch",
+    "founders": [
+      {
+        "name": "(Student pitcher)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drexel_future_fest_2026"
+  },
+  {
+    "name": "Fresh Fuel",
+    "university": "Drexel University",
+    "campusId": "univ_drexel_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university",
+    "program": "Drexel Future Fest 2026",
+    "source": "src_drexel_future_fest_2026_2026_11_03",
+    "description": "Future Fest 2026 named student pitch",
+    "founders": [
+      {
+        "name": "(Student pitcher)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drexel_future_fest_2026"
+  },
+  {
+    "name": "Hearty Health",
+    "university": "Drexel University",
+    "campusId": "univ_drexel_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university",
+    "program": "Drexel Future Fest 2026",
+    "source": "src_drexel_future_fest_2026_2026_11_03",
+    "description": "Future Fest 2026 named student pitch",
+    "founders": [
+      {
+        "name": "(Student pitcher)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drexel_future_fest_2026"
+  },
+  {
+    "name": "Bobica Bars",
+    "university": "Drexel University",
+    "campusId": "univ_drexel_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university",
+    "program": "Drexel Future Fest 2026",
+    "source": "src_drexel_future_fest_2026_2026_11_03",
+    "description": "Future Fest 2026 named student pitch",
+    "founders": [
+      {
+        "name": "(Student pitcher)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.lebow.drexel.edu/news/future-fest-2026-cultivating-next-generation-innovators-drexel-university"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drexel_future_fest_2026"
+  }
+]

@@ -1,0 +1,144 @@
+[
+  {
+    "name": "CreditQuant AI",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/",
+    "program": "Cornell Tech Startup Awards 2025",
+    "source": "src_cornell_tech_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Adam Liu",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2025"
+  },
+  {
+    "name": "gymii.ai",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/",
+    "program": "Cornell Tech Startup Awards 2025",
+    "source": "src_cornell_tech_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Selina Li",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      },
+      {
+        "name": "Zach Zhong",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      },
+      {
+        "name": "Alex Taic",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2025"
+  },
+  {
+    "name": "Polyrook",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/",
+    "program": "Cornell Tech Startup Awards 2025",
+    "source": "src_cornell_tech_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Zachary Decker",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      },
+      {
+        "name": "Jeremy Yanyang Lu",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2025"
+  },
+  {
+    "name": "SAIL",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/",
+    "program": "Cornell Tech Startup Awards 2025",
+    "source": "src_cornell_tech_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Chansam Kim",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      },
+      {
+        "name": "Olivia Mei",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      },
+      {
+        "name": "William J. Reid",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      },
+      {
+        "name": "Salik Tehami",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-startup-awards-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2025"
+  }
+]

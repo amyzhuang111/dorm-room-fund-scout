@@ -1,0 +1,22 @@
+OK 375 /
+OK 375 /companies
+OK 375 /companies?feed=leaderboard
+OK 375 /founders
+OK 375 /campuses
+OK 375 /data
+OK 375 /signals
+OK 375 /startup/proj_9GUOmdEYxbuH
+OK 1440 /
+OK 1440 /companies
+OK 1440 /companies?feed=leaderboard
+OK 1440 /founders
+OK 1440 /campuses
+OK 1440 /data
+OK 1440 /signals
+OK 1440 /startup/proj_9GUOmdEYxbuH
+{
+  "ok": true,
+  "offenders": 0,
+  "sourceHits": false,
+  "wrote": "reviews/en-us-grouping.json"
+}

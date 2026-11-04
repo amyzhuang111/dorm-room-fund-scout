@@ -1,0 +1,152 @@
+[
+  {
+    "name": "TheraV",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition",
+    "program": "Stevens Ansary 2026",
+    "source": "src_stevens_ansary_current_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_current"
+  },
+  {
+    "name": "CTRL",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition",
+    "program": "Stevens Ansary 2026",
+    "source": "src_stevens_ansary_current_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_current"
+  },
+  {
+    "name": "HeraHealth",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition",
+    "program": "Stevens Ansary 2026",
+    "source": "src_stevens_ansary_current_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_current"
+  },
+  {
+    "name": "DuoVitalis",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition",
+    "program": "Stevens Ansary 2026",
+    "source": "src_stevens_ansary_current_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_current"
+  },
+  {
+    "name": "HOPE Incubator",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition",
+    "program": "Stevens Ansary 2026",
+    "source": "src_stevens_ansary_current_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_current"
+  },
+  {
+    "name": "Stevens Flood Inundation Mapper",
+    "university": "Stevens Institute of Technology",
+    "campusId": "univ_stevens",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition",
+    "program": "Stevens Ansary 2026",
+    "source": "src_stevens_ansary_current_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Stevens student)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.stevens.edu/ansary-entrepreneurship-competition"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "stevens_ansary_current"
+  }
+]

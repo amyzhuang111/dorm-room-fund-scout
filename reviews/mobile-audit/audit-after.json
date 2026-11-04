@@ -1,0 +1,13 @@
+{
+  "note": "post campus-overflow fix",
+  "overflows": [],
+  "tapFails": [],
+  "shots": [
+    "campus-detail-375.png",
+    "campus-penn-375.png",
+    "data-375.png",
+    "founders-375.png",
+    "home-375.png",
+    "networks-375.png"
+  ]
+}

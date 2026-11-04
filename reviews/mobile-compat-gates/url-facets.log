@@ -1,0 +1,8 @@
+ok  ?q=Mercor  match=1
+ok  ?status=active  match=1,211
+ok  ?stage=Seed  match=13
+ok  ?flag=signaled  match=0
+ok  ?year=2024  match=162
+ok  ?recency=year  match=62
+ok  ?sector=fintech&campus=univ_penn  match=10
+PASS 7 URL facet cases

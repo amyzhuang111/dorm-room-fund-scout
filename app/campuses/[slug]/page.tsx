@@ -82,18 +82,23 @@ export default async function CampusPage({
   const moreCompanies = Math.max(0, affiliated.length - shownCompanies.length);
 
   return (
-    <div className="px-6 py-8">
-      <div className="flex flex-wrap items-start justify-between gap-6 pr-8">
-        <div>
+    <div className="max-w-full overflow-x-clip px-3 py-3 sm:px-6 sm:py-8" data-campus-page="">
+      <div className="flex max-w-full flex-wrap items-start justify-between gap-3 sm:gap-6">
+        <div className="min-w-0 flex-1">
           <p className="text-[14px] text-fg">
-            <Link href="/campuses" className="hover:underline">Campuses</Link>
+            <Link href="/campuses" className="inline-flex min-h-11 min-w-11 items-center hover:underline">Campuses</Link>
             <span> / </span>
             <span>{label}</span>
           </p>
-          <h1 className="page-title">{university.name}</h1>
-          <p className="mt-2 text-[14px] text-fg">{university.country ?? "Country not recorded"}</p>
+          <h1 className="page-title text-[24px] leading-7 sm:text-[inherit] sm:leading-[inherit]">{university.name}</h1>
+          <p className="mt-1 hidden text-[14px] text-fg sm:mt-2 sm:block">{university.country ?? "Country not recorded"}</p>
+          <p className="mt-2 font-mono text-[13px] tabular-nums leading-4 text-fg-2 sm:hidden" data-campus-stats-mobile="">
+            <span className="font-bold text-fg">{university.founderCount.toLocaleString("en-US")}</span> founders ·{" "}
+            <span className="font-bold text-fg">{topTier.toLocaleString("en-US")}</span> top tier ·{" "}
+            <span className="font-bold text-fg">{signalsWeek.toLocaleString("en-US")}</span> {SIGNALS_THIS_WEEK_LABEL.toLowerCase()}
+          </p>
         </div>
-        <div className="flex flex-wrap items-start gap-3">
+        <div className="hidden flex-wrap items-start gap-3 sm:flex">
           {[
             { n: university.founderCount, label: "Founders" },
             { n: topTier, label: "Top tier" },
@@ -107,22 +112,22 @@ export default async function CampusPage({
           <ShortlistCampusButton id={university.id} />
         </div>
       </div>
-      <div className="mt-8 flex gap-5 border-b border-line">
+      <div className="mt-3 flex gap-3 overflow-x-auto border-b border-line [-webkit-overflow-scrolling:touch] sm:mt-8 sm:gap-5">
         {TABS.map((item) => (
-          <Link key={item} href={`/campuses/${slug}?tab=${item}`} className={`subtab capitalize ${tab === item ? "is-active" : ""}`}>
+          <Link key={item} href={`/campuses/${slug}?tab=${item}`} className={`subtab capitalize min-h-11 min-w-11 ${tab === item ? "is-active" : ""}`}>
             {item}
           </Link>
         ))}
       </div>
-      <div className="mt-8 grid gap-x-6 gap-y-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
+      <div className="mt-3 grid max-w-full gap-x-6 gap-y-4 sm:mt-8 sm:gap-y-8 lg:grid-cols-12">
+        <div className="min-w-0 max-w-full lg:col-span-8">
           {tab === "founders" && <FoundersDesk campusId={university.id} campusLocked initialCount={founders.length} />}
           {tab === "companies" && (
             <>
             <ul>
               {affiliated.map((company) => (
-                <li key={company.id} className="flex h-8 items-center justify-between gap-3 border-b border-line">
-                  <Link href={`/startup/${company.id}`} className="min-w-0 truncate text-[14px] text-fg">{company.name}</Link>
+                <li key={company.id} className="flex min-h-11 items-center justify-between gap-3 border-b border-line py-1">
+                  <Link href={`/startup/${company.id}`} className="inline-flex min-h-11 min-w-0 items-center truncate text-[14px] text-fg">{company.name}</Link>
                   <span className="num shrink-0 text-[14px] text-fg-2">{company.people.toLocaleString("en-US")}</span>
                 </li>
               ))}
@@ -172,7 +177,7 @@ export default async function CampusPage({
               ))}
               {moreCompanies > 0 && (
                 <li>
-                  <Link href={`/campuses/${slug}?tab=companies`} className="block h-8 text-[14px] leading-8 text-fg-2">
+                  <Link href={`/campuses/${slug}?tab=companies`} className="inline-flex min-h-11 items-center text-[14px] text-fg-2">
                     +{moreCompanies.toLocaleString("en-US")} more
                   </Link>
                 </li>

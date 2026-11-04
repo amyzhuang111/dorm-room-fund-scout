@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import {
-  countFoundersListed,
   directoryPage,
   directorySortOf,
   filterDirectory,
@@ -13,7 +12,7 @@ import {
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 import { buildPeakShell } from "@/lib/domain/peak-shell";
-import { filterFacetCompanies, listedFacetSeed, type FacetCompany } from "@/lib/domain/sample-facets";
+import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
@@ -53,7 +52,8 @@ export function SampleHome({
   const campusId = campusRow?.id;
   const listed = place === "explore" && (feed === "directory" || feed === "leaderboard");
   const data = loadDirectory();
-  const foundersListed = countFoundersListed();
+  const totals = loadCorpusTotals();
+  const foundersListed = totals.foundersListed;
   const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
@@ -64,18 +64,7 @@ export function SampleHome({
       ? leaderboardPage(ordered, 1)
       : directoryPage(ordered, 1)
     : [];
-  const faceted = filterFacetCompanies(matched as FacetCompany[], {
-    stage: typeof facetExtras?.stage === "string" ? facetExtras.stage : null,
-    status: facetExtras?.status === "active" || facetExtras?.status === "acquired" || facetExtras?.status === "closed" ? facetExtras.status : null,
-    flag: facetExtras?.flag === "new" || facetExtras?.flag === "signaled" || facetExtras?.flag === "funded" || facetExtras?.flag === "founders" ? facetExtras.flag : null,
-    foundedYear: typeof facetExtras?.foundedYear === "number" ? facetExtras.foundedYear : null,
-    yearMissing: Boolean(facetExtras?.yearMissing),
-    hqRegion: typeof facetExtras?.hqRegion === "string" ? facetExtras.hqRegion : null,
-    recency: facetExtras?.recency === "month" || facetExtras?.recency === "year" || facetExtras?.recency === "older" || facetExtras?.recency === "none" ? facetExtras.recency : null,
-    sectorMissing: Boolean(facetExtras?.sectorMissing),
-  });
-  const facetSeed = listedFacetSeed(faceted);
-  const total = feed === "leaderboard" ? faceted.filter((card) => card.signals > 0).length : faceted.length;
+  const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
   const campuses = stats.universities
     .filter((university) => university.lat != null && university.lon != null)
     .map((university) => ({
@@ -161,10 +150,10 @@ export function SampleHome({
       kinds={data.kinds}
       campuses={campuses}
       stats={clientStats}
-      cardCount={data.cards.length}
+      cardCount={totals.investableCompanies}
       signalCompanyCount={data.cards.filter((c) => c.signals > 0).length}
       foundersListed={foundersListed}
-      facetSeed={facetSeed}
+      foundersIndexed={totals.foundersIndexed}
       newestHome={newestHome}
       peakShell={peakShell}
       directoryUrl="/data/sample-directory.json"

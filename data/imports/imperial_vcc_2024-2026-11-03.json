@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Cyanoskin",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.imperial.ac.uk/news/252596/living-paint-startup-wins-imperials-entrepreneurship/",
+    "program": "Imperial VCC 2024 grand prize",
+    "source": "src_imperial_vcc_2024_2026_11_03",
+    "description": "Imperial Business School alum; VCC 2024 grand prize",
+    "founders": [
+      {
+        "name": "Antoinette Nothomb",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.imperial.ac.uk/news/252596/living-paint-startup-wins-imperials-entrepreneurship/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2024"
+  }
+]

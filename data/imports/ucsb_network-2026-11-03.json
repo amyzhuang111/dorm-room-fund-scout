@@ -1,0 +1,179 @@
+[
+  {
+    "name": "Emergent",
+    "university": "University of California, Santa Barbara",
+    "campusId": "univ_ucsb",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.ucsb.network/batch",
+    "program": "ucsb.network Batch / Cohort 1",
+    "source": "src_ucsb_network_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Kay",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      },
+      {
+        "name": "Stanton",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ucsb_network"
+  },
+  {
+    "name": "Yavin Systems",
+    "university": "University of California, Santa Barbara",
+    "campusId": "univ_ucsb",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.ucsb.network/batch",
+    "program": "ucsb.network Batch / Cohort 1",
+    "source": "src_ucsb_network_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Arthur",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ucsb_network"
+  },
+  {
+    "name": "LegalTime AI",
+    "university": "University of California, Santa Barbara",
+    "campusId": "univ_ucsb",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.ucsb.network/batch",
+    "program": "ucsb.network Batch / Cohort 1",
+    "source": "src_ucsb_network_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Joaquin",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      },
+      {
+        "name": "Quinn",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ucsb_network"
+  },
+  {
+    "name": "cafX",
+    "university": "University of California, Santa Barbara",
+    "campusId": "univ_ucsb",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.ucsb.network/batch",
+    "program": "ucsb.network Batch / Cohort 1",
+    "source": "src_ucsb_network_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Nag",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ucsb_network"
+  },
+  {
+    "name": "Jevi",
+    "university": "University of California, Santa Barbara",
+    "campusId": "univ_ucsb",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.ucsb.network/batch",
+    "program": "ucsb.network Batch / Cohort 1",
+    "source": "src_ucsb_network_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Viktor",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      },
+      {
+        "name": "Yasen",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ucsb_network"
+  },
+  {
+    "name": "Repclose",
+    "university": "University of California, Santa Barbara",
+    "campusId": "univ_ucsb",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.ucsb.network/batch",
+    "program": "ucsb.network Batch / Cohort 1",
+    "source": "src_ucsb_network_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "John Lins",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ucsb.network/batch"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "ucsb_network"
+  }
+]

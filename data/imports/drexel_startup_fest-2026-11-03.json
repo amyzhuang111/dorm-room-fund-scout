@@ -1,0 +1,77 @@
+[
+  {
+    "name": "HFA Grading",
+    "university": "Drexel University",
+    "campusId": "univ_drexel_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.lebow.drexel.edu/news/startup-fest-spurs-innovation-entrepreneurial-growth-drexel",
+    "program": "Drexel Startup Fest / Baiada",
+    "source": "src_drexel_startup_fest_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Tavin Staber",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.lebow.drexel.edu/news/startup-fest-spurs-innovation-entrepreneurial-growth-drexel"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drexel_startup_fest"
+  },
+  {
+    "name": "Tech Tunes",
+    "university": "Drexel University",
+    "campusId": "univ_drexel_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.lebow.drexel.edu/news/startup-fest-spurs-innovation-entrepreneurial-growth-drexel",
+    "program": "Drexel Startup Fest / Baiada",
+    "source": "src_drexel_startup_fest_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Alexa Parker",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.lebow.drexel.edu/news/startup-fest-spurs-innovation-entrepreneurial-growth-drexel"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drexel_startup_fest"
+  },
+  {
+    "name": "Green-Prompts",
+    "university": "Drexel University",
+    "campusId": "univ_drexel_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.lebow.drexel.edu/news/startup-fest-spurs-innovation-entrepreneurial-growth-drexel",
+    "program": "Drexel Startup Fest / Baiada",
+    "source": "src_drexel_startup_fest_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Greeva Yava",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.lebow.drexel.edu/news/startup-fest-spurs-innovation-entrepreneurial-growth-drexel"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drexel_startup_fest"
+  }
+]

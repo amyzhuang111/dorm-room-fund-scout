@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
   // or Vercel's serverless functions won't have it bundled.
   async redirects() {
     return [
+      { source: "/map", destination: "/networks", permanent: false },
+      { source: "/deals", destination: "/networks", permanent: false },
       { source: "/news", destination: "/signals?type=press", permanent: true },
       { source: "/sources", destination: "/signals/sources", permanent: true },
       { source: "/alumni", destination: "/map/network", permanent: true },

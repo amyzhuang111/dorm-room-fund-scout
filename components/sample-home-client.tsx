@@ -16,13 +16,14 @@ import {
   type ActiveChip,
 } from "@/components/fold-map-craft";
 import { FoldOpenLaneHero } from "@/components/fold-open-lane";
+import { CurrentViewDock } from "@/components/current-view-dock";
 import { buildOpenLaneShell } from "@/lib/domain/open-lane";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 import { founderMatches, type FounderLead } from "@/lib/domain/founder-index";
-import type { FacetCompany, FacetSeed } from "@/lib/domain/sample-facets";
+import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
@@ -73,65 +74,62 @@ function browseHref(opts: {
 
 function PeakShareLite({
   shell,
-  foundersListed,
-  companyTotal,
+  foundersListed: _foundersListed,
   campusesOnMap: _campusesOnMap,
   topCampuses: _topCampuses = [],
 }: {
   shell: PeakShell;
   foundersListed: number;
-  companyTotal: number;
   campusesOnMap: number;
   topCampuses?: TopCampus[];
 }) {
+  void _foundersListed;
   void _campusesOnMap;
   void _topCampuses;
   const peakCount = shell.peakCount;
   const peakLabel = shell.peakLabel;
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
-  const datedLine = `Busiest dated month ${peakLabel}: ${peakCount.toLocaleString("en-US")} of ${shell.dated.toLocaleString("en-US")} dated signals (${pct}%) · ${shell.quiet.toLocaleString("en-US")} with no dated signal`;
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8" data-fold-redesign="seal-dispatch">
       <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-6 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Vetted companies</p>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
             <p className="mt-1 h-[52px] overflow-hidden font-mono text-[72px] font-bold leading-none tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
-              {companyTotal.toLocaleString("en-US")}
+              {peakCount.toLocaleString("en-US")}
+              <span className="mx-2 text-[28px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+              <span className="text-[36px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-1.5 max-w-[36rem] text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
-              {foundersListed.toLocaleString("en-US")} founders on these companies
+              {peakLabel} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span>
+              {" of every dated signal on record"}
             </p>
             <div className="mt-2 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
-            <p
-              className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]"
-              data-chrono-caption=""
-              data-chrono-peak={String(peakCount)}
-              data-chrono-dated={String(shell.dated)}
-              data-chrono-earlier={String(shell.earlierValid)}
-              data-chrono-month-unknown={String(shell.undatedMonth)}
-              data-chrono-window={String(shell.inWindow)}
-            >
-              {datedLine}
+            <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+              {shell.dated.toLocaleString("en-US")} dated
+              {shell.earlierValid > 0 ? ` · ${shell.earlierValid.toLocaleString("en-US")} earlier` : ""}
+              {shell.undatedMonth > 0 ? ` · ${shell.undatedMonth.toLocaleString("en-US")} undated` : ""}
+              {" · "}
+              {shell.quiet.toLocaleString("en-US")} quiet
             </p>
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Founders on file</p>
-            <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Not adjusted for scan depth</p>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Desk rank</p>
             <div className="mt-2 h-[8rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
       </div>
       <div className="border-b border-[color:var(--line,#E1E5EF)] pb-2 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Vetted companies</p>
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
         <p className="mt-2 h-10 overflow-hidden font-mono text-[40px] font-bold leading-none tracking-[-0.06em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
-          {companyTotal.toLocaleString("en-US")}
+          {peakCount.toLocaleString("en-US")}
+          <span className="mx-1.5 text-[18px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+          <span className="text-[24px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
         </p>
         <p className="mt-2 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
-          {foundersListed.toLocaleString("en-US")} founders on these companies
+          {peakLabel} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span> of every dated signal
         </p>
         <div className="mt-2 h-14" data-fold-peak-bars-mobile-reserve="" aria-hidden="true" />
-        <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{datedLine}</p>
         <div className="mt-2 h-10 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
       </div>
     </div>
@@ -141,7 +139,6 @@ function PeakShareLite({
 function PeakShareSlot({
   companies,
   foundersListed,
-  companyTotal,
   campusesOnMap,
   topCampuses = [],
   shell,
@@ -149,7 +146,6 @@ function PeakShareSlot({
 }: {
   companies: FacetCompany[];
   foundersListed: number;
-  companyTotal: number;
   campusesOnMap: number;
   topCampuses?: TopCampus[];
   shell?: PeakShell | null;
@@ -162,14 +158,13 @@ function PeakShareSlot({
     <div className={`relative min-h-0 ${mobileDeck ? "mb-0" : "mb-2"}`} data-fold-peak-slot="" data-fold-peak-reserve="" data-fold-peak-deck={mobileDeck ? "1" : undefined}>
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
-          <PeakShareLite shell={shell} foundersListed={foundersListed} companyTotal={companyTotal} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
+          <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
         ) : null}
       </div>
       <div className={showLive ? undefined : "absolute left-0 right-0 top-0 opacity-0 pointer-events-none"} data-fold-peak-live-wrap="" aria-hidden={!showLive || undefined}>
         <FoldPeakShare
           companies={companies}
           foundersListed={foundersListed}
-          companyTotal={companyTotal}
           campusesOnMap={campusesOnMap}
           topCampuses={topCampuses}
           shell={shell}
@@ -220,11 +215,11 @@ function MapFoldSheet({
 }) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  const heightRef = useRef(120);
+  const heightRef = useRef(108);
   const springRef = useRef<number | null>(null);
   // r53b: compact peek so ≥80% of the home map stays unobstructed @375.
   // r59: spring-settle on expand / snap; drag stays 1:1 with the finger.
-  const REST = 120;
+  const REST = 108;
   const DECK = 300;
   const [height, setHeight] = useState(REST);
   heightRef.current = height;
@@ -355,7 +350,7 @@ function MapFoldSheet({
               selectedId={campusId}
               onSelect={onSelectCampus}
               onClear={onClearCampus}
-              kicker="No top fund yet"
+              kicker="Open lane campuses"
             />
           </div>
           {mode === "peek" ? (
@@ -453,7 +448,7 @@ function MapStageOverlays({
           data-fold-panel-collapsed={peakOpen ? "0" : "1"}
         >
           <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">No top fund yet</p>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open lane</p>
             <button
               type="button"
               className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
@@ -515,7 +510,7 @@ export function SampleHomeClient(props: {
   cardCount: number;
   signalCompanyCount: number;
   foundersListed: number;
-  facetSeed?: FacetSeed | null;
+  foundersIndexed: number;
   newestHome: { label: string; detail: string } | null;
   peakShell?: PeakShell | null;
   directoryUrl?: string;
@@ -540,7 +535,7 @@ export function SampleHomeClient(props: {
     stats,
     cardCount,
     foundersListed,
-    facetSeed = null,
+    foundersIndexed,
     peakShell = null,
     directoryUrl = "/data/sample-directory.json",
     place = "map",
@@ -643,6 +638,17 @@ export function SampleHomeClient(props: {
     [matchedFounders, companies, mapCampusId],
   );
 
+  const dockCompanies = useMemo(
+    () =>
+      companies.slice(0, 40).map((c) => ({
+        id: c.id,
+        name: c.name,
+        logoUrl: c.logoUrl,
+        href: `/startup/${encodeURIComponent(c.id)}?from=map`,
+      })),
+    [companies],
+  );
+
   const activeChips: ActiveChip[] = [];
   if (mapCampusName) {
     activeChips.push({ key: "campus", label: mapCampusName, onClear: clearCampus });
@@ -679,7 +685,7 @@ export function SampleHomeClient(props: {
                 companies={companies}
                 companyCount={cardCount}
                 foundersListed={foundersListed}
-                foundersIndexed={founders.length || undefined}
+                foundersIndexed={foundersIndexed}
                 highlightCampusIds={highlightCampusIds}
               />
 
@@ -693,7 +699,6 @@ export function SampleHomeClient(props: {
                   <PeakShareSlot
                     companies={companies}
                     foundersListed={foundersListed}
-                    companyTotal={cardCount}
                     campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
                     topCampuses={topCampuses}
                     shell={peakShell}
@@ -728,6 +733,7 @@ export function SampleHomeClient(props: {
                     campusId={mapCampusId}
                     campusName={mapCampusName}
                     foundersListed={foundersListed}
+                    foundersIndexed={foundersIndexed}
                     filtersOnly
                     onClearCampus={clearCampus}
                     onMissingCampus={() => {
@@ -747,6 +753,7 @@ export function SampleHomeClient(props: {
                     campusId={mapCampusId}
                     campusName={mapCampusName}
                     foundersListed={foundersListed}
+                    foundersIndexed={foundersIndexed}
                     onClearCampus={clearCampus}
                     onMissingCampus={() => {
                       const next = new URLSearchParams(search.toString());
@@ -774,6 +781,7 @@ export function SampleHomeClient(props: {
                         onClearCampus={clearCampus}
                         onClearQuery={() => setFounderQuery("")}
                       />
+                      <CurrentViewDock companies={dockCompanies} founders={[]} max={16} />
                     </div>
                   }
                   peak={
@@ -781,16 +789,23 @@ export function SampleHomeClient(props: {
                       <FoldOpenLaneHero
                         shell={openLane}
                         companyTotal={cardCount}
-                        foundersIndexed={founders.length || foundersListed}
+                        foundersIndexed={foundersIndexed}
                       />
                       <div className="border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-open-lane-peak="">
                         <PeakShareSlot
                           companies={companies}
                           foundersListed={foundersListed}
-                          companyTotal={cardCount}
                           campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
                           topCampuses={topCampuses}
                           shell={peakShell}
+                        />
+                      </div>
+                      <div className="border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-lineage-in-rail="">
+                        <LineagePanels
+                          companies={companies}
+                          week={stats.week}
+                          campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null}
+                          campusName={mapCampusName}
                         />
                       </div>
                     </>
@@ -803,6 +818,7 @@ export function SampleHomeClient(props: {
                       campusId={mapCampusId}
                       campusName={mapCampusName}
                       foundersListed={foundersListed}
+                    foundersIndexed={foundersIndexed}
                       peek={3}
                       onClearCampus={clearCampus}
                       onMissingCampus={() => {
@@ -829,10 +845,10 @@ export function SampleHomeClient(props: {
         </div>
       ) : null}
       {place === "explore" ? (
-      <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-2 sm:px-5">
+      <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-1 sm:px-5 md:pt-2">
         <div className="mx-auto w-full max-w-[1280px]">
           <div
-            className="flex flex-wrap items-center gap-x-1 border-b border-line"
+            className="hidden flex-wrap items-center gap-x-1 border-b border-line md:flex"
             role="tablist"
             aria-label="Views"
           >
@@ -864,7 +880,6 @@ export function SampleHomeClient(props: {
             kinds={kinds}
             campuses={campuses}
             companies={companies}
-            facetSeed={facetSeed}
             moreHref={browseHref({
               feed,
               sector,
@@ -881,13 +896,13 @@ export function SampleHomeClient(props: {
               campus: campusId ?? null,
               query: query ?? "",
               stage: (facetExtras?.stage as string) ?? null,
-              status: (facetExtras?.status as UrlFacetState["status"]) ?? null,
-              flag: (facetExtras?.flag as UrlFacetState["flag"]) ?? null,
+              status: (facetExtras?.status as any) ?? null,
+              flag: (facetExtras?.flag as any) ?? null,
               foundedYear: typeof facetExtras?.foundedYear === "number" ? facetExtras.foundedYear : null,
               yearMissing: Boolean(facetExtras?.yearMissing),
               hqRegion: (facetExtras?.hqRegion as string) ?? null,
               country: (facetExtras?.country as string) ?? null,
-              recency: (facetExtras?.recency as UrlFacetState["recency"]) ?? null,
+              recency: (facetExtras?.recency as any) ?? null,
               sectorMissing: Boolean(facetExtras?.sectorMissing),
             }}
           />
@@ -900,7 +915,7 @@ export function SampleHomeClient(props: {
 
 function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
   return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--cobalt,#2F4FD8)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
+    <Link href={href} role="tab" aria-selected={active} className={`grid h-9 min-h-9 min-w-11 place-items-center border-b-2 px-2 font-mono text-[12px] font-medium uppercase tracking-[0.08em] sm:h-11 sm:min-h-11 sm:px-2.5 sm:text-[14px] ${active ? "border-[color:var(--cobalt,#2F4FD8)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
       {children}
     </Link>
   );

@@ -79,14 +79,43 @@ function hexToRgb(hex: string): [number, number, number] {
   return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
 }
 
+/** Simple quadtree for deep-zoom card culling. */
+class QuadTree {
+  x: number; y: number; w: number; h: number; items: { i: number; x: number; y: number }[]; kids: QuadTree[] | null;
+  constructor(x: number, y: number, w: number, h: number) {
+    this.x = x; this.y = y; this.w = w; this.h = h; this.items = []; this.kids = null;
+  }
+  insert(it: { i: number; x: number; y: number }) {
+    if (it.x < this.x || it.y < this.y || it.x > this.x + this.w || it.y > this.y + this.h) return;
+    if (this.items.length < 8 && !this.kids) { this.items.push(it); return; }
+    if (!this.kids) {
+      const hw = this.w / 2, hh = this.h / 2;
+      this.kids = [
+        new QuadTree(this.x, this.y, hw, hh),
+        new QuadTree(this.x + hw, this.y, hw, hh),
+        new QuadTree(this.x, this.y + hh, hw, hh),
+        new QuadTree(this.x + hw, this.y + hh, hw, hh),
+      ];
+      for (const old of this.items) for (const k of this.kids) k.insert(old);
+      this.items = [];
+    }
+    for (const k of this.kids) k.insert(it);
+  }
+  query(x: number, y: number, w: number, h: number, out: { i: number; x: number; y: number }[]) {
+    if (x + w < this.x || y + h < this.y || x > this.x + this.w || y > this.y + this.h) return;
+    for (const it of this.items) {
+      if (it.x >= x && it.y >= y && it.x <= x + w && it.y <= y + h) out.push(it);
+    }
+    if (this.kids) for (const k of this.kids) k.query(x, y, w, h, out);
+  }
+}
+
 export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompany, onSelectNetwork, mapFocus }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [poster, setPoster] = useState<Poster | null>(null);
   const [deals, setDeals] = useState<Record<string, Deal>>({});
   const [size, setSize] = useState({ w: 1200, h: 640 });
-  const [renderFailed, setRenderFailed] = useState(false);
-  const [clickedFounder, setClickedFounder] = useState<string | null>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const [selectedHub, setSelectedHub] = useState<string | null>(null);
   const [legendOtherOpen, setLegendOtherOpen] = useState(false);
@@ -177,55 +206,6 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     setZoomScale(scale);
   }, [mapFocus, poster, size.w, size.h]);
 
-  useEffect(() => {
-    if (!poster || mapFocus) return;
-    const index = poster.featuredId ? poster.foIds.indexOf(poster.featuredId) : 0;
-    if (index < 0) return;
-    const scale = 3.4;
-    const fit = Math.min(size.w / poster.w, size.h / poster.h);
-    camRef.current = {
-      scale,
-      x: (poster.w / 2 - poster.x[index]) * fit * scale,
-      y: (poster.h / 2 - poster.y[index]) * fit * scale,
-    };
-    velRef.current = { vx: 0, vy: 0, vScale: 0 };
-    setZoomScale(scale);
-  }, [poster, mapFocus, size.w, size.h]);
-
-  const fitAllCampuses = useCallback(() => {
-    if (!poster || !poster.x.length) return;
-    const minX = Math.min(...poster.x), maxX = Math.max(...poster.x);
-    const minY = Math.min(...poster.y), maxY = Math.max(...poster.y);
-    const fit = Math.min(size.w / poster.w, size.h / poster.h);
-    const scale = clamp(Math.min(
-      Math.max(80, size.w - 96) / Math.max(1, maxX - minX),
-      Math.max(80, size.h - 96) / Math.max(1, maxY - minY)
-    ) / fit, 0.3, 5.5);
-    camRef.current = {
-      scale,
-      x: (poster.w / 2 - (minX + maxX) / 2) * fit * scale,
-      y: (poster.h / 2 - (minY + maxY) / 2) * fit * scale,
-    };
-    velRef.current = { vx: 0, vy: 0, vScale: 0 };
-    setSelectedHub(null);
-    setFocusedNode(-1);
-    setZoomScale(scale);
-  }, [poster, size.w, size.h]);
-
-  const resetFounderView = useCallback(() => {
-    if (!poster) return;
-    const index = Math.max(0, poster.featuredId ? poster.foIds.indexOf(poster.featuredId) : 0);
-    const scale = 3.4;
-    const fit = Math.min(size.w / poster.w, size.h / poster.h);
-    camRef.current = {
-      scale,
-      x: (poster.w / 2 - poster.x[index]) * fit * scale,
-      y: (poster.h / 2 - poster.y[index]) * fit * scale,
-    };
-    velRef.current = { vx: 0, vy: 0, vScale: 0 };
-    setZoomScale(scale);
-  }, [poster, size.w, size.h]);
-
   const founderCount = poster?.foIds.length ?? 0;
 
   useEffect(() => {
@@ -247,7 +227,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       __NETWORKS_SET_SCALE__?: (scale: number) => void;
     };
     w.__NETWORKS_SET_SCALE__ = (scale: number) => {
-      camRef.current.scale = Math.max(0.3, Math.min(5.5, scale));
+      camRef.current.scale = Math.max(0.7, Math.min(5.5, scale));
       setZoomScale(camRef.current.scale);
       velRef.current.vScale = 0;
       bump((n) => n + 1);
@@ -258,12 +238,12 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       delete (w as typeof w & { __NETWORKS_PENDING_SCALE__?: number }).__NETWORKS_PENDING_SCALE__;
     }
     (w as typeof w & { __NETWORKS_RESET_VIEW__?: () => void }).__NETWORKS_RESET_VIEW__ = () => {
-      resetFounderView();
+      camRef.current = { x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[0].scale };
       velRef.current = { vx: 0, vy: 0, vScale: 0 };
       dragRef.current = null;
       setSelectedHub(null);
       setFocusedNode(-1);
-      setZoomScale(3.4);
+      setZoomScale(NETWORK_ZOOM_PRESETS[0].scale);
       bump((n) => n + 1);
     };
     return () => {
@@ -271,7 +251,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       delete w.__NETWORKS_SET_SCALE__;
       delete (w as typeof w & { __NETWORKS_RESET_VIEW__?: () => void }).__NETWORKS_RESET_VIEW__;
     };
-  }, [poster, resetFounderView]);
+  }, [poster]);
 
   const worldToScreen = useCallback(
     (wx: number, wy: number) => {
@@ -373,7 +353,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
 
     // Warm off-white base
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#f2f4ef";
+    ctx.fillStyle = "#fbfaf7";
     ctx.fillRect(0, 0, w, h);
 
     const cam = camRef.current;
@@ -465,7 +445,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       const breathe = reduced ? 1 : 1 + Math.sin(t * 0.4 + ci) * 0.05;
       const rad = (42 + Math.sqrt(n) * 5.8) * s * breathe * (1.05 + bloom * 0.9);
       const sprite = getGlowSprite(p.campuses[ci].color, true);
-      ctx.globalAlpha = (0.08 + bloom * 0.06) * fade;
+      ctx.globalAlpha = (0.32 + bloom * 0.38) * fade;
       ctx.drawImage(sprite, home.x - rad, home.y - rad, rad * 2, rad * 2);
       ctx.globalAlpha = 1;
     }
@@ -571,7 +551,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (pt.x < -40 || pt.y < -40 || pt.x > w + 40 || pt.y > h + 40) continue;
       // Floor to ~2-3.5 CSS px at 1440 so dots survive fit scaling
       const baseR = Math.max(2.0, Math.min(3.5, p.r[i] * Math.max(s, 0.85)));
-      const bloomR = baseR * (1 + bloom * 1.5);
+      const bloomR = baseR * (1 + bloom * (10 + hash01(String(i)) * 16));
 
       if (p.kind[i] === 2) {
         if (!reduced && bloom > 0.2) {
@@ -588,7 +568,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         }
         ctx.beginPath();
         ctx.fillStyle = `rgba(15,23,42,${0.9 * fade})`;
-        ctx.rect(pt.x - 3, pt.y - 3, 6, 6);
+        ctx.arc(pt.x, pt.y, Math.max(2.6, baseR), 0, Math.PI * 2);
         ctx.fill();
         continue;
       }
@@ -600,8 +580,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       // Soft glow under every founder/company at rest
       {
         const sprite = getGlowSprite(col, true);
-        const glowRad = baseR * 1.8;
-        ctx.globalAlpha = (0.06 + bloom * 0.08) * fade * (p.kind[i] === 0 ? 1 : 0.8);
+        const glowRad = baseR * (2.8 + bloom * 8);
+        ctx.globalAlpha = (0.35 + crisp * 0.2 + bloom * 0.45) * fade * (p.kind[i] === 0 ? 1 : 0.8);
         ctx.drawImage(sprite, pt.x - glowRad, pt.y - glowRad, glowRad * 2, glowRad * 2);
         ctx.globalAlpha = 1;
       }
@@ -610,7 +590,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (bloom > 0.02) {
         const sprite = getGlowSprite(col, true);
         const rad = bloomR;
-        ctx.globalAlpha = 0.1 * fade * (p.kind[i] === 0 ? 1 : 0.75);
+        ctx.globalAlpha = (0.28 + bloom * 0.55) * fade * (p.kind[i] === 0 ? 1 : 0.75);
         ctx.drawImage(sprite, pt.x - rad, pt.y - rad, rad * 2, rad * 2);
         ctx.globalAlpha = 1;
       }
@@ -625,9 +605,145 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (crisp > 0.35) {
         ctx.beginPath();
         ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${0.22 * crisp * fade})`;
-        ctx.arc(pt.x, pt.y, dotR * 1.15, 0, Math.PI * 2);
+        ctx.arc(pt.x, pt.y, dotR * 2.2, 0, Math.PI * 2);
         ctx.fill();
       }
+    }
+
+    // Mid-zoom tracking boxes + monospace x/y labels (bloom-box ref)
+    if (bloom > 0.08 && p.campusLabels) {
+      ctx.save();
+      ctx.font = "9px ui-monospace, SFMono-Regular, Menlo, monospace";
+      for (const lab of p.campusLabels.slice(0, 12)) {
+        const pt = toS(lab.x, lab.y);
+        const box = Math.max(36, lab.r * s * 0.42) * (0.9 + bloom * 0.55);
+        ctx.globalAlpha = (0.65 + bloom * 0.25) * fade;
+        ctx.strokeStyle = "#0f172a";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(pt.x - box / 2, pt.y - box / 2, box, box);
+        // Inner nested box for a few larger hubs
+        if (lab.n >= 80) {
+          const inner = box * 0.55;
+          ctx.globalAlpha = 0.4 * bloom * fade;
+          ctx.strokeRect(pt.x - inner / 2, pt.y - inner / 2, inner, inner);
+        }
+        ctx.globalAlpha = 0.9 * bloom * fade;
+        ctx.fillStyle = "#0f172a";
+        ctx.fillText(`${lab.label} · ${lab.n.toLocaleString("en-US")}`, pt.x - box / 2, pt.y - box / 2 - 5);
+        const xLab = Math.round(lab.x);
+        const yLab = Math.round(lab.y);
+        ctx.fillText(`x: ${xLab} y: ${yLab}`, pt.x - box / 2, pt.y + box / 2 + 11);
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 1.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Extra small tracking boxes on a sample of founders near bloom
+      let boxed = 0;
+      for (let i = 0; i < p.x.length && boxed < 28; i++) {
+        if (p.kind[i] !== 0) continue;
+        if (!isFoOn(i)) continue;
+        if (hash01(`box:${i}`) > 0.035) continue;
+        const pt = toS(p.x[i], p.y[i], i);
+        if (pt.x < 20 || pt.y < 20 || pt.x > w - 20 || pt.y > h - 20) continue;
+        const bw = 14 + hash01(`bw:${i}`) * 18;
+        const bh = 12 + hash01(`bh:${i}`) * 14;
+        ctx.globalAlpha = 0.45 * bloom * fade;
+        ctx.strokeStyle = "#0f172a";
+        ctx.lineWidth = 0.7;
+        ctx.strokeRect(pt.x - bw / 2, pt.y - bh / 2, bw, bh);
+        if (hash01(`xy:${i}`) < 0.4) {
+          ctx.globalAlpha = 0.7 * bloom * fade;
+          ctx.fillStyle = "#0f172a";
+          ctx.fillText(`x: ${Math.round(p.x[i])} y: ${Math.round(p.y[i])}`, pt.x - bw / 2, pt.y - bh / 2 - 3);
+        }
+        boxed += 1;
+      }
+      ctx.restore();
+    }
+
+    // Deep zoom: pop-in founder/company cards along arcs (quadtree cull)
+    if (deep > 0.05) {
+      const qt = new QuadTree(-200, -200, p.w + 400, p.h + 400);
+      for (let i = 0; i < p.x.length; i++) {
+        if (p.kind[i] === 2) continue;
+        if (p.kind[i] === 0 && !isFoOn(i)) continue;
+        qt.insert({ i, x: p.x[i], y: p.y[i] });
+      }
+      // Visible world AABB
+      const invS = 1 / s;
+      const wx0 = (0 - ox) * invS, wy0 = (0 - oy) * invS;
+      const wx1 = (w - ox) * invS, wy1 = (h - oy) * invS;
+      const hits: { i: number; x: number; y: number }[] = [];
+      qt.query(wx0, wy0, wx1 - wx0, wy1 - wy0, hits);
+      // Prefer higher degree; cap cards
+      hits.sort((a, b) => p.deg[b.i] - p.deg[a.i]);
+      const maxCards = 22;
+      const cardPts: { x: number; y: number; i: number }[] = [];
+      ctx.save();
+      for (let hi = 0; hi < Math.min(maxCards, hits.length); hi++) {
+        const hit = hits[hi];
+        const pt = toS(hit.x, hit.y, hit.i);
+        let pop = popRef.current.get(hit.i) ?? 0;
+        if (!reduced) pop = Math.min(1, pop + 0.1);
+        else pop = 1;
+        popRef.current.set(hit.i, pop);
+        const ease = 1 - Math.pow(1 - pop, 3);
+        // slight overshoot spring 0.9 -> 1.04 -> 1
+        const spring = ease < 0.7 ? (0.9 + (ease / 0.7) * 0.14) : (1.04 - ((ease - 0.7) / 0.3) * 0.04);
+        let title = "Founder";
+        let school = "";
+        let company = "";
+        let investor = "";
+        if (p.kind[hit.i] === 0) {
+          const fid = p.foIds[hit.i];
+          const deal = fid ? deals[fid] : null;
+          title = deal?.founderName ?? "Founder";
+          company = deal?.companyName ?? "";
+          investor = deal?.investors?.[0] ?? "";
+          const ci = p.campus[hit.i];
+          school = ci >= 0 && p.campuses[ci] ? p.campuses[ci].label : "";
+        } else {
+          const cid = p.coIds[hit.i - founderCount];
+          const dealKey = Object.keys(deals).find((k) => deals[k].companyId === cid);
+          const deal = dealKey ? deals[dealKey] : null;
+          title = deal?.companyName ?? "Company";
+          company = deal?.stage ?? "";
+          investor = deal?.investors?.[0] ?? "";
+          const ci = p.campus[hit.i];
+          school = ci >= 0 && p.campuses[ci] ? p.campuses[ci].label : "";
+        }
+        const bw = 148 * spring, bh = 54 * spring;
+        ctx.globalAlpha = deep * ease * fade;
+        ctx.fillStyle = "rgba(255,255,255,0.94)";
+        ctx.strokeStyle = "rgba(15,23,42,0.4)";
+        ctx.lineWidth = 0.9;
+        ctx.fillRect(pt.x + 10, pt.y - bh / 2, bw, bh);
+        ctx.strokeRect(pt.x + 10, pt.y - bh / 2, bw, bh);
+        ctx.fillStyle = "#0f172a";
+        ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, monospace";
+        ctx.fillText(title.slice(0, 20), pt.x + 16, pt.y - 12);
+        ctx.fillStyle = "#64748b";
+        if (school) ctx.fillText(school.slice(0, 20), pt.x + 16, pt.y + 2);
+        if (company) ctx.fillText(company.slice(0, 20), pt.x + 16, pt.y + 14);
+        if (investor) ctx.fillText(investor.slice(0, 20), pt.x + 16, pt.y + 26);
+        cardPts.push({ x: pt.x + 10 + bw / 2, y: pt.y, i: hit.i });
+      }
+      // Thin gray web between nearby cards
+      ctx.strokeStyle = "rgba(100,116,139,0.35)";
+      ctx.lineWidth = 0.7;
+      for (let i = 0; i < cardPts.length; i++) {
+        for (let j = i + 1; j < cardPts.length; j++) {
+          const a = cardPts[i], b = cardPts[j];
+          if (Math.hypot(a.x - b.x, a.y - b.y) > 280) continue;
+          if (hash01(`cardedge:${a.i}:${b.i}`) > 0.45) continue;
+          ctx.globalAlpha = deep * fade * 0.7;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
     }
 
     // Hover focus ring
@@ -662,14 +778,6 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       // Inertial pan / zoom
       const vel = velRef.current;
       const cam = camRef.current;
-      if (![cam.x, cam.y, cam.scale].every(Number.isFinite)) {
-        cam.x = 0;
-        cam.y = 0;
-        cam.scale = 3.4;
-        vel.vx = 0;
-        vel.vy = 0;
-        vel.vScale = 0;
-      }
       if (!reducedRef.current) {
         if (Math.abs(vel.vx) > 0.02 || Math.abs(vel.vy) > 0.02) {
           cam.x += vel.vx;
@@ -680,7 +788,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           vel.vx = 0; vel.vy = 0;
         }
         if (Math.abs(vel.vScale) > 0.0005) {
-          cam.scale = clamp(cam.scale * (1 + vel.vScale), 0.3, 5.5);
+          cam.scale = clamp(cam.scale * (1 + vel.vScale), 0.7, 5.5);
           vel.vScale *= 0.88;
         } else {
           vel.vScale = 0;
@@ -716,42 +824,12 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (wrapRef.current?.getAttribute("data-networks-current-scale") !== scaleTag) {
         wrapRef.current?.setAttribute("data-networks-current-scale", scaleTag);
       }
-      if (poster) {
-        const fit = Math.min(size.w / poster.w, size.h / poster.h);
-        cam.scale = clamp(cam.scale, 0.3, 5.5);
-        const scale = fit * cam.scale;
-        const centerX = poster.w / 2 - cam.x / scale;
-        const centerY = poster.h / 2 - cam.y / scale;
-        let nearest = -1;
-        let distance = Infinity;
-        for (let i = 0; i < poster.x.length; i++) {
-          if (poster.kind[i] === 2) continue;
-          const dx = (poster.x[i] - centerX) * scale / (size.w * 0.3);
-          const dy = (poster.y[i] - centerY) * scale / (size.h * 0.3);
-          const candidate = dx * dx + dy * dy;
-          if (candidate < distance) { distance = candidate; nearest = i; }
-        }
-        // Keep at least one real founder or company inside the central viewport.
-        if (nearest >= 0 && distance > 1) {
-          const correction = 1 - 1 / Math.sqrt(distance);
-          cam.x += (centerX - poster.x[nearest]) * scale * correction;
-          cam.y += (centerY - poster.y[nearest]) * scale * correction;
-          vel.vx = 0;
-          vel.vy = 0;
-        }
-      }
-      try {
-        draw();
-      } catch (error) {
-        console.error("Network map rendering failed", error);
-        setRenderFailed(true);
-        return;
-      }
+      draw();
       rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => { alive = false; cancelAnimationFrame(rafRef.current); };
-  }, [draw, poster, size]);
+  }, [draw, poster]);
 
   const hitTest = useCallback(
     (sx: number, sy: number): number => {
@@ -845,6 +923,11 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     const hit = hitTest(sx, sy);
     velRef.current.vx = 0;
     velRef.current.vy = 0;
+    if (hit >= 0 && poster && poster.kind[hit] !== 2 && !reducedRef.current) {
+      dragNodeRef.current = hit;
+      (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
+      return;
+    }
     dragRef.current = { x: sx, y: sy, cx: camRef.current.x, cy: camRef.current.y };
     (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
   };
@@ -877,8 +960,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     if (poster.kind[hit] === 0) {
       const fid = poster.foIds[hit];
       const deal = fid ? deals[fid] : null;
-      setClickedFounder(fid ?? null);
-      setFocusedNode(hit);
+      if (deal?.companyId) onSelectCompany?.(deal.companyId);
     } else if (poster.kind[hit] === 1) {
       const cid = poster.coIds[hit - founderCount];
       if (cid) onSelectCompany?.(cid);
@@ -889,7 +971,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     event.preventDefault();
     const dir = event.deltaY > 0 ? -1 : 1;
     // Smooth inertial zoom toward cursor
-    velRef.current.vScale = 0;
+    velRef.current.vScale += dir * 0.045;
     const rect = wrapRef.current?.getBoundingClientRect();
     if (rect && poster) {
       const sx = event.clientX - rect.left;
@@ -902,8 +984,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       const worldY = (sy - ((size.h - poster.h * fit) / 2 + cam.y + (poster.h * (fit - before)) / 2)) / before;
       const nextScale = clamp(cam.scale * (1 + dir * 0.04), 0.7, 5.5);
       const after = fit * nextScale;
-      cam.x += (worldX - poster.w / 2) * (before - after);
-      cam.y += (worldY - poster.h / 2) * (before - after);
+      cam.x += worldX * (before - after);
+      cam.y += worldY * (before - after);
       cam.scale = nextScale;
     }
   };
@@ -967,12 +1049,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   // Campus labels (Nature/phylum centered) - satisfy label gates; no hub labels on dots.
   const campusLabelNodes = useMemo(() => {
     if (!poster?.campusLabels?.length) return [];
-    return poster.campusLabels;
+    return poster.campusLabels.slice(0, 10);
   }, [poster]);
-
-  if (renderFailed) {
-    return <div role="alert" className="p-4">The map could not render. <a href="#network-roster" className="underline">Browse founders and startups</a><button type="button" className="ml-4 min-h-11 underline" onClick={() => window.location.reload()}>Reload map</button></div>;
-  }
 
   if (!poster) {
     return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>;
@@ -980,23 +1058,10 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
 
   return (
     <div className="w-full overflow-visible" data-networks-desk="">
-      {clickedFounder ? (
-        <aside aria-label="Selected founder" className="m-3 rounded-lg border border-[color:var(--line)] bg-white p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h3 className="font-semibold">{deals[clickedFounder]?.founderName ?? "Founder"}</h3>
-              <p className="text-sm">{deals[clickedFounder]?.companyName ?? "Startup details available in profile"}</p>
-              <a className="inline-flex min-h-11 items-center font-medium text-[color:var(--cobalt)] underline" href={`/founder/discover?q=${encodeURIComponent(deals[clickedFounder]?.founderName ?? clickedFounder)}`}>Open founder profile</a>
-              {deals[clickedFounder]?.companyId ? <button type="button" className="ml-4 min-h-11 text-[color:var(--cobalt)] underline" onClick={() => onSelectCompany?.(deals[clickedFounder].companyId!)}>Open startup</button> : null}
-            </div>
-            <button type="button" className="min-h-11 px-3" onClick={() => setClickedFounder(null)}>Close</button>
-          </div>
-        </aside>
-      ) : null}
       <div
         ref={wrapRef}
-        className="relative w-full min-w-0 max-w-full touch-manipulation overflow-hidden bg-[#f2f4ef] max-md:!h-[52vh]"
-        style={{ height: "clamp(360px, 62vh, 680px)" }}
+        className="relative w-screen max-w-none touch-manipulation overflow-hidden bg-[#fbfaf7] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[64vh]"
+        style={{ height: "min(76vh, 710px)" }}
         data-networks-graph=""
         data-networks-fade="0"
         data-networks-zoom="0"
@@ -1016,34 +1081,34 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           onPointerUp={(event) => event.stopPropagation()} onWheel={(event) => event.stopPropagation()}
           role="group" aria-label="Map zoom controls" data-network-in-map-zoom="">
           <button type="button" aria-label="Zoom out network" title="Zoom out" data-network-zoom-out=""
-            className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            className="grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
-              camRef.current.scale = Math.max(0.3, camRef.current.scale / 1.35);
+              camRef.current.scale = Math.max(0.7, camRef.current.scale / 1.35);
               velRef.current.vScale = 0;
               setZoomScale(camRef.current.scale);
               bump((value) => value + 1);
             }}>−</button>
           <button type="button" aria-label="Zoom in network" title="Zoom in" data-network-zoom-in=""
-            className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            className="grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
               camRef.current.scale = Math.min(5.5, camRef.current.scale * 1.35);
               velRef.current.vScale = 0;
               setZoomScale(camRef.current.scale);
               bump((value) => value + 1);
             }}>+</button>
-          <button type="button" aria-label="Fit all campuses" title="Show all campuses" data-network-zoom-fit=""
-            className="h-10 rounded-md px-3 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+          <button type="button" aria-label="Fit all network clusters" title="Fit whole ecosystem" data-network-zoom-fit=""
+            className="h-11 min-h-11 rounded-md px-3 text-[14px] font-semibold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
-              fitAllCampuses();
+              camRef.current = { x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale };
               velRef.current = { vx: 0, vy: 0, vScale: 0 };
               dragRef.current = null;
               setSelectedHub(null);
-
+              setZoomScale(NETWORK_ZOOM_PRESETS[1].scale);
               bump((value) => value + 1);
-            }}>Fit all</button>
+            }}>Fit</button>
         </div>
         <p className="pointer-events-none absolute left-3 top-3 z-[5] max-w-[calc(100%-13rem)] rounded-md bg-white/90 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm" data-network-map-hint="">
-          Click a founder or startup to open details
+          Start with a cluster · drag to move · zoom for founders
         </p>
 
         {/* Large editorial callouts removed: they covered the map and drew
@@ -1277,7 +1342,7 @@ const NetworksGraph3DLazy = dynamic(
 export function NetworksGraph(props: Props) {
   const [mode, setMode] = useState<"pending" | "3d" | "2d">("pending");
   const [supports3D, setSupports3D] = useState(false);
-  const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[4]);
+  const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[1]);
   const networkRootRef = useRef<HTMLDivElement>(null);
   const fallback2D = useCallback(() => setMode("2d"), []);
   useEffect(() => {
@@ -1348,7 +1413,7 @@ export function NetworksGraph(props: Props) {
       __NETWORKS_SET_SCALE__?: (scale: number) => void;
       __NETWORKS_PENDING_SCALE__?: number;
     };
-    setZoomPreset(NETWORK_ZOOM_PRESETS[4]);
+    setZoomPreset(NETWORK_ZOOM_PRESETS[0]);
     if (app.__NETWORKS_RESET_VIEW__) app.__NETWORKS_RESET_VIEW__();
     else if (app.__NETWORKS_SET_SCALE__) app.__NETWORKS_SET_SCALE__(NETWORK_ZOOM_PRESETS[0].scale);
     else app.__NETWORKS_PENDING_SCALE__ = NETWORK_ZOOM_PRESETS[0].scale;

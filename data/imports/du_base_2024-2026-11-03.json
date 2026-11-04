@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Scientific Project Zone",
+    "university": "University of Denver",
+    "campusId": "univ_denver",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://daniels.du.edu/blog/introducing-the-2024-base-campers/",
+    "program": "DU BASE Camp 2024",
+    "source": "src_du_base_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(BASE Camper)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://daniels.du.edu/blog/introducing-the-2024-base-campers/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "du_base_2024"
+  },
+  {
+    "name": "SizzlePig Sausage",
+    "university": "University of Denver",
+    "campusId": "univ_denver",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://daniels.du.edu/blog/introducing-the-2024-base-campers/",
+    "program": "DU BASE Camp 2024",
+    "source": "src_du_base_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(BASE Camper)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://daniels.du.edu/blog/introducing-the-2024-base-campers/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "du_base_2024"
+  },
+  {
+    "name": "The Control Block",
+    "university": "University of Denver",
+    "campusId": "univ_denver",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://daniels.du.edu/blog/introducing-the-2024-base-campers/",
+    "program": "DU BASE Camp 2024",
+    "source": "src_du_base_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(BASE Camper)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://daniels.du.edu/blog/introducing-the-2024-base-campers/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "du_base_2024"
+  }
+]

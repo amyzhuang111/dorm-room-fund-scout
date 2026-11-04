@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-11-03T21:37:17.807Z",
+  "generatedAt": "2026-11-03T09:25:09.574Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1548,
-  "signals": 1596,
+  "investableCompanies": 1633,
+  "signals": 1476,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 6826,
-  "founders": 3087,
+  "people": 6336,
+  "founders": 3196,
   "campuses": 170,
   "withSignal": 649,
   "ycCompanies": 564,
   "peak": {
-    "peakCount": 33,
+    "peakCount": 34,
     "peakId": "2026-04",
     "peakLabel": "Apr 2026",
-    "dated": 77,
-    "sharePct": 43,
-    "inWindow": 67,
+    "dated": 100,
+    "sharePct": 34,
+    "inWindow": 71,
     "earlierValid": 0,
-    "undatedMonth": 10,
-    "quiet": 1371
+    "undatedMonth": 29,
+    "quiet": 1433
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,89 +27,89 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1548,
+  "directoryCards": 1633,
   "signalsDated": 665,
-  "signalsUndated": 931,
-  "foundersIndexed": 3473,
-  "foundersListed": 2496,
+  "signalsUndated": 811,
+  "foundersIndexed": 3501,
+  "foundersListed": 2414,
   "campusesTotal": 170,
-  "campusesOnMap": 161,
-  "campusesWithFounders": 63,
-  "companiesWithSignal": 177,
-  "ycMembership": 319,
+  "campusesOnMap": 166,
+  "campusesWithFounders": 86,
+  "companiesWithSignal": 200,
+  "ycMembership": 323,
   "campusFoundersTop": [
     {
       "name": "University of Pennsylvania",
       "short": "Penn",
-      "founders": 766,
-      "companies": 203,
+      "founders": 758,
+      "companies": 206,
       "country": "United States"
     },
     {
       "name": "Stanford University",
       "short": "Stanford",
-      "founders": 355,
-      "companies": 221,
-      "country": "United States"
-    },
-    {
-      "name": "Harvard University",
-      "short": "Harvard",
-      "founders": 253,
-      "companies": 143,
+      "founders": 314,
+      "companies": 202,
       "country": "United States"
     },
     {
       "name": "University of California, Berkeley",
       "short": "Berkeley",
-      "founders": 249,
-      "companies": 146,
+      "founders": 247,
+      "companies": 148,
       "country": "United States"
     },
     {
       "name": "Massachusetts Institute of Technology",
       "short": "MIT",
-      "founders": 238,
-      "companies": 157,
+      "founders": 239,
+      "companies": 154,
       "country": "United States"
     },
     {
-      "name": "Princeton University",
-      "short": "Princeton",
-      "founders": 178,
-      "companies": 49,
+      "name": "Harvard University",
+      "short": "Harvard",
+      "founders": 174,
+      "companies": 82,
       "country": "United States"
     },
     {
       "name": "Columbia University",
       "short": "Columbia",
-      "founders": 155,
-      "companies": 36,
+      "founders": 160,
+      "companies": 41,
       "country": "United States"
     },
     {
-      "name": "Cornell University",
-      "short": "Cornell",
-      "founders": 135,
-      "companies": 48,
+      "name": "Princeton University",
+      "short": "Princeton",
+      "founders": 106,
+      "companies": 49,
+      "country": "United States"
+    },
+    {
+      "name": "Santa Clara University",
+      "short": "Santa Clara",
+      "founders": 104,
+      "companies": 114,
       "country": "United States"
     },
     {
       "name": "Carnegie Mellon University",
       "short": "CMU",
-      "founders": 103,
-      "companies": 66,
+      "founders": 101,
+      "companies": 64,
       "country": "United States"
     },
     {
-      "name": "University of Waterloo",
-      "short": "Waterloo",
-      "founders": 81,
-      "companies": 45,
-      "country": "Canada"
+      "name": "Cornell University",
+      "short": "Cornell",
+      "founders": 84,
+      "companies": 46,
+      "country": "United States"
     }
   ],
-  "companiesTotal": 5990,
-  "excludedOlderAlumni": 235,
-  "unverifiedRecency": 4171
+  "companiesTotal": 6039,
+  "excludedOlderAlumni": 234,
+  "unverifiedRecency": 4139
 }

@@ -1,14 +1,15 @@
-// Directory tiers. S+ sits above S. Null means no playbook rule applied.
-// The tier is a label on the record, not an input to Founder Signal or eligibility.
+// Directory tiers. S+ sits above S. Unranked means evidence was checked and
+// no playbook rule applied. The tier is a label on the record, not an input
+// to Founder Signal or eligibility.
 
-export const SIGNAL_TIERS = ["S+", "S", "A", "B", "C", "D", "talent"] as const;
+export const SIGNAL_TIERS = ["S+", "S", "A", "B", "C", "D", "talent", "Unranked"] as const;
 export type SignalTier = (typeof SIGNAL_TIERS)[number];
 
 export function isSignalTier(value: string | null | undefined): value is SignalTier {
   return SIGNAL_TIERS.includes(value as SignalTier);
 }
 
-/** Lower is stronger. Talent sorts after D. Unset tiers sort last. */
+/** Lower is stronger. Talent sorts after D. Unranked sorts last. */
 export function signalTierRank(tier: string | null | undefined): number {
   const index = SIGNAL_TIERS.indexOf(tier as SignalTier);
   return index === -1 ? SIGNAL_TIERS.length : index;
@@ -19,5 +20,8 @@ export function preferSignalTier(current: string | null | undefined, incoming: s
   const prev = isSignalTier(current) ? current : null;
   if (!next) return prev;
   if (!prev) return next;
+  // Unranked never beats a real tier.
+  if (next === "Unranked") return prev;
+  if (prev === "Unranked") return next;
   return signalTierRank(next) < signalTierRank(prev) ? next : prev;
 }
