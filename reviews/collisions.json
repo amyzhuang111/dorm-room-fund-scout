@@ -1,103 +1,138 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3477",
+  "base": "http://127.0.0.1:3460",
   "collisions": [],
   "pages": [
     {
       "route": "/",
+      "viewport": "375",
+      "nodeCount": 29,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies",
       "viewport": "375",
       "nodeCount": 41,
       "collisions": [],
       "collisionCount": 0
     },
     {
-      "route": "/companies",
-      "viewport": "375",
-      "nodeCount": 47,
-      "collisions": [],
-      "collisionCount": 0
-    },
-    {
       "route": "/companies?more=2",
       "viewport": "375",
-      "nodeCount": 48,
+      "nodeCount": 41,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies?feed=leaderboard",
-      "viewport": "375",
-      "nodeCount": 39,
-      "collisions": [],
-      "collisionCount": 0
-    },
-    {
-      "route": "/founders",
-      "viewport": "375",
-      "nodeCount": 26,
-      "collisions": [],
-      "collisionCount": 0
-    },
-    {
-      "route": "/campuses",
-      "viewport": "375",
-      "nodeCount": 96,
-      "collisions": [],
-      "collisionCount": 0
-    },
-    {
-      "route": "/data",
       "viewport": "375",
       "nodeCount": 44,
       "collisions": [],
       "collisionCount": 0
     },
     {
-      "route": "/signals",
+      "route": "/founders",
       "viewport": "375",
-      "nodeCount": 46,
+      "nodeCount": 47,
       "collisions": [],
       "collisionCount": 0
     },
     {
-      "route": "/startup/proj_9GUOmdEYxbuH",
+      "route": "/campuses",
+      "viewport": "375",
+      "nodeCount": 100,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses/penn",
+      "viewport": "375",
+      "nodeCount": 54,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses/stanford",
+      "viewport": "375",
+      "nodeCount": 52,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses/mit",
+      "viewport": "375",
+      "nodeCount": 54,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/data",
       "viewport": "375",
       "nodeCount": 49,
       "collisions": [],
       "collisionCount": 0
     },
     {
+      "route": "/signals",
+      "viewport": "375",
+      "nodeCount": 47,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/networks",
+      "viewport": "375",
+      "nodeCount": 61,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/methodology",
+      "viewport": "375",
+      "nodeCount": 30,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
+      "viewport": "375",
+      "nodeCount": 51,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
       "route": "/",
       "viewport": "1440",
-      "nodeCount": 190,
+      "nodeCount": 147,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies",
       "viewport": "1440",
-      "nodeCount": 144,
+      "nodeCount": 136,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies?more=2",
       "viewport": "1440",
-      "nodeCount": 171,
+      "nodeCount": 143,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/companies?feed=leaderboard",
       "viewport": "1440",
-      "nodeCount": 123,
+      "nodeCount": 127,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/founders",
       "viewport": "1440",
-      "nodeCount": 92,
+      "nodeCount": 140,
       "collisions": [],
       "collisionCount": 0
     },
@@ -109,9 +144,30 @@
       "collisionCount": 0
     },
     {
+      "route": "/campuses/penn",
+      "viewport": "1440",
+      "nodeCount": 139,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses/stanford",
+      "viewport": "1440",
+      "nodeCount": 130,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses/mit",
+      "viewport": "1440",
+      "nodeCount": 131,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
       "route": "/data",
       "viewport": "1440",
-      "nodeCount": 186,
+      "nodeCount": 137,
       "collisions": [],
       "collisionCount": 0
     },
@@ -123,9 +179,23 @@
       "collisionCount": 0
     },
     {
+      "route": "/networks",
+      "viewport": "1440",
+      "nodeCount": 120,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/methodology",
+      "viewport": "1440",
+      "nodeCount": 44,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
       "route": "/startup/proj_9GUOmdEYxbuH",
       "viewport": "1440",
-      "nodeCount": 118,
+      "nodeCount": 113,
       "collisions": [],
       "collisionCount": 0
     }

@@ -71,9 +71,8 @@ export function listUniversities(): UniversitySummary[] {
   return rows;
 }
 
-// Campus founder counts for the globe. The full Founder Scout rows take seconds
-// to assemble, and the map only needs how many promoted people sit on each
-// campus. This matches listFounders({ universityId }).length.
+// Campus founder counts for the globe and campus headers. Same eligible promoted
+// set as listFounders({ universityId }).length (class of 2023+ / current students).
 function founderCountsByUniversity(): Map<string, number> {
   const db = getDb();
   const projectsByPerson = new Map<string, { kind: string; role: string }[]>();
@@ -96,12 +95,42 @@ function founderCountsByUniversity(): Map<string, number> {
     set.add(row.university_id);
     campusesByPerson.set(row.person_id, set);
   }
+  // Primary affiliation status matches buildFounders ordering.
+  const primary = new Map<string, { founderStatus: string | null; enrollmentStatus: string | null; affiliationStatus: string | null }>();
+  for (const row of db
+    .prepare(
+      `SELECT pe.id as id, pe.founder_status as founder_status, pe.enrollment_status as enrollment_status, a.status as status
+       FROM people pe
+       LEFT JOIN affiliations a ON a.person_id = pe.id
+       ORDER BY pe.id,
+         CASE a.status WHEN 'current_student' THEN 0 WHEN 'recent_grad' THEN 1 WHEN 'older_alumni' THEN 2 ELSE 3 END`
+    )
+    .all() as {
+      id: string;
+      founder_status: string | null;
+      enrollment_status: string | null;
+      status: string | null;
+    }[]) {
+    if (primary.has(row.id)) continue;
+    primary.set(row.id, {
+      founderStatus: row.founder_status,
+      enrollmentStatus: row.enrollment_status,
+      affiliationStatus: row.status,
+    });
+  }
   const counts = new Map<string, number>();
-  const people = db.prepare(`SELECT id, founder_status FROM people`).all() as { id: string; founder_status: string | null }[];
-  for (const person of people) {
-    if (person.founder_status === "removed" || person.founder_status === "potential") continue;
-    if (!evaluatePromotion(projectsByPerson.get(person.id) ?? []).promoted) continue;
-    for (const campusId of campusesByPerson.get(person.id) ?? []) {
+  for (const [id, person] of primary) {
+    if (person.founderStatus === "removed" || person.founderStatus === "potential") continue;
+    if (!evaluatePromotion(projectsByPerson.get(id) ?? []).promoted) continue;
+    if (
+      !isEligibleForFounderDirectory({
+        enrollmentStatus: person.enrollmentStatus,
+        affiliationStatus: person.affiliationStatus,
+      })
+    ) {
+      continue;
+    }
+    for (const campusId of campusesByPerson.get(id) ?? []) {
       counts.set(campusId, (counts.get(campusId) ?? 0) + 1);
     }
   }

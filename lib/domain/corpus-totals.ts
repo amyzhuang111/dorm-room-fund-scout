@@ -13,7 +13,12 @@ export type CorpusTotals = {
   campusesOnMap: number;
   campusesTotal: number;
   campusesWithFounders: number;
+  /** Person-level directory exclusions (graduated before 2023 / older alumni). */
   excludedOlderAlumni: number;
+  foundersRawPromoted: number;
+  foundersExcludedEnrollmentOlderAlumni: number;
+  foundersExcludedAffiliationOlderAlumni: number;
+  companiesExcludedOlderAlumni: number;
   unverifiedRecency: number;
   ycMembership: number;
 };
@@ -32,6 +37,10 @@ export function loadCorpusTotals(): CorpusTotals {
     campusesTotal: Number(snap.campusesTotal ?? snap.campuses ?? 0),
     campusesWithFounders: Number(snap.campusesWithFounders ?? 0),
     excludedOlderAlumni: Number(snap.excludedOlderAlumni ?? 0),
+    foundersRawPromoted: Number(snap.foundersRawPromoted ?? 0),
+    foundersExcludedEnrollmentOlderAlumni: Number(snap.foundersExcludedEnrollmentOlderAlumni ?? 0),
+    foundersExcludedAffiliationOlderAlumni: Number(snap.foundersExcludedAffiliationOlderAlumni ?? 0),
+    companiesExcludedOlderAlumni: Number(snap.companiesExcludedOlderAlumni ?? snap.excludedOlderAlumni ?? 0),
     unverifiedRecency: Number(snap.unverifiedRecency ?? 0),
     ycMembership: Number(snap.ycMembership ?? 0),
   };

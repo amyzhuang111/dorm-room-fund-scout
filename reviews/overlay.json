@@ -1,16 +1,16 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3477",
+  "base": "http://127.0.0.1:3460",
   "pages": [
     {
       "route": "/",
       "viewport": "375",
-      "overlayCount": 1,
+      "overlayCount": 2,
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
       "onControl": [],
-      "homeMapUnobstructedPct": 81.4
+      "homeMapUnobstructedPct": 80.3
     },
     {
       "route": "/companies",
@@ -95,7 +95,7 @@
     {
       "route": "/",
       "viewport": "1440",
-      "overlayCount": 2,
+      "overlayCount": 3,
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
@@ -187,5 +187,82 @@
     "overlayOnText": 0,
     "overlayOnControl": 0
   },
-  "homeMapUnobstructedPct375": 81.4
+  "homeMapUnobstructedPct375": 80.3,
+  "menuOpen390": {
+    "open": true,
+    "sheetHidden": true,
+    "modeHit": []
+  },
+  "currentView1440": {
+    "pct": 1.2,
+    "collapsed": "1",
+    "sheetH": 46,
+    "mapH": 828
+  },
+  "pillOverTabs390": {
+    "ok": true,
+    "hit": [],
+    "descendersCut": false,
+    "countsH": 44,
+    "countsBottom": 145,
+    "modeTop": 150
+  },
+  "selectedCardUnderSheet390": {
+    "ok": true,
+    "sheetHidden": true,
+    "overlap": 0,
+    "cardBottom": 933,
+    "sheetTop": 0,
+    "selected": "univ_penn"
+  },
+  "foldCountsTapTargets": [
+    {
+      "width": 320,
+      "ok": true,
+      "w": 85,
+      "h": 44,
+      "text": "1,646 vetted",
+      "missingSpace": false,
+      "hit": [],
+      "countsH": 44,
+      "modeTop": 150,
+      "countsBottom": 145
+    },
+    {
+      "width": 375,
+      "ok": true,
+      "w": 85,
+      "h": 44,
+      "text": "1,646 vetted",
+      "missingSpace": false,
+      "hit": [],
+      "countsH": 44,
+      "modeTop": 150,
+      "countsBottom": 145
+    },
+    {
+      "width": 390,
+      "ok": true,
+      "w": 85,
+      "h": 44,
+      "text": "1,646 vetted",
+      "missingSpace": false,
+      "hit": [],
+      "countsH": 44,
+      "modeTop": 150,
+      "countsBottom": 145
+    },
+    {
+      "width": 430,
+      "ok": true,
+      "w": 85,
+      "h": 44,
+      "text": "1,646 vetted",
+      "missingSpace": false,
+      "hit": [],
+      "countsH": 44,
+      "modeTop": 150,
+      "countsBottom": 145
+    }
+  ]
 }

@@ -490,7 +490,7 @@ export function NetworkAtlas() {
           One network.
         </h2>
         <p className={styles.muted}>
-          {data.nodes.length.toLocaleString()} founders & startups
+          {data.nodes.length.toLocaleString("en-US")} founders & startups
         </p>
         <div className={styles.tabs}>
           <button
@@ -580,7 +580,7 @@ export function NetworkAtlas() {
                       }}
                     />
                     <span>{r.name}</span>
-                    <small>{r.count.toLocaleString()}</small>
+                    <small>{r.count.toLocaleString("en-US")}</small>
                     <span>›</span>
                   </button>
                 ))}
@@ -641,15 +641,15 @@ export function NetworkAtlas() {
         <div className={styles.status}>
           <span>
             {hasFilter
-              ? `${highlighted.size.toLocaleString()} highlighted · `
+              ? `${highlighted.size.toLocaleString("en-US")} highlighted · `
               : ""}
-            {data.nodes.length.toLocaleString()} records on the map
+            {data.nodes.length.toLocaleString("en-US")} records on the map
           </span>
           <button onClick={reset}>Reset all</button>
         </div>
         {list ? (
           <div className={styles.results}>
-            <p>All matching records · {resultIds.length.toLocaleString()}</p>
+            <p>All matching records · {resultIds.length.toLocaleString("en-US")}</p>
             {resultIds.slice(page * 30, (page + 1) * 30).map((i) => (
               <button
                 key={data.nodes[i].id}

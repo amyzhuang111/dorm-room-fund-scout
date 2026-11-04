@@ -400,7 +400,7 @@
     },
     {
       "route": "/map",
-      "redirectTo": "http://127.0.0.1:3477/networks",
+      "redirectTo": "http://127.0.0.1:3460/networks",
       "status": 200
     }
   ]

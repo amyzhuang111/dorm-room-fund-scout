@@ -26,6 +26,7 @@ const EXPECT = {
   campusesOnMap: SNAP.campusesOnMap,
   campusesTotal: SNAP.campusesTotal ?? SNAP.campuses,
   ycMembership: SNAP.ycMembership,
+  excludedOlderAlumni: SNAP.excludedOlderAlumni,
 };
 
 function num(text) {
@@ -112,6 +113,9 @@ async function main() {
     }
     if (counts["campuses-on-map"] != null) {
       pushErr(errors, route.name, "campuses-on-map", EXPECT.campusesOnMap, num(counts["campuses-on-map"]), "data-count=campuses-on-map vs snapshot.campusesOnMap");
+    }
+    if (route.name === "data" && counts["recency-excluded"] != null) {
+      pushErr(errors, route.name, "recency-excluded", EXPECT.excludedOlderAlumni, num(counts["recency-excluded"]), "data-count=recency-excluded vs snapshot.excludedOlderAlumni (person drop)");
     }
     if (counts.visibleCompanies != null) {
       pushErr(errors, route.name, "visible companies", EXPECT.investableCompanies, num(counts.visibleCompanies), "fold masthead companies vs snapshot.investableCompanies");

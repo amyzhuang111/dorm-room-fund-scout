@@ -9,10 +9,10 @@
       "locale": "de-DE",
       "periodThousands": [],
       "figures": [
-        "34/100",
-        "34/100",
-        "34/100",
-        "34/100"
+        "34/103",
+        "34/103",
+        "1,646",
+        "1,646"
       ]
     },
     {
@@ -20,10 +20,7 @@
       "viewport": "375",
       "locale": "de-DE",
       "periodThousands": [],
-      "figures": [
-        "200",
-        "34/100"
-      ]
+      "figures": []
     },
     {
       "route": "/companies?feed=leaderboard",
@@ -31,7 +28,7 @@
       "locale": "de-DE",
       "periodThousands": [],
       "figures": [
-        "37"
+        "39"
       ]
     },
     {
@@ -75,10 +72,10 @@
       "locale": "de-DE",
       "periodThousands": [],
       "figures": [
-        "34/100",
-        "34/100",
-        "34/100",
-        "34/100"
+        "34/103",
+        "34/103",
+        "1,646",
+        "1,646"
       ]
     },
     {
@@ -86,10 +83,7 @@
       "viewport": "1440",
       "locale": "de-DE",
       "periodThousands": [],
-      "figures": [
-        "200",
-        "34/100"
-      ]
+      "figures": []
     },
     {
       "route": "/companies?feed=leaderboard",
@@ -97,7 +91,7 @@
       "locale": "de-DE",
       "periodThousands": [],
       "figures": [
-        "37"
+        "39"
       ]
     },
     {

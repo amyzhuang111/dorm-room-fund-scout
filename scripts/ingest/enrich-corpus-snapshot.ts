@@ -11,6 +11,7 @@ import { buildPeakShell } from "../../lib/domain/peak-shell";
 import { listUniversities } from "../../lib/domain/queries";
 import { sampleSurfaceCounts } from "../../lib/domain/sample-facets";
 import { buildFounderIndex } from "../../lib/domain/founder-index-build";
+import { loadFounderEligibilityBreakdown } from "../../lib/domain/founder-eligibility-counts";
 
 const SNAP_PATH = path.join(process.cwd(), "data", "corpus-snapshot.json");
 
@@ -38,6 +39,19 @@ function main() {
   ).c;
   const sharePct = shell && shell.dated > 0 ? Math.round((shell.peakCount / shell.dated) * 100) : 0;
 
+  const eligibility = loadFounderEligibilityBreakdown();
+  const indexed = buildFounderIndex().length;
+  if (indexed !== eligibility.eligible) {
+    throw new Error(`founder eligibility drift: breakdown.eligible=${eligibility.eligible} buildFounderIndex=${indexed}`);
+  }
+  const companiesExcludedOlderAlumni = (
+    db
+      .prepare(
+        `SELECT COUNT(*) AS c FROM projects WHERE kind = 'company' AND excluded_reason = 'founders not current/recent (<2023)'`,
+      )
+      .get() as { c: number }
+  ).c;
+
   const snapshot = {
     ...existing,
     generatedAt: new Date().toISOString(),
@@ -49,7 +63,7 @@ function main() {
     signalsUndated: signals - signalsDated,
     people: (db.prepare(`SELECT COUNT(*) AS c FROM people`).get() as { c: number }).c,
     founders: (db.prepare(`SELECT COUNT(*) AS c FROM people WHERE founder_status = 'founder'`).get() as { c: number }).c,
-    foundersIndexed: buildFounderIndex().length,
+    foundersIndexed: eligibility.eligible,
     foundersListed: surface.foundersListed,
     campuses: unis.length,
     campusesTotal: unis.length,
@@ -72,13 +86,13 @@ function main() {
     companiesTotal: (
       db.prepare(`SELECT COUNT(*) AS c FROM projects WHERE kind = 'company'`).get() as { c: number }
     ).c,
-    excludedOlderAlumni: (
-      db
-        .prepare(
-          `SELECT COUNT(*) AS c FROM projects WHERE kind = 'company' AND excluded_reason = 'founders not current/recent (<2023)'`,
-        )
-        .get() as { c: number }
-    ).c,
+    // Person-level directory drop (raw promoted − eligible). /data copy uses this.
+    excludedOlderAlumni: eligibility.excludedTotal,
+    foundersExcludedEnrollmentOlderAlumni: eligibility.excludedEnrollmentOlderAlumni,
+    foundersExcludedAffiliationOlderAlumni: eligibility.excludedAffiliationOlderAlumni,
+    foundersRawPromoted: eligibility.rawPromoted,
+    // Company-level recency funnel (methodology page).
+    companiesExcludedOlderAlumni,
     unverifiedRecency: (
       db
         .prepare(
@@ -118,6 +132,9 @@ function main() {
         foundersListed: snapshot.foundersListed,
         campusesOnMap: snapshot.campusesOnMap,
         excludedOlderAlumni: snapshot.excludedOlderAlumni,
+        foundersIndexed: snapshot.foundersIndexed,
+        foundersRawPromoted: snapshot.foundersRawPromoted,
+        companiesExcludedOlderAlumni: snapshot.companiesExcludedOlderAlumni,
         unverifiedRecency: snapshot.unverifiedRecency,
         companiesTotal: snapshot.companiesTotal,
       },

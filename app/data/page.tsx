@@ -111,7 +111,7 @@ export default async function DataExplorerPage({
         <span className="sr-only" data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
         <span className="tabular-nums" data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
         {" companies list a stage. "}
-        <span className="tabular-nums" data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
+        <span className="tabular-nums" data-count="recency-excluded">{corpusTotals.excludedOlderAlumni.toLocaleString("en-US")}</span>
         {" founders who graduated before 2023 are left out. "}
         <span className="tabular-nums" data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
         {" have a sector"}

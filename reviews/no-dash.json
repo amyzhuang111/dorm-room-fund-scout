@@ -1,15 +1,15 @@
 {
-  "base": "http://127.0.0.1:3477",
-  "innerTextRoutes": 6,
-  "crawlRoutes": 2301,
-  "companies": 1633,
-  "dossiers": 2297,
+  "base": "http://127.0.0.1:3460",
+  "innerTextRoutes": 14,
+  "crawlRoutes": 2045,
+  "companies": 2033,
+  "dossiers": 2041,
   "founderPages": 4,
   "statusCounts": {
-    "200": 2301
+    "200": 2045
   },
   "crawlDashes": 0,
-  "checked": 2307,
+  "checked": 2073,
   "failed": 0,
   "failures": []
 }
