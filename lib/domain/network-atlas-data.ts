@@ -142,13 +142,13 @@ export function buildNetworkAtlas(): AtlasData {
     if (!nodes[i].places.some((p) => p.campus === place.campus))
       nodes[i].places.push(place);
   }
-  for (const r of db.prepare(`SELECT entity_id,claim_type,value_json,verification_state FROM claims WHERE entity_type='person' AND claim_type IN ('profile_link','linkedin_candidate') AND verification_state != 'disputed'`).all() as {entity_id:string;claim_type:string;value_json:string;verification_state:string}[]) {
+  for (const r of db.prepare(`SELECT entity_id,claim_type,value_json,verification_state FROM claims WHERE ((entity_type='person' AND claim_type IN ('profile_link','linkedin_candidate','linkedin_alias_discovered')) OR (entity_type='project' AND claim_type='website')) AND verification_state != 'disputed'`).all() as {entity_id:string;claim_type:string;value_json:string;verification_state:string}[]) {
     const i=index.get(r.entity_id);if(i===undefined)continue;
     try {
-      const value=JSON.parse(r.value_json) as {url?:string;linkedin?:string;type?:string;status?:string};
-      const url=safeAtlasUrl(value.url||value.linkedin);if(!url||nodes[i].links.some(l=>l.url===url))continue;
+      const value=JSON.parse(r.value_json) as {url?:string;linkedin?:string;website?:string;type?:string;status?:string};
+      const url=safeAtlasUrl(value.url||value.linkedin||value.website);if(!url||nodes[i].links.some(l=>l.url===url))continue;
       const verified=value.status==="confirmed"||r.verification_state==="corroborated";
-      const label=r.claim_type==="linkedin_candidate"?"LinkedIn":value.type==="website"?"Website":"Public profile";
+      const label=r.claim_type.startsWith("linkedin_")?"LinkedIn":(value.type==="website"||r.claim_type==="website")?"Website":"Public profile";
       nodes[i].links.push({label:`${label}${verified?"":" (unverified)"}`,url});
     } catch { /* ignore invalid claims, not the record */ }
   }
@@ -207,10 +207,14 @@ export function buildNetworkAtlas(): AtlasData {
     const i = index.get(r.project_id);
     if (i === undefined) continue;
     if (r.fact_key === "hq") {
-      const c = cityLookup.get(r.value_text.trim());
-      if (c && !nodes[i].places.some((p) => p.basis === "headquarters"))
+      const raw = r.value_text.trim();
+      const c = cityLookup.get(raw);
+      // Only resolve explicit country names; never infer a country from an ambiguous city.
+      const explicit = [...countries.keys()].find(name => name.length > 2 && (raw.toLowerCase() === name.toLowerCase() || raw.toLowerCase().endsWith(", " + name.toLowerCase())));
+      const country = c?.country || explicit;
+      if (country && !nodes[i].places.some((p) => p.basis === "headquarters"))
         nodes[i].places.push(
-          countryPlace(c.country, "", "headquarters", r.source_url),
+          countryPlace(country, "", "headquarters", r.source_url),
         );
     } else {
       const url = safeAtlasUrl(r.value_text);
