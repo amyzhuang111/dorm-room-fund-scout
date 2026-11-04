@@ -5,10 +5,10 @@
   "databaseModified": false,
   "counts": {
     "candidate_needs_verification": 197,
-    "held_from_publication": 33,
-    "new_import_not_reviewed": 408,
-    "no_address_found_on_checked_pages": 482,
-    "published_business_address": 49,
+    "held_from_publication": 36,
+    "new_import_not_reviewed": 407,
+    "no_address_found_on_checked_pages": 475,
+    "published_business_address": 54,
     "source_unavailable": 464
   },
   "records": [
@@ -10315,15 +10315,17 @@
     {
       "projectId": "proj_F2kTy4MYra3d",
       "company": "Reacher",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:39.825Z",
+      "status": "held_from_publication",
+      "reason": "The official legal/privacy page gives a numbered postal address at a known mail-receiving service. No separate company-published operating office was verified, so this mailing location is excluded from map pins.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.reacherapp.com/",
         "https://www.reacherapp.com/contact",
         "https://www.reacherapp.com/features/reacher-agent",
-        "https://www.reacherapp.com/ai-info"
+        "https://www.reacherapp.com/ai-info",
+        "https://www.reacherapp.com/policy/privacy-policy",
+        "https://local.fedex.com/en-us/ca/san-francisco/91494"
       ]
     },
     {
@@ -10511,16 +10513,20 @@
     {
       "projectId": "proj_d_-1pGr7vLtT",
       "company": "Reprompt",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:40.462Z",
+      "status": "published_business_address",
+      "reason": "The official About page explicitly labels this address as Reprompt HQ. Product sample addresses elsewhere on the website are excluded. The street address resolves to the municipal point for the commercial office building; the website map coordinates are not imported. Reprompt shares the exact building point with Tandem, without artificial scattering.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://repromptai.com/",
         "https://repromptai.com/blog/web-agents-200m-poi-data",
         "https://repromptai.com/products/location-data",
-        "https://repromptai.com/about"
-      ]
+        "https://repromptai.com/about",
+        "https://www.linkedin.com/company/reprompt",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=128&street_name=KING&street_type=ST",
+        "https://www.loopnet.com/Listing/128-King-St-San-Francisco-CA/18263071/"
+      ],
+      "addressSource": "https://repromptai.com/about"
     },
     {
       "projectId": "proj_h03LMbJFpg2w",
@@ -10794,15 +10800,18 @@
     {
       "projectId": "proj_tGFV48hv7eJi",
       "company": "ROE",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:41.743Z",
+      "status": "held_from_publication",
+      "reason": "The official legal/privacy page gives a numbered postal address at a known mail-receiving service. No separate company-published operating office was verified, so this mailing location is excluded from map pins.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.roe-ai.com/",
         "https://www.roe-ai.com/contact",
         "https://www.roe-ai.com/blog/bad-actors-dont-use-real-names",
-        "https://www.roe-ai.com/company"
+        "https://www.roe-ai.com/company",
+        "https://www.roe-ai.com/terms",
+        "https://www.roe-ai.com/privacy",
+        "https://local.fedex.com/en-us/ca/san-francisco/91494"
       ]
     },
     {
@@ -11453,16 +11462,21 @@
     {
       "projectId": "proj_YM1WFoObIxTg",
       "company": "Shortbread",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:44.637Z",
+      "status": "published_business_address",
+      "reason": "Current company terms and privacy pages publish this business address. The property operator describes private startup offices at the building, and the corporate filing summary for Kurukuru matches the address and founder identity. The exact municipal address point is used; no suite or headquarters-occupancy guarantee is inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://shortbread.ai/",
         "https://shortbread.ai/about",
         "https://shortbread.ai/privacy",
-        "https://shortbread.ai/terms"
-      ]
+        "https://shortbread.ai/terms",
+        "https://www.startuphq.com/156second",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=156&street_name=02ND&street_type=ST",
+        "https://www.bizprofile.net/ca/san-francisco/kurukuru-inc",
+        "https://www.linkedin.com/company/shortbreadai"
+      ],
+      "addressSource": "https://shortbread.ai/terms"
     },
     {
       "projectId": "proj_7EqhG0VYLtHo",
@@ -11921,15 +11935,17 @@
     {
       "projectId": "proj_6Wk7bwJ5QApp",
       "company": "Sphinx",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:46.985Z",
+      "status": "held_from_publication",
+      "reason": "The official legal/privacy page gives a numbered postal address at a known mail-receiving service. No separate company-published operating office was verified, so this mailing location is excluded from map pins.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://sphinxhq.com/",
         "https://sphinxhq.com/contact",
         "https://sphinxhq.com/company",
-        "https://sphinxhq.com/press"
+        "https://sphinxhq.com/press",
+        "https://sphinxhq.com/legal/privacy-policy",
+        "https://local.fedex.com/en-us/ca/san-francisco/91494"
       ]
     },
     {
@@ -12522,16 +12538,21 @@
     {
       "projectId": "proj_dHeX20FIJmZQ",
       "company": "Tandem",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:49.076Z",
+      "status": "published_business_address",
+      "reason": "The company profile explicitly identifies this primary location, and its current terms give the operations address in the same commercial building. An active municipal business registration agrees. The company record and existing San Francisco HQ are retained; coordinates come from the exact municipal address point.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://tandemspace.com/",
         "https://tandemspace.com/about",
         "https://tandemspace.com/privacy-policy",
-        "https://tandemspace.com/privacy-choices"
-      ]
+        "https://tandemspace.com/privacy-choices",
+        "https://www.linkedin.com/company/tandemspace",
+        "https://tandemspace.com/terms-of-service",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=128&street_name=KING&street_type=ST",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=8&%24where=upper%28ownership_name%29%20like%20%27%25TANDEM%20SPACE%25%27%20OR%20upper%28dba_name%29%20like%20%27%25TANDEM%20SPACE%25%27"
+      ],
+      "addressSource": "https://www.linkedin.com/company/tandemspace"
     },
     {
       "projectId": "proj_6pAQXS3H19JR",
@@ -12578,16 +12599,24 @@
     {
       "projectId": "proj_xyyMbDGWCNkc",
       "company": "TaxGPT",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:49.238Z",
+      "status": "published_business_address",
+      "reason": "The company-published Google Play developer address agrees with the active municipal business location, a professional association company profile and the broker-reported office transaction. The company website also gives a separate postal/service-of-process contact; that mailing location is not mapped. Published as a business address, without claiming current headquarters occupancy.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.taxgpt.com/",
         "https://www.taxgpt.com/faqs",
         "https://www.taxgpt.com/about",
-        "https://www.taxgpt.com/security"
-      ]
+        "https://www.taxgpt.com/security",
+        "https://play.google.com/store/apps/details?hl=en_US&id=com.taxgpt",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=8&%24where=upper%28ownership_name%29%20like%20%27%25TAXGPT%25%27%20OR%20upper%28dba_name%29%20like%20%27%25TAXGPT%25%27",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=1151&street_name=MISSION&street_type=ST",
+        "https://www.taxgpt.com/contact",
+        "https://www.taxgpt.com/legal/terms",
+        "https://ncacpahub.org/company/taxgpt",
+        "https://www.coltoncommercialsf.com/state_of_the_market_Q2_2024.pdf"
+      ],
+      "addressSource": "https://play.google.com/store/apps/details?hl=en_US&id=com.taxgpt"
     },
     {
       "projectId": "proj_zEIv7ZJdw5m3",
@@ -15974,11 +16003,19 @@
     {
       "projectId": "proj_wCwVnDKb-2Us",
       "company": "Juicebox",
-      "status": "new_import_not_reviewed",
-      "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
+      "status": "published_business_address",
+      "reason": "The September 2026 services agreement explicitly identifies offices at this address, and the current company profile lists the same building as its primary location. An August 2026 company-hosted event also identifies its San Francisco office in this building. The older municipal business record still lists South Park and gives Federal Street for mail; the current company-published office evidence is the basis for this pin.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
-      "checkedPages": []
+      "checkedPages": [
+        "https://juicebox.ai/services-agreement",
+        "https://www.linkedin.com/company/juicebox-work",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=77&street_name=FEDERAL&street_type=ST",
+        "https://juicebox.ai/privacy-policy",
+        "https://events.juicebox.ai/summer-send-off-with-juicebox/",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=8&%24where=upper%28ownership_name%29%20like%20%27%25JUICEBOX%25%27%20OR%20upper%28dba_name%29%20like%20%27%25JUICEBOX%25%27"
+      ],
+      "addressSource": "https://juicebox.ai/services-agreement"
     },
     {
       "projectId": "proj_dGZXzx1IYISC",
@@ -17646,7 +17683,7 @@
       "checkedPages": []
     }
   ],
-  "productionBase": "c97f97437115efea808dd48d024d18757c25d200",
+  "productionBase": "c9337d7c31493de72f35ace0df24d5bdbb4a3bf0",
   "mergedRecords": [
     {
       "company": "Winko",
