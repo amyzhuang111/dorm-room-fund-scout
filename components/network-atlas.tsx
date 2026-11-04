@@ -25,7 +25,7 @@ export function NetworkAtlas() {
   const [group, setGroup] = useState<string | null>(null),
     [query, setQuery] = useState("");
   const [selected, setSelected] = useState<number | null>(null),
-    [running, setRunning] = useState(false);
+    [running, setRunning] = useState(true);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [lines, setLines] = useState(true),
     [list, setList] = useState(false),
@@ -53,7 +53,6 @@ export function NetworkAtlas() {
       })
       .then((d) => {
         setData(d);
-        setRunning(!matchMedia("(prefers-reduced-motion: reduce)").matches);
       })
       .catch((e) => {
         if (e.name !== "AbortError")
@@ -267,7 +266,7 @@ export function NetworkAtlas() {
       if (!orbiting && key === drawnKey) { frame=requestAnimationFrame(tick);return; }
       drawnKey = key;
       if (orbiting) {
-        v.yaw += dt * 0.00010 / Math.sqrt(v.zoom);
+        v.yaw += dt * 0.00016 / Math.sqrt(v.zoom);
         v.pitch = 0.12 * Math.sin(v.yaw * 0.8);
       }
       const scale = Math.min(w * 0.45, h * 0.43) * v.zoom;
@@ -278,17 +277,19 @@ export function NetworkAtlas() {
       ctx.clearRect(0, 0, w, h);
       const yaw = Math.sin(v.yaw) * 0.55,
         cos = Math.cos(yaw),
-        sin = Math.sin(yaw);
+        sin = Math.sin(yaw),
+        roll = v.yaw * 0.35,
+        rollCos = Math.cos(roll),
+        rollSin = Math.sin(roll);
       const screen = positions.map((p, i) => {
         const z = -p.x * sin + p.z * cos;
+        const x = p.x * cos + p.z * sin;
+        const y = p.y * Math.cos(v.pitch) - z * Math.sin(v.pitch);
         return {
           i,
           depth: z,
-          x: w / 2 + v.x + (p.x * cos + p.z * sin) * scale,
-          y:
-            h / 2 +
-            v.y +
-            (p.y * Math.cos(v.pitch) - z * Math.sin(v.pitch)) * scale,
+          x: w / 2 + v.x + (x * rollCos - y * rollSin) * scale,
+          y: h / 2 + v.y + (x * rollSin + y * rollCos) * scale,
         };
       });
       projected.current = screen;
