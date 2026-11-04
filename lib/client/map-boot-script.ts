@@ -1,4 +1,6 @@
-export const MAPLIBRE_URL = "https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.mjs";
+// Same-origin copy of maplibre-gl's prebuilt module (scripts/copy-maplibre.mjs).
+// Do not import the package through the bundler: that replaces the tile worker.
+export const MAPLIBRE_URL = "/vendor/maplibre-gl.mjs";
 
 // Runs from the first HTML byte, before React hydrates. The map chunk awaits
 // the same promises, so the globe library and campus dots are already in flight.
@@ -13,6 +15,22 @@ export const GLOBE_BOOT_SCRIPT = `
       return fallback.json();
     });
   }
+  if (!w.__directoryPromise) {
+    w.__directoryPromise = fetch("/data/sample-directory.json").then(async (res) => {
+      if (!res.ok) throw new Error("directory");
+      return res.json();
+    });
+  }
+  if (!w.__foundersPromise) {
+    w.__foundersPromise = fetch("/data/founders.json").then(async (res) => {
+      if (!res.ok) throw new Error("founders");
+      return res.json();
+    });
+  }
+`;
+
+export const DIRECTORY_BOOT_SCRIPT = `
+  const w = window;
   if (!w.__directoryPromise) {
     w.__directoryPromise = fetch("/data/sample-directory.json").then(async (res) => {
       if (!res.ok) throw new Error("directory");

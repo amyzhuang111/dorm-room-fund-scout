@@ -13,6 +13,8 @@ import { buildDirectoryFromDb } from "../lib/domain/directory";
 import { buildFounderIndex } from "../lib/domain/founder-index-build";
 import { buildHeroStatsFromDb } from "../lib/domain/hero-stats";
 import { feedbackRedirects } from "../lib/domain/entity-redirects";
+import { buildNetworkAtlas } from "../lib/domain/network-atlas-data";
+import { companyLocations } from "../lib/domain/company-locations";
 
 const dir = path.join(process.cwd(), "public", "data");
 fs.mkdirSync(dir, { recursive: true });
@@ -33,6 +35,8 @@ write("candidates.json", candidates, universitiesStarted);
 
 const networkStarted = performance.now();
 write("network-map.json", buildNetworkMap(), networkStarted);
+write("network-atlas.json", buildNetworkAtlas(), networkStarted);
+write("company-locations.json", companyLocations(), networkStarted);
 
 const directoryStarted = performance.now();
 write("sample-directory.json", buildDirectoryFromDb(), directoryStarted);

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getDb } from "../db/client";
+import { databaseStamp, getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { directoryRank, whyItsHere } from "./directory-rank";
 import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
@@ -191,6 +191,7 @@ function hqRegionOf(raw: string | null | undefined): string | null {
 }
 
 let directoryMemo: DirectoryData | null = null;
+const directoryBuildMemo = new Map<string, { stamp: string; data: DirectoryData }>();
 
 function readPrecomputedDirectory(): DirectoryData | null {
   if (process.env.CAMPUS_SCOUT_IGNORE_PRECOMPUTE === "1") return null;
@@ -208,6 +209,7 @@ function readPrecomputedDirectory(): DirectoryData | null {
 /** Reads companies, schools, sectors, and signal rows. Prefer build-time JSON on the hot path. */
 export function clearDirectoryMemo(): void {
   directoryMemo = null;
+  directoryBuildMemo.clear();
 }
 
 export function loadDirectory(): DirectoryData {
@@ -223,6 +225,16 @@ export function loadDirectory(): DirectoryData {
 
 /** SQLite build used by precompute-map-cache. */
 export function buildDirectoryFromDb(options: { includeAll?: boolean } = {}): DirectoryData {
+  const key = options.includeAll ? "all" : "default";
+  const stamp = databaseStamp();
+  const cached = directoryBuildMemo.get(key);
+  if (cached?.stamp === stamp) return cached.data;
+  const data = buildDirectoryFromDbUncached(options);
+  directoryBuildMemo.set(key, { stamp, data });
+  return data;
+}
+
+function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): DirectoryData {
   const db = getDb();
   const companies = db
     .prepare(

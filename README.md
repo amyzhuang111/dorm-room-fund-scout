@@ -162,12 +162,15 @@ conversation looked plausible and turned out to be wrong or incomplete.
    (which doesn't need the worker) ever showed, which is exactly why it
    looked like a solid-color circle.
 
-**The fix**: load MapLibre GL JS from its CDN at runtime
-(`import("https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.mjs")`,
-version-pinned to the same 6.10.0 already in `package.json`, which
-patches a critical XSS CVE present in ≤6.4.0 — a downgrade to v5 was
-briefly considered and rejected specifically because it would have
+**The fix**: load MapLibre GL JS from a same-origin file at runtime
+(`import("/vendor/maplibre-gl.mjs")`, copied from the installed
+`maplibre-gl` package by `scripts/copy-maplibre.mjs` during `dev` and
+`prebuild`, version-pinned to the same 6.10.0 already in `package.json`,
+which patches a critical XSS CVE present in ≤6.4.0 — a downgrade to v5
+was briefly considered and rejected specifically because it would have
 reintroduced that vulnerability) instead of through Turbopack's bundle.
+Serving the prebuilt module from this origin avoids the unpkg round trip.
+It is still not bundled.
 This is also literally what dashboard.vclense.ch/ycglobe itself does (a
 plain CDN `<script>` tag, not an NPM bundle) — not a workaround invented
 here, the same integration choice as the reference site, now confirmed to

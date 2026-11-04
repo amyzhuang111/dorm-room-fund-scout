@@ -1,4 +1,4 @@
-import { getDb } from "../db/client";
+import { databaseStamp, getDb } from "../db/client";
 import { loadFounderNetworkLinks } from "./founder-networks";
 import { bestPersonLink, confirmedLinkedIn } from "./person-link";
 import centers from "@/data/company-city-centers.json";
@@ -51,7 +51,17 @@ function countryPlace(
   };
 }
 
+let atlasMemo: { stamp: string; data: AtlasData } | null = null;
+
 export function buildNetworkAtlas(): AtlasData {
+  const stamp = databaseStamp();
+  if (atlasMemo?.stamp === stamp) return atlasMemo.data;
+  const data = buildNetworkAtlasUncached();
+  atlasMemo = { stamp, data };
+  return data;
+}
+
+function buildNetworkAtlasUncached(): AtlasData {
   const db = getDb();
   const nodes: AtlasNode[] = [];
   const index = new Map<string, number>();

@@ -47,7 +47,12 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   const [onlyAddresses, setOnlyAddresses] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/company-locations", {signal: controller.signal}).then(r => { if (!r.ok) throw new Error("Locations unavailable"); return r.json(); })
+    fetch("/data/company-locations.json", {signal: controller.signal}).then(async (r) => {
+      if (r.ok) return r.json();
+      const fallback = await fetch("/api/company-locations", {signal: controller.signal});
+      if (!fallback.ok) throw new Error("Locations unavailable");
+      return fallback.json();
+    })
       .then((payload: CompanyLocations) => { setData(payload); setFailed(false); }).catch(e => { if (e.name !== "AbortError") setFailed(true); });
     return () => controller.abort();
   }, [attempt]);

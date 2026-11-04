@@ -610,7 +610,7 @@ export function TileGlobe({
     };
 
     const ric = window.requestIdleCallback?.bind(window);
-    if (ric) ric(() => { if (!dead) startMap(); }, { timeout: 500 });
+    if (ric) ric(() => { if (!dead) startMap(); }, { timeout: 50 });
     else window.setTimeout(() => { if (!dead) startMap(); }, 0);
 
     const observer = new ResizeObserver(() => mapRef.current?.resize());

@@ -44,13 +44,12 @@ export function NetworkAtlas() {
   const pinch = useRef(0);
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/network/atlas", {
-      signal: controller.signal,
-      cache: "no-store",
-    })
-      .then((r) => {
-        if (!r.ok) throw Error();
-        return r.json();
+    fetch("/data/network-atlas.json", { signal: controller.signal })
+      .then(async (r) => {
+        if (r.ok) return r.json();
+        const fallback = await fetch("/api/network/atlas", { signal: controller.signal });
+        if (!fallback.ok) throw Error();
+        return fallback.json();
       })
       .then((d) => {
         setData(d);

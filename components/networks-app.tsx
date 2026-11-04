@@ -46,8 +46,8 @@ function inkFor(count: number, max: number): string {
   return count / max > 0.45 ? "#ffffff" : "var(--fg)";
 }
 
-export function NetworksApp() {
-  const [data, setData] = useState<FounderNetworksPage | null>(null);
+export function NetworksApp({ initial = null }: { initial?: FounderNetworksPage | null }) {
+  const [data, setData] = useState<FounderNetworksPage | null>(initial);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
@@ -61,21 +61,28 @@ export function NetworksApp() {
 
   useEffect(() => {
     let cancelled = false;
+    const apply = (page: FounderNetworksPage) => {
+      if (cancelled) return;
+      setData(page);
+      const requested = new URLSearchParams(window.location.search).get("network");
+      const known = requested && page.topNetworks.some((network) => network.id === requested);
+      setActiveNetwork((current) => current ?? (known ? requested : page.topNetworks[0]?.id ?? null));
+    };
+    if (initial) {
+      apply(initial);
+      return () => {
+        cancelled = true;
+      };
+    }
     loadPage()
-      .then((page) => {
-        if (cancelled) return;
-        setData(page);
-        const requested = new URLSearchParams(window.location.search).get("network");
-        const known = requested && page.topNetworks.some((network) => network.id === requested);
-        setActiveNetwork((current) => current ?? (known ? requested : page.topNetworks[0]?.id ?? null));
-      })
+      .then(apply)
       .catch(() => {
         if (!cancelled) setLoadError("Networks data could not be loaded.");
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [initial]);
 
   const active: NetworkSummary | null = useMemo(
     () => data?.topNetworks.find((row) => row.id === activeNetwork) ?? null,

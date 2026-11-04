@@ -13,6 +13,7 @@ export interface FounderTableRow {
   tierBasis: string | null;
   campus: string | null;
   campusId: string | null;
+  campusIds: string[];
   campusSlug: string | null;
   company: string | null;
   companyId: string | null;
@@ -83,6 +84,7 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         tierBasis: founder.signalTierBasis,
         campus: founder.universityName ? shortCampusLabel(campusId ?? "", founder.universityName) : null,
         campusId,
+        campusIds: [...new Set([campusId, ...founder.campuses.map((campus) => campus.universityId)].filter((id): id is string => Boolean(id)))],
         campusSlug: campusId && founder.universityName ? campusSlug(shortCampusLabel(campusId, founder.universityName)) : null,
         company: founder.linkedCompany?.name ?? founder.possibleCompany?.name ?? founder.projects.find((project) => project.kind === "company")?.name ?? null,
         companyId: founder.linkedCompany?.id ?? founder.projects.find((project) => project.kind === "company")?.id ?? null,
@@ -171,6 +173,8 @@ export interface ProjectTableRow {
   tierBasis: string | null;
   campus: string | null;
   campusSlug: string | null;
+  /** Every member campus. Campus pages filter the static file with this. */
+  campusIds: string[];
   people: ProjectMate[];
   verified: boolean;
   logoUrl: string | null;
@@ -322,6 +326,7 @@ function buildProjectRows(universityId?: string): ProjectTableRow[] {
       tierBasis,
       campus: campus?.campus ?? null,
       campusSlug: campus?.campusSlug ?? null,
+      campusIds: [...new Set([...members.values()].flatMap((person) => person.campusIds))],
       people: mates,
       verified: [...members.values()].some((person) => person.verified),
       logoUrl: localCompanyLogoUrl(projectId),
@@ -342,6 +347,7 @@ function buildProjectRows(universityId?: string): ProjectTableRow[] {
       tierBasis: person.tierBasis,
       campus: person.campus,
       campusSlug: person.campusSlug,
+      campusIds: person.campusIds,
       people: [{ id: person.id, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }],
       verified: person.verified,
       logoUrl: person.companyId ? localCompanyLogoUrl(person.companyId) : null,

@@ -595,9 +595,14 @@ export function SampleHomeClient(props: {
       const attempts = 3;
       for (let i = 0; i < attempts; i++) {
         try {
-          const res = await fetch("/data/founders.json", { cache: "no-store" });
-          if (!res.ok) throw new Error(String(res.status));
-          const data = (await res.json()) as FounderLead[];
+          const boot = i === 0 ? (window as Window & { __foundersPromise?: Promise<FounderLead[]> }).__foundersPromise : undefined;
+          const data = boot
+            ? await boot
+            : await (async () => {
+                const res = await fetch("/data/founders.json");
+                if (!res.ok) throw new Error(String(res.status));
+                return (await res.json()) as FounderLead[];
+              })();
           if (!Array.isArray(data) || data.length === 0) throw new Error("empty founders");
           if (dead) return;
           setFounders(data);

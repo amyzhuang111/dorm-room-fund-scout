@@ -1,4 +1,4 @@
-import { getDb } from "../db/client";
+import { databaseStamp, getDb } from "../db/client";
 import { loadDirectory } from "./directory";
 import centers from "@/data/company-city-centers.json";
 import officeLocations from "@/data/company-office-locations.json";
@@ -14,8 +14,18 @@ export type CompanyCity = {
 };
 export type CompanyLocations = { precision: "mixed"; total: number; mapped: number; addressMapped: number; unmapped: number; cities: CompanyCity[] };
 
+let locationsMemo: { stamp: string; data: CompanyLocations } | null = null;
+
 /** HQ evidence chooses the city. Campus affiliation never supplies an office location. */
 export function companyLocations(): CompanyLocations {
+  const stamp = databaseStamp();
+  if (locationsMemo?.stamp === stamp) return locationsMemo.data;
+  const data = companyLocationsUncached();
+  locationsMemo = { stamp, data };
+  return data;
+}
+
+function companyLocationsUncached(): CompanyLocations {
   const cards = loadDirectory().cards;
   const allowed = new Set(cards.map(c => c.id));
   const lookup = new Map(centers.cities.map(city => [city.storedLabel, city]));
