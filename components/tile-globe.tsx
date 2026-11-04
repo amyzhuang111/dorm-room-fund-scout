@@ -132,7 +132,7 @@ export function TileGlobe({
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   /** r44 bigmap default; fit() replaces on mount. */
-  const [stageHeight, setStageHeight] = useState(720);
+  const [stageHeight, setStageHeight] = useState(860);
   const hitPadRef = useRef(64);
   const nearestMaxRef = useRef(100);
   const campusesRef = useRef(campuses);
@@ -202,9 +202,9 @@ export function TileGlobe({
       const compactHeader = !wide && (sheetMode === "deck" || sheetMode === "expanded");
       const target = compactHeader
         ? Math.round(window.innerHeight * 0.24)
-        : Math.round(window.innerHeight * (wide ? 0.86 : 0.88));
+        : Math.round(window.innerHeight * (wide ? 0.92 : 0.88));
       const next = wide
-        ? Math.max(640, Math.min(900, target))
+        ? Math.max(720, Math.min(980, target))
         : compactHeader
           ? Math.max(140, Math.min(220, target))
           : Math.max(520, Math.min(760, target));
@@ -768,17 +768,18 @@ export function TileGlobe({
         </p>
       </div>
 
-      <section className="mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[13px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)]"><span className="max-sm:sr-only">Map</span>
-          <span className={`${mapStyles.mapModes} ml-auto inline-flex overflow-hidden rounded-full border border-[color:var(--line,#E1E5EF)] bg-white shadow-sm`} role="group" aria-label="Map locations">
-            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-10 min-w-0 flex-1 px-2 text-[12px] sm:min-w-11 sm:px-3 sm:text-[13px] ${locationsMode ? "bg-[color:var(--fg,#0B0E17)] text-white" : "bg-white text-[color:var(--fg-2,#3F465C)]"}`}><span className="sm:hidden">HQs</span><span className="hidden sm:inline">Startup HQs</span></button>
-            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-10 min-w-0 flex-1 px-2 bg-white text-[12px] text-[color:var(--fg-2,#3F465C)] sm:min-w-11 sm:px-3 sm:text-[13px]"><span className="sm:hidden">World</span><span className="hidden sm:inline">World view</span></button>
-            <button type="button" aria-pressed={rotationEnabled} title="Rotation pauses while using the map, at city zoom, and for reduced motion" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-10 min-w-0 flex-1 px-2 bg-white text-[12px] text-[color:var(--fg-2,#3F465C)] sm:min-w-11 sm:px-3 sm:text-[13px]">{rotationEnabled ? (<><span className="sm:hidden">Pause</span><span className="hidden sm:inline">Pause rotation</span></>) : (<><span className="sm:hidden">Rotate</span><span className="hidden sm:inline">Rotate globe</span></>)}</button>
-            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-10 min-w-0 flex-1 px-2 text-[12px] sm:min-w-11 sm:px-3 sm:text-[13px] ${!locationsMode ? "bg-[color:var(--fg,#0B0E17)] text-white" : "bg-white text-[color:var(--fg-2,#3F465C)]"}`}>Campuses</button>
+      <section className="relative mb-4" data-fold-desk-map="" aria-label="Map">
+        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[13px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)] lg:mb-0 lg:contents">
+          <span className="max-sm:sr-only lg:hidden">Map</span>
+          <span className={`${mapStyles.mapModes} ml-auto inline-flex w-full overflow-hidden rounded-full border border-[color:var(--line,#E1E5EF)] bg-white shadow-sm lg:pointer-events-auto lg:absolute lg:right-3 lg:top-3 lg:z-[8] lg:ml-0 lg:w-auto`} role="group" aria-label="Map locations" data-fold-map-modes="">
+            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-10 min-w-0 flex-1 px-2 text-[12px] sm:min-w-11 sm:px-3 sm:text-[13px] lg:min-h-9 lg:flex-none ${locationsMode ? "bg-[color:var(--fg,#0B0E17)] text-white" : "bg-white text-[color:var(--fg-2,#3F465C)]"}`}><span className="sm:hidden">HQs</span><span className="hidden sm:inline">Startup HQs</span></button>
+            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-10 min-w-0 flex-1 px-2 bg-white text-[12px] text-[color:var(--fg-2,#3F465C)] sm:min-w-11 sm:px-3 sm:text-[13px] lg:min-h-9 lg:flex-none"><span className="sm:hidden">World</span><span className="hidden sm:inline">World view</span></button>
+            <button type="button" aria-pressed={rotationEnabled} title="Rotation pauses while using the map, at city zoom, and for reduced motion" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-10 min-w-0 flex-1 px-2 bg-white text-[12px] text-[color:var(--fg-2,#3F465C)] sm:min-w-11 sm:px-3 sm:text-[13px] lg:min-h-9 lg:flex-none">{rotationEnabled ? (<><span className="sm:hidden">Pause</span><span className="hidden sm:inline">Pause rotation</span></>) : (<><span className="sm:hidden">Rotate</span><span className="hidden sm:inline">Rotate globe</span></>)}</button>
+            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-10 min-w-0 flex-1 px-2 text-[12px] sm:min-w-11 sm:px-3 sm:text-[13px] lg:min-h-9 lg:flex-none ${!locationsMode ? "bg-[color:var(--fg,#0B0E17)] text-white" : "bg-white text-[color:var(--fg-2,#3F465C)]"}`}>Campuses</button>
           </span>
         </h2>
         <div
-          className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--line,#E1E5EF)] bg-white`}
+          className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--line,#E1E5EF)] bg-white lg:border-0`}
           style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
           role={expandedMap ? "dialog" : undefined}
           aria-modal={expandedMap ? true : undefined}

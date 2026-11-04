@@ -9,24 +9,12 @@ import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
 import { formatCorpusDate, loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { CorpusFilters } from "@/components/corpus-filters";
+import { directoryRank } from "@/lib/domain/directory-rank";
+import { ellipsisAtBoundary, WRAP_FULL } from "@/lib/display/ellipsis";
 
 export const metadata: Metadata = { title: "Data" };
 
 export const dynamic = "force-dynamic";
-
-/** Quiet blank - middot only (no em/en dashes, no "Not available" flood). */
-function blank() {
-  return (
-    <span className="c-b text-[color:var(--fg-3,#5C647A)]" aria-label="not on file">
-      ·
-    </span>
-  );
-}
-
-function cell(value: string | number | null | undefined) {
-  if (value == null || value === "") return blank();
-  return <span className="text-[color:var(--fg,#0B0E17)]">{value}</span>;
-}
 
 export default async function DataExplorerPage({
   searchParams,
@@ -200,78 +188,102 @@ export default async function DataExplorerPage({
         ) : null}
       </div>
 
-      {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
-      <div className="mt-3 overflow-x-auto border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch] sm:mt-4" data-corpus-table="" data-corpus-cards="">
-        <table className="c-table">
-          <thead className="c-head">
-            <tr>
-              <th className="c-th c-th-n">Company</th>
-              <th className="c-th c-th-m">Campus</th>
-              <th className="c-th">Stage</th>
-              <th className="c-th">Sector</th>
-              <th className="c-th c-d c-d-m">Founded</th>
-              <th className="c-th c-d c-d-m">Signals</th>
-              <th className="c-th c-d">Latest</th>
-              <th className="c-th c-d">Program</th>
-              <th className="c-th c-d">YC</th>
-              <th className="c-th c-d">Founders</th>
-              <th className="c-th c-fund-h">Funding</th>
-              <th className="c-th c-d">Site</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[color:var(--line,#E1E5EF)]">
-            {result.rows.map((row) => {
-              const whyBits = [row.signalLabel, row.stage, row.sector, row.primaryProgram].filter(Boolean) as string[];
-              const why = whyBits.slice(0, 3).join(" · ");
-              return (
-              <tr key={row.id} className="c-r align-top" data-corpus-row="">
-                <td className="c-n">
-                  <span className="c-mark">
-                    <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} campus={row.campus} />
-                  </span>
-                  <span className="c-n-stack min-w-0">
-                    <Link href={`/startup/${row.id}`} className="c-a min-h-11 min-w-11 inline-flex items-center font-semibold">
+      {/* YC-directory card language: logo, name, pitch, campus, year, stage, sector, backers, tier. */}
+      <ul className="mt-3 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)] sm:mt-4" data-corpus-table="" data-corpus-cards="">
+        {result.rows.map((row) => {
+          const whyBits = [row.signalLabel, row.stage, row.sector, row.primaryProgram].filter(Boolean) as string[];
+          const pitch = whyBits.length
+            ? whyBits.slice(0, 3).join(" · ")
+            : row.fundingText || null;
+          const desk = directoryRank({
+            signals: row.signals,
+            signalKind: null,
+            signalLabel: (row.signalLabel as "Funding" | "Launch" | "Award" | "Acquisition" | null) ?? null,
+            founders: [],
+            programs: [row.primaryProgram, row.ycBatch].filter(Boolean) as string[],
+            stage: row.stage,
+            operatingStatus: null,
+            school: row.campus,
+            schoolId: null,
+            foundedYear: row.foundedYear,
+            primaryProgram: row.primaryProgram,
+          });
+          const tierLabel = desk.tier === 0 ? "Core" : desk.tier === 1 ? "Watch" : "Listed";
+          const backers = [row.primaryProgram, row.ycBatch].filter(Boolean) as string[];
+          const uniqueBackers = [...new Set(backers)].slice(0, 3);
+          return (
+            <li key={row.id} className="list-none" data-corpus-row="">
+              <Link
+                href={`/startup/${row.id}`}
+                className="group flex min-h-11 items-start gap-3 px-1 py-4 transition-colors duration-150 ease-out sm:gap-3.5 sm:px-2 sm:py-5 lg:hover:bg-[color:var(--bg-2,#F7F8FC)]"
+              >
+                <span className="mt-0.5 shrink-0">
+                  <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} campus={row.campus} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                    <p className="break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px] sm:leading-6">
                       {row.name}
-                    </Link>
-                    {why ? (
-                      <span className="c-why mt-0.5 block text-[13px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-why-here="">
-                        {why}
+                    </p>
+                    {row.campus ? (
+                      <span className="text-[13px] text-[color:var(--fg-3,#5C647A)]" data-field="campus">
+                        {row.campus}
+                      </span>
+                    ) : null}
+                  </div>
+                  {pitch ? (
+                    <p className="mt-1 max-w-2xl text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-why-here="" data-card-pitch="">
+                      {ellipsisAtBoundary(pitch, 140)}
+                    </p>
+                  ) : (
+                    <p className="sr-only" data-why-here="" data-why-blank="1">
+                      Why it&apos;s here blank
+                    </p>
+                  )}
+                  <span className="mt-2.5 flex flex-wrap items-center gap-1.5" data-card-chips="">
+                    <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] font-medium text-[color:var(--fg,#0B0E17)]" data-card-tier-chip="">
+                      {tierLabel}
+                    </span>
+                    {row.foundedYear != null ? (
+                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-card-year="">
+                        {formatCorpusDate(row.foundedYear)}
+                      </span>
+                    ) : null}
+                    {row.stage ? (
+                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]" data-field="stage">
+                        {row.stage}
+                      </span>
+                    ) : null}
+                    {row.sector ? (
+                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] uppercase tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]" data-field="sector">
+                        {row.sector}
+                      </span>
+                    ) : null}
+                    {uniqueBackers.map((backer) => (
+                      <span
+                        key={backer}
+                        className={`inline-flex h-6 max-w-[12rem] items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 text-[12px] text-[color:var(--fg,#0B0E17)] ${WRAP_FULL}`}
+                        data-card-backer=""
+                        title={backer}
+                      >
+                        {backer}
+                      </span>
+                    ))}
+                    {row.signals > 0 ? (
+                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                        {row.signals.toLocaleString("en-US")} signals
                       </span>
                     ) : null}
                   </span>
-                </td>
-                <td className="c-m c-m1" data-field="campus">{cell(row.campus)}</td>
-                <td className="c-m" data-field="stage">{cell(row.stage)}</td>
-                <td className="c-m" data-field="sector">{cell(row.sector)}</td>
-                <td className="c-d c-d-m c-num">{cell(formatCorpusDate(row.foundedYear))}</td>
-                <td className="c-d c-d-m c-sig">{row.signals.toLocaleString("en-US")}</td>
-                <td className="c-d c-num">{cell(formatCorpusDate(row.latestSignalAt))}</td>
-                <td className="c-d">{cell(row.primaryProgram)}</td>
-                <td className="c-d">{cell(row.ycBatch)}</td>
-                <td className="c-d c-num">{row.founderCount > 0 ? row.founderCount.toLocaleString("en-US") : blank()}</td>
-                <td className="c-fund">{cell(row.fundingText)}</td>
-                <td className="c-d">
-                  {row.website ? (
-                    <a href={row.website} target="_blank" rel="noopener noreferrer" className="c-link">
-                      Link
-                    </a>
-                  ) : (
-                    blank()
-                  )}
-                </td>
-              </tr>
-            );
-            })}
-            {result.rows.length === 0 ? (
-              <tr>
-                <td colSpan={12} className="px-2.5 py-6 text-center text-[color:var(--fg-3,#5C647A)]">
-                  No companies match these filters.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+        {result.rows.length === 0 ? (
+          <li className="px-2.5 py-6 text-center text-[14px] text-[color:var(--fg-3,#5C647A)]">No companies match these filters.</li>
+        ) : null}
+      </ul>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <p className="text-[14px] tabular-nums text-[color:var(--fg-3,#5C647A)]">

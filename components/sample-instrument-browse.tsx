@@ -246,7 +246,7 @@ export function SampleInstrumentBrowse({
   const [founderLinks, setFounderLinks] = useState<Record<string, { name: string; linkedinUrl: string }[]>>({});
   const [rightTab, setRightTab] = useState<"feed" | "overlays">("feed");
   /** Right instrument starts closed so the ledger owns the width (Monitor-style peek). */
-  const [rightOpen, setRightOpen] = useState(true); // r33: desk rails open by default (d755 beat logo dock)
+  const [rightOpen, setRightOpen] = useState(false); // calm desk: feed closed so the ledger starts high
 
   useEffect(() => {
     let cancel = false;
@@ -648,7 +648,7 @@ export function SampleInstrumentBrowse({
           data-ledger-chapter={feed === "directory" ? "1" : undefined}
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="min-w-0">
+            <div className={`min-w-0 ${feed === "directory" ? "lg:hidden" : ""}`}>
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
               <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                 {caption}

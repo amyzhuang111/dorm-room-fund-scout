@@ -1239,13 +1239,41 @@ details:not([open]) > :not(summary) {
 }
 
 
-/* r44: Peak sits in the founders rail — use the compact mobile peak at all widths. */
+/* r44: Peak in the left overlay — compact mobile peak on phone; desk peak on lg so month bars do not collide. */
 [data-fold-peak-in-rail] [data-fold-peak-desk] {
   display: none !important;
 }
 [data-fold-peak-in-rail] [data-fold-peak-share-mobile],
 [data-fold-peak-in-rail] [data-fold-peak-share-mobile][data-fold-peak-share] {
   display: block !important;
+}
+@media (min-width: 1024px) {
+  [data-fold-peak-in-rail] [data-fold-peak-desk] {
+    display: block !important;
+    min-height: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  [data-fold-peak-in-rail] [data-fold-peak-share-mobile],
+  [data-fold-peak-in-rail] [data-fold-peak-share-mobile][data-fold-peak-share] {
+    display: none !important;
+  }
+  /* Desk peak grid is wide; in a 300px rail stack the columns. */
+  [data-fold-peak-in-rail] [data-fold-peak-desk] > [data-fold-peak-share] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  /* Narrow rail: keep figure + caption + campus ranks; drop month bars (they collide with caption). */
+  [data-fold-peak-in-rail] [data-fold-peak-bars],
+  [data-fold-peak-in-rail] [data-fold-peak-month-bars],
+  [data-fold-overlay-peak] [data-fold-peak-bars],
+  [data-fold-overlay-peak] [data-fold-peak-month-bars] {
+    display: none !important;
+  }
+  [data-fold-peak-in-rail] [data-chrono-caption],
+  [data-fold-overlay-peak] [data-chrono-caption] {
+    display: none !important;
+  }
 }
 [data-fold-peak-in-rail] [data-fold-peak-slot],
 [data-fold-peak-in-rail] [data-fold-peak-reserve] {

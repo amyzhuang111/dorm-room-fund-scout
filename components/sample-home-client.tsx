@@ -477,7 +477,7 @@ function MapStageOverlays({
   return createPortal(
     <div className="pointer-events-none absolute inset-0 z-[5] flex flex-col" data-fold-map-overlays="" data-fold-desk-bleed="1">
       <div
-        className="pointer-events-auto z-[6] mx-2 mt-2 shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-2 shadow-[0_10px_32px_rgba(11,14,23,0.08)] backdrop-blur-[2px]"
+        className="pointer-events-auto z-[6] mx-3 mt-3 max-w-[min(520px,46%)] shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 px-2.5 py-1.5 shadow-[0_8px_24px_rgba(11,14,23,0.06)] backdrop-blur-[2px]"
         data-fold-overlay-mast=""
         data-fold-mast=""
       >
@@ -485,8 +485,8 @@ function MapStageOverlays({
       </div>
       <div className="relative min-h-0 flex-1" data-fold-overlay-body="">
         <aside
-          className={`pointer-events-auto absolute bottom-2 left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_10px_32px_rgba(11,14,23,0.08)] backdrop-blur-[2px] ${
-            peakOpen ? "w-[min(340px,34%)]" : "w-auto"
+          className={`pointer-events-auto absolute bottom-2 left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 shadow-[0_8px_24px_rgba(11,14,23,0.06)] backdrop-blur-[2px] ${
+            peakOpen ? "w-[min(300px,28%)]" : "w-auto"
           }`}
           data-fold-overlay-peak=""
           data-fold-peak-in-rail=""
@@ -507,7 +507,7 @@ function MapStageOverlays({
           {peakOpen ? <div className="p-2.5">{peak}</div> : null}
         </aside>
         <aside
-          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(300px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_10px_32px_rgba(11,14,23,0.08)] backdrop-blur-[2px] ${
+          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(280px,26%)] flex-col overflow-hidden rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 shadow-[0_8px_24px_rgba(11,14,23,0.06)] backdrop-blur-[2px] ${
             foundersOpen ? "" : "!w-auto !bottom-auto"
           }`}
           data-fold-overlay-founders=""
@@ -826,7 +826,6 @@ export function SampleHomeClient(props: {
                         onClearCampus={clearCampus}
                         onClearQuery={() => setFounderQuery("")}
                       />
-                      <CurrentViewDock companies={dockCompanies} founders={[]} max={16} />
                     </div>
                   }
                   peak={
@@ -876,6 +875,9 @@ export function SampleHomeClient(props: {
                   }
                 />
               ) : null}
+              <div className="mt-2 hidden lg:block" data-fold-logo-strip-below="" data-current-view-dock-below="">
+                <CurrentViewDock companies={dockCompanies} founders={[]} max={20} />
+              </div>
             </div>
 
             <div className="mt-3 hidden lg:block" data-fold-lineage-desk="">
@@ -892,10 +894,12 @@ export function SampleHomeClient(props: {
       {place === "explore" ? (
       <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-1 sm:px-5 md:pt-2">
         <div className="mx-auto w-full max-w-[1280px]">
+          {/* Desk: one calm header — Companies/Signals live in primary nav; no second tab row. */}
           <div
-            className="hidden flex-wrap items-center gap-x-1 border-b border-line md:flex"
+            className="hidden"
             role="tablist"
             aria-label="Views"
+            data-desk-subtabs-retired="1"
           >
             <Tab href={browseHref({ feed: "directory", sector, kind, campus: campusId, q: query, sort: order })} active={feed === "directory"}>
               Companies

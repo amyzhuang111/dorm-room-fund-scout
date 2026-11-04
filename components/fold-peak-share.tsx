@@ -147,9 +147,9 @@ export function FoldPeakShare({
         <p className="mt-2 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
           {foundersListed.toLocaleString("en-US")} {nounFor(foundersListed, "founder")} on these companies
         </p>
-        <ol className="mt-2 flex h-14 items-end gap-1 overflow-hidden" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
+        <ol className="mt-2 flex h-16 items-end gap-1 overflow-hidden" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
           {(detail?.bars ?? []).map((b) => (
-            <li key={b.id} className="flex h-14 min-w-0 flex-1 flex-col items-center justify-end gap-1" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
+            <li key={b.id} className="flex h-16 min-w-0 flex-1 flex-col items-center justify-end gap-0.5" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
               {b.peak ? (
                 <span className="shrink-0 font-mono text-[10px] font-bold tabular-nums leading-none text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-bar-label="">
                   {b.count.toLocaleString("en-US")}

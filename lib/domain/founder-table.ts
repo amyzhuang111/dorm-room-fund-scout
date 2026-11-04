@@ -22,6 +22,8 @@ export interface FounderTableRow {
   signalAt: string | null;
   score: number | null;
   verified: boolean;
+  logoUrl: string | null;
+  programs: string[];
 }
 
 // The database file does not change while an instance runs (read-only bundle on
@@ -71,11 +73,36 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
     if (!signals.has(row.person_id)) signals.set(row.person_id, { type: row.type, at: dated(row.source_date) ?? row.created_at, text: row.text });
   }
 
+  const programsByProject = new Map<string, string[]>();
+  try {
+    for (const row of db.prepare(
+      `SELECT entity_id AS project_id, value_json, excerpt
+         FROM claims
+        WHERE entity_type='project' AND claim_type='program_membership'`
+    ).all() as { project_id: string; value_json: string | null; excerpt: string | null }[]) {
+      let label: string | null = null;
+      try {
+        const value = JSON.parse(row.value_json || "{}") as { org?: unknown };
+        if (typeof value.org === "string") label = cleanLabel(value.org);
+      } catch {
+        // ignore
+      }
+      if (!label) label = cleanLabel(row.excerpt);
+      if (!label) continue;
+      const list = programsByProject.get(row.project_id) ?? [];
+      if (!list.includes(label)) list.push(label);
+      programsByProject.set(row.project_id, list);
+    }
+  } catch {
+    // Older databases may lack claims; cards simply omit backer chips.
+  }
+
   const rows = listFoundersForPage(universityId ? { universityId } : {})
     .filter((founder) => (universityId ? founder.campuses.some((campus) => campus.universityId === universityId) || founder.universityId === universityId : true))
     .map((founder) => {
       const campusId = founder.universityId;
       const signal = signals.get(founder.id);
+      const companyId = founder.linkedCompany?.id ?? founder.projects.find((project) => project.kind === "company")?.id ?? null;
       return {
         id: founder.id,
         name: founder.name,
@@ -85,13 +112,15 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         campusId,
         campusSlug: campusId && founder.universityName ? campusSlug(shortCampusLabel(campusId, founder.universityName)) : null,
         company: founder.linkedCompany?.name ?? founder.possibleCompany?.name ?? founder.projects.find((project) => project.kind === "company")?.name ?? null,
-        companyId: founder.linkedCompany?.id ?? founder.projects.find((project) => project.kind === "company")?.id ?? null,
+        companyId,
         year: years.get(founder.id) ?? null,
-        signal: signal?.text ?? founder.strongestEvidence,
+        signal: scrubDash(signal?.text ?? founder.strongestEvidence),
         signalType: signal?.type ?? null,
         signalAt: signal?.at ?? null,
         score: founder.founderSignal.founderSignal,
         verified: founder.verificationStatus === "confirmed",
+        logoUrl: companyId ? localCompanyLogoUrl(companyId) : null,
+        programs: companyId ? (programsByProject.get(companyId) ?? []) : [],
       };
     });
   rows.sort(
@@ -127,6 +156,11 @@ function bestTier(values: (string | null | undefined)[]): string | null {
     }
   }
   return best;
+}
+
+function scrubDash(value: string | null | undefined): string | null {
+  if (!value) return null;
+  return value.replace(/[\u2014\u2013]/g, " · ").replace(/[ \t]{2,}/g, " ").trim() || null;
 }
 
 function cleanLabel(value: string | null | undefined): string | null {

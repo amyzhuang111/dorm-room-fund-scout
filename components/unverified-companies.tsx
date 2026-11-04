@@ -25,18 +25,18 @@ function host(url: string): string {
 
 /** Switch between the vetted company list and the labeled unverified list. */
 export function CompanySetToggle({ vetted, unverified, active }: { vetted: number; unverified: number; active: "vetted" | "unverified" }) {
-  const base = "inline-flex min-h-10 items-center rounded-md border px-3 text-sm font-medium";
-  const on = "border-[color:var(--cobalt)] bg-[color:var(--cobalt)] text-white";
-  const off = "border-[color:var(--line)] bg-white text-[color:var(--fg-2)] hover:border-[color:var(--cobalt)]";
+  const base = "inline-flex h-8 min-h-8 items-center rounded-full border px-2.5 text-[13px] font-medium";
+  const on = "border-[color:var(--fg,#0B0E17)] bg-[color:var(--fg,#0B0E17)] text-white";
+  const off = "border-[color:var(--line,#E1E5EF)] bg-white text-[color:var(--fg-2,#3F465C)] hover:border-[color:var(--fg-2,#3F465C)]";
   return (
-    <nav aria-label="Company set" className="mx-auto flex max-w-[1100px] flex-wrap items-center gap-2 px-3 pt-4 sm:px-6" data-company-set-toggle="">
+    <nav aria-label="Company set" className="mx-auto flex max-w-[1280px] flex-wrap items-center gap-2 px-3 pt-2 sm:px-5 lg:px-0" data-company-set-toggle="">
       <Link href="/companies" aria-current={active === "vetted" ? "page" : undefined} className={`${base} ${active === "vetted" ? on : off}`}>
         Vetted · {vetted.toLocaleString("en-US")}
       </Link>
       <Link href="/companies?unverified=1" aria-current={active === "unverified" ? "page" : undefined} className={`${base} ${active === "unverified" ? on : off}`}>
         Unverified · {unverified.toLocaleString("en-US")}
       </Link>
-      <span className="text-xs text-[color:var(--fg-3)]">Vetted counts never include unverified companies.</span>
+      <span className="text-[12px] text-[color:var(--fg-3,#5C647A)]">Vetted counts never include unverified companies.</span>
     </nav>
   );
 }
