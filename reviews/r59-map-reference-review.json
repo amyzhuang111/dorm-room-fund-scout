@@ -366,6 +366,106 @@
           "sourceUrl": "https://www.linkedin.com/company/phia-co"
         }
       ]
+    },
+    {
+      "checkedAt": "2026-11-03",
+      "added": [
+        {
+          "id": "proj_nlgdLCJ8M8cu",
+          "name": "Pulse"
+        },
+        {
+          "id": "proj_H7-SVYZP6DYD",
+          "name": "Soff"
+        },
+        {
+          "id": "proj__UY7Aj8KPgs6",
+          "name": "Woz"
+        },
+        {
+          "id": "proj_GzB02kRnc_Sm",
+          "name": "Vooma"
+        }
+      ],
+      "held": [
+        {
+          "company": "Adri AI",
+          "reason": "Company website and LinkedIn disagree on the address postal code.",
+          "sourceUrl": "https://www.getadri.ai/privacy-policy",
+          "otherSource": "https://www.linkedin.com/company/adri-ai"
+        },
+        {
+          "company": "RamAIn",
+          "reason": "Company contact page and LinkedIn list different streets. Current operating office unresolved.",
+          "sourceUrl": "https://ramain.ai/contact/",
+          "otherSource": "https://www.linkedin.com/company/ramain"
+        },
+        {
+          "company": "Trellis AI",
+          "reason": "Company privacy page and LinkedIn list different business addresses.",
+          "sourceUrl": "https://runtrellis.com/privacy-policy",
+          "otherSource": "https://www.linkedin.com/company/runtrellis"
+        },
+        {
+          "company": "InspectMind AI",
+          "reason": "Company structured address and LinkedIn disagree. Do not select one without current-office evidence.",
+          "sourceUrl": "https://www.inspectmind.ai/",
+          "otherSource": "https://www.linkedin.com/company/inspectmind-ai"
+        },
+        {
+          "company": "Fictional",
+          "reason": "The published address is designated for copyright-agent/legal notices and is also offered by a virtual-office provider. Operating-office use unverified.",
+          "sourceUrl": "https://fictional.ai/terms-of-use"
+        },
+        {
+          "company": "Beluga",
+          "reason": "Company publishes a coworking address, but operating-office use is not yet corroborated. Google Maps returned an unrelated business with a different website.",
+          "sourceUrl": "https://www.trybeluga.ai/privacy"
+        },
+        {
+          "company": "EverCurrent",
+          "reason": "Website and LinkedIn agree on a coworking address that also offers virtual offices. Actual office use and authoritative building coordinates remain unverified.",
+          "sourceUrl": "https://evercurrent.ai/support",
+          "otherSource": "https://www.linkedin.com/company/evercurrent-ai"
+        },
+        {
+          "company": "Sandstone",
+          "reason": "Website and LinkedIn agree on a Brooklyn address, but a newer relocation report raises a current-office conflict. Do not publish until resolved.",
+          "sourceUrl": "https://sandstone.com/privacy-policy",
+          "otherSource": "https://realestate.news/legal-ai-firm-sandstone-leases-over-1-200-square-metres-at-141-east-houston-stre"
+        },
+        {
+          "company": "Soren",
+          "reason": "Website contact address conflicts with a newer corporate filing summary. Current operating office unresolved.",
+          "sourceUrl": "https://soren-ai.com/privacy",
+          "otherSource": "https://www.bizprofile.net/ca/san-francisco/soren-ai-inc-2"
+        },
+        {
+          "company": "Reticular",
+          "reason": "Street address appears in structured metadata and an arbitration opt-out notice; current operating-office use not corroborated.",
+          "sourceUrl": "https://reticular.com/terms-of-service"
+        },
+        {
+          "company": "Omi Health",
+          "reason": "Address is published for postal/legal notices; operating-office use not corroborated.",
+          "sourceUrl": "https://omihealth.com/privacy/"
+        },
+        {
+          "company": "SafeWorld",
+          "reason": "Published street address found, but current company occupancy and authoritative building coordinates remain unverified.",
+          "sourceUrl": "https://www.safeworld.ai/privacy-policy"
+        },
+        {
+          "company": "Lance",
+          "reason": "Structured street address found; commercial office use not established. No coordinates published.",
+          "sourceUrl": "https://www.lance.live/"
+        },
+        {
+          "company": "Dimely",
+          "reason": "Structured street address found; commercial office use not established. No coordinates published.",
+          "sourceUrl": "https://dimely.com/"
+        }
+      ]
     }
   ]
 }

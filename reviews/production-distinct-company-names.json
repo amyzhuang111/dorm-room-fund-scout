@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-11-03",
+  "policy": "These exact records describe different businesses sharing a name. Any changed identity evidence or additional record requires another review.",
+  "groups": [
+    {
+      "normalizedName": "oasis",
+      "sources": ["https://speedrun.a16z.com/companies/oasis", "https://innovate.ucdavis.edu/little-bang-2026-winners"],
+      "records": [
+        {"id":"proj_Ee4S9xGnVUQK","primaryLink":"https://joinoasis.com","descriptionIncludes":"AI-Native Organization"},
+        {"id":"proj_O3zsxJPeoIRV","primaryLink":"https://innovate.ucdavis.edu/little-bang-2026-winners","descriptionIncludes":"public water utility"}
+      ]
+    },
+    {
+      "normalizedName": "instinct",
+      "sources": ["https://www.ycombinator.com/companies/instinct-xyz", "https://create-x.gatech.edu/2026-demo-day"],
+      "records": [
+        {"id":"proj_rCFiM1dSMjV7","primaryLink":"https://www.ycombinator.com/companies/instinct-xyz","descriptionIncludes":"Trade with superhuman instinct"},
+        {"id":"proj_HEUSp74BkJG-","primaryLink":"https://create-x.gatech.edu/2026-demo-day","descriptionIncludes":"Municipal Revenue Gap"}
+      ]
+    }
+  ]
+}

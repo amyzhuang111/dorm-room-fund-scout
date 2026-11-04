@@ -41,7 +41,8 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
   const view = VIEWS.find((v) => v === sp.view) ?? "registry";
   const sortBy = sp.sortBy === "startup" ? "startup" : "founder";
 
-  const liveSources = listSources().map((s) => ({
+  const sourceRows = listSources();
+  const liveSources = sourceRows.map((s) => ({
     id: s.id,
     status: s.status,
     lastSuccessAt: s.lastSuccessAt,
@@ -57,6 +58,15 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
   }));
   const allCards = buildSourceCards(liveSources);
   const universities = listUniversities();
+  const cataloguedSourceIds = new Set(SOURCE_CATALOGUE.map((s) => s.dbSourceId).filter(Boolean));
+  const suggestedSources = sourceRows.filter((s) =>
+    s.family === "student_fund" && !cataloguedSourceIds.has(s.id)
+    && (!sp.q || s.name.toLowerCase().includes(sp.q.toLowerCase()))
+    && (!sp.campus || s.campuses.includes(sp.campus))
+    && !sp.tier && (!sp.type || sp.type === "manual")
+    && (!sp.role || sp.role === "discovery")
+    && (!sp.status || sp.status === "unconfigured")
+  );
 
   // Typed People/Projects/Ventures breakdown per implemented source
   // (UIUX_UPGRADE_CLAUDE.md §11) — cheap at this catalogue size (~30 entries,
@@ -111,6 +121,25 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
           </Link>
         ))}
       </div>
+
+      {suggestedSources.length > 0 && (
+        <section className="mt-4 rounded-lg border border-border-c bg-white p-4" aria-labelledby="suggested-sources-heading">
+          <h2 id="suggested-sources-heading" className="text-sm font-semibold text-foreground">Sources awaiting verification</h2>
+          <p className="mt-1 text-xs text-muted">User-submitted programs to investigate. Source quality has not been rated.</p>
+          <ul className="mt-3 space-y-3">
+            {suggestedSources.map((source) => (
+              <li key={source.id}>
+                <p className="text-sm font-medium text-foreground">{source.name}</p>
+                <p className="mt-0.5 text-xs text-muted">
+                  {source.campuses.map((id) => universities.find((university) => university.id === id)?.name ?? id).join(" · ")}
+                  {" · Student-run fund / program · Unverified"}
+                </p>
+                <p className="mt-1 text-xs text-muted">{source.tierRationale}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {view === "registry" && <RegistryView cards={sorted} sp={sp} sortBy={sortBy} typedCountsById={typedCountsById} />}
       {view === "playbook" && <PlaybookView cards={allCards} universities={universities} typedCountsById={typedCountsById} />}
@@ -349,3 +378,4 @@ function PlaybookView({
     </div>
   );
 }
+

@@ -53,9 +53,42 @@ const CAMPUS_AND_LAB: NetDef[] = [
   { id: "innovate_x_la", label: "Das Family Innovate X LA", kind: "program" },
   { id: "cal_launchpad", label: "Cal Launchpad", kind: "program" },
   { id: "summer_venture_studio", label: "Summer Venture Studio", kind: "program" },
+  // Imported 2026 university accelerator and competition rosters.
+  // Only evidence-linked confirmed founders are included by collectLinks.
+  { id: "hbs_rock", label: "HBS Rock Venture Catalyst", kind: "accelerator" },
+  { id: "harvard_alumni_entrepreneurs", label: "Harvard Alumni Entrepreneurs", kind: "accelerator" },
+  { id: "brown_bl_ab", label: "Brown B-Lab", kind: "accelerator" },
+  { id: "georgia_tech_createx", label: "Georgia Tech CREATE-X", kind: "accelerator" },
+  { id: "ucdavis_bigbang", label: "UC Davis Big Bang", kind: "program" },
+  { id: "ucdavis_littlebang", label: "UC Davis Little Bang", kind: "program" },
+  { id: "duke_showcase", label: "Duke Startup Showcase", kind: "program" },
+  { id: "nyu_entrepreneurs", label: "NYU Entrepreneurs Challenge", kind: "program" },
+  { id: "harvard_pic", label: "Harvard President's Innovation Challenge", kind: "program" },
+  { id: "rice_rbpc", label: "Rice Business Plan Competition", kind: "program" },
+  { id: "cmu_venturebridge", label: "CMU VentureBridge", kind: "accelerator" },
+  { id: "uchicago_nvc", label: "UChicago New Venture Challenge", kind: "program" },
+  { id: "dartmouth_magnuson", label: "Dartmouth Magnuson Startup Competition", kind: "program" },
+  { id: "mit_100k", label: "MIT $100K Launch", kind: "program" },
 ];
 
 const SOURCE_URL_RULES: { test: RegExp; id: string; label: string; kind: NetworkKind }[] = [
+  // Dated first-party program rosters. Broad school domains are intentionally
+  // excluded because they do not establish accelerator membership.
+  { test: /svfund\.stanford\.edu\/accelerator\/25-26/i, id: "cardinal", label: "Cardinal Ventures", kind: "accelerator" },
+  { test: /hbs\.edu\/news\/releases\/2026-rock-venture-catalyst/i, id: "hbs_rock", label: "HBS Rock Venture Catalyst", kind: "accelerator" },
+  { test: /harvardae\.org\/news\/2026\/announcing-the-2026-accelerator-cohort/i, id: "harvard_alumni_entrepreneurs", label: "Harvard Alumni Entrepreneurs", kind: "accelerator" },
+  { test: /entrepreneurship\.brown\.edu\/build-your-venture\/b-lab\/2026/i, id: "brown_bl_ab", label: "Brown B-Lab", kind: "accelerator" },
+  { test: /create-x\.gatech\.edu\/2026-demo-day/i, id: "georgia_tech_createx", label: "Georgia Tech CREATE-X", kind: "accelerator" },
+  { test: /innovate\.ucdavis\.edu\/2026-big-bang-winners/i, id: "ucdavis_bigbang", label: "UC Davis Big Bang", kind: "program" },
+  { test: /innovate\.ucdavis\.edu\/little-bang-2026-winners/i, id: "ucdavis_littlebang", label: "UC Davis Little Bang", kind: "program" },
+  { test: /entrepreneurship\.duke\.edu\/startup-showcase-2026-featured-companies/i, id: "duke_showcase", label: "Duke Startup Showcase", kind: "program" },
+  { test: /nyusternberkleycenter\.com\/2026-team-directory/i, id: "nyu_entrepreneurs", label: "NYU Entrepreneurs Challenge", kind: "program" },
+  { test: /innovationlabs\.harvard\.edu\/articles\/announcing-the-2026-harvard-presidents-innovation-challenge-finalists/i, id: "harvard_pic", label: "Harvard President's Innovation Challenge", kind: "program" },
+  { test: /rbpc\.rice\.edu\/sites\/rbpc\/files\/2026-04\/RBPC-2026-Competition-Company-Database/i, id: "rice_rbpc", label: "Rice Business Plan Competition", kind: "program" },
+  { test: /cmu\.edu\/swartz-center-for-entrepreneurship\/resources-funding-and-talent\/venturebridge\/venturebridge-2026-cohort/i, id: "cmu_venturebridge", label: "CMU VentureBridge", kind: "accelerator" },
+  { test: /polsky\.uchicago\.edu\/2026\/05\/21\/10-startups-to-compete/i, id: "uchicago_nvc", label: "UChicago New Venture Challenge", kind: "program" },
+  { test: /luma\.com\/awwuqnaj/i, id: "dartmouth_magnuson", label: "Dartmouth Magnuson Startup Competition", kind: "program" },
+  { test: /mit100k\.org\/launch2022-copy|mitsloan\.mit\.edu\/press\/classroom-to-crisis-solution-uplift-microhome/i, id: "mit_100k", label: "MIT $100K Launch", kind: "program" },
   { test: /ycombinator\.com/i, id: "yc", label: "Y Combinator", kind: "accelerator" },
   { test: /skydeck\.berkeley/i, id: "skydeck", label: "Berkeley SkyDeck", kind: "accelerator" },
   // VIP-X only on explicit VIP-X paths or vip-x hosts. Startup Challenge / Bridge Award split out.
@@ -71,6 +104,21 @@ const SOURCE_URL_RULES: { test: RegExp; id: string; label: string; kind: Network
 ];
 
 const EXTRA_TEXT_RULES: { test: RegExp; id: string }[] = [
+  { test: /hbs rock venture catalyst|rock venture catalyst/i, id: "hbs_rock" },
+  { test: /harvard alumni entrepreneurs/i, id: "harvard_alumni_entrepreneurs" },
+  { test: /brown b-lab/i, id: "brown_bl_ab" },
+  { test: /stanford ventures/i, id: "cardinal" },
+  { test: /georgia tech create-x|create-x startup launch/i, id: "georgia_tech_createx" },
+  { test: /duke startup showcase/i, id: "duke_showcase" },
+  { test: /uc davis big bang/i, id: "ucdavis_bigbang" },
+  { test: /uc davis little bang/i, id: "ucdavis_littlebang" },
+  { test: /nyu entrepreneurs challenge/i, id: "nyu_entrepreneurs" },
+  { test: /harvard president.s innovation challenge/i, id: "harvard_pic" },
+  { test: /rice business plan competition/i, id: "rice_rbpc" },
+  { test: /cmu venturebridge/i, id: "cmu_venturebridge" },
+  { test: /uchicago new venture challenge/i, id: "uchicago_nvc" },
+  { test: /dartmouth magnuson startup competition/i, id: "dartmouth_magnuson" },
+  { test: /mit \$100k launch/i, id: "mit_100k" },
   { test: /vip-?x|venture lab vip|vip alumni|vip-x alumni/i, id: "vipx" },
   { test: /startup challenge/i, id: "penn_startup_challenge" },
   { test: /bridge award/i, id: "penn_bridge_award" },
@@ -839,8 +887,10 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
     .filter((row) => row.founderCount > 0)
     .sort((a, b) => b.founderCount - a.founderCount || a.label.localeCompare(b.label));
 
-  const topNetworks = summaries.slice(0, 24);
-  const topIds = new Set(topNetworks.map((row) => row.id));
+  // All verified program/fund networks are browsable instead of truncating
+  // the desk at the former top 24. The matrix still shows only its top 12.
+  const topNetworks = summaries;
+  const topIds = new Set(summaries.slice(0, 24).map((row) => row.id));
 
   const stageRank = (stage: string | null | undefined) => {
     const s = (stage || "").toLowerCase();
@@ -873,6 +923,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
         campusId,
         campusLabel: campusId ? meta.uniLabels.get(campusId) ?? campusId : null,
         stage,
+        sourceUrl: link.sourceUrl,
       });
     }
     // Signal-first roster: later stages / known stage above alphabetical dump.
@@ -882,7 +933,8 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
         a.founderName.localeCompare(b.founderName) ||
         a.companyName.localeCompare(b.companyName)
     );
-    // Every linked founder: the panel scrolls, so no cap (YC alone has ~1,000).
+    // Search and member drill-down must cover every publicly evidenced
+    // founder-company relationship, not silently hide matches after row 80.
     membersByNetwork[net.id] = members;
   }
 

@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-11-03T04:56:29.212Z",
+  "generatedAt": "2026-11-03T21:37:17.807Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1225,
-  "signals": 1476,
+  "investableCompanies": 1548,
+  "signals": 1596,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 6043,
-  "founders": 2900,
+  "people": 6826,
+  "founders": 3087,
   "campuses": 170,
   "withSignal": 649,
   "ycCompanies": 564,
@@ -19,7 +19,7 @@
     "inWindow": 67,
     "earlierValid": 0,
     "undatedMonth": 10,
-    "quiet": 1048
+    "quiet": 1371
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,11 +27,11 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1225,
+  "directoryCards": 1548,
   "signalsDated": 665,
-  "signalsUndated": 811,
-  "foundersIndexed": 3205,
-  "foundersListed": 2104,
+  "signalsUndated": 931,
+  "foundersIndexed": 3473,
+  "foundersListed": 2496,
   "campusesTotal": 170,
   "campusesOnMap": 161,
   "campusesWithFounders": 63,
@@ -41,21 +41,28 @@
     {
       "name": "University of Pennsylvania",
       "short": "Penn",
-      "founders": 758,
+      "founders": 766,
       "companies": 203,
       "country": "United States"
     },
     {
       "name": "Stanford University",
       "short": "Stanford",
-      "founders": 300,
-      "companies": 195,
+      "founders": 355,
+      "companies": 221,
+      "country": "United States"
+    },
+    {
+      "name": "Harvard University",
+      "short": "Harvard",
+      "founders": 253,
+      "companies": 143,
       "country": "United States"
     },
     {
       "name": "University of California, Berkeley",
       "short": "Berkeley",
-      "founders": 245,
+      "founders": 249,
       "companies": 146,
       "country": "United States"
     },
@@ -63,14 +70,14 @@
       "name": "Massachusetts Institute of Technology",
       "short": "MIT",
       "founders": 238,
-      "companies": 153,
+      "companies": 157,
       "country": "United States"
     },
     {
-      "name": "Harvard University",
-      "short": "Harvard",
-      "founders": 171,
-      "companies": 81,
+      "name": "Princeton University",
+      "short": "Princeton",
+      "founders": 178,
+      "companies": 49,
       "country": "United States"
     },
     {
@@ -81,35 +88,28 @@
       "country": "United States"
     },
     {
-      "name": "Princeton University",
-      "short": "Princeton",
-      "founders": 106,
-      "companies": 49,
+      "name": "Cornell University",
+      "short": "Cornell",
+      "founders": 135,
+      "companies": 48,
       "country": "United States"
     },
     {
       "name": "Carnegie Mellon University",
       "short": "CMU",
-      "founders": 101,
-      "companies": 64,
-      "country": "United States"
-    },
-    {
-      "name": "Cornell University",
-      "short": "Cornell",
-      "founders": 84,
-      "companies": 46,
+      "founders": 103,
+      "companies": 66,
       "country": "United States"
     },
     {
       "name": "University of Waterloo",
       "short": "Waterloo",
       "founders": 81,
-      "companies": 44,
+      "companies": 45,
       "country": "Canada"
     }
   ],
-  "companiesTotal": 5665,
+  "companiesTotal": 5990,
   "excludedOlderAlumni": 235,
   "unverifiedRecency": 4171
 }

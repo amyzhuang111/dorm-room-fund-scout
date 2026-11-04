@@ -1027,6 +1027,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       const w = window as unknown as {
         __NETWORKS_POSTER__?: Poster;
         __NETWORKS_SET_SCALE__?: (scale: number) => void;
+        __NETWORKS_RESET_VIEW__?: () => void;
         __NETWORKS_FADE__?: number;
         __NETWORKS_SET_YEAR__?: (y: number) => void;
       };
@@ -1053,6 +1054,15 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         idleRef.current = 0;
       };
       w.__NETWORKS_SET_SCALE__ = applyScaleNow;
+      w.__NETWORKS_RESET_VIEW__ = () => {
+        // Start over at the same reproducible overhead camera used for the
+        // widest reference. Do not leave a close-up orbit orientation behind.
+        ctrl.target.set(cx + 18, cy - 36, 0);
+        camera.up.set(0, 0, 1);
+        camera.position.set(cx + 68, cy - 118, 1095);
+        ctrl.update();
+        applyScaleNow(0.76);
+      };
       (w as unknown as { __NETWORKS_GET_DIST__?: () => number }).__NETWORKS_GET_DIST__ = () =>
         camera.position.distanceTo(ctrl.target);
       // Pending scale from shots if set before mount finished
@@ -1111,7 +1121,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         void scale;
         void midW;
         // Out: only 8–10 highest-signal hubs (campus notes by founder count)
-        const noteCap = ww < 500 ? 8 : 10;
+        const noteCap = ww < 500 ? 4 : 6;
         const notePool = [...(p.campusLabels ?? [])].sort((a, b) => b.n - a.n).slice(0, noteCap);
         if (outW > 0.25) {
           for (const lab of notePool) {
@@ -1124,7 +1134,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             const enc = encodingsRef.current.find((e) => e.id === lab.id);
             raw.push({
               id: lab.id,
-              label: outW > 0.4 && lab.n ? `${lab.label} · ${lab.n}` : lab.label,
+              label: lab.label,
               x: lx,
               y: ly,
               ax: pt.x,
@@ -1346,6 +1356,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         }
       };
 
+      let lastUiScale = distToScale(camera.position.distanceTo(ctrl.target));
       const tick = (t: number) => {
         if (disposed) return;
         raf = requestAnimationFrame(tick);
@@ -1363,7 +1374,9 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }
         }
         idleRef.current += 1;
-        if (idleRef.current > 120) ctrl.autoRotate = true;
+        // Keep close-ups stable long enough to inspect names and relationships.
+        // Only the two wide reference levels may gently orbit when idle.
+        ctrl.autoRotate = false; // Keep camera still while inspecting networks.
         ctrl.update();
         renderer!.render(scene, camera);
 
@@ -1371,10 +1384,15 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         const scale = distToScale(dist);
         const st = stageWeights(scale);
         apiRef.current?.setStages(st.outW, st.midW, st.cardW, st.deepW, t * 0.001);
-        if (tierRef.current !== st.tier) {
+        // Keep React overlays synchronized while zooming continuously, not
+        // only when crossing a tier. The old behavior popped cards and labels
+        // abruptly because state remained at the previous camera tier.
+        if (tierRef.current !== st.tier || Math.abs(lastUiScale - scale) > 0.1) {
           tierRef.current = st.tier;
+          lastUiScale = scale;
           setZoomScale(scale);
           wrapRef.current?.setAttribute("data-networks-zoom", String(st.tier));
+          wrapRef.current?.setAttribute("data-networks-current-scale", scale.toFixed(2));
         }
         wrapRef.current?.setAttribute("data-networks-fade", "1");
 
@@ -1395,8 +1413,9 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         renderer.domElement.parentElement?.removeChild(renderer.domElement);
       }
       apiRef.current = null;
-      const w = window as unknown as { __NETWORKS_SET_SCALE__?: unknown; __NETWORKS_SET_YEAR__?: unknown };
+      const w = window as unknown as { __NETWORKS_SET_SCALE__?: unknown; __NETWORKS_RESET_VIEW__?: unknown; __NETWORKS_SET_YEAR__?: unknown };
       delete w.__NETWORKS_SET_SCALE__;
+      delete w.__NETWORKS_RESET_VIEW__;
       delete w.__NETWORKS_SET_YEAR__;
     };
   }, [posterForScene, yearMax, yearMin]);
@@ -1424,8 +1443,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
     <div className="w-full overflow-visible" data-networks-desk="" data-networks-dim="4d">
       <div
         ref={wrapRef}
-        className="relative w-screen max-w-none touch-manipulation overflow-hidden left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[80vh]"
-        style={{ height: "85vh", background: "var(--networks-bg, #ece9e4)" }}
+        className="relative w-screen max-w-none touch-manipulation overflow-hidden left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[64vh]"
+        style={{ height: "min(76vh, 710px)", background: "var(--networks-bg, #ece9e4)" }}
         data-networks-graph=""
         data-networks-fade="0"
         data-networks-zoom="0"
@@ -1533,27 +1552,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           ) : null}
         </div>
 
-        {/* Nature margin pointer lines (campus notes → island anchors) */}
-        <svg
-          className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-visible"
-          aria-hidden="true"
-          style={{ opacity: labelOpacity * outOpacity }}
-        >
-          {labels
-            .filter((lab) => lab.kind === "campus" && lab.ax != null && lab.ay != null)
-            .map((lab) => (
-              <line
-                key={`ptr-${lab.id}`}
-                data-networks-margin-line={lab.id}
-                x1={lab.ax}
-                y1={lab.ay}
-                x2={lab.x}
-                y2={lab.y}
-                stroke="rgba(71,85,105,0.55)"
-                strokeWidth={0.85}
-              />
-            ))}
-        </svg>
+        {/* Editorial margin leader lines removed to keep clusters navigable. */}
 
         {/* Campus + hub labels (collision-culled) */}
         <div className="pointer-events-none absolute inset-0 z-[2]" style={{ opacity: labelOpacity }}>

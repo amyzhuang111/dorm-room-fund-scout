@@ -144,6 +144,16 @@ await page.waitForSelector("[data-founder-card]", { timeout: 20000 });
 await page.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
 await page.waitForTimeout(400);
 
+// r59 keeps program membership on the home Programs rail. Check that
+// live surface as well as any membership nodes on the companies page.
+const homeYcMembershipNodes = await page.evaluate(() =>
+  [...document.querySelectorAll('[aria-label="Programs in view"] li')]
+    .filter(el => el.firstElementChild?.textContent?.trim() === "Y Combinator").map(el => ({
+    count: Number(String(el.lastElementChild?.textContent || "").replace(/,/g, "")),
+    text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40),
+  })),
+);
+
 const founderHome = await page.evaluate(() => {
   const search = document.querySelectorAll("[data-founder-search] input");
   const text = document.body.innerText || "";
@@ -386,12 +396,12 @@ const statusAcquired = statusRows.parts.find((p) => /^Acquired\b/i.test(p.label)
 const statusClosed = statusRows.parts.find((p) => /^Closed\b/i.test(p.label))?.count ?? null;
 
 
-const ycMembershipNodes = await page.evaluate(() => {
+const ycMembershipNodes = [...homeYcMembershipNodes, ...await page.evaluate(() => {
   return [...document.querySelectorAll("[data-yc-membership-count]")].map((el) => ({
     count: Number(String(el.getAttribute("data-yc-membership-count") || "").replace(/,/g, "")),
     text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40),
   }));
-});
+})];
 const ycMembershipOk =
   ycMembershipNodes.length > 0 &&
   ycMembershipNodes.every((n) => n.count === EXPECTED_YC_MEMBERSHIP);
