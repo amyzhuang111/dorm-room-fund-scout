@@ -36,7 +36,6 @@ export function CompanySetToggle({ vetted, unverified, active }: { vetted: numbe
       <Link href="/companies?unverified=1" aria-current={active === "unverified" ? "page" : undefined} className={`${base} ${active === "unverified" ? on : off}`}>
         Unverified · {unverified.toLocaleString("en-US")}
       </Link>
-      <span className="text-xs text-[color:var(--fg-3)]">Vetted counts never include unverified companies.</span>
     </nav>
   );
 }

@@ -2019,3 +2019,13 @@ html:has([data-networks-cream]) [data-site-nav] {
     line-height: 1.5 !important;
   }
 }
+
+/* Keep campus names readable on phones; secondary facts sit below. */
+@media (max-width: 639px) {
+  [data-campuses-index] .campus-index-row { display: flex; flex-wrap: wrap; gap: .4rem .5rem; }
+  [data-campuses-index] .campus-index-row .campus-rank { flex: 0 0 1.75rem; }
+  [data-campuses-index] .campus-index-row .campus-name { flex: 1; white-space: normal; }
+  [data-campuses-index] .campus-index-row .campus-founders { order: 1; flex: 0 0 4.5rem; }
+  [data-campuses-index] .campus-index-row .campus-country { order: 2; flex: 0 0 100%; padding-left: 2.25rem; }
+  [data-campuses-index] .campus-index-row .campus-meta { order: 3; flex: 0 0 100%; padding-left: 2.25rem; flex-wrap: wrap; }
+}

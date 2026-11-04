@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { CampusSeal } from "@/components/campus-seal";
 import { NetworkAtlas } from "./network-atlas";
 import { StartupCardSheet } from "@/components/startup-directory-card";
 import { searchFounderNetworks, selectedNetworkMembers } from "@/lib/domain/network-directory-search";
@@ -150,23 +149,9 @@ export function NetworksApp({ initial = null }: { initial?: FounderNetworksPage 
     <div className="min-h-screen text-[color:var(--fg)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
       <header className="border-b border-[color:var(--line)]" style={{ background: "var(--networks-bg, #ece9e4)" }} data-networks-hero="">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-0.5 px-4 py-2 sm:gap-1 sm:px-6 sm:py-3">
-          <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
-            <CampusSeal label="CS" title="Campus Scout" size="sm" />
-            <span className="text-[10px] font-medium uppercase tracking-[0.08em] sm:text-xs">Campus Scout</span>
-          </div>
-          <h1 className="text-lg font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
+          <h1 className="text-lg font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Networks</h1>
           <p className="hidden max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:block sm:text-sm sm:leading-normal" data-networks-context="">
-            Find the founders and startups linked to a program, university accelerator, lab or fund. Open a network to see its documented founder-company relationships.
-          </p>
-          <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
-            <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
-            <span data-networks-count="founders">{data.totals.foundersLinked.toLocaleString("en-US")}</span> linked founders
-            <span className="hidden sm:inline">
-              {" · "}
-              <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> documented founder-network links ·{" "}
-              <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
-              <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> investable companies covered
-            </span>
+            Explore founders, startups, and the campuses and programs connecting them.
           </p>
 
         </div>
@@ -185,7 +170,7 @@ export function NetworksApp({ initial = null }: { initial?: FounderNetworksPage 
         <section aria-labelledby="top-networks-heading" className="order-2">
           <div className="mb-2 sm:mb-3">
             <h2 id="top-networks-heading" className="scroll-mt-24 text-base font-semibold tracking-tight sm:text-lg">
-              Explore founder networks
+              Network directory
             </h2>
             <p className="hidden text-[12px] text-[color:var(--fg-2)] sm:block sm:text-sm">
               Choose a network, then open its founders or startups. A link reflects a documented public connection, not an inferred relationship.

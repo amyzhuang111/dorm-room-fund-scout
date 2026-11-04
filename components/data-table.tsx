@@ -152,8 +152,6 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const ordered = useMemo(() => groups.flatMap((group) => group.rows), [groups]);
   const hiddenRows = Math.max(0, totalListed - ordered.length);
   const open = ordered.find((row) => row.id === openId) ?? null;
-  const withSignal = rows.filter((row) => row.full || row.detail || row.event || row.signalAt).length;
-  const noSignal = rows.length - withSignal;
 
   const shortlistPeople = useCallback((row: ProjectTableRow) => {
     for (const person of row.people) {
@@ -225,19 +223,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
-      <p className="mb-2 text-[12px] leading-4 text-fg-2 sm:hidden" data-showing-founders="">
-        Showing <span className="num font-bold text-fg">{filtered.length.toLocaleString("en-US")}</span> of{" "}
-        <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span> projects
-      </p>
-      {/* Desktop stats; mobile keeps one quiet count line so results stay above the fold. */}
-      <p className="mb-2 hidden text-[14px] leading-5 text-fg sm:mb-4 sm:block">
-        <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
-        {" / "}
-        <span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal
-        {" / "}
-        <span className="num">{noSignal.toLocaleString("en-US")}</span> with no signal yet
-        {verifiedFilled > 0 ? <>{" / "}<span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</> : null}
-      </p>
+      {(query || campus || tier || verifiedOnly) && <p className="mb-2 text-sm text-fg-2" role="status">{filtered.length.toLocaleString("en-US")} matching projects</p>}
       {/* Mobile: search + Filters sheet. Desk: full filter row. */}
       <div className="flex items-center gap-2 sm:hidden" data-data-explorer-filters="" role="group" aria-label="Filters">
         <input
