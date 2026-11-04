@@ -5,7 +5,8 @@ let sharedDirectory: Promise<FacetCompany[]> | null = null;
 
 export function fetchSampleDirectory(url = "/data/sample-directory.json"): Promise<FacetCompany[]> {
   if (!sharedDirectory) {
-    sharedDirectory = fetch(url)
+    // The unversioned snapshot is replaced on deploy; revalidate its cached response.
+    sharedDirectory = fetch(url, { cache: "no-cache" })
       .then(async (res) => {
         if (!res.ok) throw new Error(`directory ${res.status}`);
         const data = (await res.json()) as { cards?: FacetCompany[] };
