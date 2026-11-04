@@ -1419,6 +1419,16 @@ export function NetworksGraph(props: Props) {
 
   return (
     <div ref={networkRootRef} data-networks-view={mode}>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[color:var(--line)] px-3 py-1.5">
+        <p className="text-xs text-[color:var(--fg-2)]">Choose a network or search to explore.</p>
+            <button type="button" onClick={resetView} disabled={mode === "pending"}
+              aria-label="Reset network to wide overview"
+              className="min-h-10 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-medium text-[color:var(--cobalt)] hover:bg-[#eef1f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]">
+              Reset map
+            </button>
+      </div>
+      <details className="border-b border-[color:var(--line)]">
+        <summary className="cursor-pointer px-3 py-2 text-xs font-medium text-[color:var(--fg-2)]">Map settings</summary>
       <div className="mx-auto flex max-w-[1400px] flex-col gap-2 px-3 py-2 sm:px-6 lg:flex-row lg:items-center lg:justify-between" data-networks-controls="">
         <div className="min-w-0 overflow-x-auto pb-0.5" role="group" aria-label="Network detail level">
           <div className="flex w-max items-center gap-1 rounded-lg border border-[color:var(--line)] bg-white p-1">
@@ -1446,14 +1456,10 @@ export function NetworksGraph(props: Props) {
                 title={supports3D ? "Interactive 3D orbit view" : "Requires WebGL and standard-motion settings"}
                 className={`min-h-11 border-l border-[color:var(--line)] px-2.5 text-xs disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] ${mode === "3d" ? "bg-[color:var(--cobalt)] text-white" : "hover:bg-[#eef1f9]"}`}>3D</button>
             </div>
-            <button type="button" onClick={resetView} disabled={mode === "pending"}
-              aria-label="Reset network to wide overview"
-              className="min-h-11 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-medium text-[color:var(--cobalt)] hover:bg-[#eef1f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]">
-              Back to overview
-            </button>
           </div>
         </div>
       </div>
+      </details>
       {mode === "pending" ? (
         <p role="status" className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>
       ) : mode === "3d" ? (
