@@ -61,3 +61,6 @@ next-env.d.ts
 /data/imports/linkedin-direct-results.jsonl
 /data/imports/linkedin-direct.log
 data/campus-universe.db.bak-pre-audit
+
+# Local gate/audit scratch (never ship)
+reviews/_audit-tmp/
