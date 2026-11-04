@@ -890,8 +890,10 @@ export function TileGlobe({
               aria-controls="fold-map-legend-body"
               data-fold-legend-toggle=""
               onClick={() => setLegendOpen((v) => !v)}
+              title="Campus markers: size encodes founder count"
+              aria-label="Campus markers legend. Size encodes founder count."
             >
-              Markers · size=founders
+              Markers
               <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "\u2212" : "+"}</span>
             </button>
             {legendOpen ? (
