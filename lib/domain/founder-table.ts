@@ -1,5 +1,6 @@
 import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
+import { localCompanyLogoUrl } from "./local-logos";
 import { listFoundersForPage } from "./queries";
 
 const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5, talent: 6, Unranked: 7 };
@@ -146,6 +147,7 @@ export interface ProjectTableRow {
   campusSlug: string | null;
   people: ProjectMate[];
   verified: boolean;
+  logoUrl: string | null;
 }
 
 /**
@@ -286,6 +288,7 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
       campusSlug: campus?.campusSlug ?? null,
       people: mates,
       verified: [...members.values()].some((person) => person.verified),
+      logoUrl: localCompanyLogoUrl(projectId),
     });
   }
 
@@ -305,6 +308,7 @@ export function loadProjectRows(universityId?: string): ProjectTableRow[] {
       campusSlug: person.campusSlug,
       people: [{ id: person.id, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }],
       verified: person.verified,
+      logoUrl: person.companyId ? localCompanyLogoUrl(person.companyId) : null,
     });
   }
 

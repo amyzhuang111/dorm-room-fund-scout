@@ -34,28 +34,28 @@
     {
       "route": "/founders",
       "viewport": "375",
-      "nodeCount": 40,
+      "nodeCount": 26,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/campuses",
       "viewport": "375",
-      "nodeCount": 60,
+      "nodeCount": 96,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/data",
       "viewport": "375",
-      "nodeCount": 76,
+      "nodeCount": 44,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/signals",
       "viewport": "375",
-      "nodeCount": 49,
+      "nodeCount": 46,
       "collisions": [],
       "collisionCount": 0
     },
@@ -69,7 +69,7 @@
     {
       "route": "/",
       "viewport": "1440",
-      "nodeCount": 187,
+      "nodeCount": 190,
       "collisions": [],
       "collisionCount": 0
     },
@@ -97,14 +97,14 @@
     {
       "route": "/founders",
       "viewport": "1440",
-      "nodeCount": 90,
+      "nodeCount": 92,
       "collisions": [],
       "collisionCount": 0
     },
     {
       "route": "/campuses",
       "viewport": "1440",
-      "nodeCount": 121,
+      "nodeCount": 127,
       "collisions": [],
       "collisionCount": 0
     },

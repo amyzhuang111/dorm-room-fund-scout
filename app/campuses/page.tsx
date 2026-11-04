@@ -19,34 +19,36 @@ export default function CampusesPage() {
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]" data-campuses-index="">
       <CampusesTheme />
-      <div className="mx-auto max-w-[1200px] px-3 py-4 sm:px-5 sm:py-6">
-        <div className="border-b border-[color:var(--line,#E1E5EF)] pb-4" data-campuses-hero="">
+      <div className="mx-auto max-w-[1200px] px-3 py-3 sm:px-5 sm:py-6">
+        <div className="border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:pb-4" data-campuses-hero="">
           <p className="scout-kicker">Explore</p>
-          <h1 className="mt-1 scout-display text-[36px] leading-[1.05] sm:text-[48px]">Campuses</h1>
+          <h1 className="mt-1 scout-display text-[28px] leading-[1.05] sm:text-[48px]">Campuses</h1>
           <p
-            className="mt-3 max-w-xl bg-[color:var(--bg,#FFFFFF)] font-mono text-[14px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]"
+            className="mt-2 max-w-xl bg-[color:var(--bg,#FFFFFF)] font-mono text-[13px] leading-4 tabular-nums text-[color:var(--fg-2,#3F465C)] sm:mt-3 sm:text-[14px] sm:leading-5"
             data-campuses-stats=""
           >
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]" data-count="campuses-with-founders">{withFounders.length.toLocaleString("en-US")}</span>
             {" of "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="campuses-total">{totals.campusesTotal.toLocaleString("en-US")}</span>
-            {" campuses with promoted founders"}
+            {" with founders"}
             <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
             <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="founders-listed">{totals.foundersListed.toLocaleString("en-US")}</span>
-            {" founders listed"}
-            <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="investable-companies">{totals.investableCompanies.toLocaleString("en-US")}</span>
-            {" investable companies"}
+            {" founders"}
+            <span className="hidden sm:inline">
+              <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
+              <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="investable-companies">{totals.investableCompanies.toLocaleString("en-US")}</span>
+              {" investable companies"}
+            </span>
           </p>
           <Link
             href="/companies?feed=leaderboard"
-            className="mt-3 inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[14px] font-semibold text-white"
+            className="mt-2 inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[14px] font-semibold text-white sm:mt-3"
           >
             Companies by campus
           </Link>
         </div>
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)]">
+        <div className="mt-3 grid gap-4 sm:mt-4 lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)]">
           <div className="overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]" data-campuses-table="">
             <div className="hidden grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_5.5rem_5.5rem_5rem] gap-2 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3 py-2.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] sm:grid">
               <span>#</span>

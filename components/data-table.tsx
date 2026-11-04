@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
 import { plainText } from "@/lib/display/plain-text";
 import { relativeTime } from "@/lib/domain/relative-time";
+import { LogoMark } from "./sample-instrument";
 import { useFeedback } from "./feedback-provider";
 import { useUserPipeline } from "./user-pipeline-provider";
 
@@ -109,6 +110,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const [verifiedChoice, setVerifiedChoice] = useState<boolean | null>(null);
   const [dateChoice, setDateChoice] = useState<boolean | null>(null);
   const [tierReasonId, setTierReasonId] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const showVerified = verifiedChoice ?? autoVerified;
   // Tier is always visible and ranked by default (task: mobile-compat / founders).
   const showTier = true;
@@ -182,6 +184,13 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     URL.revokeObjectURL(url);
   }
 
+
+  const activeFilterCount =
+    (tier ? 1 : 0) +
+    (!campusLocked && campus ? 1 : 0) +
+    (verifiedOnly ? 1 : 0) +
+    (showQuiet ? 1 : 0);
+
   const pad = compact ? "py-2" : "py-3";
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
   const control = "inline-flex h-11 min-h-11 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg sm:h-9 sm:min-h-0";
@@ -194,7 +203,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
-      <p className="mb-3 text-[14px] leading-5 text-fg sm:mb-4">
+      {/* Desktop stats; mobile keeps one quiet count line so results stay above the fold. */}
+      <p className="mb-2 hidden text-[14px] leading-5 text-fg sm:mb-4 sm:block">
         <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
         {" / "}
         <span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal
@@ -202,9 +212,84 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         <span className="num">{noSignal.toLocaleString("en-US")}</span> with no signal yet
         {verifiedFilled > 0 ? <>{" / "}<span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</> : null}
       </p>
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters" data-data-explorer-filters="">
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-11 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none sm:h-9" />
+      {/* Mobile: search + Filters sheet. Desk: full filter row. */}
+      <div className="flex items-center gap-2 sm:hidden" data-data-explorer-filters="" role="group" aria-label="Filters">
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search projects"
+          className="h-11 min-h-11 flex-1 rounded border border-line bg-raised px-3 text-[14px] text-fg outline-none"
+        />
+        <button
+          type="button"
+          className={`${control} relative shrink-0 ${filtersOpen || activeFilterCount > 0 ? "border-link" : ""}`}
+          aria-expanded={filtersOpen}
+          data-filters-toggle=""
+          onClick={() => setFiltersOpen((value) => !value)}
+        >
+          Filters
+          {activeFilterCount > 0 ? (
+            <span className="num ml-1.5 inline-grid h-5 min-w-5 place-items-center rounded-full bg-link px-1 text-[11px] font-medium text-white">
+              {activeFilterCount}
+            </span>
+          ) : null}
+        </button>
+      </div>
+      {filtersOpen ? (
+        <div
+          className="mt-2 space-y-2 rounded border border-line bg-raised p-3 sm:hidden"
+          data-filters-sheet=""
+          role="group"
+          aria-label="Filter options"
+        >
+          <select value={tier} onChange={(event) => setTier(event.target.value)} className={`${control} w-full`} aria-label="Tier">
+            <option value="">Tier</option>
+            {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
+          </select>
+          {!campusLocked && (
+            <select value={campus} onChange={(event) => setCampus(event.target.value)} className={`${control} w-full`} aria-label="Campus">
+              <option value="">Campus</option>
+              {campuses.map((value) => <option key={value}>{value}</option>)}
+            </select>
+          )}
+          {verifiedFilled > 0 && (
+            <button type="button" className={`${control} w-full justify-between ${verifiedOnly ? "border-link" : ""}`} onClick={() => setVerifiedOnly((value) => !value)}>
+              Verified only
+            </button>
+          )}
+          {quietCount > 0 && (
+            <button type="button" className={`${control} w-full justify-between`} onClick={() => setShowQuiet((value) => !value)}>
+              {showQuiet ? "Hide no-signal rows" : "Show no-signal rows"}
+            </button>
+          )}
+          {(campusLocked || verifiedFilled > 0) && (
+            <div className="space-y-1 border-t border-line pt-2 text-[14px]" data-columns-panel="">
+              <p className="text-fg-2">Columns</p>
+              {campusLocked && (
+                <label className="flex min-h-11 items-center gap-2">
+                  <input type="checkbox" checked={showDate} onChange={(event) => setDateChoice(event.target.checked)} />
+                  Date
+                </label>
+              )}
+              {verifiedFilled > 0 && (
+                <label className="flex min-h-11 items-center gap-2">
+                  <input type="checkbox" checked={showVerified} onChange={(event) => setVerifiedChoice(event.target.checked)} />
+                  Verified
+                </label>
+              )}
+            </div>
+          )}
+          <button type="button" className={`${control} w-full`} onClick={() => setCompact((value) => !value)}>
+            {compact ? "Comfortable density" : "Compact density"}
+          </button>
+          <button type="button" className={`${control} w-full border-link text-link`} onClick={() => setFiltersOpen(false)}>
+            Done
+          </button>
+        </div>
+      ) : null}
+      <div className="mt-2 hidden flex-wrap items-center gap-2 sm:mt-0 sm:flex sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters" data-data-explorer-filters-desk="">
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none" />
           <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
             <option value="">Tier</option>
             {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
@@ -226,7 +311,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             </button>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-2 border-l border-line pl-3" role="group" aria-label="View">
+        <div className="flex flex-wrap items-center gap-2 sm:border-l sm:border-line sm:pl-3" role="group" aria-label="View">
           {(campusLocked || verifiedFilled > 0) && (
             <details className="relative">
               <summary className={`${control} cursor-pointer list-none`}>Columns</summary>
@@ -252,24 +337,17 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         </div>
       </div>
       {/* Mobile: stacked cards. Desk: sticky first column + horizontal scroll. */}
-      <div className="mt-3 max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong sm:overflow-x-auto" data-projects-scroll="">
+      <div className="mt-2 max-h-[calc(100dvh-160px)] overflow-auto border-t border-line-strong sm:mt-3 sm:max-h-[calc(100dvh-220px)] sm:overflow-x-auto" data-projects-scroll="">
         <ul className="divide-y divide-line sm:hidden" data-projects-cards="">
           {ordered.map((row, index) => {
             const text = row.detail || row.full;
             const reasonOpen = tierReasonId === row.id;
+            const markName = row.name || row.people[0]?.name || "Project";
             return (
-              <li key={row.id} className="px-2 py-3" data-project-card="">
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    className="mt-1 h-11 w-11 shrink-0"
-                    checked={selected.includes(row.id)}
-                    onChange={() => toggle(row.id)}
-                    aria-label={`Select ${row.name || row.people[0]?.name || "project"}`}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <button type="button" className="flex min-h-11 w-full items-center gap-2 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
-                      <AvatarStack people={row.people} />
+              <li key={row.id} className="px-1 py-3" data-project-card="">
+                <div className="min-w-0">
+                    <button type="button" className="flex min-h-11 w-full items-center gap-3 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
+                      <LogoMark name={markName} logoUrl={row.logoUrl} size={36} />
                       <span className="min-w-0 truncate text-[14px] font-medium text-fg">{plainText(row.name) || "n/a"}</span>
                     </button>
                     <div className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-fg-2">
@@ -297,10 +375,9 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     {reasonOpen && row.tierBasis ? (
                       <p className="mt-2 text-[14px] leading-5 text-fg" data-tier-reason="">{plainText(row.tierBasis)}</p>
                     ) : null}
-                    <button type="button" className="mt-2 min-h-11 w-full text-left text-[14px] leading-5 text-fg" onClick={() => { setCursor(index); setOpenId(row.id); }}>
+                    <button type="button" className="mt-1 min-h-11 w-full text-left text-[14px] leading-5 text-fg" onClick={() => { setCursor(index); setOpenId(row.id); }}>
                       {text ? plainText(text) : "No signal yet"}
                     </button>
-                  </div>
                 </div>
               </li>
             );

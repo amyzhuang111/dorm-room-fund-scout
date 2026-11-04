@@ -21,6 +21,7 @@ import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
 import { formatCorpusDate } from "@/lib/domain/corpus-totals";
+import { CorpusFilters } from "@/components/corpus-filters";
 
 export const dynamic = "force-dynamic";
 
@@ -127,7 +128,7 @@ export default async function DataExplorerPage({
       </div>
 
       <p
-        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-recency-funnel=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Recency gate</span>
@@ -146,7 +147,7 @@ export default async function DataExplorerPage({
       </p>
 
       <p
-        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-corpus-fill-rates=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">On file</span>
@@ -172,68 +173,17 @@ export default async function DataExplorerPage({
         {fill.total.toLocaleString("en-US")}
       </p>
 
-      <form
-        method="get"
-        action="/data"
-        className="mt-1.5 space-y-1.5 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pb-2 sm:mt-2 sm:flex sm:flex-wrap sm:items-end sm:gap-1.5 sm:space-y-0 sm:pb-2"
-        data-corpus-filters=""
-      >
-        <label className="block min-w-0 sm:flex-[1_1_10rem]">
-          <span className="sr-only">Search</span>
-          <input
-            name="q"
-            defaultValue={q}
-            placeholder="Search name or founder"
-            className="h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[16px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[14px]"
-          />
-        </label>
-        <div className="grid grid-cols-2 gap-2 sm:contents">
-          <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
-            <span className="sr-only">Sector</span>
-            <select name="sector" defaultValue={sector || ""} className="h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[16px] sm:h-8 sm:text-[14px]">
-              <option value="">All sectors</option>
-              {sectors.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
-            <span className="sr-only">Campus</span>
-            <select name="campus" defaultValue={campus || ""} className="h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[16px] sm:h-8 sm:text-[14px]">
-              <option value="">All campuses</option>
-              {campuses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="flex gap-2 sm:contents">
-          <label className="min-w-0 flex-1 sm:min-w-[6.5rem] sm:flex-none">
-            <span className="sr-only">Sort</span>
-            <select name="sort" defaultValue={sp.sort || "rank"} className="h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[16px] sm:h-8 sm:text-[14px]">
-              <option value="rank">Rank</option>
-              <option value="recent">Newest signal</option>
-              <option value="name">Name</option>
-              <option value="stage">Stage</option>
-              <option value="signals">Signal count</option>
-              <option value="founded">Founded year</option>
-            </select>
-          </label>
-          <button
-            type="submit"
-            className="inline-flex h-8 flex-none items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:h-8 sm:px-3 sm:text-[11px]"
-          >
-            Apply
-          </button>
-        </div>
-      </form>
+      <CorpusFilters
+        q={q}
+        sector={sector || ""}
+        campus={campus || ""}
+        sort={sp.sort || "rank"}
+        sectors={sectors}
+        campuses={campuses}
+      />
 
       {/* r49 mobile: compact corpus summary + top ranks above table; keep a few rows in fold. */}
-      <div className="mt-2 sm:hidden" data-corpus-campus-ranks="">
+      <div className="mt-2 hidden" data-corpus-campus-ranks="">
         <div
           className="flex items-center gap-2 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-2 py-1.5"
           data-corpus-campus-lead=""

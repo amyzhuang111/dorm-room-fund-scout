@@ -15,8 +15,8 @@ export function FoundersDesk({
   initialCount?: number;
 }) {
   const [rows, setRows] = useState<ProjectTableRow[] | null>(null);
-  const [count, setCount] = useState(initialCount ?? 0);
   const [error, setError] = useState<string | null>(null);
+  void initialCount;
 
   useEffect(() => {
     let cancel = false;
@@ -29,7 +29,6 @@ export function FoundersDesk({
       .then((data) => {
         if (cancel) return;
         setRows(data.rows);
-        setCount(data.founderCount);
       })
       .catch((err) => {
         if (!cancel) setError(err instanceof Error ? err.message : String(err));
@@ -41,10 +40,7 @@ export function FoundersDesk({
 
   return (
     <div data-founders-desk="" data-founders-loaded={rows ? "1" : "0"}>
-      <p className="mt-2 text-[14px] text-fg-2">
-        <span className="num">{count.toLocaleString("en-US")}</span> founders
-      </p>
-      <div className="mt-8">
+      <div className="mt-3 sm:mt-6">
         {error ? <p className="text-[14px] text-[color:var(--ember,#D96B1C)]">Could not load the founder table.</p> : null}
         {!rows && !error ? (
           <p className="text-[14px] text-fg-3" data-founders-loading="">
