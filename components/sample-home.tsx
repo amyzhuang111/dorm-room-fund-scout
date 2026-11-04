@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import {
+  countUniqueFounders,
   directoryPage,
   directorySortOf,
   filterDirectory,
@@ -51,12 +52,7 @@ export function SampleHome({
   const campusId = campusRow?.id;
   const listed = place === "explore" && (feed === "directory" || feed === "leaderboard");
   const data = loadDirectory();
-  // Unique founders, matching app/page.tsx: a founder on several companies counts once.
-  const uniqueFounders = new Set<string>();
-  for (const card of data.cards) {
-    for (const name of card.founders) uniqueFounders.add(name.trim().toLowerCase());
-  }
-  const foundersListed = uniqueFounders.size;
+  const foundersListed = countUniqueFounders(data.cards);
   const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
