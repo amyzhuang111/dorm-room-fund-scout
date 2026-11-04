@@ -89,7 +89,7 @@ function groupRows(rows: ProjectTableRow[]): Group[] {
 
 const ROW_PAGE = 150;
 
-export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRow[]; campusLocked?: boolean }) {
+export function DataTable({ rows, campusLocked = false, searchableFounderCount }: { rows: ProjectTableRow[]; campusLocked?: boolean; searchableFounderCount?: number }) {
   const [query, setQuery] = useState("");
   const [tier, setTier] = useState("");
   const [campus, setCampus] = useState("");
@@ -224,7 +224,16 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     <div>
       <p className="mb-2 text-[12px] leading-4 text-fg-2 sm:hidden" data-showing-founders="">
         Showing <span className="num font-bold text-fg">{filtered.length.toLocaleString("en-US")}</span> of{" "}
-        <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span> projects
+        <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span> project rows
+        {typeof searchableFounderCount === "number" ? (
+          <span className="text-fg-3">
+            {" · "}
+            <span className="num font-bold text-fg" data-count="founders-searchable">
+              {searchableFounderCount.toLocaleString("en-US")}
+            </span>
+            {" searchable founders (names in the index; one person can map to several companies, so this can exceed the row count)"}
+          </span>
+        ) : null}
       </p>
       {/* Desktop stats; mobile keeps one quiet count line so results stay above the fold. */}
       <p className="mb-2 hidden text-[14px] leading-5 text-fg sm:mb-4 sm:block">
@@ -372,20 +381,17 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     <button type="button" className="flex min-h-11 w-full items-center gap-3 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
                       <LogoMark name={markName} logoUrl={row.logoUrl} size={36} />
                       <span className="min-w-0 truncate text-[14px] font-medium text-fg">{plainText(row.name) || "n/a"}</span>
-                    </button>
-                    <div className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-fg-2">
                       {row.tier ? (
-                        <button
-                          type="button"
-                          className={`${tierClass(row.tier)} min-h-11 px-2`}
+                        <span
+                          className={`${tierClass(row.tier)} ml-auto shrink-0`}
                           data-tier={row.tier}
-                          data-tier-reason-trigger=""
-                          aria-expanded={reasonOpen}
-                          onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
+                          title={row.tierBasis ? plainText(row.tierBasis) ?? undefined : undefined}
                         >
                           {row.tier}
-                        </button>
+                        </span>
                       ) : null}
+                    </button>
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-[14px] leading-5 text-fg-2">
                       {!campusLocked && row.campus ? (
                         row.campusSlug ? (
                           <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-11 items-center text-link">{plainText(row.campus)}</Link>
@@ -394,6 +400,17 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                         )
                       ) : null}
                       {row.verified ? <span className="text-ok">Verified</span> : null}
+                      {row.tierBasis ? (
+                        <button
+                          type="button"
+                          className="min-h-11 text-[12px] text-link"
+                          data-tier-reason-trigger=""
+                          aria-expanded={reasonOpen}
+                          onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
+                        >
+                          {reasonOpen ? "Hide tier basis" : "Tier basis"}
+                        </button>
+                      ) : null}
                     </div>
                     {reasonOpen && row.tierBasis ? (
                       <p className="mt-2 text-[14px] leading-5 text-fg" data-tier-reason="">{plainText(row.tierBasis)}</p>

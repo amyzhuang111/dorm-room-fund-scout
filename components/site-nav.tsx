@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserPipeline } from "./user-pipeline-provider";
 
 /** One flat nav (Map + desks + Signals + Work). No second Explore umbrella. */
@@ -32,6 +32,12 @@ export function SiteNav() {
   const pipeline = useUserPipeline();
   const local = pipeline.storage === "local";
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    document.documentElement.setAttribute("data-nav-menu-open", open ? "1" : "0");
+    return () => {
+      document.documentElement.removeAttribute("data-nav-menu-open");
+    };
+  }, [open]);
 
   function openAsk() {
     window.dispatchEvent(new Event("campus-scout-open-ask"));
@@ -110,7 +116,7 @@ export function SiteNav() {
         ))}
       </nav>
       {open ? (
-        <div className="space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden">
+        <div className="space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden" data-site-nav-menu="">
           {NAV.map((item) => (
             <Link key={item.id} href={item.href} className="flex min-h-11 items-center text-[14px] text-fg" onClick={() => setOpen(false)}>
               {item.label}

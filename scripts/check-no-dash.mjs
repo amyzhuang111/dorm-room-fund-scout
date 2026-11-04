@@ -18,15 +18,40 @@ const BASE = (process.env.BASE || "http://127.0.0.1:3460").replace(/\/$/, "");
 const CONCURRENCY = Number(process.env.CONCURRENCY || 12);
 const OUT = process.env.OUT || "reviews/no-dash.json";
 const SAMPLE_ID = process.env.SAMPLE_ID || "proj_9GUOmdEYxbuH";
-const CORE = ["/", "/founders", "/methodology", "/signals", `/startup/${SAMPLE_ID}`, "/map/network"];
+const CORE = ["/", "/founders", "/methodology", "/signals", `/startup/${SAMPLE_ID}`, "/map/network", "/campuses/penn", "/campuses"];
 const FOUNDER_PAGES = ["/founders", "/founder/network", "/founder/discover", "/founder/shortlist"];
+
+const campusIndex = (() => {
+  const paths = ["public/data/campuses.json", "data/corpus-snapshot.json"];
+  for (const path of paths) {
+    try {
+      if (!fs.existsSync(path)) continue;
+      const raw = JSON.parse(fs.readFileSync(path, "utf8"));
+      if (Array.isArray(raw)) {
+        return raw.flatMap((c) => {
+          const slug = c.slug || c.id;
+          return slug ? [`/campuses/${slug}`] : [];
+        });
+      }
+      if (raw && Array.isArray(raw.campuses)) {
+        return raw.campuses.flatMap((c) => {
+          const slug = c.slug || c.id;
+          return slug ? [`/campuses/${slug}`] : [];
+        });
+      }
+    } catch {}
+  }
+  // Always include Penn (known dash source label) and a few desk campuses.
+  return ["/campuses/penn", "/campuses/stanford", "/campuses/mit", "/campuses/harvard", "/campuses/yale", "/campuses/columbia", "/campuses/berkeley", "/campuses/cmu"];
+})();
+const CAMPUS_PAGES = [...new Set(campusIndex)];
 
 const candidates = JSON.parse(fs.readFileSync("public/data/candidates.json", "utf8"));
 const founders = JSON.parse(fs.readFileSync("public/data/founders.json", "utf8"));
 const ids = new Set(candidates.map((c) => c.id));
 const companyCount = ids.size;
 for (const f of founders) if (f.companyId) ids.add(f.companyId);
-const CRAWL = [...FOUNDER_PAGES, ...[...ids].map((id) => `/startup/${id}`)];
+const CRAWL = [...FOUNDER_PAGES, ...CAMPUS_PAGES, ...[...ids].map((id) => `/startup/${id}`)];
 
 const DASHES = /[\u2013\u2014]/g;
 function snippets(text) {

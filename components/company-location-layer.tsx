@@ -42,7 +42,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   const [hover, setHover] = useState<HoverCard | null>(null);
   const [visible, setVisible] = useState<string[]>([]);
   const [limit, setLimit] = useState(24);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => typeof window !== "undefined" && window.innerWidth >= 1024);
   const [zoom, setZoom] = useState(1);
   const [onlyAddresses, setOnlyAddresses] = useState(false);
   useEffect(() => {
@@ -271,7 +271,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
         </div>
       </aside>
     ) : null}
-    <section className={styles.results} aria-label="Startups on the map">
+    <section className={styles.results} aria-label="Startups on the map" data-results-collapsed={collapsed ? "1" : "0"}>
       <div className={styles.resultHeading}><div><h3>{selectedCity?selectedCity.city:query.trim()?"Search results":"Current view"} <strong>{allShown.length.toLocaleString("en-US")}</strong> startups</h3><p>{addressShown.length.toLocaleString("en-US")} sourced address pins · {(allShown.length-addressShown.length).toLocaleString("en-US")} city only. {zoom>=streetZoom?"Street view shows address pins only.":"Numbered circles are city totals."}</p>
         <nav className={styles.dbCta} aria-label="Open the full database">
           <Link href="/companies">Full database</Link>

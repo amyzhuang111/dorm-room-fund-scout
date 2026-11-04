@@ -257,6 +257,100 @@ for (const vp of VIEWPORTS) {
   await page.close();
 }
 
+
+// Extra states required by mobile-m1 gates:
+// (1) Menu open @390: Open lane sheet must hide and not cover map mode tabs.
+// (2) Current view @1440: results card must cover <28% of the map stage.
+{
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 3,
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+  });
+  await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 90000 });
+  await page.waitForTimeout(2000);
+  const menu = page.getByRole("button", { name: /^Menu$/i }).first();
+  if (await menu.count()) {
+    await menu.click();
+    await page.waitForTimeout(400);
+  }
+  const menuState = await page.evaluate(() => {
+    const open = document.documentElement.getAttribute("data-nav-menu-open") === "1";
+    const sheet = document.querySelector("[data-fold-map-sheet]");
+    const sheetHidden =
+      !sheet ||
+      sheet.getAttribute("data-fold-sheet-hidden-for-menu") === "1" ||
+      getComputedStyle(sheet).display === "none" ||
+      sheet.getBoundingClientRect().height < 8;
+    const modes = [...document.querySelectorAll('[aria-label="Map locations"] button')];
+    const modeHit = modes.filter((b) => {
+      const r = b.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) return false;
+      if (!sheet || sheet.getAttribute("data-fold-sheet-hidden-for-menu") === "1") return false;
+      const s = sheet.getBoundingClientRect();
+      const x1 = Math.max(r.left, s.left), y1 = Math.max(r.top, s.top);
+      const x2 = Math.min(r.right, s.right), y2 = Math.min(r.bottom, s.bottom);
+      return x2 > x1 && y2 > y1;
+    }).map((b) => (b.textContent || "").trim());
+    return { open, sheetHidden, modeHit };
+  });
+  report.menuOpen390 = menuState;
+  if (!menuState.open) {
+    report.ok = false;
+    fail("menu-open@390: Menu did not set data-nav-menu-open");
+  } else if (!menuState.sheetHidden) {
+    report.ok = false;
+    fail("menu-open@390: Open lane sheet still visible over the menu");
+  } else if (menuState.modeHit.length) {
+    report.ok = false;
+    fail(`menu-open@390: sheet still covers map modes ${JSON.stringify(menuState.modeHit)}`);
+  } else {
+    console.log("OK menu-open@390 sheet hidden, map modes clear");
+  }
+  await page.close();
+}
+
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 90000 });
+  await page.waitForSelector("[data-dispatch-map-stage], [data-company-location-map]", { timeout: 60000 }).catch(() => {});
+  await page.waitForTimeout(2500);
+  // Ensure collapsed (default on desktop ≥1024)
+  const hideBtn = page.locator('section[aria-label="Startups on the map"] button[aria-label="Collapse startups in view"]');
+  if (await hideBtn.count()) {
+    await hideBtn.click().catch(() => {});
+    await page.waitForTimeout(200);
+  }
+  const coverage = await page.evaluate(() => {
+    const stage = document.querySelector("[data-dispatch-map-stage]");
+    const sheet = document.querySelector("section[aria-label='Startups on the map']");
+    if (!stage || !sheet) return { pct: null, reason: !stage ? "no-stage" : "no-results" };
+    const mb = stage.getBoundingClientRect();
+    const rb = sheet.getBoundingClientRect();
+    const mapArea = Math.max(1, mb.width * mb.height);
+    const x1 = Math.max(rb.left, mb.left), y1 = Math.max(rb.top, mb.top);
+    const x2 = Math.min(rb.right, mb.right), y2 = Math.min(rb.bottom, mb.bottom);
+    const hit = x2 > x1 && y2 > y1 ? (x2 - x1) * (y2 - y1) : 0;
+    return {
+      pct: +(100 * hit / mapArea).toFixed(1),
+      collapsed: sheet.getAttribute("data-results-collapsed"),
+      sheetH: Math.round(rb.height),
+      mapH: Math.round(mb.height),
+    };
+  });
+  report.currentView1440 = coverage;
+  if (coverage.pct == null) {
+    report.ok = false;
+    fail(`current-view@1440: could not measure (${coverage.reason || "unknown"})`);
+  } else if (coverage.pct > 28) {
+    report.ok = false;
+    fail(`current-view@1440: results cover ${coverage.pct}% of map (need ≤28; collapsed default)`);
+  } else {
+    console.log(`OK current-view@1440 results cover ${coverage.pct}% of map (collapsed=${coverage.collapsed}, h=${coverage.sheetH}/${coverage.mapH})`);
+  }
+  await page.close();
+}
+
 await browser.close();
 fs.mkdirSync("reviews", { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(report, null, 2));

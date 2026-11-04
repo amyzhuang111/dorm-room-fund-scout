@@ -15,8 +15,8 @@ export function FoundersDesk({
   initialCount?: number;
 }) {
   const [rows, setRows] = useState<ProjectTableRow[] | null>(null);
+  const [searchableCount, setSearchableCount] = useState<number | undefined>(initialCount);
   const [error, setError] = useState<string | null>(null);
-  void initialCount;
 
   useEffect(() => {
     let cancel = false;
@@ -29,6 +29,7 @@ export function FoundersDesk({
       .then((data) => {
         if (cancel) return;
         setRows(data.rows);
+        setSearchableCount(data.founderCount);
       })
       .catch((err) => {
         if (!cancel) setError(err instanceof Error ? err.message : String(err));
@@ -47,7 +48,13 @@ export function FoundersDesk({
             Loading founders…
           </p>
         ) : null}
-        {rows ? <DataTable rows={rows} campusLocked={campusLocked} /> : null}
+        {rows ? (
+          <DataTable
+            rows={rows}
+            campusLocked={campusLocked}
+            searchableFounderCount={searchableCount}
+          />
+        ) : null}
       </div>
     </div>
   );

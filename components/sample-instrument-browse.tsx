@@ -1096,7 +1096,7 @@ export function SampleInstrumentBrowse({
                               ? `${pageCampusRanks[0].label} leads · ${pageCampusRanks.length.toLocaleString("en-US")} campuses · ${pageSignaled.toLocaleString("en-US")} signaled`
                               : `${cards.length.toLocaleString("en-US")} companies loaded`}
                           </p>
-                          <p className="m-meta mt-1">
+                          <p className="m-meta mt-1 leading-5">
                             Companies 1 to {cards.length.toLocaleString("en-US")} on desk
                           </p>
                         </div>
@@ -1529,7 +1529,7 @@ function LedgerRow({
           {card.name}
         </p>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
+          <p className="mt-0.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
             {subtitle}
           </p>
         ) : null}

@@ -830,15 +830,17 @@ html[data-sample="halflight"] body {
 }
 .sample-paper .campus-index-row .campus-name {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  line-height: 1.25;
   color: var(--fg, #0B0E17);
 }
 .sample-paper .campus-index-row .campus-country {
+  display: none;
   grid-column: 2;
   grid-row: 2;
   font-family: var(--font-geist-mono), ui-monospace, monospace;
@@ -873,8 +875,9 @@ html[data-sample="halflight"] body {
     font-weight: 400;
     color: var(--fg-3, #5C647A);
   }
-  .sample-paper .campus-index-row .campus-name { font-size: 15px; }
+  .sample-paper .campus-index-row .campus-name { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sample-paper .campus-index-row .campus-country {
+    display: block;
     grid-column: auto;
     grid-row: auto;
     font-size: 12px;
@@ -891,6 +894,21 @@ html[data-sample="halflight"] body {
   .sample-paper .campus-index-row .campus-meta .sm-only-label { display: none; }
 }
 @media (max-width: 639px) {
+  .sample-paper .campus-index-row {
+    grid-template-columns: 2.5rem auto;
+  }
+  .sample-paper .campus-index-row .campus-name {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .sample-paper .campus-index-row .campus-rank {
+    grid-row: 2;
+  }
+  .sample-paper .campus-index-row .campus-founders {
+    grid-row: 2;
+    grid-column: 2;
+  }
+  .sample-paper .campus-index-row .campus-country { display: none !important; }
   .sample-paper .campus-index-row .desk-only-num { display: none; }
 }
 
@@ -1933,14 +1951,21 @@ html:has([data-networks-cream]) [data-site-nav] {
     min-width: 44px;
   }
 
+  /* Tier stays a compact chip; 44px circle made "S+" its own row. */
   .tier-chip {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 28px;
+    min-width: 0;
+    height: 28px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding-inline: 0.5rem;
   }
+  [data-project-card] [data-tier] {
+    min-height: 28px !important;
+    min-width: 0 !important;
+  }
+
 
   /* Dossier / campus detail: wrap long chips */
   [data-company-shell] .whitespace-nowrap {
@@ -2017,5 +2042,65 @@ html:has([data-networks-cream]) [data-site-nav] {
   [data-corpus-fill-rates] {
     font-size: 14px !important;
     line-height: 1.5 !important;
+  }
+}
+
+
+/* /data @390: one stacked card per company (table fragments fail craft) */
+@media (max-width: 639px) {
+  [data-corpus-cards] .c-table { min-width: 0; width: 100%; display: block; }
+  [data-corpus-cards] .c-head { display: none; }
+  [data-corpus-cards] tbody { display: block; }
+  [data-corpus-cards] .c-r {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 8px;
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--line, #E1E5EF);
+  }
+  [data-corpus-cards] td.c-n,
+  [data-corpus-cards] td.c-m,
+  [data-corpus-cards] td.c-d,
+  [data-corpus-cards] td.c-fund {
+    position: static !important;
+    left: auto !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  [data-corpus-cards] td.c-n {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: none;
+    font-size: 15px;
+  }
+  [data-corpus-cards] td.c-m1 { grid-column: 1; color: var(--fg-2, #3F465C); font-size: 12px; }
+  [data-corpus-cards] td.c-m:not(.c-m1) { grid-column: 2; text-align: right; font-size: 12px; }
+  [data-corpus-cards] .c-fund-h,
+  [data-corpus-cards] td.c-fund,
+  [data-corpus-cards] td.c-d:not(.c-sig):not(.c-d-m) { display: none; }
+  [data-corpus-cards] td.c-d-m:not(.c-sig) { display: none; }
+  [data-corpus-cards] td.c-sig {
+    display: block !important;
+    grid-column: 2;
+    grid-row: 2;
+    text-align: right;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--cobalt, #2F4FD8);
+    font-weight: 700;
+  }
+}
+
+/* companies @375: meta lines were overlapping by ~2px */
+@media (max-width: 400px) {
+  .sample-paper [data-ledger-stage] [data-card-signals] p,
+  .sample-paper [data-company-mobile-hero] p,
+  [data-company-card] .mt-0\.5.text-\[12px\],
+  .sample-paper [data-ledger-stage] p.text-\[12px\].leading-4 {
+    line-height: 1.35 !important;
   }
 }

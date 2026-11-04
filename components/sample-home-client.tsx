@@ -222,7 +222,15 @@ function MapFoldSheet({
   const REST = 108;
   const DECK = 300;
   const [height, setHeight] = useState(REST);
+  const [menuOpen, setMenuOpen] = useState(false);
   heightRef.current = height;
+  useEffect(() => {
+    const sync = () => setMenuOpen(document.documentElement.getAttribute("data-nav-menu-open") === "1");
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-nav-menu-open"] });
+    return () => mo.disconnect();
+  }, []);
   const minH = 100;
   const clampH = (h: number) => {
     const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
@@ -316,6 +324,21 @@ function MapFoldSheet({
       springTo(max);
     }
   };
+
+  if (menuOpen) {
+    return (
+      <div
+        ref={sheetRef}
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-[30] hidden lg:hidden"
+        data-fold-map-sheet=""
+        data-fold-sheet-mode={mode}
+        data-fold-sheet-rest={String(REST)}
+        data-fold-sheet-hidden-for-menu="1"
+        aria-hidden="true"
+        style={{ height: 0 }}
+      />
+    );
+  }
 
   return (
     <div

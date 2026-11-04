@@ -10,6 +10,7 @@ import { SIGNALS_THIS_WEEK_LABEL, signalsThisWeek } from "@/lib/domain/hero-stat
 import { listSignalsForUniversity, listSources, listUniversities, type UniversitySummary } from "@/lib/domain/queries";
 import { getDb } from "@/lib/db/client";
 import { listUnverifiedCompanies } from "@/lib/domain/unverified-companies";
+import { plainText } from "@/lib/display/plain-text";
 
 const TABS = ["founders", "companies", "signals", "network"] as const;
 
@@ -190,7 +191,7 @@ export default async function CampusPage({
             <ul className="mt-2 space-y-2">
               {sources.slice(0, 8).map((source) => (
                 <li key={source.id} className="text-[14px] text-fg-2">
-                  {source.name}
+                  {plainText(source.name)}
                   <span> · {source.lastSuccessAt?.slice(0, 10) ?? source.lastAttemptAt?.slice(0, 10) ?? "not checked"}</span>
                 </li>
               ))}

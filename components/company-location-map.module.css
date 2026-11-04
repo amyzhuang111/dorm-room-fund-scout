@@ -12,7 +12,7 @@
 .zoom { position: absolute; top: 12px; right: 12px; display: grid; background: #fff; border: 1px solid #bdc9e6; border-radius: 4px; }
 .zoom button { width: 40px; min-height: 40px; border-bottom: 1px solid #e1e6f0; font-size: 22px; background: #fff; }
 .zoom button:last-child { border: 0; }
-.results { position: absolute; bottom: 30px; left: 12px; right: 12px; background: #fff; border: 1px solid #c5cfE7; border-radius: 6px; padding: 10px 12px; pointer-events: auto; box-shadow: 0 3px 15px #24304b12; }
+.results { position: absolute; bottom: 30px; left: 12px; right: 12px; max-height: min(220px, 28vh); background: #fff; border: 1px solid #c5cfE7; border-radius: 6px; padding: 8px 10px; pointer-events: auto; box-shadow: 0 3px 15px #24304b12; overflow: hidden; }
 .resultHeading { display: flex; gap: 12px; justify-content: space-between; align-items: start; }
 .resultHeading h3 { margin: 0; font-size: 14px; line-height: 20px; font-weight: 650; }
 .resultHeading strong { color: #2f4fd8; font-variant-numeric: tabular-nums; }
@@ -21,7 +21,7 @@
 .resultFilters { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
 .resultFilters button { min-height: 34px; padding: 4px 9px; border: 1px solid #c5cfe7; border-radius: 4px; background: #fff; font-size: 11px; }
 .resultFilters button[aria-pressed="true"] { background: #2f4fd8; color: #fff; border-color: #2f4fd8; }
-.companyList { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; max-height: 128px; overflow-y: auto; overscroll-behavior: contain; margin: 6px 0; padding: 2px; }
+.companyList { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; max-height: 72px; overflow-y: auto; overscroll-behavior: contain; margin: 4px 0; padding: 2px; }
 .companyList li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 0 10px; min-width: 140px; width: 200px; max-width: 100%; padding: 5px 8px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; font-size: 12px; line-height: 18px; }
 .companyList li>a:first-child, .cardTitle a { min-height: 24px; font-weight: 650; color: #2f4fd8; overflow-wrap: anywhere; }
 .companyList span { color: #53617b; font-size: 10px; }
@@ -69,7 +69,7 @@
 
 .dbCta { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 4px; font-size: 11px; }
 .dbCta a { color: #2f4fd8; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; min-height: 28px; display: inline-flex; align-items: center; }
-.logoDock { display: flex; flex-wrap: wrap; gap: 4px; max-height: 88px; overflow-y: auto; overscroll-behavior: contain; margin: 6px 0 4px; padding: 2px; }
+.logoDock { display: flex; flex-wrap: wrap; gap: 4px; max-height: 56px; overflow-y: auto; overscroll-behavior: contain; margin: 4px 0 2px; padding: 2px; }
 .logoChip { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 52px; min-height: 52px; padding: 4px 2px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; pointer-events: auto; }
 .logoChip span { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 8px; line-height: 10px; color: #162039; text-align: center; }
 .logoChip[aria-pressed="true"] { border-color: #2f4fd8; background: #e8ecfa; }
@@ -103,4 +103,31 @@
   .logoPeek .logoDock { max-height: 64px; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
   .logoPeek .logoChip { width: 48px; min-height: 48px; flex-shrink: 0; }
   :global([data-map-expanded="true"]) .logoPeek { display: none; }
+}
+
+:global(html[data-nav-menu-open="1"]) .logoPeek { display: none !important; }
+@media (min-width: 1024px) {
+  .results { max-height: min(200px, 26vh); }
+  .companyList { max-height: 56px; }
+}
+
+/* Collapsed current-view: thin bar so home globe stays mostly clear at 1440 */
+.results[data-results-collapsed="1"] {
+  max-height: 52px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.results[data-results-collapsed="1"] .resultHeading p,
+.results[data-results-collapsed="1"] .coverage,
+.results[data-results-collapsed="1"] .logoDock,
+.results[data-results-collapsed="1"] .dbCta {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .results[data-results-collapsed="1"] {
+    left: auto;
+    right: 304px;
+    width: min(320px, 28vw);
+    max-height: 48px;
+  }
 }

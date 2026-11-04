@@ -1057,10 +1057,10 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   }
 
   return (
-    <div className="w-full overflow-visible" data-networks-desk="">
+    <div className="w-full max-w-full overflow-x-hidden" data-networks-desk="">
       <div
         ref={wrapRef}
-        className="relative w-screen max-w-none touch-manipulation overflow-hidden bg-[#fbfaf7] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[64vh]"
+        className="relative w-full max-w-full touch-manipulation overflow-hidden bg-[#fbfaf7] max-md:!h-[64vh]"
         style={{ height: "min(76vh, 710px)" }}
         data-networks-graph=""
         data-networks-fade="0"
@@ -1076,7 +1076,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing"
           aria-label="Campus founder networks map"
         />
-        <div className="absolute right-3 top-3 z-[6] flex items-center gap-1 rounded-lg border border-[color:var(--line)] bg-white/95 p-1 shadow-md"
+        <div className="absolute right-2 top-2 z-[6] flex max-w-[calc(100%-1rem)] items-center gap-1 rounded-lg border border-[color:var(--line)] bg-white/95 p-1 shadow-md"
           onPointerDown={(event) => event.stopPropagation()} onPointerMove={(event) => event.stopPropagation()}
           onPointerUp={(event) => event.stopPropagation()} onWheel={(event) => event.stopPropagation()}
           role="group" aria-label="Map zoom controls" data-network-in-map-zoom="">
