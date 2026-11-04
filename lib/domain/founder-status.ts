@@ -393,6 +393,30 @@ function bucketForYear(year: number): EnrollmentStatus {
   return "older_alumni";
 }
 
+// A roster can contain different class years for each teammate. Prefer the
+// class-year tokens immediately attached to this person's name; preserve all
+// of their own degree years, but never take a teammate's later year.
+function personClassSnippet(snippet: EvidenceSnippet, personName: string): EvidenceSnippet {
+  const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
+  const escaped = personName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const name = new RegExp(`\\b${escaped}(?=\\s|[,(:;]|$)`, "i").exec(text);
+  if (!name) return snippet;
+  const tail = text.slice(name.index + name[0].length);
+  const parenthetical = /^\s*\(([^)]{0,100})\)/.exec(tail);
+  const direct = /^\s*,?\s*((?:[A-Za-z&.]{1,12}\s*)?'(?:[A-Z]{1,4})?'?\d{2}\b(?:\s*,\s*(?:[A-Za-z&.]{1,12}\s*)?'(?:[A-Z]{1,4})?'?\d{2}\b)*)/.exec(tail);
+  const attached = parenthetical?.[1] ?? direct?.[1];
+  const ownYears = attached ? [...attached.matchAll(/'(?:[A-Z]{1,4})?'?(\d{2})\b/g)].map(m => fullYear(Number(m[1]))).filter((y): y is number => y !== null) : [];
+  if (ownYears.length) {
+    return { ...snippet, excerpt: `${personName}: ${[...new Set(ownYears)].map(y => `Class of ${y}`).join("; ")}.` };
+  }
+  // An undated member of an explicitly named team must not borrow another
+  // member's apostrophe-style class year.
+  if (/\b(team|founders|students)\b/i.test(text) && /'\d{2}\b/.test(text)) {
+    return { ...snippet, excerpt: personName };
+  }
+  return snippet;
+}
+
 export function decideEnrollment(snippets: EvidenceSnippet[], options?: { personName?: string | null }): EnrollmentDecision {
   const years: YearHit[] = [];
   const phrases: PhraseHit[] = [];
@@ -405,13 +429,14 @@ export function decideEnrollment(snippets: EvidenceSnippet[], options?: { person
       snippet.claimType === "profile_link"
     )
       continue;
-    classTokenHits(snippet, years);
-    rosterYearHits(snippet, years);
-    classOfHits(snippet, years);
-    graduatedHits(snippet, years);
-    expectedDegreeHits(snippet, years);
-    degreeYearHits(snippet, years);
-    if (personName) namedProseYearHits(snippet, years, personName);
+    const yearSnippet = personName ? personClassSnippet(snippet, personName) : snippet;
+    classTokenHits(yearSnippet, years);
+    rosterYearHits(yearSnippet, years);
+    classOfHits(yearSnippet, years);
+    graduatedHits(yearSnippet, years);
+    expectedDegreeHits(yearSnippet, years);
+    degreeYearHits(yearSnippet, years);
+    if (personName) namedProseYearHits(yearSnippet, years, personName);
     linkedInHits(snippet, years, phrases);
     if (currentStudentPhrase(snippet)) {
       phrases.push({ excerpt: snippet.excerpt, sourceUrl: snippet.sourceUrl, sourceId: snippet.sourceId });
