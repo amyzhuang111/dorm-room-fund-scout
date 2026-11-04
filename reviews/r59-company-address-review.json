@@ -6,9 +6,9 @@
   "counts": {
     "candidate_needs_verification": 183,
     "held_from_publication": 32,
-    "new_import_not_reviewed": 1201,
+    "new_import_not_reviewed": 1209,
     "no_address_found_on_checked_pages": 449,
-    "published_business_address": 254,
+    "published_business_address": 304,
     "source_unavailable": 438
   },
   "records": [
@@ -139,6 +139,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_wUX94GWKmcV-",
+      "company": "2IT",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_CR8_E-hoBzhX",
       "company": "3rd-i",
       "status": "new_import_not_reviewed",
@@ -267,6 +280,18 @@
       ]
     },
     {
+      "projectId": "proj_meYbxKoQDzeD",
+      "company": "Absco Therapeutics",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
       "projectId": "proj_vfMtrUgQMdze",
       "company": "Acaysia",
       "status": "candidate_needs_verification",
@@ -385,6 +410,18 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_3eSsqeIxtvHq",
+      "company": "Adept Materials",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.adeptmaterials.com/contact-us",
+        "https://www.masscec.com/company/adept-materials"
+      ]
     },
     {
       "projectId": "proj_9YiojhhKSp3K",
@@ -610,6 +647,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_5tzhRTUuqt3r",
+      "company": "Aethryx",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_Rs2dvUs6WQ3L",
       "company": "Affil.ai",
       "status": "no_address_found_on_checked_pages",
@@ -720,6 +773,22 @@
         "https://agentphone.ai/",
         "https://agentphone.ai/privacy",
         "https://agentphone.ai/terms"
+      ]
+    },
+    {
+      "projectId": "proj_tVYWz08MLa6G",
+      "company": "AgentSure PTE. LTD",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
       ]
     },
     {
@@ -1263,6 +1332,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_L9iGIvZA36UU",
+      "company": "Alpha Y Omega",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_Hy2vMhRRwQL5",
       "company": "Alt-X",
       "status": "no_address_found_on_checked_pages",
@@ -1475,6 +1560,22 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_Q_SXZWFC2xR_",
+      "company": "AMPLICITY",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_SocumtMpKnVp",
@@ -1699,6 +1800,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_stfUEb5KIzH-",
+      "company": "Aperture Bio",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
       "projectId": "proj_smG12OowEFvx",
       "company": "AphasiaGPT",
       "status": "new_import_not_reviewed",
@@ -1856,6 +1969,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_44sd7EC2O2An",
+      "company": "Arata AI",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_mczv8SUkybld",
       "company": "Arbolito Ventures",
       "status": "published_business_address",
@@ -1953,6 +2079,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_n8SjL-sm1vza",
+      "company": "Arculus Solutions, Inc.",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_YBpTWgvdXf4x",
       "company": "Arcus Dental",
       "status": "new_import_not_reviewed",
@@ -2033,6 +2175,22 @@
       "checkedAt": "2026-11-03T06:13:51.753Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_rne7g5T9oG1k",
+      "company": "Arkkus Health",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_4HmW4eMOIwnk",
@@ -2635,6 +2793,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_yKJjSguqeOmf",
+      "company": "Auryon Innovations Pte. Ltd.",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_qV5Xoi2v08pN",
       "company": "Auto/lab",
       "status": "new_import_not_reviewed",
@@ -2922,6 +3096,18 @@
       ]
     },
     {
+      "projectId": "proj_AAhgWlDQMgV9",
+      "company": "Axent Biosciences Inc.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://bio.bakarlabs.org/companies/",
+        "https://bio.bakarlabs.org/facility/"
+      ]
+    },
+    {
       "projectId": "proj_STe8m0OKby-Q",
       "company": "Axia AI",
       "status": "published_business_address",
@@ -3153,6 +3339,15 @@
       ]
     },
     {
+      "projectId": "proj_PgcFvzmOG8fi",
+      "company": "Basics",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_kgR50Jo3x2nk",
       "company": "Basics OS",
       "status": "new_import_not_reviewed",
@@ -3168,6 +3363,15 @@
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_KD0KMA2MetJ9",
+      "company": "BasisEdge",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
       "checkedPages": []
     },
     {
@@ -4043,6 +4247,29 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_Yq8gZpgRKagS",
+      "company": "Boston Interactome",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
+      "projectId": "proj_V5sLCh0C4PuZ",
+      "company": "Boston Materials",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.bomaterials.com/privacy-policy/"
+      ]
+    },
+    {
       "projectId": "proj_CkDTjExmDd9j",
       "company": "Boston Quantum",
       "status": "new_import_not_reviewed",
@@ -4332,6 +4559,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_Vpwv_d-J4zWk",
+      "company": "Bullseye Biosciences",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
       "projectId": "proj_GdukIk2KGxwQ",
       "company": "Burp Groceries",
       "status": "new_import_not_reviewed",
@@ -4591,6 +4830,22 @@
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://camfer.dev/"
+      ]
+    },
+    {
+      "projectId": "proj_4zaOZJqK0hMH",
+      "company": "Campaign Canvas",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
       ]
     },
     {
@@ -5321,6 +5576,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_5Dt3FNb4haTN",
+      "company": "ChatOverflow",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
       "checkedPages": []
     },
     {
@@ -6413,6 +6677,18 @@
       ]
     },
     {
+      "projectId": "proj_ZO_UXnciAKkt",
+      "company": "Core Biomedicine",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
       "projectId": "proj_L0Tz3QgL0eWv",
       "company": "Corev",
       "status": "new_import_not_reviewed",
@@ -6510,6 +6786,22 @@
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_6EaemKaSKLQa",
+      "company": "CostObserver",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_8sx6LaN51XHc",
@@ -6717,6 +7009,19 @@
       ]
     },
     {
+      "projectId": "proj_jl-ngZHLGxob",
+      "company": "Crosstalk Connections",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_SMdSHwrXUGha",
       "company": "CrowdListen",
       "status": "new_import_not_reviewed",
@@ -6825,6 +7130,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_kT3ShNDT4mQe",
+      "company": "Cura",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_GjrFxToPH-cI",
       "company": "Cursor",
       "status": "published_business_address",
@@ -6837,6 +7158,22 @@
       ],
       "addressSource": "https://invest.jll.com/uk/en/listings/office/295-bay-street",
       "evidenceType": "direct_property_disclosure"
+    },
+    {
+      "projectId": "proj_4vnDwKUKai6q",
+      "company": "Curve Labs",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_JSlMKzQqrrP7",
@@ -6933,6 +7270,18 @@
       ],
       "addressSource": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
       "evidenceType": "workspace_operator_current_resident_roster"
+    },
+    {
+      "projectId": "proj_J6mR9euwpZ1Q",
+      "company": "Dark Matter Robotics",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://researchpark.illinois.edu/dark-matter-robotics/",
+        "https://researchpark.illinois.edu/tenantservices/"
+      ]
     },
     {
       "projectId": "proj_dSLWDFhk-mNm",
@@ -7117,6 +7466,22 @@
       "checkedPages": [
         "https://www.deepsim.io/",
         "https://www.deepsim.io/contact-us"
+      ]
+    },
+    {
+      "projectId": "proj_0RDrt-EPEJsu",
+      "company": "DeepStore AI",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
       ]
     },
     {
@@ -7729,11 +8094,14 @@
     {
       "projectId": "proj_kxaZFz6apmO3",
       "company": "Durability",
-      "status": "new_import_not_reviewed",
-      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.mydurability.ai/privacy-policy.html",
+        "https://www.mydurability.ai/terms.html"
+      ]
     },
     {
       "projectId": "proj_g4wH0D2bLqrf",
@@ -7801,6 +8169,34 @@
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_aSrZKqgLGuit",
+      "company": "EarthSense",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://researchpark.illinois.edu/earthsense/",
+        "https://researchpark.illinois.edu/earthsense-wins-startup-world-cup-agriculture-and-food-regional-competition/"
+      ]
+    },
+    {
+      "projectId": "proj_Jr5yhfEB000M",
+      "company": "Eazy AI Pte. Ltd.",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_FPaJ6GcZXpXT",
@@ -7873,6 +8269,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj__FJk1-Z6yRSp",
+      "company": "Editpep",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://bio.bakarlabs.org/companies/",
+        "https://bio.bakarlabs.org/facility/"
+      ]
+    },
+    {
       "projectId": "proj_vu7QRzlSoJdc",
       "company": "Educational Vision Technologies",
       "status": "new_import_not_reviewed",
@@ -7889,6 +8297,22 @@
       "checkedAt": "2026-11-03T06:14:12.910Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_QtYq0asJaS44",
+      "company": "EDVION TECHNOLOGIES PTE. LTD.",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_j2ADK8u8WcxE",
@@ -8292,6 +8716,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_l9Qd080kbL1_",
+      "company": "Epicenter",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_QznCNf0YAISE",
       "company": "Epsilab",
       "status": "source_unavailable",
@@ -8303,11 +8736,14 @@
     {
       "projectId": "proj_GVi_Y9SuJh5B",
       "company": "EQORE",
-      "status": "new_import_not_reviewed",
-      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.eqore.com/about-us",
+        "https://www.masscec.com/company/eqore-inc"
+      ]
     },
     {
       "projectId": "proj_89tCInCJq2e4",
@@ -8566,6 +9002,22 @@
         "https://www.experientiallabs.ai/privacy"
       ],
       "addressSource": "https://www.experientiallabs.ai/privacy"
+    },
+    {
+      "projectId": "proj__jCbLfwJbq2C",
+      "company": "EXPISCORE PTE. LTD.",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_xhJenN5iZyOB",
@@ -9458,11 +9910,14 @@
     {
       "projectId": "proj_SASRO6NT8ST4",
       "company": "Fracture Club",
-      "status": "new_import_not_reviewed",
-      "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.fracture-club.com/",
+        "https://www.thegarage.northwestern.edu/contact"
+      ]
     },
     {
       "projectId": "proj_Yr91Wv21g9y8",
@@ -9783,6 +10238,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_krG5LweR_Xev",
+      "company": "GC Therapeutics",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.labcentral.org/about/our-resident-network",
+        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
+      ]
+    },
+    {
       "projectId": "proj_qhP-lUYMNHcX",
       "company": "Gear Share",
       "status": "new_import_not_reviewed",
@@ -9930,6 +10397,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_LlimHRg_NmLh",
+      "company": "Girl Math Capital",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_VlscrFDYOOBu",
       "company": "Girls in Quantum",
       "status": "new_import_not_reviewed",
@@ -9981,6 +10457,18 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_30bkcBIFdWaE",
+      "company": "Globi",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://researchpark.illinois.edu/globi-social/",
+        "https://researchpark.illinois.edu/tenantservices/"
+      ]
     },
     {
       "projectId": "proj_0917LIZbUcV3",
@@ -10418,6 +10906,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_R5jr3x-sI5rh",
+      "company": "Gwenth Pte Ltd",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_DI4ObvMmGuqC",
       "company": "gymii.ai",
       "status": "new_import_not_reviewed",
@@ -10615,6 +11119,18 @@
         "https://harborops.ai/contact",
         "https://harborops.ai/company",
         "https://harborops.ai/legal/privacy-policy"
+      ]
+    },
+    {
+      "projectId": "proj_VYfWFtlBzKXI",
+      "company": "HarborSite",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.labcentral.org/about/our-resident-network",
+        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
       ]
     },
     {
@@ -10867,6 +11383,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_YEQ7rJul2UoP",
+      "company": "Heliotrope Photonics",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://heliotropephotonics.com/contact-us/",
+        "https://greentown.org/members/heliotrope-photonics"
+      ]
+    },
+    {
       "projectId": "proj_NqBRt9kmzUcq",
       "company": "Helix",
       "status": "new_import_not_reviewed",
@@ -11034,6 +11562,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_LxevzPkd9DMI",
+      "company": "Hoist AI",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_3xkUj6LTZEYl",
       "company": "Holocron Technologies",
       "status": "new_import_not_reviewed",
@@ -11107,6 +11648,22 @@
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_pcIKoFUjhYX0",
+      "company": "Horaion AI",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_pRgPYIl94Ykh",
@@ -11324,6 +11881,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_hX9xjNMzQmsK",
+      "company": "I Sarathy",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_e_9YDMXvWSfw",
       "company": "IASTMotion.",
       "status": "new_import_not_reviewed",
@@ -11397,6 +11970,18 @@
       ]
     },
     {
+      "projectId": "proj_GSMTuOoBjYqn",
+      "company": "Illumicell AI",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
       "projectId": "proj_-IAUZYEJ0yik",
       "company": "Illusionary Labs",
       "status": "new_import_not_reviewed",
@@ -11426,6 +12011,22 @@
         "https://useimagine.ai/case-studies/fondo",
         "https://useimagine.ai/case-studies/frame-data",
         "https://useimagine.ai/privacy-policy"
+      ]
+    },
+    {
+      "projectId": "proj_itFCAzuGSgGR",
+      "company": "Imaji AI",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
       ]
     },
     {
@@ -11541,6 +12142,18 @@
       "checkedPages": [
         "https://infralytica.com/en/home/",
         "https://infralytica.com/en/contact/"
+      ]
+    },
+    {
+      "projectId": "proj_VseqAajMZKzI",
+      "company": "InGel Therapeutics",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
       ]
     },
     {
@@ -11951,6 +12564,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_7nAavddlPC5C",
+      "company": "IVY Engineering Group",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_aAXefdB4oIiW",
       "company": "IvyTech Design LLC",
       "status": "source_unavailable",
@@ -12068,6 +12694,22 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_jWCL4Qxk0mEO",
+      "company": "Jiangtou (Tianjin) Technology Development Co., Ltd.",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_Po3Id0951qLh",
@@ -12540,6 +13182,22 @@
       ]
     },
     {
+      "projectId": "proj_IGyHoVeOhzeV",
+      "company": "Kelvix",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_dIkSkrUJp-Xd",
       "company": "Kesho",
       "status": "new_import_not_reviewed",
@@ -12927,6 +13585,31 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_ftrxnQSuUMyz",
+      "company": "Krik Krak",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_ittsJZs6s1Rs",
+      "company": "Kurtosis Labs",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_J7T4i82YF5IP",
       "company": "KYCO Rentals",
       "status": "new_import_not_reviewed",
@@ -13254,6 +13937,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_QTZiNQYP9yOx",
+      "company": "Lemon Juice",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_WkH09wd1TC5a",
       "company": "LemonLime",
       "status": "published_business_address",
@@ -13422,6 +14118,18 @@
       ]
     },
     {
+      "projectId": "proj_p0k2UA3lwmSH",
+      "company": "Lightning Biotherapeutics",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
       "projectId": "proj_QsCUhvODr1iY",
       "company": "Lightscreen AI",
       "status": "no_address_found_on_checked_pages",
@@ -13488,6 +14196,19 @@
       "checkedAt": "2026-11-03T06:14:25.267Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_JSMWcMOn8Ufw",
+      "company": "Limax Biosciences",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.labcentral.org/about/our-resident-network",
+        "https://www.labcentral.org/labs-and-facilities/the-blavatnik-harvard-life-lab",
+        "https://therapeutics.hms.harvard.edu/explore/blavatnik-harvard-life-lab-longwood"
+      ]
     },
     {
       "projectId": "proj_bID8T2K7YHoT",
@@ -13984,6 +14705,18 @@
       ],
       "addressSource": "https://data.sfgov.org/resource/g8m3-pdis.json?uniqueid=1415382-03-261-1181220",
       "evidenceType": "company_filed_business_location"
+    },
+    {
+      "projectId": "proj_NDWTz_7NRCgJ",
+      "company": "Lybra Bio",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.labcentral.org/about/our-resident-network",
+        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
+      ]
     },
     {
       "projectId": "proj_7M9jac6S4uKi",
@@ -14496,6 +15229,19 @@
       "evidenceType": "workspace_operator_current_resident_roster"
     },
     {
+      "projectId": "proj_Myyumk0UrH_M",
+      "company": "Matchbook Partners",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_4VYkdYKVWMeh",
       "company": "MatterFlow",
       "status": "source_unavailable",
@@ -14542,6 +15288,15 @@
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_9_UwwJLqiVcA",
+      "company": "Mayflower",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
       "checkedPages": []
     },
     {
@@ -14833,6 +15588,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_rW8bWD_S_clD",
+      "company": "Metlas",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_S75kkHVYDuKF",
       "company": "Mica AI",
       "status": "candidate_needs_verification",
@@ -15089,6 +15857,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_PiYYE9GYZv9y",
+      "company": "Moby Filters",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_JnCOrfLyNfgP",
       "company": "MochaCare",
       "status": "no_address_found_on_checked_pages",
@@ -15142,6 +15923,15 @@
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_4O9G-XpROQE6",
+      "company": "Mohan",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
       "checkedPages": []
     },
     {
@@ -15313,6 +16103,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_eoR5PpMX36Dx",
+      "company": "Most Robotic",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_itW5DMIgcXRn",
       "company": "Motherly Notes",
       "status": "no_address_found_on_checked_pages",
@@ -15357,6 +16156,19 @@
       "checkedAt": "2026-11-03T06:14:29.760Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_CUNjCIif67dS",
+      "company": "MovementBase",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
     },
     {
       "projectId": "proj_i6CzwfSqNAKa",
@@ -15599,6 +16411,18 @@
         "https://www.techstars.com/locations",
         "https://www.techstars.com/contact",
         "https://www.techstars.com/about"
+      ]
+    },
+    {
+      "projectId": "proj_3kOzxjOsmLpb",
+      "company": "Natrion",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://researchpark.illinois.edu/natrion/",
+        "https://researchpark.illinois.edu/tenantservices/"
       ]
     },
     {
@@ -15927,6 +16751,22 @@
       ]
     },
     {
+      "projectId": "proj_zMtWH6Bg1csK",
+      "company": "Nexsoss",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_SMygOqcyvz0R",
       "company": "Next Diagnostics Inc.",
       "status": "new_import_not_reviewed",
@@ -16101,11 +16941,15 @@
     {
       "projectId": "proj_U3P_huh4NRGt",
       "company": "NONA Technologies",
-      "status": "new_import_not_reviewed",
-      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://greentown.org/members/nona-technologies",
+        "https://nsf.elsevierpure.com/en/organisations/nona-technologies-inc/",
+        "https://greentown.org/news/nona-technologies-electrifies-water-desalination-with-industrial-and-resiliency-applications"
+      ]
     },
     {
       "projectId": "proj_Ath7x2xu3asq",
@@ -16446,6 +17290,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_PBQmPAUQIuNe",
+      "company": "Odyssea AI",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_CKd9rk0A2a1z",
       "company": "Odyssey Notebooks LLC",
       "status": "no_address_found_on_checked_pages",
@@ -16494,11 +17354,13 @@
     {
       "projectId": "proj_-WT9WK2YHj3C",
       "company": "OGMA",
-      "status": "new_import_not_reviewed",
-      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.ogma-bio.com/contact"
+      ]
     },
     {
       "projectId": "proj_xyW9UjTnJX2L",
@@ -16710,6 +17572,22 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_xQKPeFyWZYXT",
+      "company": "Open Border AI Multimodal",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_P7nnAGyw6I4B",
@@ -17000,11 +17878,14 @@
     {
       "projectId": "proj_Ur5Gl5Xy56ai",
       "company": "Otomo",
-      "status": "new_import_not_reviewed",
-      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://www.otomohealth.com/about",
+        "https://www.linkedin.com/company/otomo-health"
+      ]
     },
     {
       "projectId": "proj_IpclkTbjzq-M",
@@ -17052,6 +17933,18 @@
       "checkedPages": [
         "https://outship.ai/",
         "https://outship.ai/terms"
+      ]
+    },
+    {
+      "projectId": "proj_NrNuY1hP8DqG",
+      "company": "Ovelle Bio",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
       ]
     },
     {
@@ -17145,6 +18038,22 @@
       ]
     },
     {
+      "projectId": "proj_qo_nWUthbAfs",
+      "company": "Oystera",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_Z0JfTCP9_qTv",
       "company": "Pacto",
       "status": "source_unavailable",
@@ -17181,6 +18090,15 @@
       "checkedPages": [
         "https://balitogel14825.com/register"
       ]
+    },
+    {
+      "projectId": "proj_3FDT82qoU-h9",
+      "company": "Palette",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
     },
     {
       "projectId": "proj_aBBrevwOIMb4",
@@ -17772,6 +18690,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_XdIRNT_crQ1s",
+      "company": "Phaseshift",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_hguEkDv7kEEb",
       "company": "PhenomenalBreed",
       "status": "new_import_not_reviewed",
@@ -17779,6 +18713,19 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_Fd1OHKEhw-Lz",
+      "company": "Phi.AI",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
     },
     {
       "projectId": "proj_u14m2WT2PEIA",
@@ -17987,6 +18934,22 @@
       ]
     },
     {
+      "projectId": "proj_jKdEDsvgHh6j",
+      "company": "Pixelance",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_H6Hso20C4Viz",
       "company": "Pixley AI",
       "status": "candidate_needs_verification",
@@ -18126,6 +19089,22 @@
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_-Mb4AhXTQbOr",
+      "company": "Podsee",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_t1Qf87raEdo7",
@@ -18340,6 +19319,19 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_XODxv127bfAb",
+      "company": "PowerBox Technology",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://researchpark.illinois.edu/powerbox-technologies/",
+        "https://researchpark.illinois.edu/tenantservices/",
+        "https://www.powerboxtech.org/"
+      ]
     },
     {
       "projectId": "proj_0YEvvlQ0qPgk",
@@ -19366,6 +20358,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_Hl7ZppQyepQO",
+      "company": "Rasyn",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.labcentral.org/about/our-resident-network",
+        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
+      ]
+    },
+    {
       "projectId": "proj_2wo0pZgOJrtz",
       "company": "Rational",
       "status": "no_address_found_on_checked_pages",
@@ -19823,6 +20827,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_w9m-Q1SHgcTh",
+      "company": "ReRoot SG",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_h03LMbJFpg2w",
       "company": "Rescript",
       "status": "no_address_found_on_checked_pages",
@@ -19991,6 +21011,22 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj__qimj3l5Gx29",
+      "company": "Revuify",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
     },
     {
       "projectId": "proj_2X9gCP9vzx5G",
@@ -20342,6 +21378,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_Fjl5H-sKC9Aa",
+      "company": "Root Applied Sciences, INC.",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://bio.bakarlabs.org/companies/",
+        "https://bio.bakarlabs.org/facility/"
+      ]
+    },
+    {
       "projectId": "proj_Ecu9vL072pHq",
       "company": "Root Planters",
       "status": "new_import_not_reviewed",
@@ -20429,6 +21477,15 @@
       ]
     },
     {
+      "projectId": "proj_7_Px08gvYPOe",
+      "company": "Roxbury",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_rCERXU0oCcJj",
       "company": "RRender.ai",
       "status": "new_import_not_reviewed",
@@ -20446,6 +21503,19 @@
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.rubbrband.com/"
+      ]
+    },
+    {
+      "projectId": "proj_5YOtAzovKFbD",
+      "company": "Rud-co",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
       ]
     },
     {
@@ -20467,6 +21537,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_JOzamjypuajY",
+      "company": "Rupay Bachao",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_RSMXWCA4dWWG",
       "company": "Ryndel Labs",
       "status": "new_import_not_reviewed",
@@ -20485,6 +21564,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_3A1CMGw-bTkx",
+      "company": "SABE",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_3TMFefSJA3_u",
       "company": "Sabi",
       "status": "new_import_not_reviewed",
@@ -20492,6 +21580,19 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_6GtULQUY2uj9",
+      "company": "Sachi Health",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
     },
     {
       "projectId": "proj_Qm7ujLKpIjFe",
@@ -20651,6 +21752,15 @@
       "addressSource": "https://www.trysalient.com/privacy"
     },
     {
+      "projectId": "proj_0EeMtgblQWv_",
+      "company": "Salus",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_M7WkSQzsgYtp",
       "company": "Samora AI",
       "status": "no_address_found_on_checked_pages",
@@ -20749,6 +21859,19 @@
       "checkedAt": "2026-11-03T06:14:42.764Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_mmX-L3zyqYiO",
+      "company": "Santé",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
     },
     {
       "projectId": "proj_C-OvzaDRVcjy",
@@ -21052,6 +22175,19 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_E8imn7TjLYk8",
+      "company": "Second Chance Innovations",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://researchpark.illinois.edu/second-chance-innovations/",
+        "https://researchpark.illinois.edu/tenantservices/",
+        "https://secchance.com/contact.html"
+      ]
     },
     {
       "projectId": "proj_yLfV6NNNzDNB",
@@ -21456,6 +22592,15 @@
       ]
     },
     {
+      "projectId": "proj_7t4M7OJF0wUT",
+      "company": "Shire Intelligence",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_Lh_1QdA2vBgw",
       "company": "Shockwave",
       "status": "candidate_needs_verification",
@@ -21514,11 +22659,14 @@
     {
       "projectId": "proj_b2058b0fb382c5da15",
       "company": "SideShift",
-      "status": "new_import_not_reviewed",
-      "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
-      "checkedAt": null,
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "not_attempted",
-      "checkedPages": []
+      "checkedPages": [
+        "https://sideshift.app/terms-of-service",
+        "https://nicks-newsletter-a33197.beehiiv.com/p/sideshift-eoy-newsletter"
+      ]
     },
     {
       "projectId": "proj_Eb02n5chFokZ",
@@ -21536,6 +22684,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:44.932Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_ceXUubGpYj-3",
+      "company": "Sigma",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
       "checkedPages": []
     },
     {
@@ -21844,6 +23001,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_70Q9qT18Kv9F",
+      "company": "Skala",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_Va5BoMfJRXqx",
       "company": "Skip Networking",
       "status": "new_import_not_reviewed",
@@ -22133,6 +23299,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_mejDWIF4kHHa",
+      "company": "Solidec",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://greentown.org/members/solidec",
+        "https://www.nasa.gov/wp-content/uploads/2024/01/sbir-2025-i-selection-archive.pdf?emrc=686dee6e4a2aa",
+        "https://greentown.org/news/solidec-delivers-fossil-fuel-free-chemicals-with-novel-electrolyzer"
+      ]
+    },
+    {
       "projectId": "proj_G8hAIr9oKMES",
       "company": "Solis",
       "status": "new_import_not_reviewed",
@@ -22206,6 +23385,18 @@
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_cwp28deVVrjH",
+      "company": "Sora Fuel",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://www.sec.gov/Archives/edgar/data/2014480/000201448026000004/primary_doc.xml",
+        "https://engine.xyz/resident-companies"
+      ]
     },
     {
       "projectId": "proj_SJ07wCVv3GDv",
@@ -22522,6 +23713,15 @@
       ]
     },
     {
+      "projectId": "proj_EE28UcOz5-T6",
+      "company": "Spur",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_8iG1fLH4cdVh",
       "company": "Spyke Automation",
       "status": "published_business_address",
@@ -22745,6 +23945,19 @@
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_BlCOnjhTfybC",
+      "company": "Stratagen Bio",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab",
+        "https://stratagenbio.com/contact-bedford"
+      ]
     },
     {
       "projectId": "proj_1cWYXdmE8sKg",
@@ -23710,6 +24923,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_RadnOPAeNjrK",
+      "company": "Terra",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_AQfIdv5IzllL",
       "company": "Terrakotta",
       "status": "candidate_needs_verification",
@@ -23721,6 +24947,19 @@
         "https://www.terrakotta.ai/start",
         "https://www.terrakotta.ai/privacy",
         "https://www.terrakotta.ai/terms"
+      ]
+    },
+    {
+      "projectId": "proj_qr5meU9KfFBm",
+      "company": "Tesoro",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
       ]
     },
     {
@@ -23786,6 +25025,19 @@
       "checkedAt": "2026-11-03T06:14:49.676Z",
       "discoveryStatus": "unavailable",
       "checkedPages": []
+    },
+    {
+      "projectId": "proj_-DCzC2RJuJK-",
+      "company": "The Comp Set",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
     },
     {
       "projectId": "proj_fuKbz2K2TJUs",
@@ -24138,6 +25390,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_1AzZiBluLiK0",
+      "company": "Tinu AI",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_o_ILzcnPevv6",
       "company": "Tiny",
       "status": "no_address_found_on_checked_pages",
@@ -24246,6 +25507,19 @@
       ]
     },
     {
+      "projectId": "proj_LAOiIm0LwcIt",
+      "company": "Tomosu",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_sGjheDizGcI4",
       "company": "Tona",
       "status": "source_unavailable",
@@ -24261,6 +25535,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:50.467Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_2XNtqFfSlERK",
+      "company": "Topological",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
       "checkedPages": []
     },
     {
@@ -24469,6 +25752,18 @@
       ]
     },
     {
+      "projectId": "proj_lk7wjkqFfPpk",
+      "company": "Trillion Bio",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
+      ]
+    },
+    {
       "projectId": "proj_YIA7CZYU8hTq",
       "company": "TripSync",
       "status": "new_import_not_reviewed",
@@ -24565,6 +25860,15 @@
       ]
     },
     {
+      "projectId": "proj_Olrj8qDk-IIO",
+      "company": "TUFANY",
+      "status": "new_import_not_reviewed",
+      "reason": "Recently restored production profile; no business address reviewed in this batch.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "not_reviewed",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_xtnUwdEgTNYL",
       "company": "Tumeryk",
       "status": "new_import_not_reviewed",
@@ -24628,6 +25932,22 @@
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://twolabs.ai/"
+      ]
+    },
+    {
+      "projectId": "proj_LlT5cDLcmuo0",
+      "company": "Typespaces AI",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
       ]
     },
     {
@@ -24984,6 +26304,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_ulRHHLz4pX40",
+      "company": "Value Alpha",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_6KuXPpNK9vjD",
       "company": "ValueMate",
       "status": "candidate_needs_verification",
@@ -25115,6 +26448,19 @@
         "https://www.vectorshift.ai/",
         "https://www.vectorshift.ai/data-and-privacy",
         "https://www.vectorshift.ai/terms-conditions"
+      ]
+    },
+    {
+      "projectId": "proj_twuD1gdsbL7H",
+      "company": "Vedant Capital Partners",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
       ]
     },
     {
@@ -25516,6 +26862,19 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_bKkPtejUJIlW",
+      "company": "Vitruvius",
+      "status": "published_business_address",
+      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
+        "https://entrepreneurship.columbia.edu/startup-lab/"
+      ]
+    },
+    {
       "projectId": "proj_tfDANrrwyUy5",
       "company": "VivoFlux",
       "status": "new_import_not_reviewed",
@@ -25701,6 +27060,22 @@
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://wealor.ai/"
+      ]
+    },
+    {
+      "projectId": "proj_QEdATvdjc0dy",
+      "company": "Weav8",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
       ]
     },
     {
@@ -25979,6 +27354,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_LIQvZvS8n2qS",
+      "company": "XForge Mobile",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_7WVzRtAEmRhZ",
       "company": "Xplanon",
       "status": "source_unavailable",
@@ -26113,6 +27504,18 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_5VabDTFzFZ6f",
+      "company": "Yummy Future",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://researchpark.illinois.edu/yummy-future/",
+        "https://researchpark.illinois.edu/tenantservices/"
+      ]
+    },
+    {
       "projectId": "proj_kuOoeuf9aoMt",
       "company": "Zana",
       "status": "new_import_not_reviewed",
@@ -26221,6 +27624,22 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_He-V-eO_EDql",
+      "company": "Zhejiang Polar Code Technology",
+      "status": "published_business_address",
+      "reason": "Reviewed public workplace evidence and matching address point. Shared residency labeled separately; no headquarters fact inferred.",
+      "checkedAt": "2026-11-04",
+      "discoveryStatus": "manual_primary_source_review",
+      "checkedPages": [
+        "https://iie.smu.edu.sg/big",
+        "https://iie.smu.edu.sg/greenhouse",
+        "https://iie.smu.edu.sg/startups",
+        "https://iie.smu.edu.sg/sites/iie.smu.edu.sg/files/dxpr_builder_images/SMUIIE_BIG_Aug26Cohort_LogoGrid.png",
+        "https://news.smu.edu.sg/news/2026/09/24/smus-business-innovations-generator-welcomes-36-startups-its-august-2026-cohort",
+        "https://iie.smu.edu.sg/big/faq"
+      ]
+    },
+    {
       "projectId": "proj_Ek3CUvoJSYxN",
       "company": "Zibt",
       "status": "new_import_not_reviewed",
@@ -26316,616 +27735,9 @@
       "checkedPages": [
         "https://angstrom-ai.com/"
       ]
-    },
-    {
-      "projectId": "proj_wUX94GWKmcV-",
-      "company": "2IT",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_meYbxKoQDzeD",
-      "company": "Absco Therapeutics",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_stfUEb5KIzH-",
-      "company": "Aperture Bio",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_44sd7EC2O2An",
-      "company": "Arata AI",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_AAhgWlDQMgV9",
-      "company": "Axent Biosciences Inc.",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://bio.bakarlabs.org/companies/",
-        "https://bio.bakarlabs.org/facility/"
-      ]
-    },
-    {
-      "projectId": "proj_Yq8gZpgRKagS",
-      "company": "Boston Interactome",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_Vpwv_d-J4zWk",
-      "company": "Bullseye Biosciences",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_5Dt3FNb4haTN",
-      "company": "ChatOverflow",
-      "status": "new_import_not_reviewed",
-      "reason": "Recently restored production profile; no business address reviewed in this batch.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "not_reviewed",
-      "checkedPages": []
-    },
-    {
-      "projectId": "proj_ZO_UXnciAKkt",
-      "company": "Core Biomedicine",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_jl-ngZHLGxob",
-      "company": "Crosstalk Connections",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_aSrZKqgLGuit",
-      "company": "EarthSense",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://researchpark.illinois.edu/earthsense/",
-        "https://researchpark.illinois.edu/earthsense-wins-startup-world-cup-agriculture-and-food-regional-competition/"
-      ]
-    },
-    {
-      "projectId": "proj__FJk1-Z6yRSp",
-      "company": "Editpep",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://bio.bakarlabs.org/companies/",
-        "https://bio.bakarlabs.org/facility/"
-      ]
-    },
-    {
-      "projectId": "proj_l9Qd080kbL1_",
-      "company": "Epicenter",
-      "status": "new_import_not_reviewed",
-      "reason": "Recently restored production profile; no business address reviewed in this batch.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "not_reviewed",
-      "checkedPages": []
-    },
-    {
-      "projectId": "proj_krG5LweR_Xev",
-      "company": "GC Therapeutics",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://www.labcentral.org/about/our-resident-network",
-        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
-      ]
-    },
-    {
-      "projectId": "proj_VYfWFtlBzKXI",
-      "company": "HarborSite",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://www.labcentral.org/about/our-resident-network",
-        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
-      ]
-    },
-    {
-      "projectId": "proj_LxevzPkd9DMI",
-      "company": "Hoist AI",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_GSMTuOoBjYqn",
-      "company": "Illumicell AI",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_VseqAajMZKzI",
-      "company": "InGel Therapeutics",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_7nAavddlPC5C",
-      "company": "IVY Engineering Group",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_QTZiNQYP9yOx",
-      "company": "Lemon Juice",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_p0k2UA3lwmSH",
-      "company": "Lightning Biotherapeutics",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_JSMWcMOn8Ufw",
-      "company": "Limax Biosciences",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://www.labcentral.org/about/our-resident-network",
-        "https://www.labcentral.org/labs-and-facilities/the-blavatnik-harvard-life-lab",
-        "https://therapeutics.hms.harvard.edu/explore/blavatnik-harvard-life-lab-longwood"
-      ]
-    },
-    {
-      "projectId": "proj_NDWTz_7NRCgJ",
-      "company": "Lybra Bio",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://www.labcentral.org/about/our-resident-network",
-        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
-      ]
-    },
-    {
-      "projectId": "proj_Myyumk0UrH_M",
-      "company": "Matchbook Partners",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_rW8bWD_S_clD",
-      "company": "Metlas",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_PiYYE9GYZv9y",
-      "company": "Moby Filters",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_eoR5PpMX36Dx",
-      "company": "Most Robotic",
-      "status": "new_import_not_reviewed",
-      "reason": "Recently restored production profile; no business address reviewed in this batch.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "not_reviewed",
-      "checkedPages": []
-    },
-    {
-      "projectId": "proj_CUNjCIif67dS",
-      "company": "MovementBase",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_3kOzxjOsmLpb",
-      "company": "Natrion",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://researchpark.illinois.edu/natrion/",
-        "https://researchpark.illinois.edu/tenantservices/"
-      ]
-    },
-    {
-      "projectId": "proj_NrNuY1hP8DqG",
-      "company": "Ovelle Bio",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_Fd1OHKEhw-Lz",
-      "company": "Phi.AI",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_XODxv127bfAb",
-      "company": "PowerBox Technology",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://researchpark.illinois.edu/powerbox-technologies/",
-        "https://researchpark.illinois.edu/tenantservices/",
-        "https://www.powerboxtech.org/"
-      ]
-    },
-    {
-      "projectId": "proj_Hl7ZppQyepQO",
-      "company": "Rasyn",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://www.labcentral.org/about/our-resident-network",
-        "https://www.labcentral.org/labs-and-facilities/labcentral-700"
-      ]
-    },
-    {
-      "projectId": "proj_Fjl5H-sKC9Aa",
-      "company": "Root Applied Sciences, INC.",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://bio.bakarlabs.org/companies/",
-        "https://bio.bakarlabs.org/facility/"
-      ]
-    },
-    {
-      "projectId": "proj_5YOtAzovKFbD",
-      "company": "Rud-co",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_6GtULQUY2uj9",
-      "company": "Sachi Health",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_0EeMtgblQWv_",
-      "company": "Salus",
-      "status": "new_import_not_reviewed",
-      "reason": "Recently restored production profile; no business address reviewed in this batch.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "not_reviewed",
-      "checkedPages": []
-    },
-    {
-      "projectId": "proj_mmX-L3zyqYiO",
-      "company": "Santé",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_E8imn7TjLYk8",
-      "company": "Second Chance Innovations",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://researchpark.illinois.edu/second-chance-innovations/",
-        "https://researchpark.illinois.edu/tenantservices/",
-        "https://secchance.com/contact.html"
-      ]
-    },
-    {
-      "projectId": "proj_7t4M7OJF0wUT",
-      "company": "Shire Intelligence",
-      "status": "new_import_not_reviewed",
-      "reason": "Recently restored production profile; no business address reviewed in this batch.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "not_reviewed",
-      "checkedPages": []
-    },
-    {
-      "projectId": "proj_BlCOnjhTfybC",
-      "company": "Stratagen Bio",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab",
-        "https://stratagenbio.com/contact-bedford"
-      ]
-    },
-    {
-      "projectId": "proj_RadnOPAeNjrK",
-      "company": "Terra",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_qr5meU9KfFBm",
-      "company": "Tesoro",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_-DCzC2RJuJK-",
-      "company": "The Comp Set",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_LAOiIm0LwcIt",
-      "company": "Tomosu",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_2XNtqFfSlERK",
-      "company": "Topological",
-      "status": "new_import_not_reviewed",
-      "reason": "Recently restored production profile; no business address reviewed in this batch.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "not_reviewed",
-      "checkedPages": []
-    },
-    {
-      "projectId": "proj_lk7wjkqFfPpk",
-      "company": "Trillion Bio",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
-        "https://innovationlabs.harvard.edu/labs/pagliuca-harvard-life-lab"
-      ]
-    },
-    {
-      "projectId": "proj_ulRHHLz4pX40",
-      "company": "Value Alpha",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_twuD1gdsbL7H",
-      "company": "Vedant Capital Partners",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
-    },
-    {
-      "projectId": "proj_bKkPtejUJIlW",
-      "company": "Vitruvius",
-      "status": "published_business_address",
-      "reason": "Individually reviewed public workplace evidence and a matching address point. Shared residency is labeled separately; no headquarters fact inferred.",
-      "checkedAt": "2026-11-04",
-      "discoveryStatus": "manual_primary_source_review",
-      "checkedPages": [
-        "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
-        "https://business.columbia.edu/lang/student-and-alumni-programming/scale/columbia-startup-lab-csl",
-        "https://entrepreneurship.columbia.edu/startup-lab/"
-      ]
     }
   ],
-  "productionBase": "fc3dbfaffed9da24c97a0dc499317197b4b70de8",
+  "productionBase": "e7d9e862c4dc50ab2f3d035e13631ddda1966aaa",
   "mergedRecords": [
     {
       "company": "Winko",
@@ -26992,12 +27804,12 @@
       }
     }
   ],
-  "databaseChange": "Additive reviewed build-time patch restores 44 existing profiles whose only exclusion was unverified recency, based on current named business/tenant activity. No new company rows, duplicate companies, founder/enrollment/funding/HQ/scoring/gate changes, or committed database binary. Current residency does not establish a graduation year or investment eligibility.",
+  "databaseChange": "Additive build-time visibility patch for 43 existing profiles with unverified-recency exclusions, based on current company/workspace activity. No new company rows, founder/enrollment/funding/HQ/scoring/gate-logic changes, or committed database binary. Activity and residency do not establish graduation year or investment eligibility.",
   "retiredRecords": [],
   "productionDirectorySnapshot": {
-    "source": "Fresh production directory plus 44 reviewed existing-company visibility restorations. Production map payload supplies the baseline HQ mapping; local address tests use a separate database copy.",
-    "productionCompaniesBefore": 2513,
-    "companiesAfter": 2557,
+    "source": "Fresh production directory plus 43 reviewed existing profiles; separate test database.",
+    "productionCompaniesBefore": 2572,
+    "companiesAfter": 2615,
     "checkedAt": "2026-11-04"
   },
   "databaseBinaryModified": false
