@@ -88,7 +88,8 @@
     position: absolute;
     left: 8px;
     right: 8px;
-    bottom: 28px;
+    /* Sit above the Open lane sheet rest (~108px) so "Open sheet" is not covered. */
+    bottom: 116px;
     z-index: 30;
     padding: 8px;
     border: 1px solid #c5cfe7;
@@ -130,4 +131,8 @@
     width: min(320px, 28vw);
     max-height: 48px;
   }
+}
+
+:global(body:has([data-fold-map-sheet])) .logoPeek button {
+  display: none;
 }
