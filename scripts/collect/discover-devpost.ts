@@ -36,7 +36,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
 
-async function getJson(url: string): Promise<any> {
+async function getJson(url: string): Promise<{ hackathons?: Hack[] }> {
   const res = await fetch(url, { headers: { "user-agent": UA } });
   if (!res.ok) throw new Error(`HTTP ${res.status} ${url}`);
   return res.json();
@@ -92,7 +92,7 @@ async function main() {
   const registry = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "collectors", "registry.json"), "utf8")) as { entries: { galleryUrl: string }[] };
   const known = new Set(registry.entries.map((e) => e.galleryUrl));
 
-  const candidates: any[] = [];
+  const candidates: { id: string; collector: string; status: string; sourceId: string; sourceName: string; galleryUrl: string; universityId: string; eventLabel: string; roleLabel: string; options: { winnersOnly: boolean; captureLinkedIn: boolean; maxProjectFetches: number; maxFetches: number }; notes: string }[] = [];
   const noResult: string[] = [];
   for (const u of unis.slice(0, limit)) {
     const aliases: string[] = u.aliases ? JSON.parse(u.aliases) : [];

@@ -211,7 +211,8 @@ function ycSlug(url: string | null | undefined): string | null {
   return m ? m[1].toLowerCase() : null;
 }
 
-function extractInertiaCompany(html: string): any | null {
+type YcCompany = { long_description?: string; one_liner?: string; name?: string; website?: string; year_founded?: number | string; founded?: number | string; batch?: string; batch_name?: string; tags?: unknown[]; founders?: { name?: string; full_name?: string }[] };
+function extractInertiaCompany(html: string): YcCompany | null {
   const m = html.match(/data-page="([^"]+)"/);
   if (!m) return null;
   try {
@@ -415,7 +416,7 @@ async function main() {
     const text = pageText(html);
     if (company?.name && !namesMatch(company.name, item.c.name)) {
       // Try founder overlap
-      const founders = (company.founders || []).map((f: any) => f?.name || f?.full_name || "").filter(Boolean);
+      const founders = (company.founders || []).map((f) => f?.name || f?.full_name || "").filter(Boolean);
       const ours = foundersByProject.get(item.c.id) || [];
       const overlap = founders.some((fn: string) => ours.some((o) => namesMatch(fn, o)));
       if (!overlap) {

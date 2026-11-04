@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useDialogFocus } from "./use-dialog-focus";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
-import { directoryCardSubtitle, type StatusId } from "@/lib/domain/sample-facets";
+import { directoryCardSubtitle, statusOf, type StatusId } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
   CAMPUS_COUNT_UNIT,
@@ -38,6 +39,7 @@ import {
 } from "./sample-instrument";
 import {
   activeFacetChips,
+  facetsFromSearchParams,
   browseHref as buildBrowseHref,
   type FacetState as UrlFacetState,
 } from "@/lib/domain/facet-url";
@@ -88,12 +90,7 @@ function exportFilteredCsv(rows: FacetCompany[]) {
   const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
   const lines = [header.join(",")];
   for (const row of rows) {
-    const status =
-      row.operatingStatus === "acquired"
-        ? "acquired"
-        : row.operatingStatus === "dead"
-          ? "closed"
-          : "active";
+    const status = statusOf(row);
     lines.push(
       [
         esc(row.id),
@@ -238,6 +235,7 @@ export function SampleInstrumentBrowse({
   initialFacets?: Partial<FacetState>;
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [facets, setFacets] = useState<FacetState>(() => ({
     ...emptyFacets(),
     ...(initialFacets ?? {}),
@@ -247,7 +245,15 @@ export function SampleInstrumentBrowse({
     query: query ?? initialFacets?.query ?? "",
   }));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
+  const selectedCompanyId = searchParams.get("c");
+  const filterDialog = useRef<HTMLDivElement>(null);
+  const closeFilters = useCallback(() => setMobileFiltersOpen(false), []);
+  useDialogFocus(mobileFiltersOpen, filterDialog, closeFilters);
+  useEffect(() => {
+    const restore = () => setFacets(facetsFromSearchParams(new URLSearchParams(window.location.search)));
+    window.addEventListener("popstate", restore);
+    return () => window.removeEventListener("popstate", restore);
+  }, []);
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
   const [catalogError, setCatalogError] = useState(false);
   const [catalogAttempt, setCatalogAttempt] = useState(0);
@@ -998,6 +1004,8 @@ export function SampleInstrumentBrowse({
                       </>
                     ) : null}
                     <LedgerRow
+                      returnHref={browseHref({ feed, sort, facets, more: pages, c: card.id })}
+                      selected={selectedCompanyId === card.id}
                       founderLinks={founderLinks[card.id] ?? []}
                       card={card}
                       rank={feed === "leaderboard" ? index + 1 : null}
@@ -1335,11 +1343,12 @@ export function SampleInstrumentBrowse({
 
       {/* Mobile bottom filter sheet */}
       {mobileFiltersOpen ? (
-        <div id="mobile-filter-sheet" className="fixed inset-0 z-40 lg:hidden" data-mobile-filter-sheet="" role="dialog" aria-modal="true" aria-label="Filters">
+        <div ref={filterDialog} tabIndex={-1} id="mobile-filter-sheet" className="fixed inset-0 z-50 lg:hidden" data-mobile-filter-sheet="" role="dialog" aria-modal="true" aria-label="Filters">
           <button
             type="button"
             className="absolute inset-0 bg-[color:var(--fg,#0B0E17)]/35"
             aria-label="Dismiss filters"
+            tabIndex={-1}
             onClick={() => setMobileFiltersOpen(false)}
           />
           <div className="absolute inset-x-0 bottom-0 max-h-[55dvh] overflow-hidden rounded-t-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] shadow-lg">
@@ -1471,6 +1480,7 @@ function OverlayCountBlock({
 }
 
 function LedgerRow({
+  returnHref,
   card,
   rank,
   ranked = false,
@@ -1480,6 +1490,7 @@ function LedgerRow({
   founderLinks = [],
   evidenceRich = false,
 }: {
+  returnHref: string;
   card: DirectoryCard;
   rank: number | null;
   ranked?: boolean;
@@ -1496,9 +1507,7 @@ function LedgerRow({
   const meta = signalMeta(card);
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   return (
-    <Link
-      href={`/startup/${card.id}`}
-      data-card-signals={card.signals}
+    <div
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
       className={`group flex min-h-11 items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
@@ -1544,7 +1553,7 @@ function LedgerRow({
               : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
-          {card.name}
+          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center">{card.name}</Link>
         </p>
         {subtitle ? (
           <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
@@ -1634,6 +1643,6 @@ function LedgerRow({
           {meta.secondary}
         </span>
       ) : null}
-    </Link>
+    </div>
   );
 }

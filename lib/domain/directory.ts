@@ -5,6 +5,7 @@ import { campusSlug, shortCampusLabel } from "./campuses";
 import { directoryRank, whyItsHere } from "./directory-rank";
 import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
 import { localCompanyLogoUrl } from "./local-logos";
+import { recordedOperatingStatus, type OperatingStatus } from "./sample-facets";
 
 export { directoryRank, whyItsHere };
 
@@ -34,7 +35,7 @@ export interface DirectoryCard {
   /** Calendar year from foundedYear, else latest signal/news date — for Why-it-here only. */
   activityYear?: number | null;
   /** operating_status fact when stored: acquired | dead. */
-  operatingStatus: "acquired" | "dead" | null;
+  operatingStatus: OperatingStatus | null;
   /** Normalized HQ city from company_facts.hq when stored. */
   hqRegion: string | null;
   /** First investor/program fact when stored (e.g. Y Combinator, SkyDeck). */
@@ -381,12 +382,12 @@ export function buildDirectoryFromDb(options: { includeAll?: boolean } = {}): Di
     if (Number.isFinite(year) && year >= 1990 && year <= 2100) foundedYearByProject.set(row.project_id, year);
   }
 
-  const operatingStatusByProject = new Map<string, "acquired" | "dead">();
+  const operatingStatusByProject = new Map<string, OperatingStatus>();
   for (const row of db
     .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'operating_status'`)
     .all() as { project_id: string; value_text: string | null }[]) {
-    const value = String(row.value_text ?? "").trim().toLowerCase();
-    if (value === "acquired" || value === "dead") operatingStatusByProject.set(row.project_id, value);
+    const value = recordedOperatingStatus(row.value_text);
+    if (value) operatingStatusByProject.set(row.project_id, value);
   }
 
   const logoByProject = new Map<string, string>();

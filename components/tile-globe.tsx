@@ -724,7 +724,7 @@ export function TileGlobe({
   // counts the same person twice and disagrees with the vetted list.
   const campusesOnMap = campuses.length;
 
-  const rankedCampuses = useMemo(() => {
+  const rankedCampuses = (() => {
     const pitchbook = rankedByUndergrad(campuses);
     if (pitchbook.length === 0) return campusFoundersRanked(campuses);
     const rankedIds = new Set(pitchbook.map((campus) => campus.id));
@@ -732,7 +732,7 @@ export function TileGlobe({
       .filter((campus) => !rankedIds.has(campus.id) && campus.founders > 0)
       .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
     return [...pitchbook, ...rest];
-  }, [campuses]);
+  })();
   const usingPitchbook = rankedCampuses.some((campus) => campus.pitchbookRank != null);
   const topCampuses = useMemo(
     () => (usingPitchbook ? rankedByUndergrad(campuses).slice(0, CAMPUS_FOUNDERS_VISIBLE) : campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE)),

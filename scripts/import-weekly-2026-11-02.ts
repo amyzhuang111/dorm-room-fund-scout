@@ -215,7 +215,7 @@ async function scrapeUsfSii(): Promise<Lead[]> {
   if (start < 0) return [];
   const block = text.slice(start, start + 12000);
   for (const line of block.split(/\n+/)) {
-    let name = line.replace(/^\d+\s+/, "").trim();
+    const name = line.replace(/^\d+\s+/, "").trim();
     if (!name || name.length > 80) continue;
     if (/^(aLUMNI|Alumni|Meet the|The student|SII|USF)\b/i.test(name)) continue;
     if (/quick links|visit usf|parking|activate|footer|research help/i.test(name)) break;

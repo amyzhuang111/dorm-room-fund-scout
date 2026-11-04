@@ -59,11 +59,38 @@
 .workspace-picker span { font-size:13px; color:#58627a; }
 .workspace-picker span:last-child { margin-left:auto; }
 .company-workspace :is(a,button,input,select):focus-visible,.review-actions :is(a,button):focus-visible { outline:3px solid #2f4fd8; outline-offset:3px; }
+.dossier-breadcrumb { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; margin-bottom:12px; }
+.dossier-breadcrumb a { display:inline-flex; align-items:center; min-height:44px; font-size:14px; color:#2f4fd8; }
+.company-dossier [data-full-record-top] { scroll-margin-top:100px; }
+.company-dossier [data-full-record-group] { scroll-margin-top:110px; }
+.company-dossier :is(a,button,summary) { min-height:44px; min-width:44px; }
+.company-dossier a { display:inline-flex; align-items:center; overflow-wrap:anywhere; }
+.company-dossier .company-instrument :is(input,select,textarea) { font-size:16px; min-height:44px; max-width:100%; }
+.company-dossier :is(a,button,input,select,summary,textarea):focus-visible { outline:3px solid #2f4fd8; outline-offset:3px; }
+.company-dossier :is(#evidence,#pipeline) { scroll-margin-top:110px; }
+.record-review-controls { border:1px solid #dce1ee; padding:8px 12px; }
+.record-review-controls summary { display:flex; align-items:center; cursor:pointer; font-size:14px; font-weight:600; color:#2f4fd8; }
+[data-mobile-filter-sheet] :is(button,input,select,summary) { min-height:44px; min-width:44px; }
+[data-mobile-filter-sheet] input { font-size:16px; }
+.comparison-mobile-switch { position:sticky; top:92px; z-index:5; display:flex; gap:8px; padding:10px 0; background:#fff; border-block:1px solid #dce1ee; margin:16px 0; }
+.comparison-mobile-switch button { flex:1; min-width:0; min-height:44px; padding:8px; border:1px solid #dce1ee; border-radius:4px; font-size:14px; overflow-wrap:anywhere; }
+.comparison-mobile-switch button[aria-pressed="true"] { color:#fff; background:#2f4fd8; border-color:#2f4fd8; }
+.comparison-picker-toggle { display:flex; align-items:center; min-height:44px; width:100%; margin-bottom:12px; padding:8px 12px; border:1px solid #dce1ee; color:#2f4fd8; font-size:14px; }
+.comparison-picker-content[data-open="false"] { display:none; }
+.comparison-evidence a { min-width:44px; }
+.company-dossier [data-full-record-capital-links] { grid-template-columns:minmax(0,1fr); }
+.is-comparison [data-mobile-active="false"] { display:none; }
 @media(min-width:768px) {
   .company-workspace { padding:24px 32px 80px; }
   .company-workspace h1 { font-size:48px; }
   .workspace-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .workspace-picker ul { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .comparison-mobile-switch { display:none; }
+  .comparison-picker-toggle { display:none; }
+  .comparison-picker-content[data-open="false"] { display:block; }
+  .workspace-grid.is-comparison { grid-template-columns:repeat(var(--comparison-columns,3),minmax(0,1fr)); }
+  .is-comparison .workspace-company { display:grid; grid-template-rows:subgrid; grid-row:span 15; gap:0; align-content:start; }
+  .is-comparison .workspace-company>dl { display:contents; }
+  .is-comparison .workspace-company>.review-actions { align-items:start; margin-bottom:16px; }
 }
-@media(min-width:1100px) { .workspace-grid.is-comparison { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media(prefers-reduced-motion:reduce) { .review-actions * { transition:none; } }

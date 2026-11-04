@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { cloneElement, isValidElement, useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { createPortal } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
@@ -28,6 +28,7 @@ import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { discoveryHref } from "@/lib/domain/discovery-navigation";
 import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { browseHref as buildBrowseHref, type FacetState as UrlFacetState } from "@/lib/domain/facet-url";
 
@@ -237,7 +238,7 @@ function MapFoldSheet({
   const REST = 108;
   const DECK = 300;
   const [height, setHeight] = useState(REST);
-  heightRef.current = height;
+  useEffect(() => { heightRef.current = height; }, [height]);
   const minH = 100;
   const clampH = (h: number) => {
     const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
@@ -369,10 +370,8 @@ function MapFoldSheet({
             />
           </div>
           {mode === "peek" ? (
-            <div className="mt-1" data-fold-sheet-peek="" data-fold-founders-col="">
-              {isValidElement(peek)
-                ? cloneElement(peek as ReactElement<{ onExpand?: () => void }>, { onExpand: expandToDeck })
-                : peek}
+            <div className="mt-1" data-fold-sheet-peek="" data-fold-founders-col="" onClick={expandToDeck}>
+              {peek}
               <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
                 {filterKeep}
               </div>
@@ -876,9 +875,9 @@ export function SampleHomeClient(props: {
               Companies
             </Tab>
             <Tab href={browseHref({ feed: "leaderboard", sector, kind, campus: campusId, q: query })} active={feed === "leaderboard"}>
-              Signals
+              By signals
             </Tab>
-            <Tab href="/" active={false}>
+            <Tab href={discoveryHref("map", new URLSearchParams(search))} active={false}>
               Map
             </Tab>
           </div>
@@ -916,13 +915,13 @@ export function SampleHomeClient(props: {
               campus: campusId ?? null,
               query: query ?? "",
               stage: (facetExtras?.stage as string) ?? null,
-              status: (facetExtras?.status as any) ?? null,
-              flag: (facetExtras?.flag as any) ?? null,
+              status: (facetExtras?.status as UrlFacetState["status"]) ?? null,
+              flag: (facetExtras?.flag as UrlFacetState["flag"]) ?? null,
               foundedYear: typeof facetExtras?.foundedYear === "number" ? facetExtras.foundedYear : null,
               yearMissing: Boolean(facetExtras?.yearMissing),
               hqRegion: (facetExtras?.hqRegion as string) ?? null,
               country: (facetExtras?.country as string) ?? null,
-              recency: (facetExtras?.recency as any) ?? null,
+              recency: (facetExtras?.recency as UrlFacetState["recency"]) ?? null,
               sectorMissing: Boolean(facetExtras?.sectorMissing),
             }}
           />

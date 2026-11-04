@@ -2,19 +2,19 @@ import assert from "node:assert/strict";
 import { loadDirectory } from "./directory";
 import { countCandidateProjects } from "./queries";
 import {
-  activeThisMonth,
+  activeThisMonth as activeThisMonthAt,
   bucketSum,
-  daysSinceSignal,
+  daysSinceSignal as daysSinceSignalAt,
   directoryCardSubtitle,
-  filterFacetCompanies,
+  filterFacetCompanies as filterFacetCompaniesAt,
   foundedYearBuckets,
-  hasFlag,
+  hasFlag as hasFlagAt,
   hqRegionBuckets,
   hqRegionPills,
-  newThisYear,
+  newThisYear as newThisYearAt,
   NOT_ON_RECORD,
   preferLogoCompanies,
-  recencyOf,
+  recencyOf as recencyOfAt,
   sectorBuckets,
   sampleSurfaceCounts,
   sectorPills,
@@ -22,6 +22,15 @@ import {
   statusOf,
   FLAG_LABEL,
 } from "./sample-facets";
+
+
+const today = { y: 2026, m: 10, d: 29 };
+const recencyOf = (value: string | null) => recencyOfAt(value, today);
+const activeThisMonth = (value: string | null) => activeThisMonthAt(value, today);
+const daysSinceSignal = (value: string | null) => daysSinceSignalAt(value, today);
+const newThisYear = (value: number) => newThisYearAt(value, today);
+const hasFlag = (company: Parameters<typeof hasFlagAt>[0], flag: Parameters<typeof hasFlagAt>[1]) => hasFlagAt(company, flag, today);
+const filterFacetCompanies = (companies: Parameters<typeof filterFacetCompaniesAt>[0], opts: Parameters<typeof filterFacetCompaniesAt>[1]) => filterFacetCompaniesAt(companies, { ...opts, today });
 
 assert.equal(recencyOf("2026-10-01"), "month");
 assert.equal(recencyOf("2026-05-00"), "year");
@@ -35,12 +44,13 @@ const rows = [
   { id: "d", name: "D", schoolId: null, signals: 0, founders: [] },
 ];
 
-assert.equal(statusOf(rows[0]), "active");
+assert.equal(statusOf(rows[0]), "unknown");
+assert.equal(statusOf({ ...rows[0], operatingStatus: "active" }), "active");
 assert.equal(statusOf(rows[1]), "closed");
 assert.equal(statusOf(rows[2]), "acquired");
-assert.equal(statusOf({ ...rows[2], operatingStatus: null }), "active");
+assert.equal(statusOf({ ...rows[2], operatingStatus: null }), "unknown");
 
-assert.equal(FLAG_LABEL.new, "Founded in 2026");
+assert.equal(FLAG_LABEL.new, "Founded this year");
 assert.equal(newThisYear(2026), true);
 assert.equal(newThisYear(2025), false);
 assert.equal(activeThisMonth("2026-10-15"), true);
@@ -136,7 +146,8 @@ assert.ok(surface.foundersListed > 0);
 const active = data.cards.filter((c) => statusOf(c) === "active").length;
 const acquired = data.cards.filter((c) => statusOf(c) === "acquired").length;
 const closed = data.cards.filter((c) => statusOf(c) === "closed").length;
-assert.equal(active + acquired + closed, data.cards.length);
+const unknown = data.cards.filter((c) => statusOf(c) === "unknown").length;
+assert.equal(active + acquired + closed + unknown, data.cards.length);
 
 for (const card of data.cards.slice(0, 50)) {
   const sub = directoryCardSubtitle(card);

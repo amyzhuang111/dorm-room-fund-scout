@@ -8,6 +8,9 @@ import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { isBoilerplateDescription } from "@/lib/domain/sectors";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CampusSeal } from "@/components/campus-seal";
+import { CompanyReviewActions } from "./company-review-actions";
+import { LogoMark } from "./sample-instrument";
+import type { StartupCard } from "@/lib/domain/startup-card";
 
 function displaySignalDate(value: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
@@ -25,11 +28,7 @@ function isEmpty(value: unknown): boolean {
 function oneLinePitch(raw: string | null | undefined): string | null {
   const text = (raw || "").replace(/\s+/g, " ").trim();
   if (!text || isBoilerplateDescription(text)) return null;
-  const first = (text.split(/(?<=[.!?])\s+/)[0] || text).trim();
-  if (first.length <= 140) return first;
-  const cut = first.slice(0, 140);
-  const sp = cut.lastIndexOf(" ");
-  return `${(sp > 80 ? cut.slice(0, sp) : cut).trim()}...`;
+  return text;
 }
 
 function monogram(name: string): string {
@@ -85,13 +84,13 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /** Every stored company field; lead with founders + pitch + key stats, then grouped cards. */
-export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
+export function CompanyFullRecord({ project, children, directoryCard }: { project: ProjectDetail; children?: ReactNode; directoryCard?: StartupCard | null }) {
   const profile = project.profile;
   const funding = displayedFunding(profile);
   const links = storedCompanyLinks({
     websiteUrl: project.websiteUrl,
     primaryLink: project.primaryLink,
-    sourceUrls: [profile.companyLinkedin?.text, ...project.claims.map((c) => c.sourceUrl)],
+    sourceUrls: [...(directoryCard?.links ?? []).map((link) => link.url), profile.companyLinkedin?.text, ...project.claims.map((c) => c.sourceUrl)],
   });
   const yc = profile.investors.filter((i) => /y combinator/i.test(i.name));
   const campus = formatCampusList(project.universities);
@@ -165,9 +164,10 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
     >
       <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4 sm:py-3.5">
         <p className="scout-kicker">Full record</p>
-        <p className="mt-1 text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]" data-full-record-title="">
+        <h1 className="mt-1 flex items-center gap-3 text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[32px]" data-full-record-title="">
+          <LogoMark name={project.name} logoUrl={directoryCard?.logoUrl} size={44} />
           {project.name || "Company"}
-        </p>
+        </h1>
         {/* r48: desk Links action path — website CTA in the title band on mobile */}
         {website ? (
           <p className="mt-2 sm:hidden" data-full-record-scout-link="">
@@ -195,7 +195,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       {/* Lead: mobile order keyStats → founders → pitch; desk keeps DOM founders → pitch → stats */}
       <div className="flex flex-col sm:contents" data-full-record-lead="">
       {!isEmpty(project.founderLinks) ? (
-        <div className="order-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-2" data-full-record-founders-lead="">
+        <div className="order-1 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-2" data-full-record-founders-lead="">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
           <ul className="mt-1.5 space-y-2 sm:mt-1.5 sm:space-y-2">
             {project.founderLinks.map((f) => (
@@ -240,7 +240,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
 
       {keyStats.length > 0 ? (
         <div
-          className={`order-1 grid gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)] sm:order-none ${
+          className={`order-2 grid gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)] sm:order-none ${
             keyStats.length >= 3 ? "grid-cols-3" : keyStats.length === 2 ? "grid-cols-2" : "grid-cols-1"
           }`}
           data-full-record-key-stats=""
@@ -261,10 +261,14 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       ) : null}
       </div>
 
+      <div className="px-4 py-3"><CompanyReviewActions id={project.id} name={project.name} url={website} /></div>
+      {children ? <div className="px-4 pb-3">{children}</div> : null}
       <div className="flex flex-col space-y-3 px-3.5 py-3 pl-4 sm:block sm:space-y-2 sm:py-2" data-full-record-groups="">
         {hasIdentity ? (
           <div className="order-1 sm:order-none" data-full-record-identity-first="">
           <Group title="Identity">
+            {directoryCard?.subtitle ? <Field label="Directory context">{directoryCard.subtitle}</Field> : null}
+            {!profile.operatingStatus && directoryCard?.status ? <Field label="Directory status">{directoryCard.status} · reported by the directory; company operating status is not on record.</Field> : null}
             {/* r52: Website / LinkedIn first so they clear the 900px fold with Capital in key stats */}
             {hasLinks ? (
               <div className="border-b border-[color:var(--line,#E1E5EF)] py-2 last:border-b-0" data-full-record-fold-links="">

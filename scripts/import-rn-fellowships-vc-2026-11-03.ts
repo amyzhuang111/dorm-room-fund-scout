@@ -296,7 +296,7 @@ type PerSource = {
 function main() {
   const retrievedAt = nowIso();
   const leads = JSON.parse(fs.readFileSync(LEADS_PATH, "utf8")) as Lead[];
-  const familyStats = JSON.parse(fs.readFileSync(FAMILY_STATS_PATH, "utf8")) as Record<string, any>;
+  const familyStats = JSON.parse(fs.readFileSync(FAMILY_STATS_PATH, "utf8")) as Record<string, { found: number; kept?: number; excluded?: number; excluded_or_edge_only?: number; notes?: string }>;
   const db = getDb();
 
   const beforeInvestable = (

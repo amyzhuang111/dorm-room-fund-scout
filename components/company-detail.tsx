@@ -2,21 +2,16 @@
 
 import { plainText } from "@/lib/display/plain-text";
 import Link from "next/link";
-import { CompanyReviewActions } from "./company-review-actions";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import type { StartupCard } from "@/lib/domain/startup-card";
-import { storedCompanyLinks } from "@/lib/domain/company-link";
-import { formatCampusList } from "@/lib/domain/campuses";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SameSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
 import { EntityMarks, PipelineStageEditor } from "./entity-marks";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
-import { CompanyProfileCard } from "./company-profile";
 import { CompanyFullRecord } from "./company-full-record";
 import { InTheNews } from "./in-the-news";
-import { StartupDirectoryCard, useStartupCard } from "./startup-directory-card";
 
 function normalizeOpenQuestion(raw: string): string {
   // Dedupe gate merge tails ("Also recorded: …") when the extra restates the primary.
@@ -83,8 +78,7 @@ function founderHref(founder: NamedFounder): string {
   return `/founder/discover?${params.toString()}`;
 }
 
-export function CompanyDetail({ project, initialCard = null }: { project: ProjectDetail; initialCard?: StartupCard | null }) {
-  const { card } = useStartupCard(project.id, initialCard);
+export function CompanyDetail({ project, initialCard }: { project: ProjectDetail; initialCard?: StartupCard | null }) {
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
   const strongestEvidence = project.claims[0];
   const strongestConcern = concernReasons[0];
@@ -127,102 +121,22 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
 
   return (
     <div className="space-y-3 p-2.5 sm:space-y-5 sm:p-4">
-      {/* Mobile: Why look above Funding so sim-375 matches 73a fold (Funding peeks) */}
+
 
       {/* r45: Full record lead (founders / identity / CONFIRMED) stays at the top. */}
       <div data-full-record-top="">
-        <CompanyFullRecord project={project} />
+        <CompanyFullRecord project={project} directoryCard={initialCard}>{whyLook}</CompanyFullRecord>
       </div>
-      <CompanyReviewActions id={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
       <nav className="record-sections" aria-label="Company sections"><a href="#evidence">Evidence & sources</a><a href="#pipeline">Pipeline</a><Link href="/work/shortlist">Saved companies</Link></nav>
-      <div className="sm:hidden">{whyLook}</div>
 
-      {/* Header */}
-      <div>
-        {card ? (
-          <div className="hidden sm:block" data-dossier-desk-directory-card="">
-            <StartupDirectoryCard card={card} embedded />
-          </div>
-        ) : (
-          <h2 className="text-lg font-semibold text-foreground">{plainText(project.name)}</h2>
-        )}
-        <div className="sample-ops-chrome mt-2 hidden items-start justify-between gap-2 sm:flex">
-          <div className="flex flex-wrap items-center gap-2">
-            <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
-            {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}
-            <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
-            <EntityMarks entityType="project" entityId={project.id} name={project.name} campusName={project.universities[0]} websiteUrl={project.websiteUrl} />
-          </div>
-          <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
-        </div>
-        {card ? (
-          <CompanyProfileCard profile={project.profile} founders={project.founderLinks} compact />
-        ) : (
-          (() => {
-            const links = storedCompanyLinks({
-              websiteUrl: project.websiteUrl,
-              primaryLink: project.primaryLink,
-              sourceUrls: [project.profile.companyLinkedin?.text, ...project.claims.map((claim) => claim.sourceUrl)],
-            });
-            return (
-              <>
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  {links.website ? (
-                    <a href={links.website} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground">
-                      Visit website
-                    </a>
-                  ) : (
-                    <span className="text-sm text-muted">No website found</span>
-                  )}
-                  {links.fallback && (
-                    <a href={links.fallback.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
-                      {links.fallback.label} · source page
-                    </a>
-                  )}
-                  {links.linkedin && (
-                    <a href={links.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
-                      Company LinkedIn
-                    </a>
-                  )}
-                  {links.extras.map((link) => (
-                    <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-2.5 py-1 text-xs font-medium text-link hover:border-accent">
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
-                <CompanyProfileCard profile={project.profile} founders={project.founderLinks} />
-                <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted sm:grid-cols-3">
-                  <div>
-                    <dt className="font-semibold uppercase tracking-wide">Sector</dt>
-                    <dd className="text-foreground">{project.sectorTags[0] || project.sector || "Not on record"}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-semibold uppercase tracking-wide">Campus</dt>
-                    <dd className="text-foreground">{formatCampusList(project.universities) || "Not on record"}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-semibold uppercase tracking-wide">Signal tier</dt>
-                    <dd className="text-foreground">{project.signalTier || "Not on record"}</dd>
-                  </div>
-                </dl>
-              </>
-            );
-          })()
-        )}
-        {project.sectorTags.length > 0 && (
-          <p className="mt-2 flex flex-wrap gap-1">
-            {project.sectorTags.map((tag) => (
-              <span key={tag} className="sector-chip">{tag}</span>
-            ))}
-          </p>
-        )}
-        <div className="sample-ops-chrome">
-          <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
-        </div>
+
+      <div className="flex flex-wrap items-center gap-2" data-company-verification="">
+        <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
+        <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
+        {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}
+        <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
       </div>
-
-      <div className="hidden sm:block">{whyLook}</div>
-
+      <details className="record-review-controls"><summary>Review decisions & notes</summary><FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} /></details>
       <InTheNews items={project.news} moreHref={`/news?q=${encodeURIComponent(project.name)}`} />
 
       {/* Overview */}
@@ -275,7 +189,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       )}
 
       {project.founderLinks.length > 0 ? (
-      <section data-company-founders="">
+      <details data-company-founders="" className="record-review-controls"><summary>Founder evidence & review controls</summary>
         <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
         <ul className="mt-1 space-y-1 text-sm text-foreground">
           {project.founderLinks.map((f) => (
@@ -314,7 +228,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             </li>
           ))}
         </ul>
-      </section> ) : null}
+      </details> ) : null}
 
 
       <section>
@@ -359,31 +273,6 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             </li>
           ))}
           {project.claims.length === 0 && <li className="text-sm text-muted">No claims on record yet.</li>}
-        </ul>
-      </section>
-
-      {/* Activity */}
-      <section>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Activity ({project.signals.length})</h3>
-        <ul className="mt-1 space-y-1.5">
-          {project.signals.map((s) => (
-            <li key={s.id} className="rounded-md border border-border-c p-2 text-xs">
-              <p className="text-foreground">{plainText(s.currentObservation)}</p>
-              <p className="mt-0.5 text-muted">
-                {s.signalType.replace(/_/g, " ")}
-                {s.sourceDate ? ` · ${s.sourceDate}` : ""}
-                {s.sourceUrl ? (
-                  <>
-                    {" · "}
-                    <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
-                      source
-                    </a>
-                  </>
-                ) : null}
-              </p>
-            </li>
-          ))}
-          {project.signals.length === 0 && <li className="text-sm text-muted">No dated activity recorded yet.</li>}
         </ul>
       </section>
 
