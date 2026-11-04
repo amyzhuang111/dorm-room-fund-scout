@@ -288,6 +288,24 @@ export function buildDirectoryFromDb(): DirectoryData {
     }
   }
 
+  // A company can have a reported campus before its founders are identified.
+  // Keep founder-derived schools first; use only an explicit company-campus
+  // relationship as a fallback, without inventing a founder or enrollment.
+  for (const row of db
+    .prepare(
+      `SELECT r.source_entity_id AS project_id, u.id AS university_id, u.name AS name
+         FROM relationships r
+         JOIN universities u ON u.id = r.target_entity_id
+        WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university'
+          AND r.relationship_type = 'affiliated_with'
+        ORDER BY u.name, u.id`,
+    )
+    .all() as { project_id: string; university_id: string; name: string }[]) {
+    if (!schoolByProject.has(row.project_id)) {
+      schoolByProject.set(row.project_id, { id: row.university_id, name: row.name, n: 0 });
+    }
+  }
+
   const foundersByProject = new Map<string, string[]>();
   for (const row of db
     .prepare(
@@ -563,3 +581,4 @@ export function leaderboardPage(cards: DirectoryCard[], pages = 1): DirectoryCar
 
 export const DIRECTORY_PAGE_SIZE = DIRECTORY_LIMIT;
 export const LEADERBOARD_PAGE_SIZE = LEADERBOARD_LIMIT;
+
