@@ -279,12 +279,18 @@ export function NetworksApp() {
           ) : null}
           </div>
           <div className="relative md:min-h-0" data-network-map-and-inspector="">
+            <NetworksGraph
+              mapFocus={mapFocus}
+              investorHubs={data.investorHubs}
+              onSelectCompany={(id) => setCompanyId(id)}
+              onSelectNetwork={(id) => chooseNetwork(id, true)}
+            />
             {graphInspectorOpen && active ? (
               <aside
                 data-network-map-inspector=""
                 role="region"
                 aria-label={`Selected network: ${active.label}`}
-                className="mx-auto mb-3 w-[calc(100%-2rem)] max-w-[1352px] rounded-xl border border-[color:var(--line)] bg-white p-3 sm:p-4"
+                className="mx-auto my-3 w-[calc(100%-2rem)] max-w-[1352px] rounded-xl border border-[color:var(--line)] bg-white p-3 sm:p-4"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -322,12 +328,6 @@ export function NetworksApp() {
                 {shareFeedback ? <p role="status" className="mt-2 text-[11px] text-[color:var(--fg-2)]">{shareFeedback}</p> : null}
               </aside>
             ) : null}
-            <NetworksGraph
-              mapFocus={mapFocus}
-              investorHubs={data.investorHubs}
-              onSelectCompany={(id) => setCompanyId(id)}
-              onSelectNetwork={(id) => chooseNetwork(id, true)}
-            />
           </div>
         </section>
         </div>
