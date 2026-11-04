@@ -206,11 +206,11 @@ as a `linkedin:<url>` alias. These are leads, not confirmed identities. Set
 ### The flag
 
 `projects.is_investable_candidate` decides whether a company is in the vetted
-directory. A hidden company normally carries `excluded_reason`. On 2026-11-04:
+directory. A hidden company normally carries `excluded_reason`. On 2026-11-04, after the restores described below:
 
 | `excluded_reason` | Companies | Meaning |
 |---|---|---|
-| `unverified recency` | 4,171 | Nobody has confirmed the founders are current students or recent grads. Mostly *no* founder is linked (only 471 have one) but 4,127 are tied to a campus |
+| `unverified recency` | 4,137 | Nobody has confirmed the founders are current students or recent grads. Mostly *no* founder is linked (only 437 have one) but 4,093 are tied to a campus |
 | `founders not current/recent (<2023)` | 235 | Founders are known to be too old. Deliberately out of scope |
 | `faculty startup (not student)` | 1 | Out of scope |
 | (none) | 10 | Reviewed; see below |
@@ -229,6 +229,25 @@ follows:
 - Data comes from `lib/domain/unverified-companies.ts`: three grouped queries,
   memoized per database version (about 40 ms cold).
 
+### The recency gate (and re-running it)
+
+The rule that hides companies is `company_recency()` in
+`scripts/audit/campus-accuracy-2026-11-02.py`. A company is **kept** if at least
+one *founder* (a person whose role contains "founder", or whose
+`founder_status` is `founder`) is a current student, a recent grad, or has a
+graduation year of 2023 or later. It is **excluded** if every such founder is
+known to be older, or only faculty/staff/advisors. Otherwise it is
+**unverified**, which includes "no founder on record".
+
+The gate ran once, on 2026-11-02. Founder records added afterwards (for
+example the Cornell eLab and Harvard Innovation Labs imports) were never
+re-checked, so companies can sit in `unverified recency` while now passing the
+rule. **Re-running the check read-only is cheap and worth repeating after any
+large import**: apply `company_recency` to every hidden company and list those
+that now come back `keep`. Do not restore them mechanically: a pass only proves
+the *founders* are recent, not that the company is a startup (the first batch
+included a private-equity firm and an employer named in a bio).
+
 ### Restoring a hidden company
 
 Do not flip the flag by hand without a review: the 35 companies that had *no*
@@ -241,11 +260,22 @@ reason turned out to be a mix. On 2026-11-04 each was read individually:
   acquired companies.
 - 2 left hidden: no founder linked, so recency cannot be checked.
 
+**Second batch (2026-11-04, gate re-run):** 34 companies recorded as
+`unverified recency` now passed the gate. Each was listed by a university
+entrepreneurship program with student founders (30 Cornell eLab, 3 Harvard
+Innovation Labs Student i-lab, 1 Duke Startup Showcase runner-up), and 33 of 34
+have founders recorded as current students with `verified` evidence (graduation
+years 2027-2030). The weakest is Serv Technologies Group, whose founder's 2026
+graduation is *inferred*. All 34 were restored
+(`data/exports/restore-reviewed-companies-2026-11-04-b.json`). Vetted companies
+1,573 -> 1,607; unverified 4,171 -> 4,137.
+
 The decision list is `data/exports/restore-reviewed-companies-2026-11-04.json`
 and the idempotent script is `scripts/data/restore-reviewed-companies.ts`
 (only touches rows still hidden-without-reason; `--dry-run` supported). For a
-new batch: review, write a new JSON list, copy the script, run against a
-scratch copy, **diff every table** between before and after (only `projects`
+new batch: review, write a new JSON list (the script takes `--list <file>`; a
+list may name `fromReasons` it is allowed to clear, e.g. `["unverified recency"]`,
+and those are set to NULL), run against a scratch copy, **diff every table** between before and after (only `projects`
 should differ, only the reviewed rows), run the tests, then open a PR.
 
 ## 6. Performance lessons (so they are not re-learned)
