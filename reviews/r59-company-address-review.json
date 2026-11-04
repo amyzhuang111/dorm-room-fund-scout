@@ -4,12 +4,12 @@
   "googleMapsAutomaticSync": false,
   "databaseModified": false,
   "counts": {
-    "candidate_needs_verification": 195,
+    "candidate_needs_verification": 196,
     "held_from_publication": 30,
     "new_import_not_reviewed": 348,
-    "no_address_found_on_checked_pages": 492,
-    "published_business_address": 43,
-    "source_unavailable": 465
+    "no_address_found_on_checked_pages": 487,
+    "published_business_address": 48,
+    "source_unavailable": 464
   },
   "records": [
     {
@@ -1312,16 +1312,20 @@
     {
       "projectId": "proj_hO4uhhtfqjTr",
       "company": "Artos",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:02.913Z",
+      "status": "published_business_address",
+      "reason": "Company exhibitor profile publishes the street and city, corroborated by the active Artos, Inc. business registration. Conflicting postal codes are omitted; no suite is inferred from the registry.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.artosai.com/",
         "https://www.artosai.com/contact",
         "https://www.artosai.com/resources/security",
-        "https://www.artosai.com/feature/generative-ai-integrations"
-      ]
+        "https://www.artosai.com/feature/generative-ai-integrations",
+        "https://www.diaexhibits.org/fsPopup.asp?BoothID=841207&mode=exhibitorInfo&rnd=0.301948",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=5&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24where=upper%28ownership_name%29%20%3D%20%27ARTOS%2C%20INC.%27",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=185&street_name=BERRY&street_type=ST"
+      ],
+      "addressSource": "https://www.diaexhibits.org/fsPopup.asp?BoothID=841207&mode=exhibitorInfo&rnd=0.301948"
     },
     {
       "projectId": "proj_0BlCIUmfn7VX",
@@ -4552,16 +4556,19 @@
     {
       "projectId": "proj_1GmifsGJQlqG",
       "company": "dili",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:44.042Z",
+      "status": "published_business_address",
+      "reason": "Company service agreement explicitly identifies its offices at this address; the current privacy policy corroborates it. Matched to the Manhattan municipal address point, not the similarly named Brooklyn street.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.dili.com/",
         "https://www.dili.com/about/",
         "https://www.dili.com/privacy/",
-        "https://www.dili.com/terms/"
-      ]
+        "https://www.dili.com/terms/",
+        "https://www.dili.com/terms/Dili_Terms_of_Service.pdf",
+        "https://geosearch.planninglabs.nyc/v2/search?text=33+Irving+Place+Manhattan&size=2"
+      ],
+      "addressSource": "https://www.dili.com/terms/Dili_Terms_of_Service.pdf"
     },
     {
       "projectId": "proj_bJB_5KhHwlTL",
@@ -4968,13 +4975,15 @@
     {
       "projectId": "proj__gMe_TyKVxer",
       "company": "Elayne",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:42.070Z",
+      "status": "candidate_needs_verification",
+      "reason": "A company location profile and BBB record supply a matching street/suite candidate, but postal codes differ and office occupancy versus professional correspondence use remains unresolved. No point is published.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.elayne.com/",
-        "https://www.elayne.com/company"
+        "https://www.elayne.com/company",
+        "https://www.linkedin.com/company/meetelayne",
+        "https://www.bbb.org/us/ny/new-york/profile/estate-settlement/elayne-0121-87184202"
       ]
     },
     {
@@ -9297,16 +9306,20 @@
     {
       "projectId": "proj_s0WraeWrpUbW",
       "company": "Mem0",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:27.839Z",
+      "status": "published_business_address",
+      "reason": "Company-presented open coworking event explicitly identifies its HQ and suite. A second public event identifies the same office as Mem0 HQ. Matched to the municipal building address point.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://mem0.ai/",
         "https://mem0.ai/about-us",
         "https://mem0.ai/privacy-policy",
-        "https://mem0.ai/terms"
-      ]
+        "https://mem0.ai/terms",
+        "https://luma.com/mem0-linh",
+        "https://luma.com/mwsp6qgz",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=564&street_name=MARKET&street_type=ST"
+      ],
+      "addressSource": "https://luma.com/mem0-linh"
     },
     {
       "projectId": "proj_bbc50w1HB_NK",
@@ -11299,11 +11312,16 @@
     {
       "projectId": "proj_hYzQK2SaLe8d",
       "company": "Pax",
-      "status": "source_unavailable",
-      "reason": "Recorded website could not be adequately read in this pass.",
-      "checkedAt": "2026-11-03T06:14:35.314Z",
+      "status": "published_business_address",
+      "reason": "Company membership profile links to paxai.com and identifies the customs business and founder, resolving the company identity. Active Pax Solutions Inc. / Pax AI city registration confirms the same business address and suite.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://members.naftz.org/serviceproviderspublic/Details/pax-4701034",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=10&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24where=upper%28ownership_name%29%20like%20%27%25PAX%20AI%25%27%20OR%20upper%28dba_name%29%20like%20%27%25PAX%20AI%25%27",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=51&street_name=FEDERAL&street_type=ST"
+      ],
+      "addressSource": "https://members.naftz.org/serviceproviderspublic/Details/pax-4701034"
     },
     {
       "projectId": "proj_VSTJXzeDfQUe",
@@ -12647,13 +12665,17 @@
     {
       "projectId": "proj_yq7zpx1O3nvP",
       "company": "Reducto",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:40.428Z",
+      "status": "published_business_address",
+      "reason": "Company terms publish this address and a company-hosted event explicitly identifies it as Reducto's San Francisco office, corroborating office use beyond legal correspondence.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
-        "https://reducto.ai/"
-      ]
+        "https://reducto.ai/",
+        "https://reducto.ai/terms",
+        "https://luma.com/reductoai-obnb",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=77&street_name=GEARY&street_type=ST"
+      ],
+      "addressSource": "https://reducto.ai/terms"
     },
     {
       "projectId": "proj_zDy6hexKa7pn",
@@ -12820,12 +12842,15 @@
     {
       "projectId": "proj_v3W_XLM9oxBM",
       "company": "Revise Robotics",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:47.232Z",
+      "status": "candidate_needs_verification",
+      "reason": "A company SEC filing identifies a Brooklyn workspace, but a newer company hiring page describes a different neighborhood. Current physical office location needs corroboration before publishing a point.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
-        "https://reviserobotics.com/"
+        "https://reviserobotics.com/",
+        "https://www.sec.gov/Archives/edgar/data/2069529/000206952925000001/primary_doc.xml",
+        "https://www.ycombinator.com/companies/revise-robotics/jobs/peSRWPy-engineering-intern-summer-fall-2026",
+        "https://luma.com/rghfps17"
       ]
     },
     {
@@ -17070,7 +17095,7 @@
       "checkedPages": []
     }
   ],
-  "productionBase": "9d6655b4ca33550ebe939540051db6405366de36",
+  "productionBase": "fa09249f2b0b6665f8fae8a684aade58e89564ab",
   "mergedRecords": [
     {
       "company": "Winko",

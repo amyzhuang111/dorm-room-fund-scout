@@ -2,10 +2,10 @@
   "checkedAt": "2026-11-04",
   "companies": 1573,
   "cityMapped": 698,
-  "sourcedAddressPoints": 43,
-  "cityOnly": 655,
+  "sourcedAddressPoints": 48,
+  "cityOnly": 650,
   "cityUnknown": 875,
-  "withoutSourcedAddress": 1530,
+  "withoutSourcedAddress": 1525,
   "websiteDiscovery": {
     "attemptedRecords": 1225,
     "no_address_found_on_checked_pages": 497,
@@ -665,19 +665,94 @@
       "coordinateSource": "https://data.sf.gov/resource/3mea-di5p.json?address_number=1616&street_name=CALIFORNIA&street_type=ST",
       "coordinateMethod": "San Francisco Enterprise Addressing System base address point 286839",
       "checkedAt": "2026-11-04"
+    },
+    {
+      "projectId": "proj_hO4uhhtfqjTr",
+      "company": "Artos",
+      "kind": "published_business_address",
+      "address": "185 Berry Street, San Francisco, CA, USA",
+      "cityId": "5391959",
+      "longitude": -122.39212011562742,
+      "latitude": 37.776584790919486,
+      "sourceUrl": "https://www.diaexhibits.org/fsPopup.asp?BoothID=841207&mode=exhibitorInfo&rnd=0.301948",
+      "excerpt": "185 Berry St San Francisco, CA",
+      "corroboratingSource": "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=5&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24where=upper%28ownership_name%29%20%3D%20%27ARTOS%2C%20INC.%27",
+      "coordinateSource": "https://data.sf.gov/resource/3mea-di5p.json?address_number=185&street_name=BERRY&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 447764",
+      "checkedAt": "2026-11-04"
+    },
+    {
+      "projectId": "proj_s0WraeWrpUbW",
+      "company": "Mem0",
+      "kind": "headquarters",
+      "address": "564 Market Street, Suite 401, San Francisco, CA 94104, USA",
+      "cityId": "5391959",
+      "longitude": -122.40118844376893,
+      "latitude": 37.78987904361216,
+      "sourceUrl": "https://luma.com/mem0-linh",
+      "excerpt": "mem0 HQ 564 Market St., Suite 401 San Francisco, CA",
+      "corroboratingSource": "https://luma.com/mwsp6qgz",
+      "coordinateSource": "https://data.sf.gov/resource/3mea-di5p.json?address_number=564&street_name=MARKET&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 449348",
+      "checkedAt": "2026-11-04"
+    },
+    {
+      "projectId": "proj_hYzQK2SaLe8d",
+      "company": "Pax",
+      "kind": "published_business_address",
+      "address": "51 Federal Street, Suite 200, San Francisco, CA 94107, USA",
+      "cityId": "5391959",
+      "longitude": -122.39171504819254,
+      "latitude": 37.78352289802753,
+      "sourceUrl": "https://members.naftz.org/serviceproviderspublic/Details/pax-4701034",
+      "excerpt": "51 Federal Street 200 , San Francisco , CA , 94107",
+      "corroboratingSource": "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=10&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24where=upper%28ownership_name%29%20like%20%27%25PAX%20AI%25%27%20OR%20upper%28dba_name%29%20like%20%27%25PAX%20AI%25%27",
+      "coordinateSource": "https://data.sf.gov/resource/3mea-di5p.json?address_number=51&street_name=FEDERAL&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 366232",
+      "checkedAt": "2026-11-04"
+    },
+    {
+      "projectId": "proj_yq7zpx1O3nvP",
+      "company": "Reducto",
+      "kind": "published_business_address",
+      "address": "77 Geary Street, San Francisco, CA 94108, USA",
+      "cityId": "5391959",
+      "longitude": -122.4047522871046,
+      "latitude": 37.78768763877117,
+      "sourceUrl": "https://reducto.ai/terms",
+      "excerpt": "Reducto, Inc., 77 Geary Street, San Francisco, CA 94108",
+      "corroboratingSource": "https://luma.com/reductoai-obnb",
+      "coordinateSource": "https://data.sf.gov/resource/3mea-di5p.json?address_number=77&street_name=GEARY&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 446510",
+      "checkedAt": "2026-11-04"
+    },
+    {
+      "projectId": "proj_1GmifsGJQlqG",
+      "company": "dili",
+      "kind": "published_business_address",
+      "address": "33 Irving Place, New York, NY 10003, USA",
+      "cityId": "5128581",
+      "longitude": -73.988236,
+      "latitude": 40.735166,
+      "sourceUrl": "https://www.dili.com/terms/Dili_Terms_of_Service.pdf",
+      "excerpt": "offices at 33 Irving Place, New York, New York 10003",
+      "corroboratingSource": "https://www.dili.com/privacy/",
+      "coordinateSource": "https://geosearch.planninglabs.nyc/v2/search?text=33+Irving+Place+Manhattan&size=2",
+      "coordinateMethod": "NYC Planning PAD address point 94762, postal code 10003",
+      "checkedAt": "2026-11-04"
     }
   ],
-  "distinctBuildingPoints": 38,
+  "distinctBuildingPoints": 42,
   "reviewLedger": "reviews/r59-company-address-review.json",
   "reviewStatusCounts": {
-    "candidate_needs_verification": 195,
+    "candidate_needs_verification": 196,
     "held_from_publication": 30,
     "new_import_not_reviewed": 348,
-    "no_address_found_on_checked_pages": 492,
-    "published_business_address": 43,
-    "source_unavailable": 465
+    "no_address_found_on_checked_pages": 487,
+    "published_business_address": 48,
+    "source_unavailable": 464
   },
-  "productionBase": "9d6655b4ca33550ebe939540051db6405366de36",
+  "productionBase": "fa09249f2b0b6665f8fae8a684aade58e89564ab",
   "newImportsNotAddressReviewed": 348,
   "databaseChange": "Address enrichment only in this pass; the committed company database is unchanged. Earlier duplicate merges remain recorded in the review ledger.",
   "followupDiscovery": {
@@ -700,5 +775,17 @@
     "addressesPublished": 8,
     "recordsHeld": 3,
     "scope": "Rechecked official pages for additional New York and San Francisco candidates, then individually verified eight company-published addresses using company websites/profiles and municipal records. Supplemental map and business-directory leads were used only for discovery; their coordinates were not imported. Other unverified records retain their previous review status."
-  }
+  },
+  "subsequentAddressReviews": [
+    {
+      "checkedAt": "2026-11-04",
+      "attemptedRecords": 68,
+      "attemptedPages": 135,
+      "successfulPages": 124,
+      "recordsWithAddressLikeSnippets": 6,
+      "addressesPublished": 5,
+      "scope": "Rechecked recorded official pages for 68 additional New York candidates, with separate manual research on company-hosted events, membership profiles, exhibitor profiles and municipal business records in San Francisco. Published only five individually reviewed addresses. The four San Francisco additions came from supplemental manual research, not the 68-record website scan. Other unverified records retain their previous review status. Two additional leads have refreshed pending-review explanations; neither has published coordinates.",
+      "pendingRecordsUpdated": 2
+    }
+  ]
 }
