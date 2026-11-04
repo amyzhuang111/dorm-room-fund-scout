@@ -3,6 +3,7 @@ import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { listUniversities } from "@/lib/domain/queries";
 import { CampusesTheme } from "@/components/campuses-theme";
 import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
+import { nounFor } from "@/lib/display/plural";
 
 export default function CampusesPage() {
   const rows = listUniversities()
@@ -33,7 +34,7 @@ export default function CampusesPage() {
             {" with founders"}
             <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
             <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="founders-listed">{totals.foundersListed.toLocaleString("en-US")}</span>
-            {" founders"}
+            {" "}{nounFor(totals.foundersListed, "founder")}
             <span className="hidden sm:inline">
               <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
               <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="investable-companies">{totals.investableCompanies.toLocaleString("en-US")}</span>
@@ -90,12 +91,12 @@ export default function CampusesPage() {
                 <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">campuses with founders</p>
                 <p className="mt-3 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                   <span className="font-bold text-[color:var(--ember,#D96B1C)]">{totals.foundersListed.toLocaleString("en-US")}</span>
-                  {" founders listed · "}
+                  {" "}{nounFor(totals.foundersListed, "founder")} listed · 
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totals.investableCompanies.toLocaleString("en-US")}</span>
                   {" investable companies"}
                 </p>
                 <p className="mt-2 font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">
-                  Lead: {top[0]?.label ?? "n/a"} · {top[0] ? top[0].founderCount.toLocaleString("en-US") : "0"} founders
+                  Lead: {top[0]?.label ?? "n/a"} · {top[0] ? `${top[0].founderCount.toLocaleString("en-US")} ${nounFor(top[0].founderCount, "founder")}` : "0 founders"}
                 </p>
               </div>
               <p className="font-mono text-[11px] leading-5 text-[color:var(--fg-3,#5C647A)]">

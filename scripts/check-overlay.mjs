@@ -458,6 +458,59 @@ for (const vp of VIEWPORTS) {
   await page.close();
 }
 
+// (5) Fold-counts companies link must be ≥44×44 at phone widths — without covering map modes.
+{
+  const widths = [320, 375, 390, 430];
+  report.foldCountsTapTargets = [];
+  for (const width of widths) {
+    const page = await browser.newPage({
+      viewport: { width, height: 812 },
+      deviceScaleFactor: 3,
+      isMobile: true,
+      hasTouch: true,
+      userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+    });
+    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 90000 });
+    await page.waitForTimeout(2000);
+    const measured = await page.evaluate(() => {
+      const link = document.querySelector("[data-fold-counts-companies], [data-fold-counts-line] a[href='/companies'], [data-fold-counts] a[href='/companies']");
+      const counts = document.querySelector("[data-fold-counts]");
+      const modes = [...document.querySelectorAll('[aria-label="Map locations"] button')];
+      if (!link || !counts) return { ok: false, reason: "no-link" };
+      const lr = link.getBoundingClientRect();
+      const cr = counts.getBoundingClientRect();
+      const hit = modes.filter((b) => {
+        const r = b.getBoundingClientRect();
+        if (r.width < 2 || r.height < 2) return false;
+        const x1 = Math.max(cr.left, r.left), y1 = Math.max(cr.top, r.top);
+        const x2 = Math.min(cr.right, r.right), y2 = Math.min(cr.bottom, r.bottom);
+        return x2 > x1 + 2 && y2 > y1 + 2;
+      }).map((b) => (b.textContent || "").trim());
+      const text = (link.innerText || link.textContent || "").replace(/\s+/g, " ").trim();
+      const missingSpace = /\dvet/i.test(text.replace(/,/g, ""));
+      return {
+        ok: lr.height >= 44 && lr.width >= 44 && hit.length === 0 && !missingSpace,
+        w: Math.round(lr.width),
+        h: Math.round(lr.height),
+        text,
+        missingSpace,
+        hit,
+        countsH: Math.round(cr.height),
+        modeTop: modes[0] ? Math.round(modes[0].getBoundingClientRect().top) : null,
+        countsBottom: Math.round(cr.bottom),
+      };
+    });
+    report.foldCountsTapTargets.push({ width, ...measured });
+    if (!measured.ok) {
+      report.ok = false;
+      fail(`fold-counts-tap@${width}: ${JSON.stringify(measured)}`);
+    } else {
+      console.log(`OK fold-counts-tap@${width} ${measured.w}x${measured.h} clear of modes text=${JSON.stringify(measured.text)}`);
+    }
+    await page.close();
+  }
+}
+
 await browser.close();
 fs.mkdirSync("reviews", { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(report, null, 2));

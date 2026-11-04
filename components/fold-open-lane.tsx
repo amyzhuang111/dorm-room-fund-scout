@@ -1,6 +1,7 @@
 "use client";
 
 import { CampusSeal } from "@/components/campus-seal";
+import { nounFor } from "@/lib/display/plural";
 import {
   openLaneDefinitionText,
   openLaneDeskDefinition,
@@ -56,7 +57,7 @@ export function FoldOpenLaneHero({
       <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-fold-open-lane-meta="">
         {strong.toLocaleString("en-US")} strong signals
         {" · "}
-        {foundersIndexed.toLocaleString("en-US")} founders indexed
+        {foundersIndexed.toLocaleString("en-US")} {nounFor(foundersIndexed, "founder")} indexed
         {" · "}
         {companyTotal.toLocaleString("en-US")} companies
       </p>

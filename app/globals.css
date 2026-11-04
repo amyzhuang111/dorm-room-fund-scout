@@ -2011,12 +2011,25 @@ html:has([data-networks-cream]) [data-site-nav] {
     display: inline-flex !important;
     align-items: center;
   }
-  /* Fold counts pill is a dense meta row above map modes, not a 44px tap stack. */
+  /* Fold counts: keep 44px taps, but one nowrap row so the pill never stacks over map modes. */
+  [data-fold-counts] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 44px;
+    align-items: center !important;
+  }
   [data-fold-counts] a[href] {
-    min-height: 0 !important;
-    min-width: 0 !important;
-    display: inline !important;
-    align-items: baseline;
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: inline-flex !important;
+    align-items: center;
+    white-space: nowrap;
+  }
+  [data-fold-counts] [data-fold-counts-line] {
+    align-items: center !important;
+    min-height: 44px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
   input, textarea, select {
     min-height: 44px !important;

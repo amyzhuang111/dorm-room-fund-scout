@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { buildPeakShell, type PeakShell } from "@/lib/domain/peak-shell";
 import { CampusSeal } from "@/components/campus-seal";
+import { nounFor } from "@/lib/display/plural";
 
 export type { PeakShell, PeakBar } from "@/lib/domain/peak-shell";
 export { buildPeakShell } from "@/lib/domain/peak-shell";
@@ -64,7 +65,7 @@ export function FoldPeakShare({
               {companyTotal.toLocaleString("en-US")}
             </p>
             <p className="mt-1.5 max-w-[36rem] text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
-              {foundersListed.toLocaleString("en-US")} founders on these companies
+              {foundersListed.toLocaleString("en-US")} {nounFor(foundersListed, "founder")} on these companies
             </p>
             <ol
               className="mt-2 flex h-[4.25rem] items-end gap-1"
@@ -144,7 +145,7 @@ export function FoldPeakShare({
           {companyTotal.toLocaleString("en-US")}
         </p>
         <p className="mt-2 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
-          {foundersListed.toLocaleString("en-US")} founders on these companies
+          {foundersListed.toLocaleString("en-US")} {nounFor(foundersListed, "founder")} on these companies
         </p>
         <ol className="mt-2 flex h-14 items-end gap-1 overflow-hidden" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
           {(detail?.bars ?? []).map((b) => (

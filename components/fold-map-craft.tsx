@@ -5,6 +5,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import type { FounderLead } from "@/lib/domain/founder-index";
 import type { WeekItem } from "@/lib/domain/hero-stats";
+import { nounFor } from "@/lib/display/plural";
 
 const COUNT = "font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]";
 
@@ -48,7 +49,7 @@ export function CurrentViewStrip({
           <span className={COUNT}>{matchCount.toLocaleString("en-US")}</span>
           {" of "}
           <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{totalFounders.toLocaleString("en-US")}</span>
-          {" founders"}
+          {" "}{nounFor(totalFounders, "founder")}
         </p>
         {campusName ? (
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 py-0.5" data-fold-selected-campus-chip="">

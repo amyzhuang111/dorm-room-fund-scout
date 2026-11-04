@@ -34,6 +34,7 @@ import {
   type FacetState,
   SignalsLanded,
 } from "./sample-instrument";
+import { nounFor } from "@/lib/display/plural";
 import {
   activeFacetChips,
   browseHref as buildBrowseHref,
@@ -741,7 +742,7 @@ export function SampleInstrumentBrowse({
               figureSuffix="signaled"
               takeaway={
                 podiumRows[0]
-                  ? `${podiumRows[0].label} leads the podium with ${podiumRows[0].founders.toLocaleString("en-US")} founders on record`
+                  ? `${podiumRows[0].label} leads the podium with ${podiumRows[0].founders.toLocaleString("en-US")} ${nounFor(podiumRows[0].founders, "founder")} on record`
                   : `${signaledMatch.toLocaleString("en-US")} companies carry a signal on this desk`
               }
               meta="Signal desk"

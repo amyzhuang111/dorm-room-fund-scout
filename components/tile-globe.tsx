@@ -20,6 +20,7 @@ import {
   mapPointFromPointer,
   nearestProjectedMarker,
 } from "@/lib/domain/map-pointer";
+import { nounFor } from "@/lib/display/plural";
 
 export interface TileCampus {
   id: string;
@@ -730,14 +731,14 @@ export function TileGlobe({
       {/* Phone: short pill on its own row (full leading). Desk: full counts. Never absolute over map modes. */}
       <div className={`${locationsMode ? mapStyles.hqCounts : ""} mb-2 flex w-full max-w-full flex-wrap items-end justify-start gap-x-2 gap-y-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-1.5 lg:mb-2 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0`} data-fold-counts="">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[11px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:text-[12px]" data-fold-counts-line="">
-          <Link href="/companies" className="pointer-events-auto hover:underline">
+          <Link href="/companies" className="pointer-events-auto whitespace-nowrap hover:underline" data-fold-counts-companies="">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
-            {" vetted companies"}
+            {" vetted companies"}
           </Link>
           {catalogReady ? (
-            <span>
+            <span className="inline-flex min-h-11 items-center whitespace-nowrap">
               <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
-              {" signaled"}
+              {" signaled"}
             </span>
           ) : null}
           <span className="hidden lg:contents" data-fold-counts-desk="">
@@ -812,9 +813,9 @@ export function TileGlobe({
             >
               <p className="text-[13px] font-semibold leading-4">{hover.name}</p>
               <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
+                <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> {nounFor(hover.founders, "founder")}
                 {" · "}
-                <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
+                <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> {nounFor(hover.signals, "signal")}
                 {hover.country ? <>{" · "}{hover.country}</> : null}
               </p>
             </div>
@@ -845,9 +846,9 @@ export function TileGlobe({
                 </button>
               </div>
               <p className="mt-1 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{pinned.founders.toLocaleString("en-US")}</span> founders
+                <span className={COUNT}>{pinned.founders.toLocaleString("en-US")}</span> {nounFor(pinned.founders, "founder")}
                 {" · "}
-                <span className={COUNT}>{pinned.signals.toLocaleString("en-US")}</span> signals
+                <span className={COUNT}>{pinned.signals.toLocaleString("en-US")}</span> {nounFor(pinned.signals, "signal")}
                 {pinned.country ? <>{" · "}{pinned.country}</> : null}
               </p>
               {pinnedCompanies.length > 0 ? (

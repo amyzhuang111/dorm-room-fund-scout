@@ -13,6 +13,7 @@ import {
 import { NetworksTimeline } from "@/components/networks-timeline";
 import dynamic from "next/dynamic";
 import { NETWORK_ZOOM_PRESETS, closestNetworkZoomPreset, type NetworkZoomPreset } from "@/lib/domain/network-zoom-presets";
+import { nounFor } from "@/lib/display/plural";
 
 type Deal = {
   founderName: string;
@@ -1241,7 +1242,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           ) : hover?.hub ? (
             <>
               <div className="font-medium">{hover.hub.label}</div>
-              <div className="text-[color:var(--fg-2)]">{hover.hub.founders.toLocaleString("en-US")} founders on this desk</div>
+              <div className="text-[color:var(--fg-2)]">{hover.hub.founders.toLocaleString("en-US")} {nounFor(hover.hub.founders, "founder")} on this desk</div>
             </>
           ) : (
             <p className="text-[color:var(--fg-3)]">Hover a founder on the map.</p>

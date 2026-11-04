@@ -1,9 +1,10 @@
 import { formatHitRate, HIT_RATE_SENTENCE } from "@/lib/domain/campus-hit-rate-model";
 import type { CampusHitRate } from "@/lib/domain/campus-hit-rate-model";
 import { formatCapitalUsd, PITCHBOOK_SOURCE_URL, PITCHBOOK_TITLE, type PitchbookCampus, type PitchbookTrack } from "@/lib/domain/pitchbook-model";
+import { nounFor } from "@/lib/display/plural";
 
 function trackLine(label: string, track: PitchbookTrack) {
-  return `${label}: #${track.rank} · ${track.founderCount.toLocaleString("en-US")} founders · ${track.companyCount.toLocaleString("en-US")} companies · ${formatCapitalUsd(track.capitalRaisedUsd)}`;
+  return `${label}: #${track.rank} · ${track.founderCount.toLocaleString("en-US")} ${nounFor(track.founderCount, "founder")} · ${track.companyCount.toLocaleString("en-US")} ${nounFor(track.companyCount, "company", "companies")} · ${formatCapitalUsd(track.capitalRaisedUsd)}`;
 }
 
 export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookCampus | null; hitRate: CampusHitRate | null }) {
@@ -15,7 +16,7 @@ export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookC
         {undergrad ? (
             <>
               <p className="mt-1 text-sm tabular-nums text-foreground">
-                {undergrad.founderCount.toLocaleString("en-US")} founders · {undergrad.companyCount.toLocaleString("en-US")} companies · {formatCapitalUsd(undergrad.capitalRaisedUsd)} raised
+                {undergrad.founderCount.toLocaleString("en-US")} {nounFor(undergrad.founderCount, "founder")} · {undergrad.companyCount.toLocaleString("en-US")} companies · {formatCapitalUsd(undergrad.capitalRaisedUsd)} raised
               </p>
               <p className="mt-0.5 text-xs text-foreground">
                 Undergraduate rank #{undergrad.rank}

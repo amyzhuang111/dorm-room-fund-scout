@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { GLOBE_MAP_SAMPLES, GLOBE_PHI, GLOBE_THETA, markerSize, projectCampus } from "@/lib/domain/globe-projection";
+import { nounFor } from "@/lib/display/plural";
 
 export interface GlobeCampus {
   id: string;
@@ -240,7 +241,7 @@ export function CampusGlobe({
         {campuses.map((campus) => (
           <li key={campus.id}>
             <button type="button" onClick={() => onSelect(campus.id)}>
-              {campus.name}, {campus.founders.toLocaleString("en-US")} founders, {campus.signals.toLocaleString("en-US")} signals
+              {campus.name}, {campus.founders.toLocaleString("en-US")} {nounFor(campus.founders, "founder")}, {campus.signals.toLocaleString("en-US")} {nounFor(campus.signals, "signal")}
             </button>
           </li>
         ))}

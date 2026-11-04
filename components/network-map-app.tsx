@@ -19,6 +19,7 @@ import { useAskHighlight } from "./ask-highlight";
 import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
 import { LinkedInIconButton, LinkedInOpenButton, LinkedInProfileLink, PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { StartupCardSheet } from "./startup-directory-card";
+import { nounFor } from "@/lib/display/plural";
 
 const LEGEND_REGION: Record<string, string> = {
   boston: "Northeast",
@@ -632,7 +633,7 @@ export function NetworkMapApp() {
                   selectedNode.orgTier ? tierBandLabel(selectedNode.orgTier) : null,
                   selectedNode.sector,
                   selectedNode.stage,
-                  selectedNode.type === "organization" && selectedNode.linkedFounders != null ? `${selectedNode.linkedFounders} founders` : null,
+                  selectedNode.type === "organization" && selectedNode.linkedFounders != null ? `${selectedNode.linkedFounders} ${nounFor(selectedNode.linkedFounders, "founder")}` : null,
                   selectedNode.degree ? `${selectedNode.degree} links` : null,
                   signalTooltip(selectedNode),
                 ]

@@ -6,6 +6,7 @@ import { SIGNAL_TIERS } from "@/lib/domain/signal-tier";
 import { FeedbackSync } from "./feedback-sync";
 import { CollapsibleSidebar } from "./collapsible-sidebar";
 import { ScoutLink } from "./scout-nav";
+import { nounFor } from "@/lib/display/plural";
 
 const COVERAGE_LABEL: Record<CoverageState, { label: string; cls: string }> = {
   not_scanned: { label: "Not scanned", cls: "text-muted" },
@@ -92,7 +93,7 @@ export function FilterSidebar({
         )}
       </div>
       <p className="-mt-2 mb-2 text-xs text-muted">
-        {mode === "founder" ? `${total} founders` : `${total} startup candidates`} · {scannedCount} of {universities.length} campuses monitored
+        {mode === "founder" ? `${total} ${nounFor(total, "founder")}` : `${total} startup candidates`} · {scannedCount} of {universities.length} campuses monitored
       </p>
       <ul className="space-y-0.5">
         <li>

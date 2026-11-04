@@ -6,6 +6,7 @@ import { CampusSeal } from "@/components/campus-seal";
 import { NetworksGraph, type NetworkMapFocus } from "@/components/networks-graph";
 import { StartupCardSheet } from "@/components/startup-directory-card";
 import { searchFounderNetworks, selectedNetworkMembers } from "@/lib/domain/network-directory-search";
+import { nounFor } from "@/lib/display/plural";
 import type {
   FounderNetworksPage,
   NetworkKind,
@@ -272,7 +273,7 @@ export function NetworksApp() {
                   <span className="min-w-0 font-semibold">{match.network.label}</span>
                   <span className="shrink-0 text-[color:var(--fg-3)]">
                     {match.nameMatch
-                      ? `${match.network.founderCount.toLocaleString("en-US")} founders`
+                      ? `${match.network.founderCount.toLocaleString("en-US")} ${nounFor(match.network.founderCount, "founder")}`
                       : `${match.matchingMembers.length.toLocaleString("en-US")} member matches`}
                   </span>
                 </button>

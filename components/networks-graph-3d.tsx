@@ -12,6 +12,7 @@ import {
   type PosterHub,
 } from "@/components/networks-poster-types";
 import { NetworksTimeline } from "@/components/networks-timeline";
+import { nounFor } from "@/lib/display/plural";
 import {
   applyEncodingColors,
   blobScaleForFounders,
@@ -1491,7 +1492,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
               data-networks-blob-hit={h.id}
               className="pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-0 bg-transparent p-0"
               style={{ left: h.x, top: h.y, width: h.r * 2, height: h.r * 2 }}
-              aria-label={`${h.label}: ${h.founders} founders, ${h.backed} of ${h.founders} top-fund backed`}
+              aria-label={`${h.label}: ${h.founders} ${nounFor(h.founders, "founder")}, ${h.backed} of ${h.founders} top-fund backed`}
               onMouseEnter={() =>
                 setBlobTip({
                   id: h.id,
@@ -1543,7 +1544,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
                 {blobTip.label}
               </div>
               <div className="mt-0.5 text-slate-600">
-                {blobTip.founders.toLocaleString("en-US")} founders on map
+                {blobTip.founders.toLocaleString("en-US")} {nounFor(blobTip.founders, "founder")} on map
               </div>
               <div className="text-slate-600">
                 Top-fund backed {blobTip.backed}/{blobTip.founders} ({Math.round(blobTip.share * 100)}%)
