@@ -1,0 +1,13 @@
+{
+  "Barnard College": {"country":"United States","source":"https://barnard.edu/visit/directions"},
+  "Babson College": {"country":"United States","source":"https://www.babson.edu/contact-babson/campus-locations/"},
+  "Drexel University": {"country":"United States","source":"https://drexel.edu/about/contact"},
+  "Santa Clara University": {"country":"United States","source":"https://www.scu.edu/aboutscu/our-campus/directions/"},
+  "Cooper Union": {"country":"United States","source":"https://cooper.edu/about/contact"},
+  "Middlebury College": {"country":"United States","source":"https://www.middlebury.edu/college/arts/about/directions-parking"},
+  "Western University": {"country":"Canada","source":"https://www.uwo.ca/about/contact.html"},
+  "Penn State University": {"country":"United States","source":"https://www.psu.edu/contact-us"},
+  "Bowie State University": {"country":"United States","source":"https://bowiestate.edu/admissions-and-aid/undergraduate-admissions/contact-us.php"},
+  "Western University (Huron College)": {"country":"Canada","source":"https://huronu.ca/contact/"},
+  "Olin College": {"country":"United States","source":"https://www.olin.edu/contact"}
+}

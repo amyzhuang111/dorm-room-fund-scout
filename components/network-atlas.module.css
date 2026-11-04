@@ -1,0 +1,359 @@
+.atlas {
+  --ink: #263a43;
+  --muted: #64767e;
+  --border: #e2e8e9;
+  --paper: #fff;
+  --hover: #f1f5f5;
+  color: var(--ink);
+  background: var(--paper);
+  display: grid;
+  min-width: 0;
+  border: 1px solid var(--border);
+  margin: 20px 16px;
+  font-family: var(--font-body), sans-serif;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.atlas button,
+.atlas select,
+.atlas input {
+  font: inherit;
+}
+.atlas button,
+.atlas a,
+.atlas select {
+  min-height: 44px;
+}
+.atlas button {
+  cursor: pointer;
+  color: inherit;
+  border: 0;
+  background: transparent;
+  padding: 10px;
+  text-align: left;
+  border-radius: 5px;
+}
+.atlas button:hover,
+.atlas button[aria-pressed="true"] {
+  background: var(--hover);
+}
+.atlas button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.atlas :focus-visible {
+  outline: 2px solid #3a829b;
+  outline-offset: 2px;
+}
+.sidebar {
+  padding: 22px;
+  border-bottom: 1px solid var(--border);
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.sidebar h2 {
+  font-size: 25px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  margin: 0 0 14px;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  margin: 14px 0;
+}
+.tabs button {
+  flex: 1;
+}
+.sidebar label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 14px 0;
+}
+.sidebar select {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  background: var(--paper);
+  padding: 8px;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-size: 16px;
+}
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.breadcrumb button {
+  padding: 4px;
+}
+.regionList {
+  max-height: 230px;
+  overflow: auto;
+}
+.regionList button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.regionList button span:nth-last-child(2) {
+  flex: 1;
+}
+.regionList small {
+  margin-left: auto;
+  color: var(--muted);
+}
+.swatch {
+  width: 8px;
+  height: 8px;
+  flex: none !important;
+  border-radius: 2px;
+}
+.note {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-top: 16px;
+}
+.main {
+  min-width: 0;
+}
+.toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.toolbar input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: 12px;
+  border-radius: 6px;
+  color: var(--ink);
+  font-size: 16px;
+}
+.toolbar button {
+  font-size: 12px;
+}
+.status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 11px;
+  border-bottom: 1px solid var(--border);
+}
+.viewport {
+  height: 580px;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+.viewport canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+}
+.viewport canvas:active {
+  cursor: grabbing;
+}
+.mapTools {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  display: flex;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px #20303908;
+}
+.hint {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  pointer-events: none;
+  color: var(--muted);
+  font-size: 10px;
+}
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+}
+.footer label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.card {
+  position: absolute;
+  width: min(300px, calc(100% - 24px));
+  max-height: 380px;
+  overflow: auto;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  box-shadow: 0 12px 40px #20303926;
+  padding: 20px;
+  z-index: 2;
+  font-size: 13px;
+}
+.card h3 {
+  font-size: 21px;
+  letter-spacing: -0.03em;
+  margin: 0 28px 12px 0;
+  line-height: 1.2;
+}
+.card p {
+  line-height: 1.55;
+}
+.close {
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  font-size: 22px !important;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 12px;
+}
+.peer {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid var(--border) !important;
+}
+.membership {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+}
+.membership a {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+.block {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.results {
+  min-height: 580px;
+  padding: 16px;
+}
+.results > button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.loading {
+  padding: 60px;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .atlas {
+    grid-template-columns: 230px minmax(0, 1fr);
+    margin: 20px 24px;
+  }
+  .sidebar {
+    border-bottom: 0;
+    border-right: 1px solid var(--border);
+  }
+  .regionList {
+    max-height: 360px;
+  }
+  .viewport {
+    height: 690px;
+  }
+}
+@media (min-width: 1280px) {
+  .atlas {
+    grid-template-columns: 250px minmax(0, 1fr);
+    max-width: 1600px;
+    margin: 24px auto;
+  }
+  .viewport {
+    height: 740px;
+  }
+}
+:global([data-theme="night"]) .atlas {
+  --ink: #e1e9ec;
+  --muted: #a4b6be;
+  --border: #34444e;
+  --paper: #17242c;
+  --hover: #263a45;
+}
+
+.filterToggle {
+  display: block;
+}
+.sidebar {
+  display: none;
+}
+.sidebar[data-open="true"] {
+  display: block;
+}
+.atlas {
+  scroll-margin-top: 60px;
+}
+.viewport {
+  height: 480px;
+}
+@media (min-width: 768px) {
+  .filterToggle {
+    display: none;
+  }
+  .sidebar {
+    display: block;
+  }
+  .viewport {
+    height: 580px;
+  }
+}
+@media (min-width: 1280px) {
+  .viewport {
+    height: 640px;
+  }
+}
