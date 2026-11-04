@@ -9,6 +9,8 @@ export function CorpusFilters({
   sector,
   campus,
   sort,
+  scope,
+  kind,
   sectors,
   campuses,
 }: {
@@ -16,12 +18,14 @@ export function CorpusFilters({
   sector: string;
   campus: string;
   sort: string;
+  scope: string;
+  kind: string;
   sectors: Opt[];
   campuses: Opt[];
 }) {
   const [open, setOpen] = useState(false);
   const active =
-    (sector ? 1 : 0) + (campus ? 1 : 0) + (sort && sort !== "rank" ? 1 : 0);
+    (scope ? 1 : 0) + (kind ? 1 : 0) + (sector ? 1 : 0) + (campus ? 1 : 0) + (sort && sort !== "rank" ? 1 : 0);
   const field =
     "h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[16px] sm:h-8 sm:text-[14px]";
   const control =
@@ -59,6 +63,8 @@ export function CorpusFilters({
           ) : null}
         </button>
         <div className={`w-full space-y-2 sm:contents ${open ? "block" : "hidden sm:contents"}`} data-corpus-filters-sheet="">
+          <label className="block min-w-0 sm:flex-none"><span className="sr-only">Record type</span><select name="kind" defaultValue={kind} className={field}><option value="">All companies & projects</option><option value="company">Companies</option><option value="project">Other projects</option></select></label>
+          <label className="block min-w-0 sm:flex-none"><span className="sr-only">Scouting status</span><select name="scope" defaultValue={scope} className={field}><option value="">All statuses</option><option value="scout">Scouting list</option><option value="review">Needs review</option><option value="excluded">Excluded from scouting list</option></select></label>
           <label className="block min-w-0 sm:min-w-[7.5rem] sm:flex-none">
             <span className="sr-only">Sector</span>
             <select name="sector" defaultValue={sector || ""} className={field}>
@@ -103,3 +109,4 @@ export function CorpusFilters({
     </form>
   );
 }
+

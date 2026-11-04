@@ -1,9 +1,10 @@
-import { corpusToCsv, loadCorpusRows } from "@/lib/domain/corpus-explorer";
+import { corpusToCsv, filterCorpus } from "@/lib/domain/corpus-explorer";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const csv = corpusToCsv(loadCorpusRows());
+export async function GET(request: Request) {
+  const params = Object.fromEntries(new URL(request.url).searchParams);
+  const csv = corpusToCsv(filterCorpus(params));
   return new Response(csv, {
     status: 200,
     headers: {
@@ -13,3 +14,4 @@ export async function GET() {
     },
   });
 }
+

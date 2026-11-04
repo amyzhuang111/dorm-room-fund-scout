@@ -46,3 +46,11 @@ write("hero-stats.json", hero, heroStarted);
 
 const shellStarted = performance.now();
 write("shell.json", { updatedAt: hero.updatedAt, redirects: feedbackRedirects() }, shellStarted);
+
+
+// Refresh client-side totals after every ingestion step; never ship yesterday's counts.
+import { loadCorpusTotals } from "../lib/domain/corpus-totals";
+const totals = loadCorpusTotals();
+const snapshotPath = path.join(process.cwd(), "data", "corpus-snapshot.json");
+const previous = fs.existsSync(snapshotPath) ? JSON.parse(fs.readFileSync(snapshotPath,"utf8")) : {};
+fs.writeFileSync(snapshotPath, JSON.stringify({...previous,...totals,people:totals.peopleTotal,directoryCards:totals.investableCompanies,generatedAt:new Date().toISOString()},null,2)+"\n");

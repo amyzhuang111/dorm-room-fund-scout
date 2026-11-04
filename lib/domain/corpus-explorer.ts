@@ -8,7 +8,6 @@ import {
   type DirectoryCard,
   type DirectorySort,
   directorySortOf,
-  filterDirectory,
   searchDirectory,
   sortDirectory,
 } from "@/lib/domain/directory";
@@ -37,6 +36,11 @@ export interface CorpusRow {
   website: string | null;
   fundingText: string | null;
   logoUrl: string | null;
+  kind: string;
+  scoutingStatus: string;
+  verification: string;
+  sourceUrls: string[];
+  campusIds: string[];
 }
 
 export interface CorpusPage {
@@ -125,19 +129,41 @@ export function cardToCorpusRow(
     website: extras?.website ?? null,
     fundingText: extras?.fundingText ?? null,
     logoUrl: card.logoUrl ?? localCompanyLogoUrl(card.id),
+    kind: "company", scoutingStatus: "Needs review", verification: "unverified", sourceUrls: [], campusIds: card.schoolId ? [card.schoolId] : [],
   };
 }
 
 export function loadCorpusRows(): CorpusRow[] {
-  const { cards } = buildDirectoryFromDb();
+  const { cards } = buildDirectoryFromDb({ includeAll: true });
+  const db = getDb();
   const extras = factMaps();
-  return cards.map((card) =>
-    cardToCorpusRow(card, {
-      website: extras.website.get(card.id) ?? null,
-      fundingText: extras.funding.get(card.id) ?? null,
-      ycBatch: extras.ycBatch.get(card.id) ?? ycBatchFromPrograms(card.programs),
-    })
-  );
+  const meta = new Map((db.prepare("SELECT id,kind,website_url,is_investable_candidate,excluded_reason,verification_status FROM projects").all() as {id:string;kind:string;website_url:string|null;is_investable_candidate:number;excluded_reason:string|null;verification_status:string|null}[]).map(r=>[r.id,r]));
+  const sources = new Map<string, Set<string>>();
+  for (const r of db.prepare("SELECT entity_id id,source_url url FROM claims WHERE entity_type='project' UNION SELECT project_id id,source_url url FROM company_facts").all() as {id:string;url:string|null}[]) {
+    if (r.url && /^https?:\/\//i.test(r.url)) { const set=sources.get(r.id)??new Set<string>();set.add(r.url);sources.set(r.id,set); }
+  }
+  const campuses = new Map<string, Set<string>>();
+  for(const r of db.prepare(`SELECT r.project_id id,a.university_id campus FROM person_project_roles r JOIN affiliations a ON a.person_id=r.person_id WHERE a.university_id IS NOT NULL
+    UNION SELECT source_entity_id id,target_entity_id campus FROM relationships WHERE source_entity_type='project' AND target_entity_type='university' AND relationship_type='affiliated_with'`).all() as {id:string;campus:string}[]) {
+    const set=campuses.get(r.id)??new Set<string>();set.add(r.campus);campuses.set(r.id,set);
+  }
+  return cards.map(card => {
+    const m=meta.get(card.id)!;
+    return {...cardToCorpusRow(card,{website:m.website_url??extras.website.get(card.id)??null,fundingText:extras.funding.get(card.id)??null,ycBatch:extras.ycBatch.get(card.id)}),
+      kind:m.kind, scoutingStatus:m.kind !== 'company' ? 'Project / team' : m.is_investable_candidate ? 'Scouting list' : m.excluded_reason === 'unverified recency' || !m.excluded_reason ? 'Needs review' : 'Excluded from scouting list',
+      verification:m.verification_status||'unverified',sourceUrls:[...(sources.get(card.id)??[])].sort(),campusIds:[...(campuses.get(card.id)??[])]};
+  });
+}
+export type CorpusOptions = { q?:string; sector?:string; campus?:string; sort?:string; scope?:string; kind?:string; page?:number };
+export function filterCorpus(opts: CorpusOptions = {}): CorpusRow[] {
+  let rows=loadCorpusRows();
+  const {cards}=buildDirectoryFromDb({includeAll:true});
+  const allow=new Set(searchDirectory(cards,opts.q).filter(c=>!opts.sector||c.sectorId===opts.sector).map(c=>c.id));
+  rows=rows.filter(r=>allow.has(r.id)&&(!opts.campus||r.campusIds.includes(opts.campus))&&(!opts.kind||r.kind===opts.kind));
+  if(opts.scope==='scout')rows=rows.filter(r=>r.scoutingStatus==='Scouting list');
+  if(opts.scope==='review')rows=rows.filter(r=>r.scoutingStatus==='Needs review');
+  if(opts.scope==='excluded')rows=rows.filter(r=>r.scoutingStatus==='Excluded from scouting list');
+  return sortCorpus(rows,corpusSortOf(opts.sort));
 }
 
 function sortCorpus(rows: CorpusRow[], sort: CorpusSort): CorpusRow[] {
@@ -190,25 +216,10 @@ export function corpusSortOf(value: string | undefined): CorpusSort {
   if (value === "signals" || value === "founded") return value;
   return directorySortOf(value);
 }
-export function paginateCorpus(opts: {
-  q?: string;
-  sector?: string;
-  campus?: string;
-  sort?: string;
-  page?: number;
-}): CorpusPage {
+export function paginateCorpus(opts: CorpusOptions): CorpusPage {
   const pageSize = CORPUS_PAGE_SIZE;
-  const page = Math.max(1, Math.floor(opts.page ?? 1));
-  const sort = corpusSortOf(opts.sort);
-  let rows = loadCorpusRows();
-  // filterDirectory matches sectorId / campus (schoolId); searchDirectory matches name/founders.
-  const { cards } = buildDirectoryFromDb();
-  let filtered = cards;
-  filtered = filterDirectory(filtered, opts.sector, undefined, opts.campus);
-  filtered = searchDirectory(filtered, opts.q);
-  const allow = new Set(filtered.map((c) => c.id));
-  rows = rows.filter((r) => allow.has(r.id));
-  rows = sortCorpus(rows, sort);
+  const page = Number.isFinite(opts.page) ? Math.max(1, Math.floor(opts.page!)) : 1;
+  const rows = filterCorpus(opts);
   const total = rows.length;
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(page, pageCount);
@@ -240,11 +251,12 @@ export function corpusToCsv(rows: CorpusRow[]): string {
     "founder_count",
     "founders",
     "website",
-    "funding",
+    "funding", "record_type", "scouting_status", "verification_status", "source_urls",
   ];
   const esc = (v: string | number | null | undefined) => {
     if (v == null || v === "") return "";
-    const s = String(v);
+    const raw = String(v);
+    const s = /^[=+@\-\t\r]/.test(raw) ? `'${raw}` : raw;
     if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
     return s;
   };
@@ -268,7 +280,7 @@ export function corpusToCsv(rows: CorpusRow[]): string {
         r.founderCount,
         r.founders.join(" · "),
         r.website,
-        r.fundingText,
+        r.fundingText, r.kind, r.scoutingStatus, r.verification, r.sourceUrls.join(" | "),
       ]
         .map(esc)
         .join(",")
@@ -286,7 +298,7 @@ export interface CorpusFillRates {
   website: number;
 }
 
-/** Counts derived from the same investable corpus as /data rows. */
+/** Counts derived from all stored projects, as in the unfiltered /data view. */
 export function loadCorpusFillRates(): CorpusFillRates {
   const rows = loadCorpusRows();
   const total = rows.length;
@@ -299,3 +311,4 @@ export function loadCorpusFillRates(): CorpusFillRates {
     website: rows.filter((r) => r.website).length,
   };
 }
+

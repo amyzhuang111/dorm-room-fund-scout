@@ -39,12 +39,14 @@ export default async function DataExplorerPage({
   const q = (sp.q || "").trim();
   const sector = sp.sector || undefined;
   const campus = sp.campus || undefined;
-  const result = paginateCorpus({ q, sector, campus, sort, page });
-  const { sectors: sectorFilters } = buildDirectoryFromDb();
+  const scope = sp.scope || undefined;
+  const kind = sp.kind || undefined;
+  const result = paginateCorpus({ q, sector, campus, sort, page, scope, kind });
+  const { sectors: sectorFilters } = buildDirectoryFromDb({includeAll:true});
   // Keep select options tiny in RSC HTML (id + label only) — full university rows blow the 210 KB gate.
   const sectors = sectorFilters.map((s) => ({ id: s.id, label: s.label }));
   const campuses = loadHeroStats()
-    .universities.slice(0, 20)
+    .universities
     .map((c) => ({ id: c.id, name: c.name }));
   const recency = loadRecencyFunnel();
   const fill = loadCorpusFillRates();
@@ -72,6 +74,8 @@ export default async function DataExplorerPage({
       q: q || undefined,
       sector,
       campus,
+      scope,
+      kind,
       sort: sp.sort || undefined,
       page: String(result.page),
       ...patch,
@@ -92,7 +96,7 @@ export default async function DataExplorerPage({
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
-            {" vetted companies in this view · page "}
+            {" records in this view · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
             {" of "}
             {result.pageCount.toLocaleString("en-US")}
@@ -101,14 +105,14 @@ export default async function DataExplorerPage({
           </p>
         </div>
         <a
-          href="/data/export"
+          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
           className="hidden h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:inline-flex"
           data-corpus-csv=""
         >
-          Download CSV
+          Export this view
         </a>
         <a
-          href="/data/export"
+          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
           className="inline-flex h-11 min-h-11 items-center font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
           data-corpus-csv-mobile=""
         >
@@ -116,27 +120,29 @@ export default async function DataExplorerPage({
         </a>
       </div>
 
+      <nav className="my-3 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
+      <p className="text-sm text-fg-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
       <p
         className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-recency-funnel=""
       >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Vetted list</span>
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Scouting list</span>
         {" · "}
         <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        {" kept, the same companies as Companies and the map. A company stays in that list when a founder is a current student or graduated in 2023 or later."}
+        {" companies marked eligible by the stored scouting rules, matching Companies and the map. These rules target current students and recent graduates; individual verification labels still apply."}
         {" "}
         <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
         {" older-alumni companies are left out of it."}
         {" "}
         <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
-        {" are not yet checked and are not in the vetted list."}
+        {" have unverified founder recency and are outside the scouting list."}
       </p>
 
       <p
         className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-corpus-fill-rates=""
       >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">On file</span>
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Full corpus coverage</span>
         {" · Stage: "}
         <span data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
         {" of "}
@@ -164,6 +170,8 @@ export default async function DataExplorerPage({
         sector={sector || ""}
         campus={campus || ""}
         sort={sp.sort || "rank"}
+        scope={scope || ""}
+        kind={kind || ""}
         sectors={sectors}
         campuses={campuses}
       />
@@ -223,14 +231,14 @@ export default async function DataExplorerPage({
             <tr>
               <th className="c-th c-th-n">Company</th>
               <th className="c-th c-th-m">Campus</th>
-              <th className="c-th">Stage</th>
+              <th className="c-th">Scouting status</th><th className="c-th">Evidence</th><th className="c-th">Stage</th>
               <th className="c-th">Sector</th>
               <th className="c-th c-d c-d-m">Founded</th>
               <th className="c-th c-d c-d-m">Signals</th>
               <th className="c-th c-d">Latest</th>
               <th className="c-th c-d">Program</th>
               <th className="c-th c-d">YC</th>
-              <th className="c-th c-d">Founders</th>
+              <th className="c-th c-d">Team</th>
               <th className="c-th c-fund-h">Funding</th>
               <th className="c-th c-d">Site</th>
             </tr>
@@ -247,6 +255,8 @@ export default async function DataExplorerPage({
                   </Link>
                 </td>
                 <td className="c-m c-m1">{cell(row.campus)}</td>
+                <td className="c-m"><span>{row.scoutingStatus}</span><small className="block text-fg-3">{row.kind}</small></td>
+                <td className="c-m"><span>{row.verification}</span>{row.sourceUrls[0] ? <a href={row.sourceUrls[0]} target="_blank" rel="noopener noreferrer" className="block c-link">Source{row.sourceUrls.length>1?` +${row.sourceUrls.length-1}`:''}</a> : <small className="block">No source URL</small>}</td>
                 <td className="c-m">{cell(row.stage)}</td>
                 <td className="c-m">{cell(row.sector)}</td>
                 <td className="c-d c-d-m c-num">{cell(formatCorpusDate(row.foundedYear))}</td>
@@ -269,7 +279,7 @@ export default async function DataExplorerPage({
             ))}
             {result.rows.length === 0 ? (
               <tr>
-                <td colSpan={12} className="px-2.5 py-6 text-center text-[color:var(--fg-3,#5C647A)]">
+                <td colSpan={14} className="px-2.5 py-6 text-center text-[color:var(--fg-3,#5C647A)]">
                   No companies match these filters.
                 </td>
               </tr>
@@ -302,3 +312,4 @@ export default async function DataExplorerPage({
     </div>
   );
 }
+

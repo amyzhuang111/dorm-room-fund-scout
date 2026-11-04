@@ -1,10 +1,9 @@
-/**
- * Single shared corpus totals. Every page masthead and desk count that claims
- * a universe total must read from here (corpus-snapshot.json). Partial desks
- * (e.g. campuses with founders) keep their subset math but label the share.
- */
+/** Counts are computed from the same deployed database as the desks. */
 import fs from "node:fs";
-import path from "node:path";
+import {databasePath,getDb} from "@/lib/db/client";
+import {buildDirectoryFromDb} from "@/lib/domain/directory";
+import {buildFounderIndex} from "@/lib/domain/founder-index-build";
+import {listUniversities} from "@/lib/domain/queries";
 
 export type CorpusTotals = {
   investableCompanies: number;
@@ -16,26 +15,34 @@ export type CorpusTotals = {
   excludedOlderAlumni: number;
   unverifiedRecency: number;
   ycMembership: number;
+  peopleTotal: number;
+  companiesTotal: number;
+  projectsTotal: number;
 };
 
-let memo: CorpusTotals | null = null;
-
+let memo: {stamp:string;value:CorpusTotals} | null = null;
 export function loadCorpusTotals(): CorpusTotals {
-  if (memo) return memo;
-  const snapPath = path.join(process.cwd(), "data", "corpus-snapshot.json");
-  const snap = JSON.parse(fs.readFileSync(snapPath, "utf8")) as Record<string, unknown>;
-  memo = {
-    investableCompanies: Number(snap.investableCompanies ?? 0),
-    foundersListed: Number(snap.foundersListed ?? 0),
-    foundersIndexed: Number(snap.foundersIndexed ?? 0),
-    campusesOnMap: Number(snap.campusesOnMap ?? 0),
-    campusesTotal: Number(snap.campusesTotal ?? snap.campuses ?? 0),
-    campusesWithFounders: Number(snap.campusesWithFounders ?? 0),
-    excludedOlderAlumni: Number(snap.excludedOlderAlumni ?? 0),
-    unverifiedRecency: Number(snap.unverifiedRecency ?? 0),
-    ycMembership: Number(snap.ycMembership ?? 0),
+  const db=getDb();
+  const stamp=[databasePath(),databasePath()+"-wal"].map(file=>{try{const s=fs.statSync(file);return `${s.mtimeMs}:${s.size}`;}catch{return "missing";}}).join(":");
+  if(memo?.stamp===stamp)return memo.value;
+  const count=(sql:string)=>(db.prepare(sql).get() as {n:number}).n;
+  const {cards}=buildDirectoryFromDb();
+  const universities=listUniversities();
+  const value:CorpusTotals={
+    investableCompanies:cards.length,
+    foundersListed:count(`SELECT COUNT(DISTINCT r.person_id) n FROM person_project_roles r JOIN projects p ON p.id=r.project_id WHERE p.kind='company' AND p.is_investable_candidate=1`),
+    foundersIndexed:buildFounderIndex().length,
+    campusesOnMap:universities.filter(u=>u.lat!=null&&u.lon!=null).length,
+    campusesTotal:universities.length,
+    campusesWithFounders:count(`SELECT COUNT(DISTINCT a.university_id) n FROM affiliations a JOIN people p ON p.id=a.person_id WHERE p.founder_status='founder'`),
+    excludedOlderAlumni:count(`SELECT COUNT(*) n FROM projects WHERE kind='company' AND excluded_reason='founders not current/recent (<2023)'`),
+    unverifiedRecency:count(`SELECT COUNT(*) n FROM projects WHERE kind='company' AND excluded_reason='unverified recency'`),
+    ycMembership:cards.filter(c=>c.programs.some(p=>/y combinator/i.test(p))).length,
+    peopleTotal:count('SELECT COUNT(*) n FROM people'),
+    companiesTotal:count("SELECT COUNT(*) n FROM projects WHERE kind='company'"),
+    projectsTotal:count('SELECT COUNT(*) n FROM projects'),
   };
-  return memo;
+  memo={stamp,value};return value;
 }
 
 /** Display helper for incomplete ISO dates like 2026-05-00 or 2026-00-00. */
@@ -55,3 +62,4 @@ export function formatCorpusDate(raw: string | number | null | undefined): strin
   if (year) return year;
   return null;
 }
+
