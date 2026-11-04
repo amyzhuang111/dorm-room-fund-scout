@@ -891,21 +891,16 @@ export function TileGlobe({
               data-fold-legend-toggle=""
               onClick={() => setLegendOpen((v) => !v)}
             >
-              Campus markers
+              Markers · size=founders
               <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "\u2212" : "+"}</span>
             </button>
-            {!legendOpen ? (
-              <p className="mt-1 max-w-[11rem] rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/90 px-1.5 py-1 font-mono text-[9px] leading-3 text-[color:var(--fg-3,#5C647A)]" data-fold-legend-hint="">
-                Size = founders
-              </p>
-            ) : null}
             {legendOpen ? (
               <div
                 id="fold-map-legend-body"
                 className="mt-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 py-1.5 shadow-sm"
                 data-fold-legend-body=""
               >
-                <p className="text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = founders · cobalt top desks · cobalt ring = selected</p>
+                <p className="text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Dot size encodes founder count · cobalt = top desks · ring = selected</p>
               </div>
             ) : null}
           </div>

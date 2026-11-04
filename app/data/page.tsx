@@ -259,8 +259,9 @@ export default async function DataExplorerPage({
                       {row.name}
                     </Link>
                     {why ? (
-                      <span className="c-why block text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]" data-why-here="">
-                        <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[color:var(--ember,#D96B1C)]">Why </span>
+                      <span className="c-why mt-0.5 block text-[11px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-why-here="">
+                        <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[color:var(--ember,#D96B1C)]">Why</span>
+                        <span className="text-[color:var(--fg-3,#5C647A)]"> · </span>
                         {why}
                       </span>
                     ) : null}

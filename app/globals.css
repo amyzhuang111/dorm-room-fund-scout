@@ -2182,7 +2182,8 @@ html:has([data-networks-cream]) [data-site-nav] {
     line-height: 1.25;
   }
   [data-corpus-cards] .c-why {
-    margin-top: 0.15rem;
+    margin-top: 0.2rem;
+    line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
