@@ -45,6 +45,38 @@ const devfest = "Alexander Dong won two tracks at Columbia University's Devfest.
 assert.equal(schoolHitsInPersonExcerpt(devfest, { personName: "Alexander Dong", claimType: "linkedin_alias_discovered" }).length, 0);
 const otherPerson = "Need That was founded by Wharton student Patrick Sippel and Lehigh University student Lorcan Cheng.";
 assert.equal(schoolHitsInPersonExcerpt(otherPerson, { personName: "Lorcan Cheng", claimType: "linkedin_alias_discovered" }).length, 0);
+const telAviv =
+  "Roei Schuster (Founder). Bio: I'm the CTO of Wild Moose, after completing a PhD at Cornell and Tel Aviv University.";
+assert.equal(
+  schoolHitsInPersonExcerpt(telAviv, { personName: "Roei Schuster", claimType: "accelerator_founder" })[0]?.universityId,
+  "univ_tau",
+);
+const iit =
+  "Y Combinator's page lists Mohit Gupta (Founder/CEO). Bio: \"CS @ IIT Bombay, Finance @ UC Berkeley.\"";
+assert.deepEqual(
+  schoolHitsInPersonExcerpt(iit, { personName: "Mohit Gupta", claimType: "accelerator_founder" }).map((hit) => hit.universityId).sort(),
+  ["univ_berkeley", "univ_iit_bombay"],
+);
+assert.equal(schoolHitsInPersonExcerpt("She studied in Oxford before moving to London.", { claimType: "accelerator_founder" }).length, 0);
+assert.equal(
+  schoolHitsInPersonExcerpt("She studied history at the University of Oxford.", { claimType: "accelerator_founder" })[0]?.universityId,
+  "univ_oxford",
+);
+assert.equal(
+  schoolHitsInPersonExcerpt("He earned a PhD in Neuroscience at New York University.", { claimType: "accelerator_founder" }).length,
+  0,
+);
+assert.equal(
+  schoolHitsInPersonExcerpt("Bio: Associate Professor of Computer Science at Oxford University.", { claimType: "accelerator_founder" }).length,
+  0,
+);
+const sharedBio =
+  "Y Combinator's page lists Roger de Belsunce (Founder). Bio: co-founders Cornelius von Einem (PhD, ETH Zürich) and Roger de Belsunce lead the company.";
+assert.equal(schoolHitsInPersonExcerpt(sharedBio, { personName: "Roger de Belsunce", claimType: "accelerator_founder" }).length, 0);
+assert.equal(
+  schoolHitsInPersonExcerpt(sharedBio, { personName: "Cornelius von Einem", claimType: "accelerator_founder" })[0]?.universityId,
+  "univ_eth",
+);
 
 assert.equal(foundedYearIn("We were founded in 2019 and incorporated the next spring.")?.year, 2019);
 assert.equal(foundedYearIn("Founded in 2014. The lab was founded in 2018."), null);
