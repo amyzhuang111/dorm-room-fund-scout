@@ -51,6 +51,18 @@ assert.equal(yearOf("Penn Engineering's 2025-2026 Student Ventures Committee.").
 assert.equal(yearOf("Penn Engineering's 2025-2026 Student Ventures Committee.").status, "unknown");
 assert.equal(yearOf("A business May 2026 launch at the University of Pennsylvania.").gradYear, null);
 
+const mixedTeam = "Penn Engineering team: Udit Garg (ENG'25, GEN'25), Aditya Gowd (ENG'25, GEN'25), Ryann Joseph (ENG'25), William Qi (EE'25, GEN'26) and Christopher Wun (ENG'25, GEN'25)";
+for (const name of ["Udit Garg", "Aditya Gowd", "Ryann Joseph", "Christopher Wun"]) assert.equal(yearOf(mixedTeam, name).gradYear, 2025);
+assert.equal(yearOf(mixedTeam, "William Qi").gradYear, 2026);
+assert.equal(yearOf("Penn founders: Kausalya Raman (GEng'23), Max Liechty (SEAS'22)", "Max Liechty").gradYear, 2022);
+assert.equal(yearOf("Penn founders: Haley Kang ENG'24, Octavius Kim C'23, Agustin Garcinuno W'23", "Agustin Garcinuno").gradYear, 2023);
+assert.equal(yearOf("Penn founders: David Levine GR'23; Gokulanand Iyer GR'24", "David Levine").gradYear, 2023);
+assert.equal(yearOf("Babson team: Cole Collins '26 & Alex Laraia '27", "Cole Collins").gradYear, 2026);
+assert.equal(yearOf("Babson team: Srikar Srinivasan '27 & Taihei Rokumoto Eastwood '28", "Srikar Srinivasan").gradYear, 2027);
+assert.equal(yearOf("NYU: Alexandra Debow (Tandon ‘24), co-founder of swsh", "Alexandra Debow").gradYear, 2024);
+assert.equal(yearOf("Penn team: Alex Example; Another Person ENG'28", "Alex Example").gradYear, null);
+assert.equal(yearOf("Penn: Serena Advani (W'17, C'17, WG'22)", "Serena Advani").gradYear, 2022);
+
 const roundOnly = assembleCompanyProfile([
   {
     factKey: "funding_round",
