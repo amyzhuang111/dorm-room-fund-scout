@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useGlobeRotation } from "@/lib/client/use-globe-rotation";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
-import { markerRadiusForCampus, markerSizeLegend } from "@/lib/domain/marker-radius";
+import { markerRadiusForCampus } from "@/lib/domain/marker-radius";
 import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
@@ -13,7 +13,7 @@ import { MapCredit } from "./map-credit";
 import { CompanyLocationLayer } from "./company-location-layer";
 import mapStyles from "./company-location-map.module.css";
 import type { Map as LibreMap } from "maplibre-gl";
-import { campusFoundersTop, campusFoundersRanked, CAMPUS_FOUNDERS_VISIBLE } from "./sample-instrument";
+import { CAMPUS_FOUNDERS_VISIBLE } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
 import {
   clientPointFromEvent,
@@ -207,9 +207,9 @@ export function TileGlobe({
       const compactHeader = !wide && (sheetMode === "deck" || sheetMode === "expanded");
       const target = compactHeader
         ? Math.round(window.innerHeight * 0.24)
-        : Math.round(window.innerHeight * (wide ? 0.86 : 0.88));
+        : Math.round(window.innerHeight * (wide ? 0.92 : 0.88));
       const next = wide
-        ? Math.max(640, Math.min(900, target))
+        ? Math.max(680, Math.min(1000, target))
         : compactHeader
           ? Math.max(140, Math.min(220, target))
           : Math.max(520, Math.min(760, target));
@@ -702,12 +702,6 @@ export function TileGlobe({
     mapRef.current?.flyTo({ ...camera, duration: 550, essential: true });
   }
 
-  function focus(campus: TileCampus) {
-    setLocationsMode(false);
-    // Keep the global context; zoom 11 shows only streets and obscures other campuses.
-    mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
-    onSelect(campus.id);
-  }
 
   const catalogReady = companies.length > 0;
   const pinnedCompanies = useMemo(() => {
@@ -724,27 +718,11 @@ export function TileGlobe({
   // counts the same person twice and disagrees with the vetted list.
   const campusesOnMap = campuses.length;
 
-  const rankedCampuses = (() => {
-    const pitchbook = rankedByUndergrad(campuses);
-    if (pitchbook.length === 0) return campusFoundersRanked(campuses);
-    const rankedIds = new Set(pitchbook.map((campus) => campus.id));
-    const rest = campuses
-      .filter((campus) => !rankedIds.has(campus.id) && campus.founders > 0)
-      .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
-    return [...pitchbook, ...rest];
-  })();
-  const usingPitchbook = rankedCampuses.some((campus) => campus.pitchbookRank != null);
-  const topCampuses = useMemo(
-    () => (usingPitchbook ? rankedByUndergrad(campuses).slice(0, CAMPUS_FOUNDERS_VISIBLE) : campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE)),
-    [campuses, usingPitchbook],
-  );
-  const [showAllCampuses, setShowAllCampuses] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
-  const plateCampuses = showAllCampuses ? rankedCampuses : topCampuses;
 
   return (
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
-      <div className={`${locationsMode ? mapStyles.hqCounts : ""} pointer-events-none absolute right-2 top-2 z-20 mb-0 ml-auto flex max-w-[70%] flex-wrap items-end justify-end gap-x-2 gap-y-0.5 rounded-sm bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 shadow-sm backdrop-blur-[2px] lg:pointer-events-auto lg:static lg:mb-2 lg:ml-0 lg:max-w-none lg:justify-between lg:gap-x-4 lg:gap-y-1 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none`} data-fold-counts="" style={locationsMode ? {position:"relative",maxWidth:"none",top:"auto",right:"auto",margin:0} : undefined}>
+      <div className="mb-2 hidden flex-wrap gap-2 lg:flex" data-fold-counts="">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
           <Link href="/companies" className="pointer-events-auto hover:underline">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
@@ -787,8 +765,8 @@ export function TileGlobe({
         <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
           <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
             <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
-            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">World view</button>
-            <button type="button" aria-pressed={rotationEnabled} title="The globe keeps turning while you zoom. Drag pauses it." onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause rotation" : "Rotate globe"}</button>
+            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">Reset</button>
+            <button type="button" aria-pressed={rotationEnabled} title="The globe keeps turning while you zoom. Drag pauses it." onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause" : "Rotate"}</button>
             <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
           </span>
         </h2>
@@ -920,58 +898,7 @@ export function TileGlobe({
         </div>
       </section>
 
-      <section className="mt-3 max-w-sm max-lg:hidden" data-campus-metric={usingPitchbook ? "pitchbook" : "founders"} data-mobile-campus-picker="">
-          <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-            {usingPitchbook ? "PitchBook 2026" : "Filter campus"}
-          </h2>
-          {usingPitchbook ? (
-            <p className="mb-1.5 mt-0.5 text-[11px] leading-4 text-[color:var(--fg-3,#5C647A)]">
-              Undergraduate alumni who founded a VC-backed company, January 2015 through August 2026. The number is the PitchBook count. Founders on file stay on the campus page.
-            </p>
-          ) : (
-            <p className="mb-1.5" />
-          )}
-          <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
-            {plateCampuses.map((campus, i) => {
-              const active = selectedId === campus.id;
-              const label = shortCampusLabel(campus.id, campus.name);
-              const rank = campus.pitchbookRank != null ? String(campus.pitchbookRank).padStart(2, "0") : String(i + 1).padStart(2, "0");
-              const figure = campus.pitchbookFounders ?? campus.founders;
-              const unit = campus.pitchbookFounders != null ? "PitchBook" : "on file";
-              return (
-                <li key={campus.id}>
-                  <button
-                    type="button"
-                    onClick={() => focus(campus)}
-                    className={`flex w-full items-baseline gap-2 px-1 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
-                  >
-                    <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
-                      {rank}
-                    </span>
-                    <span className="min-w-0 flex-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                    <span className={`shrink-0 font-mono text-[13px] font-bold ${COUNT}`}>{figure.toLocaleString("en-US")}</span>
-                    <span className="shrink-0 text-[12px] text-[color:var(--fg-3,#5C647A)]">{unit}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1" data-campus-founders-all="">
-            {rankedCampuses.length > topCampuses.length ? (
-              <button
-                type="button"
-                onClick={() => setShowAllCampuses((v) => !v)}
-                className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
-              >
-                {showAllCampuses ? "Show top 10" : `All campuses · ${(rankedCampuses.length - topCampuses.length).toLocaleString("en-US")} more`}
-              </button>
-            ) : null}
-            <Link href="/campuses" className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] underline-offset-2 hover:underline">
-              Campus index
-            </Link>
-          </div>
-          <p className="mt-2 text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]">{markerSizeLegend()}</p>
-        </section>
+
     </div>
   );
 }
