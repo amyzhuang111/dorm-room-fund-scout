@@ -69,7 +69,7 @@ export function SiteNav() {
       </div>
       {/* Desk tabs always on for mobile — not tucked behind Menu */}
       <nav
-        className="flex max-w-full min-h-11 items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 md:hidden"
+        className="flex max-w-full min-h-9 items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 md:hidden"
         aria-label="Desks"
         data-mobile-desk-tabs=""
       >
@@ -77,7 +77,7 @@ export function SiteNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`subtab inline-flex min-h-11 shrink-0 items-center px-2 text-[14px] ${item.match(pathname) ? "is-active" : ""}`}
+            className={`subtab inline-flex min-h-9 shrink-0 items-center px-2 text-[13px] ${item.match(pathname) ? "is-active" : ""}`}
           >
             {item.label}
           </Link>

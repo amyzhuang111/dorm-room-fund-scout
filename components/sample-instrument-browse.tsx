@@ -550,7 +550,10 @@ export function SampleInstrumentBrowse({
             data-n-of-m=""
           >
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filters</p>
-            <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]" data-showing-label="">
+              Showing
+            </p>
+            <p className="mt-1 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
               <span data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
               <span className="mx-1.5 text-[18px] font-semibold tracking-normal text-[color:var(--fg-3,#5C647A)]">of</span>
               <span className="text-[22px] font-bold text-[color:var(--fg,#0B0E17)]" data-total-count="">
@@ -691,48 +694,27 @@ export function SampleInstrumentBrowse({
 
         {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
-        <div className="mb-2 flex flex-wrap items-center gap-2 lg:hidden" data-mobile-filter-chips="">
+        {chipDefs.length > 0 ? (
+        <div className="mb-1.5 flex flex-wrap items-center gap-1.5 lg:hidden" data-mobile-filter-chips="">
           {chipDefs.map((chip) => (
             <button
               key={`m-${String(chip.key)}`}
               type="button"
               data-filter-chip={String(chip.key)}
               onClick={() => commitFacet({ ...facets, ...chip.clear })}
-              className="inline-flex h-11 min-h-11 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[14px] font-medium"
+              className="inline-flex h-8 min-h-8 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[13px] font-medium"
             >
               {chip.label}
               <span className="font-mono text-[10px] text-[color:var(--ember,#D96B1C)]" aria-hidden>x</span>
             </button>
           ))}
-          <button
-            type="button"
-            data-export-filtered-mobile=""
-            onClick={() => exportFilteredCsv(boardCompanies)}
-            className="ml-auto inline-flex min-h-11 min-w-11 items-center font-mono text-[14px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
-          >
-            Export CSV
-          </button>
         </div>
-        <div className="mb-3 space-y-2 lg:hidden" data-mobile-browse-compose="">
-          {/* r30: one list mast (seal + counts + takeaway), then a single collapsed Filters row. Sort lives inside Filters. */}
+        ) : null}
+        <div className="mb-2 space-y-1.5 lg:hidden" data-mobile-browse-compose="">
+          {/* Beat YC directory: sticky search + Filter + Showing, first card clears the fold. */}
           {feed === "directory" && pages <= 1 ? (
-            <div data-browse-mobile-hero="">
-            <MobileListMast
-              kicker="Companies on this desk"
-              sealLabel={deskCampusTop?.label}
-              figure={signaledMatch.toLocaleString("en-US")}
-              figureSuffix="with a signal"
-              takeaway={
-                deskCampusTop
-                  ? `${deskCampusTop.label} leads with ${deskCampusTop.signaled.toLocaleString("en-US")} signaled of ${deskCampusTop.companies.toLocaleString("en-US")} on the desk`
-                  : `${signaledMatch.toLocaleString("en-US")} companies on this desk carry a signal`
-              }
-              meta="Signal desk"
-            >
-              <div data-signals-landed-mobile="" className="border-t border-[color:var(--cobalt,#2F4FD8)]/15 px-3.5 pb-3">
-                <SignalsLanded companies={companiesLive} compact />
-              </div>
-            </MobileListMast>
+            <div data-browse-mobile-hero="" data-browse-mobile-hero-compact="1" className="hidden" aria-hidden>
+              {/* Count moves under Filter (YC order) so the first card sits higher. */}
             </div>
           ) : null}
 
@@ -748,48 +730,7 @@ export function SampleInstrumentBrowse({
                   : `${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} on this page have a signal`
               }
               meta={`${pageCampusRanks.length.toLocaleString("en-US")} campuses in range · sort stays below`}
-            >
-              <div
-                className="border-t border-[color:var(--cobalt,#2F4FD8)]/15 px-3.5 pb-3"
-                data-mobile-continued-mast=""
-                data-page-window=""
-                data-page-peak=""
-                data-chapter-window=""
-                data-chapter-peak=""
-              >
-                <div className="flex items-end justify-between gap-3">
-                  <p className="m-meta min-w-0">
-                    <span data-page-signaled-count="">{pageSignaled.toLocaleString("en-US")}</span>
-                    {" of "}
-                    {cards.length.toLocaleString("en-US")}
-                    {" have a signal"}
-                    {pagePeakLabel ? (
-                      <>
-                        {" · peak "}
-                        <span className="font-semibold text-[color:var(--cobalt,#2F4FD8)]">{pagePeakLabel}</span>
-                      </>
-                    ) : null}
-                    {sliceInsight ? ` · ${sliceInsight.companyName}` : ""}
-                  </p>
-                  {pageSignalBars.length > 0 ? (
-                    <div className="flex h-12 max-w-[42%] flex-1 items-end justify-end gap-0.5" data-page-signal-bars="" aria-hidden>
-                      {pageSignalBars.map((bar) => (
-                        <span
-                          key={bar.key}
-                          title={`${bar.label ?? bar.key}: ${bar.count}`}
-                          className={`min-w-[5px] flex-1 rounded-sm ${bar.peak ? "bg-[color:var(--cobalt,#2F4FD8)]" : "bg-[color:var(--cobalt,#2F4FD8)]/40"}`}
-                          style={{ height: `${Math.max(8, Math.round((bar.count / pageSignalBarsMax) * 44))}px` }}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex h-12 w-14 items-end" data-page-signal-bars="empty" aria-hidden>
-                      <span className="w-full rounded-sm bg-[color:var(--cobalt,#2F4FD8)]/25" style={{ height: 24 }} />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </MobileListMast>
+            />
           ) : null}
 
           {feed === "leaderboard" ? (
@@ -807,7 +748,6 @@ export function SampleInstrumentBrowse({
             />
           ) : null}
 
-          {/* Continued pages: sort segment stays above the list (r29 peak+sort). Page 1 keeps sort inside Filters. */}
           {feed === "directory" && pages > 1 ? (
             <div
               className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
@@ -843,37 +783,75 @@ export function SampleInstrumentBrowse({
             </div>
           ) : null}
 
-          {/* Single chrome row: Filters (sort chips inside on page 1). */}
           {feed === "directory" ? (
             <div
-              className="overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
+              className="sticky top-[5.8125rem] z-30 space-y-1.5 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 p-2 backdrop-blur-sm"
               role="region"
               aria-label="Scout filters"
               data-mobile-filters-inline=""
               data-mobile-contents-hero=""
               data-filters-index-hero=""
+              data-yc-parity-search=""
             >
+              <label className="sr-only" htmlFor="mobile-browse-q">
+                Search company or founder
+              </label>
+              <input
+                id="mobile-browse-q"
+                type="search"
+                value={facets.query}
+                onChange={(event) => {
+                  const next = { ...facets, query: event.target.value };
+                  setFacets(next);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    commitFacet({ ...facets, query: facets.query });
+                  }
+                }}
+                onBlur={() => {
+                  if ((query ?? "") !== facets.query) commitFacet(facets);
+                }}
+                placeholder="Search..."
+                autoComplete="off"
+                className="h-10 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[15px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)]"
+              />
               <button
                 type="button"
-                className="flex min-h-11 w-full items-center justify-between gap-3 px-3.5 py-3 text-left text-[14px]"
+                className="flex min-h-10 w-full items-center justify-between gap-3 rounded-md border border-[color:var(--line-strong,#C5CAD8)] px-3 py-2 text-left text-[14px] font-semibold"
                 onClick={() => setMobileFiltersOpen(true)}
                 aria-expanded={mobileFiltersOpen}
                 aria-controls="mobile-filter-sheet"
                 data-mobile-filters-open=""
               >
-                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
-                  Filters
-                  <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
-                    {boardCompanies.length.toLocaleString("en-US")}
-                  </span>
-                  <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
-                    of {total.toLocaleString("en-US")}
-                  </span>
-                </p>
-                <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
-                  Open
+                <span>Filter</span>
+                <span className="font-mono text-[12px] font-bold tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  {boardCompanies.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")}
                 </span>
               </button>
+              <div className="flex items-baseline justify-between gap-2 px-0.5" data-showing-count="">
+                <p className="min-w-0 truncate font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  Showing{" "}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                  {" of "}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+                  {deskCampusTop ? (
+                    <>
+                      {" · "}
+                      {deskCampusTop.label} leads
+                    </>
+                  ) : null}
+                </p>
+                <button
+                  type="button"
+                  data-export-filtered-mobile=""
+                  onClick={() => exportFilteredCsv(boardCompanies)}
+                  className="shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+                >
+                  Export
+                </button>
+              </div>
             </div>
           ) : null}
         </div>
@@ -1507,7 +1485,7 @@ function LedgerRow({
       {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
       {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
       {card.logoUrl ? (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
       ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
@@ -1522,7 +1500,7 @@ function LedgerRow({
           </>
         )
       ) : (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
       )}
       <div className="min-w-0 flex-1">
         <p
@@ -1570,19 +1548,21 @@ function LedgerRow({
         {founderLinks.length > 0 ? (
           <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
             {founderLinks.slice(0, 3).map((founder) => (
-              <a
+              <button
                 key={founder.linkedinUrl}
-                href={founder.linkedinUrl}
-                target="_blank"
-                rel="noreferrer"
+                type="button"
                 title={founder.name}
                 aria-label={`${founder.name} on LinkedIn`}
                 className="inline-flex h-11 min-h-11 min-w-11 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
-                onClick={(event) => event.stopPropagation()}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  window.open(founder.linkedinUrl, "_blank", "noopener,noreferrer");
+                }}
               >
                 in
                 <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
-              </a>
+              </button>
             ))}
           </span>
         ) : null}

@@ -203,6 +203,10 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
+      <p className="mb-2 text-[12px] leading-4 text-fg-2 sm:hidden" data-showing-founders="">
+        Showing <span className="num font-bold text-fg">{filtered.length.toLocaleString("en-US")}</span> of{" "}
+        <span className="num font-bold text-fg">{rows.length.toLocaleString("en-US")}</span> projects
+      </p>
       {/* Desktop stats; mobile keeps one quiet count line so results stay above the fold. */}
       <p className="mb-2 hidden text-[14px] leading-5 text-fg sm:mb-4 sm:block">
         <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
@@ -217,7 +221,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search projects"
+          placeholder="Search company or founder"
           className="h-11 min-h-11 flex-1 rounded border border-line bg-raised px-3 text-[14px] text-fg outline-none"
         />
         <button
@@ -289,7 +293,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
       ) : null}
       <div className="mt-2 hidden flex-wrap items-center gap-2 sm:mt-0 sm:flex sm:gap-3">
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters" data-data-explorer-filters-desk="">
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search company or founder" className="h-9 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none" />
           <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
             <option value="">Tier</option>
             {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}

@@ -894,7 +894,7 @@ export function SampleHomeClient(props: {
 
 function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
   return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-11 min-h-11 min-w-11 place-items-center border-b-2 px-2.5 font-mono text-[14px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--cobalt,#2F4FD8)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
+    <Link href={href} role="tab" aria-selected={active} className={`grid h-9 min-h-9 min-w-11 place-items-center border-b-2 px-2 font-mono text-[12px] font-medium uppercase tracking-[0.08em] sm:h-11 sm:min-h-11 sm:px-2.5 sm:text-[14px] ${active ? "border-[color:var(--cobalt,#2F4FD8)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
       {children}
     </Link>
   );

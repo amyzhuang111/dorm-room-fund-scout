@@ -325,7 +325,7 @@ export function LogoMark({
         height={size}
         loading="lazy"
         decoding="async"
-        className={`${cls} shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain`}
+        className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain p-0.5`}
         onError={() => setOk(false)}
         onLoad={(e) => {
           // Tiny/blank stub tiles → cobalt seal monogram.
@@ -695,7 +695,7 @@ export function FacetRail({
             onChange={(event) => set({ query: event.target.value })}
             placeholder={searchPlaceholder}
             autoComplete="off"
-            className="h-7 w-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]"
+            className="h-10 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] text-[color:var(--fg,#0B0E17)] outline-none ring-0 placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)]"
           />
           {searchSuggestions.length > 0 ? (
             <ul
