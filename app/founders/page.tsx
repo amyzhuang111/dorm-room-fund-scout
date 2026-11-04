@@ -22,8 +22,8 @@ export default function FoundersPage() {
           {" listed on the map"}
         </span>
       </p>
-      <p className="mt-0.5 max-w-2xl text-[11px] leading-4 text-fg-3 sm:mt-1 sm:text-[13px] sm:leading-5" data-founders-searchable-note="">
-        One row per company those founders map to. Row count can sit below the searchable total.
+      <p className="mt-0.5 max-w-2xl text-[12px] leading-5 text-fg-3 sm:mt-1 sm:text-[13px]" data-founders-searchable-note="">
+        One row per company; count can sit below searchable.
       </p>
       <FoundersDesk initialCount={count} />
     </div>
