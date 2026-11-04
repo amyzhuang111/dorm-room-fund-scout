@@ -1,0 +1,30 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Batch i: per-company web research restricted to the founder's own university domain, its student newspaper and ycombinator.com (round 5: 12 hidden companies; 3 confirmed). Name plus company/YC bio matching; each entry names its source.",
+  "restore": [
+    {
+      "id": "proj_0EeMtgblQWv_",
+      "name": "Salus",
+      "why": "Founder Vedant Singh: Stanford Profiles lists a Vedant Singh as a Computer Science master's student admitted Autumn 2024 (the YC bio says he studied CS at Stanford); the only other Stanford Vedant Singh found is an undergraduate '27, so either match is a 2023+ enrollee",
+      "evidence": "Stanford Profiles: Vedant Singh, Masters Student in Computer Science, admitted Autumn 2024; Stanford Daily 2024 and King Center list a Vedant Singh '27",
+      "eligibilityUrl": "https://profiles.stanford.edu/316631"
+    },
+    {
+      "id": "proj_5Dt3FNb4haTN",
+      "name": "ChatOverflow",
+      "why": "Founder Ansh Tulsyan is listed on the University of Illinois IEEE student branch leadership page (AI Director), and the Illinois Innovation LLC alumni spotlight names him and Ishaan Chamoli as ChatOverflow's founders",
+      "evidence": "UIUC IEEE leadership page: Ansh Tulsyan, AI Director; Illinois Innovation LLC alumni spotlight on ChatOverflow",
+      "eligibilityUrl": "https://landuyt.illinois.edu/collaborations/innovation-llc"
+    },
+    {
+      "id": "proj_7t4M7OJF0wUT",
+      "name": "Shire Intelligence",
+      "why": "Founder Harshith Guduru has a Duke account on Duke's coursework GitLab for a Fall 2025 course (P0-Person201-Fall2025), i.e. enrolled in 2025; YC bio: Duke CS/EE double major; co-founder Cameron Kuperman is a Duke triple major",
+      "evidence": "Duke coursework GitLab: harshith.guduru@duke.edu / P0-Person201-Fall2025; YC company page",
+      "eligibilityUrl": "https://coursework.cs.duke.edu/vg170/p0-person201-fall2025"
+    }
+  ]
+}

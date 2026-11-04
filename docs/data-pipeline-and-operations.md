@@ -481,7 +481,12 @@ later. Does not count, with the reason found when each was checked:
   Class of 2026 commencement book and an MIT page listing '25; Epicenter: Yale Daily
   News and Yale's Class Day 2024 page, class of 2024; batch h) and showed 2 to be
   old (Evergrove's CEO, a Waterloo alum from 2018; Palisade's founder, Princeton '21).
-  Across rounds 3 and 4: 5 confirmed of 24, about 1 in 5. Matching is by name plus the
+  Across rounds 3 and 4: 5 confirmed of 24, about 1 in 5.
+  Round 5 (12 more; batch i) confirmed **3** (Salus: Stanford Profiles master's student
+  admitted 2024; ChatOverflow: UIUC IEEE leadership page and Illinois Innovation LLC
+  spotlight; Shire Intelligence: Duke coursework account for a Fall 2025 course) and
+  found 4 old (Void: Cornell 2020; Tesora: Stanford 2021; Shasta Health: Berkeley 2019/20;
+  Avronna: a CMU alumnus and entrepreneur-in-residence). Cumulative: 8 of 36. Matching is by name plus the
   company or YC bio, so a collision is possible; each entry names its exact source.
 
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
