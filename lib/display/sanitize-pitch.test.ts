@@ -57,18 +57,18 @@ assert.ok(!pitchStartsBad(sanitizePitch("MIT dropout building robots for warehou
   const snapped = sanitizePitch(
     `Y Combinator's page for Tivara (Summer 2024) lists Aumesh Misra (Founder). Bio excerpt: "pany to over $2B AUM. He previously worked at Bridgewater."`,
   );
-  assert.ok(snapped && !/"pany/.test(snapped), snapped);
-  assert.ok(snapped && /He previously worked at Bridgewater/.test(snapped), snapped);
-  assert.ok(snapped && !pitchStartsBad(snapped.split('Bio excerpt: "')[1] || snapped), snapped);
+  assert.ok(snapped && !/"pany/.test(snapped), snapped ?? "null");
+  assert.ok(snapped && /He previously worked at Bridgewater/.test(snapped), snapped ?? "null");
+  assert.ok(snapped && !pitchStartsBad(snapped.split('Bio excerpt: "')[1] || snapped), snapped ?? "null");
 }
 {
   const abel = sanitizePitch(
     `Abel Dagne, Founder & CEO of Oasiz, on the Speedrun page: "s a highly technical"`,
   );
   // Unsnappable quote dropped; keep the clean outer lead (not mid-word junk).
-  assert.ok(abel && !/"s a highly/.test(abel), abel);
-  assert.ok(abel && /Abel Dagne/.test(abel), abel);
-  assert.ok(!pitchStartsBad(abel!), abel);
+  assert.ok(abel && !/"s a highly/.test(abel), abel ?? "null");
+  assert.ok(abel && /Abel Dagne/.test(abel), abel ?? "null");
+  assert.ok(abel && !pitchStartsBad(abel), abel ?? "null");
 }
 
 // Speedrun banner → none
@@ -90,7 +90,7 @@ assert.equal(
   const kastle = sanitizePitch(
     "Rishi is the co-founder and CEO of Kastle (www.kastle.ai) Before Kastle, Rishi was the founding Product Manager at Scale AI.",
   );
-  assert.ok(kastle && /Kastle\. Before Kastle/.test(kastle), kastle);
+  assert.ok(kastle && /Kastle\. Before Kastle/.test(kastle), kastle ?? "null");
 }
 
 assert.ok(isBoilerplatePitch("Had trouble submitting? Complete your SR008 application by tonight"));

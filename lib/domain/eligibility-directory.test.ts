@@ -33,6 +33,6 @@ const josh = decideEnrollment(
   { personName: "Josh Aviv" },
 );
 assert.equal(josh.status, "older_alumni");
-assert.ok(josh.gradYear === 2017 || josh.gradYear === 2015, josh);
+assert.ok(josh.gradYear === 2017 || josh.gradYear === 2015, JSON.stringify(josh));
 
 console.log("eligibility-directory tests ok", { josh });
