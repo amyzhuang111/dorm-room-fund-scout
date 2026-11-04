@@ -21,11 +21,14 @@ export function FoundersDesk({
   useEffect(() => {
     let cancel = false;
     const qs = campusId ? `?campus=${encodeURIComponent(campusId)}` : "";
-    void fetch(`/api/founder-table${qs}`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error(`founder-table ${res.status}`);
-        return (await res.json()) as { founderCount: number; rows: ProjectTableRow[] };
-      })
+    const load = async (url: string) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`founder-table ${res.status}`);
+      return (await res.json()) as { founderCount: number; rows: ProjectTableRow[] };
+    };
+    // All-campuses view: a static file built at deploy time (CDN, no cold start).
+    // If it is missing, or for a campus-filtered view, use the API.
+    void (campusId ? load(`/api/founder-table${qs}`) : load("/data/founder-table.json").catch(() => load("/api/founder-table")))
       .then((data) => {
         if (cancel) return;
         setRows(data.rows);
