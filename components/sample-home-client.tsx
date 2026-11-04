@@ -16,6 +16,7 @@ import {
   type ActiveChip,
 } from "@/components/fold-map-craft";
 import { FoldOpenLaneHero } from "@/components/fold-open-lane";
+import { CurrentViewDock } from "@/components/current-view-dock";
 import { buildOpenLaneShell } from "@/lib/domain/open-lane";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
@@ -637,6 +638,17 @@ export function SampleHomeClient(props: {
     [matchedFounders, companies, mapCampusId],
   );
 
+  const dockCompanies = useMemo(
+    () =>
+      companies.slice(0, 40).map((c) => ({
+        id: c.id,
+        name: c.name,
+        logoUrl: c.logoUrl,
+        href: `/startup/${encodeURIComponent(c.id)}?from=map`,
+      })),
+    [companies],
+  );
+
   const activeChips: ActiveChip[] = [];
   if (mapCampusName) {
     activeChips.push({ key: "campus", label: mapCampusName, onClear: clearCampus });
@@ -769,6 +781,7 @@ export function SampleHomeClient(props: {
                         onClearCampus={clearCampus}
                         onClearQuery={() => setFounderQuery("")}
                       />
+                      <CurrentViewDock companies={dockCompanies} founders={[]} max={16} />
                     </div>
                   }
                   peak={
@@ -785,6 +798,14 @@ export function SampleHomeClient(props: {
                           campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
                           topCampuses={topCampuses}
                           shell={peakShell}
+                        />
+                      </div>
+                      <div className="border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-lineage-in-rail="">
+                        <LineagePanels
+                          companies={companies}
+                          week={stats.week}
+                          campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null}
+                          campusName={mapCampusName}
                         />
                       </div>
                     </>

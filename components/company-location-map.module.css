@@ -23,7 +23,7 @@
 .resultFilters button[aria-pressed="true"] { background: #2f4fd8; color: #fff; border-color: #2f4fd8; }
 .companyList { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; max-height: 128px; overflow-y: auto; overscroll-behavior: contain; margin: 6px 0; padding: 2px; }
 .companyList li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 0 10px; min-width: 140px; width: 200px; max-width: 100%; padding: 5px 8px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; font-size: 12px; line-height: 18px; }
-.companyList li>a:first-child { grid-column: 1/-1; min-height: 24px; font-weight: 650; color: #2f4fd8; overflow-wrap: anywhere; }
+.companyList li>a:first-child, .cardTitle a { min-height: 24px; font-weight: 650; color: #2f4fd8; overflow-wrap: anywhere; }
 .companyList span { color: #53617b; font-size: 10px; }
 .companyList li>a:last-child { min-height: 24px; color: #2f4fd8; font-size: 10px; }
 .companyList button { min-height: 42px; }
@@ -65,4 +65,42 @@
   .companyList { max-height: 112px; }
   .companyList li { min-width: 0; width: calc(50% - 3px); gap: 0 4px; }
   .coverage { line-height: 16px; }
+}
+
+.dbCta { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 4px; font-size: 11px; }
+.dbCta a { color: #2f4fd8; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; min-height: 28px; display: inline-flex; align-items: center; }
+.logoDock { display: flex; flex-wrap: wrap; gap: 4px; max-height: 88px; overflow-y: auto; overscroll-behavior: contain; margin: 6px 0 4px; padding: 2px; }
+.logoChip { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 52px; min-height: 52px; padding: 4px 2px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; pointer-events: auto; }
+.logoChip span { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 8px; line-height: 10px; color: #162039; text-align: center; }
+.logoChip[aria-pressed="true"] { border-color: #2f4fd8; background: #e8ecfa; }
+.logoChip:hover { border-color: #2f4fd8; }
+.cardTitle { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.cardTitle a { min-height: 24px; font-weight: 650; color: #2f4fd8; overflow-wrap: anywhere; }
+.hoverCard { position: absolute; z-index: 40; display: flex; gap: 8px; width: min(220px, calc(100% - 24px)); padding: 8px 10px; border: 1px solid #c5cfe7; border-radius: 4px; background: #fff; box-shadow: 0 4px 16px #24304b18; pointer-events: auto; }
+.hoverBody { min-width: 0; }
+.hoverName { margin: 0; font-size: 13px; font-weight: 650; line-height: 16px; color: #0b0e17; }
+.hoverMeta { margin: 2px 0 0; font-size: 11px; line-height: 14px; color: #53617b; }
+.hoverLink { display: inline-flex; margin-top: 4px; min-height: 24px; align-items: center; font-size: 11px; font-weight: 600; color: #2f4fd8; text-decoration: underline; text-underline-offset: 2px; }
+.logoPeek { display: none; }
+@media (max-width: 639px) {
+  .logoPeek {
+    display: block;
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 28px;
+    z-index: 30;
+    padding: 8px;
+    border: 1px solid #c5cfe7;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 3px 15px #24304b12;
+    pointer-events: auto;
+  }
+  .logoPeekHead { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 12px; }
+  .logoPeekHead strong { color: #2f4fd8; font-variant-numeric: tabular-nums; }
+  .logoPeekHead button { min-height: 32px; font-size: 11px; font-weight: 600; color: #2f4fd8; }
+  .logoPeek .logoDock { max-height: 64px; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
+  .logoPeek .logoChip { width: 48px; min-height: 48px; flex-shrink: 0; }
+  :global([data-map-expanded="true"]) .logoPeek { display: none; }
 }

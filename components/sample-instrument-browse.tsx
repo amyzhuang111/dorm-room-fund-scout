@@ -620,7 +620,7 @@ export function SampleInstrumentBrowse({
           </div>
           {/* Compact current-view logo strip (P0). Keep short so rails stay primary. */}
           <div className="mt-2">
-            <CurrentViewDock companies={dockCompanies} max={8} />
+            <CurrentViewDock companies={dockCompanies} max={20} />
           </div>
         </div>
       </aside>
