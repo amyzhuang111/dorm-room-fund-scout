@@ -726,10 +726,10 @@ export function TileGlobe({
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
       <div className={`${locationsMode ? mapStyles.hqCounts : ""} pointer-events-none absolute right-2 top-2 z-20 mb-0 ml-auto flex max-w-[70%] flex-wrap items-end justify-end gap-x-2 gap-y-0.5 rounded-sm bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 shadow-sm backdrop-blur-[2px] lg:pointer-events-auto lg:static lg:mb-2 lg:ml-0 lg:max-w-none lg:justify-between lg:gap-x-4 lg:gap-y-1 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none`} data-fold-counts="" style={locationsMode ? {position:"relative",maxWidth:"none",top:"auto",right:"auto",margin:0} : undefined}>
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
-          <span>
+          <Link href="/companies" className="pointer-events-auto hover:underline">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" companies"}
-          </span>
+          </Link>
           {catalogReady ? (
             <span>
               <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
@@ -741,7 +741,7 @@ export function TileGlobe({
             {" campuses on map"}
           </span>
           {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
-          <span data-founder-count-note="">
+          <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
             <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
             {" founders"}
             {foundersIndexed > 0 ? (
@@ -751,7 +751,7 @@ export function TileGlobe({
                 {" indexed"}
               </>
             ) : null}
-          </span>
+          </Link>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Choose a city to explore recorded startup HQs." : "Click a campus to see its founders."}</p>

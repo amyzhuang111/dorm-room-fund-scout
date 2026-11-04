@@ -882,7 +882,8 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
         a.founderName.localeCompare(b.founderName) ||
         a.companyName.localeCompare(b.companyName)
     );
-    membersByNetwork[net.id] = members.slice(0, 80);
+    // Every linked founder: the panel scrolls, so no cap (YC alone has ~1,000).
+    membersByNetwork[net.id] = members;
   }
 
   const campusFounderCount = new Map<string, number>();
