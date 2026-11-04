@@ -788,7 +788,7 @@ export function TileGlobe({
           <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
             <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
             <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">World view</button>
-            <button type="button" aria-pressed={rotationEnabled} title="Rotation pauses while using the map, at city zoom, and for reduced motion" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause rotation" : "Rotate globe"}</button>
+            <button type="button" aria-pressed={rotationEnabled} title="The globe turns on its own. Drag, zoom, or a city view pauses it." onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause rotation" : "Rotate globe"}</button>
             <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
           </span>
         </h2>

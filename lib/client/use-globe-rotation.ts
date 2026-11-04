@@ -3,41 +3,52 @@
 import { useEffect } from "react";
 import type { Map as LibreMap } from "maplibre-gl";
 
-/** A slow orbit at globe scale. User input always wins over animation. */
+/** Degrees of longitude per millisecond. About 8 degrees a second, one turn in 45 seconds. */
+const DEGREES_PER_MS = 0.008;
+const RESUME_MS = 900;
+
+/** A slow orbit at globe scale. Drag and zoom pause it. A resting pointer does not. */
 export function useGlobeRotation(map: LibreMap | null, enabled: boolean) {
   useEffect(() => {
     if (!map || !enabled) return;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const canvas = map.getCanvas();
     let frame = 0;
     let previous = 0;
-    let pointerOver = false;
+    let gesturing = false;
     let pauseUntil = 0;
-    const enter = () => { pointerOver = true; };
-    const leave = () => { pointerOver = false; pauseUntil = performance.now() + 1500; };
-    const hold = () => { pauseUntil = performance.now() + 8000; };
+    const pause = () => {
+      gesturing = true;
+    };
+    const resume = () => {
+      gesturing = false;
+      pauseUntil = performance.now() + RESUME_MS;
+    };
+    map.on("dragstart", pause);
+    map.on("dragend", resume);
+    map.on("zoomstart", pause);
+    map.on("zoomend", resume);
+    const wheel = () => {
+      pauseUntil = performance.now() + RESUME_MS;
+    };
+    map.on("wheel", wheel);
     const tick = (time: number) => {
       const delta = previous ? Math.min(time - previous, 50) : 0;
       previous = time;
-      if (!motion.matches && !document.hidden && !pointerOver && time >= pauseUntil && map.getZoom() < 4 && !map.isMoving()) {
+      const idle = !gesturing && time >= pauseUntil;
+      if (!motion.matches && !document.hidden && idle && map.getZoom() < 4 && !map.isMoving()) {
         const center = map.getCenter();
-        map.jumpTo({center: [center.lng - delta * 0.003, center.lat]});
+        map.jumpTo({ center: [center.lng - delta * DEGREES_PER_MS, center.lat] });
       }
       frame = requestAnimationFrame(tick);
     };
-    canvas.addEventListener("pointerenter", enter);
-    canvas.addEventListener("pointerleave", leave);
-    canvas.addEventListener("pointerdown", hold);
-    canvas.addEventListener("wheel", hold, {passive: true});
-    canvas.addEventListener("keydown", hold);
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
-      canvas.removeEventListener("pointerenter", enter);
-      canvas.removeEventListener("pointerleave", leave);
-      canvas.removeEventListener("pointerdown", hold);
-      canvas.removeEventListener("wheel", hold);
-      canvas.removeEventListener("keydown", hold);
+      map.off("dragstart", pause);
+      map.off("dragend", resume);
+      map.off("zoomstart", pause);
+      map.off("zoomend", resume);
+      map.off("wheel", wheel);
     };
   }, [map, enabled]);
 }
