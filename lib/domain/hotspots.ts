@@ -77,8 +77,20 @@ function fileStamp(file: string): string {
   }
 }
 
+// getIndex() runs once per person while founders are built (~7,000 calls), and
+// each staleness check used to stat two files: ~14,000 stats, about 80% of the
+// time to build /founders. Re-checking at most once a second is still correct
+// (a changed file is picked up within a second) and removes that cost.
+const STAMP_TTL_MS = 1000;
+let stampValue = "";
+let stampAt = 0;
+
 function stamp(): string {
-  return `${fileStamp(CSV_PATH)}|${fileStamp(databasePath())}`;
+  const now = Date.now();
+  if (stampValue && now - stampAt < STAMP_TTL_MS) return stampValue;
+  stampValue = `${fileStamp(CSV_PATH)}|${fileStamp(databasePath())}`;
+  stampAt = now;
+  return stampValue;
 }
 
 export function hotspotCards(): HotspotCard[] {

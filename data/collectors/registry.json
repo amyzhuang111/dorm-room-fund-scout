@@ -1,0 +1,733 @@
+{
+  "version": 1,
+  "note": "Config-driven source collectors. status: approved (runs on schedule) | candidate (proposed by discovery, needs human review) | rejected | paused. Every collector must seed affiliations as 'unverified'.",
+  "entries": [
+    {
+      "id": "pennapps_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_devpost",
+      "sourceName": "PennApps XXVI (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxvi.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXVI",
+      "roleLabel": "PennApps XXVI team member",
+      "options": {
+        "maxProjectFetches": 90,
+        "maxFetches": 100,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxv_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxv_devpost",
+      "sourceName": "PennApps XXV (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxv.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXV",
+      "roleLabel": "PennApps XXV team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxiv_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxiv_devpost",
+      "sourceName": "PennApps XXIV (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxiv.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXIV",
+      "roleLabel": "PennApps XXIV team member",
+      "options": {
+        "maxProjectFetches": 72,
+        "maxFetches": 80,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxiii_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxiii_devpost",
+      "sourceName": "PennApps XXIII (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxiii.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXIII",
+      "roleLabel": "PennApps XXIII team member",
+      "options": {
+        "maxProjectFetches": 72,
+        "maxFetches": 80,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxii_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxii_devpost",
+      "sourceName": "PennApps XXII (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxii.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXII",
+      "roleLabel": "PennApps XXII team member",
+      "options": {
+        "maxProjectFetches": 72,
+        "maxFetches": 80,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "treehacks_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_treehacks_devpost",
+      "sourceName": "TreeHacks 2026 (Devpost gallery)",
+      "galleryUrl": "https://treehacks-2026.devpost.com/project-gallery",
+      "universityId": "univ_stanford",
+      "eventLabel": "TreeHacks 2026",
+      "roleLabel": "TreeHacks 2026 team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "calhacks_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_calhacks_devpost",
+      "sourceName": "Cal Hacks 12.0 (Devpost gallery)",
+      "galleryUrl": "https://cal-hacks-12-0.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "Cal Hacks 12.0",
+      "roleLabel": "Cal Hacks 12.0 team member",
+      "options": {
+        "winnersOnly": true,
+        "maxProjectFetches": 40,
+        "maxFetches": 90,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackthenorth_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackthenorth_devpost",
+      "sourceName": "Hack the North 2026 (Devpost gallery)",
+      "galleryUrl": "https://hackthenorth2026.devpost.com/project-gallery",
+      "universityId": "univ_waterloo",
+      "eventLabel": "Hack the North 2026",
+      "roleLabel": "Hack the North 2026 team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "berkeley_blockchain_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_berkeley_blockchain_devpost",
+      "sourceName": "Berkeley Blockchain Hackathon (Devpost gallery)",
+      "galleryUrl": "https://hackberkeley.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "Berkeley Blockchain Hackathon",
+      "roleLabel": "Berkeley Blockchain Hackathon team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "ucb_ai_hackathon_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_ucb_ai_hackathon_devpost",
+      "sourceName": "UC Berkeley AI Hackathon 2026 (Devpost gallery)",
+      "galleryUrl": "https://ai-hackathon-2026.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "UC Berkeley AI Hackathon 2026",
+      "roleLabel": "UC Berkeley AI Hackathon 2026 team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "treehacks26_winners",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_treehacks26_winners",
+      "sourceName": "TreeHacks 2026 Devpost prize teams",
+      "galleryUrl": "https://treehacks-2026.devpost.com/project-gallery",
+      "universityId": "univ_stanford",
+      "eventLabel": "TreeHacks 2026 prize teams",
+      "roleLabel": "TreeHacks 2026 prize-winning project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "calhacks13_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_calhacks13_devpost",
+      "sourceName": "Cal Hacks 13.0 (2026) prize teams",
+      "galleryUrl": "https://cal-hacks-13-0.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "Cal Hacks 13.0 (2026)",
+      "roleLabel": "Cal Hacks 13.0 2026 project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackprinceton_spring26",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackprinceton_spring26",
+      "sourceName": "HackPrinceton Spring 2026 prize teams",
+      "galleryUrl": "https://hackprinceton-spring-26.devpost.com/project-gallery",
+      "universityId": "univ_princeton",
+      "eventLabel": "HackPrinceton Spring 2026",
+      "roleLabel": "HackPrinceton Spring 2026 project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackharvard26_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackharvard26_devpost",
+      "sourceName": "HackHarvard 2026 prize teams",
+      "galleryUrl": "https://hackharvard2026.devpost.com/project-gallery",
+      "universityId": "univ_harvard",
+      "eventLabel": "HackHarvard 2026",
+      "roleLabel": "HackHarvard 2026 project team member",
+      "options": {
+        "winnersOnly": false,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackillinois26_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackillinois26_devpost",
+      "sourceName": "HackIllinois 2026 prize teams",
+      "galleryUrl": "https://hackillinois-2026.devpost.com/project-gallery",
+      "universityId": "univ_uiuc",
+      "eventLabel": "HackIllinois 2026",
+      "roleLabel": "HackIllinois 2026 project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "univ_brandeis_deishacks_2024",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_deishacks_2024_devpost",
+      "sourceName": "DeisHacks 2024 (Devpost gallery)",
+      "galleryUrl": "https://deishacks-2024.devpost.com/project-gallery",
+      "universityId": "univ_brandeis",
+      "eventLabel": "DeisHacks 2024",
+      "roleLabel": "DeisHacks 2024 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Brandeis University; venue Brandeis library. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_case_western_hackcwru_012025",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackcwru_012025_devpost",
+      "sourceName": "HackCWRU 2026: Ideas into Impact (Devpost gallery)",
+      "galleryUrl": "https://hackcwru-012025.devpost.com/project-gallery",
+      "universityId": "univ_case_western",
+      "eventLabel": "HackCWRU 2026: Ideas into Impact",
+      "roleLabel": "HackCWRU 2026: Ideas into Impact team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer HackCWRU; venue Case Western Reserve University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_imperial_claude_hackathon_at_imperial",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_claude_hackathon_at_imperial_devpost",
+      "sourceName": "Claude Hackathon at Imperial College London | Claude Builder Club @ Imperial (Devpost gallery)",
+      "galleryUrl": "https://claude-hackathon-at-imperial.devpost.com/project-gallery",
+      "universityId": "univ_imperial",
+      "eventLabel": "Claude Hackathon at Imperial College London | Claude Builder Club @ Imperial",
+      "roleLabel": "Claude Hackathon at Imperial College London | Claude Builder Club @ Imperial team member",
+      "options": {
+        "winnersOnly": false,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Claude Builder Club @ Imperial. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_imperial_ic_hack_26",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_ic_hack_26_devpost",
+      "sourceName": "IC Hack 26 (Devpost gallery)",
+      "galleryUrl": "https://ic-hack-26.devpost.com/project-gallery",
+      "universityId": "univ_imperial",
+      "eventLabel": "IC Hack 26",
+      "roleLabel": "IC Hack 26 team member",
+      "options": {
+        "winnersOnly": false,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer DoCSoc; venue Imperial College London. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_imperial_ic_hack_25",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_ic_hack_25_devpost",
+      "sourceName": "IC Hack 25 (Devpost gallery)",
+      "galleryUrl": "https://ic-hack-25.devpost.com/project-gallery",
+      "universityId": "univ_imperial",
+      "eventLabel": "IC Hack 25",
+      "roleLabel": "IC Hack 25 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer DoCSoc; venue Imperial College London. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_morgan_state_morganhacks_2025",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_morganhacks_2025_devpost",
+      "sourceName": "MorganHacks 2025 (Devpost gallery)",
+      "galleryUrl": "https://morganhacks-2025.devpost.com/project-gallery",
+      "universityId": "univ_morgan_state",
+      "eventLabel": "MorganHacks 2025",
+      "roleLabel": "MorganHacks 2025 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Morgan State University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_morgan_state_msu_hackai_2024",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_msu_hackai_2024_devpost",
+      "sourceName": "Morgan State University HackAI 2024 (Devpost gallery)",
+      "galleryUrl": "https://msu-hackai-2024.devpost.com/project-gallery",
+      "universityId": "univ_morgan_state",
+      "eventLabel": "Morgan State University HackAI 2024",
+      "roleLabel": "Morgan State University HackAI 2024 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Morgan State University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_ncsu_hackncstate2026",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackncstate2026_devpost",
+      "sourceName": "[Invite Only] Hack_NCState 2026 (Devpost gallery)",
+      "galleryUrl": "https://hackncstate2026.devpost.com/project-gallery",
+      "universityId": "univ_ncsu",
+      "eventLabel": "[Invite Only] Hack_NCState 2026",
+      "roleLabel": "[Invite Only] Hack_NCState 2026 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer North Carolina State University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_ncsu_hackncstate2025",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackncstate2025_devpost",
+      "sourceName": "Hack_NCState 2025 (Devpost gallery)",
+      "galleryUrl": "https://hackncstate2025.devpost.com/project-gallery",
+      "universityId": "univ_ncsu",
+      "eventLabel": "Hack_NCState 2025",
+      "roleLabel": "Hack_NCState 2025 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer North Carolina State University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_ncsu_hackncstate2024",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackncstate2024_devpost",
+      "sourceName": "Hack_NCState 2024 (Devpost gallery)",
+      "galleryUrl": "https://hackncstate2024.devpost.com/project-gallery",
+      "universityId": "univ_ncsu",
+      "eventLabel": "Hack_NCState 2024",
+      "roleLabel": "Hack_NCState 2024 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer North Carolina State University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_rit_wichacks_26",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_wichacks_26_devpost",
+      "sourceName": "WiCHacks '26 (Devpost gallery)",
+      "galleryUrl": "https://wichacks-26.devpost.com/project-gallery",
+      "universityId": "univ_rit",
+      "eventLabel": "WiCHacks '26",
+      "roleLabel": "WiCHacks '26 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Women in Computing at RIT; venue RIT. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_smu_sg_dothackathon",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_dothackathon_devpost",
+      "sourceName": ".HACKathon (Devpost gallery)",
+      "galleryUrl": "https://dothackathon.devpost.com/project-gallery",
+      "universityId": "univ_smu_sg",
+      "eventLabel": ".HACKathon",
+      "roleLabel": ".HACKathon team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Singapore Management University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_smu_sg_dothack_heap_2026",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_dothack_heap_2026_devpost",
+      "sourceName": "SMU .Hack Enrichment Application Programme 2026 (Devpost gallery)",
+      "galleryUrl": "https://dothack-heap-2026.devpost.com/project-gallery",
+      "universityId": "univ_smu_sg",
+      "eventLabel": "SMU .Hack Enrichment Application Programme 2026",
+      "roleLabel": "SMU .Hack Enrichment Application Programme 2026 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Singapore Management University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_smu_sg_dothack_heap_2025",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_dothack_heap_2025_devpost",
+      "sourceName": "SMU .Hack Enrichment Application Programme 2025 (Devpost gallery)",
+      "galleryUrl": "https://dothack-heap-2025.devpost.com/project-gallery",
+      "universityId": "univ_smu_sg",
+      "eventLabel": "SMU .Hack Enrichment Application Programme 2025",
+      "roleLabel": "SMU .Hack Enrichment Application Programme 2025 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Singapore Management University. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_stevens_stevens_quackhacks_2026",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_stevens_quackhacks_2026_devpost",
+      "sourceName": "Stevens QuackHacks 2026 (Devpost gallery)",
+      "galleryUrl": "https://stevens-quackhacks-2026.devpost.com/project-gallery",
+      "universityId": "univ_stevens",
+      "eventLabel": "Stevens QuackHacks 2026",
+      "roleLabel": "Stevens QuackHacks 2026 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: title names Stevens; venue SIT Babbio Building (Stevens Institute of Technology). Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_temple_owlhacks_2026",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_owlhacks_2026_devpost",
+      "sourceName": "OwlHacks 2026 (Devpost gallery)",
+      "galleryUrl": "https://owlhacks-2026.devpost.com/project-gallery",
+      "universityId": "univ_temple",
+      "eventLabel": "OwlHacks 2026",
+      "roleLabel": "OwlHacks 2026 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: venue Temple University SERC. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_tamu_build4good_2025",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_build4good_2025_devpost",
+      "sourceName": "Build4Good 2025 (Devpost gallery)",
+      "galleryUrl": "https://build4good-2025.devpost.com/project-gallery",
+      "universityId": "univ_tamu",
+      "eventLabel": "Build4Good 2025",
+      "roleLabel": "Build4Good 2025 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Texas A&M Computing Society; venue Texas A&M. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_tamu_build4good_2026",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_build4good_2026_devpost",
+      "sourceName": "Build4Good 2026 (Devpost gallery)",
+      "galleryUrl": "https://build4good-2026.devpost.com/project-gallery",
+      "universityId": "univ_tamu",
+      "eventLabel": "Build4Good 2026",
+      "roleLabel": "Build4Good 2026 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Texas A&M Computing Society; venue Texas A&M. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_arizona_hack_arizona_2026",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hack_arizona_2026_devpost",
+      "sourceName": "Hack Arizona 2026 (Devpost gallery)",
+      "galleryUrl": "https://hack-arizona-2026.devpost.com/project-gallery",
+      "universityId": "univ_arizona",
+      "eventLabel": "Hack Arizona 2026",
+      "roleLabel": "Hack Arizona 2026 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Hack Arizona; venue UArizona Health Sciences Innovation Building. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_ubc_hellohacks_2026",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hellohacks_2026_devpost",
+      "sourceName": "HelloHacks (Devpost gallery)",
+      "galleryUrl": "https://hellohacks-2026.devpost.com/project-gallery",
+      "universityId": "univ_ubc",
+      "eventLabel": "HelloHacks",
+      "roleLabel": "HelloHacks team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer UBC BizTech; venue UBC. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_ucsb_sb_hacks_x",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_sb_hacks_x_devpost",
+      "sourceName": "SB Hacks X (Devpost gallery)",
+      "galleryUrl": "https://sb-hacks-x.devpost.com/project-gallery",
+      "universityId": "univ_ucsb",
+      "eventLabel": "SB Hacks X",
+      "roleLabel": "SB Hacks X team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer ucsb; venue Corwin Pavilion (UCSB). Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_ucf_gemiknights",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_gemiknights_devpost",
+      "sourceName": "GemiKnights  (Devpost gallery)",
+      "galleryUrl": "https://gemiknights.devpost.com/project-gallery",
+      "universityId": "univ_ucf",
+      "eventLabel": "GemiKnights ",
+      "roleLabel": "GemiKnights  team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Knight Hacks; venue University of Central Florida. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_houston_codered_genesis",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_codered_genesis_devpost",
+      "sourceName": "CodeRED: Genesis  (Devpost gallery)",
+      "galleryUrl": "https://codered-genesis.devpost.com/project-gallery",
+      "universityId": "univ_houston",
+      "eventLabel": "CodeRED: Genesis ",
+      "roleLabel": "CodeRED: Genesis  team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer CodeRED; venue University of Houston Student Center South. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_miami_um_horizon_ai_hackathon_2025",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_um_horizon_ai_hackathon_2025_devpost",
+      "sourceName": "University of Miami Horizon AI Hackathon 2025 (Devpost gallery)",
+      "galleryUrl": "https://um-horizon-ai-hackathon-2025.devpost.com/project-gallery",
+      "universityId": "univ_miami",
+      "eventLabel": "University of Miami Horizon AI Hackathon 2025",
+      "roleLabel": "University of Miami Horizon AI Hackathon 2025 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer College of Engineering, Univ of Miami; venue UM Lakeside Expo Center. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_pitt_steelhacksxiii",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_steelhacksxiii_devpost",
+      "sourceName": "SteelHacks XIII (Devpost gallery)",
+      "galleryUrl": "https://steelhacksxiii.devpost.com/project-gallery",
+      "universityId": "univ_pitt",
+      "eventLabel": "SteelHacks XIII",
+      "roleLabel": "SteelHacks XIII team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer PittCSC; venue University of Pittsburgh Posvar Hall. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_university_of_texas_at_dallas_hackai_2025",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackai_2025_devpost",
+      "sourceName": "HackAI 2025 (Devpost gallery)",
+      "galleryUrl": "https://hackai-2025.devpost.com/project-gallery",
+      "universityId": "univ_university_of_texas_at_dallas",
+      "eventLabel": "HackAI 2025",
+      "roleLabel": "HackAI 2025 team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer AI Society; venue UT Dallas. Event 2024 or later. Affiliation stays unverified."
+    },
+    {
+      "id": "univ_vcu_megahack_vcu",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_megahack_vcu_devpost",
+      "sourceName": "MegaHack@VCU (Devpost gallery)",
+      "galleryUrl": "https://megahack-vcu.devpost.com/project-gallery",
+      "universityId": "univ_vcu",
+      "eventLabel": "MegaHack@VCU",
+      "roleLabel": "MegaHack@VCU team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Approved 2026-11-04: organizer Virginia Commonwealth University. Event 2024 or later. Affiliation stays unverified."
+    }
+  ]
+}

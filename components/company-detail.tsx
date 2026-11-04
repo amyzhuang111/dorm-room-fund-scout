@@ -43,6 +43,36 @@ function normalizeOpenQuestion(raw: string): string {
   return `${primary} Also recorded: ${keep.join(" · ")}`;
 }
 
+function whyLookText(project: ProjectDetail): string {
+  const note = project.latestSignalNote?.replace(/\s+/g, " ").trim();
+  if (note) return note;
+  const round = project.profile.rounds[0];
+  if (round) {
+    const bits = [round.stage, round.amountText, round.date, round.leads.join(", ")].filter(Boolean);
+    if (bits.length) return bits.join(" · ");
+  }
+  const investor = project.profile.investors[0];
+  if (investor) {
+    const bits = [investor.name, investor.round, investor.batch].filter(Boolean);
+    if (bits.length) return bits.join(" · ");
+  }
+  const funding = project.profile.funding?.text?.replace(/\s+/g, " ").trim();
+  if (funding) return funding;
+  const pitch = (project.profile.description?.text || project.description || "").replace(/\s+/g, " ").trim();
+  if (pitch) return pitch;
+  return "No supporting evidence recorded yet.";
+}
+
+function openQuestionText(project: ProjectDetail, raw: string): string {
+  const text = normalizeOpenQuestion(raw);
+  const generic = text.startsWith("No dated affiliation evidence yet");
+  const datedRound = project.profile.rounds.some((round) => Boolean(round.date && !round.date.endsWith("-00")));
+  if (generic && (datedRound || project.latestSignalNote)) {
+    return "The campus affiliation still has no date. A round or signal date is not an enrollment date.";
+  }
+  return text;
+}
+
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
     founder: founder.personId,
@@ -59,13 +89,13 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   const strongestConcern = concernReasons[0];
 
   const openQ = strongestConcern
-    ? normalizeOpenQuestion(strongestConcern.rationale)
+    ? openQuestionText(project, strongestConcern.rationale)
     : "No unresolved eligibility concerns on record.";
   const whyLook = (
       <section className="dossier-brief relative space-y-1.5 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2 sm:space-y-2 sm:p-2.5" data-why-look-section="">
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
-          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{whyLookText(project)}</p>
         </div>
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
@@ -200,7 +230,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             <li key={g.gate} className="flex items-start gap-2 text-sm">
               <GateBadge result={g.result} />
               <span className="text-foreground">
-                <span className="font-medium capitalize">{g.gate.replace(/_/g, " ")}:</span> {plainText(g.rationale)}
+                <span className="font-medium capitalize">{g.gate.replace(/_/g, " ")}:</span> {plainText(openQuestionText(project, g.rationale))}
               </span>
             </li>
           ))}

@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import Discover from "../startup/discover/page";
 import { SampleHome } from "@/components/sample-home";
+import { CompanySetToggle, UnverifiedCompaniesView, unverifiedTotal } from "@/components/unverified-companies";
+import { loadDirectory } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { facetsFromSearchParams } from "@/lib/domain/facet-url";
+
+export const metadata: Metadata = { title: "Companies" };
 
 export default async function CompaniesPage({
   searchParams,
@@ -12,8 +17,20 @@ export default async function CompaniesPage({
   if (sp.discover === "1") {
     return <Discover searchParams={Promise.resolve(sp)} />;
   }
+  const vettedCount = loadDirectory().cards.length;
+  if (sp.unverified === "1") {
+    return (
+      <>
+        <CompanySetToggle vetted={vettedCount} unverified={unverifiedTotal()} active="unverified" />
+        <UnverifiedCompaniesView sp={sp} />
+      </>
+    );
+  }
   const facets = facetsFromSearchParams(sp);
   return (
+    <>
+    <CompanySetToggle vetted={vettedCount} unverified={unverifiedTotal()} active="vetted" />
+    <h1 className="sr-only">Companies</h1>
     <SampleHome
       place="explore"
       feed={sp.feed === "leaderboard" ? "leaderboard" : "directory"}
@@ -37,5 +54,6 @@ export default async function CompaniesPage({
         c: sp.c,
       }}
     />
+    </>
   );
 }

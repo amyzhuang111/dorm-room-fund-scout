@@ -57,12 +57,16 @@ assert.match(northwesternAnswer, /Y Combinator|HaptE/);
 const seriesA = retrieveForAsk("Stanford startups that raised a Series A");
 assert.equal(seriesA.matches.length, 0);
 assert.equal(seriesA.suggestion?.stage, "seed");
-assert.ok(seriesA.suggestion?.matches.some((hit) => hit.name === "SkyPilot"));
-assert.match(seriesA.suggestion?.matches.find((hit) => hit.name === "SkyPilot")?.detail ?? "", /Seed|\$20M|Lux/i);
+// The nearest recorded stage is Seed. Which Stanford company is nearest depends on the data
+// (SkyPilot was here until it was excluded for unverified recency), so assert the behavior.
+const nearest = seriesA.suggestion?.matches ?? [];
+assert.ok(nearest.length > 0, "a nearest-stage suggestion is offered");
+assert.ok(nearest.every((hit) => hit.campuses.includes("univ_stanford")));
+assert.match(nearest[0].detail ?? "", /Seed/i);
 const seriesAnswer = noMatchAnswer("Stanford startups that raised a Series A", seriesA.suggestion);
 assert.match(seriesAnswer, /No Series A records match for Stanford/);
 assert.match(seriesAnswer, /nearest recorded stage is Seed/);
-assert.match(seriesAnswer, /SkyPilot/);
+assert.ok(seriesAnswer.includes(nearest[0].name), "the answer names the nearest company");
 
 const pennYc = retrieveAsk("Which Penn startups are backed by YC?");
 assert.ok(pennYc.some((hit) => hit.kind === "startup" && hit.campuses.includes("univ_penn") && /Y Combinator/i.test(hit.detail)));
@@ -94,11 +98,13 @@ assert.doesNotMatch(pennPreseedAnswer, /Flagler Health|Series B/);
 const berkeleySeed = retrieveAsk("seed startups at berkeley");
 assert.ok(berkeleySeed.length > 0);
 assert.ok(berkeleySeed.every((hit) => hit.kind === "startup" && hit.campuses.includes("univ_berkeley")));
-assert.ok(berkeleySeed.some((hit) => hit.name === "SkyPilot"));
+// SkyPilot ($20M seed) used to anchor this; it is now excluded for unverified recency, so assert
+// that Berkeley seed results carry a recorded Seed round rather than naming one company.
+assert.ok(berkeleySeed.some((hit) => /Seed/i.test(hit.detail)));
 for (const name of ["Edvisor", "Teragen Energy", "Naïve", "Supermove"]) {
   assert.equal(berkeleySeed.some((hit) => hit.name === name), false, name);
 }
-assert.match(berkeleySeed.find((hit) => hit.name === "SkyPilot")?.detail ?? "", /Seed \$20M/);
+assert.ok(berkeleySeed.every((hit) => /Seed/i.test(hit.detail)), "every seed result shows its recorded Seed round");
 
 const unfunded = retrieveAsk("unfunded penn founders");
 assert.ok(unfunded.length > 0);

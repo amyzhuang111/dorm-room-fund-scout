@@ -290,6 +290,24 @@ export function buildDirectoryFromDb(): DirectoryData {
     }
   }
 
+  // A company can have a reported campus before its founders are identified.
+  // Keep founder-derived schools first; use only an explicit company-campus
+  // relationship as a fallback, without inventing a founder or enrollment.
+  for (const row of db
+    .prepare(
+      `SELECT r.source_entity_id AS project_id, u.id AS university_id, u.name AS name
+         FROM relationships r
+         JOIN universities u ON u.id = r.target_entity_id
+        WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university'
+          AND r.relationship_type = 'affiliated_with'
+        ORDER BY u.name, u.id`,
+    )
+    .all() as { project_id: string; university_id: string; name: string }[]) {
+    if (!schoolByProject.has(row.project_id)) {
+      schoolByProject.set(row.project_id, { id: row.university_id, name: row.name, n: 0 });
+    }
+  }
+
   const foundersByProject = new Map<string, string[]>();
   for (const row of db
     .prepare(
@@ -496,6 +514,25 @@ export function buildDirectoryFromDb(): DirectoryData {
   return { cards, sectors, kinds };
 }
 
+/**
+ * Distinct people (by person id) with a role on a company in the directory: the
+ * homepage "founders" count. Same filters as the directory cards (kind =
+ * company, investable, named person). Counting by id, not name, keeps two
+ * different people who share a name apart (name-matching merged ~10).
+ */
+export function countFoundersListed(): number {
+  const row = getDb()
+    .prepare(
+      `SELECT COUNT(DISTINCT r.person_id) AS n
+         FROM person_project_roles r
+         JOIN people pe ON pe.id = r.person_id
+         JOIN projects p ON p.id = r.project_id
+        WHERE trim(pe.name) != '' AND p.kind = 'company' AND p.is_investable_candidate = 1`,
+    )
+    .get() as { n: number };
+  return row.n;
+}
+
 export function filterDirectory(cards: DirectoryCard[], sector: string | undefined, kind: string | undefined, campus?: string): DirectoryCard[] {
   return cards.filter((card) => {
     if (sector && card.sectorId !== sector) return false;
@@ -565,3 +602,4 @@ export function leaderboardPage(cards: DirectoryCard[], pages = 1): DirectoryCar
 
 export const DIRECTORY_PAGE_SIZE = DIRECTORY_LIMIT;
 export const LEADERBOARD_PAGE_SIZE = LEADERBOARD_LIMIT;
+

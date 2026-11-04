@@ -30,13 +30,14 @@ assert.equal(recencyOf(null), "none");
 const rows = [
   { id: "a", name: "A", schoolId: "u1", signals: 1, sectorId: "ai", stage: "Seed", signalKind: "funding", latestSignalAt: "2026-10-01", foundedYear: 2026, logoUrl: "https://example.com/a.png", hqRegion: "San Francisco", primaryProgram: "Y Combinator", founders: ["Ada"] },
   { id: "b", name: "B", schoolId: "u2", signals: 2, sectorId: "health", stage: "Series A", signalKind: "launch", latestSignalAt: "2024-01-01", foundedYear: 2023, operatingStatus: "dead" as const, hqRegion: "New York", founders: [] },
-  { id: "c", name: "C", schoolId: "u1", signals: 0, sectorId: "ai", signalKind: "acquisition", latestSignalAt: "2025-01-01", foundedYear: 2025, founders: ["Cam"] },
+  { id: "c", name: "C", schoolId: "u1", signals: 0, sectorId: "ai", signalKind: "acquisition", operatingStatus: "acquired" as const, latestSignalAt: "2025-01-01", foundedYear: 2025, founders: ["Cam"] },
   { id: "d", name: "D", schoolId: null, signals: 0, founders: [] },
 ];
 
 assert.equal(statusOf(rows[0]), "active");
 assert.equal(statusOf(rows[1]), "closed");
 assert.equal(statusOf(rows[2]), "acquired");
+assert.equal(statusOf({ ...rows[2], operatingStatus: null }), "active");
 
 assert.equal(FLAG_LABEL.new, "Founded in 2026");
 assert.equal(newThisYear(2026), true);

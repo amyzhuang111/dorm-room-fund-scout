@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { permanentRedirect, redirect } from "next/navigation";
 import { GlobeLibraryBoot } from "@/components/map-boot";
 import { StartupDiscoverApp } from "@/components/startup-discover-app";
@@ -13,6 +14,8 @@ import {
   listUniversities,
 } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
+
+export const metadata: Metadata = { title: "Discover startups" };
 
 export default async function StartupDiscoverPage({
   searchParams,

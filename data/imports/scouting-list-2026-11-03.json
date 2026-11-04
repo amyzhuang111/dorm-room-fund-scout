@@ -1,0 +1,258 @@
+[
+  {
+    "key": "series",
+    "name": "Series",
+    "type": "company",
+    "existingProjectId": "proj_vacrKa2TyRy9",
+    "school": "Yale",
+    "campusId": "univ_yale",
+    "location": "New York, NY",
+    "funding": "$5.1M pre-seed",
+    "graduationOrStatus": "Yale 2026",
+    "reportedSource": "Web",
+    "founders": [
+      {
+        "name": "Nathaneo Johnson",
+        "existingPersonId": "per_PpPVrP73ysmo",
+        "education": "Yale 2026 (user-reported)"
+      }
+    ],
+    "reviewNote": "Submitted list reports $5.1M pre-seed; the existing cited record reports $3.1M. Preserve both as separate evidence pending verification; do not sum them."
+  },
+  {
+    "key": "photon",
+    "name": "Photon",
+    "type": "company",
+    "existingProjectId": "proj_hIljcqE1ibtY",
+    "school": "Penn",
+    "campusId": "univ_penn",
+    "location": "San Francisco, CA",
+    "funding": "$4.5M seed",
+    "graduationOrStatus": "Daniel Tian left Penn",
+    "reportedSource": "Web + internal",
+    "founders": [
+      {
+        "name": "Daniel Tian",
+        "existingPersonId": "person_tM3wicXOQjC9",
+        "education": "Left Penn (user-reported)"
+      },
+      {
+        "name": "Ryan Zhu",
+        "existingPersonId": "person_MxPDn0DKdSHt"
+      }
+    ]
+  },
+  {
+    "key": "simantic",
+    "name": "Simantic",
+    "type": "company",
+    "existingProjectId": "proj_DF4diMWfIS-_",
+    "school": "Waterloo",
+    "campusId": "univ_waterloo",
+    "backersOrProgram": "YC F26",
+    "reportedSource": "Web"
+  },
+  {
+    "key": "wygo",
+    "name": "Wygo",
+    "type": "company",
+    "school": "Waterloo",
+    "campusId": "univ_waterloo",
+    "funding": "$1.6M pre-seed",
+    "graduationOrStatus": "Waterloo 2025",
+    "reportedSource": "Web"
+  },
+  {
+    "key": "greptile",
+    "name": "Greptile",
+    "type": "company",
+    "existingProjectId": "proj_Kjt4QnMR7jT7",
+    "school": "Georgia Tech",
+    "campusId": "univ_gatech",
+    "funding": "$30M at $180M valuation",
+    "graduationOrStatus": "Georgia Tech 2023",
+    "reportedSource": "Web"
+  },
+  {
+    "key": "datacurve",
+    "name": "Datacurve",
+    "type": "company",
+    "existingProjectId": "proj_vc10SX0OiIbW",
+    "school": "Waterloo",
+    "campusId": "univ_waterloo",
+    "backersOrProgram": "YC W24",
+    "reportedSource": "Web"
+  },
+  {
+    "key": "loto-punto",
+    "name": "Loto Punto",
+    "type": "company",
+    "existingProjectId": "proj_HhF1sLIUZjjl",
+    "school": "Georgia Tech",
+    "campusId": "univ_gatech",
+    "reportedSource": "Web"
+  },
+  {
+    "key": "kairos-health",
+    "name": "Kairos Health",
+    "type": "company",
+    "school": "Georgia Tech",
+    "campusId": "univ_gatech",
+    "reportedSource": "Web",
+    "reviewNote": "Georgia Tech lead with founders and website not yet identified. Kept separate from the existing Rice-associated Kairos Health; the identity and school connection require verification."
+  },
+  {
+    "key": "echosure",
+    "name": "echoSURE",
+    "type": "company",
+    "existingProjectId": "proj_FPaJ6GcZXpXT",
+    "school": "Purdue",
+    "campusId": "univ_purdue",
+    "backersOrProgram": "Purdue NVC 2026",
+    "reportedSource": "Web",
+    "restoreForReview": true
+  },
+  {
+    "key": "vitawave",
+    "name": "VitaWave",
+    "type": "company",
+    "school": "Purdue",
+    "campusId": "univ_purdue",
+    "backersOrProgram": "Purdue NVC 2026",
+    "reportedSource": "Web"
+  },
+  {
+    "key": "calcgpt",
+    "name": "CalcGPT",
+    "type": "company",
+    "existingProjectId": "proj_sOu6hBH28763",
+    "school": "Purdue",
+    "campusId": "univ_purdue",
+    "backersOrProgram": "Purdue NVC 2026",
+    "reportedSource": "Web",
+    "restoreForReview": true
+  },
+  {
+    "key": "kova-group",
+    "name": "Kova Group",
+    "type": "company",
+    "existingProjectId": "proj_tOdRxoO49lcG",
+    "school": "Purdue",
+    "campusId": "univ_purdue",
+    "backersOrProgram": "Purdue NVC 2026",
+    "reportedSource": "Web",
+    "restoreForReview": true
+  },
+  {
+    "key": "pure--pure-poker",
+    "name": "Pure Poker",
+    "type": "company",
+    "school": "Columbia",
+    "campusId": "univ_columbia",
+    "location": "Menlo Park, CA",
+    "funding": "$8M seed (Jul 2026)",
+    "backersOrProgram": "Ludlow (lead); Goodwater; SignalFire; MaC; Z Fellows; Hidden Capital. Both founders participated in Z Fellows in 2025.",
+    "graduationOrStatus": "Jacob Bulbulia: attended Columbia, 2021–2025; completion status unverified. Harold Castiaux: Columbia BS Computer Science, 2024.",
+    "reportedSource": "Harmonic",
+    "website": "https://pureapp.com",
+    "founders": [
+      {
+        "name": "Jacob Bulbulia",
+        "education": "Columbia, 2021–2025; completion status unverified. Former professional poker player."
+      },
+      {
+        "name": "Harold Castiaux",
+        "education": "Columbia BS Computer Science, 2024; Amazon software engineer, 2024–2025 (user-reported)."
+      }
+    ],
+    "aliases": [
+      "Pure",
+      "Pure Poker",
+      "Pure Group"
+    ],
+    "reviewNote": "Columbia founder team. Distinct from the Seton Hall company named PURE. Details supplied from Harmonic; not independently reverified."
+  },
+  {
+    "key": "sideshift",
+    "name": "SideShift",
+    "type": "company",
+    "school": "UW-Madison",
+    "campusId": "univ_wisc",
+    "location": "New York, NY (originally Madison, WI)",
+    "funding": "Approximately $2.2M total; $2M seed (Oct 2025)",
+    "backersOrProgram": "BullMont; StartingBlock Madison; UW-Madison",
+    "graduationOrStatus": "Lawton: UW-Madison Economics, 2024. Pergande: UW-Madison BBA, 2024. Levin: UW-Madison BS in Computer Science / Data Science, 2024; Columbia MS; previously co-founded Prebar.",
+    "reportedSource": "Harmonic",
+    "website": "https://sideshift.app",
+    "founders": [
+      {
+        "name": "Nick Lawton",
+        "role": "CEO",
+        "education": "UW-Madison Economics, 2024 (user-reported)"
+      },
+      {
+        "name": "Canyon Pergande",
+        "role": "COO",
+        "education": "UW-Madison BBA, 2024 (user-reported)"
+      },
+      {
+        "name": "Drew Levin",
+        "role": "CTO",
+        "education": "UW-Madison BS Computer Science / Data Science, 2024; Columbia MS; previously co-founded Prebar (user-reported)"
+      }
+    ],
+    "description": "Gen Z side-hustle and user-generated content (UGC) creator marketplace (user-reported)."
+  },
+  {
+    "key": "sirius-protocol",
+    "name": "Sirius Protocol",
+    "type": "company",
+    "reportedSource": "User-submitted",
+    "reviewNote": "Identity and student-founder status have not been publicly confirmed from this submission."
+  },
+  {
+    "key": "flip-labs",
+    "name": "Flip Labs",
+    "type": "company",
+    "reportedSource": "User-submitted",
+    "reviewNote": "Identity and student-founder status have not been publicly confirmed from this submission."
+  },
+  {
+    "key": "othello---skipclass",
+    "name": "Othello / SkipClass",
+    "type": "company",
+    "reportedSource": "User-submitted",
+    "reviewNote": "Identity and student-founder status have not been publicly confirmed from this submission."
+  },
+  {
+    "key": "picarnot",
+    "name": "Picarnot",
+    "type": "company",
+    "reportedSource": "User-submitted",
+    "reviewNote": "Identity and student-founder status have not been publicly confirmed from this submission."
+  },
+  {
+    "key": "sway-formations",
+    "name": "Sway Formations",
+    "type": "company",
+    "reportedSource": "User-submitted",
+    "reviewNote": "Identity and student-founder status have not been publicly confirmed from this submission."
+  },
+  {
+    "key": "blacksmith",
+    "name": "Blacksmith",
+    "type": "company",
+    "existingProjectId": "proj_a1QMtMwln8Nb",
+    "reportedSource": "User-submitted",
+    "reviewNote": "Identity and student-founder status have not been publicly confirmed from this submission."
+  },
+  {
+    "key": "unc-1789-fund",
+    "name": "UNC 1789 Fund",
+    "type": "source",
+    "school": "UNC",
+    "campusId": "univ_unc",
+    "reportedSource": "User-submitted",
+    "reviewNote": "Identity and student-founder status have not been publicly confirmed from this submission."
+  }
+]

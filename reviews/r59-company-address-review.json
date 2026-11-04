@@ -1,15 +1,15 @@
 {
-  "checkedAt": "2026-11-03",
+  "checkedAt": "2026-11-04",
   "scope": "Review inventory for every existing company. Website discovery is not verification. Pending records do not have published coordinates. No raw address candidates, private addresses, emails or contact names retained here.",
   "googleMapsAutomaticSync": false,
-  "databaseModified": true,
+  "databaseModified": false,
   "counts": {
-    "candidate_needs_verification": 214,
-    "held_from_publication": 21,
-    "new_import_not_reviewed": 323,
-    "no_address_found_on_checked_pages": 496,
-    "published_business_address": 29,
-    "source_unavailable": 465
+    "candidate_needs_verification": 196,
+    "held_from_publication": 30,
+    "new_import_not_reviewed": 348,
+    "no_address_found_on_checked_pages": 487,
+    "published_business_address": 48,
+    "source_unavailable": 464
   },
   "records": [
     {
@@ -672,15 +672,16 @@
     {
       "projectId": "proj_AwGUYMhSdSl6",
       "company": "Alex",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:01.131Z",
+      "status": "held_from_publication",
+      "reason": "Company legal pages and the active San Francisco business registration identify different business locations. Current office location needs corroboration before publishing coordinates.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.alex.com/",
         "https://www.alex.com/customer-stories/how-tier4-group-cuts-38-of-fraudulent-applications-with-alex",
         "https://www.alex.com/privacy-policy",
-        "https://www.alex.com/terms-of-service"
+        "https://www.alex.com/terms-of-service",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper(ownership_name)%20like%20'%25APRIORA%25'&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=12"
       ]
     },
     {
@@ -1170,6 +1171,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_MdHaKznqUu3o",
+      "company": "Arcafeed",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_boyLmdqD44j6",
       "company": "Archean Sciences",
       "status": "source_unavailable",
@@ -1302,16 +1312,20 @@
     {
       "projectId": "proj_hO4uhhtfqjTr",
       "company": "Artos",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:02.913Z",
+      "status": "published_business_address",
+      "reason": "Company exhibitor profile publishes the street and city, corroborated by the active Artos, Inc. business registration. Conflicting postal codes are omitted; no suite is inferred from the registry.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.artosai.com/",
         "https://www.artosai.com/contact",
         "https://www.artosai.com/resources/security",
-        "https://www.artosai.com/feature/generative-ai-integrations"
-      ]
+        "https://www.artosai.com/feature/generative-ai-integrations",
+        "https://www.diaexhibits.org/fsPopup.asp?BoothID=841207&mode=exhibitorInfo&rnd=0.301948",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=5&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24where=upper%28ownership_name%29%20%3D%20%27ARTOS%2C%20INC.%27",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=185&street_name=BERRY&street_type=ST"
+      ],
+      "addressSource": "https://www.diaexhibits.org/fsPopup.asp?BoothID=841207&mode=exhibitorInfo&rnd=0.301948"
     },
     {
       "projectId": "proj_0BlCIUmfn7VX",
@@ -1340,16 +1354,19 @@
     {
       "projectId": "proj_nZ6_oXlVNMAF",
       "company": "Asakana",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:13:50.189Z",
+      "status": "published_business_address",
+      "reason": "Company home and about pages explicitly identify the address as its office. Matched to the municipal building address point.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.asakana.co/",
         "https://www.asakana.co/get-demo",
         "https://www.asakana.co/about",
-        "https://www.asakana.co/privacy-policy.html"
-      ]
+        "https://www.asakana.co/privacy-policy.html",
+        "https://asakana.co/about",
+        "https://data.sfgov.org/resource/3mea-di5p.json?address_number=989&street_name=MARKET&street_type=ST"
+      ],
+      "addressSource": "https://www.asakana.co/"
     },
     {
       "projectId": "proj_ha_NsqOVtewY",
@@ -1396,6 +1413,15 @@
         "https://www.assemble.ai/privacy",
         "https://www.assemble.ai/terms"
       ]
+    },
+    {
+      "projectId": "proj_ziurFWAZgQ8P",
+      "company": "Assure5",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_ja1VLsB3yMs-",
@@ -2049,6 +2075,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_6winQBe84uQa",
+      "company": "Bikeability",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_m0Bos-xDSXjw",
       "company": "Bild AI",
       "status": "candidate_needs_verification",
@@ -2357,16 +2392,21 @@
     {
       "projectId": "proj_a18xdrC6Y_Te",
       "company": "BootLoop",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:05.806Z",
+      "status": "published_business_address",
+      "reason": "Company location profile, company exhibitor contact details and current San Francisco business registration agree on this commercial business address. The registry separately labels the previous location as old.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://bootloop.ai/",
         "https://bootloop.ai/contact",
         "https://bootloop.ai/company",
-        "https://bootloop.ai/privacy"
-      ]
+        "https://bootloop.ai/privacy",
+        "https://www.linkedin.com/company/bootloop",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=10&%24where=upper%28ownership_name%29%20like%20%27%25BOOTLOOP%25%27%20OR%20upper%28dba_name%29%20like%20%27%25BOOTLOOP%25%27",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=1616&street_name=CALIFORNIA&street_type=ST",
+        "https://www.embedded-world.de/en/exhibitors/bootloop-2611377"
+      ],
+      "addressSource": "https://www.linkedin.com/company/bootloop"
     },
     {
       "projectId": "proj_ib-PaHSW9lVD",
@@ -2440,16 +2480,19 @@
     {
       "projectId": "proj_8hXImDFX-0wr",
       "company": "Bravi",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:13:42.064Z",
+      "status": "published_business_address",
+      "reason": "Company website publishes its Brooklyn location; the building operator confirms a commercial coworking facility. Matched to the exact municipal address point.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.bravi.app/",
         "https://www.bravi.app/contact",
         "https://www.bravi.app/solutions/chat-widget",
-        "https://www.bravi.app/about"
-      ]
+        "https://www.bravi.app/about",
+        "https://www.thebrassfactory.com/home/",
+        "https://geosearch.planninglabs.nyc/v2/search?text=185+Wythe+Avenue+Brooklyn&size=2"
+      ],
+      "addressSource": "https://www.bravi.app/"
     },
     {
       "projectId": "proj_8DQzpu5NXCd7",
@@ -2553,14 +2596,15 @@
     {
       "projectId": "proj_cVle4HALUf9n",
       "company": "Bubble Lab",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:06.175Z",
+      "status": "held_from_publication",
+      "reason": "The company-published contact address resolves to a multifamily residential development. No separate commercial office was established, so no address or coordinates are published.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://bubblelab.ai/",
         "https://bubblelab.ai/privacy",
-        "https://bubblelab.ai/terms"
+        "https://bubblelab.ai/terms",
+        "https://www.engineering350.com/multifamily-housing"
       ]
     },
     {
@@ -3049,9 +3093,9 @@
     {
       "projectId": "proj_CIwpvL-RziUa",
       "company": "Channel3",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:13:43.384Z",
+      "status": "held_from_publication",
+      "reason": "The company explicitly labels the candidate as a mailing address; the policy also lists an overseas data-protection representative. Neither establishes a company office.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://trychannel3.com/",
@@ -3788,15 +3832,20 @@
     {
       "projectId": "proj_XDjGi4xK7qwm",
       "company": "Contrario",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:53.402Z",
+      "status": "published_business_address",
+      "reason": "Developer-published Chrome Web Store address, company location profile and active San Francisco business registration agree. No floor was inferred from the registry.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.contrario.ai/",
         "https://www.contrario.ai/privacy-policy",
-        "https://www.contrario.ai/terms-of-service"
-      ]
+        "https://www.contrario.ai/terms-of-service",
+        "https://chromewebstore.google.com/detail/contrario/idodlfeefabapegipmndpfcikhhhfaci?hl=en",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper%28ownership_name%29+like+%27%25CONTRARIO%25%27+OR+upper%28dba_name%29+like+%27%25CONTRARIO%25%27&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=10",
+        "https://data.sfgov.org/resource/3mea-di5p.json?address_number=333&street_name=KEARNY&street_type=ST",
+        "https://www.linkedin.com/company/contrario-ai"
+      ],
+      "addressSource": "https://chromewebstore.google.com/detail/contrario/idodlfeefabapegipmndpfcikhhhfaci?hl=en"
     },
     {
       "projectId": "proj_wRyaagyPtBuq",
@@ -3872,6 +3921,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:13:43.794Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_IY6hQvnbOHHt",
+      "company": "Cortex",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -4050,15 +4108,17 @@
     {
       "projectId": "proj_WZJj8Xsqh7FB",
       "company": "Crustdata",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:10.287Z",
+      "status": "held_from_publication",
+      "reason": "The website's business address exactly matches a marketed virtual-office/mailbox service. Actual office occupancy was not independently established, so it remains unpublished.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://crustdata.com/",
         "https://crustdata.com/casestudies/appsmith-live-company-people-data",
         "https://crustdata.com/casestudies/scend-agentic-search-finance",
-        "https://crustdata.com/about"
+        "https://crustdata.com/about",
+        "https://www.crustdata.com/",
+        "https://www.davincivirtual.com/loc/us/california/san-francisco-virtual-offices/facility-3550"
       ]
     },
     {
@@ -4278,15 +4338,19 @@
     {
       "projectId": "proj__B4IPrcZhZ_5",
       "company": "Decisional AI",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:10.822Z",
+      "status": "published_business_address",
+      "reason": "Company location profile and active business registration agree on street number, street and city. The profile's postal code conflicts with municipal records, so the display address omits it; no floor was inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.decisional.com/",
         "https://www.decisional.com/privacy-policy",
-        "https://www.decisional.com/toc"
-      ]
+        "https://www.decisional.com/toc",
+        "https://www.linkedin.com/company/decisional-ai",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper%28ownership_name%29+like+%27%25DECISIONAL%25%27+OR+upper%28dba_name%29+like+%27%25DECISIONAL%25%27&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=10",
+        "https://data.sfgov.org/resource/3mea-di5p.json?address_number=945&street_name=MARKET&street_type=ST"
+      ],
+      "addressSource": "https://www.linkedin.com/company/decisional-ai"
     },
     {
       "projectId": "proj_miflfhdKFIrs",
@@ -4373,16 +4437,26 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_87BxbArZqYWC",
+      "company": "Density Partners",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_YucpOT4e06VG",
       "company": "Denta",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:11.111Z",
+      "status": "held_from_publication",
+      "reason": "The company-published contact address includes a unit in a residential development. No separate commercial office was established, so no address or coordinates are published.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.denta.com/",
         "https://www.denta.com/legal/privacy",
-        "https://www.denta.com/legal/terms"
+        "https://www.denta.com/legal/terms",
+        "https://www.fletcher.studio/the-landing"
       ]
     },
     {
@@ -4482,16 +4556,19 @@
     {
       "projectId": "proj_1GmifsGJQlqG",
       "company": "dili",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:44.042Z",
+      "status": "published_business_address",
+      "reason": "Company service agreement explicitly identifies its offices at this address; the current privacy policy corroborates it. Matched to the Manhattan municipal address point, not the similarly named Brooklyn street.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.dili.com/",
         "https://www.dili.com/about/",
         "https://www.dili.com/privacy/",
-        "https://www.dili.com/terms/"
-      ]
+        "https://www.dili.com/terms/",
+        "https://www.dili.com/terms/Dili_Terms_of_Service.pdf",
+        "https://geosearch.planninglabs.nyc/v2/search?text=33+Irving+Place+Manhattan&size=2"
+      ],
+      "addressSource": "https://www.dili.com/terms/Dili_Terms_of_Service.pdf"
     },
     {
       "projectId": "proj_bJB_5KhHwlTL",
@@ -4519,15 +4596,16 @@
     {
       "projectId": "proj_RMtCDpQGpO8W",
       "company": "Discovered Materials",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:11.388Z",
+      "status": "published_business_address",
+      "reason": "Company terms explicitly connect the Discovered Materials brand to Matforge and identify its principal business address; privacy policy agrees. Commercial building and municipal address-point coordinates verified; no suite inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://discoveredmaterials.com/",
         "https://discoveredmaterials.com/privacy",
         "https://discoveredmaterials.com/terms"
-      ]
+      ],
+      "addressSource": "https://discoveredmaterials.com/terms"
     },
     {
       "projectId": "proj_rJz7rXWcmSb5",
@@ -4639,6 +4717,15 @@
         "https://hellodossi.com/",
         "https://hellodossi.com/contact/"
       ]
+    },
+    {
+      "projectId": "proj_H9fXK8ykfaN0",
+      "company": "Dossier",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_JnZXX_9SnI8n",
@@ -4888,13 +4975,15 @@
     {
       "projectId": "proj__gMe_TyKVxer",
       "company": "Elayne",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:42.070Z",
+      "status": "candidate_needs_verification",
+      "reason": "A company location profile and BBB record supply a matching street/suite candidate, but postal codes differ and office occupancy versus professional correspondence use remains unresolved. No point is published.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.elayne.com/",
-        "https://www.elayne.com/company"
+        "https://www.elayne.com/company",
+        "https://www.linkedin.com/company/meetelayne",
+        "https://www.bbb.org/us/ny/new-york/profile/estate-settlement/elayne-0121-87184202"
       ]
     },
     {
@@ -5359,16 +5448,20 @@
     {
       "projectId": "proj_mxXRZc-DzKB3",
       "company": "Fazeshift",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:15.177Z",
+      "status": "published_business_address",
+      "reason": "Company location profile and active San Francisco business registration agree. This resolves the earlier hold: the verified business location is separate from the legal-notice and overseas representative addresses.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.fazeshift.com/",
         "https://www.fazeshift.com/about",
         "https://www.fazeshift.com/privacy-policy",
-        "https://www.fazeshift.com/terms-of-use"
-      ]
+        "https://www.fazeshift.com/terms-of-use",
+        "https://www.linkedin.com/company/fazeshift/",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper%28ownership_name%29+like+%27%25FAZESHIFT%25%27+OR+upper%28dba_name%29+like+%27%25FAZESHIFT%25%27&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=10",
+        "https://data.sfgov.org/resource/3mea-di5p.json?address_number=642&street_name=HARRISON&street_type=ST"
+      ],
+      "addressSource": "https://www.linkedin.com/company/fazeshift/"
     },
     {
       "projectId": "proj_DVZDtZ_5PMT1",
@@ -5416,6 +5509,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:15.768Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_VSajtgT8Y106",
+      "company": "Felivo",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -5896,15 +5998,17 @@
     {
       "projectId": "proj_i9bI1WN5ljP-",
       "company": "Fresco",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:13:53.986Z",
+      "status": "published_business_address",
+      "reason": "Company privacy policy and terms identify the same business address and suite. San Francisco's active business register matches; commercial office use and municipal address-point coordinates verified.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://fresco.build/",
         "https://fresco.build/privacy-policy",
-        "https://fresco.build/terms-of-service"
-      ]
+        "https://fresco.build/terms-of-service",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper(ownership_name)%20like%20'%25FRESCO%20TECHNOLOGIES%25'&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=12"
+      ],
+      "addressSource": "https://fresco.build/privacy-policy"
     },
     {
       "projectId": "proj_JyGGo2N6zdHM",
@@ -5967,15 +6071,18 @@
     {
       "projectId": "proj_7ergTtUnWjS_",
       "company": "FurtherAI",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:17.788Z",
+      "status": "published_business_address",
+      "reason": "Company privacy policy and company LinkedIn location agree on the building; San Francisco's active business register independently matches it. Municipal address-point coordinates verified; no suite inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.furtherai.com/",
         "https://www.furtherai.com/company",
-        "https://www.furtherai.com/privacy-policy"
-      ]
+        "https://www.furtherai.com/privacy-policy",
+        "https://www.linkedin.com/company/furtherai",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper(ownership_name)%20like%20'%25FURTHERAI%25'&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=12"
+      ],
+      "addressSource": "https://www.furtherai.com/privacy-policy"
     },
     {
       "projectId": "proj_uasaLSjD3HcA",
@@ -6442,6 +6549,15 @@
       ]
     },
     {
+      "projectId": "proj_cPQ7y_C2mhx6",
+      "company": "Handled",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_0Fm5s6U2rvWb",
       "company": "Handoff",
       "status": "new_import_not_reviewed",
@@ -6795,15 +6911,16 @@
     {
       "projectId": "proj_NLaUsSvmgNWh",
       "company": "Human Behavior",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:13:54.819Z",
+      "status": "held_from_publication",
+      "reason": "The company-published contact address resolves to a residential development. No separate commercial office was established, so no address or coordinates are published.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.humanbehavior.co/",
         "https://www.humanbehavior.co/contact-sales",
         "https://www.humanbehavior.co/company",
-        "https://www.humanbehavior.co/privacy"
+        "https://www.humanbehavior.co/privacy",
+        "https://www.fletcher.studio/the-landing"
       ]
     },
     {
@@ -6858,15 +6975,19 @@
     {
       "projectId": "proj_Ac5j7i5GIBE8",
       "company": "Hyperbound",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:20.141Z",
+      "status": "published_business_address",
+      "reason": "Company-hosted September 2026 event page explicitly identifies this location as Hyperbound HQ. Active business registration under IntelligentSystems Corp. corroborates the location.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.hyperbound.ai/",
         "https://www.hyperbound.ai/about-us",
-        "https://www.hyperbound.ai/privacy-policy"
-      ]
+        "https://www.hyperbound.ai/privacy-policy",
+        "https://www.hyperbound.ai/dreamfest-party",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper%28ownership_name%29+like+%27%25INTELLIGENTSYSTEMS%25%27+OR+upper%28dba_name%29+like+%27%25INTELLIGENTSYSTEMS%25%27&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=10",
+        "https://data.sfgov.org/resource/3mea-di5p.json?address_number=512&street_name=02ND&street_type=ST"
+      ],
+      "addressSource": "https://www.hyperbound.ai/dreamfest-party"
     },
     {
       "projectId": "proj_XNqOvrkiL6MI",
@@ -7645,6 +7766,15 @@
       ]
     },
     {
+      "projectId": "proj_dIkSkrUJp-Xd",
+      "company": "Kesho",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_XFIN5hnYUWRs",
       "company": "Kestrel AI",
       "status": "no_address_found_on_checked_pages",
@@ -7661,9 +7791,9 @@
     {
       "projectId": "proj_Ovv9fb0wIFo9",
       "company": "Keye",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:13:42.460Z",
+      "status": "held_from_publication",
+      "reason": "The company privacy policy provides a PO Box for correspondence, not a verified physical office.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.keye.co/",
@@ -8152,6 +8282,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_El3WFtFsfIdx",
+      "company": "LegalTime AI",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_KpM-qk-_iOKy",
       "company": "Legion Platforms",
       "status": "new_import_not_reviewed",
@@ -8398,6 +8537,15 @@
       "company": "Litia",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_1-hbSJpeq6Yj",
+      "company": "Little Autonomy",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -9158,16 +9306,20 @@
     {
       "projectId": "proj_s0WraeWrpUbW",
       "company": "Mem0",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:27.839Z",
+      "status": "published_business_address",
+      "reason": "Company-presented open coworking event explicitly identifies its HQ and suite. A second public event identifies the same office as Mem0 HQ. Matched to the municipal building address point.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://mem0.ai/",
         "https://mem0.ai/about-us",
         "https://mem0.ai/privacy-policy",
-        "https://mem0.ai/terms"
-      ]
+        "https://mem0.ai/terms",
+        "https://luma.com/mem0-linh",
+        "https://luma.com/mwsp6qgz",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=564&street_name=MARKET&street_type=ST"
+      ],
+      "addressSource": "https://luma.com/mem0-linh"
     },
     {
       "projectId": "proj_bbc50w1HB_NK",
@@ -9455,16 +9607,19 @@
     {
       "projectId": "proj_8dcwsOH7MzPD",
       "company": "Momentic",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:29.141Z",
+      "status": "published_business_address",
+      "reason": "Company-authored hiring pages identify the in-person office, corroborated by its company LinkedIn location. Used this office evidence instead of the separate legal-notice address. Municipal address-point coordinates verified.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://momentic.ai/",
         "https://momentic.ai/sales",
         "https://momentic.ai/docs/core-concepts/file-format",
-        "https://momentic.ai/docs/cli-reference/momentic/commands/run"
-      ]
+        "https://momentic.ai/docs/cli-reference/momentic/commands/run",
+        "https://www.ycombinator.com/companies/momentic/jobs/938G5qp-founding-engineer-frontend",
+        "https://jobs.ashbyhq.com/momentic/10d2e5d6-ebe1-43a6-b543-5131717f4ecd"
+      ],
+      "addressSource": "https://www.ycombinator.com/companies/momentic/jobs/938G5qp-founding-engineer-frontend"
     },
     {
       "projectId": "proj_dOerRlYPLhhU",
@@ -9705,6 +9860,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_M69K6DxKXw_o",
+      "company": "NADE",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_k7mDCln35ZEE",
       "company": "Naiad Technologies",
       "status": "no_address_found_on_checked_pages",
@@ -9743,6 +9907,15 @@
       "company": "Nappr",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_k-sKw4kX700O",
+      "company": "Narion Technologies",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -11108,6 +11281,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_VyW4CMDtwBeG",
+      "company": "Pathlight",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_oLkyBg428dmy",
       "company": "Pave Robotics",
       "status": "no_address_found_on_checked_pages",
@@ -11130,11 +11312,16 @@
     {
       "projectId": "proj_hYzQK2SaLe8d",
       "company": "Pax",
-      "status": "source_unavailable",
-      "reason": "Recorded website could not be adequately read in this pass.",
-      "checkedAt": "2026-11-03T06:14:35.314Z",
+      "status": "published_business_address",
+      "reason": "Company membership profile links to paxai.com and identifies the customs business and founder, resolving the company identity. Active Pax Solutions Inc. / Pax AI city registration confirms the same business address and suite.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "unavailable",
-      "checkedPages": []
+      "checkedPages": [
+        "https://members.naftz.org/serviceproviderspublic/Details/pax-4701034",
+        "https://data.sf.gov/resource/g8m3-pdis.json?%24limit=10&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24where=upper%28ownership_name%29%20like%20%27%25PAX%20AI%25%27%20OR%20upper%28dba_name%29%20like%20%27%25PAX%20AI%25%27",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=51&street_name=FEDERAL&street_type=ST"
+      ],
+      "addressSource": "https://members.naftz.org/serviceproviderspublic/Details/pax-4701034"
     },
     {
       "projectId": "proj_VSTJXzeDfQUe",
@@ -11882,14 +12069,16 @@
     {
       "projectId": "proj_zWAIrA9vORcQ",
       "company": "Proof of Human",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:37.824Z",
+      "status": "published_business_address",
+      "reason": "Company website and company LinkedIn location agree on this commercial building. Municipal address-point coordinates verified. No suite or headquarters occupancy inferred from the older registration address.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://poh.org/",
-        "https://poh.org/market-research"
-      ]
+        "https://poh.org/market-research",
+        "https://www.linkedin.com/company/proofofhumanpbc"
+      ],
+      "addressSource": "https://poh.org/"
     },
     {
       "projectId": "proj_rw8qo8W0f6k0",
@@ -12439,6 +12628,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_A8jjnuc2mXth",
+      "company": "Red Leader",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_ebqg7g46Tcx-",
       "company": "Reditus Space",
       "status": "no_address_found_on_checked_pages",
@@ -12467,13 +12665,17 @@
     {
       "projectId": "proj_yq7zpx1O3nvP",
       "company": "Reducto",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:40.428Z",
+      "status": "published_business_address",
+      "reason": "Company terms publish this address and a company-hosted event explicitly identifies it as Reducto's San Francisco office, corroborating office use beyond legal correspondence.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
-        "https://reducto.ai/"
-      ]
+        "https://reducto.ai/",
+        "https://reducto.ai/terms",
+        "https://luma.com/reductoai-obnb",
+        "https://data.sf.gov/resource/3mea-di5p.json?address_number=77&street_name=GEARY&street_type=ST"
+      ],
+      "addressSource": "https://reducto.ai/terms"
     },
     {
       "projectId": "proj_zDy6hexKa7pn",
@@ -12496,6 +12698,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:40.459Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_SkLG0wi5BNt2",
+      "company": "Regilon",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -12631,12 +12842,15 @@
     {
       "projectId": "proj_v3W_XLM9oxBM",
       "company": "Revise Robotics",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:13:47.232Z",
+      "status": "candidate_needs_verification",
+      "reason": "A company SEC filing identifies a Brooklyn workspace, but a newer company hiring page describes a different neighborhood. Current physical office location needs corroboration before publishing a point.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
-        "https://reviserobotics.com/"
+        "https://reviserobotics.com/",
+        "https://www.sec.gov/Archives/edgar/data/2069529/000206952925000001/primary_doc.xml",
+        "https://www.ycombinator.com/companies/revise-robotics/jobs/peSRWPy-engineering-intern-summer-fall-2026",
+        "https://luma.com/rghfps17"
       ]
     },
     {
@@ -13106,16 +13320,20 @@
     {
       "projectId": "proj_L0D36lPpLaV9",
       "company": "Salient",
-      "status": "no_address_found_on_checked_pages",
-      "reason": "No usable street-address candidate found in the checked pages. This is not a claim that the company has no office.",
-      "checkedAt": "2026-11-03T06:14:42.428Z",
+      "status": "published_business_address",
+      "reason": "Company privacy policy identifies Skwid Inc. (dba Salient) at this business address; active San Francisco business registration corroborates the same suite.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "no_address_found_on_checked_pages",
       "checkedPages": [
         "https://www.trysalient.com/",
         "https://www.trysalient.com/demo",
         "https://www.trysalient.com/support",
-        "https://www.trysalient.com/company"
-      ]
+        "https://www.trysalient.com/company",
+        "https://www.trysalient.com/privacy",
+        "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper%28ownership_name%29+like+%27%25SKWID%25%27+OR+upper%28dba_name%29+like+%27%25SKWID%25%27&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=10",
+        "https://data.sfgov.org/resource/3mea-di5p.json?address_number=1700&street_name=MONTGOMERY&street_type=ST"
+      ],
+      "addressSource": "https://www.trysalient.com/privacy"
     },
     {
       "projectId": "proj_M7WkSQzsgYtp",
@@ -13275,13 +13493,14 @@
     {
       "projectId": "proj_eXJDosHF9DZP",
       "company": "Sciloop",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:43.294Z",
+      "status": "held_from_publication",
+      "reason": "The company-published contact address resolves to a residential development. No separate commercial office was established, so no address or coordinates are published.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.sciloop.dev/",
-        "https://www.sciloop.dev/privacy"
+        "https://www.sciloop.dev/privacy",
+        "https://www.fletcher.studio/the-landing"
       ]
     },
     {
@@ -13680,6 +13899,15 @@
       ]
     },
     {
+      "projectId": "proj_u9YOwo74eKPT",
+      "company": "Shinkei Systems",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_giY1f3TAj0f7",
       "company": "Shinra Energy",
       "status": "new_import_not_reviewed",
@@ -13740,6 +13968,15 @@
         "https://textsidekick.com/terms",
         "https://textsidekick.com/sms-terms"
       ]
+    },
+    {
+      "projectId": "proj_Eb02n5chFokZ",
+      "company": "Sideye",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_PGkfSB7o7UYO",
@@ -13974,6 +14211,15 @@
         "https://www.sizeless.co/privacy-policy",
         "https://www.sizeless.co/terms-of-service"
       ]
+    },
+    {
+      "projectId": "proj_Va5BoMfJRXqx",
+      "company": "Skip Networking",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_85RDQl83JYgs",
@@ -14541,15 +14787,17 @@
     {
       "projectId": "proj_mUhKFMxHAxOm",
       "company": "Struct",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:14:47.566Z",
+      "status": "published_business_address",
+      "reason": "Company privacy policy, contact section of terms, and company LinkedIn location agree on this commercial building. Older registered address differs and is not mapped. Municipal address-point coordinates verified; no suite inferred.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://struct.ai/",
         "https://struct.ai/privacy-policy",
-        "https://struct.ai/terms-of-use"
-      ]
+        "https://struct.ai/terms-of-use",
+        "https://www.linkedin.com/company/trystruct"
+      ],
+      "addressSource": "https://struct.ai/privacy-policy"
     },
     {
       "projectId": "proj_x_0gFkGQNDz2",
@@ -15374,6 +15622,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_bEGhEmO0uDpB",
+      "company": "Tillr Robotics",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_ima99pRBYzFL",
       "company": "Tinfoil",
       "status": "no_address_found_on_checked_pages",
@@ -15540,6 +15797,15 @@
       "checkedPages": [
         "https://www.travoai.com/"
       ]
+    },
+    {
+      "projectId": "proj_IfZeuL4CCcig",
+      "company": "Treffa",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_0LDeF3vCRhWl",
@@ -15816,6 +16082,15 @@
       ]
     },
     {
+      "projectId": "proj_Y0f2xSISX2PY",
+      "company": "UnitZero",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_xJmMHlgM9Uj_",
       "company": "Unsiloed AI",
       "status": "candidate_needs_verification",
@@ -16019,6 +16294,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_AXCQk3ceYO9f",
+      "company": "Vault Kinetics",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_ky8-4il9y6F4",
       "company": "Vector",
       "status": "new_import_not_reviewed",
@@ -16187,6 +16471,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_qe2ne0FSY0mJ",
+      "company": "Veyra Health",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_BvuJOjumBp1a",
       "company": "Vezgo",
       "status": "new_import_not_reviewed",
@@ -16233,6 +16526,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:53.253Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_dPOmQXK_2gRL",
+      "company": "Village",
+      "status": "new_import_not_reviewed",
+      "reason": "Restored to the company directory by PR #136 after the previous address review. No address or coordinates inferred; individual address review is pending.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -16673,15 +16975,16 @@
     {
       "projectId": "proj_46fAD_mIcZYh",
       "company": "Zarna",
-      "status": "candidate_needs_verification",
-      "reason": "Automated discovery found address-like content. Ownership, office use and current location still require individual review.",
-      "checkedAt": "2026-11-03T06:13:59.003Z",
+      "status": "held_from_publication",
+      "reason": "The company-published contact address resolves to a residential apartment development. No separate commercial office was established, so no address or coordinates are published.",
+      "checkedAt": "2026-11-04",
       "discoveryStatus": "candidate_needs_verification",
       "checkedPages": [
         "https://www.zarnaai.com/",
         "https://www.zarnaai.com/team",
         "https://www.zarnaai.com/privacy",
-        "https://www.zarnaai.com/terms"
+        "https://www.zarnaai.com/terms",
+        "https://presidiobay.com/projects/the-mariposa/"
       ]
     },
     {
@@ -16792,7 +17095,7 @@
       "checkedPages": []
     }
   ],
-  "productionBase": "3d9153fa4685fff1d19ddec92d56154eb59e6a11",
+  "productionBase": "fa09249f2b0b6665f8fae8a684aade58e89564ab",
   "mergedRecords": [
     {
       "company": "Winko",
@@ -16859,5 +17162,5 @@
       }
     }
   ],
-  "databaseChange": "Four user-approved duplicate merges only; address research did not modify company metadata."
+  "databaseChange": "Address enrichment only in this pass; the committed company database is unchanged. Earlier duplicate merges remain recorded in the review ledger."
 }

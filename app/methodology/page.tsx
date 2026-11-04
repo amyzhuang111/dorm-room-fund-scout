@@ -1,5 +1,4 @@
-import fs from "node:fs";
-import path from "node:path";
+import type { Metadata } from "next";
 import { RUBRIC_DIMENSIONS, RUBRIC_VERSION } from "@/lib/scoring/rubric";
 import { SCREENING_CONFIG } from "@/lib/screening/config";
 import {
@@ -8,20 +7,9 @@ import {
   openLaneTopFundDefinition,
   openLaneDeskDefinition,
 } from "@/lib/domain/open-lane";
+import { loadRecencyFunnel } from "@/lib/domain/recency-funnel";
 
-function loadRecencyFunnel() {
-  try {
-    const snap = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "corpus-snapshot.json"), "utf8"));
-    return {
-      investable: Number(snap.investableCompanies ?? 0),
-      excludedOlderAlumni: Number(snap.excludedOlderAlumni ?? 0),
-      unverifiedRecency: Number(snap.unverifiedRecency ?? 0),
-      companiesTotal: Number(snap.companiesTotal ?? 0),
-    };
-  } catch {
-    return { investable: 0, excludedOlderAlumni: 0, unverifiedRecency: 0, companiesTotal: 0 };
-  }
-}
+export const metadata: Metadata = { title: "Methodology" };
 
 export default function MethodologyPage() {
   const recency = loadRecencyFunnel();
@@ -53,22 +41,20 @@ export default function MethodologyPage() {
           people and the project evidence attached to them · including hackathon submissions, which are founder evidence, not startups.
           <strong> Startup Scout</strong> tracks only formed (or plausibly forming) companies. A Cal Hacks/PennApps/TreeHacks submission
           enters as a project attached to its founders; it only becomes a Startup Scout candidate once there&apos;s independent evidence
-          it&apos;s an actual (or plausibly forming) company · never automatically. Internally this is the <code className="font-mono text-xs">kind</code>{" "}
-          field on a project (<code className="font-mono text-xs">project</code> vs. <code className="font-mono text-xs">company</code>);
-          Startup Scout&apos;s queries only ever read <code className="font-mono text-xs">kind=&apos;company&apos;</code>.
+          it&apos;s an actual (or plausibly forming) company · never automatically. A record is either a project or a company.
+          Startup Scout only reads companies.
         </p>
       </section>
 
       <section id="promotion">
         <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Founder candidate promotion</h2>
         <p className="mt-1 text-sm text-muted">
-          Founder Scout Discover does not show every resolved person · only <strong>promoted</strong> candidates, per a deterministic rule
-          in <code className="font-mono text-xs">lib/domain/promotion.ts</code>: a person is promoted if they&apos;re linked to a real
+          Founder Scout Discover does not show every resolved person · only <strong>promoted</strong> candidates. A person is promoted if they&apos;re linked to a real
           company as a founder, hold a named leadership/technical-lead role, hold any specific named role (not a generic
           &quot;team member&quot; placeholder), or appear with a real role on 2+ distinct projects (repeat building). Club membership,
           hackathon attendance alone, or a directory listing never promotes someone by itself. A Devpost hackathon gallery&apos;s public
           team-member list never tells us who owned what, so every hackathon team member is recorded with the honest, non-differentiated
-          role <code className="font-mono text-xs">team_member</code> · not <code className="font-mono text-xs">founder</code> · unless
+          role team member · not founder · unless
           they separately hold a leadership role elsewhere.
         </p>
       </section>
@@ -77,7 +63,7 @@ export default function MethodologyPage() {
         <h2 className="text-sm font-semibold text-foreground">Founder Signal</h2>
         <p className="mt-1 text-sm text-muted">
           Separate from source tier · a source&apos;s tier says how useful it is to scan, not how strong any individual person&apos;s
-          evidence is. <code className="font-mono text-xs">lib/scoring/founder-signal.ts</code> computes 8 dimensions (ability to build,
+          evidence is. The score uses 8 dimensions (ability to build,
           technical depth, repeat building, shipping velocity, project ambition, external validation, collaborator quality, momentum) from
           real rows only · unknown is never coerced to zero, and dimensions with no reliable deterministic source (technical depth, project
           ambition, momentum) always report unknown rather than being guessed at. A headline Founder Signal number only shows once real
@@ -135,7 +121,7 @@ export default function MethodologyPage() {
         <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Open lane on the map</h2>
         <p className="mt-1 text-sm text-muted">
           The desk map fold shows how many strong student founders still have no top fund on record. The wording below is
-          generated from <code className="font-mono text-xs">lib/domain/open-lane.ts</code> so it cannot drift from the matcher.
+          generated from the same rule the map uses, so the words cannot drift from the count.
         </p>
         <p className="mt-3 text-sm text-foreground" data-methodology-open-lane-def="">
           <span data-methodology-open-lane-def-strong="">{openLaneStrongDefinition()}</span>{" "}
@@ -164,7 +150,7 @@ export default function MethodologyPage() {
           <li className="rounded-md border border-border-c bg-surface p-3">
             <span className="font-medium text-foreground">Kept / investable</span>
             <span className="ml-2 font-mono tabular-nums text-ok" data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-            <p className="mt-1 text-xs text-muted">Counted on the site as verified campus companies.</p>
+            <p className="mt-1 text-xs text-muted">This is the vetted company list on Companies, the map, and Data.</p>
           </li>
           <li className="rounded-md border border-border-c bg-surface p-3">
             <span className="font-medium text-foreground">Excluded · older alumni</span>
@@ -178,8 +164,7 @@ export default function MethodologyPage() {
           </li>
         </ul>
         <p className="mt-2 text-xs text-muted">
-          Corpus companies total {recency.companiesTotal.toLocaleString("en-US")} · funnel numbers come from{" "}
-          <code className="font-mono">data/corpus-snapshot.json</code> after each recency batch.
+          The wider corpus is {recency.companiesTotal.toLocaleString("en-US")} companies. Only the kept count is the vetted list.
         </p>
       </section>
 
@@ -226,7 +211,7 @@ export default function MethodologyPage() {
           <li>✅ UI/UX upgrade per a separate detailed spec: renamed Universe→Explore (with a redirect alias), new dark design tokens, search + Companies/Builders entity switch, reworked table columns and drawer ordering (Why look/Founder edge/Open question above the fold), a real compact Sources table with typed People/Projects/Ventures counts, and Signals filters/labels (also fixed a real bug: competition placements were mislabeled &quot;grant&quot; instead of &quot;award&quot;).</li>
           <li>✅ Split into Founder Scout / Startup Scout as two products under one &quot;Campus Scout&quot; nav, with the data-model correction described above (hackathon projects no longer masquerade as companies) · replaced the Companies/Builders entity switch entirely. Rebalanced the palette toward neutral gray/white, reserving purple for interaction/selection. Pipeline stages consolidated to New/Researching/Contact planned/Contacted/Meeting/Diligence/Passed (dropped the redundant &quot;Watching&quot; status · the watch queue keys off an explicit due date instead) with a board/table toggle and compact cards replacing the old chip wall. Verification page groups companies by their single primary blocker instead of a generic &quot;Needs research.&quot; Signals cards dropped the ingestion-log boilerplate and now show &quot;Discovered {"{"}date{"}"}&quot; instead of &quot;date unknown&quot; when the true event date isn&apos;t known. Sources&apos; Table/Registry/Playbook tabs collapsed to Registry/Playbooks, with tier/role/status/yield columns folded into one Registry table. Old routes (<code className="font-mono text-xs">/explore</code>, <code className="font-mono text-xs">/universe</code>, <code className="font-mono text-xs">/shortlist</code>, <code className="font-mono text-xs">/pipeline</code>) now redirect to their Startup Scout equivalents. See README for what wasn&apos;t done (Globe company-HQ mode, Network typed-edge rework, in-app scan-trigger UI).</li>
           <li>✅ Manual assessment UI (rate any candidate 0-5-or-unknown per dimension); rubric math is always computed deterministically, never by the rating form itself. New assessments are added to history, never overwrite a prior one.</li>
-          <li>✅ Real ingestion at two more campuses via their real public accelerators: MIT (delta v, <code className="font-mono text-xs">fetch-mit-deltav.ts</code>) and Waterloo (Velocity, <code className="font-mono text-xs">fetch-velocity.ts</code>). Neither accelerator&apos;s own site exposes a per-founder detail page reliably enough to extract names without guessing, so companies are ingested honestly &quot;founders not yet identified&quot; where that&apos;s the case, still linked to their real accelerator/university evidence.</li>
+          <li>✅ Real ingestion at two more campuses via their public accelerators, MIT delta v and Waterloo Velocity. Neither accelerator&apos;s own site exposes a per-founder detail page reliably enough to extract names without guessing, so companies are ingested as founders not yet identified where that&apos;s the case, still linked to their accelerator and university evidence.</li>
           <li>✅ Two of the brief&apos;s previously-unconfigured P0 sources now real: Web Development at Berkeley (its own site has no team roster or project-credits page · real evidence instead comes from its GitHub org&apos;s commit history) and GRASP Lab (its Startups page is fully AJAX-loaded with no usable fallback · real evidence instead comes from a genuine WordPress REST API the site exposes). Both hand-verify every named founder against the actual page text rather than a generic parser, to avoid mistaking an advisor/faculty mention for a founding claim.</li>
           <li>✅ Possible-company detection: a person&apos;s own bio (currently: GitHub bio, the one place this app captures real personal bio text) can surface a company they say they&apos;re building, but it&apos;s never auto-created as a Startup Scout candidate · it&apos;s filed as a reviewable hint (shown as &quot;Possible company: X (unconfirmed)&quot; on their Founder Scout card) unless it corroborates a company they&apos;re already a confirmed founder of.</li>
           <li>✅ Canvas-view bottom result tray (compact cards for the current filtered result set) and a localStorage-backed &quot;remember the user&apos;s last view&quot; on Startup Scout&apos;s Globe/Table switch.</li>

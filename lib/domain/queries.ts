@@ -1151,6 +1151,52 @@ export function sourceTypedCounts(sourceId: string): SourceTypedCounts {
   return { people, projects, ventures };
 }
 
+/**
+ * People / Projects / Ventures for EVERY source in three grouped queries.
+ * sourceTypedCounts() runs ~5 queries per source; looping it over the 424
+ * sources made /signals/sources take 26 s. Same definitions as the per-source
+ * helpers above (a project counts for a source if a project claim from it
+ * names the project, or a role claim from it links someone to the project).
+ * Sources with no rows are absent from the map: treat as zeros.
+ */
+export function sourceTypedCountsAll(): Map<string, SourceTypedCounts> {
+  const db = getDb();
+  const out = new Map<string, SourceTypedCounts>();
+  const slot = (id: string) => {
+    let row = out.get(id);
+    if (!row) out.set(id, (row = { people: 0, projects: 0, ventures: 0 }));
+    return row;
+  };
+  for (const r of db
+    .prepare(
+      `SELECT c.source_id AS id, COUNT(DISTINCT a.person_id) AS n
+         FROM affiliations a JOIN claims c ON c.id = a.claim_id
+        WHERE c.source_id IS NOT NULL GROUP BY c.source_id`,
+    )
+    .all() as { id: string; n: number }[]) {
+    slot(r.id).people = r.n;
+  }
+  for (const r of db
+    .prepare(
+      `SELECT x.source_id AS id, p.kind AS kind, COUNT(DISTINCT p.id) AS n
+         FROM (
+           SELECT c.source_id AS source_id, c.entity_id AS project_id
+             FROM claims c WHERE c.entity_type = 'project' AND c.source_id IS NOT NULL
+           UNION
+           SELECT c2.source_id, ppr.project_id
+             FROM person_project_roles ppr JOIN claims c2 ON c2.id = ppr.claim_id
+            WHERE c2.source_id IS NOT NULL
+         ) x JOIN projects p ON p.id = x.project_id
+        WHERE p.kind IN ('project', 'company')
+        GROUP BY x.source_id, p.kind`,
+    )
+    .all() as { id: string; kind: string; n: number }[]) {
+    if (r.kind === "project") slot(r.id).projects = r.n;
+    else slot(r.id).ventures = r.n;
+  }
+  return out;
+}
+
 // Only present once a human has actually recorded a confidence level — a row
 // with zero community research done has communitySignal: null, distinct from
 // confidence: "insufficient" (which means research WAS done and came up

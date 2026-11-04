@@ -33,7 +33,7 @@ export function FoldOpenLaneHero({
   return (
     <div className="mb-2" data-fold-open-lane="" data-fold-redesign="open-lane">
       <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-        Open lane
+        No top fund yet
       </p>
       <p
         className="mt-1 font-mono text-[48px] font-bold leading-none tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]"
@@ -63,7 +63,7 @@ export function FoldOpenLaneHero({
       {campuses.length > 0 ? (
         <div className="mt-3 border-t border-[color:var(--cobalt,#2F4FD8)]/20 pt-2" data-fold-top-campuses-desk="" data-fold-open-lane-campuses="">
           <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-            Campus counts
+            Founders in this lane
           </p>
           <ol className="mt-2 space-y-1.5" data-fold-peak-campus-rank="">
             {campuses.map((campus, i) => (

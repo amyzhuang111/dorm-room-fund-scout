@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { plainText } from "@/lib/display/plain-text";
 import { getDb } from "@/lib/db/client";
@@ -14,6 +15,8 @@ import { LogoMark } from "@/components/sample-instrument";
 import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 import { PrecollegeBadges } from "@/components/badges";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
+
+export const metadata: Metadata = { title: "Signals" };
 
 interface SignalRow {
   id: string;
@@ -36,6 +39,12 @@ interface SignalRow {
 
 const SIGNALS_PAGE_SIZE = 40;
 
+const CAMPUS_TOOLS = new Set(["penn mobile", "penn clubs", "penn courses"]);
+
+function typeLabel(type: string): string {
+  return TYPE_LABEL[type] ?? type.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 const TYPE_LABEL: Record<string, string> = {
   demo: "Product launch",
   continued_dev: "Technical release",
@@ -57,6 +66,8 @@ function formatSignalDate(value: string): string {
     const month = MONTHS[Number(full[2]) - 1];
     const day = Number(full[3]);
     if (month && day >= 1 && day <= 31) return `${month} ${day}, ${full[1]}`;
+    if (month && day === 0) return `${month} ${full[1]}`;
+    if (!month) return full[1]!;
   }
   const monthOnly = /^(\d{4})-(\d{2})$/.exec(stored);
   if (monthOnly) {
@@ -114,30 +125,30 @@ function listAllSignals(): SignalRow[] {
   const db = getDb();
   return db
     .prepare(
-      `SELECT s.id, s.project_id, p.kind as project_kind, p.name as project_name, p.website_url, p.primary_link,
+      `WITH pu AS (
+         SELECT ppr.project_id AS pid, a.university_id AS uid
+           FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
+          WHERE a.university_id IS NOT NULL
+         UNION
+         SELECT r.source_entity_id, r.target_entity_id
+           FROM relationships r
+          WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university'
+       ), pun AS (
+         SELECT pu.pid AS pid,
+                group_concat(u.name, ' · ' ORDER BY u.id) AS names,
+                group_concat(u.id, ',' ORDER BY u.id) AS ids
+           FROM pu JOIN universities u ON u.id = pu.uid
+          GROUP BY pu.pid
+       )
+       SELECT s.id, s.project_id, p.kind as project_kind, p.name as project_name, p.website_url, p.primary_link,
               (SELECT pe.name FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id WHERE ppr.project_id = p.id AND ppr.role LIKE '%founder%' LIMIT 1) as founder_name,
-              (SELECT group_concat(name, ' · ') FROM (
-                 SELECT DISTINCT u.name as name FROM (
-                   SELECT a.university_id as id FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
-                    WHERE ppr.project_id = s.project_id AND a.university_id IS NOT NULL
-                   UNION
-                   SELECT r.target_entity_id FROM relationships r
-                    WHERE r.source_entity_type = 'project' AND r.source_entity_id = s.project_id AND r.target_entity_type = 'university'
-                 ) ids JOIN universities u ON u.id = ids.id
-              )) as university_name,
-              (SELECT group_concat(id, ',') FROM (
-                 SELECT DISTINCT u.id as id FROM (
-                   SELECT a.university_id as id FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
-                    WHERE ppr.project_id = s.project_id AND a.university_id IS NOT NULL
-                   UNION
-                   SELECT r.target_entity_id FROM relationships r
-                    WHERE r.source_entity_type = 'project' AND r.source_entity_id = s.project_id AND r.target_entity_type = 'university'
-                 ) ids JOIN universities u ON u.id = ids.id
-              )) as university_ids,
+              pun.names as university_name,
+              pun.ids as university_ids,
               s.signal_type, s.current_observation, s.significance_note, s.source_date, s.created_at,
               (SELECT src.name FROM claims c JOIN sources src ON src.id = c.source_id WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) ORDER BY c.retrieved_at DESC LIMIT 1) as source_name,
               (SELECT c.source_url FROM claims c WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) AND c.source_url IS NOT NULL AND c.source_url != '' ORDER BY c.retrieved_at DESC LIMIT 1) as source_url
        FROM signals s JOIN projects p ON p.id = s.project_id
+       LEFT JOIN pun ON pun.pid = s.project_id
        ORDER BY (s.source_date IS NULL OR trim(s.source_date) = ''), s.source_date DESC, s.created_at DESC`
     )
     .all() as SignalRow[];
@@ -149,6 +160,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   const review = await readReviewState();
   const allSignals = listAllSignals().filter(
     (s) =>
+      !CAMPUS_TOOLS.has(s.project_name.trim().toLowerCase()) &&
       !isHidden(review.records, {
         entityType: "project",
         entityId: s.project_id,
@@ -273,7 +285,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
                   href={buildHref(basePath, sp, { type: sp.type === t ? null : t, page: null })}
                   className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white" : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-3,#5C647A)]"}`}
                 >
-                  {TYPE_LABEL[t] ?? t}
+                  {typeLabel(t)}
                 </Link>
               ))}
             </>
@@ -367,12 +379,12 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
                 </Link>
                 {s.project_kind === "company" && <CompanyWebsiteIcon url={s.website_url} name={s.project_name} />}
               </span>
-              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{typeLabel(s.signal_type)}</p>
               <p className={`mt-1 text-foreground ${featured ? "text-[15px] leading-snug" : "text-sm"}`}>{plainText(s.current_observation)}</p>
               {s.significance_note && lowConfidence ? <p className="mt-1 text-sm text-muted">{plainText(s.significance_note)}</p> : null}
               {s.significance_note && !lowConfidence ? <p className="mt-1 text-sm text-muted">Why it matters: {plainText(s.significance_note)}</p> : null}
               <p className="mt-1.5 text-xs text-muted">
-                {s.source_name ? <span>{plainText(s.source_name)}</span> : null}
+                {s.source_name ? <span>{plainText(s.source_name).replace(/\s*\([^)]*API\)/g, "")}</span> : null}
                 {s.source_name && s.source_url ? " · " : null}
                 {s.source_url ? (
                   <a href={s.source_url} target="_blank" rel="noopener noreferrer" className="text-link underline">

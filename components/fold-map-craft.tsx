@@ -120,6 +120,7 @@ export function LineagePanels({
         if (campusId && item.campusSlug && item.campusSlug === campusId) return true;
         return false;
       })
+      .filter((item) => !/^(penn mobile|penn clubs|penn courses)$/i.test(item.event.trim()))
       .slice(0, 6);
   }, [week, campusId, campusName]);
 
@@ -146,11 +147,21 @@ export function LineagePanels({
           <ol className="mt-1.5 space-y-1.5">
             {recent.map((item) => {
               const title = item.event.trim() || item.detail?.trim() || item.category || item.type;
+              const when = item.at ? new Date(item.at) : null;
+              const dateLabel =
+                when && !Number.isNaN(when.getTime())
+                  ? when.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })
+                  : null;
+              const snippet = item.event.trim() && item.detail?.trim() ? item.detail.trim() : null;
               const body = (
                 <>
                   <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{title}</span>
                   <span className="text-[color:var(--fg-3,#5C647A)]"> · {item.campus}</span>
+                  {dateLabel ? <span className="text-[color:var(--fg-3,#5C647A)]"> · {dateLabel}</span> : null}
                   {item.tag ? <span className="text-[color:var(--cobalt,#2F4FD8)]"> · {item.tag}</span> : null}
+                  {snippet ? (
+                    <span className="mt-0.5 line-clamp-2 block text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">{snippet}</span>
+                  ) : null}
                 </>
               );
               return (

@@ -8,6 +8,11 @@ what's still missing. It's written to match what the code actually does,
 not the full brief — see `app/methodology/page.tsx` (also live at
 `/methodology` once running) for the same breakdown inside the app.
 
+**Data, collectors and operations:** see
+[`docs/data-pipeline-and-operations.md`](docs/data-pipeline-and-operations.md)
+for how data gets in, what each count means, the weekly collector workflow, the
+unverified-companies view, and how to run and review all of it safely.
+
 ## News
 
 `/news` lists public headlines for startups and founders already in

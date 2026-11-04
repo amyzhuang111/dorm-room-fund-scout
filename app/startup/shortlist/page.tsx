@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import { permanentRedirect } from "next/navigation";
 import { StartupShortlistApp } from "@/components/startup-lists-app";
 import { requireMemberPage } from "@/lib/auth/guard";
 import { mergedParamHref } from "@/lib/domain/entity-redirects";
 import { getProjectDetail, listCandidateProjects, listSectorCounts, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
+
+export const metadata: Metadata = { title: "Startup shortlist" };
 
 export default async function StartupShortlistPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   await requireMemberPage("/startup/shortlist");

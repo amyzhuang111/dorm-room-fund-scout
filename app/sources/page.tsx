@@ -1,11 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { listSources, listUniversities, sourceTypedCounts, type SourceTypedCounts } from "@/lib/domain/queries";
+import { listSources, listUniversities, sourceTypedCountsAll, type SourceTypedCounts } from "@/lib/domain/queries";
 import { importReferralsCsv } from "@/lib/actions/import-csv";
 import { buildSourceCards, compareTiers, SOURCE_CATALOGUE, type SourceCard, type Tier } from "@/lib/domain/source-quality";
 import { SourceCardView } from "@/components/source-card";
 import { buildHref } from "@/lib/domain/url";
 
+export const metadata: Metadata = { title: "Sources" };
+
 const VIEWS = ["registry", "playbook"] as const;
+const REGISTRY_PAGE_SIZE = 25;
 
 // UIUX_UPGRADE_CLAUDE.md §11 status vocabulary, mapped from our internal
 // source.status values (unchanged internally so nothing else has to migrate).
@@ -41,7 +45,8 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
   const view = VIEWS.find((v) => v === sp.view) ?? "registry";
   const sortBy = sp.sortBy === "startup" ? "startup" : "founder";
 
-  const liveSources = listSources().map((s) => ({
+  const sourceRows = listSources();
+  const liveSources = sourceRows.map((s) => ({
     id: s.id,
     status: s.status,
     lastSuccessAt: s.lastSuccessAt,
@@ -57,13 +62,23 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
   }));
   const allCards = buildSourceCards(liveSources);
   const universities = listUniversities();
+  const cataloguedSourceIds = new Set(SOURCE_CATALOGUE.map((s) => s.dbSourceId).filter(Boolean));
+  const suggestedSources = sourceRows.filter((s) =>
+    s.family === "student_fund" && !cataloguedSourceIds.has(s.id)
+    && (!sp.q || s.name.toLowerCase().includes(sp.q.toLowerCase()))
+    && (!sp.campus || s.campuses.includes(sp.campus))
+    && !sp.tier && (!sp.type || sp.type === "manual")
+    && (!sp.role || sp.role === "discovery")
+    && (!sp.status || sp.status === "unconfigured")
+  );
 
-  // Typed People/Projects/Ventures breakdown per implemented source
-  // (UIUX_UPGRADE_CLAUDE.md §11) — cheap at this catalogue size (~30 entries,
-  // most without a live row).
+  // Typed People/Projects/Ventures breakdown per source (UIUX_UPGRADE_CLAUDE.md §11).
+  // One grouped query for all sources: the per-source helper ran ~5 queries each
+  // across 424 sources and took ~26 s per request.
+  const allTypedCounts = sourceTypedCountsAll();
   const typedCountsById = new Map<string, SourceTypedCounts>();
   for (const s of liveSources) {
-    typedCountsById.set(s.id, sourceTypedCounts(s.id));
+    typedCountsById.set(s.id, allTypedCounts.get(s.id) ?? { people: 0, projects: 0, ventures: 0 });
   }
 
   let filtered = allCards;
@@ -111,6 +126,25 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
           </Link>
         ))}
       </div>
+
+      {suggestedSources.length > 0 && (
+        <section className="mt-4 rounded-lg border border-border-c bg-white p-4" aria-labelledby="suggested-sources-heading">
+          <h2 id="suggested-sources-heading" className="text-sm font-semibold text-foreground">Sources awaiting verification</h2>
+          <p className="mt-1 text-xs text-muted">User-submitted programs to investigate. Source quality has not been rated.</p>
+          <ul className="mt-3 space-y-3">
+            {suggestedSources.map((source) => (
+              <li key={source.id}>
+                <p className="text-sm font-medium text-foreground">{source.name}</p>
+                <p className="mt-0.5 text-xs text-muted">
+                  {source.campuses.map((id) => universities.find((university) => university.id === id)?.name ?? id).join(" · ")}
+                  {" · Student-run fund / program · Unverified"}
+                </p>
+                <p className="mt-1 text-xs text-muted">{source.tierRationale}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {view === "registry" && <RegistryView cards={sorted} sp={sp} sortBy={sortBy} typedCountsById={typedCountsById} />}
       {view === "playbook" && <PlaybookView cards={allCards} universities={universities} typedCountsById={typedCountsById} />}
@@ -240,49 +274,76 @@ function RegistryView({
   sortBy: "founder" | "startup";
   typedCountsById: Map<string, SourceTypedCounts>;
 }) {
+  // 424 sources rendered twice (table + cards) made this page ~2.8 MB; page it.
+  const total = cards.length;
+  const pageCount = Math.max(1, Math.ceil(total / REGISTRY_PAGE_SIZE));
+  const page = Math.min(pageCount, Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1));
+  const from = (page - 1) * REGISTRY_PAGE_SIZE;
+  const pageCards = cards.slice(from, from + REGISTRY_PAGE_SIZE);
   const types = [...new Set(SOURCE_CATALOGUE.map((c) => c.sourceType))];
   const campuses = [...new Set(SOURCE_CATALOGUE.map((c) => c.campus).filter((c): c is string => !!c))];
   return (
     <div className="mt-3 space-y-6">
-      <RegistryTable cards={cards} sp={sp} typedCountsById={typedCountsById} />
+      <RegistryTable cards={pageCards} sp={sp} typedCountsById={typedCountsById} />
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="text-muted">Sort by:</span>
-        <Link href={buildHref("/signals/sources", sp, { sortBy: "founder" })} className={sortBy === "founder" ? "font-semibold text-link" : "text-muted underline"}>
+        <Link href={buildHref("/signals/sources", sp, { page: null, sortBy: "founder" })} className={sortBy === "founder" ? "font-semibold text-link" : "text-muted underline"}>
           Founder tier
         </Link>
-        <Link href={buildHref("/signals/sources", sp, { sortBy: "startup" })} className={sortBy === "startup" ? "font-semibold text-link" : "text-muted underline"}>
+        <Link href={buildHref("/signals/sources", sp, { page: null, sortBy: "startup" })} className={sortBy === "startup" ? "font-semibold text-link" : "text-muted underline"}>
           Startup tier
         </Link>
         <span className="mx-1 text-border-c">|</span>
-        <Link href={buildHref("/signals/sources", sp, { campus: null, tier: null, type: null, role: null, status: null })} className="text-muted underline">
+        <Link href={buildHref("/signals/sources", sp, { page: null, campus: null, tier: null, type: null, role: null, status: null })} className="text-muted underline">
           Clear filters
         </Link>
       </div>
       <div className="mt-2 flex flex-wrap gap-2 text-xs">
         {campuses.map((c) => (
-          <Link key={c} href={buildHref("/signals/sources", sp, { campus: sp.campus === c ? null : c })} className={`rounded-full border px-2 py-0.5 ${sp.campus === c ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
+          <Link key={c} href={buildHref("/signals/sources", sp, { page: null, campus: sp.campus === c ? null : c })} className={`rounded-full border px-2 py-0.5 ${sp.campus === c ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
             {CAMPUS_LABEL[c] ?? c}
           </Link>
         ))}
         {(["S+", "S", "A", "B", "C", "D"] as Tier[]).map((t) => (
-          <Link key={t} href={buildHref("/signals/sources", sp, { tier: sp.tier === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.tier === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
+          <Link key={t} href={buildHref("/signals/sources", sp, { page: null, tier: sp.tier === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.tier === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
             Tier {t}
           </Link>
         ))}
         {types.map((t) => (
-          <Link key={t} href={buildHref("/signals/sources", sp, { type: sp.type === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
+          <Link key={t} href={buildHref("/signals/sources", sp, { page: null, type: sp.type === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
             {t.replace(/_/g, " ")}
           </Link>
         ))}
       </div>
       <ul className="mt-3 space-y-2">
-        {cards.map((c) => (
+        {pageCards.map((c) => (
           <li key={c.id}>
             <SourceCardView card={c} typedCounts={c.dbSourceId ? typedCountsById.get(c.dbSourceId) : undefined} />
           </li>
         ))}
         {cards.length === 0 && <p className="text-sm text-muted">No sources match these filters.</p>}
       </ul>
+      {total > REGISTRY_PAGE_SIZE && (
+        <nav aria-label="Source pages" className="flex flex-wrap items-center gap-3 text-xs">
+          {page > 1 ? (
+            <Link href={buildHref("/signals/sources", sp, { page: page - 1 <= 1 ? null : String(page - 1) })} className="text-link underline">
+              Previous
+            </Link>
+          ) : (
+            <span className="text-muted">Previous</span>
+          )}
+          <span className="text-muted">
+            Page {page} of {pageCount} · showing {from + 1}–{Math.min(total, from + REGISTRY_PAGE_SIZE)} of {total} sources
+          </span>
+          {page < pageCount ? (
+            <Link href={buildHref("/signals/sources", sp, { page: String(page + 1) })} className="text-link underline">
+              Next
+            </Link>
+          ) : (
+            <span className="text-muted">Next</span>
+          )}
+        </nav>
+      )}
     </div>
   );
 }
@@ -349,3 +410,4 @@ function PlaybookView({
     </div>
   );
 }
+

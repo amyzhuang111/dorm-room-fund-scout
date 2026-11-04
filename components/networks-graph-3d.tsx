@@ -772,7 +772,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       for (const d of drawn) {
         let x0: number, y0: number, z0: number, x1: number, y1: number, z1: number;
         let aIdx = d.a;
-        let bIdx = d.b;
+        const bIdx = d.b;
         if (d.kind === "campus_hub") {
           const c = campusCentroid.get(d.campusIdx);
           if (!c) continue;

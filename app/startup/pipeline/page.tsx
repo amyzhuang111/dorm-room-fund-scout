@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PipelineApp } from "@/components/pipeline-app";
 import { requireMemberPage } from "@/lib/auth/guard";
 import { listUniversities } from "@/lib/domain/queries";
+
+export const metadata: Metadata = { title: "Startup pipeline" };
 
 export default async function PipelinePage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;

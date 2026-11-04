@@ -1,4 +1,5 @@
-import { getDb } from "../db/client";
+import fs from "node:fs";
+import { databasePath, getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { localCompanyLogoUrl } from "./local-logos";
 import { listFoundersForPage } from "./queries";
@@ -23,7 +24,32 @@ export interface FounderTableRow {
   verified: boolean;
 }
 
+// The database file does not change while an instance runs (read-only bundle on
+// Vercel; locally any write bumps its mtime), so each table is built once per
+// campus per file version instead of on every request. One /founders request
+// used to run this heavy signals scan three times.
+function dbStamp(): string {
+  try {
+    const st = fs.statSync(databasePath());
+    return `${st.mtimeMs}:${st.size}`;
+  } catch {
+    return "missing";
+  }
+}
+const founderTableMemo = new Map<string, { stamp: string; rows: FounderTableRow[] }>();
+const projectRowsMemo = new Map<string, { stamp: string; rows: ProjectTableRow[] }>();
+
 export function loadFounderTable(universityId?: string): FounderTableRow[] {
+  const key = universityId ?? "";
+  const stamp = dbStamp();
+  const hit = founderTableMemo.get(key);
+  if (hit?.stamp === stamp) return hit.rows;
+  const rows = buildFounderTable(universityId);
+  founderTableMemo.set(key, { stamp, rows });
+  return rows;
+}
+
+function buildFounderTable(universityId?: string): FounderTableRow[] {
   const db = getDb();
   const years = new Map<string, number>();
   try {
@@ -202,6 +228,16 @@ interface ProjectHit {
 }
 
 export function loadProjectRows(universityId?: string): ProjectTableRow[] {
+  const key = universityId ?? "";
+  const stamp = dbStamp();
+  const hit = projectRowsMemo.get(key);
+  if (hit?.stamp === stamp) return hit.rows;
+  const rows = buildProjectRows(universityId);
+  projectRowsMemo.set(key, { stamp, rows });
+  return rows;
+}
+
+function buildProjectRows(universityId?: string): ProjectTableRow[] {
   const people = loadFounderTable(universityId);
   const byId = new Map(people.map((person) => [person.id, person]));
   const db = getDb();

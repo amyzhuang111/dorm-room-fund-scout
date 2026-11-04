@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { CompanyDetail } from "@/components/company-detail";
 import { SampleCompanyShell } from "@/components/sample-company-shell";
@@ -61,6 +62,13 @@ function wireSeedCompanies(all: FacetCompany[], schoolId: string | null, sectorI
   return ranked.slice(0, 48).map(slimWireCard);
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  if (id.startsWith("user_")) return { title: "Startup" };
+  const project = getProjectDetail(survivorId("project", id) ?? id);
+  return { title: project?.name ?? "Startup" };
+}
+
 export default async function StartupPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (id.startsWith("user_")) return <UserStartupPage id={id} />;
@@ -100,7 +108,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   const dossier = {
     id: project.id,
     name: card?.name ?? project.name,
-    campus: card?.campuses?.[0] ?? directoryRow?.school ?? null,
+    campus: directoryRow?.school ?? card?.campuses?.[0] ?? null,
     year: directoryRow?.foundedYear ?? null,
     schoolId: directoryRow?.schoolId ?? null,
     sectorId: directoryRow?.sectorId ?? null,

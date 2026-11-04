@@ -7,7 +7,7 @@ import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadiusByFounders, markerSizeLegend } from "@/lib/domain/marker-radius";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
-import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
+import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import { CompanyLocationLayer } from "./company-location-layer";
 import mapStyles from "./company-location-map.module.css";
@@ -103,6 +103,7 @@ export function TileGlobe({
   companyCount = 0,
   foundersListed = 0,
   foundersIndexed = 0,
+  campusesWithFounders = 0,
   selectedId,
   onSelect,
   className = "",
@@ -117,6 +118,8 @@ export function TileGlobe({
   foundersListed?: number;
   /** Rows in the searchable founder index (founders.json). May exceed foundersListed. */
   foundersIndexed?: number;
+  /** Campuses page list: schools with a promoted founder. A subset of the pins. */
+  campusesWithFounders?: number;
   selectedId?: string | null;
   onSelect: (id: string) => void;
   className?: string;
@@ -149,7 +152,7 @@ export function TileGlobe({
   const [ready, setReady] = useState(false);
   const [painted, setPainted] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [locationsMode, setLocationsMode] = useState(true);
+  const [locationsMode, setLocationsMode] = useState(false);
   const [expandedMap, setExpandedMap] = useState(false);
   const [rotationEnabled, setRotationEnabled] = useState(true);
   useGlobeRotation(activeMap, rotationEnabled && !pinnedCaptureCenter());
@@ -710,11 +713,9 @@ export function TileGlobe({
   }, [companies, pinned]);
   const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
 
-  // One campus count: the campuses actually drawn on the globe.
-  const universeCounts = catalogReady
-    ? sampleSurfaceCounts(companies, campuses)
-    : { companies: companyCount, foundersListed, campusesOnMap: campuses.length };
-  const campusesOnMap = universeCounts.campusesOnMap;
+  // Keep the server founder count. Summing founder-name slots after hydrate
+  // counts the same person twice and disagrees with the vetted list.
+  const campusesOnMap = campuses.length;
 
   const rankedCampuses = useMemo(() => campusFoundersRanked(campuses), [campuses]);
   const topCampuses = useMemo(() => campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE), [campuses]);
@@ -726,10 +727,10 @@ export function TileGlobe({
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
       <div className={`${locationsMode ? mapStyles.hqCounts : ""} pointer-events-none absolute right-2 top-2 z-20 mb-0 ml-auto flex max-w-[70%] flex-wrap items-end justify-end gap-x-2 gap-y-0.5 rounded-sm bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 shadow-sm backdrop-blur-[2px] lg:pointer-events-auto lg:static lg:mb-2 lg:ml-0 lg:max-w-none lg:justify-between lg:gap-x-4 lg:gap-y-1 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none`} data-fold-counts="" style={locationsMode ? {position:"relative",maxWidth:"none",top:"auto",right:"auto",margin:0} : undefined}>
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
-          <span>
+          <Link href="/companies" className="pointer-events-auto hover:underline">
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
-            {" companies"}
-          </span>
+            {" vetted companies"}
+          </Link>
           {catalogReady ? (
             <span>
               <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
@@ -738,23 +739,29 @@ export function TileGlobe({
           ) : null}
           <span>
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" campuses on map"}
+            {" schools with a pin"}
           </span>
+          {campusesWithFounders > 0 ? (
+            <Link href="/campuses" className="pointer-events-auto hover:underline">
+              <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
+              {" campuses with promoted founders"}
+            </Link>
+          ) : null}
           {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
-          <span data-founder-count-note="">
-            <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-            {" founders"}
+          <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
+            <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
+            {" founders on those companies"}
             {foundersIndexed > 0 ? (
               <>
                 {" · "}
                 <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-                {" indexed"}
+                {" in the full index"}
               </>
             ) : null}
-          </span>
+          </Link>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Choose a city to explore recorded startup HQs." : "Click a campus to see its founders."}</p>
+        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">

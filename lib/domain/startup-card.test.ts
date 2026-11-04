@@ -78,20 +78,33 @@ assert.equal(after.sector, "AI infra");
 assert.equal(after.region, "San Francisco");
 assert.equal(after.teamSize, "30");
 assert.equal(after.status, null);
-assert.deepEqual(after.campuses, ["University of Pennsylvania"]);
+// Penn comes from the YC page; UBC was added 2026-11-02 from the UBC Tech Map listing
+// (observed, not verified). Assert the stable fact (Penn is present, names are sorted)
+// instead of pinning the full list, which grows as sources are imported.
+assert.ok(after.campuses.includes("University of Pennsylvania"));
+assert.deepEqual(after.campuses, [...after.campuses].sort((a, b) => a.localeCompare(b)));
 assert.equal(after.websiteUrl, "https://afterquery.com");
 assert.ok(after.links.some((link) => link.kind === "website"));
 assert.ok(after.links.some((link) => link.kind === "linkedin"));
 assert.equal(after.links.some((link) => link.kind === "facebook" || link.kind === "x"), false);
-assert.equal(after.verifiedOn, "Sep 27, 2026");
+// The exact date is record data that changes when a company is re-verified (it read
+// "Sep 27, 2026" here, then "Aug 3, 2026"); assert it is a formatted date, not which one.
+assert.match(after.verifiedOn ?? "", /^[A-Z][a-z]{2} \d{1,2}, 2026$/);
 assert.equal(after.verifiedSource, "YC company page");
 assert.equal(after.founders.length, 2);
 for (const founder of after.founders) {
   assert.equal(founder.photoUrl, null);
   assert.equal(founder.linkedinFollowers, null);
   assert.equal(founder.yearsExperience, null);
-  assert.ok(founder.linkedinUrl?.includes("linkedin.com/in/"));
-  assert.equal(founder.linkedinConfidence, "confirmed");
+  // These two had confirmed LinkedIn URLs on 2026-09-27; the 2026-11-02 accuracy pass
+  // demoted them to "linkedin_unverified" (no URL). So assert the invariant, not the person:
+  // a URL is shown only if it is a profile link, and confidence is set exactly when a URL is.
+  if (founder.linkedinUrl) {
+    assert.ok(founder.linkedinUrl.includes("linkedin.com/in/"));
+    assert.ok(founder.linkedinConfidence === "confirmed" || founder.linkedinConfidence === "likely");
+  } else {
+    assert.equal(founder.linkedinConfidence, null);
+  }
   assert.equal(founder.role, "Founder");
 }
 const spencer = after.founders.find((founder) => founder.name === "Spencer Mateega");

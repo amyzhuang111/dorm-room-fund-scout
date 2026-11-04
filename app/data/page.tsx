@@ -1,27 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE, loadCorpusFillRates } from "@/lib/domain/corpus-explorer";
 import { buildDirectoryFromDb } from "@/lib/domain/directory";
-import fs from "node:fs";
-import path from "node:path";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
-
-function loadRecencyFunnel() {
-  try {
-    const snap = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "corpus-snapshot.json"), "utf8"));
-    return {
-      investable: Number(snap.investableCompanies ?? 0),
-      excludedOlderAlumni: Number(snap.excludedOlderAlumni ?? 0),
-      unverifiedRecency: Number(snap.unverifiedRecency ?? 0),
-    };
-  } catch {
-    return { investable: 0, excludedOlderAlumni: 0, unverifiedRecency: 0 };
-  }
-}
+import { loadRecencyFunnel } from "@/lib/domain/recency-funnel";
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
 import { formatCorpusDate } from "@/lib/domain/corpus-totals";
 import { CorpusFilters } from "@/components/corpus-filters";
+
+export const metadata: Metadata = { title: "Data" };
 
 export const dynamic = "force-dynamic";
 
@@ -103,7 +92,7 @@ export default async function DataExplorerPage({
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
-            {" companies · page "}
+            {" vetted companies in this view · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
             {" of "}
             {result.pageCount.toLocaleString("en-US")}
@@ -131,19 +120,16 @@ export default async function DataExplorerPage({
         className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-recency-funnel=""
       >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Recency gate</span>
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Vetted list</span>
         {" · "}
         <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        {" kept"}
-        <span className="hidden sm:inline">{" (this table)"}</span>
-        {" · "}
+        {" kept, the same companies as Companies and the map. A company stays in that list when a founder is a current student or graduated in 2023 or later."}
+        {" "}
         <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
-        {" excluded"}
-        <span className="hidden sm:inline">{" older alumni"}</span>
-        {" · "}
+        {" older-alumni companies are left out of it."}
+        {" "}
         <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
-        {" unverified"}
-        <span className="hidden sm:inline">{" recency (not counted as verified)"}</span>
+        {" are not yet checked and are not in the vetted list."}
       </p>
 
       <p

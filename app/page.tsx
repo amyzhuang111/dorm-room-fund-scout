@@ -40,9 +40,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   const foundersListed = totals.foundersListed;
   const companyCount = totals.investableCompanies;
   const plotted = stats.universities.filter((university) => university.lat != null && university.lon != null);
+  const campusesWithFounders = totals.campusesWithFounders;
   const top = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))[0];
   return (
     <>
+      <h1 className="sr-only">Campus Scout: student founder intelligence by campus</h1>
       <GlobeBoot />
       <Suspense
         fallback={
@@ -51,6 +53,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
               companyCount={companyCount}
               foundersListed={foundersListed}
               campusesOnMap={totals.campusesOnMap}
+              campusesWithFounders={campusesWithFounders}
               dataThrough={stats.updatedAt}
               topName={top?.name ?? ""}
               topFounders={top?.founderCount ?? 0}

@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { SCREENING_CONFIG } from "@/lib/screening/config";
+
+export const metadata: Metadata = { title: "Settings" };
 
 export default function SettingsPage() {
   return (
@@ -7,9 +10,7 @@ export default function SettingsPage() {
         <p className="page-eyebrow">Read only</p>
         <h1 className="page-title">Settings</h1>
         <p className="mt-1 text-sm text-muted">
-          v1 is single-user and locally runnable · these values are edited in code (<code className="font-mono text-xs">lib/screening/config.ts</code>,{" "}
-          <code className="font-mono text-xs">lib/scoring/rubric.ts</code>) rather than through a settings UI yet. Shown here read-only so
-          it&apos;s clear what&apos;s currently active and why.
+          These screening values are read-only. They are the rules the desks use today.
         </p>
       </div>
 

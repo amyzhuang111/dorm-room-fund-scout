@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { plainTextDeep } from "@/lib/display/plain-text";
 import { permanentRedirect } from "next/navigation";
 import { FounderDiscoverApp } from "@/components/founder-discover-app";
@@ -5,6 +6,8 @@ import { mergedParamHref } from "@/lib/domain/entity-redirects";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { listFounderStatusCounts, listFoundersForPage, listPotentialFoundersForPage, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
+
+export const metadata: Metadata = { title: "Discover founders" };
 
 export default async function FounderDiscoverPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
