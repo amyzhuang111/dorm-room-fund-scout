@@ -712,6 +712,7 @@ export function NetworkAtlas() {
               idleDelay.current = 1800;
             }}
             onPointerMove={(e) => {
+              idleDelay.current = 1800;
               if (!touches.current.has(e.pointerId)) return;
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
               const t = [...touches.current.values()];
@@ -738,6 +739,7 @@ export function NetworkAtlas() {
               drag.current = null;
             }}
             onPointerUp={(e) => {
+              idleDelay.current = 1800;
               touches.current.delete(e.pointerId);
               const d = drag.current;
               drag.current = null;
