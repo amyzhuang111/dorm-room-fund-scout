@@ -47,9 +47,10 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   const [onlyAddresses, setOnlyAddresses] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/data/company-locations.json", {signal: controller.signal}).then(async (r) => {
+    // Revalidate on page load so new address batches replace the browser's prior snapshot.
+    fetch("/data/company-locations.json", {signal: controller.signal, cache: "no-cache"}).then(async (r) => {
       if (r.ok) return r.json();
-      const fallback = await fetch("/api/company-locations", {signal: controller.signal});
+      const fallback = await fetch("/api/company-locations", {signal: controller.signal, cache: "no-cache"});
       if (!fallback.ok) throw new Error("Locations unavailable");
       return fallback.json();
     })

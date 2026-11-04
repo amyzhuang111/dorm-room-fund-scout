@@ -6,7 +6,7 @@
   "counts": {
     "candidate_needs_verification": 188,
     "held_from_publication": 34,
-    "new_import_not_reviewed": 1133,
+    "new_import_not_reviewed": 1244,
     "no_address_found_on_checked_pages": 452,
     "published_business_address": 104,
     "source_unavailable": 453
@@ -189,6 +189,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_YJ-hmtviVxt2",
+      "company": "A Healthy Reminder",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_7ZRTnS_1o01C",
       "company": "a0.dev",
       "status": "no_address_found_on_checked_pages",
@@ -365,6 +374,15 @@
         "https://adaptaplay.org/contact/",
         "https://adaptaplay.org/about/"
       ]
+    },
+    {
+      "projectId": "proj_38CLDX9KEFL_",
+      "company": "AddSynth",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_9YiojhhKSp3K",
@@ -601,6 +619,15 @@
       ]
     },
     {
+      "projectId": "proj_Nnu4jSfEKMpj",
+      "company": "Afia's Leaf",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_Hgj3XkuZQ8UF",
       "company": "African Scholar",
       "status": "source_unavailable",
@@ -727,6 +754,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:00.684Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_Hvd9niY4MBAX",
+      "company": "Agrichat AI",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -1011,6 +1047,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_gheTn78ZST8u",
+      "company": "Algae Tree",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_-4WQn-HAoIU3",
       "company": "Ali Mustafa Games",
       "status": "new_import_not_reviewed",
@@ -1069,6 +1114,15 @@
         "https://www.alkera.ai/privacy-policy",
         "https://www.alkera.ai/tos"
       ]
+    },
+    {
+      "projectId": "proj_RuNFSykIzoXo",
+      "company": "All Unique Objects",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_zDmoiQvQ9hEx",
@@ -1317,6 +1371,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_6y09LmNAu6d7",
+      "company": "AMG Detection",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -2011,6 +2074,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_928w4cJaxy42",
+      "company": "Art by Grey",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_oGZDlPDszAe0",
       "company": "Arth – Art of Health",
       "status": "new_import_not_reviewed",
@@ -2317,10 +2389,28 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_H8rxEDUsfcNs",
+      "company": "Athens Scoop",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_s7vkqrqEaxpC",
       "company": "Athlea",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_OMK0JK8FWaEr",
+      "company": "AthleteMetrix",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -2510,6 +2600,15 @@
       "company": "Auto/lab",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_qBgz1rX82AnE",
+      "company": "AutoAce",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -2909,6 +3008,15 @@
       "company": "Bandelier Technologies",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_xDRUOqPjWzq4",
+      "company": "Bandit Rides",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -3829,6 +3937,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_CkDTjExmDd9j",
+      "company": "Boston Quantum",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_crV5szsTwREh",
       "company": "Bota",
       "status": "candidate_needs_verification",
@@ -4467,6 +4584,15 @@
       "company": "Carb Counting App",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_WDMGi0YUIn2I",
+      "company": "Carbion",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -5555,6 +5681,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_9zQ70_mxdWS5",
+      "company": "CLNR",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_OPiXed1K516p",
       "company": "Cloak",
       "status": "no_address_found_on_checked_pages",
@@ -5743,6 +5878,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:08.553Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj__UNbooTBQN2Q",
+      "company": "Cognify",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -6017,6 +6161,15 @@
       "checkedPages": [
         "https://continue.dev/"
       ]
+    },
+    {
+      "projectId": "proj_YNOcH1Fg22EO",
+      "company": "Continuity",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_XDjGi4xK7qwm",
@@ -6403,6 +6556,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_wJ-QsEC8cJJE",
+      "company": "cru",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_WZJj8Xsqh7FB",
       "company": "Crustdata",
       "status": "held_from_publication",
@@ -6642,6 +6804,15 @@
       "reason": "Recorded website could not be adequately read in this pass.",
       "checkedAt": "2026-11-03T06:13:43.996Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_MZsk_yoEAw7e",
+      "company": "Dawgtown Moving",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -6918,6 +7089,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_nCOzZEOGeXyP",
+      "company": "Detail Dawgs",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_jgQBB9yxvf8w",
       "company": "Dexto",
       "status": "no_address_found_on_checked_pages",
@@ -7147,6 +7327,24 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_9Ta4wYmMnkEv",
+      "company": "Dope Coffee",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_vqOofw0c3Abb",
+      "company": "DormSync",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_dMTOB_Q2-3MJ",
       "company": "DoseUp",
       "status": "source_unavailable",
@@ -7346,6 +7544,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_kxaZFz6apmO3",
+      "company": "Durability",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_g4wH0D2bLqrf",
       "company": "Durevie",
       "status": "new_import_not_reviewed",
@@ -7392,6 +7599,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_B_yEiYIOvAQb",
+      "company": "Eagle Grip Golf",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -7501,6 +7717,24 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_BOtlCBDq47ba",
+      "company": "Effingo",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj__WG4AJ0_UpGu",
+      "company": "eggPlan",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_f3iuIj99k5fH",
       "company": "EHR Buddy",
       "status": "new_import_not_reviewed",
@@ -7542,6 +7776,15 @@
       "checkedPages": [
         "https://ekholabs.com/"
       ]
+    },
+    {
+      "projectId": "proj_ZZtAvnPhtai7",
+      "company": "Eki Agrivoltaics",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_AZDpicSbB46K",
@@ -7810,6 +8053,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj__LztXk8EYDvm",
+      "company": "EngNotebook",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_VG_QyJtG68WL",
       "company": "Engram",
       "status": "source_unavailable",
@@ -7863,6 +8115,15 @@
       "reason": "Recorded website could not be adequately read in this pass.",
       "checkedAt": "2026-11-03T06:13:53.890Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_GVi_Y9SuJh5B",
+      "company": "EQORE",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -8047,6 +8308,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_JN4zgEYttIn8",
+      "company": "ExamRocket",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_N5iRTmYxW43n",
       "company": "Excellence Learning",
       "status": "no_address_found_on_checked_pages",
@@ -8078,6 +8348,15 @@
         "https://www.exialabs.com/privacy/",
         "https://www.exialabs.com/terms/"
       ]
+    },
+    {
+      "projectId": "proj_GTY_HUjXB_Xv",
+      "company": "Expat AI",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_AHKXudvc4ZjZ",
@@ -8213,12 +8492,30 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_M5JdN_4qlBip",
+      "company": "fascia",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_PlYgmQf83WYp",
       "company": "FASTOS",
       "status": "source_unavailable",
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:15.176Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_8gBKyBIEWKk-",
+      "company": "Fazenda da Mamma",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -8442,6 +8739,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:16.001Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_SwWgYS3Duwyz",
+      "company": "Fire Truck Rentals of Atlanta",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -8889,6 +9195,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_knCWFFT3aIhw",
+      "company": "Fount",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_GhTz9OR9RV1o",
       "company": "Fourth State Therapeutics",
       "status": "new_import_not_reviewed",
@@ -9257,6 +9572,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_vNaIu0SANzwP",
+      "company": "Gees",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_4OezZtsD-owy",
       "company": "GeminAI Dx",
       "status": "new_import_not_reviewed",
@@ -9304,6 +9628,15 @@
       "company": "Genesis",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_Sow2EeppeUDT",
+      "company": "Genesis Landscaping",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -9613,6 +9946,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_g3XpdOKNZVC9",
+      "company": "gravity",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_e85q7lpCXuiH",
       "company": "GreekFlow",
       "status": "new_import_not_reviewed",
@@ -9739,6 +10081,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_piXAHoB8HrKx",
+      "company": "Ground3d",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_zJK2O_9zfBD8",
       "company": "Group Therapeutics",
       "status": "new_import_not_reviewed",
@@ -9856,6 +10207,15 @@
       "company": "Hackney",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_GonoZZNvcuoB",
+      "company": "Hailey's Healthy Hangout",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -10087,6 +10447,15 @@
       ]
     },
     {
+      "projectId": "proj__2XFQX58ZLrX",
+      "company": "HauntFest",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_oBzRjOYg6ctz",
       "company": "HAVEN (Y-Prize)",
       "status": "source_unavailable",
@@ -10107,6 +10476,15 @@
       ]
     },
     {
+      "projectId": "proj__hSnhQPLQ7RJ",
+      "company": "Health Galaxy",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_jAh9beXMgpS5",
       "company": "HealthShades",
       "status": "new_import_not_reviewed",
@@ -10122,6 +10500,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:13:54.570Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_1ztOfoNV-IgX",
+      "company": "Heart of Moisture",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -10208,10 +10595,28 @@
       ]
     },
     {
+      "projectId": "proj_MknFkEG6WMuu",
+      "company": "Helios Analytics",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_NqBRt9kmzUcq",
       "company": "Helix",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_3sADXyzw1Im4",
+      "company": "Helix Carbon",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -10299,6 +10704,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_CqmaHXWi34E3",
+      "company": "High Level Acquisition",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -10846,6 +11260,15 @@
       ]
     },
     {
+      "projectId": "proj_UfokiC67LuEZ",
+      "company": "Initium",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_xof5nWR5C0hY",
       "company": "Inkeep",
       "status": "candidate_needs_verification",
@@ -11031,6 +11454,15 @@
       ],
       "addressSource": "https://data.sfgov.org/resource/g8m3-pdis.json?uniqueid=1416539-03-261-1181724",
       "evidenceType": "company_filed_business_location"
+    },
+    {
+      "projectId": "proj_uApxGedZA7XP",
+      "company": "Intendere",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_ZjfITmbFiSv_",
@@ -11256,6 +11688,15 @@
         "https://jalanjourney.com/contactus",
         "https://jalanjourney.com/about"
       ]
+    },
+    {
+      "projectId": "proj_RX4Vi0UQlEtF",
+      "company": "Jane",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_fBYd7TmdanqO",
@@ -11571,6 +12012,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:21.938Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_lB4AUOJmFrxV",
+      "company": "Juzogo",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -12161,6 +12611,24 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_J7T4i82YF5IP",
+      "company": "KYCO Rentals",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_VMsYTXfbZ_Qo",
+      "company": "Kyma",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_kwNH_guxmDW6",
       "company": "Ladder",
       "status": "source_unavailable",
@@ -12371,6 +12839,15 @@
       "reason": "Recorded website could not be adequately read in this pass.",
       "checkedAt": "2026-11-03T06:13:55.349Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_PO9yI59yor2m",
+      "company": "LeadQualify",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -12600,6 +13077,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_P8Iz2qC4eaWy",
+      "company": "Lifta",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_9G1oGpEp9MRa",
       "company": "Lighthouz AI",
       "status": "no_address_found_on_checked_pages",
@@ -12793,6 +13279,15 @@
       "company": "LKRM",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_w9PmFtYqgONh",
+      "company": "LNK Energies",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -13142,6 +13637,15 @@
       "evidenceType": "company_filed_business_location"
     },
     {
+      "projectId": "proj_7M9jac6S4uKi",
+      "company": "LymeAlert",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_r9-G57VgYuKg",
       "company": "Lyon",
       "status": "candidate_needs_verification",
@@ -13206,6 +13710,15 @@
       ],
       "addressSource": "https://www.sec.gov/Archives/edgar/data/1995957/000123191925000091/primary_doc.xml",
       "evidenceType": "company_filed_business_location"
+    },
+    {
+      "projectId": "proj_lWssomhxR1tf",
+      "company": "MacroCycle",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_08Q5qMCRB9wu",
@@ -13333,6 +13846,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_dFEomOIGo55R",
+      "company": "MakerSharks",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -13533,6 +14055,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_6Lt77nmJj4qf",
+      "company": "Mashi",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_uOndBBuX0-jS",
       "company": "Mass Magnetics",
       "status": "no_address_found_on_checked_pages",
@@ -13697,6 +14228,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_myrp6ThodnEG",
+      "company": "medikana",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_KoH9JIqF3IRp",
       "company": "MediMint",
       "status": "source_unavailable",
@@ -13795,6 +14335,15 @@
       "company": "Men's Health Clinic",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_BuGRFaOdaGp2",
+      "company": "Mendhai Health",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -13919,6 +14468,15 @@
       ]
     },
     {
+      "projectId": "proj_FP3uU7mv2gk_",
+      "company": "Midnight Snackzzz",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_pub_35ee4eb46a47ca40fb2d",
       "company": "Miirror",
       "status": "new_import_not_reviewed",
@@ -13972,6 +14530,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:28.787Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_UnzILi0A6cca",
+      "company": "Mindful Sprouts",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -14280,6 +14847,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_6RDyfRQTn7OU",
+      "company": "MoonTrace",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_qkemqLqYf0wD",
       "company": "MoovieMe (MoovieMe.io)",
       "status": "new_import_not_reviewed",
@@ -14574,6 +15150,15 @@
       ]
     },
     {
+      "projectId": "proj_7jnxhl_dRyOT",
+      "company": "nami",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_-3iMd0as0-pq",
       "company": "NanoChill Technologies Inc.",
       "status": "new_import_not_reviewed",
@@ -14810,6 +15395,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_pJM6CyKBm7ua",
+      "company": "NeuroBionics",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_n2mRuh2hmyX7",
       "company": "Neurobot: \"Microrobots for Neurosurgery Applications\"",
       "status": "new_import_not_reviewed",
@@ -14832,6 +15426,15 @@
       "company": "NeuroCore",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_WFwb8T-vATjU",
+      "company": "NeuroDrive",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -14988,6 +15591,15 @@
       ]
     },
     {
+      "projectId": "proj_kfLlLhhR09rK",
+      "company": "Niche Supplements",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_e_GGBsxCFnqa",
       "company": "NIL Revival",
       "status": "new_import_not_reviewed",
@@ -15060,6 +15672,15 @@
       "company": "Nomos Robotics",
       "status": "new_import_not_reviewed",
       "reason": "Added by the newer production import after the website-discovery pass. No address or coordinates inferred.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_U3P_huh4NRGt",
+      "company": "NONA Technologies",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -15205,6 +15826,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_VI0T9PeYcFBN",
+      "company": "nurtur",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_I0eBnDQf1Z6I",
       "company": "NXPlay VR",
       "status": "new_import_not_reviewed",
@@ -15260,6 +15890,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_V0awIqqcm18U",
+      "company": "Nähren",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -15424,6 +16063,15 @@
         "https://www.useoffstream.com/about-us",
         "https://www.useoffstream.com/privacy-policy"
       ]
+    },
+    {
+      "projectId": "proj_-WT9WK2YHj3C",
+      "company": "OGMA",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_xyW9UjTnJX2L",
@@ -15620,6 +16268,15 @@
       "company": "Open Sport Sense",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_6lufLz3USGV2",
+      "company": "OpenLake",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -15887,6 +16544,15 @@
       ]
     },
     {
+      "projectId": "proj_Ur5Gl5Xy56ai",
+      "company": "Otomo",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_IpclkTbjzq-M",
       "company": "Otto",
       "status": "new_import_not_reviewed",
@@ -16094,6 +16760,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:34.384Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_xu8Tf1Gk0_Mj",
+      "company": "Pancho",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -16634,6 +17309,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_hguEkDv7kEEb",
+      "company": "PhenomenalBreed",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_u14m2WT2PEIA",
       "company": "Phia",
       "status": "held_from_publication",
@@ -16738,6 +17422,24 @@
       "company": "Picarnot",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_H1Fh6kbczRJp",
+      "company": "Pictora",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_zPUFFcamg0mA",
+      "company": "Pigeon",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -16861,6 +17563,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_X23GOUcbmx9e",
+      "company": "Plantfi",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -17080,6 +17791,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_S1FBkW-FW2oZ",
+      "company": "Pool Protection Technologies",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_-iebV_vNovNK",
       "company": "PopEye",
       "status": "source_unavailable",
@@ -17138,6 +17858,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_W5FphwiDNAL1",
+      "company": "Power Shot",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_0YEvvlQ0qPgk",
       "company": "PowerHouse",
       "status": "new_import_not_reviewed",
@@ -17187,6 +17916,15 @@
       "checkedPages": [
         "https://www.praxisrobotics.io/"
       ]
+    },
+    {
+      "projectId": "proj_TcTJXDQYQ0GY",
+      "company": "Prayr",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_RWFiQaIZU1CA",
@@ -17384,6 +18122,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_vpV0DImUbNAw",
+      "company": "ProGuide",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -17591,6 +18338,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_rfcc5Z7pO1fw",
+      "company": "Psyche",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_nlgdLCJ8M8cu",
       "company": "Pulse",
       "status": "published_business_address",
@@ -17656,6 +18412,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_dM-n77__Nsu0",
+      "company": "Putt Athens",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_rvhBF5a-lacS",
       "company": "Q&Q AI",
       "status": "new_import_not_reviewed",
@@ -17676,6 +18441,15 @@
         "https://www.tryq2q.com/privacy-policy",
         "https://www.tryq2q.com/terms-and-conditions"
       ]
+    },
+    {
+      "projectId": "proj_yGUWta671S8S",
+      "company": "Qadence",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_oP20zkcwZ8Nr",
@@ -17702,6 +18476,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:38.700Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_rkLOVwxKh3Vc",
+      "company": "Quacked",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -18340,6 +19123,15 @@
       "company": "Reharmonize",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_WuJwgjrJPyhK",
+      "company": "ReHome",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -19167,6 +19959,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_CbeNh6EU28rL",
+      "company": "Sakhi",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_niPpgAKrE8gH",
       "company": "Salem Robotics Inc",
       "status": "no_address_found_on_checked_pages",
@@ -19567,6 +20368,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_fdwM__XvGN3Q",
+      "company": "Seak",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_Ct9u_FaqVAvX",
       "company": "SeaLion Energy",
       "status": "new_import_not_reviewed",
@@ -19690,6 +20500,15 @@
       "checkedPages": [
         "https://senseirobotics.com/"
       ]
+    },
+    {
+      "projectId": "proj_iIymEl14ReXF",
+      "company": "Sensopore",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_zVqOU_sle1j5",
@@ -19918,6 +20737,15 @@
         "https://shiboleth.ai/privacy-policy",
         "https://shiboleth.ai/terms"
       ]
+    },
+    {
+      "projectId": "proj_RQ6QFrq_RwbN",
+      "company": "Shine Edutainment",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_u9YOwo74eKPT",
@@ -20354,6 +21182,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_TkbtS2h0XVeb",
+      "company": "Skyfall Space",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_sFSMXS9Te_hh",
       "company": "Slashy",
       "status": "no_address_found_on_checked_pages",
@@ -20675,6 +21512,15 @@
       ]
     },
     {
+      "projectId": "proj_Jtj2bnGvTR1Q",
+      "company": "Soundboard",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_sS0dA1QpqLrM",
       "company": "SourceFill",
       "status": "new_import_not_reviewed",
@@ -20812,6 +21658,15 @@
       ]
     },
     {
+      "projectId": "proj_1dQHHY5DnCZJ",
+      "company": "Spheric Bio",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_6Wk7bwJ5QApp",
       "company": "Sphinx",
       "status": "held_from_publication",
@@ -20929,6 +21784,15 @@
       "company": "Spyke Automation",
       "status": "new_import_not_reviewed",
       "reason": "Present after upstream corpus recovery/imports; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_8jRh32ZecMNL",
+      "company": "SquadSave",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
       "checkedAt": null,
       "discoveryStatus": "not_attempted",
       "checkedPages": []
@@ -21308,6 +22172,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_smXmc5kNjAOX",
+      "company": "Sunroof Coffee",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_VwX9PVLUReJz",
       "company": "superglue",
       "status": "candidate_needs_verification",
@@ -21465,6 +22338,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_s0j8jbt8390P",
+      "company": "Switch",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_qQY-RYp0HuXi",
       "company": "Switchless",
       "status": "new_import_not_reviewed",
@@ -21489,6 +22371,15 @@
       "reason": "Present in the public directory after the subsequent 2026-11-04 data import; no street address has been individually verified.",
       "checkedAt": "2026-11-04",
       "discoveryStatus": "new_import_not_reviewed",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_jbj6RhtW537h",
+      "company": "Syl",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -21651,6 +22542,15 @@
       ]
     },
     {
+      "projectId": "proj_9Z8TMbFddT_1",
+      "company": "T33",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_mae7ojkVSGLb",
       "company": "TableIQ",
       "status": "new_import_not_reviewed",
@@ -21762,6 +22662,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_3wOmZU-BA9c2",
+      "company": "Tapestry",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_JWn4Mu3_JQsh",
       "company": "TapLaw",
       "status": "new_import_not_reviewed",
@@ -21798,6 +22707,15 @@
       "checkedPages": [
         "https://tarebio.com/"
       ]
+    },
+    {
+      "projectId": "proj_YZp893OFSqku",
+      "company": "Tarragon Systems",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_7bgGtNgYlA4S",
@@ -22142,6 +23060,15 @@
         "https://www.theforecastingcompany.com/company/",
         "https://www.theforecastingcompany.com/legal/"
       ]
+    },
+    {
+      "projectId": "proj_VOKN57rMxvLQ",
+      "company": "The Girls Trip Co",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_DslH1uII1G5d",
@@ -22500,6 +23427,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_7n_RePy9RF6t",
+      "company": "TLS",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_wIFAocCLZzm-",
       "company": "To The Trade",
       "status": "new_import_not_reviewed",
@@ -22544,6 +23480,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:50.467Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_SHSwOx_hARHi",
+      "company": "Torque",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -22656,6 +23601,15 @@
       ]
     },
     {
+      "projectId": "proj_kH8Zf9fLMnUV",
+      "company": "Trazo",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_IfZeuL4CCcig",
       "company": "Treffa",
       "status": "new_import_not_reviewed",
@@ -22755,6 +23709,15 @@
         "https://www.trytrueclaim.com/about-us",
         "https://www.trytrueclaim.com/privacy-policy"
       ]
+    },
+    {
+      "projectId": "proj_4thEFVjLCmX6",
+      "company": "TruEdge Sports",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_UB7b5qm-V37J",
@@ -23117,6 +24080,15 @@
       "checkedPages": [
         "https://www.upstream.do/"
       ]
+    },
+    {
+      "projectId": "proj_XXVdLlFjonxq",
+      "company": "UpTo",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
     },
     {
       "projectId": "proj_XrKGuevOD4pI",
@@ -23512,6 +24484,15 @@
       "checkedPages": []
     },
     {
+      "projectId": "proj_89qIHHAonj-F",
+      "company": "Vertical Horizons",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_gd0hBdAyP6HZ",
       "company": "Vestris",
       "status": "no_address_found_on_checked_pages",
@@ -23605,6 +24586,15 @@
       "reason": "No official website recorded for this company.",
       "checkedAt": "2026-11-03T06:14:53.253Z",
       "discoveryStatus": "unavailable",
+      "checkedPages": []
+    },
+    {
+      "projectId": "proj_3FxgiBOFNDsS",
+      "company": "Vikri.io",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
       "checkedPages": []
     },
     {
@@ -24206,6 +25196,15 @@
       ]
     },
     {
+      "projectId": "proj_bp1uKOo0vOjG",
+      "company": "Yoku AI",
+      "status": "new_import_not_reviewed",
+      "reason": "Additional company present in the deployed precomputed directory; no business-address review completed in this batch.",
+      "checkedAt": null,
+      "discoveryStatus": "not_attempted",
+      "checkedPages": []
+    },
+    {
       "projectId": "proj_x3_kZnzmp3pQ",
       "company": "Yondu",
       "status": "no_address_found_on_checked_pages",
@@ -24532,5 +25531,6 @@
     }
   ],
   "databaseChange": "No database change in this address batch. Inventory reconciled against the current main database plus its existing production prebuild recovery/import patches.",
-  "retiredRecords": []
+  "retiredRecords": [],
+  "productionDirectorySnapshot": "Verified deployed directory for merge 59ae9ce595c569dfbd6c88e7ad1bb36d3f64b7ce; includes 111 additional records beyond the temporary database build."
 }
