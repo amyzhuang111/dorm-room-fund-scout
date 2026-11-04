@@ -104,7 +104,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <footer className="border-t border-line px-6 py-6 text-[14px] text-fg-2">
             <div className="flex flex-wrap gap-3">
               <Link href="/methodology" className="inline-flex min-h-11 items-center px-2 text-[14px]">Methodology</Link>
-              <Link href="/settings" className="inline-flex min-h-11 items-center px-2 text-[14px]">Settings</Link>
               <Link href="/signin" className="inline-flex min-h-11 min-w-11 items-center px-2 text-[14px]">Sign in</Link>
               <span className="ml-auto tabular-nums">Data through {absoluteDate(latestDataTimestamp())}</span>
             </div>

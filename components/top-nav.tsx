@@ -97,9 +97,6 @@ export function TopNav() {
         <Link href="/methodology" className={`text-sm ${pathname === "/methodology" ? "text-foreground" : "text-muted hover:text-foreground"}`}>
           Methodology
         </Link>
-        <Link href="/settings" className={`text-sm ${pathname === "/settings" ? "text-foreground" : "text-muted hover:text-foreground"}`}>
-          Settings
-        </Link>
       </div>
     </div>
   );

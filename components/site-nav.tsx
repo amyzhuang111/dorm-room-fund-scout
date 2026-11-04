@@ -98,9 +98,6 @@ export function SiteNav() {
           <Link href="/methodology" className="flex min-h-11 items-center text-[14px] text-fg-2" onClick={() => setOpen(false)}>
             Methodology
           </Link>
-          <Link href="/settings" className="flex min-h-11 items-center text-[14px] text-fg-2" onClick={() => setOpen(false)}>
-            Settings
-          </Link>
         </div>
       ) : null}
     </div>
