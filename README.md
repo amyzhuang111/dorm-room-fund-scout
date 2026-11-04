@@ -28,6 +28,10 @@ npm install
 npm run dev -- --port 43123
 ```
 
-Open [http://127.0.0.1:43123](http://127.0.0.1:43123).
+Open [http://127.0.0.1:43123](http://127.0.0.1:43123). Founder and company links are at [http://127.0.0.1:43123/founders](http://127.0.0.1:43123/founders).
+
+## Founder and company links
+
+The Founders desk lists the same 2,432 projects as the public founders table. A company name links to the website on file. A founder name links to the recorded profile, usually LinkedIn, otherwise GitHub or a personal site. Names with no URL on file stay plain text. Unverified name-only LinkedIn guesses are left unlinked.
 
 The page loads with both passes already applied. Scan all, Rank all, and Run both again replay them. Show the Nov 2, 2026 file returns to the original coverage labels.

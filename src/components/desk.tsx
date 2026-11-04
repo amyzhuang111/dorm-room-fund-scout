@@ -1,13 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Chrome } from "@/components/chrome";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   campuses,
   FILE_AS_OF,
-  SOURCE_URL,
   type Campus,
   type Coverage,
 } from "@/data/campuses";
@@ -196,19 +196,7 @@ export function Desk() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#16181d]">
-      <header className="sticky top-0 z-20 flex h-12 items-center gap-3 border-b border-[#e6e8ef] bg-white px-4">
-        <span className="inline-flex items-center gap-2 text-sm font-semibold">
-          <span className="size-2.5 rounded-full bg-[#2f4fd8]" />
-          Campus Scout
-        </span>
-        <span className="text-sm text-[#5c6370]">Work</span>
-        <a
-          href={SOURCE_URL}
-          className="ml-auto hidden text-xs text-[#2f4fd8] underline-offset-2 hover:underline sm:inline"
-        >
-          Source shortlist
-        </a>
-      </header>
+      <Chrome active="work" />
 
       <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
         <button
