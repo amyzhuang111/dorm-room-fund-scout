@@ -40,6 +40,7 @@ export function NetworkAtlas() {
   const drag = useRef<{ x: number; y: number; startX:number; startY:number; moved: boolean } | null>(null);
   const touches = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef(0);
+  const idleDelay = useRef(0);
   useEffect(() => {
     const controller = new AbortController();
     fetch("/api/network/atlas", {
@@ -135,14 +136,14 @@ export function NetworkAtlas() {
     const s = new Set<number>();
     if (selected === null || !data) return s;
     s.add(selected);
-    for (const g of nodeGroups.get(selected) ?? [])
+    for (const g of (nodeGroups.get(selected) ?? []).filter(g => g.id === group))
       for (const i of g.members) s.add(i);
     for (const [a, b] of data.companies) {
       if (a === selected) s.add(b);
       if (b === selected) s.add(a);
     }
     return s;
-  }, [data, selected, nodeGroups]);
+  }, [data, selected, nodeGroups, group]);
   const edges = useMemo(() => {
     if (!data) return [];
     const out = data.companies.map(([a, b]) => ({
@@ -153,6 +154,7 @@ export function NetworkAtlas() {
       id: "company",
     }));
     for (const g of data.groups) {
+      if (g.id !== group) continue;
       const root =
         selected !== null && g.members.includes(selected)
           ? selected
@@ -161,7 +163,7 @@ export function NetworkAtlas() {
         if (b !== root) out.push({ a: root, b, kind: g.kind, id: g.id, label: `Shared ${g.name}` });
     }
     return out;
-  }, [data, selected]);
+  }, [data, selected, group]);
   function reset() {
     setColorBy("campus");
     setBasis("campus");
@@ -184,17 +186,17 @@ export function NetworkAtlas() {
     v.x = cx - size.current.w / 2 - (cx - size.current.w / 2 - v.x) * k;
     v.y = cy - size.current.h / 2 - (cy - size.current.h / 2 - v.y) * k;
     v.zoom = next;
-    setRunning(false);
+    idleDelay.current = 1800;
   }
   function choose(i: number) {
-    setRunning(false);
+    idleDelay.current = 1800;
     setSelected(i);
     setNearby([]);
     const p = projected.current.find((p) => p.i === i);
     if (p) setAnchor({ x: p.x, y: p.y });
   }
   function focus(i: number) {
-    setRunning(false);
+    idleDelay.current = 1800;
     view.current = { ...initialView(), zoom: 4 };
     const scale = Math.min(size.current.w * 0.45, size.current.h * 0.43) * 4;
     view.current.x = -positions[i].x * scale;
@@ -220,9 +222,7 @@ export function NetworkAtlas() {
         sprite = document.createElement("canvas");
         sprite.width = sprite.height = 96;
         const brush = sprite.getContext("2d")!;
-        const channels = [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16));
-        const middle = (Math.max(...channels) + Math.min(...channels)) / 2;
-        const vivid = `#${channels.map(c => Math.round(Math.max(0, Math.min(255, middle + (c - middle) * 2.6))).toString(16).padStart(2, "0")).join("")}`;
+        const vivid = color;
         const lobe = (x: number, y: number, sx: number, sy: number, angle: number) => {
           brush.save();
           brush.translate(x, y);
@@ -259,13 +259,15 @@ export function NetworkAtlas() {
     const tick = (time: number) => {
       const dt = Math.min(40, time - last);
       last = time;
+      idleDelay.current = Math.max(0, idleDelay.current - dt);
       const { w, h } = size.current;
       const v = view.current;
       const key = [w,h,v.x,v.y,v.zoom,v.yaw,v.pitch].join(":");
-      if (!running && key === drawnKey) { frame=requestAnimationFrame(tick);return; }
+      const orbiting = running && selected === null && !drag.current && idleDelay.current <= 0 && !document.hidden;
+      if (!orbiting && key === drawnKey) { frame=requestAnimationFrame(tick);return; }
       drawnKey = key;
-      if (running) {
-        v.yaw += dt * 0.00012;
+      if (orbiting) {
+        v.yaw += dt * 0.00010 / Math.sqrt(v.zoom);
         v.pitch = 0.12 * Math.sin(v.yaw * 0.8);
       }
       const scale = Math.min(w * 0.45, h * 0.43) * v.zoom;
@@ -707,9 +709,10 @@ export function NetworkAtlas() {
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
               drag.current = { x: e.clientX, y: e.clientY, startX:e.clientX,startY:e.clientY,moved: false };
               pinch.current = 0;
-              setRunning(false);
+              idleDelay.current = 1800;
             }}
             onPointerMove={(e) => {
+              idleDelay.current = 1800;
               if (!touches.current.has(e.pointerId)) return;
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
               const t = [...touches.current.values()];
@@ -736,6 +739,7 @@ export function NetworkAtlas() {
               drag.current = null;
             }}
             onPointerUp={(e) => {
+              idleDelay.current = 1800;
               touches.current.delete(e.pointerId);
               const d = drag.current;
               drag.current = null;
@@ -756,9 +760,6 @@ export function NetworkAtlas() {
             }}
           />
           <div className={styles.mapTools}>
-            <button onClick={() => setRunning(!running)} aria-pressed={running}>
-              {running ? "Pause orbit" : "Rotate"}
-            </button>
             <button aria-label="Zoom in" onClick={() => zoom(1.5)}>
               +
             </button>
@@ -849,7 +850,7 @@ export function NetworkAtlas() {
                   ))}
                 </>
               )}
-              {(nodeGroups.get(selected!) ?? []).length > 0 && <p className={styles.note}>Dashed purple lines = shared affiliation, not a personal connection.</p>}
+              {(nodeGroups.get(selected!) ?? []).length > 0 && <p className={styles.note}>Choose an affiliation below to reveal its dashed purple lines. Shared membership does not mean a personal connection.</p>}
               {(nodeGroups.get(selected!) ?? []).map((g) => (
                 <div className={styles.membership} key={g.id}>
                   <button
@@ -896,7 +897,8 @@ export function NetworkAtlas() {
           <span>Each tile / dot = one founder or startup</span>
           <span className={styles.lineKey}><i /> Founded this startup</span>
           <span className={`${styles.lineKey} ${styles.sharedKey}`}><i /> Shared affiliation</span>
-          <span>Select a record or network for nearby shared affiliations.</span>
+          <span>Choose a network to reveal its shared affiliations.</span>
+          <label><input type="checkbox" checked={!running} onChange={e => setRunning(!e.target.checked)} /> Still view</label>
         </footer>
       </div>
     </section>
