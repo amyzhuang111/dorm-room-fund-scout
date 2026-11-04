@@ -241,8 +241,35 @@ export function NetworksApp() {
       </header>
 
       <main className="flex flex-col gap-0">
-        {/* Hero map: edge-to-edge, near full viewport */}
-        <section aria-labelledby="graph-heading" className="order-1 overflow-visible">
+        <nav aria-label="Networks sections" className="order-1 mx-auto flex w-full max-w-[1400px] flex-wrap gap-x-5 border-b border-[color:var(--line)] px-4 py-2 text-sm sm:px-6">
+          <a className="py-2 underline-offset-4 hover:underline" href="#network-map">Map</a>
+          <a className="py-2 underline-offset-4 hover:underline" href="#top-networks-heading">All networks</a>
+          <a className="py-2 underline-offset-4 hover:underline" href="#network-roster">Founder links</a>
+        </nav>
+        <div className="order-1 mx-auto grid w-full max-w-[1400px] items-start gap-4 px-4 py-4 sm:px-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
+          <aside aria-labelledby="popular-networks-heading" className="rounded-xl border border-[color:var(--line)] bg-white p-3">
+            <h2 id="popular-networks-heading" className="px-2 text-base font-semibold">Top networks</h2>
+            <p className="px-2 pb-2 text-xs text-[color:var(--fg-2)]">Choose a network to see its founders and startups.</p>
+            {displayedNetworks.length === 0 ? <p className="px-2 text-sm">No matching networks.</p> : null}
+            <ol className="divide-y divide-[color:var(--line)]">
+              {displayedNetworks.slice(0, 5).map((row, index) => (
+                <li key={row.id}>
+                  <button type="button" aria-pressed={graphInspectorOpen && row.id === activeNetwork}
+                    className="grid min-h-12 w-full grid-cols-[auto_1fr_auto] items-center gap-2 rounded-md px-2 py-2 text-left text-sm hover:bg-[#f7f8fc] aria-pressed:bg-[color:var(--cobalt-haze)]"
+                    onClick={() => {
+                      chooseNetwork(row.id, true, false);
+                      setMapFocus({ networkId: row.id });
+                    }}>
+                    <span className="text-xs text-[color:var(--fg-3)]">{index + 1}</span>
+                    <span className="font-medium">{row.label}</span>
+                    <span className="text-right text-xs tabular-nums">{row.founderCount.toLocaleString("en-US")}<br />founders</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+            <a href="#top-networks-heading" className="inline-flex min-h-10 items-center px-2 text-sm font-semibold text-[color:var(--cobalt)] hover:underline">Browse all networks</a>
+          </aside>
+        <section id="network-map" aria-labelledby="graph-heading" className="min-w-0 scroll-mt-24 rounded-xl border border-[color:var(--line)] bg-white">
           <div className="mx-auto max-w-[1400px] px-4 pt-2 sm:px-6">
             <h2 id="graph-heading" className="sr-only">
               Network map
@@ -306,12 +333,13 @@ export function NetworksApp() {
             />
           </div>
         </section>
+        </div>
 
         <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-3 py-4 sm:gap-5 sm:px-6 sm:py-6">
 
         <section aria-labelledby="top-networks-heading" className="order-2">
           <div className="mb-2 sm:mb-3">
-            <h2 id="top-networks-heading" className="text-base font-semibold tracking-tight sm:text-lg">
+            <h2 id="top-networks-heading" className="scroll-mt-24 text-base font-semibold tracking-tight sm:text-lg">
               Explore founder networks
             </h2>
             <p className="text-[12px] text-[color:var(--fg-2)] sm:text-sm">
