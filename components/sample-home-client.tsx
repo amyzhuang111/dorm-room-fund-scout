@@ -824,10 +824,10 @@ export function SampleHomeClient(props: {
         </div>
       ) : null}
       {place === "explore" ? (
-      <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-2 sm:px-5">
+      <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-1 sm:px-5 md:pt-2">
         <div className="mx-auto w-full max-w-[1280px]">
           <div
-            className="flex flex-wrap items-center gap-x-1 border-b border-line"
+            className="hidden flex-wrap items-center gap-x-1 border-b border-line md:flex"
             role="tablist"
             aria-label="Views"
           >

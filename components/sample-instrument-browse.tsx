@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
@@ -434,7 +434,9 @@ export function SampleInstrumentBrowse({
 
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
-  function commitFacet(next: FacetState) {
+  const urlSyncRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function commitFacet(next: FacetState, opts?: { debounceMs?: number }) {
+    // Instant local filter (YC-speed); URL sync is replace-only and optional-debounce.
     setFacets(next);
     const href = browseHref({
       feed,
@@ -442,7 +444,13 @@ export function SampleInstrumentBrowse({
       facets: next,
       c: selectedCompanyId,
     });
-    router.push(href);
+    const run = () => {
+      router.replace(href, { scroll: false });
+    };
+    if (urlSyncRef.current) clearTimeout(urlSyncRef.current);
+    const wait = opts?.debounceMs ?? 0;
+    if (wait > 0) urlSyncRef.current = setTimeout(run, wait);
+    else run();
   }
 
   const chipDefs = useMemo(() => {
@@ -605,7 +613,7 @@ export function SampleInstrumentBrowse({
               companies={companiesLive}
               campuses={campuses}
               facets={facets}
-              onChange={commitFacet}
+              onChange={(next) => commitFacet(next, { debounceMs: next.query !== facets.query ? 120 : 0 })}
               index
               caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
@@ -681,15 +689,7 @@ export function SampleInstrumentBrowse({
               </button>
             </div>
           </div>
-          {feed === "directory" ? (
-            <div
-              className="mt-3 hidden lg:block"
-              data-signals-landed-desk={pages > 1 ? undefined : ""}
-              data-signals-landed-desk-continued={pages > 1 ? "" : undefined}
-            >
-              <SignalsLanded companies={companiesLive} />
-            </div>
-          ) : null}
+          {/* Signals chart moved below ledger so first fold is the company list (YC parity). */}
         </div>
 
         {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
@@ -785,7 +785,7 @@ export function SampleInstrumentBrowse({
 
           {feed === "directory" ? (
             <div
-              className="sticky top-[5.8125rem] z-30 space-y-1.5 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 p-2 backdrop-blur-sm"
+              className="sticky top-10 z-30 space-y-1 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 p-1.5 backdrop-blur-sm"
               role="region"
               aria-label="Scout filters"
               data-mobile-filters-inline=""
@@ -802,7 +802,7 @@ export function SampleInstrumentBrowse({
                 value={facets.query}
                 onChange={(event) => {
                   const next = { ...facets, query: event.target.value };
-                  setFacets(next);
+                  commitFacet(next, { debounceMs: 120 });
                 }}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
@@ -1203,6 +1203,22 @@ export function SampleInstrumentBrowse({
           </p>
         ) : null}
 
+        {feed === "directory" ? (
+          <details
+            className="mt-4 hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] lg:block"
+            data-signals-landed-desk={pages > 1 ? undefined : ""}
+            data-signals-landed-desk-continued={pages > 1 ? "" : undefined}
+            data-signals-landed-collapsible="1"
+          >
+            <summary className="cursor-pointer list-none px-3 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] marker:content-none [&::-webkit-details-marker]:hidden">
+              When signals landed
+              <span className="ml-2 font-normal normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">Show chart</span>
+            </summary>
+            <div className="border-t border-[color:var(--line,#E1E5EF)] px-1 pb-2">
+              <SignalsLanded companies={companiesLive} />
+            </div>
+          </details>
+        ) : null}
         <div className="h-4 lg:hidden" aria-hidden data-mobile-dock-spacer="" />
 
         <div className="sr-only">
@@ -1355,7 +1371,7 @@ export function SampleInstrumentBrowse({
                   })}
                 </div>
               ) : null}
-              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense sheet />
+              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={(next) => commitFacet(next, { debounceMs: next.query !== facets.query ? 120 : 0 })} dense sheet />
             </div>
           </div>
         </div>
@@ -1468,7 +1484,7 @@ function LedgerRow({
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
       className={`group flex min-h-11 items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
-        ranked ? "gap-2.5 py-3 sm:gap-3 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2 py-2.5 sm:gap-3 sm:py-3"
+        ranked ? "gap-2 py-2.5 sm:gap-2.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2 py-2 sm:gap-3 sm:py-3"
       } ${selected ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55 ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/35" : ""}`}
     >
       {rank != null ? (
