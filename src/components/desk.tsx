@@ -320,16 +320,16 @@ export function Desk() {
 
           <h1 className="mt-4 text-lg font-semibold">Scan and rank</h1>
           <p className="mt-1 max-w-3xl text-sm leading-5 text-[#5c6370]">
-            {campuses.length} campuses from the public shortlist. Scan walks
-            every campus on that file. Rank places every campus on the PitchBook
-            2026 undergraduate list, then the graduate list, then the MBA list,
-            then founders already on file. PitchBook place stays fixed when a
-            campus is scanned.
+            {campuses.length} campuses from the current Campus Scout file. Scan
+            walks every campus on that file. Rank places every campus on the
+            PitchBook 2026 undergraduate list, then the graduate list, then the
+            MBA list, then founders already on file. PitchBook place stays fixed
+            when a campus is scanned.
           </p>
           <p className="mt-1 text-xs text-[#5c6370]">
             {scans
               ? `${scanCounts.opened} opened from Not scanned · ${scanCounts.confirmed} confirmed current · ${ranks ? `${Object.keys(ranks).length} ranked` : "rank not run yet"}`
-              : "The Nov 2 file is showing. Scan and rank are ready."}{" "}
+              : `The ${FILE_AS_OF} file is showing. Scan and rank are ready.`}{" "}
             {reranAt
               ? `Re-ran at ${reranAt}.`
               : scans

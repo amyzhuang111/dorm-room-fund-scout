@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Scan and rank · Campus Scout",
   description:
-    "Scan all 170 shortlist campuses and rank every one from the PitchBook lists and the founders already on file.",
+    "Scan every campus on the current Campus Scout file and rank each one from the PitchBook lists and the founders already on file.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

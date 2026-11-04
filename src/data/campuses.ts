@@ -23,10 +23,10 @@ export type Campus = {
   mba: ListRank | null;
 };
 
-/** Public shortlist snapshot. Data through Nov 2, 2026. */
-export const FILE_AS_OF = "Nov 2, 2026";
+/** Public Campus Scout snapshot. Data through Nov 4, 2026. */
+export const FILE_AS_OF = "Nov 4, 2026";
 export const SOURCE_URL =
-  "https://campus-scout-git-main-amys-projects-d3dfb125.vercel.app/work/shortlist";
+  "https://campus-scout-git-main-amys-projects-d3dfb125.vercel.app/campuses";
 
 export const campuses: Campus[] = [
   {
@@ -103,21 +103,21 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 3,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 60,
       "founderCount": 368,
-      "companyCount": 348
+      "companyCount": 0
     },
     "grad": {
       "rank": 48,
       "founderCount": 408,
-      "companyCount": 365
+      "companyCount": 0
     },
     "mba": {
       "rank": 27,
       "founderCount": 196,
-      "companyCount": 190
+      "companyCount": 0
     },
     "shortName": "ASU"
   },
@@ -129,21 +129,45 @@ export const campuses: Campus[] = [
     "founderCount": 21,
     "companyCount": 16,
     "candidateProjectCount": 16,
-    "resolvedPersonCount": 22,
+    "resolvedPersonCount": 21,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T07:55:07.279Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": {
       "rank": 68,
       "founderCount": 325,
-      "companyCount": 298
+      "companyCount": 0
     },
     "mba": {
       "rank": 18,
       "founderCount": 288,
-      "companyCount": 265
+      "companyCount": 0
     },
     "shortName": "Babson"
+  },
+  {
+    "id": "univ_bar_ilan",
+    "name": "Bar-Ilan University",
+    "country": "Israel",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 91,
+      "founderCount": 265,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 96,
+      "founderCount": 251,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Bar-Ilan"
   },
   {
     "id": "univ_barnard_college",
@@ -153,9 +177,9 @@ export const campuses: Campus[] = [
     "founderCount": 2,
     "companyCount": 1,
     "candidateProjectCount": 1,
-    "resolvedPersonCount": 3,
+    "resolvedPersonCount": 2,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -178,6 +202,30 @@ export const campuses: Campus[] = [
     "shortName": "Baylor"
   },
   {
+    "id": "univ_bgu",
+    "name": "Ben-Gurion University of the Negev",
+    "country": "Israel",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 56,
+      "founderCount": 402,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 91,
+      "founderCount": 261,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Ben-Gurion"
+  },
+  {
     "id": "univ_bentley",
     "name": "Bentley University",
     "country": "United States",
@@ -187,11 +235,51 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 6,
     "resolvedPersonCount": 9,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T07:55:07.279Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Bentley"
+  },
+  {
+    "id": "univ_bits",
+    "name": "Birla Institute of Technology and Science",
+    "country": "India",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 91,
+      "founderCount": 265,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "BITS Pilani"
+  },
+  {
+    "id": "univ_bocconi",
+    "name": "Bocconi University",
+    "country": "Italy",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": {
+      "rank": 80,
+      "founderCount": 285,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Bocconi"
   },
   {
     "id": "univ_bc",
@@ -199,15 +287,15 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 22,
-    "companyCount": 12,
-    "candidateProjectCount": 12,
-    "resolvedPersonCount": 24,
+    "companyCount": 19,
+    "candidateProjectCount": 19,
+    "resolvedPersonCount": 22,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T04:53:34.141Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 77,
       "founderCount": 321,
-      "companyCount": 305
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -219,25 +307,25 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 24,
-    "companyCount": 14,
-    "candidateProjectCount": 14,
-    "resolvedPersonCount": 30,
-    "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T07:55:07.279Z",
+    "companyCount": 16,
+    "candidateProjectCount": 16,
+    "resolvedPersonCount": 24,
+    "sourcesConfigured": 4,
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 37,
       "founderCount": 547,
-      "companyCount": 526
+      "companyCount": 0
     },
     "grad": {
       "rank": 34,
       "founderCount": 598,
-      "companyCount": 533
+      "companyCount": 0
     },
     "mba": {
       "rank": 44,
       "founderCount": 120,
-      "companyCount": 119
+      "companyCount": 0
     },
     "shortName": "Boston University"
   },
@@ -249,7 +337,7 @@ export const campuses: Campus[] = [
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
-    "resolvedPersonCount": 1,
+    "resolvedPersonCount": 0,
     "sourcesConfigured": 0,
     "lastCheckedAt": null,
     "undergrad": null,
@@ -266,8 +354,8 @@ export const campuses: Campus[] = [
     "companyCount": 12,
     "candidateProjectCount": 12,
     "resolvedPersonCount": 16,
-    "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "sourcesConfigured": 3,
+    "lastCheckedAt": "2026-11-04T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -283,11 +371,11 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 1,
     "resolvedPersonCount": 3,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 32,
       "founderCount": 585,
-      "companyCount": 486
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -299,15 +387,15 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 62,
-    "companyCount": 33,
-    "candidateProjectCount": 33,
-    "resolvedPersonCount": 90,
-    "sourcesConfigured": 5,
-    "lastCheckedAt": "2026-11-02T07:42:03.091Z",
+    "companyCount": 37,
+    "candidateProjectCount": 37,
+    "resolvedPersonCount": 62,
+    "sourcesConfigured": 8,
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 24,
       "founderCount": 703,
-      "companyCount": 654
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -319,11 +407,11 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 8,
-    "companyCount": 4,
-    "candidateProjectCount": 4,
+    "companyCount": 6,
+    "candidateProjectCount": 6,
     "resolvedPersonCount": 8,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T07:55:07.279Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -337,14 +425,14 @@ export const campuses: Campus[] = [
     "founderCount": 30,
     "companyCount": 10,
     "candidateProjectCount": 10,
-    "resolvedPersonCount": 32,
+    "resolvedPersonCount": 30,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T22:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": null,
     "grad": {
       "rank": 58,
       "founderCount": 377,
-      "companyCount": 310
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Caltech"
@@ -363,7 +451,7 @@ export const campuses: Campus[] = [
     "undergrad": {
       "rank": 81,
       "founderCount": 300,
-      "companyCount": 282
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -383,7 +471,7 @@ export const campuses: Campus[] = [
     "undergrad": {
       "rank": 87,
       "founderCount": 276,
-      "companyCount": 269
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -410,26 +498,26 @@ export const campuses: Campus[] = [
     "name": "Carnegie Mellon University",
     "country": "United States",
     "coverage": "up_to_date",
-    "founderCount": 101,
-    "companyCount": 64,
-    "candidateProjectCount": 64,
-    "resolvedPersonCount": 147,
+    "founderCount": 104,
+    "companyCount": 82,
+    "candidateProjectCount": 82,
+    "resolvedPersonCount": 104,
     "sourcesConfigured": 11,
-    "lastCheckedAt": "2026-09-27T23:10:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 30,
       "founderCount": 594,
-      "companyCount": 550
+      "companyCount": 0
     },
     "grad": {
       "rank": 18,
       "founderCount": 1129,
-      "companyCount": 935
+      "companyCount": 0
     },
     "mba": {
       "rank": 33,
       "founderCount": 165,
-      "companyCount": 153
+      "companyCount": 0
     },
     "shortName": "CMU"
   },
@@ -437,6 +525,22 @@ export const campuses: Campus[] = [
     "id": "univ_case_western",
     "name": "Case Western Reserve University",
     "country": "United States",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 1,
+    "lastCheckedAt": "2026-11-04T16:00:00.000Z",
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Case Western"
+  },
+  {
+    "id": "univ_chalmers",
+    "name": "Chalmers University of Technology",
+    "country": "Sweden",
     "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
@@ -447,7 +551,39 @@ export const campuses: Campus[] = [
     "undergrad": null,
     "grad": null,
     "mba": null,
-    "shortName": "Case Western"
+    "shortName": "Chalmers"
+  },
+  {
+    "id": "univ_ceibs",
+    "name": "China Europe International Business School",
+    "country": "China",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "CEIBS"
+  },
+  {
+    "id": "univ_cas",
+    "name": "Chinese Academy of Sciences",
+    "country": "China",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "CAS"
   },
   {
     "id": "univ_clarkson",
@@ -517,27 +653,27 @@ export const campuses: Campus[] = [
     "id": "univ_columbia",
     "name": "Columbia University",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 162,
-    "companyCount": 42,
-    "candidateProjectCount": 42,
-    "resolvedPersonCount": 198,
-    "sourcesConfigured": 18,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "coverage": "up_to_date",
+    "founderCount": 163,
+    "companyCount": 72,
+    "candidateProjectCount": 72,
+    "resolvedPersonCount": 163,
+    "sourcesConfigured": 21,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 16,
       "founderCount": 829,
-      "companyCount": 784
+      "companyCount": 0
     },
     "grad": {
       "rank": 5,
       "founderCount": 2353,
-      "companyCount": 2090
+      "companyCount": 0
     },
     "mba": {
       "rank": 5,
       "founderCount": 1019,
-      "companyCount": 954
+      "companyCount": 0
     },
     "shortName": "Columbia"
   },
@@ -565,13 +701,37 @@ export const campuses: Campus[] = [
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
-    "resolvedPersonCount": 1,
+    "resolvedPersonCount": 0,
     "sourcesConfigured": 0,
     "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Cooper Union"
+  },
+  {
+    "id": "univ_cbs",
+    "name": "Copenhagen Business School",
+    "country": "Denmark",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 94,
+      "founderCount": 260,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 63,
+      "founderCount": 346,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "CBS"
   },
   {
     "id": "univ_cornell_tech",
@@ -581,9 +741,9 @@ export const campuses: Campus[] = [
     "founderCount": 12,
     "companyCount": 10,
     "candidateProjectCount": 10,
-    "resolvedPersonCount": 15,
+    "resolvedPersonCount": 12,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -594,26 +754,26 @@ export const campuses: Campus[] = [
     "name": "Cornell University",
     "country": "United States",
     "coverage": "up_to_date",
-    "founderCount": 84,
-    "companyCount": 145,
-    "candidateProjectCount": 145,
-    "resolvedPersonCount": 107,
-    "sourcesConfigured": 7,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "founderCount": 153,
+    "companyCount": 147,
+    "candidateProjectCount": 147,
+    "resolvedPersonCount": 153,
+    "sourcesConfigured": 13,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 4,
       "founderCount": 1541,
-      "companyCount": 1436
+      "companyCount": 0
     },
     "grad": {
       "rank": 12,
       "founderCount": 1352,
-      "companyCount": 1137
+      "companyCount": 0
     },
     "mba": {
       "rank": 19,
       "founderCount": 282,
-      "companyCount": 271
+      "companyCount": 0
     },
     "shortName": "Cornell"
   },
@@ -623,27 +783,43 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 25,
-    "companyCount": 12,
-    "candidateProjectCount": 12,
-    "resolvedPersonCount": 28,
-    "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "companyCount": 21,
+    "candidateProjectCount": 21,
+    "resolvedPersonCount": 25,
+    "sourcesConfigured": 5,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 34,
       "founderCount": 549,
-      "companyCount": 510
+      "companyCount": 0
     },
     "grad": {
       "rank": 70,
       "founderCount": 323,
-      "companyCount": 295
+      "companyCount": 0
     },
     "mba": {
       "rank": 30,
       "founderCount": 189,
-      "companyCount": 184
+      "companyCount": 0
     },
     "shortName": "Dartmouth"
+  },
+  {
+    "id": "univ_delft",
+    "name": "Delft University of Technology",
+    "country": "Netherlands",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Delft"
   },
   {
     "id": "univ_drexel_university",
@@ -653,9 +829,9 @@ export const campuses: Campus[] = [
     "founderCount": 3,
     "companyCount": 10,
     "candidateProjectCount": 10,
-    "resolvedPersonCount": 6,
+    "resolvedPersonCount": 3,
     "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -667,27 +843,95 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 42,
-    "companyCount": 47,
-    "candidateProjectCount": 47,
-    "resolvedPersonCount": 60,
-    "sourcesConfigured": 9,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "companyCount": 69,
+    "candidateProjectCount": 69,
+    "resolvedPersonCount": 42,
+    "sourcesConfigured": 10,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 21,
       "founderCount": 790,
-      "companyCount": 755
+      "companyCount": 0
     },
     "grad": {
       "rank": 30,
       "founderCount": 721,
-      "companyCount": 625
+      "companyCount": 0
     },
     "mba": {
       "rank": 16,
       "founderCount": 334,
-      "companyCount": 326
+      "companyCount": 0
     },
     "shortName": "Duke"
+  },
+  {
+    "id": "univ_esade",
+    "name": "ESADE",
+    "country": "Spain",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "ESADE"
+  },
+  {
+    "id": "univ_escp",
+    "name": "ESCP Business School",
+    "country": "France",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "ESCP"
+  },
+  {
+    "id": "univ_essec",
+    "name": "ESSEC Business School",
+    "country": "France",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "ESSEC"
+  },
+  {
+    "id": "univ_eth",
+    "name": "ETH Zurich",
+    "country": "Switzerland",
+    "coverage": "up_to_date",
+    "founderCount": 5,
+    "companyCount": 4,
+    "candidateProjectCount": 4,
+    "resolvedPersonCount": 5,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": {
+      "rank": 28,
+      "founderCount": 749,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "ETH Zurich"
   },
   {
     "id": "univ_ecu",
@@ -715,15 +959,31 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 8,
     "resolvedPersonCount": 17,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 82,
       "founderCount": 297,
-      "companyCount": 290
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
     "shortName": "Emory"
+  },
+  {
+    "id": "univ_erasmus",
+    "name": "Erasmus University Rotterdam",
+    "country": "Netherlands",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Erasmus"
   },
   {
     "id": "univ_fairfield",
@@ -779,11 +1039,11 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 2,
-    "companyCount": 22,
-    "candidateProjectCount": 22,
+    "companyCount": 23,
+    "candidateProjectCount": 23,
     "resolvedPersonCount": 2,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -804,6 +1064,38 @@ export const campuses: Campus[] = [
     "grad": null,
     "mba": null,
     "shortName": "Fordham"
+  },
+  {
+    "id": "univ_fudan",
+    "name": "Fudan University",
+    "country": "China",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Fudan"
+  },
+  {
+    "id": "univ_fgv",
+    "name": "Fundação Getulio Vargas",
+    "country": "Brazil",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "FGV"
   },
   {
     "id": "univ_furman",
@@ -831,16 +1123,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 19,
     "resolvedPersonCount": 0,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 93,
       "founderCount": 261,
-      "companyCount": 252
+      "companyCount": 0
     },
     "grad": {
       "rank": 63,
       "founderCount": 346,
-      "companyCount": 331
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "GW"
@@ -854,22 +1146,22 @@ export const campuses: Campus[] = [
     "companyCount": 10,
     "candidateProjectCount": 10,
     "resolvedPersonCount": 16,
-    "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "sourcesConfigured": 3,
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 45,
       "founderCount": 455,
-      "companyCount": 443
+      "companyCount": 0
     },
     "grad": {
       "rank": 47,
       "founderCount": 429,
-      "companyCount": 401
+      "companyCount": 0
     },
     "mba": {
       "rank": 45,
       "founderCount": 117,
-      "companyCount": 109
+      "companyCount": 0
     },
     "shortName": "Georgetown"
   },
@@ -878,24 +1170,48 @@ export const campuses: Campus[] = [
     "name": "Georgia Institute of Technology",
     "country": "United States",
     "coverage": "up_to_date",
-    "founderCount": 79,
-    "companyCount": 55,
-    "candidateProjectCount": 55,
-    "resolvedPersonCount": 82,
-    "sourcesConfigured": 12,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "founderCount": 80,
+    "companyCount": 159,
+    "candidateProjectCount": 159,
+    "resolvedPersonCount": 80,
+    "sourcesConfigured": 13,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 33,
       "founderCount": 568,
-      "companyCount": 504
+      "companyCount": 0
     },
     "grad": {
       "rank": 32,
       "founderCount": 683,
-      "companyCount": 583
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Georgia Tech"
+  },
+  {
+    "id": "univ_hec",
+    "name": "HEC Paris",
+    "country": "France",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": {
+      "rank": 10,
+      "founderCount": 1441,
+      "companyCount": 0
+    },
+    "mba": {
+      "rank": 17,
+      "founderCount": 321,
+      "companyCount": 0
+    },
+    "shortName": "HEC Paris"
   },
   {
     "id": "univ_harrisburg",
@@ -917,27 +1233,27 @@ export const campuses: Campus[] = [
     "id": "univ_harvard",
     "name": "Harvard University",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 174,
-    "companyCount": 171,
-    "candidateProjectCount": 171,
-    "resolvedPersonCount": 216,
-    "sourcesConfigured": 18,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "coverage": "up_to_date",
+    "founderCount": 256,
+    "companyCount": 234,
+    "candidateProjectCount": 234,
+    "resolvedPersonCount": 256,
+    "sourcesConfigured": 26,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 3,
       "founderCount": 1697,
-      "companyCount": 1532
+      "companyCount": 0
     },
     "grad": {
       "rank": 2,
       "founderCount": 4840,
-      "companyCount": 4070
+      "companyCount": 0
     },
     "mba": {
       "rank": 1,
       "founderCount": 2444,
-      "companyCount": 2235
+      "companyCount": 0
     },
     "shortName": "Harvard"
   },
@@ -949,13 +1265,37 @@ export const campuses: Campus[] = [
     "founderCount": 15,
     "companyCount": 10,
     "candidateProjectCount": 10,
-    "resolvedPersonCount": 19,
-    "sourcesConfigured": 4,
-    "lastCheckedAt": "2026-09-27T23:30:00.000Z",
+    "resolvedPersonCount": 15,
+    "sourcesConfigured": 5,
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Harvey Mudd"
+  },
+  {
+    "id": "univ_hebrew",
+    "name": "Hebrew University of Jerusalem",
+    "country": "Israel",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 29,
+      "founderCount": 598,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 36,
+      "founderCount": 543,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Hebrew"
   },
   {
     "id": "univ_high_point_university",
@@ -1006,28 +1346,228 @@ export const campuses: Campus[] = [
     "shortName": "HKUST"
   },
   {
+    "id": "univ_ie",
+    "name": "IE University",
+    "country": "Spain",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "IE"
+  },
+  {
+    "id": "univ_iese",
+    "name": "IESE Business School",
+    "country": "Spain",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "IESE"
+  },
+  {
+    "id": "univ_insead",
+    "name": "INSEAD",
+    "country": "France",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "INSEAD"
+  },
+  {
     "id": "univ_imperial",
     "name": "Imperial College London",
     "country": "United Kingdom",
     "coverage": "up_to_date",
-    "founderCount": 1,
-    "companyCount": 9,
-    "candidateProjectCount": 9,
-    "resolvedPersonCount": 1,
-    "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "founderCount": 5,
+    "companyCount": 11,
+    "candidateProjectCount": 11,
+    "resolvedPersonCount": 5,
+    "sourcesConfigured": 5,
+    "lastCheckedAt": "2026-11-04T16:00:00.000Z",
     "undergrad": {
       "rank": 85,
       "founderCount": 284,
-      "companyCount": 271
+      "companyCount": 0
     },
     "grad": {
       "rank": 15,
       "founderCount": 1186,
-      "companyCount": 980
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Imperial"
+  },
+  {
+    "id": "univ_iimb",
+    "name": "Indian Institute of Management Bangalore",
+    "country": "India",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "IIM Bangalore"
+  },
+  {
+    "id": "univ_iimc",
+    "name": "Indian Institute of Management Calcutta",
+    "country": "India",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "IIM Calcutta"
+  },
+  {
+    "id": "univ_iit_bombay",
+    "name": "Indian Institute of Technology Bombay",
+    "country": "India",
+    "coverage": "up_to_date",
+    "founderCount": 2,
+    "companyCount": 2,
+    "candidateProjectCount": 2,
+    "resolvedPersonCount": 2,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 22,
+      "founderCount": 756,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 65,
+      "founderCount": 345,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "IIT Bombay"
+  },
+  {
+    "id": "univ_iit_delhi",
+    "name": "Indian Institute of Technology Delhi",
+    "country": "India",
+    "coverage": "up_to_date",
+    "founderCount": 2,
+    "companyCount": 2,
+    "candidateProjectCount": 2,
+    "resolvedPersonCount": 2,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 27,
+      "founderCount": 640,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "IIT Delhi"
+  },
+  {
+    "id": "univ_iit_kanpur",
+    "name": "Indian Institute of Technology Kanpur",
+    "country": "India",
+    "coverage": "up_to_date",
+    "founderCount": 3,
+    "companyCount": 2,
+    "candidateProjectCount": 2,
+    "resolvedPersonCount": 3,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 50,
+      "founderCount": 428,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "IIT Kanpur"
+  },
+  {
+    "id": "univ_iit_kharagpur",
+    "name": "Indian Institute of Technology Kharagpur",
+    "country": "India",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 49,
+      "founderCount": 434,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "IIT Kharagpur"
+  },
+  {
+    "id": "univ_iit_madras",
+    "name": "Indian Institute of Technology Madras",
+    "country": "India",
+    "coverage": "up_to_date",
+    "founderCount": 2,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 2,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 48,
+      "founderCount": 447,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "IIT Madras"
+  },
+  {
+    "id": "univ_isb",
+    "name": "Indian School of Business",
+    "country": "India",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "ISB"
   },
   {
     "id": "univ_indiana",
@@ -1035,25 +1575,25 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 1,
-    "companyCount": 0,
-    "candidateProjectCount": 0,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
     "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 45,
       "founderCount": 455,
-      "companyCount": 438
+      "companyCount": 0
     },
     "grad": {
       "rank": 75,
       "founderCount": 304,
-      "companyCount": 278
+      "companyCount": 0
     },
     "mba": {
       "rank": 46,
       "founderCount": 115,
-      "companyCount": 113
+      "companyCount": 0
     },
     "shortName": "Indiana"
   },
@@ -1093,7 +1633,7 @@ export const campuses: Campus[] = [
     "id": "univ_jhu",
     "name": "Johns Hopkins University",
     "country": "United States",
-    "coverage": "not_scanned",
+    "coverage": "up_to_date",
     "founderCount": 1,
     "companyCount": 0,
     "candidateProjectCount": 0,
@@ -1103,15 +1643,47 @@ export const campuses: Campus[] = [
     "undergrad": {
       "rank": 54,
       "founderCount": 411,
-      "companyCount": 384
+      "companyCount": 0
     },
     "grad": {
       "rank": 22,
       "founderCount": 902,
-      "companyCount": 773
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Johns Hopkins"
+  },
+  {
+    "id": "univ_kth",
+    "name": "KTH Royal Institute of Technology",
+    "country": "Sweden",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "KTH"
+  },
+  {
+    "id": "univ_kuleuven",
+    "name": "KU Leuven",
+    "country": "Belgium",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "KU Leuven"
   },
   {
     "id": "univ_lafayette",
@@ -1119,11 +1691,11 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 1,
-    "companyCount": 1,
-    "candidateProjectCount": 1,
-    "resolvedPersonCount": 2,
+    "companyCount": 2,
+    "candidateProjectCount": 2,
+    "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T22:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1137,9 +1709,9 @@ export const campuses: Campus[] = [
     "founderCount": 5,
     "companyCount": 1,
     "candidateProjectCount": 1,
-    "resolvedPersonCount": 6,
+    "resolvedPersonCount": 5,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:30:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1160,6 +1732,46 @@ export const campuses: Campus[] = [
     "grad": null,
     "mba": null,
     "shortName": "Lehigh"
+  },
+  {
+    "id": "univ_lbs",
+    "name": "London Business School",
+    "country": "United Kingdom",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "LBS"
+  },
+  {
+    "id": "univ_lse",
+    "name": "London School of Economics",
+    "country": "United Kingdom",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 83,
+      "founderCount": 296,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 27,
+      "founderCount": 759,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "LSE"
   },
   {
     "id": "univ_long_island_university",
@@ -1194,6 +1806,22 @@ export const campuses: Campus[] = [
     "shortName": "Loyola University Chicago"
   },
   {
+    "id": "univ_lund",
+    "name": "Lund University",
+    "country": "Sweden",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Lund"
+  },
+  {
     "id": "univ_marist",
     "name": "Marist University",
     "country": "United States",
@@ -1213,29 +1841,53 @@ export const campuses: Campus[] = [
     "id": "univ_mit",
     "name": "Massachusetts Institute of Technology",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 239,
-    "companyCount": 154,
-    "candidateProjectCount": 154,
-    "resolvedPersonCount": 282,
-    "sourcesConfigured": 33,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "coverage": "up_to_date",
+    "founderCount": 241,
+    "companyCount": 213,
+    "candidateProjectCount": 213,
+    "resolvedPersonCount": 241,
+    "sourcesConfigured": 35,
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 5,
       "founderCount": 1525,
-      "companyCount": 1342
+      "companyCount": 0
     },
     "grad": {
       "rank": 3,
       "founderCount": 3833,
-      "companyCount": 2943
+      "companyCount": 0
     },
     "mba": {
       "rank": 7,
       "founderCount": 934,
-      "companyCount": 858
+      "companyCount": 0
     },
     "shortName": "MIT"
+  },
+  {
+    "id": "univ_mcgill",
+    "name": "McGill University",
+    "country": "Canada",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 23,
+      "founderCount": 721,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 56,
+      "founderCount": 384,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "McGill"
   },
   {
     "id": "univ_miami_university",
@@ -1263,11 +1915,11 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 2,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 89,
       "founderCount": 267,
-      "companyCount": 257
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -1281,13 +1933,33 @@ export const campuses: Campus[] = [
     "founderCount": 4,
     "companyCount": 2,
     "candidateProjectCount": 2,
-    "resolvedPersonCount": 5,
+    "resolvedPersonCount": 4,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Middlebury"
+  },
+  {
+    "id": "univ_monash",
+    "name": "Monash University",
+    "country": "Australia",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 66,
+      "founderCount": 356,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Monash"
   },
   {
     "id": "univ_monmouth_university",
@@ -1331,16 +2003,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:42:03.091Z",
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 47,
       "founderCount": 454,
-      "companyCount": 383
+      "companyCount": 0
     },
     "grad": {
       "rank": 51,
       "founderCount": 390,
-      "companyCount": 346
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "NUS"
@@ -1365,27 +2037,27 @@ export const campuses: Campus[] = [
     "id": "univ_nyu",
     "name": "New York University",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 47,
-    "companyCount": 20,
-    "candidateProjectCount": 20,
-    "resolvedPersonCount": 65,
-    "sourcesConfigured": 4,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "coverage": "up_to_date",
+    "founderCount": 50,
+    "companyCount": 46,
+    "candidateProjectCount": 46,
+    "resolvedPersonCount": 50,
+    "sourcesConfigured": 6,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 19,
       "founderCount": 799,
-      "companyCount": 753
+      "companyCount": 0
     },
     "grad": {
       "rank": 11,
       "founderCount": 1392,
-      "companyCount": 1301
+      "companyCount": 0
     },
     "mba": {
       "rank": 11,
       "founderCount": 546,
-      "companyCount": 534
+      "companyCount": 0
     },
     "shortName": "NYU"
   },
@@ -1441,22 +2113,22 @@ export const campuses: Campus[] = [
     "id": "univ_northeastern",
     "name": "Northeastern University",
     "country": "United States",
-    "coverage": "not_scanned",
+    "coverage": "up_to_date",
     "founderCount": 1,
     "companyCount": 0,
     "candidateProjectCount": 0,
-    "resolvedPersonCount": 8,
+    "resolvedPersonCount": 1,
     "sourcesConfigured": 0,
     "lastCheckedAt": null,
     "undergrad": {
       "rank": 61,
       "founderCount": 367,
-      "companyCount": 345
+      "companyCount": 0
     },
     "grad": {
       "rank": 81,
       "founderCount": 281,
-      "companyCount": 263
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Northeastern"
@@ -1467,25 +2139,25 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 32,
-    "companyCount": 57,
-    "candidateProjectCount": 57,
+    "companyCount": 71,
+    "candidateProjectCount": 71,
     "resolvedPersonCount": 32,
-    "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-02T07:13:23.953Z",
+    "sourcesConfigured": 3,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 24,
       "founderCount": 703,
-      "companyCount": 650
+      "companyCount": 0
     },
     "grad": {
       "rank": 9,
       "founderCount": 1636,
-      "companyCount": 1448
+      "companyCount": 0
     },
     "mba": {
       "rank": 6,
       "founderCount": 1015,
-      "companyCount": 966
+      "companyCount": 0
     },
     "shortName": "Northwestern"
   },
@@ -1499,16 +2171,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 18,
     "resolvedPersonCount": 0,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T07:55:07.279Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 71,
       "founderCount": 346,
-      "companyCount": 324
+      "companyCount": 0
     },
     "grad": {
       "rank": 72,
       "founderCount": 314,
-      "companyCount": 278
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Ohio State"
@@ -1517,7 +2189,7 @@ export const campuses: Campus[] = [
     "id": "univ_olin_college",
     "name": "Olin College",
     "country": "United States",
-    "coverage": "not_scanned",
+    "coverage": "up_to_date",
     "founderCount": 1,
     "companyCount": 0,
     "candidateProjectCount": 0,
@@ -1562,6 +2234,34 @@ export const campuses: Campus[] = [
     "shortName": "Pace"
   },
   {
+    "id": "univ_peking",
+    "name": "Peking University",
+    "country": "China",
+    "coverage": "up_to_date",
+    "founderCount": 2,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 2,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 58,
+      "founderCount": 383,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 50,
+      "founderCount": 403,
+      "companyCount": 0
+    },
+    "mba": {
+      "rank": 47,
+      "founderCount": 114,
+      "companyCount": 0
+    },
+    "shortName": "Peking"
+  },
+  {
     "id": "univ_penn_state_university",
     "name": "Penn State University",
     "country": null,
@@ -1569,9 +2269,9 @@ export const campuses: Campus[] = [
     "founderCount": 8,
     "companyCount": 6,
     "candidateProjectCount": 6,
-    "resolvedPersonCount": 9,
+    "resolvedPersonCount": 8,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1587,19 +2287,55 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 34,
       "founderCount": 549,
-      "companyCount": 524
+      "companyCount": 0
     },
     "grad": {
       "rank": 79,
       "founderCount": 292,
-      "companyCount": 260
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Penn State"
+  },
+  {
+    "id": "univ_pepperdine",
+    "name": "Pepperdine University",
+    "country": "United States",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Pepperdine"
+  },
+  {
+    "id": "univ_polimi",
+    "name": "Politecnico di Milano",
+    "country": "Italy",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": {
+      "rank": 98,
+      "founderCount": 250,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Polimi"
   },
   {
     "id": "univ_pratt_institute",
@@ -1621,22 +2357,22 @@ export const campuses: Campus[] = [
     "id": "univ_princeton",
     "name": "Princeton University",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 106,
-    "companyCount": 49,
-    "candidateProjectCount": 49,
-    "resolvedPersonCount": 130,
-    "sourcesConfigured": 10,
-    "lastCheckedAt": "2026-11-03T04:53:34.141Z",
+    "coverage": "up_to_date",
+    "founderCount": 110,
+    "companyCount": 52,
+    "candidateProjectCount": 52,
+    "resolvedPersonCount": 110,
+    "sourcesConfigured": 11,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 14,
       "founderCount": 845,
-      "companyCount": 792
+      "companyCount": 0
     },
     "grad": {
       "rank": 67,
       "founderCount": 337,
-      "companyCount": 287
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Princeton"
@@ -1651,16 +2387,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 47,
     "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T12:31:23.262Z",
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 44,
       "founderCount": 462,
-      "companyCount": 433
+      "companyCount": 0
     },
     "grad": {
       "rank": 52,
       "founderCount": 389,
-      "companyCount": 333
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Purdue"
@@ -1673,13 +2409,13 @@ export const campuses: Campus[] = [
     "founderCount": 8,
     "companyCount": 3,
     "candidateProjectCount": 3,
-    "resolvedPersonCount": 9,
+    "resolvedPersonCount": 8,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-09-27T23:30:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 78,
       "founderCount": 319,
-      "companyCount": 292
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -1702,9 +2438,9 @@ export const campuses: Campus[] = [
     "shortName": "Quinnipiac"
   },
   {
-    "id": "univ_rpi",
-    "name": "Rensselaer Polytechnic Institute",
-    "country": "United States",
+    "id": "univ_reichman",
+    "name": "Reichman University",
+    "country": "Israel",
     "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
@@ -1713,9 +2449,29 @@ export const campuses: Campus[] = [
     "sourcesConfigured": 0,
     "lastCheckedAt": null,
     "undergrad": {
+      "rank": 51,
+      "founderCount": 422,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Reichman"
+  },
+  {
+    "id": "univ_rpi",
+    "name": "Rensselaer Polytechnic Institute",
+    "country": "United States",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 3,
+    "candidateProjectCount": 3,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
       "rank": 95,
       "founderCount": 257,
-      "companyCount": 241
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -1729,9 +2485,9 @@ export const campuses: Campus[] = [
     "founderCount": 25,
     "companyCount": 10,
     "candidateProjectCount": 10,
-    "resolvedPersonCount": 27,
+    "resolvedPersonCount": 25,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T20:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1741,13 +2497,13 @@ export const campuses: Campus[] = [
     "id": "univ_rit",
     "name": "Rochester Institute of Technology",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:29:42.524Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1779,11 +2535,11 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 13,
     "resolvedPersonCount": 9,
     "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 86,
       "founderCount": 280,
-      "companyCount": 269
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -1811,11 +2567,11 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 3,
-    "companyCount": 3,
-    "candidateProjectCount": 3,
+    "companyCount": 4,
+    "candidateProjectCount": 4,
     "resolvedPersonCount": 3,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1829,17 +2585,41 @@ export const campuses: Campus[] = [
     "founderCount": 104,
     "companyCount": 114,
     "candidateProjectCount": 114,
-    "resolvedPersonCount": 105,
+    "resolvedPersonCount": 104,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T07:55:07.279Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": {
       "rank": 42,
       "founderCount": 121,
-      "companyCount": 119
+      "companyCount": 0
     },
     "shortName": "Santa Clara"
+  },
+  {
+    "id": "univ_snu",
+    "name": "Seoul National University",
+    "country": "South Korea",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 73,
+      "founderCount": 343,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 59,
+      "founderCount": 370,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Seoul National"
   },
   {
     "id": "univ_seton_hall_university",
@@ -1861,13 +2641,13 @@ export const campuses: Campus[] = [
     "id": "univ_sfu",
     "name": "Simon Fraser University",
     "country": "Canada",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:05:34.378Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1877,13 +2657,13 @@ export const campuses: Campus[] = [
     "id": "univ_smu_sg",
     "name": "Singapore Management University",
     "country": "Singapore",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:42:03.091Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1893,13 +2673,13 @@ export const campuses: Campus[] = [
     "id": "univ_smu",
     "name": "Southern Methodist University",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:42:03.091Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -1925,27 +2705,27 @@ export const campuses: Campus[] = [
     "id": "univ_stanford",
     "name": "Stanford University",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 314,
-    "companyCount": 204,
-    "candidateProjectCount": 204,
-    "resolvedPersonCount": 757,
-    "sourcesConfigured": 33,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "coverage": "up_to_date",
+    "founderCount": 369,
+    "companyCount": 232,
+    "candidateProjectCount": 232,
+    "resolvedPersonCount": 369,
+    "sourcesConfigured": 35,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 2,
       "founderCount": 1997,
-      "companyCount": 1787
+      "companyCount": 0
     },
     "grad": {
       "rank": 1,
       "founderCount": 5508,
-      "companyCount": 4189
+      "companyCount": 0
     },
     "mba": {
       "rank": 2,
       "founderCount": 1504,
-      "companyCount": 1359
+      "companyCount": 0
     },
     "shortName": "Stanford"
   },
@@ -1954,16 +2734,16 @@ export const campuses: Campus[] = [
     "name": "State University of New York",
     "country": "United States",
     "coverage": "up_to_date",
-    "founderCount": 1,
-    "companyCount": 0,
-    "candidateProjectCount": 0,
-    "resolvedPersonCount": 1,
+    "founderCount": 2,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 2,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 84,
       "founderCount": 293,
-      "companyCount": 290
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -1973,17 +2753,33 @@ export const campuses: Campus[] = [
     "id": "univ_stevens",
     "name": "Stevens Institute of Technology",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
-    "companyCount": 14,
-    "candidateProjectCount": 14,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Stevens"
+  },
+  {
+    "id": "univ_hhs",
+    "name": "Stockholm School of Economics",
+    "country": "Sweden",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "SSE"
   },
   {
     "id": "univ_swarthmore_college",
@@ -2007,19 +2803,107 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 5,
-    "companyCount": 0,
-    "candidateProjectCount": 0,
+    "companyCount": 4,
+    "candidateProjectCount": 4,
     "resolvedPersonCount": 5,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "sourcesConfigured": 2,
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 96,
       "founderCount": 249,
-      "companyCount": 240
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
     "shortName": "Syracuse"
+  },
+  {
+    "id": "univ_dtu",
+    "name": "Technical University of Denmark",
+    "country": "Denmark",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "DTU"
+  },
+  {
+    "id": "univ_tum",
+    "name": "Technical University of Munich",
+    "country": "Germany",
+    "coverage": "up_to_date",
+    "founderCount": 3,
+    "companyCount": 3,
+    "candidateProjectCount": 3,
+    "resolvedPersonCount": 3,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": {
+      "rank": 42,
+      "founderCount": 456,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "TUM"
+  },
+  {
+    "id": "univ_technion",
+    "name": "Technion – Israel Institute of Technology",
+    "country": "Israel",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 12,
+      "founderCount": 1019,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 30,
+      "founderCount": 721,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Technion"
+  },
+  {
+    "id": "univ_tau",
+    "name": "Tel Aviv University",
+    "country": "Israel",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 9,
+      "founderCount": 1084,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 16,
+      "founderCount": 1153,
+      "companyCount": 0
+    },
+    "mba": {
+      "rank": 13,
+      "founderCount": 429,
+      "companyCount": 0
+    },
+    "shortName": "Tel Aviv"
   },
   {
     "id": "univ_temple",
@@ -2027,11 +2911,11 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 3,
-    "companyCount": 2,
-    "candidateProjectCount": 2,
+    "companyCount": 3,
+    "candidateProjectCount": 3,
     "resolvedPersonCount": 3,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2047,16 +2931,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 28,
     "resolvedPersonCount": 0,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 79,
       "founderCount": 317,
-      "companyCount": 295
+      "companyCount": 0
     },
     "grad": {
       "rank": 91,
       "founderCount": 261,
-      "companyCount": 242
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Texas A&M"
@@ -2071,7 +2955,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 8,
     "resolvedPersonCount": 12,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2087,7 +2971,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 6,
     "resolvedPersonCount": 4,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2103,7 +2987,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 1,
     "resolvedPersonCount": 3,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2126,6 +3010,54 @@ export const campuses: Campus[] = [
     "shortName": "New School"
   },
   {
+    "id": "univ_tcd",
+    "name": "Trinity College Dublin",
+    "country": "Ireland",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 75,
+      "founderCount": 334,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Trinity Dublin"
+  },
+  {
+    "id": "univ_tsinghua",
+    "name": "Tsinghua University",
+    "country": "China",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 26,
+      "founderCount": 678,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 23,
+      "founderCount": 879,
+      "companyCount": 0
+    },
+    "mba": {
+      "rank": 32,
+      "founderCount": 171,
+      "companyCount": 0
+    },
+    "shortName": "Tsinghua"
+  },
+  {
     "id": "univ_tufts",
     "name": "Tufts University",
     "country": "United States",
@@ -2133,17 +3065,77 @@ export const campuses: Campus[] = [
     "founderCount": 1,
     "companyCount": 0,
     "candidateProjectCount": 0,
-    "resolvedPersonCount": 4,
+    "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 68,
       "founderCount": 352,
-      "companyCount": 340
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
     "shortName": "Tufts"
+  },
+  {
+    "id": "univ_ucd",
+    "name": "University College Dublin",
+    "country": "Ireland",
+    "coverage": "up_to_date",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 1,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
+    "undergrad": {
+      "rank": 66,
+      "founderCount": 356,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 91,
+      "founderCount": 261,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "UCD"
+  },
+  {
+    "id": "univ_ucl",
+    "name": "University College London",
+    "country": "United Kingdom",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 1,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": {
+      "rank": 41,
+      "founderCount": 462,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "UCL"
+  },
+  {
+    "id": "univ_amsterdam",
+    "name": "University of Amsterdam",
+    "country": "Netherlands",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Amsterdam"
   },
   {
     "id": "univ_arizona",
@@ -2159,7 +3151,7 @@ export const campuses: Campus[] = [
     "undergrad": {
       "rank": 80,
       "founderCount": 303,
-      "companyCount": 288
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -2170,57 +3162,29 @@ export const campuses: Campus[] = [
     "name": "University of British Columbia",
     "country": "Canada",
     "coverage": "up_to_date",
-    "founderCount": 0,
+    "founderCount": 1,
     "companyCount": 2,
     "candidateProjectCount": 2,
-    "resolvedPersonCount": 0,
+    "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:05:34.378Z",
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 43,
       "founderCount": 472,
-      "companyCount": 415
+      "companyCount": 0
     },
     "grad": {
       "rank": 54,
       "founderCount": 385,
-      "companyCount": 323
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "UBC"
   },
   {
-    "id": "univ_berkeley",
-    "name": "University of California, Berkeley",
-    "country": "United States",
-    "coverage": "partial",
-    "founderCount": 247,
-    "companyCount": 148,
-    "candidateProjectCount": 148,
-    "resolvedPersonCount": 655,
-    "sourcesConfigured": 36,
-    "lastCheckedAt": "2026-11-02T07:13:23.953Z",
-    "undergrad": {
-      "rank": 1,
-      "founderCount": 2380,
-      "companyCount": 2155
-    },
-    "grad": {
-      "rank": 4,
-      "founderCount": 2468,
-      "companyCount": 2035
-    },
-    "mba": {
-      "rank": 9,
-      "founderCount": 705,
-      "companyCount": 650
-    },
-    "shortName": "Berkeley"
-  },
-  {
-    "id": "univ_ucdavis",
-    "name": "University of California, Davis",
-    "country": "United States",
+    "id": "univ_calgary",
+    "name": "University of Calgary",
+    "country": "Canada",
     "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
@@ -2229,14 +3193,62 @@ export const campuses: Campus[] = [
     "sourcesConfigured": 0,
     "lastCheckedAt": null,
     "undergrad": {
+      "rank": 96,
+      "founderCount": 249,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Calgary"
+  },
+  {
+    "id": "univ_berkeley",
+    "name": "University of California, Berkeley",
+    "country": "United States",
+    "coverage": "up_to_date",
+    "founderCount": 252,
+    "companyCount": 149,
+    "candidateProjectCount": 149,
+    "resolvedPersonCount": 252,
+    "sourcesConfigured": 38,
+    "lastCheckedAt": "2026-11-04T16:00:00.000Z",
+    "undergrad": {
+      "rank": 1,
+      "founderCount": 2380,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 4,
+      "founderCount": 2468,
+      "companyCount": 0
+    },
+    "mba": {
+      "rank": 9,
+      "founderCount": 705,
+      "companyCount": 0
+    },
+    "shortName": "Berkeley"
+  },
+  {
+    "id": "univ_ucdavis",
+    "name": "University of California, Davis",
+    "country": "United States",
+    "coverage": "up_to_date",
+    "founderCount": 0,
+    "companyCount": 10,
+    "candidateProjectCount": 10,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 1,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
+    "undergrad": {
       "rank": 66,
       "founderCount": 356,
-      "companyCount": 342
+      "companyCount": 0
     },
     "grad": {
       "rank": 91,
       "founderCount": 261,
-      "companyCount": 234
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "UC Davis"
@@ -2251,11 +3263,11 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 2,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 89,
       "founderCount": 267,
-      "companyCount": 252
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -2265,27 +3277,27 @@ export const campuses: Campus[] = [
     "id": "univ_ucla",
     "name": "University of California, Los Angeles",
     "country": "United States",
-    "coverage": "partial",
+    "coverage": "up_to_date",
     "founderCount": 27,
-    "companyCount": 13,
-    "candidateProjectCount": 13,
+    "companyCount": 14,
+    "candidateProjectCount": 14,
     "resolvedPersonCount": 27,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T22:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 15,
       "founderCount": 840,
-      "companyCount": 807
+      "companyCount": 0
     },
     "grad": {
       "rank": 14,
       "founderCount": 1272,
-      "companyCount": 1108
+      "companyCount": 0
     },
     "mba": {
       "rank": 12,
       "founderCount": 530,
-      "companyCount": 505
+      "companyCount": 0
     },
     "shortName": "UCLA"
   },
@@ -2297,18 +3309,18 @@ export const campuses: Campus[] = [
     "founderCount": 4,
     "companyCount": 0,
     "candidateProjectCount": 0,
-    "resolvedPersonCount": 5,
+    "resolvedPersonCount": 4,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 38,
       "founderCount": 541,
-      "companyCount": 515
+      "companyCount": 0
     },
     "grad": {
       "rank": 37,
       "founderCount": 532,
-      "companyCount": 428
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "UC San Diego"
@@ -2323,11 +3335,11 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 6,
     "resolvedPersonCount": 9,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T07:55:07.279Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 58,
       "founderCount": 383,
-      "companyCount": 370
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -2338,26 +3350,26 @@ export const campuses: Campus[] = [
     "name": "University of Cambridge",
     "country": "United Kingdom",
     "coverage": "up_to_date",
-    "founderCount": 18,
-    "companyCount": 3,
-    "candidateProjectCount": 3,
+    "founderCount": 19,
+    "companyCount": 4,
+    "candidateProjectCount": 4,
     "resolvedPersonCount": 19,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:30:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 55,
       "founderCount": 405,
-      "companyCount": 388
+      "companyCount": 0
     },
     "grad": {
       "rank": 7,
       "founderCount": 1928,
-      "companyCount": 1595
+      "companyCount": 0
     },
     "mba": {
       "rank": 40,
       "founderCount": 127,
-      "companyCount": 115
+      "companyCount": 0
     },
     "shortName": "Cambridge"
   },
@@ -2385,23 +3397,23 @@ export const campuses: Campus[] = [
     "founderCount": 33,
     "companyCount": 9,
     "candidateProjectCount": 9,
-    "resolvedPersonCount": 41,
+    "resolvedPersonCount": 33,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T18:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 57,
       "founderCount": 401,
-      "companyCount": 377
+      "companyCount": 0
     },
     "grad": {
       "rank": 13,
       "founderCount": 1295,
-      "companyCount": 1130
+      "companyCount": 0
     },
     "mba": {
       "rank": 8,
       "founderCount": 884,
-      "companyCount": 823
+      "companyCount": 0
     },
     "shortName": "UChicago"
   },
@@ -2409,13 +3421,13 @@ export const campuses: Campus[] = [
     "id": "univ_cincinnati",
     "name": "University of Cincinnati",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
-    "companyCount": 1,
-    "candidateProjectCount": 1,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2431,16 +3443,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:29:42.524Z",
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 40,
       "founderCount": 530,
-      "companyCount": 506
+      "companyCount": 0
     },
     "grad": {
       "rank": 43,
       "founderCount": 438,
-      "companyCount": 375
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "CU Boulder"
@@ -2449,17 +3461,53 @@ export const campuses: Campus[] = [
     "id": "univ_uconn",
     "name": "University of Connecticut",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
-    "companyCount": 1,
-    "candidateProjectCount": 1,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:29:42.524Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "UConn"
+  },
+  {
+    "id": "univ_copenhagen",
+    "name": "University of Copenhagen",
+    "country": "Denmark",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Copenhagen"
+  },
+  {
+    "id": "univ_delhi",
+    "name": "University of Delhi",
+    "country": "India",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 62,
+      "founderCount": 366,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Delhi"
   },
   {
     "id": "univ_denver",
@@ -2467,15 +3515,31 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 4,
-    "companyCount": 6,
-    "candidateProjectCount": 6,
+    "companyCount": 7,
+    "candidateProjectCount": 7,
     "resolvedPersonCount": 4,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Denver"
+  },
+  {
+    "id": "univ_edinburgh",
+    "name": "University of Edinburgh",
+    "country": "United Kingdom",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Edinburgh"
   },
   {
     "id": "univ_florida",
@@ -2487,16 +3551,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 51,
       "founderCount": 422,
-      "companyCount": 391
+      "companyCount": 0
     },
     "grad": {
       "rank": 57,
       "founderCount": 378,
-      "companyCount": 321
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Florida"
@@ -2505,13 +3569,13 @@ export const campuses: Campus[] = [
     "id": "univ_uga",
     "name": "University of Georgia",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:29:42.524Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2527,7 +3591,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 3,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T04:53:34.141Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2553,13 +3617,13 @@ export const campuses: Campus[] = [
     "id": "univ_houston",
     "name": "University of Houston",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
-    "companyCount": 11,
-    "candidateProjectCount": 11,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2569,22 +3633,22 @@ export const campuses: Campus[] = [
     "id": "univ_uiuc",
     "name": "University of Illinois Urbana-Champaign",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 34,
+    "coverage": "up_to_date",
+    "founderCount": 37,
     "companyCount": 18,
     "candidateProjectCount": 18,
-    "resolvedPersonCount": 34,
-    "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "resolvedPersonCount": 37,
+    "sourcesConfigured": 4,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 11,
       "founderCount": 1032,
-      "companyCount": 936
+      "companyCount": 0
     },
     "grad": {
       "rank": 25,
       "founderCount": 872,
-      "companyCount": 701
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "UIUC"
@@ -2599,16 +3663,16 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 38,
       "founderCount": 541,
-      "companyCount": 519
+      "companyCount": 0
     },
     "grad": {
       "rank": 39,
       "founderCount": 502,
-      "companyCount": 434
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Maryland"
@@ -2627,15 +3691,39 @@ export const campuses: Campus[] = [
     "undergrad": {
       "rank": 70,
       "founderCount": 348,
-      "companyCount": 342
+      "companyCount": 0
     },
     "grad": {
       "rank": 99,
       "founderCount": 246,
-      "companyCount": 221
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "UMass"
+  },
+  {
+    "id": "univ_melbourne",
+    "name": "University of Melbourne",
+    "country": "Australia",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 76,
+      "founderCount": 323,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 90,
+      "founderCount": 262,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Melbourne"
   },
   {
     "id": "univ_miami",
@@ -2647,7 +3735,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 10,
     "resolvedPersonCount": 2,
     "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2658,26 +3746,26 @@ export const campuses: Campus[] = [
     "name": "University of Michigan",
     "country": "United States",
     "coverage": "up_to_date",
-    "founderCount": 45,
+    "founderCount": 46,
     "companyCount": 22,
     "candidateProjectCount": 22,
-    "resolvedPersonCount": 64,
+    "resolvedPersonCount": 46,
     "sourcesConfigured": 7,
-    "lastCheckedAt": "2026-11-02T05:51:32.654Z",
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 8,
       "founderCount": 1085,
-      "companyCount": 1012
+      "companyCount": 0
     },
     "grad": {
       "rank": 19,
       "founderCount": 1082,
-      "companyCount": 902
+      "companyCount": 0
     },
     "mba": {
       "rank": 23,
       "founderCount": 254,
-      "companyCount": 246
+      "companyCount": 0
     },
     "shortName": "Michigan"
   },
@@ -2687,25 +3775,25 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "not_scanned",
     "founderCount": 0,
-    "companyCount": 0,
-    "candidateProjectCount": 0,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
     "resolvedPersonCount": 0,
     "sourcesConfigured": 0,
     "lastCheckedAt": null,
     "undergrad": {
       "rank": 65,
       "founderCount": 358,
-      "companyCount": 334
+      "companyCount": 0
     },
     "grad": {
       "rank": 46,
       "founderCount": 431,
-      "companyCount": 362
+      "companyCount": 0
     },
     "mba": {
       "rank": 49,
       "founderCount": 107,
-      "companyCount": 104
+      "companyCount": 0
     },
     "shortName": "Minnesota"
   },
@@ -2713,17 +3801,37 @@ export const campuses: Campus[] = [
     "id": "univ_olemiss",
     "name": "University of Mississippi",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T04:53:34.141Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Ole Miss"
+  },
+  {
+    "id": "univ_mumbai",
+    "name": "University of Mumbai",
+    "country": "India",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 74,
+      "founderCount": 339,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Mumbai"
   },
   {
     "id": "univ_nebraska",
@@ -2758,30 +3866,54 @@ export const campuses: Campus[] = [
     "shortName": "New Haven"
   },
   {
+    "id": "univ_unsw",
+    "name": "University of New South Wales",
+    "country": "Australia",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 72,
+      "founderCount": 345,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 84,
+      "founderCount": 268,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "UNSW"
+  },
+  {
     "id": "univ_unc",
     "name": "University of North Carolina at Chapel Hill",
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 1,
-    "companyCount": 1,
-    "candidateProjectCount": 1,
-    "resolvedPersonCount": 4,
+    "companyCount": 2,
+    "candidateProjectCount": 2,
+    "resolvedPersonCount": 1,
     "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-11-02T12:31:23.262Z",
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 41,
       "founderCount": 502,
-      "companyCount": 466
+      "companyCount": 0
     },
     "grad": {
       "rank": 53,
       "founderCount": 386,
-      "companyCount": 352
+      "companyCount": 0
     },
     "mba": {
       "rank": 36,
       "founderCount": 146,
-      "companyCount": 144
+      "companyCount": 0
     },
     "shortName": "UNC"
   },
@@ -2791,45 +3923,73 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 4,
-    "companyCount": 2,
-    "candidateProjectCount": 2,
-    "resolvedPersonCount": 5,
+    "companyCount": 3,
+    "candidateProjectCount": 3,
+    "resolvedPersonCount": 4,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T20:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 69,
       "founderCount": 350,
-      "companyCount": 324
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
     "shortName": "Notre Dame"
   },
   {
+    "id": "univ_oxford",
+    "name": "University of Oxford",
+    "country": "United Kingdom",
+    "coverage": "up_to_date",
+    "founderCount": 3,
+    "companyCount": 2,
+    "candidateProjectCount": 2,
+    "resolvedPersonCount": 3,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 51,
+      "founderCount": 422,
+      "companyCount": 0
+    },
+    "grad": {
+      "rank": 8,
+      "founderCount": 1793,
+      "companyCount": 0
+    },
+    "mba": {
+      "rank": 21,
+      "founderCount": 263,
+      "companyCount": 0
+    },
+    "shortName": "Oxford"
+  },
+  {
     "id": "univ_penn",
     "name": "University of Pennsylvania",
     "country": "United States",
-    "coverage": "partial",
-    "founderCount": 759,
+    "coverage": "up_to_date",
+    "founderCount": 768,
     "companyCount": 212,
     "candidateProjectCount": 212,
-    "resolvedPersonCount": 2082,
-    "sourcesConfigured": 127,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "resolvedPersonCount": 768,
+    "sourcesConfigured": 163,
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 6,
       "founderCount": 1466,
-      "companyCount": 1354
+      "companyCount": 0
     },
     "grad": {
       "rank": 6,
       "founderCount": 2225,
-      "companyCount": 1934
+      "companyCount": 0
     },
     "mba": {
       "rank": 3,
       "founderCount": 1437,
-      "companyCount": 1332
+      "companyCount": 0
     },
     "shortName": "Penn"
   },
@@ -2859,7 +4019,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 10,
     "resolvedPersonCount": 16,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T04:53:34.141Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2891,7 +4051,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 4,
     "resolvedPersonCount": 3,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2901,13 +4061,13 @@ export const campuses: Campus[] = [
     "id": "univ_usf",
     "name": "University of South Florida",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-02T07:29:42.524Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -2921,25 +4081,45 @@ export const campuses: Campus[] = [
     "founderCount": 48,
     "companyCount": 15,
     "candidateProjectCount": 15,
-    "resolvedPersonCount": 49,
+    "resolvedPersonCount": 48,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T22:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 20,
       "founderCount": 791,
-      "companyCount": 744
+      "companyCount": 0
     },
     "grad": {
       "rank": 21,
       "founderCount": 1015,
-      "companyCount": 890
+      "companyCount": 0
     },
     "mba": {
       "rank": 22,
       "founderCount": 259,
-      "companyCount": 252
+      "companyCount": 0
     },
     "shortName": "USC"
+  },
+  {
+    "id": "univ_sydney",
+    "name": "University of Sydney",
+    "country": "Australia",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 64,
+      "founderCount": 362,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Sydney"
   },
   {
     "id": "univ_utexas",
@@ -2947,25 +4127,25 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 16,
-    "companyCount": 6,
-    "candidateProjectCount": 6,
-    "resolvedPersonCount": 18,
+    "companyCount": 9,
+    "candidateProjectCount": 9,
+    "resolvedPersonCount": 16,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-09-27T18:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 10,
       "founderCount": 1036,
-      "companyCount": 948
+      "companyCount": 0
     },
     "grad": {
       "rank": 20,
       "founderCount": 1049,
-      "companyCount": 906
+      "companyCount": 0
     },
     "mba": {
       "rank": 20,
       "founderCount": 273,
-      "companyCount": 246
+      "companyCount": 0
     },
     "shortName": "UT Austin"
   },
@@ -2979,11 +4159,27 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 4,
     "resolvedPersonCount": 4,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
     "shortName": "Texas at Dallas"
+  },
+  {
+    "id": "univ_tokyo",
+    "name": "University of Tokyo",
+    "country": "Japan",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Tokyo"
   },
   {
     "id": "univ_toronto",
@@ -2991,25 +4187,25 @@ export const campuses: Campus[] = [
     "country": "Canada",
     "coverage": "up_to_date",
     "founderCount": 15,
-    "companyCount": 6,
-    "candidateProjectCount": 6,
-    "resolvedPersonCount": 16,
+    "companyCount": 7,
+    "candidateProjectCount": 7,
+    "resolvedPersonCount": 15,
     "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 17,
       "founderCount": 808,
-      "companyCount": 737
+      "companyCount": 0
     },
     "grad": {
       "rank": 26,
       "founderCount": 828,
-      "companyCount": 655
+      "companyCount": 0
     },
     "mba": {
       "rank": 39,
       "founderCount": 132,
-      "companyCount": 127
+      "companyCount": 0
     },
     "shortName": "Toronto"
   },
@@ -3019,27 +4215,43 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 13,
-    "companyCount": 5,
-    "candidateProjectCount": 5,
-    "resolvedPersonCount": 15,
+    "companyCount": 6,
+    "candidateProjectCount": 6,
+    "resolvedPersonCount": 13,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T18:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 28,
       "founderCount": 599,
-      "companyCount": 562
+      "companyCount": 0
     },
     "grad": {
       "rank": 40,
       "founderCount": 477,
-      "companyCount": 415
+      "companyCount": 0
     },
     "mba": {
       "rank": 28,
       "founderCount": 195,
-      "companyCount": 187
+      "companyCount": 0
     },
     "shortName": "UVA"
+  },
+  {
+    "id": "univ_warwick",
+    "name": "University of Warwick",
+    "country": "United Kingdom",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Warwick"
   },
   {
     "id": "univ_uw",
@@ -3047,25 +4259,25 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 13,
-    "companyCount": 4,
-    "candidateProjectCount": 4,
-    "resolvedPersonCount": 16,
+    "companyCount": 6,
+    "candidateProjectCount": 6,
+    "resolvedPersonCount": 13,
     "sourcesConfigured": 3,
-    "lastCheckedAt": "2026-09-27T22:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 31,
       "founderCount": 587,
-      "companyCount": 536
+      "companyCount": 0
     },
     "grad": {
       "rank": 33,
       "founderCount": 616,
-      "companyCount": 510
+      "companyCount": 0
     },
     "mba": {
       "rank": 38,
       "founderCount": 134,
-      "companyCount": 126
+      "companyCount": 0
     },
     "shortName": "UW"
   },
@@ -3073,22 +4285,22 @@ export const campuses: Campus[] = [
     "id": "univ_waterloo",
     "name": "University of Waterloo",
     "country": "Canada",
-    "coverage": "partial",
-    "founderCount": 81,
-    "companyCount": 45,
-    "candidateProjectCount": 45,
-    "resolvedPersonCount": 123,
-    "sourcesConfigured": 12,
-    "lastCheckedAt": "2026-11-02T07:42:03.091Z",
+    "coverage": "up_to_date",
+    "founderCount": 83,
+    "companyCount": 46,
+    "candidateProjectCount": 46,
+    "resolvedPersonCount": 83,
+    "sourcesConfigured": 14,
+    "lastCheckedAt": "2026-11-02T16:00:00.000Z",
     "undergrad": {
       "rank": 7,
       "founderCount": 1303,
-      "companyCount": 1006
+      "companyCount": 0
     },
     "grad": {
       "rank": 54,
       "founderCount": 385,
-      "companyCount": 290
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Waterloo"
@@ -3099,23 +4311,39 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 5,
-    "companyCount": 1,
-    "candidateProjectCount": 1,
+    "companyCount": 2,
+    "candidateProjectCount": 2,
     "resolvedPersonCount": 5,
-    "sourcesConfigured": 2,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "sourcesConfigured": 4,
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 18,
       "founderCount": 802,
-      "companyCount": 724
+      "companyCount": 0
     },
     "grad": {
       "rank": 34,
       "founderCount": 598,
-      "companyCount": 490
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "Wisconsin"
+  },
+  {
+    "id": "univ_uppsala",
+    "name": "Uppsala University",
+    "country": "Sweden",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Uppsala"
   },
   {
     "id": "univ_vanderbilt",
@@ -3125,23 +4353,23 @@ export const campuses: Campus[] = [
     "founderCount": 2,
     "companyCount": 1,
     "candidateProjectCount": 1,
-    "resolvedPersonCount": 4,
+    "resolvedPersonCount": 2,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T20:00:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 42,
       "founderCount": 474,
-      "companyCount": 460
+      "companyCount": 0
     },
     "grad": {
       "rank": 77,
       "founderCount": 297,
-      "companyCount": 252
+      "companyCount": 0
     },
     "mba": {
       "rank": 50,
       "founderCount": 104,
-      "companyCount": 99
+      "companyCount": 0
     },
     "shortName": "Vanderbilt"
   },
@@ -3155,7 +4383,7 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 5,
     "resolvedPersonCount": 10,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -3187,11 +4415,11 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 0,
     "resolvedPersonCount": 1,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-09-27T23:40:00.000Z",
+    "lastCheckedAt": "2026-09-27T16:00:00.000Z",
     "undergrad": {
       "rank": 88,
       "founderCount": 268,
-      "companyCount": 258
+      "companyCount": 0
     },
     "grad": null,
     "mba": null,
@@ -3201,13 +4429,13 @@ export const campuses: Campus[] = [
     "id": "univ_wake_forest",
     "name": "Wake Forest University",
     "country": "United States",
-    "coverage": "up_to_date",
+    "coverage": "not_scanned",
     "founderCount": 0,
-    "companyCount": 6,
-    "candidateProjectCount": 6,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
     "resolvedPersonCount": 0,
-    "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
     "undergrad": null,
     "grad": null,
     "mba": null,
@@ -3223,19 +4451,35 @@ export const campuses: Campus[] = [
     "candidateProjectCount": 12,
     "resolvedPersonCount": 14,
     "sourcesConfigured": 1,
-    "lastCheckedAt": "2026-11-03T09:01:00.057Z",
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 63,
       "founderCount": 365,
-      "companyCount": 337
+      "companyCount": 0
     },
     "grad": {
       "rank": 61,
       "founderCount": 352,
-      "companyCount": 293
+      "companyCount": 0
     },
     "mba": null,
     "shortName": "WashU"
+  },
+  {
+    "id": "univ_weizmann",
+    "name": "Weizmann Institute of Science",
+    "country": "Israel",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": null,
+    "mba": null,
+    "shortName": "Weizmann"
   },
   {
     "id": "univ_wesleyan_university",
@@ -3277,7 +4521,7 @@ export const campuses: Campus[] = [
     "founderCount": 0,
     "companyCount": 0,
     "candidateProjectCount": 0,
-    "resolvedPersonCount": 2,
+    "resolvedPersonCount": 0,
     "sourcesConfigured": 0,
     "lastCheckedAt": null,
     "undergrad": null,
@@ -3286,10 +4530,34 @@ export const campuses: Campus[] = [
     "shortName": "Western University"
   },
   {
+    "id": "univ_western",
+    "name": "Western University",
+    "country": "Canada",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 36,
+      "founderCount": 548,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": {
+      "rank": 42,
+      "founderCount": 121,
+      "companyCount": 0
+    },
+    "shortName": "Western"
+  },
+  {
     "id": "univ_western_university_huron_college",
     "name": "Western University (Huron College)",
     "country": "Canada",
-    "coverage": "not_scanned",
+    "coverage": "up_to_date",
     "founderCount": 1,
     "companyCount": 0,
     "candidateProjectCount": 0,
@@ -3323,25 +4591,25 @@ export const campuses: Campus[] = [
     "country": "United States",
     "coverage": "up_to_date",
     "founderCount": 73,
-    "companyCount": 40,
-    "candidateProjectCount": 40,
-    "resolvedPersonCount": 93,
-    "sourcesConfigured": 4,
-    "lastCheckedAt": "2026-11-03T09:19:10.624Z",
+    "companyCount": 66,
+    "candidateProjectCount": 66,
+    "resolvedPersonCount": 73,
+    "sourcesConfigured": 8,
+    "lastCheckedAt": "2026-11-03T16:00:00.000Z",
     "undergrad": {
       "rank": 13,
       "founderCount": 887,
-      "companyCount": 825
+      "companyCount": 0
     },
     "grad": {
       "rank": 24,
       "founderCount": 876,
-      "companyCount": 743
+      "companyCount": 0
     },
     "mba": {
       "rank": 26,
       "founderCount": 225,
-      "companyCount": 212
+      "companyCount": 0
     },
     "shortName": "Yale"
   },
@@ -3360,5 +4628,69 @@ export const campuses: Campus[] = [
     "grad": null,
     "mba": null,
     "shortName": "Yeshiva"
+  },
+  {
+    "id": "univ_york",
+    "name": "York University",
+    "country": "Canada",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 98,
+      "founderCount": 248,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": {
+      "rank": 41,
+      "founderCount": 122,
+      "companyCount": 0
+    },
+    "shortName": "York"
+  },
+  {
+    "id": "univ_zhejiang",
+    "name": "Zhejiang University",
+    "country": "China",
+    "coverage": "not_scanned",
+    "founderCount": 0,
+    "companyCount": 0,
+    "candidateProjectCount": 0,
+    "resolvedPersonCount": 0,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": {
+      "rank": 100,
+      "founderCount": 241,
+      "companyCount": 0
+    },
+    "grad": null,
+    "mba": null,
+    "shortName": "Zhejiang"
+  },
+  {
+    "id": "univ_polytechnique",
+    "name": "École Polytechnique",
+    "country": "France",
+    "coverage": "up_to_date",
+    "founderCount": 1,
+    "companyCount": 1,
+    "candidateProjectCount": 1,
+    "resolvedPersonCount": 1,
+    "sourcesConfigured": 0,
+    "lastCheckedAt": null,
+    "undergrad": null,
+    "grad": {
+      "rank": 94,
+      "founderCount": 259,
+      "companyCount": 0
+    },
+    "mba": null,
+    "shortName": "Polytechnique"
   }
 ];

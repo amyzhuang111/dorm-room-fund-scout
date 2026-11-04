@@ -1,14 +1,14 @@
 # Campus Scout scan desk
 
-A desk for the public [Campus Scout shortlist](https://campus-scout-git-main-amys-projects-d3dfb125.vercel.app/work/shortlist). It scans all 170 campuses on that file and ranks every one.
+A desk for the public [Campus Scout campus file](https://campus-scout-git-main-amys-projects-d3dfb125.vercel.app/campuses). It scans all 238 campuses on that file and ranks every one.
 
-The shortlist itself is read-only. Seventy campuses were marked Not scanned, and PitchBook place does not change when a campus is scanned. This desk reads the Nov 2, 2026 file and runs both passes locally.
+The public file is read-only. 124 campuses have no founders and no sources yet, and PitchBook place does not change when a campus is scanned. This desk reads the Nov 4, 2026 file and runs both passes locally.
 
 ## What the passes do
 
 **Scan all campuses** walks every campus:
 
-- Every campus that already has a file is confirmed, including the ones the source file had marked partial. The note records the source count, founder count, and last check.
+- Every campus with founders or sources on file is confirmed. None are left partial. The note records the source count, founder count, and last check.
 - Not scanned campuses are opened from the file. The note records founders already on file and any PitchBook rank. It does not invent people.
 
 **Rank all** gives every campus a desk place:
@@ -31,6 +31,6 @@ Open [http://127.0.0.1:43123](http://127.0.0.1:43123). Founder and company links
 
 ## Founder and company links
 
-The Founders desk lists the same 2,432 projects as the public founders table. A company name links to the website on file. A founder name links to the recorded profile, usually LinkedIn, otherwise GitHub or a personal site. Names with no URL on file stay plain text. Unverified name-only LinkedIn guesses are left unlinked.
+The Founders desk lists the same 2,432 projects as the public founders table. 1,328 company names link to a website on file, and 1,621 founder names link to a recorded profile, usually LinkedIn, otherwise GitHub or a personal site. Names with no URL on file stay plain text. Unverified name-only LinkedIn guesses are left unlinked.
 
-The page loads with both passes already applied. Scan all, Rank all, and Run both again replay them. Show the Nov 2, 2026 file returns to the original coverage labels.
+The page loads with both passes already applied. Scan all, Rank all, and Run both again replay them. Show the Nov 4, 2026 file returns to the original coverage labels.
