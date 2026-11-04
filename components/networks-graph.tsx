@@ -223,6 +223,20 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     setZoomScale(scale);
   }, [poster, mapFocus, size.w, size.h]);
 
+  const resetFounderView = useCallback(() => {
+    if (!poster) return;
+    const index = Math.max(0, poster.featuredId ? poster.foIds.indexOf(poster.featuredId) : 0);
+    const scale = 3.4;
+    const fit = Math.min(size.w / poster.w, size.h / poster.h);
+    camRef.current = {
+      scale,
+      x: (poster.w / 2 - poster.x[index]) * fit * scale,
+      y: (poster.h / 2 - poster.y[index]) * fit * scale,
+    };
+    velRef.current = { vx: 0, vy: 0, vScale: 0 };
+    setZoomScale(scale);
+  }, [poster, size.w, size.h]);
+
   const founderCount = poster?.foIds.length ?? 0;
 
   useEffect(() => {
@@ -244,7 +258,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       __NETWORKS_SET_SCALE__?: (scale: number) => void;
     };
     w.__NETWORKS_SET_SCALE__ = (scale: number) => {
-      camRef.current.scale = Math.max(0.7, Math.min(5.5, scale));
+      camRef.current.scale = Math.max(2.8, Math.min(5.5, scale));
       setZoomScale(camRef.current.scale);
       velRef.current.vScale = 0;
       bump((n) => n + 1);
@@ -255,12 +269,12 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       delete (w as typeof w & { __NETWORKS_PENDING_SCALE__?: number }).__NETWORKS_PENDING_SCALE__;
     }
     (w as typeof w & { __NETWORKS_RESET_VIEW__?: () => void }).__NETWORKS_RESET_VIEW__ = () => {
-      camRef.current = { x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[0].scale };
+      resetFounderView();
       velRef.current = { vx: 0, vy: 0, vScale: 0 };
       dragRef.current = null;
       setSelectedHub(null);
       setFocusedNode(-1);
-      setZoomScale(NETWORK_ZOOM_PRESETS[0].scale);
+      setZoomScale(3.4);
       bump((n) => n + 1);
     };
     return () => {
@@ -268,7 +282,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       delete w.__NETWORKS_SET_SCALE__;
       delete (w as typeof w & { __NETWORKS_RESET_VIEW__?: () => void }).__NETWORKS_RESET_VIEW__;
     };
-  }, [poster]);
+  }, [poster, resetFounderView]);
 
   const worldToScreen = useCallback(
     (wx: number, wy: number) => {
@@ -813,7 +827,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           vel.vx = 0; vel.vy = 0;
         }
         if (Math.abs(vel.vScale) > 0.0005) {
-          cam.scale = clamp(cam.scale * (1 + vel.vScale), 0.7, 5.5);
+          cam.scale = clamp(cam.scale * (1 + vel.vScale), 2.8, 5.5);
           vel.vScale *= 0.88;
         } else {
           vel.vScale = 0;
@@ -851,10 +865,27 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       }
       if (poster) {
         const fit = Math.min(size.w / poster.w, size.h / poster.h);
-        const marginX = poster.w * fit * cam.scale * 0.4;
-        const marginY = poster.h * fit * cam.scale * 0.4;
-        cam.x = clamp(cam.x, -marginX, marginX);
-        cam.y = clamp(cam.y, -marginY, marginY);
+        cam.scale = clamp(cam.scale, 2.8, 5.5);
+        const scale = fit * cam.scale;
+        const centerX = poster.w / 2 - cam.x / scale;
+        const centerY = poster.h / 2 - cam.y / scale;
+        let nearest = -1;
+        let distance = Infinity;
+        for (let i = 0; i < poster.x.length; i++) {
+          if (poster.kind[i] === 2) continue;
+          const dx = (poster.x[i] - centerX) * scale / (size.w * 0.3);
+          const dy = (poster.y[i] - centerY) * scale / (size.h * 0.3);
+          const candidate = dx * dx + dy * dy;
+          if (candidate < distance) { distance = candidate; nearest = i; }
+        }
+        // Keep at least one real founder or company inside the central viewport.
+        if (nearest >= 0 && distance > 1) {
+          const correction = 1 - 1 / Math.sqrt(distance);
+          cam.x += (centerX - poster.x[nearest]) * scale * correction;
+          cam.y += (centerY - poster.y[nearest]) * scale * correction;
+          vel.vx = 0;
+          vel.vy = 0;
+        }
       }
       try {
         draw();
@@ -1134,7 +1165,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           <button type="button" aria-label="Zoom out network" title="Zoom out" data-network-zoom-out=""
             className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
-              camRef.current.scale = Math.max(0.7, camRef.current.scale / 1.35);
+              camRef.current.scale = Math.max(2.8, camRef.current.scale / 1.35);
               velRef.current.vScale = 0;
               setZoomScale(camRef.current.scale);
               bump((value) => value + 1);
@@ -1147,16 +1178,16 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
               setZoomScale(camRef.current.scale);
               bump((value) => value + 1);
             }}>+</button>
-          <button type="button" aria-label="Fit all network clusters" title="Fit whole ecosystem" data-network-zoom-fit=""
+          <button type="button" aria-label="Center founders and startups" title="Return to founder view" data-network-zoom-fit=""
             className="h-10 rounded-md px-3 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
-              camRef.current = { x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale };
+              resetFounderView();
               velRef.current = { vx: 0, vy: 0, vScale: 0 };
               dragRef.current = null;
               setSelectedHub(null);
-              setZoomScale(NETWORK_ZOOM_PRESETS[1].scale);
+              setZoomScale(3.4);
               bump((value) => value + 1);
-            }}>Fit</button>
+            }}>Center</button>
         </div>
         <p className="pointer-events-none absolute left-3 top-3 z-[5] max-w-[calc(100%-13rem)] rounded-md bg-white/90 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm" data-network-map-hint="">
           Click a founder or startup to open details
