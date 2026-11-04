@@ -12,7 +12,6 @@ import { CorpusFilters } from "@/components/corpus-filters";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
 import { TagChips } from "@/components/tag-chips";
-import { titleCaseTag } from "@/lib/display/tag-label";
 
 export const metadata: Metadata = { title: "Data" };
 
@@ -190,7 +189,8 @@ export default async function DataExplorerPage({
       <div className="mt-3 grid gap-6 sm:mt-4 lg:grid-cols-[minmax(0,1fr)_240px]" data-data-spread="">
       <ul className="grid grid-cols-1 gap-0 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)] md:grid-cols-2 md:gap-3 md:divide-y-0 md:border-t-0" data-corpus-table="" data-corpus-cards="">
         {result.rows.map((row) => {
-          const whyBits = [row.signalLabel, row.stage, titleCaseTag(row.sector), row.primaryProgram].filter(Boolean) as string[];
+          // Same labels as TagChips below — sector/stage/program already canonical; no title-case.
+          const whyBits = [row.signalLabel, row.stage, row.sector, row.primaryProgram].filter(Boolean) as string[];
           const pitch = whyBits.length
             ? whyBits.slice(0, 3).join(" · ")
             : row.fundingText || null;

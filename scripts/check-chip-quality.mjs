@@ -1,7 +1,8 @@
 /**
  * Fail when any visible tag chip is ellipsized, longer than 28 chars, or a
- * sentence (ending punctuation or more than 5 words). Runs every listed route
- * at 390 and 1440 after hydration.
+ * sentence (ending punctuation or more than 5 words). Also fail when a card's
+ * meta/pitch line mentions a sector with different casing than the sector chip
+ * (canonical labels must match on every route).
  * Usage: BASE=http://127.0.0.1:3460 node scripts/check-chip-quality.mjs
  */
 import { chromium } from "playwright";
@@ -18,6 +19,38 @@ const VIEWPORTS = [
 ];
 const UA =
   "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
+
+/** Canonical sector labels — Food/Ag style (each word capitalized, acronyms kept). */
+const CANONICAL_SECTORS = [
+  "AI Infra",
+  "AI Agents/Apps",
+  "Vertical AI",
+  "Dev Tools",
+  "Data/Infra",
+  "Cybersecurity",
+  "Fintech",
+  "Crypto/Web3",
+  "Healthtech",
+  "Biotech",
+  "Medtech/Devices",
+  "Climate/Energy",
+  "Robotics/Hardware",
+  "Defense/Gov",
+  "Aerospace",
+  "Edtech",
+  "Consumer",
+  "Marketplaces",
+  "E-commerce",
+  "Enterprise SaaS",
+  "Proptech",
+  "Mobility",
+  "Food/Ag",
+  "Media/Creator",
+  "Social",
+  "Gaming",
+  "Legal",
+  "HR/Work",
+];
 
 const browser = await chromium.launch({ headless: true });
 const report = { ok: true, base: BASE, hits: [] };
@@ -50,8 +83,10 @@ for (const vp of VIEWPORTS) {
       }
     }
     const found = await page.evaluate(
-      ({ maxChars, maxWords }) => {
+      ({ maxChars, maxWords, canonicalSectors }) => {
         const hits = [];
+        const byLower = new Map(canonicalSectors.map((s) => [s.toLowerCase(), s]));
+
         const chips = document.querySelectorAll("[data-tag-chip]");
         for (const chip of chips) {
           if (chip.closest("[data-tag-chips-measure]")) continue;
@@ -70,13 +105,49 @@ for (const vp of VIEWPORTS) {
           if (label.length > maxChars) reasons.push(`len:${label.length}`);
           if (/[.!?]$/.test(label)) reasons.push("end-punct");
           if (words.length > maxWords) reasons.push(`words:${words.length}`);
+          const canon = byLower.get(label.toLowerCase());
+          if (canon && canon !== label) reasons.push(`sector-case:${canon}`);
           if (!reasons.length) continue;
-          hits.push({ label: label.slice(0, 80), reasons });
+          hits.push({ label: label.slice(0, 80), reasons, kind: "chip" });
           if (hits.length >= 25) break;
+        }
+
+        // Meta line under company name must use the same canonical sector label as the chip.
+        const cards = document.querySelectorAll("[data-corpus-row], [data-directory-card], a[href^='/startup/']");
+        for (const card of cards) {
+          const pitchEl = card.querySelector("[data-card-pitch], [data-why-here]:not(.sr-only)");
+          const sectorEl = card.querySelector("[data-card-sector], [data-field='sector']");
+          if (!pitchEl || !sectorEl) continue;
+          const pitch = (pitchEl.textContent || "").replace(/\s+/g, " ").trim();
+          const sector = (sectorEl.textContent || "").replace(/\s+/g, " ").trim();
+          if (!pitch || !sector) continue;
+          const canon = byLower.get(sector.toLowerCase()) || sector;
+          if (sector !== canon) {
+            hits.push({ label: sector.slice(0, 80), reasons: [`chip-not-canonical:${canon}`], kind: "meta", pitch: pitch.slice(0, 100) });
+          }
+          // Pitch · segments that match a sector case-insensitively must equal the chip/canon form.
+          const parts = pitch.split(/\s*·\s*/).map((p) => p.trim()).filter(Boolean);
+          for (const part of parts) {
+            const partCanon = byLower.get(part.toLowerCase());
+            if (!partCanon) continue;
+            if (part !== partCanon || part !== sector) {
+              hits.push({
+                label: part.slice(0, 80),
+                reasons: [`meta-sector-mismatch:chip=${sector};canon=${partCanon}`],
+                kind: "meta",
+                pitch: pitch.slice(0, 100),
+              });
+            }
+          }
+          // Leftover auto title-case artifacts that destroy acronyms
+          if (/\bSaas\b/.test(pitch) && !/\bSaaS\b/.test(pitch)) {
+            hits.push({ label: "Saas", reasons: ["meta-destroyed-acronym:SaaS"], kind: "meta", pitch: pitch.slice(0, 100) });
+          }
+          if (hits.length >= 40) break;
         }
         return hits;
       },
-      { maxChars: MAX_CHARS, maxWords: MAX_WORDS },
+      { maxChars: MAX_CHARS, maxWords: MAX_WORDS, canonicalSectors: CANONICAL_SECTORS },
     );
     for (const hit of found) {
       fail(`${vp.w}${route} chip-quality "${hit.label}" [${hit.reasons.join(",")}]`, { vp: vp.w, route, ...hit });

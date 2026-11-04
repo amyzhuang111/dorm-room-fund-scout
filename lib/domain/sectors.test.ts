@@ -29,4 +29,12 @@ for (const sector of SECTORS) {
   if (sector.id !== "vertical_ai") assert.ok(sector.patterns.length > 0, sector.id);
 }
 
+assert.equal(sectorLabel("food_ag"), "Food/Ag");
+assert.equal(sectorLabel("Food/ag"), "Food/Ag");
+assert.equal(sectorLabel("enterprise_saas"), "Enterprise SaaS");
+assert.equal(sectorLabel("dev_tools"), "Dev Tools");
+assert.equal(sectorLabel("robotics_hardware"), "Robotics/Hardware");
+assert.equal(sectorLabel("hr_work"), "HR/Work");
+assert.equal(sectorLabel("AI infra"), "AI Infra");
+
 console.log("sectors tests ok", { cases: cases.length, sectors: SECTORS.length });

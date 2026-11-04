@@ -74,7 +74,7 @@ const after = getStartupCard("proj_75gsH605T3no");
 assert.ok(after);
 assert.equal(after.name, "AfterQuery");
 assert.equal(after.subtitle, "Winter 2025 · San Francisco");
-assert.equal(after.sector, "AI infra");
+assert.equal(after.sector, "AI Infra");
 assert.equal(after.region, "San Francisco");
 assert.equal(after.teamSize, "30");
 assert.equal(after.status, null);

@@ -27,7 +27,7 @@ const rows = [
     campusId: "univ_berkeley",
     campus: "Berkeley",
     programs: ["Y Combinator"],
-    sector: "AI agents/apps",
+    sector: "AI Agents/Apps",
     gradYear: 2026,
     signalTypes: ["funding"],
     company: "Sim",

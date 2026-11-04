@@ -67,7 +67,7 @@ export function buildSectorFacetAliasMap(
     map.set(normKey(sector.id), sector.id);
     map.set(sector.id.toLowerCase(), sector.id);
     map.set(normKey(sector.label), sector.id);
-    // "AI agents/apps" → "ai agents", "ai agents apps"
+    // "AI Agents/Apps" → "ai agents", "ai agents apps"
     const labelBits = sector.label.toLowerCase().split(/[\/,]/).map((b) => b.trim()).filter(Boolean);
     for (const bit of labelBits) map.set(normKey(bit), sector.id);
     // id tokens: robotics_hardware → robotics, hardware

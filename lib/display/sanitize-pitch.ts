@@ -25,6 +25,8 @@ export function sanitizePitch(
   let text = stripUrls(value) || "";
   text = stripLeadingName(text, name) || "";
   for (const re of SCRAPE_PATTERNS) text = text.replace(re, " ");
+  // Collapse scrape joins like "Intempus ... equipping" / "Name … rest"
+  text = text.replace(/\s*(?:\.{3}|…)\s*/g, " ");
   // Drop orphan fragments that start with a leading period after cuts
   text = text
     .replace(/(^|[·|])\s*\.\s+/g, "$1 ")
