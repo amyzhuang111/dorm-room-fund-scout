@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { undergradEnrollment } from "./undergrad-enrollment";
 import { foundersPerThousand, formatCapitalUsd, matchPitchbookUniversity } from "./pitchbook-model";
 
 assert.equal(matchPitchbookUniversity("University of California, Berkeley"), "univ_berkeley");
@@ -56,6 +57,19 @@ assert.equal(matchPitchbookUniversity("Ben Gurion University"), "univ_bgu");
 assert.equal(matchPitchbookUniversity("Birla Institute of Technology and Science (BITS Pilani)"), "univ_bits");
 assert.equal(matchPitchbookUniversity("Indian Institute of Technology, Bombay"), "univ_iit_bombay");
 assert.equal(matchPitchbookUniversity("Zhejiang University (Zheda)"), "univ_zhejiang");
+assert.equal(matchPitchbookUniversity("HEC Paris"), "univ_hec");
+assert.equal(matchPitchbookUniversity("IESE-Business School"), "univ_iese");
+assert.equal(matchPitchbookUniversity("IE Business School"), "univ_ie");
+assert.equal(matchPitchbookUniversity("University of Edinburgh, Scotland"), "univ_edinburgh");
+assert.equal(matchPitchbookUniversity("Katholieke Universiteit Leuven (KU Leuven, University of Leuven)"), "univ_kuleuven");
+assert.equal(matchPitchbookUniversity("Ecole polytechnique"), "univ_polytechnique");
+assert.equal(matchPitchbookUniversity("Getulio Vargas Foundation"), "univ_fgv");
+assert.equal(matchPitchbookUniversity("Indian Institute of Management, Calcutta"), "univ_iimc");
+assert.equal(matchPitchbookUniversity("ESCP Europe"), "univ_escp");
+assert.equal(undergradEnrollment("univ_tau")?.undergrads, 15285);
+assert.equal(undergradEnrollment("univ_oxford")?.undergrads, 12460);
+assert.equal(undergradEnrollment("univ_hebrew"), null);
+assert.equal(undergradEnrollment("univ_mumbai"), null);
 assert.notEqual(matchPitchbookUniversity("Cornell University"), "univ_cornell_tech");
 
 assert.equal(formatCapitalUsd(139394.26021627351 * 1_000_000), "$139.4B");

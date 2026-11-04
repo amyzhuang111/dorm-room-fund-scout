@@ -119,7 +119,42 @@ export const UNDERGRAD_ENROLLMENT: readonly UndergradEnrollment[] = [
     sourceName: "Queen's University Enrolment Report 2024-25, undergraduate subtotal as of 1 November 2024",
     sourceUrl: "https://www.queensu.ca/registrar/sites/uregwww/files/uploaded_files/pdfs/Reports/Enrolment%20Reports/Reduced%20Size/Enrolment-Report-2024-25.pdf",
   },
+  cited("univ_tau", 15285, "2019", "undergraduates", "Tel Aviv University English Wikipedia infobox, undergraduates field (2019), retrieved 2026-11-04", "https://en.wikipedia.org/wiki/Tel_Aviv_University"),
+  cited("univ_technion", 9251, "2014", "undergraduates", "Council for Higher Education in Israel annual report Table 8 (2014), cited by the English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/Technion_%E2%80%93_Israel_Institute_of_Technology"),
+  cited("univ_iit_bombay", 6276, "2023–2024", "undergraduates", "IIT Bombay Pocket Statistics 2023-24", "https://www.iitb.ac.in/sites/www.iitb.ac.in/files/2025-01/Pocket%20Statistics%202023_24.pdf"),
+  cited("univ_mcgill", 27737, "2024", "undergraduates", "McGill University Enrolments Report 2024", "https://www.mcgill.ca/es/registration-statistics"),
+  cited("univ_tsinghua", 16272, "English Wikipedia infobox, retrieved 2026-11-04", "undergraduates", "Tsinghua University facts page, cited by the English Wikipedia infobox undergraduates field", "https://en.wikipedia.org/wiki/Tsinghua_University"),
+  cited("univ_iit_delhi", 4971, "NIRF 2024", "undergraduates", "NIRF 2024 undergraduates, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/IIT_Delhi"),
+  cited("univ_western", 30647, "2023–2024", "undergraduates", "Western University Facts & Figures, 2023–2024", "https://www.uwo.ca/about/whoweare/facts.html"),
+  cited("univ_iit_madras", 4909, "NIRF 2024", "undergraduates", "NIRF 2024 undergraduates, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/IIT_Madras"),
+  cited("univ_iit_kharagpur", 8452, "2025", "undergraduates", "IIT Kharagpur NIRF 2026 overall submission", "https://www.iitkgp.ac.in/assets/pdf/nirf26_overall.pdf"),
+  cited("univ_iit_kanpur", 4410, "NIRF 2024", "undergraduates", "NIRF 2024 undergraduates, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/IIT_Kanpur"),
+  cited("univ_oxford", 12460, "2025", "undergraduates", "University of Oxford student numbers (2025), English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/University_of_Oxford"),
+  cited("univ_cambridge", 13345, "2024/25", "undergraduates", "HESA student statistics 2024/25 undergraduate population, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/University_of_Cambridge"),
+  cited("univ_peking", 16746, "English Wikipedia infobox, retrieved 2026-11-04", "undergraduates", "Peking University statistical report, cited by the English Wikipedia infobox undergraduates field", "https://en.wikipedia.org/wiki/Peking_University"),
+  cited("univ_delhi", 114494, "NIRF 2024", "undergraduates", "NIRF 2024 undergraduates, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/Delhi_University"),
+  cited("univ_sydney", 40388, "2024", "undergraduates", "University of Sydney Annual Report 2024, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/University_of_Sydney"),
+  cited("univ_monash", 56996, "2023", "undergraduates", "Monash University at a glance 2023, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/Monash_University"),
+  cited("univ_snu", 15870, "2022", "undergraduates", "Seoul National University 2022 enrollment, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/Seoul_National_University"),
+  cited("univ_tcd", 14085, "2023/24", "undergraduates", "Higher Education Authority Key Facts and Figures, cited by the English Wikipedia infobox, retrieved 2026-11-04", "https://hea.ie/statistics/data-for-download-and-visualisations/key-facts-figures/"),
+  cited("univ_lse", 5785, "2024/25", "undergraduates", "HESA student statistics 2024/25 undergraduate population, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/London_School_of_Economics"),
+  cited("univ_suny", 339800, "Fall 2025", "undergraduates", "SUNY Fast Facts, fall 2025 undergraduates, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/State_University_of_New_York"),
+  cited("univ_imperial", 12080, "2024/25", "undergraduates", "HESA student statistics 2024/25 undergraduate population, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/Imperial_College_London"),
+  cited("univ_csu", 408248, "2023–24", "undergraduates", "CSU Facts 2025, p. 13, English Wikipedia infobox, retrieved 2026-11-04", "https://en.wikipedia.org/wiki/California_State_University"),
+  cited("univ_bits", 11917, "NIRF 2025", "undergraduates", "NIRF 2025 overall submission for BITS Pilani", "https://www.nirfindia.org/nirfpdfcdn/2025/pdf/Overall/IR-O-U-0391.pdf"),
+  cited("univ_zhejiang", 28960, "2024", "undergraduates", "Zhejiang University Statistical Bulletin 2024", "https://www.zju.edu.cn/tjgb/list.htm"),
 ];
+
+function cited(
+  universityId: string,
+  undergrads: number,
+  year: string,
+  kind: string,
+  sourceName: string,
+  sourceUrl: string,
+): UndergradEnrollment {
+  return { universityId, undergrads, year, kind, sourceName, sourceUrl };
+}
 
 const BY_ID = new Map(UNDERGRAD_ENROLLMENT.map((row) => [row.universityId, row]));
 
