@@ -222,13 +222,13 @@ export function loadDirectory(): DirectoryData {
 }
 
 /** SQLite build used by precompute-map-cache. */
-export function buildDirectoryFromDb(): DirectoryData {
+export function buildDirectoryFromDb(options: { includeAll?: boolean } = {}): DirectoryData {
   const db = getDb();
   const companies = db
     .prepare(
       `SELECT id, name, description
          FROM projects
-        WHERE kind = 'company' AND is_investable_candidate = 1`,
+        WHERE ${options.includeAll ? '1 = 1' : "kind = 'company' AND is_investable_candidate = 1"}`,
     )
     .all() as { id: string; name: string; description: string | null }[];
 
@@ -602,4 +602,5 @@ export function leaderboardPage(cards: DirectoryCard[], pages = 1): DirectoryCar
 
 export const DIRECTORY_PAGE_SIZE = DIRECTORY_LIMIT;
 export const LEADERBOARD_PAGE_SIZE = LEADERBOARD_LIMIT;
+
 

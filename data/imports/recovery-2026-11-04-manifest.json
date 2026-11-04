@@ -1,0 +1,682 @@
+{
+  "version": 1,
+  "recoveredFromCommit": "fa09249f2b0b6665f8fae8a684aade58e89564ab",
+  "comparedWithCommit": "4b8d256ee7759c528faa0e52627fdef8b6ba3b04",
+  "checkedAt": "2026-11-04",
+  "method": "Missing-row recovery from exported backend; not a fresh factual verification. Existing IDs keep current values. Identity matches require corroborating project/profile evidence.",
+  "identityMappings": [
+    {
+      "oldId": "proj_lKwbdAF_v9uA",
+      "survivorId": "proj_jnYDW2rf5PI8",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_HyhO6bitiFD_",
+      "survivorId": "proj_cNFEZt9BOv8t",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_BYXuGC8MDeor",
+      "survivorId": "proj_fZ7K6C8vGYfr",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_MeRzfvW1WcLO",
+      "survivorId": "proj_RjHevoQfN9_y",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_kj9T-tT0LCqt",
+      "survivorId": "proj_-CeS_du6sOQL",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_aP6PDFyraDPY",
+      "survivorId": "proj_PHqStO7Zt4hs",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_Ikpue3PTE1tr",
+      "survivorId": "proj_E8JRH8xoW2Ra",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_5_Ekfgvpquwp",
+      "survivorId": "proj_oZNlc0DaukPX",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_IbkNhLY0becp",
+      "survivorId": "proj_UKeXzMFn8bHQ",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_o3-KgYw9mead",
+      "survivorId": "proj_TMe3Su3WPnyh",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_8g6ohLdpPwNN",
+      "survivorId": "proj_mbXQ1ISpseuh",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_e_os6-BaIWFG",
+      "survivorId": "proj_bx7xgVzbkOn7",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_jyjTO4OIskNz",
+      "survivorId": "proj_hhjbRroq4sua",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_RloK4I-K5LcS",
+      "survivorId": "proj_SCkZPLuUpSaq",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_8Zm8v2HmCpyo",
+      "survivorId": "proj_i0_nOC_P5psG",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_t0MP1I6Ldx9Y",
+      "survivorId": "proj_e4g26O0kr38O",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_3XMlvZFP8seY",
+      "survivorId": "proj_M_LFmeerFhAH",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_QIZyYX-tkmIs",
+      "survivorId": "proj_2p4Mi7iyYpKr",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_rYj7mP0WxRr8",
+      "survivorId": "proj_52rNjLlol80Q",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_2BeLDOwo9_-s",
+      "survivorId": "proj_DUNHnXrDFPHS",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_7-nBeoIjEyHV",
+      "survivorId": "proj_eQ1xfy9FIYS_",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_2DxKKNs-Bz7u",
+      "survivorId": "proj_lh4G2c-t67IT",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_XIHV3IeQ3M5T",
+      "survivorId": "proj_Ijx1Lc2LcS8N",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_H5ryiMiTRIhM",
+      "survivorId": "proj_Tnwrcbv5SFpm",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_zbmqfnRA33Ix",
+      "survivorId": "proj_ly5_vue5HSv-",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_cT6Wb18f-lB4",
+      "survivorId": "proj_4Sf-fXEOyK9t",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_eFPWz-293Ee-",
+      "survivorId": "proj_imHFfZrZ_96n",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_KcLkc9yZMX6Q",
+      "survivorId": "proj_EQJppULDIjvL",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_M74cowArqce0",
+      "survivorId": "proj_ejZSl817Dxq2",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_dSwTlFkMJuKO",
+      "survivorId": "proj_WeQUjRAVS49m",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj__5Ko2ktukFp5",
+      "survivorId": "proj_Da0kQsLEjtbT",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_tisWfrOHlQZa",
+      "survivorId": "proj_YiZCrIkfrReX",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "proj_2rTswiTa_TjK",
+      "survivorId": "proj_bzgNDcgKi1GY",
+      "reason": "Same name and company-specific URL"
+    },
+    {
+      "oldId": "person_7mnKl5jnFg0l",
+      "survivorId": "person_bACfDz0wqnn2",
+      "reason": "Same name and identical linked project; no conflicting campus"
+    },
+    {
+      "oldId": "person_sa-tA02pi2Zr",
+      "survivorId": "person_2fZO2nTq5gcj",
+      "reason": "Same name and identical linked project; no conflicting campus"
+    },
+    {
+      "oldId": "person_F1Fb-ztq97SH",
+      "survivorId": "person_1QloHv7_vWld",
+      "reason": "Same name and identical linked project; no conflicting campus"
+    },
+    {
+      "oldId": "person_1dx22nmI1V3p",
+      "survivorId": "person_xsqc7dNOwJUg",
+      "reason": "Same name and identical linked project; no conflicting campus"
+    },
+    {
+      "oldId": "person_OCGT0uNUBBd3",
+      "survivorId": "person_c7Vmx6gUeQJM",
+      "reason": "Same name and identical linked project; no conflicting campus"
+    },
+    {
+      "oldId": "person_X5vcbDx3advk",
+      "survivorId": "person_wip_mu8xqVTH",
+      "reason": "Same name and identical linked project; no conflicting campus"
+    }
+  ],
+  "ambiguousNames": [
+    {
+      "entityType": "projects",
+      "id": "proj_CDzMGa1mR5_A",
+      "name": "Chop Chop Eats",
+      "candidates": [
+        "proj_pub_c6d9369f05a882e81d92"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_3V3u0Oo0AO1u",
+      "name": "Arrow Analytics",
+      "candidates": [
+        "proj_pub_0be5f63429f73139b718"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_8DQzpu5NXCd7",
+      "name": "BRC\u0112",
+      "candidates": [
+        "proj_RnBQ-H9mkNd3"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_ZKPppKlW2bGv",
+      "name": "ChargeBay",
+      "candidates": [
+        "proj_qJRv8zLZ5_zl"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_zvfM5WBeE5yX",
+      "name": "Cocoa Potash",
+      "candidates": [
+        "proj_wneRSLONMpmA"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_QlcvqTSsEOUx",
+      "name": "Foregger Energy Solutions",
+      "candidates": [
+        "proj_gnJ8y7SB35CG"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_KpM-qk-_iOKy",
+      "name": "Legion Platforms",
+      "candidates": [
+        "proj_pub_374ce32a28e2059c3e87"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_ID0UmPWL9bg-",
+      "name": "Sentivity.ai",
+      "candidates": [
+        "proj_pub_1c28f57ef04b41522801"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_tfDANrrwyUy5",
+      "name": "VivoFlux",
+      "candidates": [
+        "proj_lgbNxBUm7plL"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_WtgSfw3psSRs",
+      "name": "BeatAI",
+      "candidates": [
+        "proj_ZWyaOz8hg0KY"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_tTxIbbqE_kbH",
+      "name": "RallyAI",
+      "candidates": [
+        "proj_n-Kkz_BpuTb9"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_7wqVAhkgD3zK",
+      "name": "NeuralPhysics",
+      "candidates": [
+        "proj_Rv3PLS1l576Q"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_21dSTFJiuv1k",
+      "name": "Spark",
+      "candidates": [
+        "proj_asjSWazYhtCg",
+        "proj_jcPI5tsJcJPa",
+        "proj_Fnb02xysoX7s"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_nb9okwerjv6L",
+      "name": "Mirage",
+      "candidates": [
+        "proj_cNFEZt9BOv8t"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_g67Xkde8-cTG",
+      "name": "Swarm",
+      "candidates": [
+        "proj_LsgmrXLN7IgW"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_GaxwQHIL5hDU",
+      "name": "Orca",
+      "candidates": [
+        "proj_ABF3NvAXdw2W"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_4MT497XzUty6",
+      "name": "Alto",
+      "candidates": [
+        "proj_OUiQ-XXKkEyl"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_WqHHyl9DvXy-",
+      "name": "Origin",
+      "candidates": [
+        "proj_zunNM1zsAc8x"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_lMy97NdOpNuN",
+      "name": "Jexim",
+      "candidates": [
+        "proj_RbAWXOQtmJMZ"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_HEUSp74BkJG-",
+      "name": "Instinct",
+      "candidates": [
+        "proj_rCFiM1dSMjV7"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_O3zsxJPeoIRV",
+      "name": "Oasis",
+      "candidates": [
+        "proj_Ee4S9xGnVUQK"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_bUcRKrjLxoU4",
+      "name": "Forward",
+      "candidates": [
+        "proj_OplmL9VHG9WE"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_oh1TVQBWKiJJ",
+      "name": "Synth",
+      "candidates": [
+        "proj_MFGOQE_oMPQ_"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_CxhdwRdx_LNz",
+      "name": "Rounded",
+      "candidates": [
+        "proj_wXdoZYEIUuPt"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_Mqlcz9Tml54h",
+      "name": "Elevate",
+      "candidates": [
+        "proj_Ai4KPmzhpTm0",
+        "proj_lPt10kjN1V0a"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "projects",
+      "id": "proj_qf7dRpmJMhdO",
+      "name": "Relay",
+      "candidates": [
+        "proj_sAenWzqgAUH6",
+        "proj_JrQVLrbGv2Z9",
+        "proj_wLYOPSId6iBH"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_o0FDVBFa23Pn",
+      "name": "Kevin Wang",
+      "candidates": [
+        "person_-dKZfKDQNEKY",
+        "person_hfSqF7qii0lS",
+        "person_Iv7nHTdKAG-U"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_-7GRkqW1wnsa",
+      "name": "Tanvi Gadamsetti",
+      "candidates": [
+        "person_ZVua02IAHmhs"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_vff6eyPEyd1D",
+      "name": "Madhav Aggarwal",
+      "candidates": [
+        "person_ueDaCd1iEu_5"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_wq_IEX0y9TJk",
+      "name": "Lassiter Foregger",
+      "candidates": [
+        "person_83FAtat7hndS"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_tgcE-kVnVs7i",
+      "name": "Kevin Lee",
+      "candidates": [
+        "person_2Qn1dMo6F6yf"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_X6yyS8_n44Uy",
+      "name": "Zannah Baker",
+      "candidates": [
+        "person_gu6W_IyebEBt"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_7ArOfOw4v2kZ",
+      "name": "Daniel Lee",
+      "candidates": [
+        "person_3paXl0qHLbR0"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_rPDlmMw8g76O",
+      "name": "Andrew Zhou",
+      "candidates": [
+        "person_Pc660Ubqyaua"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_owl87N3ANC2G",
+      "name": "Vikram Bhamre",
+      "candidates": [
+        "person_euoi-msYchcH"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_h5n-0ILHj0Ff",
+      "name": "Jason Yi",
+      "candidates": [
+        "person_ZsZA6SmYyf3O"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_xV6OeWvWQfm_",
+      "name": "Austin Wang",
+      "candidates": [
+        "person_OVlRNRGmyRRn"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_uOoWcAOxUidm",
+      "name": "David Wu",
+      "candidates": [
+        "person_hBZ9iVzigo8C"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_jMYxPHNbCYDZ",
+      "name": "Sarah Ling",
+      "candidates": [
+        "person_YgbLE5n3PwSy"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_wrQ6Js05_jxp",
+      "name": "Aritra Saha",
+      "candidates": [
+        "person_aB1it_BbkLqG"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person__4S4BiSB_mGa",
+      "name": "Sujal Dhakal",
+      "candidates": [
+        "person_sD_jmi0QDbLi"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_6WBl2Xs5Y6qs",
+      "name": "Ethan Wang",
+      "candidates": [
+        "person_71k_Rdw36j7l"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_drgu2TxaZ5Hg",
+      "name": "David Zhang",
+      "candidates": [
+        "person_wyTeuoG_aNOm",
+        "person_343qxmXljgIo"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_zl68E-JhVqy5",
+      "name": "Gavin Firestone",
+      "candidates": [
+        "person_8ztReuMLrt9v"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_G0ei1eMvG823",
+      "name": "Rishi Shah",
+      "candidates": [
+        "person_btbajA9WJCqV"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_uOeHFjjOyFA_",
+      "name": "Marco Qin",
+      "candidates": [
+        "person_0HzBc0CQdImM"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_0sHnrftSde5k",
+      "name": "Ivy Tran",
+      "candidates": [
+        "person_Ra_UsxbtwcMR"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_YEqOaW-tinid",
+      "name": "Rohan Desai",
+      "candidates": [
+        "person_1yuUezgmzTQ0"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_-68TwuEKBIO1",
+      "name": "Michael Zhang",
+      "candidates": [
+        "person_Ddv5rskglNM9"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    },
+    {
+      "entityType": "people",
+      "id": "person_CONBV6P43eQW",
+      "name": "Ben Yang",
+      "candidates": [
+        "person_TTEK9htGHqak"
+      ],
+      "disposition": "Retain distinct record; name alone is insufficient"
+    }
+  ],
+  "counts": {
+    "sources": 22,
+    "snapshots": 211,
+    "people": 994,
+    "projects": 488,
+    "claims": 1703,
+    "affiliations": 949,
+    "person_project_roles": 1028,
+    "company_facts": 533,
+    "signals": 196,
+    "relationships": 1478,
+    "notes": 0,
+    "project_sector_tags": 90,
+    "funding_events": 0,
+    "program_signals": 0,
+    "precollege_signals": 0,
+    "portfolio_memberships": 0
+  }
+}

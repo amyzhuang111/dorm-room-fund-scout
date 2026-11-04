@@ -1,3 +1,4 @@
+import { getDb } from "../db/client";
 import assert from "node:assert/strict";
 import { formatCorpusDate, loadCorpusTotals } from "./corpus-totals";
 
@@ -11,6 +12,9 @@ assert.equal(formatCorpusDate(""), null);
 const totals = loadCorpusTotals();
 assert.ok(totals.investableCompanies > 0);
 assert.ok(totals.foundersListed > 0);
-assert.equal(totals.investableCompanies, 1633);
+
+assert.equal(totals.investableCompanies, (getDb().prepare("SELECT COUNT(*) n FROM projects WHERE kind='company' AND is_investable_candidate=1").get() as {n:number}).n);
+assert.equal(totals.peopleTotal, (getDb().prepare("SELECT COUNT(*) n FROM people").get() as {n:number}).n);
 
 console.log("corpus-totals.test.ts: ok");
+

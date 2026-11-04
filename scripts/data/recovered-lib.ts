@@ -36,6 +36,10 @@ export const RECOVERED_ORDER = [
 export function applyRecoveredRows(db: Database.Database, data: RecoveredData, dry = false): RecoveredResult {
   const perTable: RecoveredResult["perTable"] = {};
   let inserted = 0;
+  const hasRedirects = !!db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='entity_redirects'").get();
+  const redirects = new Map<string,string>(hasRedirects ? (db.prepare('SELECT old_id,survivor_id FROM entity_redirects').all() as {old_id:string;survivor_id:string}[]).map(r=>[r.old_id,r.survivor_id]) : []);
+  const resolve = (value: unknown): unknown => { const seen=new Set<string>();while(typeof value==='string'&&redirects.has(value)&&!seen.has(value)){seen.add(value);value=redirects.get(value)!;}return value; };
+  const remap = (value: unknown): unknown => Array.isArray(value) ? value.map(remap) : value && typeof value==='object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,remap(v)])) : resolve(value);
   db.transaction(() => {
     for (const table of RECOVERED_ORDER) {
       const t = data.tables[table];
@@ -49,7 +53,18 @@ export function applyRecoveredRows(db: Database.Database, data: RecoveredData, d
       const exists = db.prepare(`SELECT 1 FROM "${table}" WHERE id = ?`);
       const idCol = t.columns.indexOf("id");
       let n = 0;
-      for (const row of t.rows) {
+      for (const original of t.rows) {
+        // A recovery must never resurrect an identity already merged by a reviewed decision.
+        if ((table==='people'||table==='projects') && redirects.has(String(original[idCol]))) continue;
+        const row = original.map((value,i)=>{
+          const key=t.columns[i];
+          if (['person_id','project_id','entity_id','source_entity_id','target_entity_id'].includes(key)) return resolve(value);
+          if (key.endsWith('_json') && typeof value==='string') {try{return JSON.stringify(remap(JSON.parse(value)));}catch{/* Keep historical invalid JSON as-is. */}}
+          return value;
+        });
+        const semanticKeys: Record<string,string[]> = {affiliations:['person_id','university_id','role'],person_project_roles:['person_id','project_id','role'],company_facts:['project_id','fact_key','value_text','source_url']};
+        const keys=semanticKeys[table];
+        if(keys && keys.every(k=>target.has(k)&&t.columns.includes(k)) && db.prepare(`SELECT 1 FROM "${table}" WHERE ${keys.map(k=>`"${k}" IS ?`).join(' AND ')} LIMIT 1`).get(...keys.map(k=>row[t.columns.indexOf(k)] as never))) continue;
         if (dry) {
           if (!exists.get(row[idCol])) n += 1;
         } else {
@@ -62,3 +77,4 @@ export function applyRecoveredRows(db: Database.Database, data: RecoveredData, d
   })();
   return { perTable, inserted };
 }
+
