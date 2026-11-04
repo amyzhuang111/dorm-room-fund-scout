@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "note": "Config-driven source collectors. status: approved (runs on schedule) | candidate (proposed by discovery, needs human review) | rejected | paused. Every collector must seed affiliations as 'unverified'.",
+  "entries": [
+    {
+      "id": "pennapps_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_devpost",
+      "sourceName": "PennApps XXVI (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxvi.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXVI",
+      "roleLabel": "PennApps XXVI team member",
+      "options": {
+        "maxProjectFetches": 90,
+        "maxFetches": 100,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxv_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxv_devpost",
+      "sourceName": "PennApps XXV (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxv.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXV",
+      "roleLabel": "PennApps XXV team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxiv_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxiv_devpost",
+      "sourceName": "PennApps XXIV (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxiv.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXIV",
+      "roleLabel": "PennApps XXIV team member",
+      "options": {
+        "maxProjectFetches": 72,
+        "maxFetches": 80,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxiii_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxiii_devpost",
+      "sourceName": "PennApps XXIII (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxiii.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXIII",
+      "roleLabel": "PennApps XXIII team member",
+      "options": {
+        "maxProjectFetches": 72,
+        "maxFetches": 80,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "pennapps_xxii_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_pennapps_xxii_devpost",
+      "sourceName": "PennApps XXII (Devpost gallery)",
+      "galleryUrl": "https://pennapps-xxii.devpost.com/project-gallery",
+      "universityId": "univ_penn",
+      "eventLabel": "PennApps XXII",
+      "roleLabel": "PennApps XXII team member",
+      "options": {
+        "maxProjectFetches": 72,
+        "maxFetches": 80,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "treehacks_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_treehacks_devpost",
+      "sourceName": "TreeHacks 2026 (Devpost gallery)",
+      "galleryUrl": "https://treehacks-2026.devpost.com/project-gallery",
+      "universityId": "univ_stanford",
+      "eventLabel": "TreeHacks 2026",
+      "roleLabel": "TreeHacks 2026 team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "calhacks_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_calhacks_devpost",
+      "sourceName": "Cal Hacks 12.0 (Devpost gallery)",
+      "galleryUrl": "https://cal-hacks-12-0.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "Cal Hacks 12.0",
+      "roleLabel": "Cal Hacks 12.0 team member",
+      "options": {
+        "winnersOnly": true,
+        "maxProjectFetches": 40,
+        "maxFetches": 90,
+        "captureLinkedIn": false
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackthenorth_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackthenorth_devpost",
+      "sourceName": "Hack the North 2026 (Devpost gallery)",
+      "galleryUrl": "https://hackthenorth2026.devpost.com/project-gallery",
+      "universityId": "univ_waterloo",
+      "eventLabel": "Hack the North 2026",
+      "roleLabel": "Hack the North 2026 team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "berkeley_blockchain_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_berkeley_blockchain_devpost",
+      "sourceName": "Berkeley Blockchain Hackathon (Devpost gallery)",
+      "galleryUrl": "https://hackberkeley.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "Berkeley Blockchain Hackathon",
+      "roleLabel": "Berkeley Blockchain Hackathon team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "ucb_ai_hackathon_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_ucb_ai_hackathon_devpost",
+      "sourceName": "UC Berkeley AI Hackathon 2026 (Devpost gallery)",
+      "galleryUrl": "https://ai-hackathon-2026.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "UC Berkeley AI Hackathon 2026",
+      "roleLabel": "UC Berkeley AI Hackathon 2026 team member",
+      "options": {},
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "treehacks26_winners",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_treehacks26_winners",
+      "sourceName": "TreeHacks 2026 Devpost prize teams",
+      "galleryUrl": "https://treehacks-2026.devpost.com/project-gallery",
+      "universityId": "univ_stanford",
+      "eventLabel": "TreeHacks 2026 prize teams",
+      "roleLabel": "TreeHacks 2026 prize-winning project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "calhacks13_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_calhacks13_devpost",
+      "sourceName": "Cal Hacks 13.0 (2026) prize teams",
+      "galleryUrl": "https://cal-hacks-13-0.devpost.com/project-gallery",
+      "universityId": "univ_berkeley",
+      "eventLabel": "Cal Hacks 13.0 (2026)",
+      "roleLabel": "Cal Hacks 13.0 2026 project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackprinceton_spring26",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackprinceton_spring26",
+      "sourceName": "HackPrinceton Spring 2026 prize teams",
+      "galleryUrl": "https://hackprinceton-spring-26.devpost.com/project-gallery",
+      "universityId": "univ_princeton",
+      "eventLabel": "HackPrinceton Spring 2026",
+      "roleLabel": "HackPrinceton Spring 2026 project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackharvard26_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackharvard26_devpost",
+      "sourceName": "HackHarvard 2026 prize teams",
+      "galleryUrl": "https://hackharvard2026.devpost.com/project-gallery",
+      "universityId": "univ_harvard",
+      "eventLabel": "HackHarvard 2026",
+      "roleLabel": "HackHarvard 2026 project team member",
+      "options": {
+        "winnersOnly": false,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    },
+    {
+      "id": "hackillinois26_devpost",
+      "collector": "devpost",
+      "status": "approved",
+      "sourceId": "src_hackillinois26_devpost",
+      "sourceName": "HackIllinois 2026 prize teams",
+      "galleryUrl": "https://hackillinois-2026.devpost.com/project-gallery",
+      "universityId": "univ_uiuc",
+      "eventLabel": "HackIllinois 2026",
+      "roleLabel": "HackIllinois 2026 project team member",
+      "options": {
+        "winnersOnly": true,
+        "captureLinkedIn": false,
+        "maxProjectFetches": 24,
+        "maxFetches": 90
+      },
+      "notes": "Migrated from scripts/ingest/*devpost*.ts"
+    }
+  ]
+}
