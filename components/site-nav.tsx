@@ -14,7 +14,7 @@ const NAV = [
   { id: "networks", href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
   { id: "signals", href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
   { id: "data", href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
-  { id: "work", href: "/work/shortlist", label: "Work", match: (p: string) => p.startsWith("/work") },
+  { id: "work", href: "/work/shortlist", label: "Saved", match: (p: string) => p.startsWith("/work") || p === "/compare" },
 ] as const;
 
 /** Always-visible mobile desk row (Taste r33 blind: Menu-only hurt all 3 raters). */
@@ -88,7 +88,7 @@ export function SiteNav() {
           </button>
         </div>
         <div className="ml-auto flex items-center gap-2 md:hidden">
-          <button type="button" className={`inline-flex min-w-11 items-center justify-center px-2 text-[14px] text-fg ${onCompaniesDesk ? "min-h-9" : "min-h-11"}`} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+          <button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[14px] text-fg" aria-controls="mobile-site-menu" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
             Menu
           </button>
         </div>
@@ -110,7 +110,7 @@ export function SiteNav() {
         ))}
       </nav>
       {open ? (
-        <div className="space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden">
+        <div id="mobile-site-menu" className="max-h-[75dvh] overflow-y-auto space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden" onKeyDown={(event) => { if (event.key === "Escape") setOpen(false); }}>
           {NAV.map((item) => (
             <Link key={item.id} href={item.href} className="flex min-h-11 items-center text-[14px] text-fg" onClick={() => setOpen(false)}>
               {item.label}

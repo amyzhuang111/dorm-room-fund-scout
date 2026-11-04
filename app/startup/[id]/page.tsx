@@ -115,6 +115,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     sector: directoryRow?.sector ?? null,
     primaryProgram: directoryRow?.primaryProgram ?? null,
     founders: directoryRow?.founders ?? [],
+    founderIdentity: project.founderLinks.map((f) => ({ name: f.name, school: f.school, program: f.program, enrollment: [f.graduationYear ? `Class of ${f.graduationYear}` : "Class year not on record", f.enrollmentLabel].filter(Boolean).join(" · "), confirmed: f.link?.kind === "linkedin" })),
     founderConfirmed: (project.founderLinks ?? []).some((f) => f.link?.kind === "linkedin"),
     signals: directoryRow?.signals ?? 0,
     operatingStatus: directoryRow?.operatingStatus ?? null,
@@ -128,7 +129,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (
-    <SampleCompanyShell companies={plainTextDeep(companies)} campuses={plainTextDeep(campuses)} dossier={plainTextDeep(dossier)}>
+    <SampleCompanyShell companies={plainTextDeep(companies)} campuses={plainTextDeep(campuses)} dossier={plainTextDeep(dossier)} peerTotals={{ campus: dossier.schoolId ? campusPeerCompanies(all, dossier.schoolId).length : 0, sector: dossier.sectorId ? all.filter((c) => c.sectorId === dossier.sectorId).length : 0 }}>
       <CompanyDetail project={plainTextDeep(project)} initialCard={plainTextDeep(card)} />
     </SampleCompanyShell>
   );

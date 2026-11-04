@@ -216,10 +216,10 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                   <p className="mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]">
                     {/* Mobile: short campus · role; desk keeps full provenance line */}
                     <span className="sm:hidden">
-                      {[f.role?.replaceAll("_", " "), (f.school || "").replace(/^University of (?:California, )?/, "").replace(/ University$/, "") || null].filter(Boolean).join(" · ") || "Role not on record"}
+                      {[f.role?.replaceAll("_", " "), (f.school || "").replace(/^University of (?:California, )?/, "").replace(/ University$/, "") || null, f.graduationYear ? `Class of ${f.graduationYear}` : "Class year not on record", f.program, f.enrollmentLabel].filter(Boolean).join(" · ") || "Role not on record"}
                     </span>
                     <span className="hidden sm:inline">
-                      {[f.role?.replaceAll("_", " "), f.school, f.program, f.enrollmentLabel].filter(Boolean).join(" · ") || "Role not on record"}
+                      {[f.role?.replaceAll("_", " "), f.school, f.graduationYear ? `Class of ${f.graduationYear}` : "Class year not on record", f.program, f.enrollmentLabel].filter(Boolean).join(" · ") || "Role not on record"}
                     </span>
                   </p>
                   <div className="max-sm:[&_a]:inline-flex max-sm:[&_a]:min-h-9 max-sm:[&_a]:min-w-9 max-sm:[&_a]:items-center">

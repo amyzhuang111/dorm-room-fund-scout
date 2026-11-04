@@ -2,6 +2,7 @@
 
 import { plainText } from "@/lib/display/plain-text";
 import Link from "next/link";
+import { CompanyReviewActions } from "./company-review-actions";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import type { StartupCard } from "@/lib/domain/startup-card";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
@@ -127,12 +128,14 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   return (
     <div className="space-y-3 p-2.5 sm:space-y-5 sm:p-4">
       {/* Mobile: Why look above Funding so sim-375 matches 73a fold (Funding peeks) */}
-      <div className="sm:hidden">{whyLook}</div>
 
       {/* r45: Full record lead (founders / identity / CONFIRMED) stays at the top. */}
       <div data-full-record-top="">
         <CompanyFullRecord project={project} />
       </div>
+      <CompanyReviewActions id={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
+      <nav className="record-sections" aria-label="Company sections"><a href="#evidence">Evidence & sources</a><a href="#pipeline">Pipeline</a><Link href="/work/shortlist">Saved companies</Link></nav>
+      <div className="sm:hidden">{whyLook}</div>
 
       {/* Header */}
       <div>

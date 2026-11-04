@@ -546,7 +546,7 @@ export function searchDirectory(cards: DirectoryCard[], query: string | undefine
   const tokens = (query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   if (tokens.length === 0) return cards;
   return cards.filter((card) => {
-    const haystack = [card.name, card.description ?? "", ...card.founders].join("\n").toLowerCase();
+      const haystack = [card.name, card.description ?? "", card.school ?? "", card.sector ?? "", ...card.founders].join("\n").toLowerCase();
     return tokens.every((token) => haystack.includes(token));
   });
 }

@@ -208,6 +208,7 @@ export interface LinkedInCandidate {
 }
 
 export interface NamedFounder {
+  graduationYear?: number | null;
   name: string;
   personId: string;
   linkedinUrl: string | null;
@@ -574,13 +575,13 @@ function buildAllCandidates(): CandidateSummary[] {
     .prepare(
       `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
-              pe.enrollment_basis as enrollment_basis,
+              pe.enrollment_basis as enrollment_basis, pe.enrollment_grad_year as graduation_year,
               pe.left_school as left_school, pe.founder_status as founder_status, ppr.role as role
        FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
        WHERE ppr.role LIKE '%founder%'
        ORDER BY ppr.rowid`
     )
-    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; enrollment_basis: string | null; left_school: number | null; founder_status: string | null; role: string | null }[]) {
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; enrollment_basis: string | null; graduation_year: number | null; left_school: number | null; founder_status: string | null; role: string | null }[]) {
     const key = `${r.project_id}:${r.id}`;
     if (seenFounder.has(key)) continue;
     seenFounder.add(key);
@@ -601,6 +602,7 @@ function buildAllCandidates(): CandidateSummary[] {
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
       enrollmentBasis: r.enrollment_basis,
+      graduationYear: r.graduation_year,
       leftSchool: r.left_school === 1,
       school: schoolByPerson.get(r.id) ?? null,
       program: programByPerson.get(r.id) ?? null,

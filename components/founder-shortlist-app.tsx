@@ -31,7 +31,7 @@ export function FounderShortlistApp({
   likes: FeedbackTarget[];
 }) {
   return (
-    <ScoutNav basePath="/founder/shortlist" initial={initial}>
+    <ScoutNav basePath="/work/founders" initial={initial}>
       <ShortlistBody universities={universities} founders={founders} enrollment={enrollment} initialRecords={records} initialLikes={likes} />
     </ScoutNav>
   );
@@ -66,9 +66,9 @@ function ShortlistBody({
   const withoutEvidence = visible.filter((founder) => !founder.strongestEvidence);
   return (
     <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={catalog.universities} basePath="/founder/shortlist" current={current} mode="founder" />
+      <FilterSidebar universities={catalog.universities} basePath="/work/founders" current={current} mode="founder" />
       <div className="flex-1 p-4">
-        <EnrollmentChips basePath="/founder/shortlist" current={current} counts={counts} />
+        <EnrollmentChips basePath="/work/founders" current={current} counts={counts} />
         <h1 className="mt-3 text-lg font-semibold text-foreground">Founder shortlist</h1>
         <p className="mt-1 text-sm text-muted">
           Sorted by whether there&apos;s an attached claim, not a score · there&apos;s no per-founder scoring model yet. Read the evidence
@@ -80,7 +80,7 @@ function ShortlistBody({
           </h2>
           <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {withEvidence.map((founder) => (
-              <FounderCard key={founder.id} founder={founder} open={query.founder === founder.id} basePath="/founder/shortlist" current={query} />
+              <FounderCard key={founder.id} founder={founder} open={query.founder === founder.id} basePath="/work/founders" current={query} />
             ))}
             {withEvidence.length === 0 && <p className="text-sm text-muted">None yet.</p>}
           </div>
@@ -91,7 +91,7 @@ function ShortlistBody({
           </h2>
           <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {withoutEvidence.map((founder) => (
-              <FounderCard key={founder.id} founder={founder} open={query.founder === founder.id} basePath="/founder/shortlist" current={query} />
+              <FounderCard key={founder.id} founder={founder} open={query.founder === founder.id} basePath="/work/founders" current={query} />
             ))}
             {withoutEvidence.length === 0 && <p className="text-sm text-muted">None.</p>}
           </div>

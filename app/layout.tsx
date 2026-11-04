@@ -12,6 +12,7 @@ import { feedbackRedirects } from "@/lib/domain/entity-redirects";
 import { latestDataTimestamp } from "@/lib/domain/hero-stats";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import "./globals.css";
+import "./company-workspace.css";
 
 const geist = Geist({
   variable: "--font-geist",
