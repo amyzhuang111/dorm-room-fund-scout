@@ -242,7 +242,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
         <p className="font-mono text-[9px] tabular-nums text-fg-3" data-tier-legend="">
           S+ top · S strong · A-D
         </p>
-        <p className="flex flex-wrap items-center gap-1 font-mono text-[9px] text-fg-3" data-campus-ink-legend="">
+        <p className="hidden flex-wrap items-center gap-1 font-mono text-[9px] text-fg-3 sm:flex" data-campus-ink-legend="">
           {CAMPUS_INK_LEGEND.map((row) => (
             <span key={row.label} className="inline-flex items-center gap-0.5">
               <span className="inline-block h-2 w-2 rounded-full" style={{ background: row.color }} aria-hidden />
@@ -261,7 +261,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
         {verifiedFilled > 0 ? <>{" / "}<span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</> : null}
       </p>
       {/* Mobile: search + Filters sheet. Desk: full filter row. */}
-      <div className="flex items-center gap-2 sm:hidden" data-data-explorer-filters="" role="group" aria-label="Filters">
+      <div className="flex items-center gap-1.5 sm:hidden" data-data-explorer-filters="" role="group" aria-label="Filters">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
@@ -385,7 +385,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
         </div>
       </div>
       {/* Mobile: stacked cards. Desk: sticky first column + horizontal scroll. */}
-      <div className="mt-2 max-h-[calc(100dvh-132px)] overflow-auto border-t border-line-strong sm:mt-3 sm:max-h-[calc(100dvh-220px)] sm:overflow-x-auto" data-projects-scroll="">
+      <div className="mt-2 max-h-[calc(100dvh-120px)] overflow-auto border-t border-line-strong sm:mt-3 sm:max-h-[calc(100dvh-220px)] sm:overflow-x-auto" data-projects-scroll="">
         <ul className="divide-y divide-line sm:hidden" data-projects-cards="">
           {ordered.map((row, index) => {
             const text = row.detail || row.full;
@@ -402,7 +402,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     ? `${row.tier} ranked signal tier`
                     : undefined;
             return (
-              <li key={row.id} className="px-1 py-1.5" data-project-card="">
+              <li key={row.id} className="px-1 py-1" data-project-card="">
                 <div className="min-w-0">
                     <button type="button" className="flex min-h-9 w-full items-center gap-2 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
                       <LogoMark name={markName} logoUrl={row.logoUrl} size={28} campusInk={ink} />

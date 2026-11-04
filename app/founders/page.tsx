@@ -6,7 +6,7 @@ export default function FoundersPage() {
   const count = totals.foundersIndexed;
   return (
     <div className="px-3 py-2 sm:px-6 sm:py-8" data-founders-page="">
-      <h1 className="page-title text-[24px] leading-7 sm:text-[inherit] sm:leading-[inherit]">Founders</h1>
+      <h1 className="page-title text-[22px] leading-6 sm:text-[inherit] sm:leading-[inherit]">Founders</h1>
       <p
         className="mt-0.5 font-mono text-[11px] font-semibold tabular-nums tracking-wide text-[color:var(--cobalt,#2F4FD8)] sm:mt-1 sm:text-[12px]"
         data-hero-stat=""
@@ -22,7 +22,7 @@ export default function FoundersPage() {
           {" listed on the map"}
         </span>
       </p>
-      <p className="mt-0.5 max-w-2xl text-[12px] leading-5 text-fg-3 sm:mt-1 sm:text-[13px]" data-founders-searchable-note="">
+      <p className="mt-0.5 hidden max-w-2xl text-[12px] leading-5 text-fg-3 sm:mt-1 sm:block sm:text-[13px]" data-founders-searchable-note="">
         One row per company; count can sit below searchable.
       </p>
       <FoundersDesk initialCount={count} />
