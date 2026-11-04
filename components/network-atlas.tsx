@@ -37,7 +37,7 @@ export function NetworkAtlas() {
   const view = useRef<View>(initialView()),
     projected = useRef<ScreenPoint[]>([]),
     size = useRef({ w: 800, h: 640 });
-  const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null);
+  const drag = useRef<{ x: number; y: number; startX:number; startY:number; moved: boolean } | null>(null);
   const touches = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef(0);
   useEffect(() => {
@@ -204,11 +204,12 @@ export function NetworkAtlas() {
   useEffect(() => {
     const el = canvas.current,
       container = host.current;
-    if (!el || !container || !data) return;
+    if (!el || !container || !data || list) return;
     const ctx = el.getContext("2d");
     if (!ctx) return;
     let frame = 0,
       last = 0;
+    let drawnKey = "";
     const resize = new ResizeObserver(() => {
       const r = container.getBoundingClientRect();
       if (!r.width || !r.height) return;
@@ -217,6 +218,7 @@ export function NetworkAtlas() {
       el.width = r.width * dpr;
       el.height = r.height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawnKey = "";
     });
     resize.observe(container);
     const tick = (time: number) => {
@@ -224,6 +226,9 @@ export function NetworkAtlas() {
       last = time;
       const { w, h } = size.current;
       const v = view.current;
+      const key = [w,h,v.x,v.y,v.zoom,v.yaw,v.pitch].join(":");
+      if (!running && key === drawnKey) { frame=requestAnimationFrame(tick);return; }
+      drawnKey = key;
       if (running) {
         v.yaw += dt * 0.00012;
         v.pitch = 0.12 * Math.sin(v.yaw * 0.8);
@@ -610,7 +615,7 @@ export function NetworkAtlas() {
             onPointerDown={(e) => {
               e.currentTarget.setPointerCapture(e.pointerId);
               touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-              drag.current = { x: e.clientX, y: e.clientY, moved: false };
+              drag.current = { x: e.clientX, y: e.clientY, startX:e.clientX,startY:e.clientY,moved: false };
               pinch.current = 0;
               setRunning(false);
             }}
@@ -629,7 +634,7 @@ export function NetworkAtlas() {
               if (d) {
                 const dx = e.clientX - d.x,
                   dy = e.clientY - d.y;
-                if (Math.abs(dx) + Math.abs(dy) > 2) d.moved = true;
+                if (Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>4) d.moved = true;
                 view.current.x += dx;
                 view.current.y += dy;
                 d.x = e.clientX;
