@@ -393,7 +393,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     const sel = selectedRef.current;
     const hv = hoverRef.current;
     const focusHub = sel || (hv?.hub?.id ?? null);
-    const focusNode = hv?.index ?? focusedNode;
+    const focusNode = focusedNode >= 0 ? focusedNode : hv?.index ?? -1;
     const scrub = scrubRef.current;
     const ymax = yearMax;
     const years = p.year;
@@ -454,6 +454,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     ctx.lineCap = "round";
     const nE = p.e0.length;
     const memberFos = new Set<number>();
+    const focusedHubIndex = p.hubs.find((hub) => hub.id === focusHub)?.i ?? -1;
     if (focusHub) {
       const hub = p.hubs.find((hh) => hh.id === focusHub);
       if (hub) {
@@ -468,7 +469,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     for (let i = 0; i < nE; i++) {
       const a = p.e0[i], b = p.e1[i], k = p.ek[i];
       if ((p.kind[a] === 0 && !isFoOn(a)) || (p.kind[b] === 0 && !isFoOn(b))) continue;
-      const related = focusNode === a || focusNode === b || memberFos.has(a) || memberFos.has(b);
+      const direct = focusNode === a || focusNode === b || focusedHubIndex === a || focusedHubIndex === b;
+      const related = direct || memberFos.has(a) || memberFos.has(b);
       if (tier === 0 && !related) continue;
       if (tier === 1 && !related && p.campus[a] !== p.campus[b]) continue;
       const hubA = p.kind[a] === 2, hubB = p.kind[b] === 2;
@@ -501,8 +503,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       }
       if ((focusHub || focusNode >= 0) && !related) alpha *= 0.18;
       alpha *= fade * (0.55 + 0.45 * assembleEase);
-      ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha * crisp + alpha * 0.35 * bloom})`;
-      ctx.lineWidth = lineW;
+      ctx.strokeStyle = direct ? `rgba(37,58,53,${0.76 * fade})` : `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha * crisp + alpha * 0.35 * bloom})`;
+      ctx.lineWidth = direct ? 1.8 : lineW;
       ctx.beginPath();
       ctx.moveTo(pa.x, pa.y);
       ctx.quadraticCurveTo(cx, cy, pb.x, pb.y);
@@ -528,7 +530,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         if (!source || !target) continue;
         const a = toS(source.x, source.y);
         const b = toS(target.x, target.y);
-        ctx.strokeStyle = focusHub ? "#cbd5e1" : "#64748b";
+        ctx.strokeStyle = focusHub || focusNode >= 0 ? "#e0e5e1" : "#84958d";
         ctx.lineWidth = Math.min(3, 0.75 + Math.log2(count + 1) / 2);
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
