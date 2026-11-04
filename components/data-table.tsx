@@ -418,10 +418,10 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                         </span>
                       ) : null}
                     </button>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] leading-4 text-fg-2">
+                    <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0 text-[11px] leading-4 text-fg-2">
                       {!campusLocked && row.campus ? (
                         row.campusSlug ? (
-                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-8 items-center text-link">{plainText(row.campus)}</Link>
+                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-0 items-center text-link">{plainText(row.campus)}</Link>
                         ) : (
                           <span>{plainText(row.campus)}</span>
                         )
@@ -431,7 +431,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                       {row.tierBasis ? (
                         <button
                           type="button"
-                          className="min-h-8 text-[11px] text-link"
+                          className="min-h-0 text-[11px] text-link"
                           data-tier-reason-trigger=""
                           aria-expanded={reasonOpen}
                           onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
@@ -443,9 +443,12 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     {reasonOpen && row.tierBasis ? (
                       <p className="mt-1 text-[13px] leading-5 text-fg" data-tier-reason="">{plainText(row.tierBasis)}</p>
                     ) : null}
-                    <button type="button" className="mt-0.5 min-h-8 w-full text-left text-[13px] leading-5 text-fg-2" onClick={() => { setCursor(index); setOpenId(row.id); }} title={text ? plainText(text) ?? undefined : undefined}>
+                    <button type="button" className="mt-0.5 hidden min-h-8 w-full text-left text-[13px] leading-5 text-fg-2 sm:block" onClick={() => { setCursor(index); setOpenId(row.id); }} title={text ? plainText(text) ?? undefined : undefined}>
                       {clamped || "No signal yet"}
                     </button>
+                    <p className="mt-0.5 line-clamp-1 text-[12px] leading-4 text-fg-3 sm:hidden" title={text ? plainText(text) ?? undefined : undefined}>
+                      {clamped || row.event || "Open for signal"}
+                    </p>
                 </div>
               </li>
             );
