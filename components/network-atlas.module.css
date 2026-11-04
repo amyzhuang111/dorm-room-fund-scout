@@ -329,6 +329,9 @@
 .filterToggle {
   display: block;
 }
+.lineKey { display: inline-flex; align-items: center; gap: 8px; }
+.lineKey i { display: inline-block; width: 28px; border-top: 2px solid #526775; }
+.sharedKey i { border-top: 2px dashed #9a73bd; }
 .sidebar {
   display: none;
 }
