@@ -1,5 +1,10 @@
 import assert from "node:assert/strict";
 import { inferEnrollment } from "./enrollment-infer";
+import { decideEnrollment } from "./founder-status";
+
+const conference = { excerpt: "Advika Vuppala: ECE @ Carnegie Mellon University | SpoilSafe (AL26) | GHC '25", sourceUrl: "https://www.linkedin.com/in/advikav", sourceId: "src" };
+assert.equal(decideEnrollment([conference], {personName:"Advika Vuppala"}).gradYear, null, "A GHC conference date is not a graduation year");
+assert.equal(decideEnrollment([{...conference, excerpt: "Advika Vuppala, class of 2028; GHC '25"}], {personName:"Advika Vuppala"}).gradYear, 2028, "Preserve an explicit class year alongside conference dates");
 
 const warren = inferEnrollment({
   personName: "Warren Shepard '26",

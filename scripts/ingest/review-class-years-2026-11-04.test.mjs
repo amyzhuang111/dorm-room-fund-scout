@@ -28,7 +28,12 @@ try{
  assert.equal(db.prepare("SELECT enrollment_grad_year FROM people WHERE name='Utkarsh Saxena'").get().enrollment_grad_year,null,'Company founding is not graduation');
  assert.equal(db.prepare("SELECT r.status FROM person_class_year_reviews r JOIN people p ON p.id=r.person_id WHERE p.name='Joshua Baek'").get().status,'conflict');
  assert.ok(!manifest.observations.some(o=>o.name==='Aaron Wang'&&o.graduationYear===2025),'A different teammate\'s year must not leak through');
- assert.ok(!manifest.observations.some(o=>o.name==='Carlos Gosen'),'Do not automatically match flattened PDF columns');
+ const carlos=manifest.observations.find(o=>o.name==='Carlos Gosen');
+ assert.equal(carlos?.graduationYear,2025);
+ assert.match(carlos.retrievalMethod,/Manually inspected rendered PDF/,'PDF columns require visual name-to-degree confirmation');
+ assert.match(carlos.evidence,/page 3/);
+ assert.equal(db.prepare("SELECT enrollment_grad_year FROM people WHERE name='Advika Vuppala'").get().enrollment_grad_year,2028,'Use CMU expected degree year rather than GHC conference date');
+ assert.equal(db.prepare("SELECT r.status FROM person_class_year_reviews r JOIN people p ON p.id=r.person_id WHERE p.name='Advika Vuppala'").get().status,'verified');
  assert.deepEqual(db.pragma('foreign_key_check'),[]);
  const before=db.prepare('SELECT * FROM person_class_year_reviews ORDER BY person_id').all();db.close();
  const second=run();assert.equal(second.yearsFilled+second.yearsCorrected+second.invalidYearsCleared+second.claimsAdded,0);
