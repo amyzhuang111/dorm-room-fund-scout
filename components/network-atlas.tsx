@@ -213,8 +213,9 @@ export function NetworkAtlas() {
     let drawnKey = "";
     // Reuse soft sprites instead of blurring thousands of shapes every frame.
     const halos = new Map<string, HTMLCanvasElement>();
-    const haloFor = (color: string) => {
-      let sprite = halos.get(color);
+    const haloFor = (color: string, shape: number) => {
+      const spriteKey = `${color}:${shape}`;
+      let sprite = halos.get(spriteKey);
       if (!sprite) {
         sprite = document.createElement("canvas");
         sprite.width = sprite.height = 96;
@@ -222,14 +223,25 @@ export function NetworkAtlas() {
         const channels = [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16));
         const middle = (Math.max(...channels) + Math.min(...channels)) / 2;
         const vivid = `#${channels.map(c => Math.round(Math.max(0, Math.min(255, middle + (c - middle) * 2.6))).toString(16).padStart(2, "0")).join("")}`;
-        const glow = brush.createRadialGradient(48, 48, 0, 48, 48, 48);
-        glow.addColorStop(0, `${vivid}ee`);
-        glow.addColorStop(0.24, `${vivid}bb`);
-        glow.addColorStop(0.6, `${vivid}48`);
-        glow.addColorStop(1, `${vivid}00`);
-        brush.fillStyle = glow;
-        brush.fillRect(0, 0, 96, 96);
-        halos.set(color, sprite);
+        const lobe = (x: number, y: number, sx: number, sy: number, angle: number) => {
+          brush.save();
+          brush.translate(x, y);
+          brush.rotate(angle);
+          brush.scale(sx, sy);
+          const glow = brush.createRadialGradient(0, 0, 0, 0, 0, 32);
+          glow.addColorStop(0, `${vivid}f5`);
+          glow.addColorStop(0.3, `${vivid}d8`);
+          glow.addColorStop(0.65, `${vivid}60`);
+          glow.addColorStop(1, `${vivid}00`);
+          brush.fillStyle = glow;
+          brush.fillRect(-32, -32, 64, 64);
+          brush.restore();
+        };
+        // Irregular, overlapping pigment lobes, not identical circular glows.
+        lobe(48, 48, shape === 0 ? 1.25 : 0.85, shape === 0 ? 0.48 : 0.8, -0.6);
+        if (shape > 0) lobe(61, 34, 0.43, 0.95, 0.45);
+        if (shape > 1) lobe(32, 64, 0.4, 0.85, 0.7);
+        halos.set(spriteKey, sprite);
       }
       return sprite;
     };
@@ -279,6 +291,10 @@ export function NetworkAtlas() {
       });
       projected.current = screen;
       const detail = Math.max(0, Math.min(1, (v.zoom - 2.8) / 3.2));
+      if (detail > 0 && !document.documentElement.matches('[data-theme="night"]')) {
+        ctx.fillStyle = `rgba(248,247,239,${detail * 0.8})`;
+        ctx.fillRect(0, 0, w, h);
+      }
       if (lines) {
         const labels: { x: number; y: number }[] = [];
         for (const e of edges) {
@@ -363,9 +379,16 @@ export function NetworkAtlas() {
           ctx.strokeRect(p.x - r / 2, p.y - r / 2, r, r);
         }
         if (detail > 0) {
-          const radius = (18 + (atlasHash(n.id) % 27)) * detail;
-          ctx.globalAlpha = opacity * detail * 0.72;
-          ctx.drawImage(haloFor(color), p.x - radius, p.y - radius, radius * 2, radius * 2);
+          const seed = atlasHash(n.id);
+          // A mix of tiny points, wisps and occasional broad color pools lets
+          // individual records breathe at close range without hiding any.
+          const radius = (seed % 5 === 0 ? 40 + seed % 38 : 7 + seed % 20) * detail;
+          ctx.globalAlpha = opacity * detail * (seed % 5 === 0 ? 0.88 : 0.62);
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((seed % 628) / 100);
+          ctx.drawImage(haloFor(color, seed % 3), -radius, -radius, radius * 2, radius * 2);
+          ctx.restore();
           ctx.globalAlpha = opacity * detail;
           ctx.fillStyle = "#263947";
           ctx.beginPath();
