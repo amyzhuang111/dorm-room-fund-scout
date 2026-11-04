@@ -463,6 +463,17 @@ later. Does not count, with the reason found when each was checked:
   found nothing usable for 10, including a name collision (Multiplier matched a
   different company founded in 2018). Expect roughly 1 in 12, and accept only an
   official university or company source stating a class year or student status.
+  A third round **restricted each search to the founder's own university domain,
+  its student newspaper and ycombinator.com** (one hidden 2025-26 YC-batch company
+  per campus, 12 companies) and did better: **2 confirmed** from primary sources
+  (cocreate: Stanford Profiles lists the founder as an undergraduate and the
+  Stanford Daily calls him Class of 2026; Capacitive: the Yale Daily News reports
+  both founders were originally Yale class of 2028 and are on leave to build the
+  startup; batch g), 2 shown to be **old** (FullSeam's CEO appears in Illinois's
+  2018 commencement program; Uplift AI's CEO spent about 9 years at Apple and
+  Amazon), and the rest held for lack of a class year (Lumius: Duke PhD alumni;
+  FlowManual: Harvard dropouts; Luca IQ: Harvard MBAs). Restricting domains removes
+  aggregator noise and name collisions; roughly 1 in 6 on that targeting.
 
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
 `unverified recency` now passed the gate. Each was listed by a university
