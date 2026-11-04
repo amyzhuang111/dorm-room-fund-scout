@@ -242,7 +242,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
         <p className="font-mono text-[9px] tabular-nums text-fg-3" data-tier-legend="">
           S+ top · S strong · A-D
         </p>
-        <p className="hidden flex-wrap items-center gap-1 font-mono text-[9px] text-fg-3 sm:flex" data-campus-ink-legend="">
+        <p className="flex flex-wrap items-center gap-1 font-mono text-[9px] text-fg-3" data-campus-ink-legend="">
           {CAMPUS_INK_LEGEND.map((row) => (
             <span key={row.label} className="inline-flex items-center gap-0.5">
               <span className="inline-block h-2 w-2 rounded-full" style={{ background: row.color }} aria-hidden />
