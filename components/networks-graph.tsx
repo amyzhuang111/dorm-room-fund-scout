@@ -116,6 +116,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const [poster, setPoster] = useState<Poster | null>(null);
   const [deals, setDeals] = useState<Record<string, Deal>>({});
   const [size, setSize] = useState({ w: 1200, h: 640 });
+  const [renderFailed, setRenderFailed] = useState(false);
   const [clickedFounder, setClickedFounder] = useState<string | null>(null);
   const [hover, setHover] = useState<HoverState | null>(null);
   const [selectedHub, setSelectedHub] = useState<string | null>(null);
@@ -832,7 +833,13 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         cam.x = clamp(cam.x, -marginX, marginX);
         cam.y = clamp(cam.y, -marginY, marginY);
       }
-      draw();
+      try {
+        draw();
+      } catch (error) {
+        console.error("Network map rendering failed", error);
+        setRenderFailed(true);
+        return;
+      }
       rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);
@@ -1055,6 +1062,10 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     if (!poster?.campusLabels?.length) return [];
     return poster.campusLabels.slice(0, 10);
   }, [poster]);
+
+  if (renderFailed) {
+    return <div role="alert" className="p-4">The map could not render. <a href="#network-roster" className="underline">Browse founders and startups</a><button type="button" className="ml-4 min-h-11 underline" onClick={() => window.location.reload()}>Reload map</button></div>;
+  }
 
   if (!poster) {
     return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map...</p>;
