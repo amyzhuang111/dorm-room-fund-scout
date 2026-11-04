@@ -871,13 +871,13 @@ export function SampleHomeClient(props: {
               campus: campusId ?? null,
               query: query ?? "",
               stage: (facetExtras?.stage as string) ?? null,
-              status: (facetExtras?.status as any) ?? null,
-              flag: (facetExtras?.flag as any) ?? null,
+              status: (facetExtras?.status as UrlFacetState["status"]) ?? null,
+              flag: (facetExtras?.flag as UrlFacetState["flag"]) ?? null,
               foundedYear: typeof facetExtras?.foundedYear === "number" ? facetExtras.foundedYear : null,
               yearMissing: Boolean(facetExtras?.yearMissing),
               hqRegion: (facetExtras?.hqRegion as string) ?? null,
               country: (facetExtras?.country as string) ?? null,
-              recency: (facetExtras?.recency as any) ?? null,
+              recency: (facetExtras?.recency as UrlFacetState["recency"]) ?? null,
               sectorMissing: Boolean(facetExtras?.sectorMissing),
             }}
           />
