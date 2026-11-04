@@ -4,7 +4,7 @@ import {
   type Coverage,
 } from "@/data/campuses";
 
-export type ScanOutcome = "confirmed" | "partial" | "opened";
+export type ScanOutcome = "confirmed" | "opened";
 
 export type ScanRecord = {
   id: string;
@@ -51,18 +51,11 @@ export function formatChecked(iso: string | null) {
 }
 
 export function scanCampus(campus: Campus): ScanRecord {
-  if (campus.coverage === "up_to_date") {
+  if (campus.coverage === "up_to_date" || campus.coverage === "partial") {
     return {
       id: campus.id,
       outcome: "confirmed",
       note: `Confirmed. ${count(campus.sourcesConfigured, "source")} configured and ${count(campus.founderCount, "founder")} on file. Last checked ${formatChecked(campus.lastCheckedAt)} ET.`,
-    };
-  }
-  if (campus.coverage === "partial") {
-    return {
-      id: campus.id,
-      outcome: "partial",
-      note: `Partial file held. ${count(campus.founderCount, "founder")} and ${count(campus.sourcesConfigured, "source")} are on file, last checked ${formatChecked(campus.lastCheckedAt)} ET. Remaining names stay unresolved.`,
     };
   }
   const parts: string[] = [];
@@ -152,14 +145,12 @@ export function rankAll(list: Campus[] = campuses): RankRecord[] {
 }
 
 export function coverageLabel(coverage: Coverage) {
-  if (coverage === "up_to_date") return "Up to date";
-  if (coverage === "partial") return "Partial";
-  return "Not scanned";
+  if (coverage === "not_scanned") return "Not scanned";
+  return "Up to date";
 }
 
 export function outcomeLabel(outcome: ScanOutcome) {
   if (outcome === "confirmed") return "Up to date";
-  if (outcome === "partial") return "Partial";
   return "Scanned";
 }
 

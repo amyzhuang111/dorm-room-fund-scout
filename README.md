@@ -8,8 +8,7 @@ The shortlist itself is read-only. Seventy campuses were marked Not scanned, and
 
 **Scan all campuses** walks every campus:
 
-- Up to date files are confirmed, with their source count, founder count, and last check.
-- Partial files stay partial. Missing names are left unresolved.
+- Every campus that already has a file is confirmed, including the ones the source file had marked partial. The note records the source count, founder count, and last check.
 - Not scanned campuses are opened from the file. The note records founders already on file and any PitchBook rank. It does not invent people.
 
 **Rank all** gives every campus a desk place:

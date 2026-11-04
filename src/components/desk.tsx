@@ -25,7 +25,6 @@ import {
 type FilterId =
   | "all"
   | "not_scanned"
-  | "partial"
   | "up_to_date"
   | "opened"
   | "unranked";
@@ -34,7 +33,6 @@ const filters: { id: FilterId; label: string }[] = [
   { id: "all", label: "All" },
   { id: "not_scanned", label: "Was not scanned" },
   { id: "opened", label: "Scanned this pass" },
-  { id: "partial", label: "Partial" },
   { id: "up_to_date", label: "Already current" },
   { id: "unranked", label: "No PitchBook UG rank" },
 ];
@@ -61,11 +59,11 @@ function matchesFilter(
   if (filter === "all") return true;
   if (filter === "opened") return scan?.outcome === "opened";
   if (filter === "unranked") return campus.undergrad == null;
+  if (filter === "up_to_date") return campus.coverage !== "not_scanned";
   return campus.coverage === filter;
 }
 
 function statusClass(coverage: Coverage, scanned: boolean) {
-  if (coverage === "partial") return "text-amber-700";
   if (coverage === "not_scanned") {
     return scanned ? "text-[#2f4fd8]" : "text-muted-foreground";
   }
@@ -120,7 +118,6 @@ export function Desk() {
     const values = scans ? Object.values(scans) : [];
     return {
       confirmed: values.filter((row) => row.outcome === "confirmed").length,
-      partial: values.filter((row) => row.outcome === "partial").length,
       opened: values.filter((row) => row.outcome === "opened").length,
     };
   }, [scans]);
@@ -331,7 +328,7 @@ export function Desk() {
           </p>
           <p className="mt-1 text-xs text-[#5c6370]">
             {scans
-              ? `${scanCounts.opened} opened from Not scanned · ${scanCounts.confirmed} confirmed current · ${scanCounts.partial} still partial · ${ranks ? `${Object.keys(ranks).length} ranked` : "rank not run yet"}`
+              ? `${scanCounts.opened} opened from Not scanned · ${scanCounts.confirmed} confirmed current · ${ranks ? `${Object.keys(ranks).length} ranked` : "rank not run yet"}`
               : "The Nov 2 file is showing. Scan and rank are ready."}{" "}
             {reranAt
               ? `Re-ran at ${reranAt}.`
