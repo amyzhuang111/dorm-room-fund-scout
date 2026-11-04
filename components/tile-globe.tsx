@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useGlobeRotation } from "@/lib/client/use-globe-rotation";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
-import { markerRadiusByFounders, markerSizeLegend } from "@/lib/domain/marker-radius";
+import { markerRadiusForCampus, markerSizeLegend } from "@/lib/domain/marker-radius";
+import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
@@ -29,6 +30,10 @@ export interface TileCampus {
   founders: number;
   signals: number;
   country: string;
+  /** PitchBook 2026 undergraduate rank. Null when the school is not on that list. */
+  pitchbookRank?: number | null;
+  /** PitchBook undergraduate alumni who founded a VC-backed company. */
+  pitchbookFounders?: number | null;
 }
 
 export type TileCompany = FacetCompany;
@@ -72,10 +77,12 @@ function globeView(width: number, height: number): { center: [number, number]; z
 }
 
 function campusCollection(campuses: TileCampus[]) {
-  /** Founders-weighted map: top desks + label priority match campus plates (Penn / Stanford / MIT). */
-  const ranked = [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
+  const pitchbook = rankedByUndergrad(campuses);
+  const ranked = pitchbook.length > 0
+    ? pitchbook
+    : [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
   const topIds = new Set(ranked.slice(0, CAMPUS_FOUNDERS_VISIBLE).map((c) => c.id));
-  const labelRank = new Map(ranked.slice(0, CAMPUS_FOUNDERS_VISIBLE).map((c, i) => [c.id, i + 1]));
+  const labelRank = new Map(ranked.slice(0, CAMPUS_FOUNDERS_VISIBLE).map((c) => [c.id, c.pitchbookRank ?? 99]));
   return {
     type: "FeatureCollection",
     features: campuses.map((campus) => ({
@@ -91,7 +98,7 @@ function campusCollection(campuses: TileCampus[]) {
         color: markerColor(campus.country),
         top: topIds.has(campus.id) ? 1 : 0,
         labelRank: labelRank.get(campus.id) ?? 99,
-        radius: markerRadiusByFounders(campus.founders),
+        radius: markerRadiusForCampus(campus.founders, campus.pitchbookFounders),
       },
     })),
   };
@@ -717,8 +724,20 @@ export function TileGlobe({
   // counts the same person twice and disagrees with the vetted list.
   const campusesOnMap = campuses.length;
 
-  const rankedCampuses = useMemo(() => campusFoundersRanked(campuses), [campuses]);
-  const topCampuses = useMemo(() => campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE), [campuses]);
+  const rankedCampuses = useMemo(() => {
+    const pitchbook = rankedByUndergrad(campuses);
+    if (pitchbook.length === 0) return campusFoundersRanked(campuses);
+    const rankedIds = new Set(pitchbook.map((campus) => campus.id));
+    const rest = campuses
+      .filter((campus) => !rankedIds.has(campus.id) && campus.founders > 0)
+      .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
+    return [...pitchbook, ...rest];
+  }, [campuses]);
+  const usingPitchbook = rankedCampuses.some((campus) => campus.pitchbookRank != null);
+  const topCampuses = useMemo(
+    () => (usingPitchbook ? rankedByUndergrad(campuses).slice(0, CAMPUS_FOUNDERS_VISIBLE) : campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE)),
+    [campuses, usingPitchbook],
+  );
   const [showAllCampuses, setShowAllCampuses] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
   const plateCampuses = showAllCampuses ? rankedCampuses : topCampuses;
@@ -894,19 +913,31 @@ export function TileGlobe({
                 className="mt-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 py-1.5 shadow-sm"
                 data-fold-legend-body=""
               >
-                <p className="text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = founders · cobalt top desks · cobalt ring = selected</p>
+                <p className="text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = PitchBook founders when listed, founders on file otherwise. Cobalt marks the undergraduate top 10. A cobalt ring is the selected school.</p>
               </div>
             ) : null}
           </div>
         </div>
       </section>
 
-      <section className="mt-3 max-w-sm max-lg:hidden" data-campus-metric="founders" data-mobile-campus-picker="">
-          <h2 className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filter campus</h2>
+      <section className="mt-3 max-w-sm max-lg:hidden" data-campus-metric={usingPitchbook ? "pitchbook" : "founders"} data-mobile-campus-picker="">
+          <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
+            {usingPitchbook ? "PitchBook 2026" : "Filter campus"}
+          </h2>
+          {usingPitchbook ? (
+            <p className="mb-1.5 mt-0.5 text-[11px] leading-4 text-[color:var(--fg-3,#5C647A)]">
+              Undergraduate alumni who founded a VC-backed company, January 2015 through August 2026. The number is the PitchBook count. Founders on file stay on the campus page.
+            </p>
+          ) : (
+            <p className="mb-1.5" />
+          )}
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
             {plateCampuses.map((campus, i) => {
               const active = selectedId === campus.id;
               const label = shortCampusLabel(campus.id, campus.name);
+              const rank = campus.pitchbookRank != null ? String(campus.pitchbookRank).padStart(2, "0") : String(i + 1).padStart(2, "0");
+              const figure = campus.pitchbookFounders ?? campus.founders;
+              const unit = campus.pitchbookFounders != null ? "PitchBook" : "on file";
               return (
                 <li key={campus.id}>
                   <button
@@ -915,11 +946,11 @@ export function TileGlobe({
                     className={`flex w-full items-baseline gap-2 px-1 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
                   >
                     <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
-                      {String(i + 1).padStart(2, "0")}
+                      {rank}
                     </span>
                     <span className="min-w-0 flex-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                    <span className={`shrink-0 font-mono text-[13px] font-bold ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
-                    <span className="shrink-0 text-[12px] text-[color:var(--fg-3,#5C647A)]">founders</span>
+                    <span className={`shrink-0 font-mono text-[13px] font-bold ${COUNT}`}>{figure.toLocaleString("en-US")}</span>
+                    <span className="shrink-0 text-[12px] text-[color:var(--fg-3,#5C647A)]">{unit}</span>
                   </button>
                 </li>
               );

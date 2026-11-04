@@ -365,7 +365,7 @@ export function MobileCampusSegments({
   onClear,
   kicker = "Campuses",
 }: {
-  campuses: { id: string; name: string; founders: number }[];
+  campuses: { id: string; name: string; founders: number; pitchbookRank?: number | null; pitchbookFounders?: number | null }[];
   selectedId: string | null;
   onSelect: (id: string) => void;
   onClear: () => void;
@@ -417,13 +417,13 @@ export function MobileCampusSegments({
                     : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]"
                 }`}
               >
-                <span className={`font-mono text-[9px] tabular-nums ${active ? "text-white/80" : "text-[color:var(--fg-3,#5C647A)]"}`}>{String(i + 1).padStart(2, "0")}</span>
+                <span className={`font-mono text-[9px] tabular-nums ${active ? "text-white/80" : "text-[color:var(--fg-3,#5C647A)]"}`}>{String(campus.pitchbookRank ?? i + 1).padStart(2, "0")}</span>
                 <CampusSeal label={campus.name} size="sm" />
                 <span className="max-w-[4.5rem] truncate text-[11px] font-semibold tracking-tight" data-fold-peak-campus-label="">
                   {short}
                 </span>
                 <span className={`font-mono text-[11px] font-bold tabular-nums ${active ? "text-white" : "text-[color:var(--cobalt,#2F4FD8)]"}`}>
-                  {campus.founders.toLocaleString("en-US")}
+                  {(campus.pitchbookFounders ?? campus.founders).toLocaleString("en-US")}
                 </span>
               </button>
             </li>

@@ -11,10 +11,19 @@ export default function CampusesPage() {
       label: shortCampusLabel(university.id, university.name),
       slug: campusSlug(shortCampusLabel(university.id, university.name)),
     }))
-    .sort((a, b) => b.founderCount - a.founderCount || a.label.localeCompare(b.label));
   const withFounders = rows.filter((row) => row.founderCount > 0);
+  const ranked = rows
+    .filter((row) => row.pitchbook?.undergrad)
+    .sort(
+      (a, b) =>
+        (a.pitchbook?.undergrad?.rank ?? 999) - (b.pitchbook?.undergrad?.rank ?? 999) ||
+        a.label.localeCompare(b.label),
+    );
+  const unranked = rows
+    .filter((row) => !row.pitchbook?.undergrad && row.founderCount > 0)
+    .sort((a, b) => b.founderCount - a.founderCount || a.label.localeCompare(b.label));
   const totals = loadCorpusTotals();
-  const top = withFounders.slice(0, 10);
+  const lead = ranked[0];
 
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]" data-campuses-index="">
@@ -40,6 +49,9 @@ export default function CampusesPage() {
               {" investable companies"}
             </span>
           </p>
+          <p className="mt-2 max-w-xl text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
+            Order is the PitchBook 2026 undergraduate rank: alumni who founded a company that raised venture capital from January 2015 through August 2026. The PitchBook column is that published count. On file is this scan. {ranked.length.toLocaleString("en-US")} of the undergraduate top 100 are linked to a campus here.
+          </p>
           <Link
             href="/companies?feed=leaderboard"
             className="mt-2 inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[14px] font-semibold text-white sm:mt-3"
@@ -54,18 +66,20 @@ export default function CampusesPage() {
               <span>#</span>
               <span>Campus</span>
               <span>Country</span>
-              <span className="text-right">Founders</span>
+              <span className="text-right">PitchBook</span>
               <span className="text-right">Companies</span>
               <span className="text-right">Sources</span>
             </div>
             <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campuses-cards="">
-              {withFounders.map((row, i) => (
+              {ranked.map((row) => {
+                const track = row.pitchbook?.undergrad;
+                return (
                 <li key={row.id}>
                   <Link href={`/campuses/${row.slug}`} className="campus-index-row">
-                    <span className="campus-rank">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="campus-rank">{String(track?.rank ?? 0).padStart(2, "0")}</span>
                     <span className="campus-name">{row.label}</span>
-                    <span className="campus-country">{row.country?.trim() || "Not on record"}</span>
-                    <span className="campus-founders">{row.founderCount.toLocaleString("en-US")}</span>
+                    <span className="campus-country">{row.country?.trim() || "Not on record"} · {row.founderCount.toLocaleString("en-US")} on file</span>
+                    <span className="campus-founders">{(track?.founderCount ?? 0).toLocaleString("en-US")}</span>
                     <span className="campus-meta">
                       <span>
                         <span className="sm-only-label">{row.companyCount.toLocaleString("en-US")} companies</span>
@@ -78,8 +92,38 @@ export default function CampusesPage() {
                     </span>
                   </Link>
                 </li>
-              ))}
+                );
+              })}
             </ol>
+            {unranked.length > 0 ? (
+              <div data-campuses-unranked="">
+                <p className="border-t border-[color:var(--line,#E1E5EF)] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
+                  Not on the PitchBook undergraduate list · founders on file
+                </p>
+                <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
+                  {unranked.map((row) => (
+                    <li key={row.id}>
+                      <Link href={`/campuses/${row.slug}`} className="campus-index-row">
+                        <span className="campus-rank">-</span>
+                        <span className="campus-name">{row.label}</span>
+                        <span className="campus-country">{row.country?.trim() || "Not on record"} · {row.founderCount.toLocaleString("en-US")} on file</span>
+                        <span className="campus-founders">-</span>
+                        <span className="campus-meta">
+                          <span>
+                            <span className="sm-only-label">{row.companyCount.toLocaleString("en-US")} companies</span>
+                            <span className="desk-only-num">{row.companyCount.toLocaleString("en-US")}</span>
+                          </span>
+                          <span>
+                            <span className="sm-only-label">{row.sourcesConfigured.toLocaleString("en-US")} sources</span>
+                            <span className="desk-only-num">{row.sourcesConfigured.toLocaleString("en-US")}</span>
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ) : null}
           </div>
 
           <aside className="hidden lg:block">
@@ -95,11 +139,11 @@ export default function CampusesPage() {
                   {" investable companies"}
                 </p>
                 <p className="mt-2 font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">
-                  Lead: {top[0]?.label ?? "n/a"} · {top[0] ? top[0].founderCount.toLocaleString("en-US") : "0"} founders
+                  Lead: {lead?.label ?? "n/a"} · PitchBook #{lead?.pitchbook?.undergrad?.rank ?? "n/a"} · {(lead?.pitchbook?.undergrad?.founderCount ?? 0).toLocaleString("en-US")} undergraduate founders
                 </p>
               </div>
               <p className="font-mono text-[11px] leading-5 text-[color:var(--fg-3,#5C647A)]">
-                Open a campus for founders, companies, and sources on that desk.
+                Rank is the PitchBook undergraduate list, not founders on file. A deeper scan does not move a school up.
               </p>
             </div>
           </aside>

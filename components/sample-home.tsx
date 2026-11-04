@@ -13,6 +13,7 @@ import {
 import type { HeroStats } from "@/lib/domain/hero-stats";
 import { buildPeakShell } from "@/lib/domain/peak-shell";
 import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
+import { undergradRankFields } from "@/lib/domain/pitchbook-model";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
@@ -72,6 +73,7 @@ export function SampleHome({
       name: university.name,
       country: university.country?.trim() || "Unknown",
       founders: university.founderCount,
+      ...undergradRankFields(university.pitchbook),
     }));
   // Server-safe newest-sector strip (mirrors contentsPageInsight; avoid client import).
   type Agg = { id: string; label: string; n: number; sig: number; recent: number };
@@ -110,12 +112,13 @@ export function SampleHome({
     lon: university.lon,
     founderCount: university.founderCount,
     signalCount: university.signalCount,
+    ...undergradRankFields(university.pitchbook),
     slug: university.slug,
     signalWeek: university.signalWeek,
     signalPrev: university.signalPrev,
     latestSignal: university.latestSignal,
     signalSeries: university.signalSeries,
-  })) as HeroStats["universities"];
+  })) as unknown as HeroStats["universities"];
   const foldWeek = stats.week.map((item) => ({ ...item, detail: null }));
   const clientStats: HeroStats =
     place === "explore"

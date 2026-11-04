@@ -9,9 +9,40 @@ import { loadFounderTable } from "@/lib/domain/founder-table";
 import { SIGNALS_THIS_WEEK_LABEL, signalsThisWeek } from "@/lib/domain/hero-stats";
 import { listSignalsForUniversity, listSources, listUniversities, type UniversitySummary } from "@/lib/domain/queries";
 import { getDb } from "@/lib/db/client";
+import { PITCHBOOK_SOURCE_URL } from "@/lib/domain/pitchbook-model";
 import { listUnverifiedCompanies } from "@/lib/domain/unverified-companies";
 
 const TABS = ["founders", "companies", "signals", "network"] as const;
+
+function PitchbookLine({ university }: { university: UniversitySummary }) {
+  const undergrad = university.pitchbook?.undergrad ?? null;
+  const grad = university.pitchbook?.grad ?? null;
+  const mba = university.pitchbook?.mba ?? null;
+  if (!undergrad && !grad && !mba) {
+    return (
+      <p className="mt-2 max-w-xl text-[13px] leading-5 text-fg-2" data-pitchbook-undergrad="">
+        Not on the PitchBook 2026 undergraduate, graduate, or MBA lists. {university.founderCount.toLocaleString("en-US")} founders on file in this scan.
+      </p>
+    );
+  }
+  return (
+    <p className="mt-2 max-w-xl text-[13px] leading-5 text-fg-2" data-pitchbook-undergrad="">
+      {undergrad ? (
+        <>
+          PitchBook 2026 undergraduate rank {undergrad.rank}: {undergrad.founderCount.toLocaleString("en-US")} alumni who founded a company that raised venture capital from January 2015 through August 2026.
+        </>
+      ) : (
+        <>Not on the PitchBook 2026 undergraduate list.</>
+      )}
+      {grad ? ` Graduate list rank ${grad.rank}, ${grad.founderCount.toLocaleString("en-US")} founders.` : ""}
+      {mba ? ` MBA list rank ${mba.rank}, ${mba.founderCount.toLocaleString("en-US")} founders.` : ""}
+      {" "}
+      <a href={PITCHBOOK_SOURCE_URL} target="_blank" rel="noopener noreferrer" className="underline">
+        PitchBook university rankings
+      </a>
+    </p>
+  );
+}
 
 function resolveUniversity(slug: string): UniversitySummary | undefined {
   const universities = listUniversities();
@@ -92,15 +123,16 @@ export default async function CampusPage({
           </p>
           <h1 className="page-title text-[24px] leading-7 sm:text-[inherit] sm:leading-[inherit]">{university.name}</h1>
           <p className="mt-1 hidden text-[14px] text-fg sm:mt-2 sm:block">{university.country ?? "Country not recorded"}</p>
+          <PitchbookLine university={university} />
           <p className="mt-2 font-mono text-[13px] tabular-nums leading-4 text-fg-2 sm:hidden" data-campus-stats-mobile="">
-            <span className="font-bold text-fg">{university.founderCount.toLocaleString("en-US")}</span> founders ·{" "}
+            <span className="font-bold text-fg">{university.founderCount.toLocaleString("en-US")}</span> founders on file ·{" "}
             <span className="font-bold text-fg">{topTier.toLocaleString("en-US")}</span> top tier ·{" "}
             <span className="font-bold text-fg">{signalsWeek.toLocaleString("en-US")}</span> {SIGNALS_THIS_WEEK_LABEL.toLowerCase()}
           </p>
         </div>
         <div className="hidden flex-wrap items-start gap-3 sm:flex">
           {[
-            { n: university.founderCount, label: "Founders" },
+            { n: university.founderCount, label: "Founders on file" },
             { n: topTier, label: "Top tier" },
             { n: signalsWeek, label: SIGNALS_THIS_WEEK_LABEL },
           ].map((stat) => (

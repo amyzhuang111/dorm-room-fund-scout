@@ -28,6 +28,7 @@ import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { browseHref as buildBrowseHref, type FacetState as UrlFacetState } from "@/lib/domain/facet-url";
 
 const SampleInstrumentBrowse = dynamic(
@@ -35,7 +36,13 @@ const SampleInstrumentBrowse = dynamic(
   { ssr: true },
 );
 
-type TopCampus = { id: string; name: string; founders: number };
+type TopCampus = {
+  id: string;
+  name: string;
+  founders: number;
+  pitchbookRank: number | null;
+  pitchbookFounders: number | null;
+};
 
 /** Client-only Peak share · outer slot reserves exact height so CLS ≈ 0 (HTML stays lean). */
 const FoldPeakShare = dynamic(
@@ -44,7 +51,14 @@ const FoldPeakShare = dynamic(
 );
 
 
-type CampusOpt = { id: string; name: string; country: string; founders: number };
+type CampusOpt = {
+  id: string;
+  name: string;
+  country: string;
+  founders: number;
+  pitchbookRank?: number | null;
+  pitchbookFounders?: number | null;
+};
 
 
 function browseHref(opts: {
@@ -114,7 +128,8 @@ function PeakShareLite({
             </p>
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Desk rank</p>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">PitchBook 2026</p>
+            <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Undergraduate alumni, VC-backed</p>
             <div className="mt-2 h-[8rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
@@ -350,7 +365,7 @@ function MapFoldSheet({
               selectedId={campusId}
               onSelect={onSelectCampus}
               onClear={onClearCampus}
-              kicker="Open lane campuses"
+              kicker={campuses.some((campus) => campus.pitchbookRank != null) ? "PitchBook 2026" : "Open lane campuses"}
             />
           </div>
           {mode === "peek" ? (
@@ -553,15 +568,20 @@ export function SampleHomeClient(props: {
   const mapCampusId = search.get("campus");
   const listed = feed === "directory" || feed === "leaderboard";
   const topCampuses = useMemo<TopCampus[]>(() => {
-    return [...campuses]
-      .filter((c) => (c.founders ?? 0) > 0)
-      .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
-      .slice(0, 3)
-      .map((c) => ({
-        id: c.id,
-        name: shortCampusLabel(c.id, c.name),
-        founders: c.founders,
-      }));
+    const pitchbook = rankedByUndergrad(campuses);
+    const source = pitchbook.length
+      ? pitchbook.slice(0, 5)
+      : [...campuses]
+          .filter((c) => (c.founders ?? 0) > 0)
+          .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
+          .slice(0, 5);
+    return source.map((c) => ({
+      id: c.id,
+      name: shortCampusLabel(c.id, c.name),
+      founders: c.founders,
+      pitchbookRank: c.pitchbookRank ?? null,
+      pitchbookFounders: c.pitchbookFounders ?? null,
+    }));
   }, [campuses]);
 
   useEffect(() => {
@@ -691,7 +711,7 @@ export function SampleHomeClient(props: {
 
               {/* Mobile sheet only below lg — keeps first [data-founder-card] visible for checks. */}
               {!isLg ? <MapFoldSheet
-                campuses={(openLane?.campuses?.length ? openLane.campuses : topCampuses)}
+                campuses={topCampuses}
                 campusId={mapCampusId}
                 onSelectCampus={selectCampus}
                 onClearCampus={clearCampus}

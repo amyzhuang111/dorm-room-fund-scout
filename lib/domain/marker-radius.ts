@@ -12,6 +12,24 @@ export function markerRadiusByFounders(founders: number): number {
   return Math.round((3.1 + Math.min(10.8, Math.sqrt(count) * 0.33)) * 10) / 10;
 }
 
+/**
+ * Point radius from PitchBook undergraduate founder counts.
+ * 2,500 is the scale ceiling so Berkeley (about 2,380) stays larger than Penn (about 1,466).
+ */
+export function markerRadiusByPitchbook(founders: number): number {
+  const count = Number.isFinite(founders) ? Math.max(0, founders) : 0;
+  if (count <= 0) return 3.2;
+  const t = Math.min(1, count / 2500);
+  return Math.round((3.4 + t * 8.2) * 10) / 10;
+}
+
+/** PitchBook size when the school is on that list. File-only dots stay smaller than a top-20 PitchBook marker. */
+export function markerRadiusForCampus(fileFounders: number, pitchbookFounders: number | null | undefined): number {
+  if (pitchbookFounders != null && pitchbookFounders > 0) return markerRadiusByPitchbook(pitchbookFounders);
+  const count = Number.isFinite(fileFounders) ? Math.max(0, fileFounders) : 0;
+  return Math.round((3.1 + Math.min(3.6, Math.sqrt(count) * 0.18)) * 10) / 10;
+}
+
 export function markerSizeLegend(): string {
-  return "Point size scales with founder names on record. Color is the campus country.";
+  return "Point size follows PitchBook undergraduate founder counts when the school is on that list, and founders on file otherwise. Color is the campus country.";
 }

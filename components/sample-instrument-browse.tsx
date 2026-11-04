@@ -15,6 +15,7 @@ import {
   type OverlayRow,
 } from "@/lib/domain/overlay-counts";
 import { resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
+import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
 import { CurrentViewDock } from "@/components/current-view-dock";
@@ -222,7 +223,14 @@ export function SampleInstrumentBrowse({
   sort: DirectorySort;
   sectors: DirectoryFilter[];
   kinds: DirectoryFilter[];
-  campuses: { id: string; name: string; country: string; founders: number }[];
+  campuses: {
+    id: string;
+    name: string;
+    country: string;
+    founders: number;
+    pitchbookRank?: number | null;
+    pitchbookFounders?: number | null;
+  }[];
   companies: FacetCompany[];
   moreHref: string;
   clearCampusHref: string;
@@ -374,7 +382,11 @@ export function SampleInstrumentBrowse({
   }, [pageSignalBars]);
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   /** Leaderboard podium: top campuses by founders; signals = companies with signal on that desk. */
-  const podiumRankedCount = useMemo(() => campusFoundersRanked(campuses).length, [campuses]);
+  const pitchbookCampuses = useMemo(() => rankedByUndergrad(campuses), [campuses]);
+  const podiumRankedCount = useMemo(
+    () => (pitchbookCampuses.length ? pitchbookCampuses.length : campusFoundersRanked(campuses).length),
+    [campuses, pitchbookCampuses],
+  );
   /** Ranked campuses on this loaded page  -  seal header with real company/signal counts. */
   const pageCampusRanks = useMemo(() => {
     const map = new Map<string, { id: string | null; label: string; companies: number; signaled: number }>();
@@ -421,12 +433,16 @@ export function SampleInstrumentBrowse({
       if (!id || !(card.signals > 0)) continue;
       signaledByCampus.set(id, (signaledByCampus.get(id) ?? 0) + 1);
     }
-    // Mobile signals fold needs company cards above the fold (2e37f4f). Top-10 lives on home + /campuses.
-    return campusFoundersTop(campuses, 3).map((c) => ({
+    const pitchbook = rankedByUndergrad(campuses);
+    const source = pitchbook.length ? pitchbook.slice(0, 3) : campusFoundersTop(campuses, 3);
+    return source.map((c) => ({
       id: c.id,
       label: shortCampusLabel(c.id, c.name),
-      founders: c.founders,
+      founders: c.pitchbookFounders ?? c.founders,
+      onFile: c.founders,
+      pitchbook: c.pitchbookFounders != null,
       signals: signaledByCampus.get(c.id) ?? 0,
+      rank: c.pitchbookRank ?? null,
     }));
   }, [campuses, boardCompanies]);
   /** End-colophon: next programs on the matching desk (programs[] membership counts; YC labelled in YC). */
@@ -932,7 +948,13 @@ export function SampleInstrumentBrowse({
             <div data-ledger-stage={feed} data-ledger-top={pages > 1 ? undefined : ""}>
             {feed === "leaderboard" ? (
               <div className="mb-4" data-signals-podium-wrap="">
-                <ScoutSignalPodium rows={podiumRows} totalOnDesk={total} rankedCount={podiumRankedCount} allHref="/campuses" />
+                <ScoutSignalPodium
+                  rows={podiumRows}
+                  totalOnDesk={total}
+                  rankedCount={podiumRankedCount}
+                  allHref="/campuses"
+                  caption={podiumRows[0]?.pitchbook ? "PitchBook 2026 undergraduate alumni" : "Ranked by founder names"}
+                />
               </div>
             ) : null}
             <ol
