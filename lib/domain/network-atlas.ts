@@ -42,8 +42,12 @@ export const ATLAS_COLORS = [
 /** A coverage metric, not a claim of influence or personal acquaintance. */
 export function atlasConnectors(data: AtlasData) {
   const affiliations = data.nodes.map(() => new Set<string>());
+  const types = data.nodes.map(() => new Set<string>());
   const neighbors = data.nodes.map(() => new Set<number>());
-  for (const g of data.groups) for (const i of g.members) affiliations[i]?.add(g.id);
+  for (const g of data.groups) for (const i of g.members) {
+    affiliations[i]?.add(g.id);
+    types[i]?.add(g.kind.trim().toLowerCase());
+  }
   for (const [a, b] of data.companies) {
     if (a === b) continue;
     neighbors[a]?.add(b);
@@ -52,8 +56,22 @@ export function atlasConnectors(data: AtlasData) {
   return data.nodes.map((node, i) => ({
     i, id: node.id, affiliations: affiliations[i].size,
     direct: neighbors[i].size, score: affiliations[i].size + neighbors[i].size,
+    networkTypes: types[i].size,
+    campuses: new Set([i,...neighbors[i]].flatMap(j => data.nodes[j].places.filter(p => p.basis === "campus" && p.campus).map(p => p.campus))).size,
   })).filter(n => n.affiliations >= 2 && n.direct >= 1)
-    .sort((a, b) => b.score - a.score || b.affiliations - a.affiliations || a.id.localeCompare(b.id));
+    .sort((a, b) => (b.networkTypes + b.campuses) - (a.networkTypes + a.campuses) || b.score - a.score || a.id.localeCompare(b.id));
+}
+
+/** Keep a selected dot visible while the rest of its neighborhood rotates. */
+export function anchorAtlasSelection<T extends {x:number;y:number}>(points:T[], selected:number|null, width:number, height:number):T[] {
+  if (selected === null || !points[selected]) return points;
+  const target = {x:width < 700 ? width * .5 : width * .32, y:width < 700 ? 42 : height * .45};
+  const dx = target.x - points[selected].x, dy = target.y - points[selected].y;
+  return points.map(p => ({...p,x:p.x+dx,y:p.y+dy}));
+}
+
+export function atlasSummary(description:string):string {
+  return description.replace(/\s+/g," ").trim().split(/(?<=[.!?])\s+(?=[A-Z])|(?<=[.!?])(?=[A-Z])/)[0] || description;
 }
 export function safeAtlasUrl(value: string | null | undefined): string | null {
   if (!value) return null;
