@@ -58,6 +58,7 @@ const EMPTY: EnrollmentDecision = {
 // Venue and contest codes that print as CODE 'YY. They are not school class years.
 // CHI '26 is the CHI conference. WACV '23 is a vision conference. IMO '24 is an olympiad.
 const EVENT_CODES = new Set([
+  "GHC",
   "CHI",
   "NEURIPS",
   "NIPS",
