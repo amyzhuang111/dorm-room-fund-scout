@@ -109,7 +109,7 @@ export default async function DataExplorerPage({
           className="hidden h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:inline-flex"
           data-corpus-csv=""
         >
-          Download CSV
+          Export this view
         </a>
         <a
           href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
@@ -126,23 +126,23 @@ export default async function DataExplorerPage({
         className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-recency-funnel=""
       >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Vetted list</span>
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Scouting list</span>
         {" · "}
         <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        {" kept, the same companies as Companies and the map. A company stays in that list when a founder is a current student or graduated in 2023 or later."}
+        {" companies marked eligible by the stored scouting rules, matching Companies and the map. These rules target current students and recent graduates; individual verification labels still apply."}
         {" "}
         <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
         {" older-alumni companies are left out of it."}
         {" "}
         <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
-        {" are not yet checked and are not in the vetted list."}
+        {" have unverified founder recency and are outside the scouting list."}
       </p>
 
       <p
         className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
         data-corpus-fill-rates=""
       >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">On file</span>
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Full corpus coverage</span>
         {" · Stage: "}
         <span data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
         {" of "}
