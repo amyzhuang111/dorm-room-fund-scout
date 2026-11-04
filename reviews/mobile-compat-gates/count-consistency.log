@@ -1,13 +1,13 @@
 {
-  "ok": false,
-  "errors": [
-    {
-      "page": "home",
-      "label": "founders-indexed",
-      "expected": 3501,
-      "actual": 3205,
-      "source": "data-count=founders-indexed vs snapshot.foundersIndexed"
-    }
-  ],
+  "ok": true,
+  "expect": {
+    "investableCompanies": 1633,
+    "foundersListed": 2414,
+    "foundersIndexed": 3501,
+    "campusesOnMap": 166,
+    "campusesTotal": 170,
+    "ycMembership": 323
+  },
+  "pages": 6,
   "wrote": "/tmp/campus-mobile-compat/reviews/count-consistency.json"
 }

@@ -58,7 +58,40 @@
       "invalidDate": false
     },
     {
+      "route": "/campuses/penn",
+      "width": 320,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 320,
+      "docW": 320,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/campuses/georgia-tech",
+      "width": 320,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 320,
+      "docW": 320,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
       "route": "/networks",
+      "width": 320,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 320,
+      "docW": 320,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
       "width": 320,
       "status": 200,
       "overflow": false,
@@ -124,7 +157,40 @@
       "invalidDate": false
     },
     {
+      "route": "/campuses/penn",
+      "width": 375,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 375,
+      "docW": 375,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/campuses/georgia-tech",
+      "width": 375,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 375,
+      "docW": 375,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
       "route": "/networks",
+      "width": 375,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 375,
+      "docW": 375,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
       "width": 375,
       "status": 200,
       "overflow": false,
@@ -190,7 +256,40 @@
       "invalidDate": false
     },
     {
+      "route": "/campuses/penn",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 390,
+      "docW": 390,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/campuses/georgia-tech",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 390,
+      "docW": 390,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
       "route": "/networks",
+      "width": 390,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 390,
+      "docW": 390,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
       "width": 390,
       "status": 200,
       "overflow": false,
@@ -256,7 +355,40 @@
       "invalidDate": false
     },
     {
+      "route": "/campuses/penn",
+      "width": 430,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 430,
+      "docW": 430,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/campuses/georgia-tech",
+      "width": 430,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 430,
+      "docW": 430,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
       "route": "/networks",
+      "width": 430,
+      "status": 200,
+      "overflow": false,
+      "scrollW": 430,
+      "docW": 430,
+      "smallTapCount": 0,
+      "smallTaps": [],
+      "invalidDate": false
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
       "width": 430,
       "status": 200,
       "overflow": false,

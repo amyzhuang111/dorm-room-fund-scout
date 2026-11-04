@@ -8,7 +8,7 @@ import path from "node:path";
 
 const BASE = (process.env.BASE || "http://127.0.0.1:3477").replace(/\/$/, "");
 const WIDTHS = [320, 375, 390, 430];
-const ROUTES = ["/", "/founders", "/companies", "/data", "/campuses", "/networks"];
+const ROUTES = ["/", "/founders", "/companies", "/data", "/campuses", "/campuses/penn", "/campuses/georgia-tech", "/networks", "/startup/proj_9GUOmdEYxbuH"];
 const OUT = path.join(process.cwd(), "reviews", "mobile-compat-gate.json");
 
 async function measure(page) {

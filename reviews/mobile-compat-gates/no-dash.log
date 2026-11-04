@@ -7,15 +7,15 @@
 {
   "base": "http://127.0.0.1:3477",
   "innerTextRoutes": 6,
-  "crawlRoutes": 1900,
-  "companies": 1225,
-  "dossiers": 1896,
+  "crawlRoutes": 2301,
+  "companies": 1633,
+  "dossiers": 2297,
   "founderPages": 4,
   "statusCounts": {
-    "200": 1900
+    "200": 2301
   },
   "crawlDashes": 0,
-  "checked": 1906,
+  "checked": 2307,
   "failed": 0
 }
 PASS: no dashes

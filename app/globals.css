@@ -1880,6 +1880,12 @@ html:has([data-networks-cream]) [data-site-nav] {
   /* Kill page-level horizontal overflow; keep intentional scrollers. */
   html, body {
     overflow-x: clip;
+    max-width: 100%;
+  }
+  main, .sample-paper, [data-campus-page] {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
   }
   [data-founders-desk],
   [data-campuses-index],
@@ -1967,10 +1973,15 @@ html:has([data-networks-cream]) [data-site-nav] {
   /* Hard floor after component classes (mobile-compat). */
   button, a[href], select, summary, [role="button"], [role="tab"] {
     min-height: 44px !important;
+    box-sizing: border-box;
   }
   button, a[href], [role="button"], [role="tab"] {
     min-width: 44px !important;
-    box-sizing: border-box;
+  }
+  /* inline anchors ignore min-height unless they participate in flex/block formatting */
+  a[href]:not(.block):not(.flex):not(.inline-flex):not(.grid):not([class*="flex "]):not([class*=" grid"]) {
+    display: inline-flex !important;
+    align-items: center;
   }
   input, textarea, select {
     min-height: 44px !important;

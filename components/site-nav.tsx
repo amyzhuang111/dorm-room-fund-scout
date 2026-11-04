@@ -69,7 +69,7 @@ export function SiteNav() {
       </div>
       {/* Desk tabs always on for mobile — not tucked behind Menu */}
       <nav
-        className="flex min-h-11 items-stretch gap-1 overflow-x-auto px-3 md:hidden"
+        className="flex max-w-full min-h-11 items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 md:hidden"
         aria-label="Desks"
         data-mobile-desk-tabs=""
       >
