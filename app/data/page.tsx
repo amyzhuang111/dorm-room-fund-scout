@@ -7,7 +7,7 @@ import { loadRecencyFunnel } from "@/lib/domain/recency-funnel";
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
-import { formatCorpusDate } from "@/lib/domain/corpus-totals";
+import { formatCorpusDate, loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { CorpusFilters } from "@/components/corpus-filters";
 
 export const metadata: Metadata = { title: "Data" };
@@ -40,6 +40,9 @@ export default async function DataExplorerPage({
   const sector = sp.sector || undefined;
   const campus = sp.campus || undefined;
   const result = paginateCorpus({ q, sector, campus, sort, page });
+  const corpusTotals = loadCorpusTotals();
+  const unfiltered = !q && !sector && !campus;
+  const universeTotal = unfiltered ? corpusTotals.investableCompanies : result.total;
   const { sectors: sectorFilters } = buildDirectoryFromDb();
   // Keep select options tiny in RSC HTML (id + label only) — full university rows blow the 210 KB gate.
   const sectors = sectorFilters.map((s) => ({ id: s.id, label: s.label }));
@@ -91,7 +94,7 @@ export default async function DataExplorerPage({
           <p className="scout-kicker">Corpus</p>
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
+            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>
             {" vetted companies in this view · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
             {" of "}
@@ -179,7 +182,7 @@ export default async function DataExplorerPage({
           <div className="min-w-0 flex-1">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Corpus on this page</p>
             <p className="mt-0.5 font-mono text-[13px] tabular-nums leading-4 text-[color:var(--fg,#0B0E17)]">
-              <span className="text-[18px] font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
+              <span className="text-[18px] font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>
               {" companies"}
               <span aria-hidden> · </span>
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{pageSignaled.toLocaleString("en-US")}</span>
@@ -284,7 +287,7 @@ export default async function DataExplorerPage({
           {" to "}
           {Math.min(result.page * result.pageSize, result.total).toLocaleString("en-US")}
           {" of "}
-          {result.total.toLocaleString("en-US")}
+          {universeTotal.toLocaleString("en-US")}
         </p>
         <div className="flex items-center gap-2">
           {result.page > 1 ? (

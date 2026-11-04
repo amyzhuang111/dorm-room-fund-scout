@@ -64,7 +64,12 @@ export function SampleHome({
       ? leaderboardPage(ordered, 1)
       : directoryPage(ordered, 1)
     : [];
-  const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
+  // Universe total always from the shared snapshot. Filtered desks report the
+  // filtered size against that same universe so /companies never invents a second total.
+  const universe = totals.investableCompanies;
+  const filteredTotal = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
+  const unfiltered = !sector && !kind && !campusId && !query;
+  const total = unfiltered && feed !== "leaderboard" ? universe : filteredTotal;
   const campuses = stats.universities
     .filter((university) => university.lat != null && university.lon != null)
     .map((university) => ({

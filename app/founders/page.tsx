@@ -1,10 +1,9 @@
 import { FoundersDesk } from "@/components/founders-desk";
-import { loadFounderTable } from "@/lib/domain/founder-table";
 import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 
 export default function FoundersPage() {
-  const count = loadFounderTable().length;
   const totals = loadCorpusTotals();
+  const count = totals.foundersIndexed;
   return (
     <div className="px-3 py-3 sm:px-6 sm:py-8" data-founders-page="">
       <h1 className="page-title text-[28px] leading-8 sm:text-[inherit] sm:leading-[inherit]">Founders</h1>

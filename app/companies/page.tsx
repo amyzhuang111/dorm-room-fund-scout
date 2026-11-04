@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Discover from "../startup/discover/page";
 import { SampleHome } from "@/components/sample-home";
 import { CompanySetToggle, UnverifiedCompaniesView, unverifiedTotal } from "@/components/unverified-companies";
-import { loadDirectory } from "@/lib/domain/directory";
+import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { facetsFromSearchParams } from "@/lib/domain/facet-url";
 
@@ -17,7 +17,8 @@ export default async function CompaniesPage({
   if (sp.discover === "1") {
     return <Discover searchParams={Promise.resolve(sp)} />;
   }
-  const vettedCount = loadDirectory().cards.length;
+  // Universe total from the shared snapshot — never cards.length (prebuild can diverge).
+  const vettedCount = loadCorpusTotals().investableCompanies;
   if (sp.unverified === "1") {
     return (
       <>

@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-11-03T09:25:09.574Z",
+  "generatedAt": "2026-11-04T06:19:55.948Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1633,
+  "investableCompanies": 1646,
   "signals": 1476,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 6336,
-  "founders": 3196,
+  "people": 6341,
+  "founders": 3201,
   "campuses": 170,
   "withSignal": 649,
   "ycCompanies": 564,
@@ -14,12 +14,12 @@
     "peakCount": 34,
     "peakId": "2026-04",
     "peakLabel": "Apr 2026",
-    "dated": 100,
-    "sharePct": 34,
+    "dated": 103,
+    "sharePct": 33,
     "inWindow": 71,
     "earlierValid": 0,
-    "undatedMonth": 29,
-    "quiet": 1433
+    "undatedMonth": 32,
+    "quiet": 1443
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,21 +27,21 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1633,
+  "directoryCards": 1646,
   "signalsDated": 665,
   "signalsUndated": 811,
-  "foundersIndexed": 3501,
-  "foundersListed": 2414,
+  "foundersIndexed": 3506,
+  "foundersListed": 2419,
   "campusesTotal": 170,
   "campusesOnMap": 166,
   "campusesWithFounders": 86,
-  "companiesWithSignal": 200,
+  "companiesWithSignal": 203,
   "ycMembership": 323,
   "campusFoundersTop": [
     {
       "name": "University of Pennsylvania",
       "short": "Penn",
-      "founders": 758,
+      "founders": 759,
       "companies": 206,
       "country": "United States"
     },
@@ -76,8 +76,8 @@
     {
       "name": "Columbia University",
       "short": "Columbia",
-      "founders": 160,
-      "companies": 41,
+      "founders": 162,
+      "companies": 42,
       "country": "United States"
     },
     {
@@ -109,7 +109,7 @@
       "country": "United States"
     }
   ],
-  "companiesTotal": 6039,
+  "companiesTotal": 6049,
   "excludedOlderAlumni": 234,
-  "unverifiedRecency": 4139
+  "unverifiedRecency": 4136
 }
