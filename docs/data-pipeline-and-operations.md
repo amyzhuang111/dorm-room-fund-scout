@@ -486,7 +486,20 @@ later. Does not count, with the reason found when each was checked:
   admitted 2024; ChatOverflow: UIUC IEEE leadership page and Illinois Innovation LLC
   spotlight; Shire Intelligence: Duke coursework account for a Fall 2025 course) and
   found 4 old (Void: Cornell 2020; Tesora: Stanford 2021; Shasta Health: Berkeley 2019/20;
-  Avronna: a CMU alumnus and entrepreneur-in-residence). Cumulative: 8 of 36. Matching is by name plus the
+  Avronna: a CMU alumnus and entrepreneur-in-residence). Cumulative: 8 of 36.
+  Round 6 (batch j; 71 of a planned 100 searched before the search quota ran out)
+  confirmed **16**, a much better rate (about 1 in 4.5) because most came from
+  **current-student venture rosters on official university pages**: Michigan's Zell
+  Entrepreneurs and Michigan Business Challenge (Tinu AI, Skala, Roxbury, Rupay Bachao,
+  BasisEdge, Krik Krak), Wharton/Penn Venture Lab (SABE, Girl Math Capital, TUFANY),
+  Columbia Business School's Summer Student Incubator (Sachi Health), CMU's McGinnis
+  competition (Basics), plus Stanford Profiles (Mayflower), MIT pages (Palette, Mohan),
+  Yale Engineering news (Spur) and Duke's 2024 diploma program (Sigma). Lesson: search
+  student-venture rosters (Zell, Venture Lab, McGinnis, incubators) before founder bios;
+  the Columbia Startup Lab and the YC bio alone remain insufficient. About 15 more were
+  found old (e.g. Constant: Princeton '18; Reform: NYU '21; Fuchsia: Yale '21; Dayflow:
+  Duke '21; Hazel: Harvard '19/'20). Cumulative: 24 confirmed of about 107. The 29
+  candidates not reached are in the scratch list and can be re-run. Matching is by name plus the
   company or YC bio, so a collision is possible; each entry names its exact source.
 
 **Second batch (2026-11-04, gate re-run):** 34 companies recorded as
