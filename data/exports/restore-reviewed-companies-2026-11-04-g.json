@@ -1,0 +1,23 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Batch g: per-company web research restricted to the founder's own university domain, its student newspaper and ycombinator.com (12 hidden 2025-26 YC-batch companies, one per campus; 2 confirmed). Each entry needs an official or primary source stating a class year or student status.",
+  "restore": [
+    {
+      "id": "proj_cNXxvlqyQv4O",
+      "name": "cocreate",
+      "why": "Founder Tamish Pulappadi: Stanford Profiles lists him as an undergraduate in Computer Science, and the Stanford Daily (June 2024) calls him a Class of 2026 student",
+      "evidence": "Stanford Daily, 'The Six of Spades are all in' (2024-06-25): 'Class of 2026 student'; Stanford Profiles entry: undergraduate, Computer Science",
+      "eligibilityUrl": "https://stanforddaily.com/2024/06/25/six-of-spades-are-all-in/"
+    },
+    {
+      "id": "proj_4e6ohfcNlXx9",
+      "name": "Capacitive",
+      "why": "Founders Kevin Treehan and Rohan Radhakeesoon: Yale Daily News reports both were originally Yale class of 2028 and left campus on leave to build the startup",
+      "evidence": "Yale Daily News, 'Why Did You Drop out of Yale?': originally class of 2028; indefinite leave of absence",
+      "eligibilityUrl": "https://yaledailynews.com/articles/why-did-you-drop-out-of-yale"
+    }
+  ]
+}
