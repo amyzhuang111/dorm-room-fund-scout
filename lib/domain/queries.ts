@@ -9,7 +9,7 @@ import { assignQueue, type Queue } from "./queue";
 import { evaluatePromotion } from "./promotion";
 import { parseCommunitySignalCategories, type CommunityConfidence, type CommunitySignal } from "./community-signal";
 import { catalogueForCampus } from "./source-quality";
-import { ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus } from "./founder-status";
+import {ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus, isEligibleForFounderDirectory} from "./founder-status";
 import { bestPersonLink, confirmedLinkedIn, readLinkedInCandidate, type PersonLinkTarget } from "./person-link";
 import type { RelatedHotspot } from "./hotspot-model";
 import { relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
@@ -1813,9 +1813,20 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
     };
     all.push(row);
     // accuracy_audit keeps the row. founder_status "removed" is off both scout lists.
+    // Class of 2023+ / current students only on the promoted directory.
     if (row.founderStatus === "removed") continue;
     if (row.founderStatus === "potential") potential.push(row);
-    else if (row.promoted) promoted.push(row);
+    else if (row.promoted) {
+      if (
+        !isEligibleForFounderDirectory({
+          enrollmentStatus: row.enrollmentStatus,
+          affiliationStatus: row.status,
+        })
+      ) {
+        continue;
+      }
+      promoted.push(row);
+    }
   }
   return { promoted, potential, all, affs };
 }

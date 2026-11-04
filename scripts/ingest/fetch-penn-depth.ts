@@ -234,6 +234,22 @@ interface SpeedrunCompany {
   people: { name: string; title: string; introduction: string; linkedin: string | null; founder: boolean }[];
 }
 
+const SPEEDRUN_CHROME =
+  /Had trouble submitting\?|SR00\d application|speedrun\.a16z\.com\/apply|Skip to (?:Search|Chat|main content)/i;
+
+function isSpeedrunChrome(text: string): boolean {
+  return SPEEDRUN_CHROME.test(text) || text.replace(/\s+/g, " ").trim().length < 12;
+}
+
+function cleanSpeedrunBio(text: string): string {
+  const cleaned = norm(text)
+    .replace(/Had trouble submitting\?[\s\S]*?(?:speedrun\.a16z\.com\/apply|11:59\s*PM\s*PT)/gi, " ")
+    .replace(/Skip to (?:Search|Chat|main content)[\s\S]{0,200}?(?:Info for|CHAT Chat Menu)/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return isSpeedrunChrome(cleaned) ? "" : cleaned;
+}
+
 export function parseSpeedrunCompany(html: string): SpeedrunCompany | null {
   const m = html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
   if (!m) return null;
@@ -252,7 +268,7 @@ export function parseSpeedrunCompany(html: string): SpeedrunCompany | null {
       .map((f) => {
         const row = f as { first_name?: string; last_name?: string; title?: string; introduction?: string; linkedin_url?: string };
         const name = cleanName(`${row.first_name ?? ""} ${row.last_name ?? ""}`);
-        const introduction = norm(row.introduction ?? "");
+        const introduction = cleanSpeedrunBio(row.introduction ?? "");
         const title = norm(row.title ?? "");
         if (!name || !introduction) return null;
         const lead = introduction.slice(0, 80);
@@ -266,7 +282,7 @@ export function parseSpeedrunCompany(html: string): SpeedrunCompany | null {
       name: String(d.name ?? ""),
       slug: String(d.slug ?? ""),
       website,
-      description: norm(String(d.preamble || d.description || "")).slice(0, 500),
+      description: cleanSpeedrunBio(String(d.preamble || d.description || "")).slice(0, 500),
       people,
     };
   }

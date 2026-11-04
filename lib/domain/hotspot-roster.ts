@@ -28,16 +28,34 @@ const AFFILIATION_CONTEXT =
 const CUSTOMER_CONTEXT =
   /\b(using|used by|customers?|partnership with|partnered with|researchers at leading|already using|payment option|hospitals?|launched at|including the)\b/i;
 
+function excerptAround(text: string, index: number, length: number, radius = 110): string {
+  let start = Math.max(0, index - radius);
+  let end = Math.min(text.length, index + length + radius);
+  // Do not start or end mid-word.
+  while (start > 0 && /[A-Za-z0-9]/.test(text.charAt(start))) start -= 1;
+  while (end < text.length && /[A-Za-z0-9]/.test(text.charAt(end))) end += 1;
+  // Prefer the nearest sentence start inside the window.
+  const window = text.slice(start, index);
+  const sentence = window.match(/[.!?]["']?\s+(?=[A-Z])/g);
+  if (sentence) {
+    const last = sentence[sentence.length - 1]!;
+    const at = window.lastIndexOf(last);
+    if (at >= 0) start = start + at + last.length;
+  } else {
+    // Trim a leading lowercase fragment left by the word-boundary nudge.
+    const leading = text.slice(start, end).match(/^[a-z]{1,12}\s+/);
+    if (leading) start += leading[0].length;
+  }
+  return text.slice(start, end).replace(/\s+/g, " ").trim();
+}
+
 export function schoolHitsIn(text: string): SchoolHit[] {
   const hits: SchoolHit[] = [];
   for (const school of HOTSPOT_SCHOOLS) {
     const pattern = new RegExp(school.pattern.source, school.pattern.flags);
     const match = pattern.exec(text);
     if (!match) continue;
-    const excerpt = text
-      .slice(Math.max(0, match.index - 110), Math.min(text.length, match.index + match[0].length + 110))
-      .replace(/\s+/g, " ")
-      .trim();
+    const excerpt = excerptAround(text, match.index, match[0].length);
     const customer = CUSTOMER_CONTEXT.test(excerpt);
     const affiliated = AFFILIATION_CONTEXT.test(excerpt);
     if (customer && !affiliated) continue;

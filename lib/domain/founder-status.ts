@@ -12,6 +12,28 @@ export type EnrollmentStatus = (typeof ENROLLMENT_STATUSES)[number];
 
 export const DEFAULT_ENROLLMENT_FOCUS: EnrollmentStatus[] = ["current_student", "recent_grad"];
 
+/**
+ * Directory / campus pages only show current students and class of 2023+.
+ * Older alumni (enrollment or affiliation) are excluded. Unverified people stay
+ * until dated evidence marks them older_alumni.
+ */
+export function isEligibleForFounderDirectory(input: {
+  enrollmentStatus?: string | null;
+  affiliationStatus?: string | null;
+  enrollmentGradYear?: number | null;
+}): boolean {
+  const enroll = input.enrollmentStatus ?? "unknown";
+  const aff = input.affiliationStatus ?? "unverified";
+  const year = input.enrollmentGradYear ?? null;
+  if (typeof year === "number" && year > 0 && year < ENROLLMENT_AS_OF_YEAR - RECENT_GRAD_WINDOW_YEARS) return false;
+  if (enroll === "older_alumni") return false;
+  if (aff === "older_alumni" || aff === "verified_older_alumni") {
+    if (enroll !== "current_student" && enroll !== "recent_grad") return false;
+  }
+  return true;
+}
+
+
 const RECENT_MIN_YEAR = ENROLLMENT_AS_OF_YEAR - RECENT_GRAD_WINDOW_YEARS;
 
 export interface EvidenceSnippet {
@@ -237,11 +259,25 @@ function rosterYearHits(snippet: EvidenceSnippet, hits: YearHit[]) {
     const word = match[1].replace(/\./g, "").toUpperCase();
     if (ROSTER_SKIP.has(word) || eventCode(match[1])) continue;
     const year = fullYear(parseInt(match[2], 10));
-    if (!year || year < 2020 || year > 2032) continue;
+    // Pre-2020 years are older_alumni; still record them so eligibility can drop them.
+    if (!year || year < 1980 || year > 2032) continue;
     pushYear(hits, year, `'${match[2]}`, snippet);
   }
 }
 
+
+// Bare class tokens after a name: "Josh Aviv '15 'G17". Apostrophe-year with
+// no school code. 'G17 is a graduate-year form (G + YY).
+function bareClassYearHits(snippet: EvidenceSnippet, hits: YearHit[]) {
+  const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
+  const bare = /(?:^|[^A-Za-z0-9])'(?:G)?(\d{2})\b/g;
+  for (const match of text.matchAll(bare)) {
+    const year = fullYear(parseInt(match[1], 10));
+    if (!year || year < 1980 || year > 2032) continue;
+    const token = match[0].replace(/^[^']+/, "").trim();
+    pushYear(hits, year, token || labelFromYear(year), snippet);
+  }
+}
 function classOfHits(snippet: EvidenceSnippet, hits: YearHit[]) {
   const re = /\bclass (?:of|year:)\s*'?(\d{2,4})\b/gi;
   for (const match of snippet.excerpt.matchAll(re)) {
@@ -407,6 +443,7 @@ export function decideEnrollment(snippets: EvidenceSnippet[], options?: { person
       continue;
     classTokenHits(snippet, years);
     rosterYearHits(snippet, years);
+    bareClassYearHits(snippet, years);
     classOfHits(snippet, years);
     graduatedHits(snippet, years);
     expectedDegreeHits(snippet, years);

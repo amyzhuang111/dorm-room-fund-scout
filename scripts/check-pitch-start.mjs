@@ -3,6 +3,7 @@
  * - starts with a lowercase letter, word fragment, or orphan pronoun (him/it/…)
  * - contains '[' (unstripped bracket markers)
  * - ends with '.…' / '!…' / '?…' (period before ellipsis)
+ * - quoted Bio / Bio excerpt / Speedrun segments start mid-word
  * Runs every listed route including all campus pages at 390 and 1440.
  * Usage: BASE=http://127.0.0.1:3460 node scripts/check-pitch-start.mjs
  */
@@ -90,6 +91,16 @@ for (const vp of VIEWPORTS) {
         if (pronouns.includes(first)) reasons.push(`pronoun:${first}`);
         if (text.includes("[")) reasons.push("bracket");
         if (/\.\u2026$/.test(text) || /\.\.\.$/.test(text) || /[.!?]\u2026$/.test(text)) reasons.push("punct-before-ellipsis");
+        // Quoted Bio / Speedrun segments must not start mid-word.
+        const quoteRe = /(?:Bio excerpt|Bio|on the Speedrun page)\s*:\s*["“]([^"”]*)["”]/gi;
+        for (const qm of text.matchAll(quoteRe)) {
+          const inner = (qm[1] || "").replace(/\s+/g, " ").trim();
+          if (!inner) continue;
+          if (/^[a-z]/.test(inner)) reasons.push("quoted-lowercase-start");
+          if (/^[a-z]{1,6}\s+[A-Z]/.test(inner)) reasons.push("quoted-word-fragment");
+          const qFirst = (inner.match(/^[A-Za-z']+/)?.[0] || "").toLowerCase();
+          if (pronouns.includes(qFirst)) reasons.push(`quoted-pronoun:${qFirst}`);
+        }
         if (!reasons.length) continue;
         hits.push({ text: text.slice(0, 120), reasons });
         if (hits.length >= 20) break;
