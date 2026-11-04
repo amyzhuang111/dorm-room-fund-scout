@@ -161,7 +161,7 @@ export function TileGlobe({
   const [failed, setFailed] = useState(false);
   const [locationsMode, setLocationsMode] = useState(false);
   const [expandedMap, setExpandedMap] = useState(false);
-  const [rotationEnabled, setRotationEnabled] = useState(true);
+  const [rotationEnabled, setRotationEnabled] = useState(false);
   useGlobeRotation(activeMap, rotationEnabled && !pinnedCaptureCenter());
   const locationsModeRef = useRef(locationsMode);
   useEffect(() => { locationsModeRef.current = locationsMode; }, [locationsMode]);
@@ -766,7 +766,7 @@ export function TileGlobe({
           <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
             <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
             <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">Reset</button>
-            <button type="button" aria-pressed={rotationEnabled} title="The globe keeps turning while you zoom. Drag pauses it." onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause" : "Rotate"}</button>
+            <button type="button" aria-pressed={rotationEnabled} title="Turn automatic rotation on or off" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause" : "Rotate"}</button>
             <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
           </span>
         </h2>

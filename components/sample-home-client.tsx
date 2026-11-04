@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { MapStartupResults } from "./map-startup-results";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { createPortal } from "react-dom";
@@ -8,18 +9,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
 import { MobileCampusSegments, MobileFounderDeck, MobileFounderPeek } from "@/components/mobile-founder-deck";
 import {
-  CurrentViewStrip,
-  FilterChips,
   campusIdsForSearch,
-  startupsInFounderMatches,
-  type ActiveChip,
 } from "@/components/fold-map-craft";
 import { buildOpenLaneShell } from "@/lib/domain/open-lane";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
-import { founderMatches, type FounderLead } from "@/lib/domain/founder-index";
+import { type FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
@@ -92,6 +89,7 @@ function useIsLg() {
 }
 
 function MapFoldSheet({
+  tabs,
   peak,
   founders,
   deck,
@@ -103,6 +101,7 @@ function MapFoldSheet({
   onClearCampus,
   search,
 }: {
+  tabs: ReactNode;
   peak: ReactNode;
   founders: ReactNode;
   deck: ReactNode;
@@ -246,6 +245,7 @@ function MapFoldSheet({
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-2" data-fold-sheet-body="">
           <div className="sticky top-0 z-[1] bg-[color:var(--bg,#FFFFFF)] pb-1.5">
+            <div onClick={expandToDeck}>{tabs}</div>
             <MobileCampusSegments
               campuses={campuses}
               selectedId={campusId}
@@ -296,10 +296,12 @@ function MapFoldSheet({
 
 /** Desk overlays portaled onto the map stage — filters live in the fold, not stacked above. */
 function MapStageOverlays({
+  label,
   mast,
   showFounders,
   founders,
 }: {
+  label: string;
   mast: ReactNode;
   showFounders: boolean;
   founders: ReactNode;
@@ -346,7 +348,7 @@ function MapStageOverlays({
           data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
         >
           <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founders</p>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{label}</p>
             <button
               type="button"
               className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
@@ -421,6 +423,8 @@ export function SampleHomeClient(props: {
   const [founders, setFounders] = useState<FounderLead[]>([]);
   const [founderStatus, setFounderStatus] = useState<"loading" | "ready" | "error">("loading");
   const [founderQuery, setFounderQuery] = useState("");
+  const [resultMode, setResultMode] = useState<"startups" | "founders">("startups");
+  const [browseOpen, setBrowseOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const search = useSearchParams();
   const router = useRouter();
@@ -506,32 +510,6 @@ export function SampleHomeClient(props: {
     router.push(`/?${next.toString()}`);
   };
 
-  const matchedFounders = useMemo(
-    () =>
-      founders.filter((founder) =>
-        founderMatches(founder, { text: founderQuery, campusId: mapCampusId || null }),
-      ),
-    [founders, founderQuery, mapCampusId],
-  );
-
-  const viewStartups = useMemo(
-    () =>
-      startupsInFounderMatches(
-        matchedFounders,
-        companies.filter((c) => !mapCampusId || mapCampusId === "missing" || c.schoolId === mapCampusId),
-      ),
-    [matchedFounders, companies, mapCampusId],
-  );
-
-
-  const activeChips: ActiveChip[] = [];
-  if (mapCampusName) {
-    activeChips.push({ key: "campus", label: mapCampusName, onClear: clearCampus });
-  }
-  if (founderQuery.trim()) {
-    activeChips.push({ key: "q", label: `“${founderQuery.trim()}”`, onClear: () => setFounderQuery("") });
-  }
-
   const investableCompanyIds = useMemo(
     () => new Set(companies.map((company) => company.id).filter(Boolean)),
     [companies],
@@ -545,6 +523,8 @@ export function SampleHomeClient(props: {
     [founders, investableCompanyIds],
   );
 
+  const discoveryTabs = <div className="flex gap-2" role="group" aria-label="Browse map records">{(["startups", "founders"] as const).map(mode => <button key={mode} type="button" aria-pressed={resultMode === mode} className={`min-h-11 rounded px-3 text-sm font-semibold ${resultMode === mode ? "bg-blue-50 text-blue-700" : "text-fg-2"}`} onClick={() => { setResultMode(mode); setBrowseOpen(true); }}>{mode === "startups" ? "Startups" : "Founders"}</button>)}</div>;
+  const startupResults = <MapStartupResults key={`${mapCampusId}:${founderQuery}`} companies={companies} ready={ready} query={founderQuery} campusId={mapCampusId} />;
   return (
     <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
@@ -566,12 +546,13 @@ export function SampleHomeClient(props: {
 
               {/* Mobile sheet only below lg — keeps first [data-founder-card] visible for checks. */}
               {!isLg ? <MapFoldSheet
+                tabs={discoveryTabs}
                 campuses={topCampuses}
                 campusId={mapCampusId}
                 onSelectCampus={selectCampus}
                 onClearCampus={clearCampus}
                 peak={null}
-                deck={
+                deck={resultMode === "startups" ? startupResults :
                   <MobileFounderDeck
                     founders={founders}
                     status={founderStatus}
@@ -581,7 +562,7 @@ export function SampleHomeClient(props: {
                     investableCompanyIds={investableCompanyIds}
                   />
                 }
-                peek={
+                peek={resultMode === "startups" ? <MapStartupResults companies={companies} ready={ready} query={founderQuery} campusId={mapCampusId} compact /> :
                   <MobileFounderPeek
                     founders={founders}
                     status={founderStatus}
@@ -611,7 +592,7 @@ export function SampleHomeClient(props: {
                   />
                 }
                 search={<FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />}
-                founders={
+                founders={resultMode === "startups" ? startupResults :
                   <FounderResults
                     founders={founders}
                     status={founderStatus}
@@ -634,23 +615,16 @@ export function SampleHomeClient(props: {
               {/* r56 desk: full-bleed fold — mast filters + open-lane hero + founders on the map. */}
               {isLg ? (
                 <MapStageOverlays
+                  label={resultMode === "startups" ? "Startups" : "Founders"}
                   mast={
                     <div className="space-y-1.5" data-fold-desk-mast-inner="">
+                      {discoveryTabs}
                       <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-                      <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
-                      <CurrentViewStrip
-                        campusName={mapCampusName}
-                        query={founderQuery}
-                        matchCount={matchedFounders.length}
-                        totalFounders={founders.length || foundersListed}
-                        startups={viewStartups}
-                        onClearCampus={clearCampus}
-                        onClearQuery={() => setFounderQuery("")}
-                      />
+                      {mapCampusId && <button type="button" className="min-h-11 text-sm text-link" onClick={clearCampus}>{mapCampusName || "Campus"} × Clear</button>}
                     </div>
                   }
-                  showFounders={Boolean(mapCampusId || founderQuery.trim())}
-                  founders={
+                  showFounders={Boolean(browseOpen || mapCampusId || founderQuery.trim())}
+                  founders={resultMode === "startups" ? startupResults :
                     <FounderResults
                       founders={founders}
                       status={founderStatus}
