@@ -421,7 +421,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                     <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0 text-[11px] leading-4 text-fg-2">
                       {!campusLocked && row.campus ? (
                         row.campusSlug ? (
-                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-0 items-center text-link">{plainText(row.campus)}</Link>
+                          <Link href={`/campuses/${row.campusSlug}`} className="inline-flex min-h-11 items-center text-link">{plainText(row.campus)}</Link>
                         ) : (
                           <span>{plainText(row.campus)}</span>
                         )
@@ -431,7 +431,7 @@ export function DataTable({ rows, campusLocked = false, searchableFounderCount }
                       {row.tierBasis ? (
                         <button
                           type="button"
-                          className="min-h-0 text-[11px] text-link"
+                          className="min-h-11 text-[11px] text-link"
                           data-tier-reason-trigger=""
                           aria-expanded={reasonOpen}
                           onClick={() => setTierReasonId(reasonOpen ? null : row.id)}
