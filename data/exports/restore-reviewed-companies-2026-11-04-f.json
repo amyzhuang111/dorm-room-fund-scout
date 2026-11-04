@@ -1,0 +1,16 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Batch f: per-company web research (targeted round of 12 hidden 2025-26 YC-batch companies; 1 confirmed). Each entry needs an OFFICIAL source stating the founder's class year or student status.",
+  "restore": [
+    {
+      "id": "proj_DDpAPdpxMi1q",
+      "name": "Robocurve",
+      "why": "Founder Jay Chooi is named a SENIOR (Harvard class of 2026) on Harvard's own math department page; YC bio: Harvard BA CS/Math, MA Statistics",
+      "evidence": "Harvard Mathematics, 'Two math concentrators among 2026 Rhodes Scholars': 'seniors Jay Chooi and Emma Finn' (joint CS and mathematics concentrator)",
+      "eligibilityUrl": "https://www.math.harvard.edu/two-math-concentrators-among-2026-rhodes-scholars"
+    }
+  ]
+}
