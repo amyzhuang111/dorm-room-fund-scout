@@ -1,0 +1,273 @@
+{
+  "checkedAt": "2026-11-04",
+  "reviewScope": "Additive visibility review of existing university-linked profiles using current named company/tenant evidence. No new rows or changes to founders, enrollment, funding, headquarters, scoring, or gate logic.",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "restore": [
+    {
+      "id": "proj_wUX94GWKmcV-",
+      "name": "2IT",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_44sd7EC2O2An",
+      "name": "Arata AI",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_jl-ngZHLGxob",
+      "name": "Crosstalk Connections",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_LxevzPkd9DMI",
+      "name": "Hoist AI",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_7nAavddlPC5C",
+      "name": "IVY Engineering Group",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_QTZiNQYP9yOx",
+      "name": "Lemon Juice",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Myyumk0UrH_M",
+      "name": "Matchbook Partners",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_rW8bWD_S_clD",
+      "name": "Metlas",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_PiYYE9GYZv9y",
+      "name": "Moby Filters",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_CUNjCIif67dS",
+      "name": "MovementBase",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Fd1OHKEhw-Lz",
+      "name": "Phi.AI",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_5YOtAzovKFbD",
+      "name": "Rud-co",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_6GtULQUY2uj9",
+      "name": "Sachi Health",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_mmX-L3zyqYiO",
+      "name": "Santé",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_RadnOPAeNjrK",
+      "name": "Terra",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_qr5meU9KfFBm",
+      "name": "Tesoro",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_-DCzC2RJuJK-",
+      "name": "The Comp Set",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_LAOiIm0LwcIt",
+      "name": "Tomosu",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_ulRHHLz4pX40",
+      "name": "Value Alpha",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_twuD1gdsbL7H",
+      "name": "Vedant Capital Partners",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_bKkPtejUJIlW",
+      "name": "Vitruvius",
+      "sourceUrl": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_meYbxKoQDzeD",
+      "name": "Absco Therapeutics",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_stfUEb5KIzH-",
+      "name": "Aperture Bio",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Yq8gZpgRKagS",
+      "name": "Boston Interactome",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Vpwv_d-J4zWk",
+      "name": "Bullseye Biosciences",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_ZO_UXnciAKkt",
+      "name": "Core Biomedicine",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_GSMTuOoBjYqn",
+      "name": "Illumicell AI",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_VseqAajMZKzI",
+      "name": "InGel Therapeutics",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_p0k2UA3lwmSH",
+      "name": "Lightning Biotherapeutics",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_NrNuY1hP8DqG",
+      "name": "Ovelle Bio",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_BlCOnjhTfybC",
+      "name": "Stratagen Bio",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_lk7wjkqFfPpk",
+      "name": "Trillion Bio",
+      "sourceUrl": "https://innovationlabs.harvard.edu/ventures/current-pagliuca-life-lab-ventures",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_krG5LweR_Xev",
+      "name": "GC Therapeutics",
+      "sourceUrl": "https://www.labcentral.org/about/our-resident-network",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_VYfWFtlBzKXI",
+      "name": "HarborSite",
+      "sourceUrl": "https://www.labcentral.org/about/our-resident-network",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_NDWTz_7NRCgJ",
+      "name": "Lybra Bio",
+      "sourceUrl": "https://www.labcentral.org/about/our-resident-network",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Hl7ZppQyepQO",
+      "name": "Rasyn",
+      "sourceUrl": "https://www.labcentral.org/about/our-resident-network",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_JSMWcMOn8Ufw",
+      "name": "Limax Biosciences",
+      "sourceUrl": "https://www.labcentral.org/about/our-resident-network",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_AAhgWlDQMgV9",
+      "name": "Axent Biosciences Inc.",
+      "sourceUrl": "https://bio.bakarlabs.org/companies/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj__FJk1-Z6yRSp",
+      "name": "Editpep",
+      "sourceUrl": "https://bio.bakarlabs.org/companies/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_Fjl5H-sKC9Aa",
+      "name": "Root Applied Sciences, INC.",
+      "sourceUrl": "https://bio.bakarlabs.org/companies/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_3kOzxjOsmLpb",
+      "name": "Natrion",
+      "sourceUrl": "https://researchpark.illinois.edu/natrion/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_XODxv127bfAb",
+      "name": "PowerBox Technology",
+      "sourceUrl": "https://researchpark.illinois.edu/powerbox-technologies/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_E8imn7TjLYk8",
+      "name": "Second Chance Innovations",
+      "sourceUrl": "https://researchpark.illinois.edu/second-chance-innovations/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    },
+    {
+      "id": "proj_aSrZKqgLGuit",
+      "name": "EarthSense",
+      "sourceUrl": "https://researchpark.illinois.edu/earthsense/",
+      "reason": "Existing company identity matches a current operator tenant/resident listing or company publication, confirming present business activity. Resolves the old unverified-recency exclusion for directory visibility only; does not verify a graduation year, current enrollment, investment eligibility, or funding."
+    }
+  ]
+}
