@@ -20,12 +20,11 @@ import { resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
-import { CurrentViewDock } from "@/components/current-view-dock";
+import { CompanyFilters } from "./company-filters";
 import { CompanyReviewActions } from "./company-review-actions";
 import {
   applyFacets,
   emptyFacets,
-  FacetRail,
   IntelligenceBoards,
   LogoMark,
   PANEL,
@@ -243,7 +242,7 @@ export function SampleInstrumentBrowse({
   const [founderLinks, setFounderLinks] = useState<Record<string, { name: string; linkedinUrl: string }[]>>({});
   const [rightTab, setRightTab] = useState<"feed" | "overlays">("feed");
   /** Right instrument starts closed so the ledger owns the width (Monitor-style peek). */
-  const [rightOpen, setRightOpen] = useState(true); // r33: desk rails open by default (d755 beat logo dock)
+  const [rightOpen, setRightOpen] = useState(false);
 
   useEffect(() => {
     let cancel = false;
@@ -462,19 +461,9 @@ export function SampleInstrumentBrowse({
     const campusLabel = facets.campus
       ? campuses.find((c) => c.id === facets.campus)?.name ?? facets.campus
       : null;
-    return activeFacetChips(facets, { campus: campusLabel });
-  }, [facets, campuses]);
+    return activeFacetChips(facets, { campus: campusLabel, sector: companiesLive.find(c => c.sectorId === facets.sector)?.sector ?? undefined, kind: companiesLive.find(c => c.signalKind === facets.kind)?.signalLabel ?? undefined });
+  }, [facets, campuses, companiesLive]);
 
-  const dockCompanies = useMemo(
-    () =>
-      boardCompanies.slice(0, 12).map((c) => ({
-        id: c.id,
-        name: c.name,
-        logoUrl: c.logoUrl,
-        href: `/startup/${c.id}`,
-      })),
-    [boardCompanies],
-  );
 
   useEffect(() => {
     const ids = cards.slice(0, 40).map((c) => c.id);
@@ -553,7 +542,7 @@ export function SampleInstrumentBrowse({
     >
       {/* Col 1 · persistent ruled index (magazine TOC), not a sheet over content */}
       <aside className="hidden min-w-0 lg:block" data-browse-index="">
-        <div className="sticky top-14 space-y-2">
+        <div className="space-y-4">
           <div
             className="border-b border-[color:var(--line,#E1E5EF)] pb-2"
             data-index-signal-beat=""
@@ -561,7 +550,7 @@ export function SampleInstrumentBrowse({
             data-n-of-m=""
           >
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filters</p>
-            <p className="mt-1 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[18px] font-semibold leading-normal tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
               <span data-match-count="">{total.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
@@ -598,26 +587,21 @@ export function SampleInstrumentBrowse({
                 type="button"
                 data-export-filtered=""
                 onClick={() => exportFilteredCsv(boardCompanies)}
-                className="inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 text-[12px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
               >
                 Export CSV
               </button>
             </div>
           </div>
-          <div className="mt-2 h-[min(42vh,400px)] overflow-x-hidden overflow-y-auto pt-2" data-contents-facet-map="">
-            <FacetRail
+          <div className="pt-2" data-contents-facet-map="">
+            <CompanyFilters
               companies={companiesLive}
               campuses={campuses}
               facets={facets}
               onChange={(next) => commitFacet(next, { debounceMs: next.query !== facets.query ? 120 : 0 })}
-              index
-              caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
           </div>
-          {/* Compact current-view logo strip (P0). Keep short so rails stay primary. */}
-          <div className="mt-2">
-            <CurrentViewDock companies={dockCompanies} max={20} />
-          </div>
+
         </div>
       </aside>
 
@@ -1372,7 +1356,7 @@ export function SampleInstrumentBrowse({
                   })}
                 </div>
               ) : null}
-              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={(next) => commitFacet(next, { debounceMs: next.query !== facets.query ? 120 : 0 })} dense sheet />
+              <CompanyFilters companies={companiesLive} campuses={campuses} facets={facets} onChange={(next) => commitFacet(next, { debounceMs: next.query !== facets.query ? 120 : 0 })} />
             </div>
           </div>
         </div>
