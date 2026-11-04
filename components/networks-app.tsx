@@ -144,6 +144,7 @@ export function NetworksApp() {
   if (loadError) {
     return (
       <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-2)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
+        <h1 className="sr-only">Campus founder networks</h1>
         {loadError}
       </div>
     );
@@ -152,6 +153,7 @@ export function NetworksApp() {
   if (!data) {
     return (
       <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-3)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
+        <h1 className="sr-only">Campus founder networks</h1>
         Loading networks...
       </div>
     );

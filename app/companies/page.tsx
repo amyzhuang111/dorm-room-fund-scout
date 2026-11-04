@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import Discover from "../startup/discover/page";
 import { SampleHome } from "@/components/sample-home";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { facetsFromSearchParams } from "@/lib/domain/facet-url";
+
+export const metadata: Metadata = { title: "Companies" };
 
 export default async function CompaniesPage({
   searchParams,
@@ -14,6 +17,8 @@ export default async function CompaniesPage({
   }
   const facets = facetsFromSearchParams(sp);
   return (
+    <>
+    <h1 className="sr-only">Companies</h1>
     <SampleHome
       place="explore"
       feed={sp.feed === "leaderboard" ? "leaderboard" : "directory"}
@@ -37,5 +42,6 @@ export default async function CompaniesPage({
         c: sp.c,
       }}
     />
+    </>
   );
 }

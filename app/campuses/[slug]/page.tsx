@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ClassYearChart } from "@/components/class-year-chart";
@@ -43,6 +44,12 @@ function companies(universityId: string): { id: string; name: string; people: nu
   } catch {
     return [];
   }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const university = resolveUniversity(slug);
+  return { title: university ? shortCampusLabel(university.id, university.name) : "Campus" };
 }
 
 export default async function CampusPage({

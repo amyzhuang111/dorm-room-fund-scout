@@ -512,13 +512,23 @@ export function buildDirectoryFromDb(): DirectoryData {
   return { cards, sectors, kinds };
 }
 
-/** Unique founders across cards: a founder on several companies counts once (cards carry names only). */
-export function countUniqueFounders(cards: Pick<DirectoryCard, "founders">[]): number {
-  const seen = new Set<string>();
-  for (const card of cards) {
-    for (const name of card.founders) seen.add(name.trim().toLowerCase());
-  }
-  return seen.size;
+/**
+ * Distinct people (by person id) with a role on a company in the directory: the
+ * homepage "founders" count. Same filters as the directory cards (kind =
+ * company, investable, named person). Counting by id, not name, keeps two
+ * different people who share a name apart (name-matching merged ~10).
+ */
+export function countFoundersListed(): number {
+  const row = getDb()
+    .prepare(
+      `SELECT COUNT(DISTINCT r.person_id) AS n
+         FROM person_project_roles r
+         JOIN people pe ON pe.id = r.person_id
+         JOIN projects p ON p.id = r.project_id
+        WHERE trim(pe.name) != '' AND p.kind = 'company' AND p.is_investable_candidate = 1`,
+    )
+    .get() as { n: number };
+  return row.n;
 }
 
 export function filterDirectory(cards: DirectoryCard[], sector: string | undefined, kind: string | undefined, campus?: string): DirectoryCard[] {

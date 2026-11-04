@@ -80,7 +80,7 @@ export function facetsFromSearchParams(
   const flag = flagRaw && FLAG_OK.has(flagRaw) ? (flagRaw as FlagId) : null;
   const yearRaw = get("year")?.trim();
   let foundedYear: number | null = null;
-  let yearMissing = get("yearMissing") === "1" || yearRaw === "missing";
+  const yearMissing = get("yearMissing") === "1" || yearRaw === "missing";
   if (yearRaw && yearRaw !== "missing") {
     const n = Number(yearRaw);
     if (Number.isFinite(n)) foundedYear = n;

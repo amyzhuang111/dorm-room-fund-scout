@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import { listUniversities } from "@/lib/domain/queries";
 import { addManualReferral } from "@/lib/actions/manual-referral";
+
+export const metadata: Metadata = { title: "New referral" };
 
 export default function NewReferralPage() {
   const universities = listUniversities();

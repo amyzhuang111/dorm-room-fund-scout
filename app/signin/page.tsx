@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { signInWithGoogle } from "@/lib/auth/actions";
 import { SIGNIN_MESSAGE, safeCallbackUrl } from "@/lib/auth/access";
@@ -5,6 +6,8 @@ import { currentMember } from "@/lib/auth/guard";
 import { logMissingAuthEnv, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 import { authMethods } from "@/lib/auth/send-email";
 import { MagicLinkForm } from "@/components/magic-link-form";
+
+export const metadata: Metadata = { title: "Sign in" };
 
 export const dynamic = "force-dynamic";
 

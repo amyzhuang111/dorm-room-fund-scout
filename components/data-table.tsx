@@ -86,6 +86,8 @@ function groupRows(rows: ProjectTableRow[]): Group[] {
   return groups;
 }
 
+const ROW_PAGE = 150;
+
 export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRow[]; campusLocked?: boolean }) {
   const [query, setQuery] = useState("");
   const [tier, setTier] = useState("");
@@ -95,6 +97,9 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   // Show every row by default; signaled rows already sort first, and hiding the rest made
   // the table look shorter than the founder count above it.
   const [showQuiet, setShowQuiet] = useState(true);
+  // Drawing every row at once (2,000+) is what made the table heavy. Filters and
+  // search still run over ALL rows; only the drawn slice is limited.
+  const [rowLimit, setRowLimit] = useState(ROW_PAGE);
   const [selected, setSelected] = useState<string[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [cursor, setCursor] = useState(0);
@@ -130,8 +135,20 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const hasSignal = (row: ProjectTableRow) => Boolean(row.detail || row.full || row.event || row.signalAt);
   const quietCount = filtered.filter((row) => !hasSignal(row)).length;
   const listed = showQuiet ? filtered : filtered.filter(hasSignal);
-  const groups = useMemo(() => groupRows(listed), [listed]);
+  const allGroups = useMemo(() => groupRows(listed), [listed]);
+  const totalListed = useMemo(() => allGroups.reduce((n, group) => n + group.rows.length, 0), [allGroups]);
+  const groups = useMemo(() => {
+    const out: typeof allGroups = [];
+    let drawn = 0;
+    for (const group of allGroups) {
+      if (drawn >= rowLimit) break;
+      out.push(group);
+      drawn += group.rows.length;
+    }
+    return out;
+  }, [allGroups, rowLimit]);
   const ordered = useMemo(() => groups.flatMap((group) => group.rows), [groups]);
+  const hiddenRows = Math.max(0, totalListed - ordered.length);
   const open = ordered.find((row) => row.id === openId) ?? null;
   const withSignal = rows.filter((row) => row.full || row.detail || row.event || row.signalAt).length;
   const noSignal = rows.length - withSignal;
@@ -333,6 +350,20 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             })}
           </tbody>
         </table>
+        {hiddenRows > 0 && (
+          <div className="flex flex-wrap items-center gap-3 px-2 py-4 text-[14px] text-fg-2" data-founders-more="">
+            <span>
+              Showing <span className="num">{ordered.length.toLocaleString("en-US")}</span> of{" "}
+              <span className="num">{totalListed.toLocaleString("en-US")}</span> projects
+            </span>
+            <button type="button" className={control} onClick={() => setRowLimit((n) => n + ROW_PAGE)}>
+              Show {Math.min(ROW_PAGE, hiddenRows).toLocaleString("en-US")} more
+            </button>
+            <button type="button" className={control} onClick={() => setRowLimit(Number.MAX_SAFE_INTEGER)}>
+              Show all {totalListed.toLocaleString("en-US")}
+            </button>
+          </div>
+        )}
         {ordered.length === 0 && quietCount > 0 && !showQuiet && <p className="px-2 py-6 text-[14px] text-fg-2">Rows with no signal are hidden.</p>}
         {ordered.length === 0 && (quietCount === 0 || showQuiet) && <p className="px-2 py-6 text-[14px] text-fg-2">No projects match. Clear filters.</p>}
       </div>

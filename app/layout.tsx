@@ -71,7 +71,7 @@ const heading = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Campus Scout",
+  title: { default: "Campus Scout", template: "%s · Campus Scout" },
   description: "Student founder intelligence, by campus.",
 };
 

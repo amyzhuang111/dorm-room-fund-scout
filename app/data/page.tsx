@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE } from "@/lib/domain/corpus-explorer";
 import { buildDirectoryFromDb } from "@/lib/domain/directory";
@@ -20,6 +21,8 @@ function loadRecencyFunnel() {
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
+
+export const metadata: Metadata = { title: "Data" };
 
 export const dynamic = "force-dynamic";
 

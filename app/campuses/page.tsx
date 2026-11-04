@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { listUniversities } from "@/lib/domain/queries";
 import { CampusesTheme } from "@/components/campuses-theme";
+
+export const metadata: Metadata = { title: "Campuses" };
 
 export default function CampusesPage() {
   const rows = listUniversities()

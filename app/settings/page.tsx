@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { SCREENING_CONFIG } from "@/lib/screening/config";
+
+export const metadata: Metadata = { title: "Settings" };
 
 export default function SettingsPage() {
   return (
