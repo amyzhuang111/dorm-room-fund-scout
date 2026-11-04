@@ -8,6 +8,7 @@ export interface SchoolHit {
   universityId: string;
   label: string;
   excerpt: string;
+  phrase: string;
 }
 
 const SCHOOLS: { id: string; label: string; pattern: RegExp }[] = [
@@ -26,6 +27,77 @@ const SCHOOLS: { id: string; label: string; pattern: RegExp }[] = [
   { id: "univ_gatech", label: "Georgia Institute of Technology", pattern: /\bgeorgia institute of technology\b|\bgeorgia tech\b/i },
   { id: "univ_michigan", label: "University of Michigan", pattern: /\buniversity of michigan\b/i },
   { id: "univ_waterloo", label: "University of Waterloo", pattern: /\buniversity of waterloo\b|\buwaterloo\b/i },
+  { id: "univ_tau", label: "Tel Aviv University", pattern: /\btel aviv university\b/i },
+  { id: "univ_technion", label: "Technion", pattern: /\btechnion\b/i },
+  { id: "univ_iit_bombay", label: "IIT Bombay", pattern: /\biit bombay\b|\bindian institute of technology,? bombay\b/i },
+  { id: "univ_iit_delhi", label: "IIT Delhi", pattern: /\biit delhi\b|\bindian institute of technology,? delhi\b/i },
+  { id: "univ_iit_madras", label: "IIT Madras", pattern: /\biit madras\b|\bindian institute of technology,? madras\b/i },
+  { id: "univ_iit_kanpur", label: "IIT Kanpur", pattern: /\biit kanpur\b|\bindian institute of technology,? kanpur\b/i },
+  { id: "univ_iit_kharagpur", label: "IIT Kharagpur", pattern: /\biit kharagpur\b|\bindian institute of technology,? kharagpur\b/i },
+  { id: "univ_mcgill", label: "McGill University", pattern: /\bmcgill\b/i },
+  { id: "univ_tsinghua", label: "Tsinghua University", pattern: /\btsinghua\b/i },
+  { id: "univ_hebrew", label: "Hebrew University", pattern: /\bhebrew university\b/i },
+  { id: "univ_oxford", label: "University of Oxford", pattern: /\buniversity of oxford\b|\boxford university\b/i },
+  { id: "univ_cambridge", label: "University of Cambridge", pattern: /\buniversity of cambridge\b|\bcambridge university\b/i },
+  { id: "univ_western", label: "Western University", pattern: /\bwestern university\b|\buniversity of western ontario\b/i },
+  { id: "univ_ubc", label: "University of British Columbia", pattern: /\buniversity of british columbia\b|\bubc\b/i },
+  { id: "univ_nus", label: "National University of Singapore", pattern: /\bnational university of singapore\b/i },
+  { id: "univ_reichman", label: "Reichman University", pattern: /\breichman university\b|\bidc herzliya\b/i },
+  { id: "univ_bgu", label: "Ben-Gurion University", pattern: /\bben[- ]gurion university\b/i },
+  { id: "univ_peking", label: "Peking University", pattern: /\bpeking university\b/i },
+  { id: "univ_delhi", label: "University of Delhi", pattern: /\bdelhi university\b|\buniversity of delhi\b/i },
+  { id: "univ_sydney", label: "University of Sydney", pattern: /\buniversity of sydney\b/i },
+  { id: "univ_monash", label: "Monash University", pattern: /\bmonash university\b|\bmonash\b/i },
+  { id: "univ_unsw", label: "UNSW", pattern: /\buniversity of new south wales\b|\bunsw\b/i },
+  { id: "univ_snu", label: "Seoul National University", pattern: /\bseoul national university\b/i },
+  { id: "univ_mumbai", label: "University of Mumbai", pattern: /\buniversity of mumbai\b/i },
+  { id: "univ_tcd", label: "Trinity College Dublin", pattern: /\btrinity college dublin\b/i },
+  { id: "univ_melbourne", label: "University of Melbourne", pattern: /\buniversity of melbourne\b/i },
+  { id: "univ_lse", label: "London School of Economics", pattern: /\blondon school of economics\b/i },
+  { id: "univ_imperial", label: "Imperial College London", pattern: /\bimperial college\b/i },
+  { id: "univ_suny", label: "SUNY", pattern: /\bstate university of new york\b|\bsuny\b/i },
+  { id: "univ_csu", label: "California State University", pattern: /\bcalifornia state university\b/i },
+  { id: "univ_bits", label: "BITS Pilani", pattern: /\bbits pilani\b/i },
+  { id: "univ_cbs", label: "Copenhagen Business School", pattern: /\bcopenhagen business school\b/i },
+  { id: "univ_calgary", label: "University of Calgary", pattern: /\buniversity of calgary\b/i },
+  { id: "univ_york", label: "York University", pattern: /(?<!new )\byork university\b/i },
+  { id: "univ_ucd", label: "University College Dublin", pattern: /\buniversity college dublin\b/i },
+  { id: "univ_zhejiang", label: "Zhejiang University", pattern: /\bzhejiang university\b/i },
+  { id: "univ_hec", label: "HEC Paris", pattern: /\bhec paris\b/i },
+  { id: "univ_insead", label: "INSEAD", pattern: /\binsead\b/i },
+  { id: "univ_eth", label: "ETH Zurich", pattern: /\beth zurich\b|\beth zürich\b/i },
+  { id: "univ_lbs", label: "London Business School", pattern: /\blondon business school\b/i },
+  { id: "univ_ucl", label: "University College London", pattern: /\buniversity college london\b|\bucl\b/i },
+  { id: "univ_tum", label: "Technical University of Munich", pattern: /\btechnical university of munich\b|\btu munich\b/i },
+  { id: "univ_esade", label: "ESADE", pattern: /\besade\b/i },
+  { id: "univ_iese", label: "IESE", pattern: /\biese\b/i },
+  { id: "univ_delft", label: "Delft University of Technology", pattern: /\bdelft university of technology\b|\btu delft\b/i },
+  { id: "univ_lund", label: "Lund University", pattern: /\blund university\b/i },
+  { id: "univ_edinburgh", label: "University of Edinburgh", pattern: /\buniversity of edinburgh\b/i },
+  { id: "univ_kuleuven", label: "KU Leuven", pattern: /\bku leuven\b|\buniversity of leuven\b/i },
+  { id: "univ_tokyo", label: "University of Tokyo", pattern: /\buniversity of tokyo\b/i },
+  { id: "univ_dtu", label: "Technical University of Denmark", pattern: /\btechnical university of denmark\b/i },
+  { id: "univ_erasmus", label: "Erasmus University Rotterdam", pattern: /\berasmus university\b/i },
+  { id: "univ_copenhagen", label: "University of Copenhagen", pattern: /\buniversity of copenhagen\b/i },
+  { id: "univ_kth", label: "KTH", pattern: /\bkth royal institute\b/i },
+  { id: "univ_amsterdam", label: "University of Amsterdam", pattern: /\buniversity of amsterdam\b/i },
+  { id: "univ_bocconi", label: "Bocconi University", pattern: /\bbocconi\b/i },
+  { id: "univ_essec", label: "ESSEC", pattern: /\bessec\b/i },
+  { id: "univ_chalmers", label: "Chalmers", pattern: /\bchalmers\b/i },
+  { id: "univ_hhs", label: "Stockholm School of Economics", pattern: /\bstockholm school of economics\b/i },
+  { id: "univ_uppsala", label: "Uppsala University", pattern: /\buppsala university\b/i },
+  { id: "univ_escp", label: "ESCP", pattern: /\bescp\b/i },
+  { id: "univ_warwick", label: "University of Warwick", pattern: /\buniversity of warwick\b/i },
+  { id: "univ_fudan", label: "Fudan University", pattern: /\bfudan university\b/i },
+  { id: "univ_polytechnique", label: "École Polytechnique", pattern: /\bécole polytechnique\b|\becole polytechnique\b/i },
+  { id: "univ_weizmann", label: "Weizmann Institute", pattern: /\bweizmann institute\b/i },
+  { id: "univ_polimi", label: "Politecnico di Milano", pattern: /\bpolitecnico di milano\b/i },
+  { id: "univ_isb", label: "Indian School of Business", pattern: /\bindian school of business\b/i },
+  { id: "univ_pepperdine", label: "Pepperdine University", pattern: /\bpepperdine\b/i },
+  { id: "univ_iimc", label: "IIM Calcutta", pattern: /\biim calcutta\b|\bindian institute of management,? calcutta\b/i },
+  { id: "univ_iimb", label: "IIM Bangalore", pattern: /\biim bangalore\b|\bindian institute of management,? bangalore\b/i },
+  { id: "univ_ceibs", label: "CEIBS", pattern: /\bceibs\b|\bchina europe international business school\b/i },
+  { id: "univ_fgv", label: "FGV", pattern: /\bgetulio vargas\b|\bfundação getulio vargas\b/i },
 ];
 
 const AFFILIATION_CONTEXT =
@@ -52,6 +124,11 @@ export function schoolHitsInPersonExcerpt(
     const match = school.pattern.exec(text);
     if (!match || match.index == null) continue;
     if (/\bwith\s+$/i.test(text.slice(Math.max(0, match.index - 24), match.index))) continue;
+    const beforeSchool = text.slice(Math.max(0, match.index - 48), match.index);
+    if (/\b(lecturer|professor|faculty|researcher|researched|post-?doctoral|postdoctoral|post-?doc)\b/i.test(beforeSchool)) continue;
+    if (/\binstitute of\s+$/i.test(beforeSchool)) continue;
+    const justAfter = text.slice(match.index + match[0].length, match.index + match[0].length + 18);
+    if (/^\s*post-?doc/i.test(justAfter)) continue;
     const afterSchool = text.slice(match.index + match[0].length, match.index + match[0].length + 16);
     if (/^\s*spin-?out|^\s*spin-?off|devfest|hackathon|hackprinceton/i.test(afterSchool)) continue;
     const excerpt = windowAround(text, match.index, match[0].length);
@@ -62,12 +139,17 @@ export function schoolHitsInPersonExcerpt(
     const ownBio = options?.claimType === "accelerator_founder" || /Bio:/i.test(text.slice(0, match.index));
     if (customer && !affiliated) continue;
     if (!affiliated && !atSchool && (!ownBio || employerList)) continue;
-    const ownClaim = options?.claimType === "accelerator_founder" || options?.claimType === "source_mention";
-    if (!ownClaim && lastName.length >= 3) {
+    if (lastName.length >= 3) {
       const preceding = text.slice(Math.max(0, match.index - 240), match.index);
-      if (!new RegExp(`\\b${lastName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(preceding)) continue;
+      const named = new RegExp(`\\b${lastName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(preceding);
+      const firstPerson = /\b(i'm|i am|i studied|i hold|i graduated|i earned|i received|my )\b/i.test(preceding);
+      if (!named && !firstPerson) continue;
+      const owner = preceding.match(/([A-Z][a-zA-Z'’-]+)\s*\([^)]*$/);
+      if (owner && owner[1].toLowerCase() !== lastName.toLowerCase()) continue;
+      const holder = preceding.match(/([A-Z][a-zA-Z'’-]+)\s+(?:holds|has|earned|received)\b[^.]{0,50}$/);
+      if (holder && holder[1].toLowerCase() !== lastName.toLowerCase()) continue;
     }
-    hits.push({ universityId: school.id, label: school.label, excerpt });
+    hits.push({ universityId: school.id, label: school.label, excerpt, phrase: match[0] });
   }
   return hits;
 }
