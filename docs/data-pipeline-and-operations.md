@@ -441,6 +441,14 @@ later. Does not count, with the reason found when each was checked:
 - **CMU VentureBridge**: includes a venture founded by a CMU professor.
 - **SMU IIE / BIG programme**: has accepted non-SMU founders since 2009.
 - **UC LAUNCH**: admits a UC student, alum, faculty or staff member.
+- **Columbia Startup Lab cohort pages** (74 hidden companies, from the 2025-26 and
+  2026-27 announcements): the pages say the Lab "cultivates a cohort of **alumni**
+  entrepreneurs", and Columbia's notice requires applicants to have graduated from
+  Columbia or Barnard by June 1 **or up to five years earlier**. A cohort founder
+  can therefore have graduated in 2020-2022, before the rule's 2023 threshold, and
+  the pages print each founder's school (CBS, SIPA, Columbia College, Engineering)
+  but **no class years**. Not evidence of recency. (The separate Morningside track
+  for current students is a different list.)
 - **USF Student Innovation Incubator, Ole Miss Rebel Student Venture Fund**:
   student-focused but cumulative back to about 2014 with no cohort years in the
   entries, so recency cannot be told.
