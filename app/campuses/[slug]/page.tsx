@@ -155,6 +155,14 @@ export default async function CampusPage({
         <div className="min-w-0 max-w-full lg:col-span-8">
           {tab === "founders" && (
             <>
+              {founders.length === 0 ? (
+                <p className="text-[14px] leading-5 text-fg-2" data-campus-empty-roster="">
+                  This scan has no founders on file for {label}.
+                  {university.pitchbook?.undergrad || university.pitchbook?.grad || university.pitchbook?.mba
+                    ? " The PitchBook count above is the published alumni total, not a roster stored here."
+                    : ""}
+                </p>
+              ) : null}
               <link rel="preload" as="fetch" href="/data/founder-table.json" />
               <FoundersDesk campusId={university.id} campusLocked initialCount={founders.length} />
             </>
