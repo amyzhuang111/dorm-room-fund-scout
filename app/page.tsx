@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { GlobeFoldSkeleton } from "@/components/globe-fold-skeleton";
 import { GlobeBoot } from "@/components/map-boot";
 import { SampleHome, type Feed } from "@/components/sample-home";
-import { loadDirectory } from "@/lib/domain/directory";
+import { countUniqueFounders, loadDirectory } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 
 function feedOf(value: string | undefined): Feed {
@@ -35,8 +35,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   const feed = feedOf(sp.feed);
   const stats = loadHeroStats();
   const directory = loadDirectory();
-  let foundersListed = 0;
-  for (const card of directory.cards) foundersListed += card.founders.length;
+  const foundersListed = countUniqueFounders(directory.cards);
   const plotted = stats.universities.filter((university) => university.lat != null && university.lon != null);
   const top = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))[0];
   return (

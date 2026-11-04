@@ -110,6 +110,7 @@ function PeakShareLite({
               {shell.undatedMonth > 0 ? ` · ${shell.undatedMonth.toLocaleString("en-US")} undated` : ""}
               {" · "}
               {shell.quiet.toLocaleString("en-US")} quiet
+              {shell.noDate > 0 ? ` · ${shell.noDate.toLocaleString("en-US")} no date` : ""}
             </p>
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">

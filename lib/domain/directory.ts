@@ -512,6 +512,15 @@ export function buildDirectoryFromDb(): DirectoryData {
   return { cards, sectors, kinds };
 }
 
+/** Unique founders across cards: a founder on several companies counts once (cards carry names only). */
+export function countUniqueFounders(cards: Pick<DirectoryCard, "founders">[]): number {
+  const seen = new Set<string>();
+  for (const card of cards) {
+    for (const name of card.founders) seen.add(name.trim().toLowerCase());
+  }
+  return seen.size;
+}
+
 export function filterDirectory(cards: DirectoryCard[], sector: string | undefined, kind: string | undefined, campus?: string): DirectoryCard[] {
   return cards.filter((card) => {
     if (sector && card.sectorId !== sector) return false;

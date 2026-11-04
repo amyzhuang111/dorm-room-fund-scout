@@ -92,7 +92,9 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const [campus, setCampus] = useState("");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [compact, setCompact] = useState(false);
-  const [showQuiet, setShowQuiet] = useState(false);
+  // Show every row by default; signaled rows already sort first, and hiding the rest made
+  // the table look shorter than the founder count above it.
+  const [showQuiet, setShowQuiet] = useState(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [cursor, setCursor] = useState(0);
