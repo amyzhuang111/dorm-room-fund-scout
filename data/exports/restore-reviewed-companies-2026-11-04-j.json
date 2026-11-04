@@ -1,0 +1,121 @@
+{
+  "reviewedOn": "2026-11-04",
+  "fromReasons": [
+    "unverified recency"
+  ],
+  "note": "Batch j: per-company web research restricted to the founder's university domain, its student newspaper and ycombinator.com (round 6: 71 of 100 hidden companies searched; 16 confirmed from official university pages, mostly current-student venture rosters). Name plus company/YC bio matching; each entry names its source.",
+  "restore": [
+    {
+      "id": "proj_1AzZiBluLiK0",
+      "name": "Tinu AI",
+      "why": "Founder Kelvin Chang is a current Michigan MSI student and a 2025-26 Zell Entrepreneur",
+      "evidence": "UMSI news 'Meet 3 UMSI entrepreneurs'; Zell Lurie 2025-2026 Zell Entrepreneurs; U-M Center for Entrepreneurship 2026 cohort",
+      "eligibilityUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/"
+    },
+    {
+      "id": "proj_3A1CMGw-bTkx",
+      "name": "SABE",
+      "why": "Founder Veronica Rivera is a Wharton MBA student, W '26 (Penn Libraries event page)",
+      "evidence": "Penn Libraries event page: Founder Veronica Rivera (W '26); Wharton story on VIP-X Philadelphia",
+      "eligibilityUrl": "https://www.library.upenn.edu/events/lippincotts-snack-stop-0"
+    },
+    {
+      "id": "proj_3FDT82qoU-h9",
+      "name": "Palette",
+      "why": "Founders Serena Pei (MIT undergraduate, SuperUROP 2025-26) and Josephine Lee (MIT EECS graduate student, Media Lab)",
+      "evidence": "MIT FutureTech team page; MIT SuperUROP scholar page; MIT Media Lab Multisensory Intelligence people",
+      "eligibilityUrl": "https://superurop.mit.edu/scholars/serena-h-pei/"
+    },
+    {
+      "id": "proj_4O9G-XpROQE6",
+      "name": "Mohan",
+      "why": "Founder Chance Jiajie Li is named as an MIT Media Lab MAS graduate in its 2025 graduation post",
+      "evidence": "MIT Media Lab 'Congratulations to everyone graduating in 2025'; personal page on fab.cba.mit.edu (2023)",
+      "eligibilityUrl": "https://www.media.mit.edu/posts/congratulations-to-everyone-graduating-in-2025/"
+    },
+    {
+      "id": "proj_70Q9qT18Kv9F",
+      "name": "Skala",
+      "why": "Founder Shalin Zarboulas is a final-year UMSI BSI student and a 2025-26 Zell Entrepreneur",
+      "evidence": "UMSI news 'Meet 3 UMSI entrepreneurs'; Zell Lurie 2025-2026 Zell Entrepreneurs; 2026 UMSI Student Project Exposition",
+      "eligibilityUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/"
+    },
+    {
+      "id": "proj_7_Px08gvYPOe",
+      "name": "Roxbury",
+      "why": "Founder Samuel Deutsch is a Michigan LSA (Political Science) student in the 2025-26 Zell Entrepreneurs, venture track",
+      "evidence": "Zell Lurie 2025-2026 Zell Entrepreneurs roster",
+      "eligibilityUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/"
+    },
+    {
+      "id": "proj_JOzamjypuajY",
+      "name": "Rupay Bachao",
+      "why": "Founder Ishika Gupta is a Michigan CS senior and 2025-26 Zell Entrepreneur",
+      "evidence": "Michigan CSE story 'CS undergrad Ishika Gupta named Zell Entrepreneur'; M-LEAD certificate 2026",
+      "eligibilityUrl": "https://cse.engin.umich.edu/stories/cs-undergrad-ishika-gupta-named-zell-entrepreneur"
+    },
+    {
+      "id": "proj_KD0KMA2MetJ9",
+      "name": "BasisEdge",
+      "why": "Founder William Furge is BS '26 (Michigan Business Challenge 2026, Sillman Undergraduate Award) and a Zell Entrepreneur",
+      "evidence": "Zell Lurie: Meet the 2026 Michigan Business Challenge winners",
+      "eligibilityUrl": "https://zli.umich.edu/meet-the-2026-michigan-business-challenge-winners/"
+    },
+    {
+      "id": "proj_ftrxnQSuUMyz",
+      "name": "Krik Krak",
+      "why": "Founder Jaenelle Lauture is a Michigan Ross MBA '26 candidate; Michigan Business Challenge 2026 finalist",
+      "evidence": "Michigan Ross 'Learning by Building'; Zell Lurie Michigan Business Challenge 2026",
+      "eligibilityUrl": "https://michiganross.umich.edu/news/learning-building-inside-ross-full-time-mba-entrepreneurial-experience"
+    },
+    {
+      "id": "proj_9_UwwJLqiVcA",
+      "name": "Mayflower",
+      "why": "Founder Aryan Gulati is listed by Stanford Profiles as a CS master's student admitted Autumn 2022 (another entry lists an undergraduate); either is 2022+ enrollment",
+      "evidence": "Stanford Profiles: Aryan Gulati, Masters Student in Computer Science, admitted Autumn 2022; Stanford AI Lab ICML 2026 listings",
+      "eligibilityUrl": "https://profiles.stanford.edu/aryan-gulati"
+    },
+    {
+      "id": "proj_EE28UcOz5-T6",
+      "name": "Spur",
+      "why": "Founder Anushka Nijhawan graduated from Yale in May 2024 (CS); Spur began as a senior-year project",
+      "evidence": "Yale Engineering news: 'With launch of tech company Spur, recent grads discuss...'",
+      "eligibilityUrl": "https://engineering.yale.edu/news-and-events/news/launch-tech-company-spur-recent-grads-discuss-hectic-exciting-startup-life"
+    },
+    {
+      "id": "proj_LlimHRg_NmLh",
+      "name": "Girl Math Capital",
+      "why": "Founder Serena Ainslie is a Wharton MBA student (WG '26/'27) who pitched at Penn Venture Lab in March 2026",
+      "evidence": "Penn Venture Lab recap 'Breaking the Bias Panel and Pitch Competition'; Wharton MBA profile",
+      "eligibilityUrl": "https://venturelab.upenn.edu/explorer/recap-breaking-the-bias-panel-and-pitch-competition"
+    },
+    {
+      "id": "proj_Olrj8qDk-IIO",
+      "name": "TUFANY",
+      "why": "Founder Ahmad Hasanian is a Wharton MBA student (WG '26/'27, Class of 2027 first-year honors)",
+      "evidence": "Wharton story on VIP-X Philadelphia; Wharton MBA Inside Class of 2027 honors lists",
+      "eligibilityUrl": "https://mba-inside.wharton.upenn.edu/class-2027-first-year-honors/"
+    },
+    {
+      "id": "proj_ceXUubGpYj-3",
+      "name": "Sigma",
+      "why": "Founder Rushil Knagaram graduated from Duke (Neuroscience BS) in May 2024",
+      "evidence": "Duke Undergraduate Studies in Neuroscience diploma ceremony program, 12 May 2024; Duke 2024 commencement program",
+      "eligibilityUrl": "https://psychandneuro.duke.edu/sites/psychandneuro.duke.edu/files/documents/WORKING%202024%20Graduation%20Program.pdf"
+    },
+    {
+      "id": "proj_6GtULQUY2uj9",
+      "name": "Sachi Health",
+      "why": "Founder Daniella Ueki is a Columbia Business School student; Sachi Health won the Columbia Summer Student Incubator 2025",
+      "evidence": "Columbia Business School: Summer Student Incubator 2025 winners",
+      "eligibilityUrl": "https://business.columbia.edu/lang/student-and-alumni-programming/launch/summer-startup-track/summer-student-incubator-2025"
+    },
+    {
+      "id": "proj_PgcFvzmOG8fi",
+      "name": "Basics",
+      "why": "Founder Akeil Smith is a CMU undergraduate (junior, business administration, 2025; Innovation Scholar); Basics won the 2026 McGinnis undergraduate track",
+      "evidence": "CMU CS news 2025; CMU McGinnis Venture Competition past winners; Swartz Center news archive 2026",
+      "eligibilityUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/mcginnis-venture-competition/past-winners.html"
+    }
+  ]
+}
