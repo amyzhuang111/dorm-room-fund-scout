@@ -972,6 +972,26 @@
       "latitude": 45.52345,
       "longitude": -122.67621,
       "sourceUrl": "https://www.geonames.org/5746545/"
+    },
+    {
+      "storedLabel": "Champaign, Illinois",
+      "id": "4887158",
+      "city": "Champaign",
+      "country": "US",
+      "region": "IL",
+      "latitude": 40.11642,
+      "longitude": -88.24338,
+      "sourceUrl": "https://www.geonames.org/4887158/"
+    },
+    {
+      "storedLabel": "Schenectady, New York",
+      "id": "5136454",
+      "city": "Schenectady",
+      "country": "US",
+      "region": "NY",
+      "latitude": 42.81424,
+      "longitude": -73.93957,
+      "sourceUrl": "https://www.geonames.org/5136454/"
     }
   ]
 }
