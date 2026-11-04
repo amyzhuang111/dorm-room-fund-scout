@@ -4,18 +4,24 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { FounderTableRow } from "@/lib/domain/founder-table";
 import { LogoMark } from "@/components/sample-instrument";
+import { TagChips, type TagChip } from "@/components/tag-chips";
 import { campusInk } from "@/lib/display/campus-ink";
-import { ellipsisAtBoundary, WRAP_FULL } from "@/lib/display/ellipsis";
+import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
 import { humanizeEnumText } from "@/lib/display/enum-labels";
+import { stripLeadingName, stripUrls } from "@/lib/display/strip-urls";
 
 const ROW_PAGE = 60;
 const control =
-  "inline-flex h-11 min-h-11 items-center rounded-md border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] text-[color:var(--fg,#0B0E17)] outline-none";
+  "inline-flex h-11 min-h-11 items-center rounded-md border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] text-[color:var(--fg,#0B0E17)] outline-none appearance-none";
+const selectControl = `${control} pr-8 bg-[length:12px] bg-[right_12px_center] bg-no-repeat`;
+const SELECT_ARROW =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235C647A' d='M1 1l5 5 5-5'/%3E%3C/svg%3E\")";
 
-function plainText(value: string | null | undefined): string | null {
+function plainText(value: string | null | undefined, name?: string | null): string | null {
   if (!value) return null;
+  const stripped = stripLeadingName(stripUrls(value), name);
   const text = humanizeEnumText(
-    value
+    (stripped || "")
       .replace(/[\u2014\u2013]/g, " · ")
       .replace(/\s+/g, " ")
       .trim(),
@@ -28,6 +34,112 @@ function tierLabel(tier: string | null): string {
   if (tier === "S+" || tier === "S") return "Core";
   if (tier === "A" || tier === "B") return "Watch";
   return "Listed";
+}
+
+function FilterFields({
+  query,
+  setQuery,
+  tier,
+  setTier,
+  campus,
+  setCampus,
+  verifiedOnly,
+  setVerifiedOnly,
+  hideQuiet,
+  setHideQuiet,
+  campusLocked,
+  campuses,
+  tiers,
+  activeFilterCount,
+  onClear,
+}: {
+  query: string;
+  setQuery: (v: string) => void;
+  tier: string;
+  setTier: (v: string) => void;
+  campus: string;
+  setCampus: (v: string) => void;
+  verifiedOnly: boolean;
+  setVerifiedOnly: (v: boolean | ((b: boolean) => boolean)) => void;
+  hideQuiet: boolean;
+  setHideQuiet: (v: boolean | ((b: boolean) => boolean)) => void;
+  campusLocked: boolean;
+  campuses: [string, string][];
+  tiers: string[];
+  activeFilterCount: number;
+  onClear: () => void;
+}) {
+  return (
+    <>
+      <input
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Search company or founder"
+        className={`${control} min-w-[12rem] flex-1 sm:max-w-sm`}
+        aria-label="Search company or founder"
+      />
+      <select
+        value={tier}
+        onChange={(event) => setTier(event.target.value)}
+        className={selectControl}
+        style={{ backgroundImage: SELECT_ARROW }}
+        aria-label="Tier"
+        data-select-styled=""
+      >
+        <option value="">Tier</option>
+        {tiers.map((value) => (
+          <option key={value} value={value}>
+            {value}
+          </option>
+        ))}
+      </select>
+      {!campusLocked ? (
+        <select
+          value={campus}
+          onChange={(event) => setCampus(event.target.value)}
+          className={selectControl}
+          style={{ backgroundImage: SELECT_ARROW }}
+          aria-label="Campus"
+          data-select-styled=""
+        >
+          <option value="">Campus</option>
+          {campuses.map(([id, label]) => (
+            <option key={id} value={id}>
+              {label}
+            </option>
+          ))}
+        </select>
+      ) : null}
+      <button
+        type="button"
+        className={`${control} ${verifiedOnly ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
+        aria-pressed={verifiedOnly}
+        data-btn-style="sans"
+        onClick={() => setVerifiedOnly((value) => !value)}
+      >
+        Verified
+      </button>
+      <button
+        type="button"
+        className={control}
+        aria-pressed={hideQuiet}
+        data-btn-style="sans"
+        onClick={() => setHideQuiet((value) => !value)}
+      >
+        {hideQuiet ? "Hide quiet" : "Show quiet"}
+      </button>
+      {activeFilterCount > 0 ? (
+        <button
+          type="button"
+          className="text-[13px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+          data-btn-style="sans"
+          onClick={onClear}
+        >
+          Clear
+        </button>
+      ) : null}
+    </>
+  );
 }
 
 export function FounderDirectory({
@@ -43,6 +155,7 @@ export function FounderDirectory({
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [hideQuiet, setHideQuiet] = useState(true);
   const [rowLimit, setRowLimit] = useState(ROW_PAGE);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   const campuses = useMemo(() => {
     const map = new Map<string, string>();
@@ -80,163 +193,184 @@ export function FounderDirectory({
   const activeFilterCount =
     (query.trim() ? 1 : 0) + (tier ? 1 : 0) + (campus ? 1 : 0) + (verifiedOnly ? 1 : 0) + (hideQuiet ? 0 : 1);
 
+  const clearAll = () => {
+    setQuery("");
+    setTier("");
+    setCampus("");
+    setVerifiedOnly(false);
+    setHideQuiet(true);
+  };
+
+  const filterProps = {
+    query,
+    setQuery,
+    tier,
+    setTier,
+    campus,
+    setCampus,
+    verifiedOnly,
+    setVerifiedOnly,
+    hideQuiet,
+    setHideQuiet,
+    campusLocked,
+    campuses,
+    tiers,
+    activeFilterCount,
+    onClear: clearAll,
+  };
+
+  // Side panel: top campuses in the filtered set
+  const sideRanks = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const row of filtered) {
+      const label = row.campus || "Unknown";
+      map.set(label, (map.get(label) || 0) + 1);
+    }
+    return [...map.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 8);
+  }, [filtered]);
+
   return (
     <div data-founder-directory="" data-founders-results="">
-      <div className="flex flex-wrap items-center gap-2" data-founder-filters="" role="group" aria-label="Founder filters">
+      {/* Phone: one Filters button → sheet. Desk: full controls. */}
+      <div className="flex flex-wrap items-center gap-2 lg:hidden" data-founder-filters-mobile="">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search company or founder"
-          className={`${control} min-w-[12rem] flex-1 sm:max-w-sm`}
+          className={`${control} min-w-0 flex-1`}
           aria-label="Search company or founder"
         />
-        <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
-          <option value="">Tier</option>
-          {tiers.map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-        {!campusLocked ? (
-          <select value={campus} onChange={(event) => setCampus(event.target.value)} className={control} aria-label="Campus">
-            <option value="">Campus</option>
-            {campuses.map(([id, label]) => (
-              <option key={id} value={id}>
-                {label}
-              </option>
-            ))}
-          </select>
-        ) : null}
-        <button
-          type="button"
-          className={`${control} ${verifiedOnly ? "border-[color:var(--cobalt,#2F4FD8)]" : ""}`}
-          aria-pressed={verifiedOnly}
-          onClick={() => setVerifiedOnly((value) => !value)}
-        >
-          Verified
-        </button>
         <button
           type="button"
           className={control}
-          aria-pressed={hideQuiet}
-          onClick={() => setHideQuiet((value) => !value)}
+          data-btn-style="sans"
+          data-founder-filters-open=""
+          aria-expanded={sheetOpen}
+          onClick={() => setSheetOpen(true)}
         >
-          {hideQuiet ? "Hide rows with no signal" : "Show quiet rows"}
+          Filters{activeFilterCount > 0 ? ` · ${activeFilterCount}` : ""}
         </button>
-        {activeFilterCount > 0 ? (
-          <button
-            type="button"
-            className="text-[13px] font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline"
-            onClick={() => {
-              setQuery("");
-              setTier("");
-              setCampus("");
-              setVerifiedOnly(false);
-              setHideQuiet(true);
-            }}
-          >
-            Clear
-          </button>
-        ) : null}
+      </div>
+      <div className="mt-2 hidden flex-wrap items-center gap-2 lg:flex" data-founder-filters="" role="group" aria-label="Founder filters">
+        <FilterFields {...filterProps} />
       </div>
 
+      {sheetOpen ? (
+        <div className="fixed inset-0 z-40 lg:hidden" data-founder-filter-sheet="" role="dialog" aria-modal="true" aria-label="Founder filters">
+          <button type="button" className="absolute inset-0 bg-black/35" aria-label="Close filters" onClick={() => setSheetOpen(false)} />
+          <div className="absolute inset-x-0 bottom-0 max-h-[80dvh] overflow-y-auto rounded-t-2xl bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-[16px] font-semibold text-[color:var(--fg,#0B0E17)]">Filters</p>
+              <button type="button" className="text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" data-btn-style="sans" onClick={() => setSheetOpen(false)}>
+                Done
+              </button>
+            </div>
+            <div className="flex flex-col gap-2">
+              <FilterFields {...filterProps} />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <p className="mt-3 text-[13px] text-[color:var(--fg-3,#5C647A)]" data-showing-founders="">
-        <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{filtered.length.toLocaleString("en-US")}</span>
-        {" of "}
-        <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{founders.length.toLocaleString("en-US")}</span>
-        {" founders"}
+        {filtered.length === founders.length ? (
+          <>
+            <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{founders.length.toLocaleString("en-US")}</span>
+            {" founders"}
+          </>
+        ) : (
+          <>
+            <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{filtered.length.toLocaleString("en-US")}</span>
+            {" of "}
+            <span className="tabular-nums text-[color:var(--fg,#0B0E17)]">{founders.length.toLocaleString("en-US")}</span>
+            {" founders"}
+          </>
+        )}
       </p>
 
-      <ul className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)]" data-founder-cards="">
-        {ordered.map((row) => {
-          const pitch = plainText(row.signal);
-          const backers = (row.programs || []).slice(0, 3);
-          const label = tierLabel(row.tier);
-          const ink = campusInk(row.campusId || row.campus);
-          return (
-            <li key={row.id} className="list-none" data-founder-card="" data-project-card="">
-              <Link
-                href={row.companyId ? `/startup/${row.companyId}` : row.campusSlug ? `/campuses/${row.campusSlug}` : "/founders"}
-                className="group flex min-h-11 items-start gap-3 px-1 py-4 transition-colors duration-150 ease-out sm:gap-3.5 sm:px-2 sm:py-5 lg:hover:bg-[color:var(--bg-2,#F7F8FC)]"
-              >
-                <LogoMark name={row.name} logoUrl={row.logoUrl} size={48} campusInk={ink} />
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                    <p className="break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px] sm:leading-6">
-                      {row.name}
-                    </p>
-                    {row.company ? (
-                      <span className="text-[13px] text-[color:var(--fg-3,#5C647A)]">{row.company}</span>
-                    ) : null}
+      <div className="mt-2 grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]" data-founders-spread="">
+        <ul className="grid grid-cols-1 gap-0 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)] md:grid-cols-2 md:gap-3 md:divide-y-0 md:border-t-0 lg:grid-cols-2 xl:grid-cols-3" data-founder-cards="">
+          {ordered.map((row) => {
+            const pitch = plainText(row.signal, row.name);
+            const backers = (row.programs || []).slice(0, 3);
+            const label = tierLabel(row.tier);
+            const ink = campusInk(row.campusId || row.campus);
+            const chips: TagChip[] = [
+              { key: "tier", label: row.tier || label, attrs: { "data-card-tier-chip": "", "data-tier": row.tier ?? undefined } },
+              ...(row.campus ? [{ key: "campus", label: row.campus }] : []),
+              ...(row.year != null ? [{ key: "year", label: String(row.year), tone: "mono" as const, attrs: { "data-card-year": "" } }] : []),
+              ...backers.map((backer) => ({
+                key: `b-${backer}`,
+                label: backer,
+                tone: "soft" as const,
+                title: backer,
+                attrs: { "data-card-backer": "" },
+              })),
+              ...(row.verified ? [{ key: "verified", label: "Verified", tone: "ok" as const }] : []),
+            ];
+            return (
+              <li key={row.id} className="list-none md:rounded-lg md:border md:border-[color:var(--line,#E1E5EF)] md:bg-white" data-founder-card="" data-project-card="">
+                <Link
+                  href={row.companyId ? `/startup/${row.companyId}` : row.campusSlug ? `/campuses/${row.campusSlug}` : "/founders"}
+                  className="group flex min-h-11 items-start gap-3 px-1 py-4 transition-colors duration-150 ease-out sm:gap-3.5 sm:px-2 sm:py-5 md:px-3 md:py-4 lg:hover:bg-[color:var(--bg-2,#F7F8FC)]"
+                >
+                  <LogoMark name={row.name} logoUrl={row.logoUrl} size={48} campusInk={ink} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                      <p className="break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px] sm:leading-6">
+                        {row.name}
+                      </p>
+                      {row.company ? (
+                        <span className="text-[13px] text-[color:var(--fg-3,#5C647A)]">{row.company}</span>
+                      ) : null}
+                    </div>
+                    {pitch ? (
+                      <p className="mt-1 max-w-2xl text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" title={pitch} data-card-pitch="" data-why-here="">
+                        {ellipsisAtBoundary(pitch, 140)}
+                      </p>
+                    ) : (
+                      <p className="sr-only" data-why-here="" data-why-blank="1">
+                        Why it&apos;s here blank
+                      </p>
+                    )}
+                    <TagChips max={4} chips={chips} />
                   </div>
-                  {pitch ? (
-                    <p className="mt-1 max-w-2xl text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" title={pitch} data-card-pitch="" data-why-here="">
-                      {ellipsisAtBoundary(pitch, 140)}
-                    </p>
-                  ) : (
-                    <p className="sr-only" data-why-here="" data-why-blank="1">
-                      Why it&apos;s here blank
-                    </p>
-                  )}
-                  <span className="mt-2.5 flex flex-wrap items-center gap-1.5" data-card-chips="">
-                    <span
-                      className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] font-medium text-[color:var(--fg,#0B0E17)]"
-                      data-card-tier-chip=""
-                      data-tier={row.tier ?? undefined}
-                    >
-                      {row.tier || label}
-                    </span>
-                    {row.campus ? (
-                      row.campusSlug ? (
-                        <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]">
-                          {row.campus}
-                        </span>
-                      ) : (
-                        <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]">
-                          {row.campus}
-                        </span>
-                      )
-                    ) : null}
-                    {row.year != null ? (
-                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-card-year="">
-                        {row.year}
-                      </span>
-                    ) : null}
-                    {backers.map((backer) => (
-                      <span
-                        key={backer}
-                        className="inline-flex h-6 max-w-[12rem] items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 text-[12px] text-[color:var(--fg,#0B0E17)]"
-                        data-card-backer=""
-                        title={backer}
-                      >
-                        <span className={WRAP_FULL}>{backer}</span>
-                      </span>
-                    ))}
-                    {row.verified ? (
-                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--ok,#1F7A4D)]">
-                        Verified
-                      </span>
-                    ) : null}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        <aside className="hidden lg:block" data-founders-side="">
+          <div className="sticky top-16 rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Campuses in view</p>
+            <ol className="mt-2 space-y-1.5">
+              {sideRanks.map(([label, count], i) => (
+                <li key={label} className="flex items-baseline justify-between gap-2 text-[13px]">
+                  <span className="min-w-0 truncate text-[color:var(--fg,#0B0E17)]">
+                    <span className="mr-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                    {label}
                   </span>
-                </div>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+                  <span className="shrink-0 font-semibold tabular-nums text-[color:var(--fg-2,#3F465C)]">{count.toLocaleString("en-US")}</span>
+                </li>
+              ))}
+              {sideRanks.length === 0 ? <li className="text-[13px] text-[color:var(--fg-3,#5C647A)]">No campus ranks yet</li> : null}
+            </ol>
+          </div>
+        </aside>
+      </div>
 
       {hiddenRows > 0 ? (
         <div className="flex flex-wrap items-center gap-3 px-1 py-4 text-[14px] text-[color:var(--fg-2,#3F465C)]" data-founders-more="">
           <span>
-            Showing <span className="font-mono tabular-nums">{ordered.length.toLocaleString("en-US")}</span> of{" "}
-            <span className="font-mono tabular-nums">{filtered.length.toLocaleString("en-US")}</span> founders
+            Showing <span className="tabular-nums">{ordered.length.toLocaleString("en-US")}</span>
+            {" on this page"}
           </span>
-          <button type="button" className={control} onClick={() => setRowLimit((n) => n + ROW_PAGE)}>
+          <button type="button" className={control} data-btn-style="sans" onClick={() => setRowLimit((n) => n + ROW_PAGE)}>
             Show {Math.min(ROW_PAGE, hiddenRows).toLocaleString("en-US")} more
           </button>
-          <button type="button" className={control} onClick={() => setRowLimit(Number.MAX_SAFE_INTEGER)}>
-            Show all {filtered.length.toLocaleString("en-US")}
+          <button type="button" className={control} data-btn-style="sans" onClick={() => setRowLimit(Number.MAX_SAFE_INTEGER)}>
+            Show remaining
           </button>
         </div>
       ) : null}

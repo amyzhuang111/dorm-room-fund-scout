@@ -10,7 +10,9 @@ import { CampusSeal } from "@/components/campus-seal";
 import { formatCorpusDate, loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { CorpusFilters } from "@/components/corpus-filters";
 import { directoryRank } from "@/lib/domain/directory-rank";
-import { ellipsisAtBoundary, WRAP_FULL } from "@/lib/display/ellipsis";
+import { ellipsisAtBoundary } from "@/lib/display/ellipsis";
+import { TagChips } from "@/components/tag-chips";
+import { titleCaseTag } from "@/lib/display/tag-label";
 
 export const metadata: Metadata = { title: "Data" };
 
@@ -75,17 +77,17 @@ export default async function DataExplorerPage({
   };
 
   return (
-    <div className="sample-paper mx-auto max-w-[1200px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
+    <div className="sample-paper mx-auto max-w-[1280px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
       <DataTheme />
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3">
         <div className="min-w-0">
           <h1 className="text-[28px] font-semibold leading-none tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[32px]">Full data</h1>
           <p className="mt-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-hero-stat="" data-corpus-explain="">
-            <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{universeTotal.toLocaleString("en-US")}</span>
+            <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{universeTotal.toLocaleString("en-US")}</span>
             {" vetted companies · page "}
-            <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{result.page}</span>
+            <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{result.page}</span>
             {" of "}
-            <span className="font-mono tabular-nums">{result.pageCount.toLocaleString("en-US")}</span>
+            <span className="tabular-nums">{result.pageCount.toLocaleString("en-US")}</span>
             {" · "}
             {CORPUS_PAGE_SIZE}
             {" per page"}
@@ -93,17 +95,12 @@ export default async function DataExplorerPage({
         </div>
         <a
           href="/data/export"
-          className="hidden h-10 min-h-10 items-center rounded-md border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--fg-2,#3F465C)] sm:inline-flex"
+          className="inline-flex h-10 min-h-10 items-center rounded-md border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--fg-2,#3F465C)]"
           data-corpus-csv=""
+          data-corpus-csv-mobile=""
+          data-btn-style="sans"
         >
           Download CSV
-        </a>
-        <a
-          href="/data/export"
-          className="inline-flex h-10 min-h-10 items-center text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline sm:hidden"
-          data-corpus-csv-mobile=""
-        >
-          CSV export
         </a>
       </div>
 
@@ -112,23 +109,31 @@ export default async function DataExplorerPage({
         data-recency-funnel=""
         data-corpus-fill-rates=""
       >
-        <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        {" vetted · "}
+        <span className="sr-only" data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
         <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
         {" older alumni out · "}
         <span data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
         {" unchecked · on file Stage "}
-        <span className="font-mono tabular-nums" data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
-        {"/"}
-        <span className="font-mono tabular-nums" data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
+        <span className="tabular-nums" data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
+        {fill.total === universeTotal ? (
+          <>
+            {" filed"}
+            <span className="sr-only" data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
+          </>
+        ) : (
+          <>
+            {" of "}
+            <span className="tabular-nums" data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
+          </>
+        )}
         {" · Sector "}
-        <span className="font-mono tabular-nums" data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
+        <span className="tabular-nums" data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
         {" · Founded "}
-        <span className="font-mono tabular-nums" data-count="fill-founded">{fill.founded.toLocaleString("en-US")}</span>
+        <span className="tabular-nums" data-count="fill-founded">{fill.founded.toLocaleString("en-US")}</span>
         {" · Funding "}
-        <span className="font-mono tabular-nums" data-count="fill-funding">{fill.funding.toLocaleString("en-US")}</span>
+        <span className="tabular-nums" data-count="fill-funding">{fill.funding.toLocaleString("en-US")}</span>
         {" · Site "}
-        <span className="font-mono tabular-nums" data-count="fill-website">{fill.website.toLocaleString("en-US")}</span>
+        <span className="tabular-nums" data-count="fill-website">{fill.website.toLocaleString("en-US")}</span>
       </p>
 
       <CorpusFilters
@@ -151,8 +156,8 @@ export default async function DataExplorerPage({
           <div className="min-w-0 flex-1">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On this page</p>
             <p className="mt-0.5 font-mono text-[13px] tabular-nums leading-4 text-[color:var(--fg,#0B0E17)]">
-              <span className="text-[18px] font-bold text-[color:var(--cobalt,#2F4FD8)]">{universeTotal.toLocaleString("en-US")}</span>
-              {" companies"}
+              <span className="text-[18px] font-bold text-[color:var(--cobalt,#2F4FD8)]">{pageSignaled.toLocaleString("en-US")}</span>
+              {" signaled"}
               <span aria-hidden> · </span>
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{pageSignaled.toLocaleString("en-US")}</span>
               {" signaled"}
@@ -188,10 +193,10 @@ export default async function DataExplorerPage({
         ) : null}
       </div>
 
-      {/* YC-directory card language: logo, name, pitch, campus, year, stage, sector, backers, tier. */}
-      <ul className="mt-3 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)] sm:mt-4" data-corpus-table="" data-corpus-cards="">
+      <div className="mt-3 grid gap-6 sm:mt-4 lg:grid-cols-[minmax(0,1fr)_240px]" data-data-spread="">
+      <ul className="grid grid-cols-1 gap-0 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)] md:grid-cols-2 md:gap-3 md:divide-y-0 md:border-t-0" data-corpus-table="" data-corpus-cards="">
         {result.rows.map((row) => {
-          const whyBits = [row.signalLabel, row.stage, row.sector, row.primaryProgram].filter(Boolean) as string[];
+          const whyBits = [row.signalLabel, row.stage, titleCaseTag(row.sector), row.primaryProgram].filter(Boolean) as string[];
           const pitch = whyBits.length
             ? whyBits.slice(0, 3).join(" · ")
             : row.fundingText || null;
@@ -212,10 +217,10 @@ export default async function DataExplorerPage({
           const backers = [row.primaryProgram, row.ycBatch].filter(Boolean) as string[];
           const uniqueBackers = [...new Set(backers)].slice(0, 3);
           return (
-            <li key={row.id} className="list-none" data-corpus-row="">
+            <li key={row.id} className="list-none md:rounded-lg md:border md:border-[color:var(--line,#E1E5EF)] md:bg-white" data-corpus-row="">
               <Link
                 href={`/startup/${row.id}`}
-                className="group flex min-h-11 items-start gap-3 px-1 py-4 transition-colors duration-150 ease-out sm:gap-3.5 sm:px-2 sm:py-5 lg:hover:bg-[color:var(--bg-2,#F7F8FC)]"
+                className="group flex min-h-11 items-start gap-3 px-1 py-4 transition-colors duration-150 ease-out sm:gap-3.5 sm:px-2 sm:py-5 md:px-3 md:py-4 lg:hover:bg-[color:var(--bg-2,#F7F8FC)]"
               >
                 <span className="mt-0.5 shrink-0">
                   <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} campus={row.campus} />
@@ -240,58 +245,65 @@ export default async function DataExplorerPage({
                       Why it&apos;s here blank
                     </p>
                   )}
-                  <span className="mt-2.5 flex flex-wrap items-center gap-1.5" data-card-chips="">
-                    <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] font-medium text-[color:var(--fg,#0B0E17)]" data-card-tier-chip="">
-                      {tierLabel}
-                    </span>
-                    {row.foundedYear != null ? (
-                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-card-year="">
-                        {formatCorpusDate(row.foundedYear)}
-                      </span>
-                    ) : null}
-                    {row.stage ? (
-                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]" data-field="stage">
-                        {row.stage}
-                      </span>
-                    ) : null}
-                    {row.sector ? (
-                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] uppercase tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]" data-field="sector">
-                        {row.sector}
-                      </span>
-                    ) : null}
-                    {uniqueBackers.map((backer) => (
-                      <span
-                        key={backer}
-                        className={`inline-flex h-6 max-w-[12rem] items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 text-[12px] text-[color:var(--fg,#0B0E17)] ${WRAP_FULL}`}
-                        data-card-backer=""
-                        title={backer}
-                      >
-                        {backer}
-                      </span>
-                    ))}
-                    {row.signals > 0 ? (
-                      <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                        {row.signals.toLocaleString("en-US")} signals
-                      </span>
-                    ) : null}
-                  </span>
+                  <TagChips
+                    max={4}
+                    chips={[
+                      { key: "tier", label: tierLabel, attrs: { "data-card-tier-chip": "" } },
+                      ...(row.foundedYear != null
+                        ? [{ key: "year", label: formatCorpusDate(row.foundedYear) || String(row.foundedYear), tone: "mono" as const, attrs: { "data-card-year": "" } }]
+                        : []),
+                      ...(row.stage ? [{ key: "stage", label: row.stage, attrs: { "data-field": "stage" } }] : []),
+                      ...(row.sector ? [{ key: "sector", label: row.sector, attrs: { "data-field": "sector" } }] : []),
+                      ...uniqueBackers.map((backer) => ({
+                        key: `b-${backer}`,
+                        label: backer,
+                        tone: "soft" as const,
+                        title: backer,
+                        attrs: { "data-card-backer": "" },
+                      })),
+                      ...(row.signals > 0
+                        ? [{ key: "sig", label: `${row.signals.toLocaleString("en-US")} signals`, tone: "mono" as const }]
+                        : []),
+                    ]}
+                  />
                 </div>
               </Link>
             </li>
           );
         })}
         {result.rows.length === 0 ? (
-          <li className="px-2.5 py-6 text-center text-[14px] text-[color:var(--fg-3,#5C647A)]">No companies match these filters.</li>
+          <li className="px-2.5 py-6 text-center text-[14px] text-[color:var(--fg-3,#5C647A)] md:col-span-2">No companies match these filters.</li>
         ) : null}
       </ul>
+      <aside className="hidden lg:block" data-data-side="">
+        <div className="sticky top-16 rounded-lg border border-[color:var(--line,#E1E5EF)] bg-white p-3">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">On this page</p>
+          <p className="mt-2 text-[14px] text-[color:var(--fg,#0B0E17)]">
+            <span className="font-semibold tabular-nums">{pageSignaled.toLocaleString("en-US")}</span>
+            {" signaled of "}
+            <span className="tabular-nums">{result.rows.length.toLocaleString("en-US")}</span>
+          </p>
+          <ol className="mt-3 space-y-1.5">
+            {pageCampusRanks.map((row, i) => (
+              <li key={row.label} className="flex items-baseline justify-between gap-2 text-[13px]">
+                <span className="min-w-0 truncate">
+                  <span className="mr-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                  {row.label}
+                </span>
+                <span className="shrink-0 font-semibold tabular-nums text-[color:var(--fg-2,#3F465C)]">{row.companies.toLocaleString("en-US")}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </aside>
+      </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-        <p className="text-[14px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-          Showing {(result.total === 0 ? 0 : (result.page - 1) * result.pageSize + 1).toLocaleString("en-US")}
-          {" to "}
+        <p className="text-[14px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-data-page-range="">
+          {(result.total === 0 ? 0 : (result.page - 1) * result.pageSize + 1).toLocaleString("en-US")}
+          {"–"}
           {Math.min(result.page * result.pageSize, result.total).toLocaleString("en-US")}
-          {" of "}
-          {universeTotal.toLocaleString("en-US")}
+          {unfiltered ? " on this page" : ` of ${result.total.toLocaleString("en-US")}`}
         </p>
         <div className="flex items-center gap-2">
           {result.page > 1 ? (

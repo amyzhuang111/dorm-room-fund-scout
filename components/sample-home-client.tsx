@@ -490,7 +490,7 @@ function MapStageOverlays({
       <div className="relative min-h-0 flex-1" data-fold-overlay-body="">
         <aside
           className={`pointer-events-auto absolute bottom-2 left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 shadow-[0_8px_24px_rgba(11,14,23,0.06)] backdrop-blur-[2px] ${
-            peakOpen ? "w-[min(300px,28%)]" : "w-auto"
+            peakOpen ? "w-[min(320px,30%)]" : "w-auto"
           }`}
           data-fold-overlay-peak=""
           data-fold-peak-in-rail=""
@@ -500,7 +500,8 @@ function MapStageOverlays({
             <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Open lane</p>
             <button
               type="button"
-              className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
+              className="inline-flex h-7 items-center rounded-md border border-[color:var(--line,#E1E5EF)] px-2 text-[12px] font-semibold text-[color:var(--fg-2,#3F465C)]"
+              data-btn-style="sans"
               aria-expanded={peakOpen}
               data-fold-panel-toggle="peak"
               onClick={() => setPeakOpen((v) => !v)}
@@ -511,7 +512,7 @@ function MapStageOverlays({
           {peakOpen ? <div className="p-2.5">{peak}</div> : null}
         </aside>
         <aside
-          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(280px,26%)] flex-col overflow-hidden rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 shadow-[0_8px_24px_rgba(11,14,23,0.06)] backdrop-blur-[2px] ${
+          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(300px,28%)] flex-col overflow-hidden rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 shadow-[0_8px_24px_rgba(11,14,23,0.06)] backdrop-blur-[2px] ${
             foundersOpen ? "" : "!w-auto !bottom-auto"
           }`}
           data-fold-overlay-founders=""
@@ -522,7 +523,8 @@ function MapStageOverlays({
             <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Founders</p>
             <button
               type="button"
-              className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
+              className="inline-flex h-7 items-center rounded-md border border-[color:var(--line,#E1E5EF)] px-2 text-[12px] font-semibold text-[color:var(--fg-2,#3F465C)]"
+              data-btn-style="sans"
               aria-expanded={foundersOpen}
               data-fold-panel-toggle="founders"
               onClick={() => setFoundersOpen((v) => !v)}
@@ -881,7 +883,7 @@ export function SampleHomeClient(props: {
                   }
                 />
               ) : null}
-              <div className="mt-2 hidden lg:block" data-fold-logo-strip-below="" data-current-view-dock-below="">
+              <div className="mt-3 hidden lg:block" data-fold-logo-strip-below="" data-current-view-dock-below="">
                 <CurrentViewDock companies={dockCompanies} founders={[]} max={20} />
               </div>
             </div>

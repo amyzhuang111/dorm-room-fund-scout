@@ -196,7 +196,7 @@ function HomeMapBody() {
 function GlobeShell() {
   return (
     <div
-      className="relative grid h-[min(62dvh,680px)] min-h-[420px] w-full place-items-center overflow-hidden rounded-2xl border border-border-c bg-surface sm:min-h-[520px]"
+      className="relative grid h-[min(62dvh,680px)] min-h-[420px] w-full place-items-center overflow-hidden rounded-2xl border border-border-c bg-surface sm:min-h-[520px] lg:h-[min(78dvh,820px)] lg:min-h-[560px]"
     >
       <p className="ui-label">Loading globe</p>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUserPipeline } from "./user-pipeline-provider";
 
@@ -30,7 +30,6 @@ const DESK_TABS = [
 
 export function SiteNav() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const pipeline = useUserPipeline();
   const local = pipeline.storage === "local";
   const [open, setOpen] = useState(false);
@@ -45,38 +44,13 @@ export function SiteNav() {
     window.dispatchEvent(new Event("campus-scout-open-ask"));
   }
 
-  const onCompaniesDesk =
-    pathname.startsWith("/companies") || pathname.startsWith("/startup/");
-
   return (
-    <div className="border-b border-line bg-[#FFFFFF]" data-site-nav="merged" data-slim-companies-nav={onCompaniesDesk ? "1" : undefined}>
-      <div className={`flex items-center gap-3 px-3 pt-[env(safe-area-inset-top)] sm:gap-4 sm:px-5 ${onCompaniesDesk ? "min-h-10" : "min-h-12"}`}>
-        <Link href="/" className={`wordmark inline-flex items-center shrink-0 ${onCompaniesDesk ? "min-h-9 text-[14px]" : "min-h-11"}`}>
+    <div className="border-b border-line bg-[#FFFFFF]" data-site-nav="merged">
+      <div className="flex min-h-12 items-center gap-3 px-3 pt-[env(safe-area-inset-top)] sm:gap-4 sm:px-5">
+        <Link href="/" className="wordmark inline-flex min-h-11 items-center shrink-0">
           <span className="mark" aria-hidden />
-          <span className={onCompaniesDesk ? "max-[380px]:hidden" : undefined}>Campus Scout</span>
-          <span className={onCompaniesDesk ? "hidden max-[380px]:inline" : "hidden"}>CS</span>
+          <span>Campus Scout</span>
         </Link>
-        {onCompaniesDesk ? (
-          <nav className="ml-1 flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto md:hidden" aria-label="Views" data-mobile-view-tabs="">
-            {([
-              { href: "/companies", label: "Companies", active: pathname.startsWith("/companies") && searchParams.get("feed") !== "leaderboard" },
-              { href: "/companies?feed=leaderboard", label: "Signals", active: pathname.startsWith("/companies") && searchParams.get("feed") === "leaderboard" },
-              { href: "/", label: "Map", active: false },
-            ]).map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`inline-flex h-8 shrink-0 items-center rounded-sm px-2 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
-                  item.active
-                    ? "bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
-                    : "text-[color:var(--fg-3,#5C647A)]"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        ) : null}
         <nav className="ml-4 hidden min-w-0 items-center gap-4 overflow-x-auto md:flex" aria-label="Primary">
           {NAV.map((item) => (
             <Link key={item.id} href={item.href} className={`nav-link ${item.match(pathname) ? "is-active" : ""}`}>
@@ -96,14 +70,14 @@ export function SiteNav() {
           </button>
         </div>
         <div className="ml-auto flex items-center gap-2 md:hidden">
-          <button type="button" className={`inline-flex min-w-11 items-center justify-center px-2 text-[14px] text-fg ${onCompaniesDesk ? "min-h-9" : "min-h-11"}`} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+          <button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[14px] text-fg" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
             Menu
           </button>
         </div>
       </div>
       {/* Desk tabs always on for mobile — not tucked behind Menu */}
       <nav
-        className="flex max-w-full min-h-9 items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 md:hidden"
+        className="flex max-w-full min-h-9 items-stretch gap-1 overflow-x-auto overscroll-x-contain px-3 [-webkit-mask-image:linear-gradient(90deg,#000_0%,#000_calc(100%-28px),transparent)] [mask-image:linear-gradient(90deg,#000_0%,#000_calc(100%-28px),transparent)] md:hidden"
         aria-label="Desks"
         data-mobile-desk-tabs=""
       >

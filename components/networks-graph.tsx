@@ -1062,7 +1062,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       <div
         ref={wrapRef}
         className="relative w-full max-w-full touch-manipulation overflow-hidden bg-[#fbfaf7] max-md:!h-[64vh]"
-        style={{ height: "min(76vh, 710px)" }}
+        style={{ height: "min(82vh, 780px)" }}
         data-networks-graph=""
         data-networks-fade="0"
         data-networks-zoom="0"

@@ -23,9 +23,9 @@ export function CorpusFilters({
   const active =
     (sector ? 1 : 0) + (campus ? 1 : 0) + (sort && sort !== "rank" ? 1 : 0);
   const field =
-    "h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[16px] sm:h-8 sm:text-[14px]";
+    "h-11 min-h-11 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[16px] text-[color:var(--fg,#0B0E17)] sm:h-9 sm:text-[14px]";
   const control =
-    "inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[14px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:min-h-0 sm:text-[11px]";
+    "inline-flex h-11 min-h-11 items-center rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] font-medium text-[color:var(--fg,#0B0E17)] sm:h-9 sm:min-h-0";
 
   return (
     <form
@@ -41,7 +41,7 @@ export function CorpusFilters({
             name="q"
             defaultValue={q}
             placeholder="Search name or founder"
-            className="h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[16px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[14px]"
+            className="h-11 min-h-11 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[16px] text-[color:var(--fg,#0B0E17)] placeholder:font-sans placeholder:text-[color:var(--fg-3,#5C647A)] sm:h-9 sm:text-[14px]"
           />
         </label>
         <button
@@ -94,7 +94,7 @@ export function CorpusFilters({
           </label>
           <button
             type="submit"
-            className="inline-flex h-11 min-h-11 w-full items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:h-8 sm:w-auto sm:px-3 sm:text-[11px]"
+            className="inline-flex h-11 min-h-11 w-full items-center justify-center rounded-md border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 text-[14px] font-semibold text-white sm:h-9 sm:w-auto"
           >
             Apply
           </button>

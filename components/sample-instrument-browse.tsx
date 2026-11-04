@@ -19,7 +19,8 @@ import {
 import { resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
-import { CurrentViewDock } from "@/components/current-view-dock";
+import { TagChips, type TagChip } from "@/components/tag-chips";
+import { stripUrls } from "@/lib/display/strip-urls";
 import {
   applyFacets,
   emptyFacets,
@@ -463,17 +464,6 @@ export function SampleInstrumentBrowse({
     return activeFacetChips(facets, { campus: campusLabel });
   }, [facets, campuses]);
 
-  const dockCompanies = useMemo(
-    () =>
-      boardCompanies.slice(0, 12).map((c) => ({
-        id: c.id,
-        name: c.name,
-        logoUrl: c.logoUrl,
-        href: `/startup/${c.id}`,
-      })),
-    [boardCompanies],
-  );
-
   useEffect(() => {
     const ids = cards.slice(0, 40).map((c) => c.id);
     if (ids.length === 0) {
@@ -543,37 +533,35 @@ export function SampleInstrumentBrowse({
 
   return (
     <div
-      className={`mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:gap-5 ${
-        rightOpen
-          ? "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)]"
-          : "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)]"
-      }`}
+      className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)] lg:gap-5"
       data-browse-spread=""
       data-right-open={rightOpen ? "1" : "0"}
     >
       {/* Col 1 · persistent ruled index (magazine TOC), not a sheet over content */}
       <aside className="hidden min-w-0 lg:block" data-browse-index="">
-        <div className="sticky top-14 space-y-2">
+        <div className="sticky top-14 flex max-h-[calc(100dvh-3.5rem)] flex-col space-y-2 overflow-hidden">
           <div
-            className="border-b border-[color:var(--line,#E1E5EF)] pb-2"
+            className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] pb-2"
             data-index-signal-beat=""
             data-filters-index-hero=""
             data-n-of-m=""
           >
             <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Filters</p>
-            <p className="mt-1 text-[14px] text-[color:var(--fg-3,#5C647A)]" data-showing-label="">
-              Showing
-            </p>
-            <p className="mt-1 text-[28px] font-semibold leading-none tracking-tight text-[color:var(--fg,#0B0E17)]">
-              <span className="font-mono tabular-nums" data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
-              <span className="mx-1.5 text-[16px] font-medium text-[color:var(--fg-3,#5C647A)]">of</span>
-              <span className="font-mono tabular-nums text-[20px]" data-total-count="">
-                {total.toLocaleString("en-US")}
-              </span>
-            </p>
-            <p className="mt-1.5 text-[14px] text-[color:var(--fg-2,#3F465C)]">
-              {feed === "leaderboard" ? "on the signal desk" : "companies"}
-            </p>
+            {/* One count on the page lives in the Vetted toggle; rail only restates when filtered. */}
+            {boardCompanies.length !== total ? (
+              <p className="mt-2 text-[15px] leading-5 text-[color:var(--fg,#0B0E17)]" data-showing-label="">
+                <span className="font-semibold tabular-nums" data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
+                <span className="mx-1 text-[color:var(--fg-3,#5C647A)]">of</span>
+                <span className="tabular-nums text-[color:var(--fg-2,#3F465C)]" data-total-count="">{total.toLocaleString("en-US")}</span>
+                <span className="text-[color:var(--fg-2,#3F465C)]"> match</span>
+              </p>
+            ) : (
+              <p className="mt-2 text-[14px] text-[color:var(--fg-2,#3F465C)]" data-showing-label="">
+                <span className="sr-only" data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
+                <span className="sr-only" data-total-count="">{total.toLocaleString("en-US")}</span>
+                All {feed === "leaderboard" ? "signals" : "companies"} on this desk
+              </p>
+            )}
             <div className="mt-2 flex flex-wrap items-center gap-2" data-filter-chips="" aria-label="Active filters">
               {chipDefs.map((chip) => (
                 <button
@@ -594,7 +582,8 @@ export function SampleInstrumentBrowse({
                   type="button"
                   data-filter-reset=""
                   onClick={() => commitFacet(emptyFacets())}
-                  className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+                  className="text-[13px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+                  data-btn-style="sans"
                 >
                   Reset all
                 </button>
@@ -605,13 +594,14 @@ export function SampleInstrumentBrowse({
                 type="button"
                 data-export-filtered=""
                 onClick={() => exportFilteredCsv(boardCompanies)}
-                className="inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex h-10 min-h-10 items-center rounded-md border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[14px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                data-btn-style="sans"
               >
                 Export CSV
               </button>
             </div>
           </div>
-          <div className="mt-2 h-[min(42vh,400px)] overflow-x-hidden overflow-y-auto pt-2" data-contents-facet-map="">
+          <div className="mt-2 min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain pt-1" data-contents-facet-map="">
             <FacetRail
               companies={companiesLive}
               campuses={campuses}
@@ -627,16 +617,16 @@ export function SampleInstrumentBrowse({
 
       {/* Col 2 · ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
-        {/* Current-view logos live under the ledger, never over the filter rail. */}
-        <div className="mb-3 hidden lg:block" data-browse-logo-strip="">
-          <CurrentViewDock companies={dockCompanies} max={20} />
-        </div>
+        {/* Universe count lives once in the Vetted toggle; ledger only adds the signal read. */}
         <p className="mb-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-hero-stat="">
-          <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
-          {" "}{caption}
-          {" · "}
-          <span className="font-mono font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{signaledMatch.toLocaleString("en-US")}</span>
+          <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{signaledMatch.toLocaleString("en-US")}</span>
           {" with a signal"}
+          {deskCampusTop ? (
+            <>
+              <span aria-hidden> · </span>
+              <span className="whitespace-nowrap">{deskCampusTop.label} leads</span>
+            </>
+          ) : null}
         </p>
         {/* Single count hero lives in the Filters column. Ledger keeps sort + optional signal strip. */}
         <div
@@ -679,7 +669,7 @@ export function SampleInstrumentBrowse({
                     <Link
                       key={id}
                       href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                      className={`inline-flex h-8 items-center rounded-sm border px-3 font-mono text-[11px] font-medium ${sortChip(sort === id)}`}
+                      className={`inline-flex h-8 items-center rounded-md border px-3 text-[13px] font-medium ${sortChip(sort === id)}`}
                     >
                       {label}
                     </Link>
@@ -690,11 +680,12 @@ export function SampleInstrumentBrowse({
                 data-open-right-rail=""
                 aria-pressed={rightOpen}
                 onClick={() => setRightOpen((open) => !open)}
-                className={`inline-flex h-8 items-center rounded-sm border px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] ${
+                className={`inline-flex h-8 items-center rounded-md border px-3 text-[13px] font-medium ${
                   rightOpen
                     ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
                     : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
                 }`}
+                data-btn-style="sans"
               >
                 {rightOpen ? "Hide feed" : "Feed"}
               </button>
@@ -838,29 +829,32 @@ export function SampleInstrumentBrowse({
                 aria-controls="mobile-filter-sheet"
                 data-mobile-filters-open=""
               >
-                <span>Filter</span>
-                <span className="font-mono text-[12px] font-bold tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  {boardCompanies.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")}
+                <span>Filters</span>
+                <span className="text-[12px] font-semibold tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  {boardCompanies.length !== total
+                    ? `${boardCompanies.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
+                    : "All"}
                 </span>
               </button>
               <div className="flex items-baseline justify-between gap-2 px-0.5" data-showing-count="">
-                <p className={`min-w-0 ${WRAP_FULL} font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]`}>
-                  Showing{" "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-                  {" of "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
-                  {deskCampusTop ? (
+                <p className={`min-w-0 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]`}>
+                  {boardCompanies.length !== total ? (
                     <>
-                      {" · "}
-                      {deskCampusTop.label} leads
+                      <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                      {" of "}
+                      <span className="tabular-nums">{total.toLocaleString("en-US")}</span>
+                      {" match"}
                     </>
-                  ) : null}
+                  ) : (
+                    <span className="tabular-nums">{signaledMatch.toLocaleString("en-US")} with a signal</span>
+                  )}
                 </p>
                 <button
                   type="button"
                   data-export-filtered-mobile=""
                   onClick={() => exportFilteredCsv(boardCompanies)}
-                  className="shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+                  className="shrink-0 text-[13px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
+                  data-btn-style="sans"
                 >
                   Export
                 </button>
@@ -1199,15 +1193,14 @@ export function SampleInstrumentBrowse({
           <div className="mt-3 flex flex-wrap items-center gap-2.5" data-ledger-more-footer="">
             <Link
               href={moreHref}
-              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+              className="inline-flex h-8 items-center rounded-md border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 text-[13px] font-semibold text-white hover:opacity-90" data-btn-style="sans"
             >
               Show more
             </Link>
-            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
-              {"Companies 1 to "}
-              <span className="font-medium text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
-              {" of "}
-              {total.toLocaleString("en-US")}
+            <p className="text-[12px] text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
+              {"Companies 1–"}
+              <span className="font-medium tabular-nums text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
+              {" on this page"}
             </p>
           </div>
         ) : pages > 1 && cards.length >= total ? (
@@ -1248,82 +1241,111 @@ export function SampleInstrumentBrowse({
         </div>
       </div>
 
-      {/* Col 3 · tabbed instrument; closed by default so the list gains width.
-          Stay mounted (hidden) so YC membership / feed counts remain in the DOM for honesty checks. */}
+      {/* Col 3 · campus ranks when feed closed; feed/overlays when open. */}
       <aside
-          className={`min-w-0 ${rightOpen ? "hidden lg:block" : "hidden"}`}
+          className="hidden min-w-0 lg:block"
           data-browse-wire=""
           data-instrument-tabs=""
           data-right-rail={rightOpen ? "open" : "closed"}
-          aria-hidden={rightOpen ? undefined : true}
         >
           <div className="sticky top-14">
-            <div className={`${PANEL} relative overflow-hidden p-2.5`}>
-              <div className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                <div className="flex items-center gap-1" role="tablist" aria-label="Instrument panels">
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={rightTab === "feed"}
-                    data-tab="feed"
-                    onClick={() => setRightTab("feed")}
-                    className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
-                      rightTab === "feed"
-                        ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
-                        : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
-                    }`}
-                  >
-                    Feed
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={rightTab === "overlays"}
-                    data-tab="overlays"
-                    onClick={() => setRightTab("overlays")}
-                    className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
-                      rightTab === "overlays"
-                        ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
-                        : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
-                    }`}
-                  >
-                    Overlays
-                  </button>
-                </div>
+            {!rightOpen ? (
+              <div className={`${PANEL} relative overflow-hidden p-3`} data-companies-side-ranks="">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Campuses on this desk</p>
+                <ol className="mt-2 space-y-1.5">
+                  {pageCampusRanks.slice(0, 8).map((row, i) => (
+                    <li key={row.label} className="flex items-baseline justify-between gap-2 text-[13px]">
+                      <span className="min-w-0 truncate text-[color:var(--fg,#0B0E17)]">
+                        <span className="mr-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                        {row.label}
+                      </span>
+                      <span className="shrink-0 font-semibold tabular-nums text-[color:var(--fg-2,#3F465C)]">{row.companies.toLocaleString("en-US")}</span>
+                    </li>
+                  ))}
+                  {pageCampusRanks.length === 0 ? (
+                    <li className="text-[13px] text-[color:var(--fg-3,#5C647A)]">No campus ranks yet</li>
+                  ) : null}
+                </ol>
                 <button
                   type="button"
-                  data-close-right-rail=""
-                  onClick={() => setRightOpen(false)}
-                  className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--ember,#D96B1C)]"
+                  className="mt-3 inline-flex h-9 items-center rounded-md border border-[color:var(--line-strong,#C5CAD8)] px-3 text-[13px] font-semibold"
+                  data-btn-style="sans"
+                  onClick={() => setRightOpen(true)}
                 >
-                  Close
+                  Open feed
                 </button>
               </div>
-              {rightTab === "feed" ? (
-                <div data-tab-panel="feed">
-                  <IntelligenceBoards
-                    companies={boardCompanies}
-                    compact={pages <= 1}
-                    surface={wireSurface}
-                    hideSector={feed === "directory" && pages <= 1}
-                    hideLatest={false}
-                    hidePrograms={false}
-                  />
+            ) : (
+              <div className={`${PANEL} relative overflow-hidden p-2.5`}>
+                <div className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+                  <div className="flex items-center gap-1" role="tablist" aria-label="Instrument panels">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={rightTab === "feed"}
+                      data-tab="feed"
+                      data-btn-style="sans"
+                      onClick={() => setRightTab("feed")}
+                      className={`h-7 rounded-full px-2.5 text-[12px] font-semibold ${
+                        rightTab === "feed"
+                          ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
+                          : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
+                      }`}
+                    >
+                      Feed
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={rightTab === "overlays"}
+                      data-tab="overlays"
+                      data-btn-style="sans"
+                      onClick={() => setRightTab("overlays")}
+                      className={`h-7 rounded-full px-2.5 text-[12px] font-semibold ${
+                        rightTab === "overlays"
+                          ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
+                          : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
+                      }`}
+                    >
+                      Overlays
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    data-close-right-rail=""
+                    data-btn-style="sans"
+                    onClick={() => setRightOpen(false)}
+                    className="text-[13px] font-semibold text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--ember,#D96B1C)]"
+                  >
+                    Close
+                  </button>
                 </div>
-              ) : (
-                <div className="space-y-3" data-tab-panel="overlays" data-overlay-campus-unit={overlayCounts.campusUnit}>
-                  <OverlayCountBlock title="Status" rows={overlayCounts.status} onSelect={applyOverlayRow} activeId={facets.status} />
-                  <OverlayCountBlock title="Sector" rows={overlayCounts.sector} onSelect={applyOverlayRow} activeId={facets.sector} />
-                  <OverlayCountBlock
-                    title="Campus"
-                    unit={CAMPUS_COUNT_UNIT}
-                    rows={overlayCounts.campus}
-                    onSelect={applyOverlayRow}
-                    activeId={facets.campus}
-                  />
-                </div>
-              )}
-            </div>
+                {rightTab === "feed" ? (
+                  <div data-tab-panel="feed">
+                    <IntelligenceBoards
+                      companies={boardCompanies}
+                      compact={pages <= 1}
+                      surface={wireSurface}
+                      hideSector={feed === "directory" && pages <= 1}
+                      hideLatest={false}
+                      hidePrograms={false}
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-3" data-tab-panel="overlays" data-overlay-campus-unit={overlayCounts.campusUnit}>
+                    <OverlayCountBlock title="Status" rows={overlayCounts.status} onSelect={applyOverlayRow} activeId={facets.status} />
+                    <OverlayCountBlock title="Sector" rows={overlayCounts.sector} onSelect={applyOverlayRow} activeId={facets.sector} />
+                    <OverlayCountBlock
+                      title="Campus"
+                      unit={CAMPUS_COUNT_UNIT}
+                      rows={overlayCounts.campus}
+                      onSelect={applyOverlayRow}
+                      activeId={facets.campus}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
       </aside>
 
@@ -1487,7 +1509,7 @@ function LedgerRow({
   /** r57: richer stage/program chips on continued mobile batches (companies-more). */
   evidenceRich?: boolean;
 }) {
-  const pitch = (card.description || "").trim();
+  const pitch = stripUrls((card.description || "").trim()) || "";
   const meta = signalMeta(card);
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   const desk = directoryRank(card);
@@ -1551,41 +1573,32 @@ function LedgerRow({
         ) : (
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
-        <span className="mt-2.5 flex flex-wrap items-center gap-1.5" data-card-chips="" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined}>
-          <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] font-medium text-[color:var(--fg,#0B0E17)]" data-card-tier-chip="">
-            {tierLabel}
-          </span>
-          {yearOrBatch ? (
-            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-card-year="">
-              {yearOrBatch}
-            </span>
-          ) : null}
-          {card.stage ? (
-            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]" data-evidence-chip="stage">
-              {card.stage}
-            </span>
-          ) : null}
-          {card.sector ? (
-            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] uppercase tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]" data-card-sector="">
-              {card.sector}
-            </span>
-          ) : null}
-          {meta ? (
-            <span className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[12px] text-[color:var(--fg-2,#3F465C)]" data-evidence-chip="signal">
-              {meta.primary}
-            </span>
-          ) : null}
-          {backers.map((backer) => (
-            <span
-              key={backer}
-              className="inline-flex h-6 max-w-[12rem] items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 text-[12px] text-[color:var(--fg,#0B0E17)]"
-              data-card-backer=""
-              title={backer}
-            >
-              <span className={WRAP_FULL}>{backer}</span>
-            </span>
-          ))}
-        </span>
+        <TagChips
+          max={4}
+          chips={[
+            { key: "tier", label: tierLabel, attrs: { "data-card-tier-chip": "" } },
+            ...(yearOrBatch
+              ? [{ key: "year", label: yearOrBatch, tone: "mono" as const, attrs: { "data-card-year": "" } }]
+              : []),
+            ...(card.stage
+              ? [{ key: "stage", label: card.stage, attrs: { "data-evidence-chip": "stage" } }]
+              : []),
+            ...(card.sector
+              ? [{ key: "sector", label: card.sector, attrs: { "data-card-sector": "" } }]
+              : []),
+            ...(meta
+              ? [{ key: "signal", label: meta.primary, attrs: { "data-evidence-chip": "signal" } }]
+              : []),
+            ...backers.map((backer) => ({
+              key: `b-${backer}`,
+              label: backer,
+              tone: "soft" as const,
+              title: backer,
+              attrs: { "data-card-backer": "" },
+            })),
+          ].filter(Boolean) as TagChip[]}
+        />
+        <span className="sr-only" data-card-chips="" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined} />
         {founderLinks.length > 0 ? (
           <span className="mt-2 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
             {founderLinks.slice(0, 3).map((founder) => (

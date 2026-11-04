@@ -161,7 +161,7 @@ export function NetworksApp() {
   return (
     <div className="min-h-screen max-w-[100vw] overflow-x-hidden text-[color:var(--fg)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
       <header className="border-b border-[color:var(--line)]" style={{ background: "var(--networks-bg, #ece9e4)" }} data-networks-hero="">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-0.5 px-4 py-2 sm:gap-1 sm:px-6 sm:py-3">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-1 px-4 py-3 sm:gap-1.5 sm:px-6 sm:py-4">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
             <CampusSeal label="CS" title="Campus Scout" size="sm" />
             <span className="text-[10px] font-medium uppercase tracking-[0.08em] sm:text-xs">Campus Scout</span>
@@ -190,7 +190,7 @@ export function NetworksApp() {
           <a className="py-2 underline-offset-4 hover:underline" href="#top-networks-heading">All networks</a>
           <a className="py-2 underline-offset-4 hover:underline" href="#network-roster">Founder links</a>
         </nav>
-        <div className="order-1 mx-auto hidden w-full max-w-[1400px] items-start gap-4 px-4 py-4 sm:grid sm:px-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
+        <div className="order-1 mx-auto hidden w-full max-w-[1400px] items-start gap-5 px-4 py-5 sm:grid sm:px-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
           <aside aria-labelledby="popular-networks-heading" className="rounded-xl border border-[color:var(--line)] bg-white p-3">
             <h2 id="popular-networks-heading" className="px-2 text-base font-semibold">Top networks</h2>
             <p className="px-2 pb-2 text-xs text-[color:var(--fg-2)]">Choose a network to see its founders and startups.</p>
@@ -211,7 +211,7 @@ export function NetworksApp() {
               </select>
             </label>
             <ol className="divide-y divide-[color:var(--line)]">
-              {displayedNetworks.slice(0, 5).map((row, index) => (
+              {displayedNetworks.slice(0, 10).map((row, index) => (
                 <li key={row.id}>
                   <button type="button" aria-pressed={graphInspectorOpen && row.id === activeNetwork}
                     className="grid min-h-12 w-full grid-cols-[auto_1fr_auto] items-center gap-2 rounded-md px-2 py-2 text-left text-sm hover:bg-[#f7f8fc] aria-pressed:bg-[color:var(--cobalt-haze)]"
