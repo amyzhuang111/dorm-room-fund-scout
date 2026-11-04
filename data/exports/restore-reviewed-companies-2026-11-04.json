@@ -1,0 +1,185 @@
+{
+  "reviewedOn": "2026-11-04",
+  "note": "Companies with is_investable_candidate=0 and no excluded_reason, reviewed one by one. Restore = startup-like with a founder recorded as current student or recent grad.",
+  "restore": [
+    {
+      "id": "proj_MdHaKznqUu3o",
+      "name": "Arcafeed",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_ziurFWAZgQ8P",
+      "name": "Assure5",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_6winQBe84uQa",
+      "name": "Bikeability",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_IY6hQvnbOHHt",
+      "name": "Cortex",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_87BxbArZqYWC",
+      "name": "Density Partners",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_H9fXK8ykfaN0",
+      "name": "Dossier",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_VSajtgT8Y106",
+      "name": "Felivo",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_cPQ7y_C2mhx6",
+      "name": "Handled",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_dIkSkrUJp-Xd",
+      "name": "Kesho",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_El3WFtFsfIdx",
+      "name": "LegalTime AI",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_1-hbSJpeq6Yj",
+      "name": "Little Autonomy",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_M69K6DxKXw_o",
+      "name": "NADE",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_k-sKw4kX700O",
+      "name": "Narion Technologies",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_VyW4CMDtwBeG",
+      "name": "Pathlight",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_A8jjnuc2mXth",
+      "name": "Red Leader",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_SkLG0wi5BNt2",
+      "name": "Regilon",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_u9YOwo74eKPT",
+      "name": "Shinkei Systems",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_Eb02n5chFokZ",
+      "name": "Sideye",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_Va5BoMfJRXqx",
+      "name": "Skip Networking",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_bEGhEmO0uDpB",
+      "name": "Tillr Robotics",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_IfZeuL4CCcig",
+      "name": "Treffa",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_Y0f2xSISX2PY",
+      "name": "UnitZero",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_AXCQk3ceYO9f",
+      "name": "Vault Kinetics",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_qe2ne0FSY0mJ",
+      "name": "Veyra Health",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    },
+    {
+      "id": "proj_dPOmQXK_2gRL",
+      "name": "Village",
+      "why": "startup-like, with a founder recorded as current student or recent grad"
+    }
+  ],
+  "keepHidden": [
+    {
+      "id": "proj_rgJN9eW4pC7G",
+      "name": "Astra Wellbeing",
+      "why": "source says it was acquired"
+    },
+    {
+      "id": "proj_5r_UU7z8ToEA",
+      "name": "Bessy",
+      "why": "an app the founder says he exited right after high school; no recent venture"
+    },
+    {
+      "id": "proj_DxVOIXF9hAYj",
+      "name": "Breakthrough Ventures",
+      "why": "an accelerator/fund that invests in student companies, not a startup itself"
+    },
+    {
+      "id": "proj_VGQYRqlbbvrk",
+      "name": "Elevation Partners",
+      "why": "a growth-equity / private-equity firm, not a startup (the record says so itself)"
+    },
+    {
+      "id": "proj_nHe5OGhUbxx-",
+      "name": "Horizon Robotics",
+      "why": "an employer named in someone's GitHub bio, not a company they founded"
+    },
+    {
+      "id": "proj_EEPsDj6-moSM",
+      "name": "SBVenture",
+      "why": "a nonprofit that connects students with startups, not a startup"
+    },
+    {
+      "id": "proj_ATUfFjQ7fTlI",
+      "name": "TeenHacksLI",
+      "why": "a (high-school) student hackathon, not a company"
+    },
+    {
+      "id": "proj_bwFZv96CdDDz",
+      "name": "The Neuron",
+      "why": "recorded as an acquired company with a former CEO"
+    }
+  ],
+  "needsFounder": [
+    {
+      "id": "proj_mVjWOH6IQHUg",
+      "name": "Enlaye",
+      "why": "no founder linked yet, so recency can't be checked"
+    },
+    {
+      "id": "proj_TK4dw8aXrBur",
+      "name": "FieldData",
+      "why": "no founder linked yet, so recency can't be checked"
+    }
+  ]
+}
