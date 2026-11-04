@@ -192,6 +192,26 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     setZoomScale(scale);
   }, [poster, mapFocus, size.w, size.h]);
 
+  const fitAllCampuses = useCallback(() => {
+    if (!poster || !poster.x.length) return;
+    const minX = Math.min(...poster.x), maxX = Math.max(...poster.x);
+    const minY = Math.min(...poster.y), maxY = Math.max(...poster.y);
+    const fit = Math.min(size.w / poster.w, size.h / poster.h);
+    const scale = clamp(Math.min(
+      Math.max(80, size.w - 96) / Math.max(1, maxX - minX),
+      Math.max(80, size.h - 96) / Math.max(1, maxY - minY)
+    ) / fit, 0.3, 5.5);
+    camRef.current = {
+      scale,
+      x: (poster.w / 2 - (minX + maxX) / 2) * fit * scale,
+      y: (poster.h / 2 - (minY + maxY) / 2) * fit * scale,
+    };
+    velRef.current = { vx: 0, vy: 0, vScale: 0 };
+    setSelectedHub(null);
+    setFocusedNode(-1);
+    setZoomScale(scale);
+  }, [poster, size.w, size.h]);
+
   const resetFounderView = useCallback(() => {
     if (!poster) return;
     const index = Math.max(0, poster.featuredId ? poster.foIds.indexOf(poster.featuredId) : 0);
@@ -227,7 +247,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       __NETWORKS_SET_SCALE__?: (scale: number) => void;
     };
     w.__NETWORKS_SET_SCALE__ = (scale: number) => {
-      camRef.current.scale = Math.max(2.8, Math.min(5.5, scale));
+      camRef.current.scale = Math.max(0.3, Math.min(5.5, scale));
       setZoomScale(camRef.current.scale);
       velRef.current.vScale = 0;
       bump((n) => n + 1);
@@ -660,7 +680,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           vel.vx = 0; vel.vy = 0;
         }
         if (Math.abs(vel.vScale) > 0.0005) {
-          cam.scale = clamp(cam.scale * (1 + vel.vScale), 2.8, 5.5);
+          cam.scale = clamp(cam.scale * (1 + vel.vScale), 0.3, 5.5);
           vel.vScale *= 0.88;
         } else {
           vel.vScale = 0;
@@ -698,7 +718,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       }
       if (poster) {
         const fit = Math.min(size.w / poster.w, size.h / poster.h);
-        cam.scale = clamp(cam.scale, 2.8, 5.5);
+        cam.scale = clamp(cam.scale, 0.3, 5.5);
         const scale = fit * cam.scale;
         const centerX = poster.w / 2 - cam.x / scale;
         const centerY = poster.h / 2 - cam.y / scale;
@@ -947,7 +967,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   // Campus labels (Nature/phylum centered) - satisfy label gates; no hub labels on dots.
   const campusLabelNodes = useMemo(() => {
     if (!poster?.campusLabels?.length) return [];
-    return poster.campusLabels.slice(0, 10);
+    return poster.campusLabels;
   }, [poster]);
 
   if (renderFailed) {
@@ -998,7 +1018,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           <button type="button" aria-label="Zoom out network" title="Zoom out" data-network-zoom-out=""
             className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
-              camRef.current.scale = Math.max(2.8, camRef.current.scale / 1.35);
+              camRef.current.scale = Math.max(0.3, camRef.current.scale / 1.35);
               velRef.current.vScale = 0;
               setZoomScale(camRef.current.scale);
               bump((value) => value + 1);
@@ -1011,16 +1031,16 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
               setZoomScale(camRef.current.scale);
               bump((value) => value + 1);
             }}>+</button>
-          <button type="button" aria-label="Center founders and startups" title="Return to founder view" data-network-zoom-fit=""
+          <button type="button" aria-label="Fit all campuses" title="Show all campuses" data-network-zoom-fit=""
             className="h-10 rounded-md px-3 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
             onClick={() => {
-              resetFounderView();
+              fitAllCampuses();
               velRef.current = { vx: 0, vy: 0, vScale: 0 };
               dragRef.current = null;
               setSelectedHub(null);
-              setZoomScale(3.4);
+
               bump((value) => value + 1);
-            }}>Center</button>
+            }}>Fit all</button>
         </div>
         <p className="pointer-events-none absolute left-3 top-3 z-[5] max-w-[calc(100%-13rem)] rounded-md bg-white/90 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm" data-network-map-hint="">
           Click a founder or startup to open details
@@ -1349,7 +1369,7 @@ export function NetworksGraph(props: Props) {
       <div className="mx-auto flex max-w-[1400px] flex-col gap-2 px-3 py-2 sm:px-6 lg:flex-row lg:items-center lg:justify-between" data-networks-controls="">
         <div className="min-w-0 overflow-x-auto pb-0.5" role="group" aria-label="Network detail level">
           <div className="flex w-max items-center gap-1 rounded-lg border border-[color:var(--line)] bg-white p-1">
-            {NETWORK_ZOOM_PRESETS.filter((preset) => preset.scale >= 2.8).map((preset, index) => (
+            {NETWORK_ZOOM_PRESETS.map((preset, index) => (
               <button key={preset.id} type="button" data-networks-zoom-preset={preset.id}
                 aria-pressed={zoomPreset.id === preset.id}
                 title={preset.detail}
