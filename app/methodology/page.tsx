@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import fs from "node:fs";
-import path from "node:path";
 import { RUBRIC_DIMENSIONS, RUBRIC_VERSION } from "@/lib/scoring/rubric";
 import { SCREENING_CONFIG } from "@/lib/screening/config";
 import {
@@ -9,22 +7,9 @@ import {
   openLaneTopFundDefinition,
   openLaneDeskDefinition,
 } from "@/lib/domain/open-lane";
+import { loadRecencyFunnel } from "@/lib/domain/recency-funnel";
 
 export const metadata: Metadata = { title: "Methodology" };
-
-function loadRecencyFunnel() {
-  try {
-    const snap = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "corpus-snapshot.json"), "utf8"));
-    return {
-      investable: Number(snap.investableCompanies ?? 0),
-      excludedOlderAlumni: Number(snap.excludedOlderAlumni ?? 0),
-      unverifiedRecency: Number(snap.unverifiedRecency ?? 0),
-      companiesTotal: Number(snap.companiesTotal ?? 0),
-    };
-  } catch {
-    return { investable: 0, excludedOlderAlumni: 0, unverifiedRecency: 0, companiesTotal: 0 };
-  }
-}
 
 export default function MethodologyPage() {
   const recency = loadRecencyFunnel();
@@ -165,7 +150,7 @@ export default function MethodologyPage() {
           <li className="rounded-md border border-border-c bg-surface p-3">
             <span className="font-medium text-foreground">Kept / investable</span>
             <span className="ml-2 font-mono tabular-nums text-ok" data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-            <p className="mt-1 text-xs text-muted">Counted on the site as verified campus companies.</p>
+            <p className="mt-1 text-xs text-muted">This is the vetted company list on Companies, the map, and Data.</p>
           </li>
           <li className="rounded-md border border-border-c bg-surface p-3">
             <span className="font-medium text-foreground">Excluded · older alumni</span>
@@ -179,8 +164,7 @@ export default function MethodologyPage() {
           </li>
         </ul>
         <p className="mt-2 text-xs text-muted">
-          Corpus companies total {recency.companiesTotal.toLocaleString("en-US")} · funnel numbers come from{" "}
-          <code className="font-mono">data/corpus-snapshot.json</code> after each recency batch.
+          The wider corpus is {recency.companiesTotal.toLocaleString("en-US")} companies. Only the kept count is the vetted list.
         </p>
       </section>
 
@@ -227,7 +211,7 @@ export default function MethodologyPage() {
           <li>✅ UI/UX upgrade per a separate detailed spec: renamed Universe→Explore (with a redirect alias), new dark design tokens, search + Companies/Builders entity switch, reworked table columns and drawer ordering (Why look/Founder edge/Open question above the fold), a real compact Sources table with typed People/Projects/Ventures counts, and Signals filters/labels (also fixed a real bug: competition placements were mislabeled &quot;grant&quot; instead of &quot;award&quot;).</li>
           <li>✅ Split into Founder Scout / Startup Scout as two products under one &quot;Campus Scout&quot; nav, with the data-model correction described above (hackathon projects no longer masquerade as companies) · replaced the Companies/Builders entity switch entirely. Rebalanced the palette toward neutral gray/white, reserving purple for interaction/selection. Pipeline stages consolidated to New/Researching/Contact planned/Contacted/Meeting/Diligence/Passed (dropped the redundant &quot;Watching&quot; status · the watch queue keys off an explicit due date instead) with a board/table toggle and compact cards replacing the old chip wall. Verification page groups companies by their single primary blocker instead of a generic &quot;Needs research.&quot; Signals cards dropped the ingestion-log boilerplate and now show &quot;Discovered {"{"}date{"}"}&quot; instead of &quot;date unknown&quot; when the true event date isn&apos;t known. Sources&apos; Table/Registry/Playbook tabs collapsed to Registry/Playbooks, with tier/role/status/yield columns folded into one Registry table. Old routes (<code className="font-mono text-xs">/explore</code>, <code className="font-mono text-xs">/universe</code>, <code className="font-mono text-xs">/shortlist</code>, <code className="font-mono text-xs">/pipeline</code>) now redirect to their Startup Scout equivalents. See README for what wasn&apos;t done (Globe company-HQ mode, Network typed-edge rework, in-app scan-trigger UI).</li>
           <li>✅ Manual assessment UI (rate any candidate 0-5-or-unknown per dimension); rubric math is always computed deterministically, never by the rating form itself. New assessments are added to history, never overwrite a prior one.</li>
-          <li>✅ Real ingestion at two more campuses via their real public accelerators: MIT (delta v, <code className="font-mono text-xs">fetch-mit-deltav.ts</code>) and Waterloo (Velocity, <code className="font-mono text-xs">fetch-velocity.ts</code>). Neither accelerator&apos;s own site exposes a per-founder detail page reliably enough to extract names without guessing, so companies are ingested honestly &quot;founders not yet identified&quot; where that&apos;s the case, still linked to their real accelerator/university evidence.</li>
+          <li>✅ Real ingestion at two more campuses via their public accelerators, MIT delta v and Waterloo Velocity. Neither accelerator&apos;s own site exposes a per-founder detail page reliably enough to extract names without guessing, so companies are ingested as founders not yet identified where that&apos;s the case, still linked to their accelerator and university evidence.</li>
           <li>✅ Two of the brief&apos;s previously-unconfigured P0 sources now real: Web Development at Berkeley (its own site has no team roster or project-credits page · real evidence instead comes from its GitHub org&apos;s commit history) and GRASP Lab (its Startups page is fully AJAX-loaded with no usable fallback · real evidence instead comes from a genuine WordPress REST API the site exposes). Both hand-verify every named founder against the actual page text rather than a generic parser, to avoid mistaking an advisor/faculty mention for a founding claim.</li>
           <li>✅ Possible-company detection: a person&apos;s own bio (currently: GitHub bio, the one place this app captures real personal bio text) can surface a company they say they&apos;re building, but it&apos;s never auto-created as a Startup Scout candidate · it&apos;s filed as a reviewable hint (shown as &quot;Possible company: X (unconfirmed)&quot; on their Founder Scout card) unless it corroborates a company they&apos;re already a confirmed founder of.</li>
           <li>✅ Canvas-view bottom result tray (compact cards for the current filtered result set) and a localStorage-backed &quot;remember the user&apos;s last view&quot; on Startup Scout&apos;s Globe/Table switch.</li>
