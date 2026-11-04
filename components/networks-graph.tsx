@@ -208,6 +208,21 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     setZoomScale(scale);
   }, [mapFocus, poster, size.w, size.h]);
 
+  useEffect(() => {
+    if (!poster || mapFocus) return;
+    const index = poster.featuredId ? poster.foIds.indexOf(poster.featuredId) : 0;
+    if (index < 0) return;
+    const scale = 3.4;
+    const fit = Math.min(size.w / poster.w, size.h / poster.h);
+    camRef.current = {
+      scale,
+      x: (poster.w / 2 - poster.x[index]) * fit * scale,
+      y: (poster.h / 2 - poster.y[index]) * fit * scale,
+    };
+    velRef.current = { vx: 0, vy: 0, vScale: 0 };
+    setZoomScale(scale);
+  }, [poster, mapFocus, size.w, size.h]);
+
   const founderCount = poster?.foIds.length ?? 0;
 
   useEffect(() => {
@@ -780,6 +795,14 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       // Inertial pan / zoom
       const vel = velRef.current;
       const cam = camRef.current;
+      if (![cam.x, cam.y, cam.scale].every(Number.isFinite)) {
+        cam.x = 0;
+        cam.y = 0;
+        cam.scale = 3.4;
+        vel.vx = 0;
+        vel.vy = 0;
+        vel.vScale = 0;
+      }
       if (!reducedRef.current) {
         if (Math.abs(vel.vx) > 0.02 || Math.abs(vel.vy) > 0.02) {
           cam.x += vel.vx;
@@ -1136,7 +1159,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
             }}>Fit</button>
         </div>
         <p className="pointer-events-none absolute left-3 top-3 z-[5] max-w-[calc(100%-13rem)] rounded-md bg-white/90 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm" data-network-map-hint="">
-          Start with a cluster · drag to move · zoom for founders
+          Click a founder or startup to open details
         </p>
 
         {/* Large editorial callouts removed: they covered the map and drew
