@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { listSources, listUniversities, sourceTypedCounts, type SourceTypedCounts } from "@/lib/domain/queries";
+import { listSources, listUniversities, sourceTypedCountsAll, type SourceTypedCounts } from "@/lib/domain/queries";
 import { importReferralsCsv } from "@/lib/actions/import-csv";
 import { buildSourceCards, compareTiers, SOURCE_CATALOGUE, type SourceCard, type Tier } from "@/lib/domain/source-quality";
 import { SourceCardView } from "@/components/source-card";
@@ -68,12 +68,13 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
     && (!sp.status || sp.status === "unconfigured")
   );
 
-  // Typed People/Projects/Ventures breakdown per implemented source
-  // (UIUX_UPGRADE_CLAUDE.md §11) — cheap at this catalogue size (~30 entries,
-  // most without a live row).
+  // Typed People/Projects/Ventures breakdown per source (UIUX_UPGRADE_CLAUDE.md §11).
+  // One grouped query for all sources: the per-source helper ran ~5 queries each
+  // across 424 sources and took ~26 s per request.
+  const allTypedCounts = sourceTypedCountsAll();
   const typedCountsById = new Map<string, SourceTypedCounts>();
   for (const s of liveSources) {
-    typedCountsById.set(s.id, sourceTypedCounts(s.id));
+    typedCountsById.set(s.id, allTypedCounts.get(s.id) ?? { people: 0, projects: 0, ventures: 0 });
   }
 
   let filtered = allCards;
