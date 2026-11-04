@@ -1,0 +1,28 @@
+name: Verify full network atlas
+on:
+  pull_request:
+    paths:
+      - 'components/network-atlas*'
+      - 'components/networks-app.tsx'
+      - 'lib/domain/network-atlas*'
+      - 'app/api/network/atlas/**'
+      - 'data/campus-country-evidence.json'
+      - '.github/workflows/verify-network-atlas.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx tsx lib/domain/network-atlas.test.ts
+      - run: npm run test:directory
+      - run: npm run test:startup-card
+      - run: npx tsc --noEmit
+      - run: npx eslint components/network-atlas.tsx lib/domain/network-atlas.ts lib/domain/network-atlas-data.ts
