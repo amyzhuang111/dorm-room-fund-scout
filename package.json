@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "prebuild": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts",
+    "prebuild": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts && tsx scripts/precompute-founder-table.ts",
     "start": "next start",
     "lint": "eslint",
     "enrich:apify-linkedin": "tsx scripts/enrich/apify-linkedin-lookup.ts",
