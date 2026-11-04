@@ -1,11 +1,11 @@
 {
   "checkedAt": "2026-11-04",
-  "companies": 2364,
+  "companies": 2475,
   "cityMapped": 718,
   "sourcedAddressPoints": 104,
   "cityOnly": 614,
-  "cityUnknown": 1646,
-  "withoutSourcedAddress": 2260,
+  "cityUnknown": 1757,
+  "withoutSourcedAddress": 2371,
   "websiteDiscovery": {
     "attemptedRecords": 1225,
     "no_address_found_on_checked_pages": 497,
@@ -1698,13 +1698,13 @@
   "reviewStatusCounts": {
     "candidate_needs_verification": 188,
     "held_from_publication": 34,
-    "new_import_not_reviewed": 1133,
+    "new_import_not_reviewed": 1244,
     "no_address_found_on_checked_pages": 452,
     "published_business_address": 104,
     "source_unavailable": 453
   },
   "productionBase": "174f574e26e2506a0f95350798abf27ef8214187",
-  "newImportsNotAddressReviewed": 1133,
+  "newImportsNotAddressReviewed": 1244,
   "databaseChange": "No database change in this address batch. Inventory reconciled against the current main database plus its existing production prebuild recovery/import patches.",
   "followupDiscovery": {
     "checkedAt": "2026-11-04",
@@ -1723,7 +1723,10 @@
     "reactivatedReviewRecords": 346,
     "newUnreviewedRecords": 385,
     "retiredRecords": 0,
-    "scope": "Reconciled against the current main database with existing prebuild recovery, scouting-list, class-year and reviewed-restore patches applied to a temporary copy."
+    "scope": "Reconciled against the current main database with existing prebuild recovery, scouting-list, class-year and reviewed-restore patches applied to a temporary copy.",
+    "deployedDirectoryCount": 2475,
+    "additionalDeployedRecordsNotReviewed": 111,
+    "verification": "Fresh deployed static directory and company-location payload verified after merge 59ae9ce595c569dfbd6c88e7ad1bb36d3f64b7ce; review placeholders added for 111 extra production records. All 104 address entries and all 718 mapped companies match the temporary database tests."
   },
   "additionalAddressReview": {
     "checkedAt": "2026-11-04",
@@ -1830,5 +1833,6 @@
       "headquartersPolicy": "A reviewed business address maps even if no HQ fact exists or the recorded HQ is a different city; no HQ fact is invented or overwritten."
     }
   ],
-  "retiredReviewRecords": 0
+  "retiredReviewRecords": 0,
+  "cacheRefresh": "Map payload requests revalidate the browser cache on page load; previously cached JSON can otherwise retain 54 addresses after a deployment containing 104."
 }
