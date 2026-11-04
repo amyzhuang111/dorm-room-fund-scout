@@ -106,6 +106,14 @@ export function NetworksApp() {
     window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
   }
 
+  function selectSearchResult(match: (typeof networkMatches)[number]) {
+    chooseNetwork(match.network.id, true, false);
+    setMapFocus({
+      networkId: match.network.id,
+      founderId: match.nameMatch ? undefined : match.matchingMembers[0]?.founderId,
+    });
+  }
+
   async function copyNetworkLink() {
     if (!active) return;
     const url = new URL(window.location.href);
@@ -168,28 +176,28 @@ export function NetworksApp() {
             <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
             <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> investable companies covered
           </p>
-          <div className="mt-3 flex flex-wrap items-end gap-2" data-network-quick-find="">
-            <label className="min-w-[210px] flex-[1_1_340px] text-[11px] font-semibold text-[color:var(--fg-2)]">
-              Search a founder, startup, campus, program or fund
-              <input
-                type="search"
-                value={networkQuery}
-                onChange={(event) => { setNetworkQuery(event.target.value); setDesktopHubsOpen(false); }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" && networkMatches[0]) chooseNetwork(networkMatches[0].network.id, true, false);
-                }}
-                placeholder="Try: Stanford, HBS Rock, founder or company name"
-                aria-label="Find founders, startups and networks"
-                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]"
-              />
-            </label>
-            <label className="text-[11px] font-semibold text-[color:var(--fg-2)]">
+
+        </div>
+      </header>
+
+      <main className="flex flex-col gap-0">
+        <nav aria-label="Networks sections" className="order-1 mx-auto flex w-full max-w-[1400px] flex-wrap gap-x-5 border-b border-[color:var(--line)] px-4 py-2 text-sm sm:px-6">
+          <a className="py-2 underline-offset-4 hover:underline" href="#network-map">Map</a>
+          <a className="py-2 underline-offset-4 hover:underline" href="#top-networks-heading">All networks</a>
+          <a className="py-2 underline-offset-4 hover:underline" href="#network-roster">Founder links</a>
+        </nav>
+        <div className="order-1 mx-auto grid w-full max-w-[1400px] items-start gap-4 px-4 py-4 sm:px-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
+          <aside aria-labelledby="popular-networks-heading" className="rounded-xl border border-[color:var(--line)] bg-white p-3">
+            <h2 id="popular-networks-heading" className="px-2 text-base font-semibold">Top networks</h2>
+            <p className="px-2 pb-2 text-xs text-[color:var(--fg-2)]">Choose a network to see its founders and startups.</p>
+            {displayedNetworks.length === 0 ? <p className="px-2 text-sm">No matching networks.</p> : null}
+            <label className="mb-2 block px-2 text-[11px] font-semibold text-[color:var(--fg-2)]">
               Network type
               <select
                 value={networkKind}
                 onChange={(event) => { setNetworkKind(event.target.value as NetworkKind | "all"); setDesktopHubsOpen(false); }}
                 aria-label="Filter networks by type"
-                className="mt-1 h-11 min-w-[140px] rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]"
+                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]"
               >
                 <option value="all">All types</option>
                 <option value="accelerator">Accelerators</option>
@@ -198,14 +206,52 @@ export function NetworksApp() {
                 <option value="lab">Labs</option>
               </select>
             </label>
-            <button
-              type="button"
-              onClick={scrollToRoster}
-              className="h-11 rounded-md bg-[color:var(--cobalt)] px-3 text-xs font-semibold text-white hover:opacity-90"
-              data-network-browse-results=""
-            >
-              Browse {networkMatches.length.toLocaleString("en-US")} networks
-            </button>
+            <ol className="divide-y divide-[color:var(--line)]">
+              {displayedNetworks.slice(0, 5).map((row, index) => (
+                <li key={row.id}>
+                  <button type="button" aria-pressed={graphInspectorOpen && row.id === activeNetwork}
+                    className="grid min-h-12 w-full grid-cols-[auto_1fr_auto] items-center gap-2 rounded-md px-2 py-2 text-left text-sm hover:bg-[#f7f8fc] aria-pressed:bg-[color:var(--cobalt-haze)]"
+                    onClick={() => {
+                      chooseNetwork(row.id, true, false);
+                      setMapFocus({ networkId: row.id });
+                    }}>
+                    <span className="text-xs text-[color:var(--fg-3)]">{index + 1}</span>
+                    <span className="font-medium">{row.label}</span>
+                    <span className="text-right text-xs tabular-nums">{row.founderCount.toLocaleString("en-US")}<br />founders</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+            <a href="#top-networks-heading" className="inline-flex min-h-10 items-center px-2 text-sm font-semibold text-[color:var(--cobalt)] hover:underline">Browse all networks</a>
+          </aside>
+        <section id="network-map" aria-labelledby="graph-heading" className="min-w-0 scroll-mt-24 rounded-xl border border-[color:var(--line)] bg-white">
+          <div className="mx-auto max-w-[1400px] px-4 pt-2 sm:px-6">
+            <h2 id="graph-heading" className="sr-only">
+              Network map
+            </h2>
+            <p className="mb-1 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
+              Search above or browse the network list to open founder, startup, and source details. Use the map to explore nearby connections.
+            </p>
+            <p className="mb-1 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
+              Campus-colored founders and program hubs. Scroll to zoom.
+            </p>
+          </div>
+          <div className="border-b border-[color:var(--line)] px-3 pb-3">
+          <div className="flex items-center" data-network-quick-find="">
+            <label className="min-w-[210px] flex-[1_1_340px] text-[11px] font-semibold text-[color:var(--fg-2)]">
+              Search a founder, startup, campus, program or fund
+              <input
+                type="search"
+                value={networkQuery}
+                onChange={(event) => { setNetworkQuery(event.target.value); setDesktopHubsOpen(false); }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && networkMatches[0]) selectSearchResult(networkMatches[0]);
+                }}
+                placeholder="Search founders, startups, or networks…"
+                aria-label="Find founders, startups and networks"
+                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]"
+              />
+            </label>
           </div>
           {networkQuery.trim() ? (
             <div className="mt-2 rounded-md border border-[color:var(--line)] bg-white p-2" data-network-quick-results="">
@@ -216,13 +262,7 @@ export function NetworksApp() {
                 <button
                   key={match.network.id}
                   type="button"
-                  onClick={() => {
-                    chooseNetwork(match.network.id, true, false);
-                    setMapFocus({
-                      networkId: match.network.id,
-                      founderId: match.nameMatch ? undefined : match.matchingMembers[0]?.founderId,
-                    });
-                  }}
+                  onClick={() => selectSearchResult(match)}
                   className="flex min-h-10 w-full items-center justify-between gap-3 rounded px-2 text-left text-xs hover:bg-[color:var(--cobalt-haze)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
                   data-network-quick-result={match.network.id}
                 >
@@ -237,22 +277,6 @@ export function NetworksApp() {
               {networkMatches.length === 0 ? <p className="px-2 py-3 text-xs text-[color:var(--fg-3)]">No source-linked founders or networks match this search. Try a different name or network type.</p> : null}
             </div>
           ) : null}
-        </div>
-      </header>
-
-      <main className="flex flex-col gap-0">
-        {/* Hero map: edge-to-edge, near full viewport */}
-        <section aria-labelledby="graph-heading" className="order-1 overflow-visible">
-          <div className="mx-auto max-w-[1400px] px-4 pt-2 sm:px-6">
-            <h2 id="graph-heading" className="sr-only">
-              Network map
-            </h2>
-            <p className="mb-1 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
-              Every founder and company, colored by campus. Dark hubs are programs and funds. Hover a founder, drag a node, scroll to zoom.
-            </p>
-            <p className="mb-1 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
-              Campus-colored founders and program hubs. Scroll to zoom.
-            </p>
           </div>
           <div className="relative md:min-h-0" data-network-map-and-inspector="">
             <NetworksGraph
@@ -266,7 +290,7 @@ export function NetworksApp() {
                 data-network-map-inspector=""
                 role="region"
                 aria-label={`Selected network: ${active.label}`}
-                className="absolute right-3 top-[8.75rem] z-[50] max-h-[min(58vh,430px)] w-[min(350px,calc(100%-1.5rem))] overflow-y-auto rounded-xl border border-[color:var(--line)] bg-white p-3 shadow-[0_16px_45px_rgba(18,29,58,0.2)] sm:top-20 sm:p-4"
+                className="mx-auto my-3 w-[calc(100%-2rem)] max-w-[1352px] rounded-xl border border-[color:var(--line)] bg-white p-3 sm:p-4"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -281,7 +305,7 @@ export function NetworksApp() {
                   <button type="button" onClick={() => setGraphInspectorOpen(false)}
                     aria-label="Close network details" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[color:var(--line)] text-lg text-[color:var(--fg-2)] hover:bg-[#f3f5fb]">×</button>
                 </div>
-                <div className="mt-3 space-y-1.5" data-network-map-members="">
+                <div className="mt-3 grid gap-2 sm:grid-cols-2" data-network-map-members="">
                   {(members.length ? members : fullMembers).slice(0, 4).map((member) => (
                     <NetworkMemberEntry
                       key={`${member.founderId}-${member.companyId}`}
@@ -306,12 +330,13 @@ export function NetworksApp() {
             ) : null}
           </div>
         </section>
+        </div>
 
         <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-3 py-4 sm:gap-5 sm:px-6 sm:py-6">
 
         <section aria-labelledby="top-networks-heading" className="order-2">
           <div className="mb-2 sm:mb-3">
-            <h2 id="top-networks-heading" className="text-base font-semibold tracking-tight sm:text-lg">
+            <h2 id="top-networks-heading" className="scroll-mt-24 text-base font-semibold tracking-tight sm:text-lg">
               Explore founder networks
             </h2>
             <p className="text-[12px] text-[color:var(--fg-2)] sm:text-sm">
