@@ -3,7 +3,7 @@ import path from "node:path";
 import { databaseStamp, getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { directoryRank, whyItsHere } from "./directory-rank";
-import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
+import { isBoilerplateDescription, matchesSector, resolveCompanySectors, sectorIdsOf, sectorLabelsOf, sectorLabel } from "./sectors";
 import { localCompanyLogoUrl } from "./local-logos";
 import { recordedOperatingStatus, type OperatingStatus } from "./sample-facets";
 
@@ -17,6 +17,7 @@ export interface DirectoryCard {
   schoolId: string | null;
   schoolSlug: string | null;
   sectorId: string | null;
+  sectorIds?: string[];
   sector: string | null;
   stage: string | null;
   /** News category already stored for this company. Never a made-up tag. */
@@ -250,11 +251,13 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
     signalCount.set(row.project_id, row.n);
   }
 
-  const sectorByProject = new Map<string, string>();
+  const sectorsByProject = new Map<string, string[]>();
   for (const row of db
     .prepare(`SELECT project_id, tag FROM project_sector_tags ORDER BY is_primary DESC, tag`)
     .all() as { project_id: string; tag: string }[]) {
-    if (!sectorByProject.has(row.project_id)) sectorByProject.set(row.project_id, row.tag);
+    const tags = sectorsByProject.get(row.project_id) ?? [];
+    if (!tags.includes(row.tag)) tags.push(row.tag);
+    sectorsByProject.set(row.project_id, tags);
   }
 
   const stageByProject = new Map<string, string>();
@@ -450,11 +453,9 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
     const school = schoolByProject.get(company.id);
     const short = school ? shortCampusLabel(school.id, school.name) : null;
     const description = company.description && !isBoilerplateDescription(company.description) ? oneLine(company.description) : null;
-    let sectorId = sectorByProject.get(company.id) ?? null;
-    if (!sectorId && description) {
-      const hit = primaryTag(classifyDescription(description, company.name));
-      if (hit) sectorId = hit.tag;
-    }
+    // Classify the complete product description, before card copy is shortened.
+    const sectorIds = resolveCompanySectors(sectorsByProject.get(company.id) ?? [], company.description, company.name);
+    const sectorId = sectorIds[0] ?? null;
     const signalKind = signalByProject.get(company.id) ?? null;
     let site = websiteByProject.get(company.id);
     if (!site) {
@@ -482,6 +483,7 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
       schoolId: school?.id ?? null,
       schoolSlug: short ? campusSlug(short) : null,
       sectorId,
+      sectorIds,
       sector: sectorId ? sectorLabel(sectorId) : null,
       stage: stageByProject.get(company.id) ?? null,
       signalKind,
@@ -512,14 +514,12 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
   const sectorCounts = new Map<string, number>();
   const kindCounts = new Map<string, number>();
   for (const card of cards) {
-    if (card.sectorId) sectorCounts.set(card.sectorId, (sectorCounts.get(card.sectorId) ?? 0) + 1);
+    for (const id of sectorIdsOf(card)) sectorCounts.set(id, (sectorCounts.get(id) ?? 0) + 1);
     if (card.signalKind) kindCounts.set(card.signalKind, (kindCounts.get(card.signalKind) ?? 0) + 1);
   }
   const sectors = [...sectorCounts.entries()]
     .map(([id, count]) => ({ id, label: sectorLabel(id), count }))
-    .filter((item) => item.count >= 10)
-    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
-    .slice(0, 12);
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
   const kinds = (Object.keys(SIGNAL_LABEL) as DirectoryCard["signalKind"][])
     .filter((id): id is NonNullable<DirectoryCard["signalKind"]> => Boolean(id && kindCounts.get(id)))
     .map((id) => ({ id, label: SIGNAL_LABEL[id], count: kindCounts.get(id) ?? 0 }));
@@ -548,7 +548,7 @@ export function countFoundersListed(): number {
 
 export function filterDirectory(cards: DirectoryCard[], sector: string | undefined, kind: string | undefined, campus?: string): DirectoryCard[] {
   return cards.filter((card) => {
-    if (sector && card.sectorId !== sector) return false;
+    if (sector && !matchesSector(card, sector)) return false;
     if (kind && card.signalKind !== kind) return false;
     if (campus && card.schoolId !== campus) return false;
     return true;
@@ -559,7 +559,7 @@ export function searchDirectory(cards: DirectoryCard[], query: string | undefine
   const tokens = (query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   if (tokens.length === 0) return cards;
   return cards.filter((card) => {
-      const haystack = [card.name, card.description ?? "", card.school ?? "", card.sector ?? "", ...card.founders].join("\n").toLowerCase();
+      const haystack = [card.name, card.description ?? "", card.school ?? "", ...sectorLabelsOf(card), ...card.founders].join("\n").toLowerCase();
     return tokens.every((token) => haystack.includes(token));
   });
 }

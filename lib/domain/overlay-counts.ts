@@ -1,6 +1,6 @@
 /** Shared Overlays + FacetRail count source so Status / Campus never drift. */
 
-import { STATUS_LABEL, statusOf, type FacetCompany, type StatusId } from "@/lib/domain/sample-facets";
+import { NOT_ON_RECORD, sectorBuckets, STATUS_LABEL, statusOf, type FacetCompany, type StatusId } from "@/lib/domain/sample-facets";
 
 export const CAMPUS_COUNT_UNIT = "founders" as const;
 
@@ -31,17 +31,9 @@ export function overlayStatusRows(companies: FacetCompany[]): OverlayRow[] {
 }
 
 export function overlaySectorRows(companies: FacetCompany[], topN = 6): OverlayRow[] {
-  const counts = new Map<string, { label: string; count: number }>();
-  for (const company of companies) {
-    const id = company.sectorId?.trim();
-    if (!id) continue;
-    const cur = counts.get(id);
-    if (cur) cur.count += 1;
-    else counts.set(id, { label: company.sector?.trim() || id, count: 1 });
-  }
-  return [...counts.entries()]
-    .map(([id, { label, count }]) => ({ id, label, count, facet: "sector" as const }))
-    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+  return sectorBuckets(companies)
+    .filter((row) => row.id !== NOT_ON_RECORD)
+    .map((row) => ({ ...row, facet: "sector" as const }))
     .slice(0, topN);
 }
 

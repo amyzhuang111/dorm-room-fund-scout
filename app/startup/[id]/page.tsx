@@ -7,7 +7,7 @@ import { loadDirectory, type DirectoryCard } from "@/lib/domain/directory";
 import { survivorId } from "@/lib/domain/entity-redirects";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { getProjectDetail } from "@/lib/domain/queries";
-import { isBoilerplateDescription } from "@/lib/domain/sectors";
+import { isBoilerplateDescription, matchesSector } from "@/lib/domain/sectors";
 import { plainTextDeep } from "@/lib/display/plain-text";
 import { getStartupCard } from "@/lib/domain/startup-card";
 import { campusPeerCompanies, type FacetCompany } from "@/lib/domain/sample-facets";
@@ -21,6 +21,7 @@ function toFacetCompany(card: DirectoryCard): FacetCompany {
     logoUrl: card.logoUrl,
     founders: card.founders,
     sectorId: card.sectorId,
+    sectorIds: card.sectorIds,
     sector: card.sector,
     signalKind: card.signalKind,
     signalLabel: card.signalLabel,
@@ -36,6 +37,7 @@ function slimWireCard(card: FacetCompany): FacetCompany {
     schoolId: card.schoolId,
     signals: card.signals,
     sectorId: card.sectorId,
+    sectorIds: card.sectorIds,
     sector: card.sector,
     signalKind: card.signalKind,
     signalLabel: card.signalLabel,
@@ -50,7 +52,7 @@ function wireSeedCompanies(all: FacetCompany[], schoolId: string | null, sectorI
     peers = campusPeerCompanies(all, schoolId);
   }
   if (!peers.length && sectorId) {
-    peers = all.filter((c) => c.sectorId === sectorId);
+    peers = all.filter((c) => matchesSector(c, sectorId));
   }
   if (!peers.length) {
     peers = all.filter((c) => (c.signals ?? 0) > 0).slice(0, 40);
@@ -129,7 +131,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (
-    <SampleCompanyShell companies={plainTextDeep(companies)} campuses={plainTextDeep(campuses)} dossier={plainTextDeep(dossier)} peerTotals={{ campus: dossier.schoolId ? campusPeerCompanies(all, dossier.schoolId).length : 0, sector: dossier.sectorId ? all.filter((c) => c.sectorId === dossier.sectorId).length : 0 }}>
+    <SampleCompanyShell companies={plainTextDeep(companies)} campuses={plainTextDeep(campuses)} dossier={plainTextDeep(dossier)} peerTotals={{ campus: dossier.schoolId ? campusPeerCompanies(all, dossier.schoolId).length : 0, sector: dossier.sectorId ? all.filter((c) => matchesSector(c, dossier.sectorId)).length : 0 }}>
       <CompanyDetail project={plainTextDeep(project)} initialCard={plainTextDeep(card)} />
     </SampleCompanyShell>
   );
