@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { loadDirectory } from "./directory";
 import { countCandidateProjects } from "./queries";
+import { sectorIdsOf } from "./sectors";
 import {
   activeThisMonth as activeThisMonthAt,
   bucketSum,
@@ -122,14 +123,18 @@ assert.equal(ordered[1]?.name, "Zulu");
 const data = loadDirectory();
 assert.equal(bucketSum(foundedYearBuckets(data.cards)), data.cards.length);
 assert.equal(bucketSum(hqRegionBuckets(data.cards)), data.cards.length);
-assert.equal(bucketSum(sectorBuckets(data.cards)), data.cards.length);
+const sectorMemberships = data.cards.reduce((sum, card) => sum + Math.max(1, sectorIdsOf(card).length), 0);
+assert.equal(bucketSum(sectorBuckets(data.cards)), sectorMemberships);
+for (const bucket of sectorBuckets(data.cards)) {
+  assert.equal(bucket.count, filterFacetCompanies(data.cards, bucket.id === NOT_ON_RECORD ? { sectorMissing: true } : { sector: bucket.id }).length);
+}
 assert.equal(data.cards.length, countCandidateProjects());
 const sectorMissing = sectorBuckets(data.cards).find((b) => b.id === NOT_ON_RECORD)?.count ?? 0;
 assert.ok(sectorMissing > 0);
 const namedSector = sectorBuckets(data.cards).filter((b) => b.id !== NOT_ON_RECORD).reduce((s, b) => s + b.count, 0);
 assert.ok(namedSector >= 700, `expected broader sector coverage, got ${namedSector}`);
 const pack = sectorPills(data.cards, 10);
-assert.equal(bucketSum(pack.visible.filter((b) => b.id !== NOT_ON_RECORD)) + pack.moreCount + (pack.visible.find((b) => b.id === NOT_ON_RECORD)?.count ?? 0), data.cards.length);
+assert.equal(bucketSum(pack.visible.filter((b) => b.id !== NOT_ON_RECORD)) + pack.moreCount + (pack.visible.find((b) => b.id === NOT_ON_RECORD)?.count ?? 0), sectorMemberships);
 const newCount = data.cards.filter((c) => hasFlag(c, "new")).length;
 const activeCount = data.cards.filter((c) => hasFlag(c, "signaled")).length;
 assert.ok(newCount !== activeCount, `flags must differ: new=${newCount} active=${activeCount}`);

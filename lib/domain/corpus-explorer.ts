@@ -8,6 +8,7 @@ import {
   type DirectoryCard,
   type DirectorySort,
   directorySortOf,
+  filterDirectory,
   searchDirectory,
   sortDirectory,
 } from "@/lib/domain/directory";
@@ -169,7 +170,7 @@ export type CorpusOptions = { q?:string; sector?:string; campus?:string; sort?:s
 export function filterCorpus(opts: CorpusOptions = {}): CorpusRow[] {
   let rows=loadCorpusRows();
   const {cards}=buildDirectoryFromDb({includeAll:true});
-  const allow=new Set(searchDirectory(cards,opts.q).filter(c=>!opts.sector||c.sectorId===opts.sector).map(c=>c.id));
+  const allow=new Set(filterDirectory(searchDirectory(cards,opts.q),opts.sector,undefined).map(c=>c.id));
   rows=rows.filter(r=>allow.has(r.id)&&(!opts.campus||r.campusIds.includes(opts.campus))&&(!opts.kind||r.kind===opts.kind));
   if(opts.scope==='scout')rows=rows.filter(r=>r.scoutingStatus==='Scouting list');
   if(opts.scope==='review')rows=rows.filter(r=>r.scoutingStatus==='Needs review');

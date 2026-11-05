@@ -36,6 +36,7 @@
     "test:campus-signals": "tsx lib/domain/pitchbook.test.ts && tsx lib/domain/campus-hit-rate.test.ts && tsx lib/domain/same-school.test.ts",
     "test:startup-card": "tsx lib/domain/startup-card.test.ts",
     "test:directory": "tsx lib/domain/directory.test.ts",
+    "test:sector-filters": "node --import tsx lib/domain/sectors.test.ts && node --import tsx lib/domain/map-startups.test.ts && node --import tsx lib/domain/directory-sectors.test.ts && node --import tsx lib/domain/sample-facets.test.ts && node --import tsx lib/domain/overlay-counts.test.ts",
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",
     "import:pear-hc-prod": "tsx scripts/ingest/import-pear-hc-prod-members.ts",
     "import:founders-inc-spc": "tsx scripts/ingest/import-founders-inc-spc.ts",

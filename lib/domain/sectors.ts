@@ -25,7 +25,7 @@ export const SECTORS: SectorDef[] = [
   { id: "climate_energy", label: "Climate/energy", specificity: 6, patterns: [/\b(climate|clean energy|renewable|carbon|solar|battery storage|decarbon)\b/i] },
   { id: "robotics_hardware", label: "Robotics/hardware", specificity: 7, patterns: [/\b(robot|robotics|hardware|sensor|drone|autonomous vehicle|manufacturing automation)\b/i] },
   { id: "defense_gov", label: "Defense/gov", specificity: 7, patterns: [/\b(defense|defence|national security|government contract|dual-use|police communication)\b/i] },
-  { id: "aerospace", label: "Aerospace", specificity: 7, patterns: [/\b(aerospace|satellite|space launch|orbital)\b/i] },
+  { id: "aerospace", label: "Aerospace", specificity: 7, patterns: [/\b(aerospace|satellites?|spacecraft|space launch|orbital|aviation|aircraft|rockets?|cubesats?)\b/i] },
   { id: "edtech", label: "Edtech", specificity: 6, patterns: [/\b(edtech|education|classroom|tutoring|university students|learning platform|training platform|student)\b/i] },
   { id: "consumer", label: "Consumer", specificity: 3, patterns: [/\b(consumer brand|direct to consumer|d2c|skincare|sneaker|apparel|lifestyle brand|consumer app)\b/i] },
   { id: "marketplaces", label: "Marketplaces", specificity: 5, patterns: [/\b(marketplace|two-sided|buyers and sellers)\b/i] },
@@ -72,9 +72,34 @@ export function sectorLabel(id: string): string {
   return SECTORS.find((s) => s.id === id)?.label ?? id;
 }
 
+export interface CompanySectors {
+  sectorId?: string | null;
+  sector?: string | null;
+  /** All matching sectors, including the primary one. Older snapshots may omit this. */
+  sectorIds?: string[];
+}
+
+export function sectorIdsOf(company: CompanySectors): string[] {
+  return [...new Set([company.sectorId, ...(company.sectorIds ?? [])]
+    .map((id) => id?.trim()).filter((id): id is string => Boolean(id)))];
+}
+
+export function sectorLabelsOf(company: CompanySectors): string[] {
+  return sectorIdsOf(company).map((id) => id === company.sectorId && company.sector
+    ? company.sector : sectorLabel(id));
+}
+
+export function matchesSector(company: CompanySectors, sector: string | null | undefined): boolean {
+  return Boolean(sector && sectorIdsOf(company).includes(sector));
+}
+
 export function isBoilerplateDescription(text: string | null | undefined): boolean {
   const t = (text ?? "").trim();
   if (t.length < 25) return true;
+  return isDirectoryBoilerplate(t);
+}
+
+function isDirectoryBoilerplate(t: string): boolean {
   if (BOILERPLATE.some((re) => re.test(t))) return true;
   // A press blurb that names several "founded by" teams is a shared list,
   // not one company's product description.
@@ -98,7 +123,9 @@ function windowAround(text: string, index: number): string {
 
 export function classifyDescription(text: string | null | undefined, companyName?: string): SectorHit[] {
   let raw = (text ?? "").replace(/\s+/g, " ").trim();
-  if (isBoilerplateDescription(raw)) return [];
+  // Short, explicit product descriptions (e.g. "Reusable Satellites") are
+  // valid sector evidence even when too short to display as a card blurb.
+  if (!raw || isDirectoryBoilerplate(raw)) return [];
   if (companyName && companyName.trim().length > 2) {
     const escaped = companyName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     raw = raw.replace(new RegExp(escaped, "ig"), " ");
@@ -133,4 +160,9 @@ export function classifyDescription(text: string | null | undefined, companyName
 
 export function primaryTag(hits: SectorHit[]): SectorHit | null {
   return hits[0] ?? null;
+}
+
+/** Keep the stored primary tag, but never discard other product matches. */
+export function resolveCompanySectors(stored: string[], description: string | null, name: string): string[] {
+  return [...new Set([...stored, ...classifyDescription(description, name).map((hit) => hit.tag)])];
 }

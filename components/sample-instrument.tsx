@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
+import { sectorIdsOf, sectorLabel } from "@/lib/domain/sectors";
 import {
   countBy,
   FLAG_LABEL,
@@ -16,6 +17,7 @@ import {
   RECENCY_LABEL,
   recencyOf,
   sectorPills,
+  sectorBuckets,
   STATUS_LABEL,
   statusOf,
   type FacetCompany,
@@ -824,6 +826,7 @@ export function FacetRail({
           ) : null}
         </FacetGroup>
         <FacetGroup title="Sector" dense={editorial}>
+          <p className="px-2 pb-1 text-[11px] text-fg-2">Startups can belong to multiple sectors.</p>
           <FacetRow facet="sector" count={listedTotal} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label="All" />
           {sectorRows.map((item) => {
             const missing = item.id === NOT_ON_RECORD;
@@ -925,7 +928,7 @@ export function applyFacets(companies: FacetCompany[], facets: FacetState, count
 }
 
 export function sectorMix(companies: FacetCompany[]): FacetCount[] {
-  return countBy(companies, (c) => c.sectorId, (id) => companies.find((c) => c.sectorId === id)?.sector ?? id).slice(0, 5);
+  return sectorBuckets(companies).filter((row) => row.id !== NOT_ON_RECORD).slice(0, 5);
 }
 
 export function recentSignals(companies: FacetCompany[]): FacetCompany[] {
@@ -995,15 +998,16 @@ export function contentsPageInsight(
   type Agg = { id: string; label: string; n: number; sig: number; recent: number };
   const map = new Map<string, Agg>();
   for (const company of companies) {
-    const id = company.sectorId?.trim() || "";
-    const label = company.sector?.trim() || "";
-    if (!id || !label || /^unlabeled$/i.test(label)) continue;
-    const row = map.get(id) ?? { id, label, n: 0, sig: 0, recent: 0 };
-    row.n += 1;
-    if ((company.signals ?? 0) > 0) row.sig += 1;
-    const at = company.latestSignalAt ?? "";
-    if (at.length >= 7 && at.slice(0, 7) >= startYm) row.recent += 1;
-    map.set(id, row);
+    for (const id of sectorIdsOf(company)) {
+      const label = id === company.sectorId ? company.sector?.trim() || sectorLabel(id) : sectorLabel(id);
+      if (!id || !label || /^unlabeled$/i.test(label)) continue;
+      const row = map.get(id) ?? { id, label, n: 0, sig: 0, recent: 0 };
+      row.n += 1;
+      if ((company.signals ?? 0) > 0) row.sig += 1;
+      const at = company.latestSignalAt ?? "";
+      if (at.length >= 7 && at.slice(0, 7) >= startYm) row.recent += 1;
+      map.set(id, row);
+    }
   }
   const rows = [...map.values()];
   const byRecent = [...rows]
@@ -1053,14 +1057,15 @@ export function newestSectorMix(
   const startYm = `${startY}-${String(startM).padStart(2, "0")}`;
   const map = new Map<string, FacetCount>();
   for (const company of companies) {
-    const id = company.sectorId?.trim() || "";
-    const label = company.sector?.trim() || "";
-    if (!id || !label || /^unlabeled$/i.test(label)) continue;
-    const at = company.latestSignalAt ?? "";
-    if (at.length < 7 || at.slice(0, 7) < startYm) continue;
-    const prev = map.get(id);
-    if (prev) prev.count += 1;
-    else map.set(id, { id, label, count: 1 });
+    for (const id of sectorIdsOf(company)) {
+      const label = id === company.sectorId ? company.sector?.trim() || sectorLabel(id) : sectorLabel(id);
+      if (!id || !label || /^unlabeled$/i.test(label)) continue;
+      const at = company.latestSignalAt ?? "";
+      if (at.length < 7 || at.slice(0, 7) < startYm) continue;
+      const prev = map.get(id);
+      if (prev) prev.count += 1;
+      else map.set(id, { id, label, count: 1 });
+    }
   }
   return [...map.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label)).slice(0, limit);
 }

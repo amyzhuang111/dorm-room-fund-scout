@@ -9,6 +9,7 @@ import { cleanCsvDate, cleanCsvNames, cleanCsvText, encodeCsv } from "@/lib/disp
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
+import { sectorLabel, sectorLabelsOf } from "@/lib/domain/sectors";
 import { directoryCardSubtitle, statusOf, type StatusId } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
@@ -78,7 +79,7 @@ function exportFilteredCsv(rows: FacetCompany[]) {
     ...rows.map((row) => [
       cleanCsvText(row.id),
       cleanCsvText(row.name),
-      cleanCsvText(row.sector),
+      cleanCsvText(sectorLabelsOf(row).join("; ")),
       cleanCsvText(row.stage),
       cleanCsvText(row.school),
       row.foundedYear,
@@ -461,7 +462,7 @@ export function SampleInstrumentBrowse({
     const campusLabel = facets.campus
       ? campuses.find((c) => c.id === facets.campus)?.name ?? facets.campus
       : null;
-    return activeFacetChips(facets, { campus: campusLabel, sector: companiesLive.find(c => c.sectorId === facets.sector)?.sector ?? undefined, kind: companiesLive.find(c => c.signalKind === facets.kind)?.signalLabel ?? undefined });
+    return activeFacetChips(facets, { campus: campusLabel, sector: facets.sector ? sectorLabel(facets.sector) : undefined, kind: companiesLive.find(c => c.signalKind === facets.kind)?.signalLabel ?? undefined });
   }, [facets, campuses, companiesLive]);
 
 

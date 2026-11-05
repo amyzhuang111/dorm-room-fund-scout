@@ -1,7 +1,7 @@
 "use client";
 import type { ReactNode } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
-import { FLAG_LABEL, RECENCY_LABEL, STATUS_LABEL } from "@/lib/domain/sample-facets";
+import { FLAG_LABEL, NOT_ON_RECORD, RECENCY_LABEL, sectorBuckets, STATUS_LABEL } from "@/lib/domain/sample-facets";
 import { emptyFacets, type FacetState } from "./sample-instrument";
 
 export function CompanyFilters({companies, campuses, facets, onChange}: {companies: FacetCompany[]; campuses: {id:string; name:string; country:string}[]; facets:FacetState; onChange:(next:FacetState)=>void}) {
@@ -12,7 +12,7 @@ export function CompanyFilters({companies, campuses, facets, onChange}: {compani
   return <div className="space-y-4" data-company-filters="">
     <label className="block text-sm font-medium text-fg">Search<input type="search" value={facets.query} onChange={e=>set({query:e.target.value})} placeholder="Company or founder" className="mt-1 block min-h-11 w-full rounded-md border border-line bg-white px-3 text-sm" /></label>
     {field("Campus",facets.campus??"",v=>set({campus:v||null}),[...campuses].sort((a,b)=>a.name.localeCompare(b.name)).map(c=><option key={c.id} value={c.id}>{c.name}</option>))}
-    {field("Sector",facets.sectorMissing?"__missing":facets.sector??"",v=>set({sector:v&&v!=="__missing"?v:null,sectorMissing:v==="__missing"}),<>{[...new Map(companies.filter(c=>c.sectorId).map(c=>[c.sectorId!,c.sector||c.sectorId!])).entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([id,label])=><option key={id} value={id}>{label}</option>)}<option value="__missing">Not on record</option></>)}
+    {field("Sector",facets.sectorMissing?"__missing":facets.sector??"",v=>set({sector:v&&v!=="__missing"?v:null,sectorMissing:v==="__missing"}),<>{sectorBuckets(companies).filter(row=>row.id!==NOT_ON_RECORD).sort((a,b)=>a.label.localeCompare(b.label)).map(({id,label})=><option key={id} value={id}>{label}</option>)}<option value="__missing">Not on record</option></>)}
     {field("Stage",facets.stage??"",v=>set({stage:v||null}),options(values("stage")))}
     <details className="border-t border-line pt-2"><summary className="cursor-pointer py-2 text-sm font-semibold">More filters</summary><div className="space-y-4 pt-2">
       {field("Status",facets.status??"",v=>set({status:(v||null) as FacetState["status"]}),Object.entries(STATUS_LABEL).map(([v,label])=><option key={v} value={v}>{label}</option>))}

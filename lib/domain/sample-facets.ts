@@ -1,4 +1,5 @@
 /** Facet helpers for the sample instrument. Counts come from stored directory cards only. */
+import { matchesSector, sectorIdsOf, sectorLabelsOf, sectorLabel } from "./sectors";
 
 export type RecencyId = "month" | "year" | "older" | "future" | "none";
 export type StatusId = "active" | "acquired" | "closed" | "unknown";
@@ -19,6 +20,7 @@ export interface FacetCompany {
   founders?: string[];
   description?: string | null;
   sectorId?: string | null;
+  sectorIds?: string[];
   sector?: string | null;
   stage?: string | null;
   signalKind?: string | null;
@@ -180,19 +182,21 @@ export function hqRegionBuckets(companies: FacetCompany[]): FacetCount[] {
   return regions;
 }
 
-/** Sector buckets including Not on record. Sum equals companies.length. */
+/** Unique companies per sector; multi-sector companies can appear in several buckets. */
 export function sectorBuckets(companies: FacetCompany[]): FacetCount[] {
   const counts = new Map<string, number>();
   const labels = new Map<string, string>();
   let missing = 0;
   for (const company of companies) {
-    const id = company.sectorId?.trim();
-    if (!id) {
+    const ids = sectorIdsOf(company);
+    if (!ids.length) {
       missing += 1;
       continue;
     }
-    counts.set(id, (counts.get(id) ?? 0) + 1);
-    if (!labels.has(id)) labels.set(id, company.sector?.trim() || id);
+    for (const id of ids) {
+      counts.set(id, (counts.get(id) ?? 0) + 1);
+      if (!labels.has(id)) labels.set(id, id === company.sectorId ? company.sector?.trim() || sectorLabel(id) : sectorLabel(id));
+    }
   }
   const sectors = [...counts.entries()]
     .map(([id, count]) => ({ id, label: labels.get(id) ?? id, count }))
@@ -201,7 +205,7 @@ export function sectorBuckets(companies: FacetCompany[]): FacetCount[] {
   return sectors;
 }
 
-/** Sector pills: Not on record first, then top N named, optional More remainder. Visible+More+missing sum to total. */
+/** Sector pills: Not on record first, then top N named, optional More remainder. */
 export function sectorPills(companies: FacetCompany[], topN = 10): { visible: FacetCount[]; more: FacetCount[]; moreCount: number; all: FacetCount[] } {
   const all = sectorBuckets(companies);
   const missing = all.filter((b) => b.id === NOT_ON_RECORD);
@@ -289,8 +293,8 @@ export function filterFacetCompanies(
   const today = opts.today ?? currentCalendarDay();
   return companies.filter((company) => {
     if (opts.sectorMissing) {
-      if (company.sectorId) return false;
-    } else if (opts.sector && company.sectorId !== opts.sector) {
+      if (sectorIdsOf(company).length) return false;
+    } else if (opts.sector && !matchesSector(company, opts.sector)) {
       return false;
     }
     if (opts.kind && company.signalKind !== opts.kind) return false;
@@ -310,7 +314,7 @@ export function filterFacetCompanies(
       return false;
     }
     if (tokens.length) {
-      const hay = [company.name, company.description ?? "", company.sector ?? "", company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
+      const hay = [company.name, company.description ?? "", ...sectorLabelsOf(company), company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
       if (!tokens.every((token) => hay.includes(token))) return false;
     }
     return true;

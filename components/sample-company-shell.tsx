@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { campusPeerCompanies, type FacetCompany } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
+import { matchesSector } from "@/lib/domain/sectors";
 import { browseHref } from "@/lib/domain/facet-url";
 import { safeDiscoveryReturn } from "@/lib/domain/discovery-navigation";
 import { emptyFacets, FacetRail, IntelligenceBoards, PANEL, type FacetState } from "./sample-instrument";
@@ -31,11 +32,11 @@ export function SampleCompanyShell({ children, companies, campuses, dossier, pee
   const peers = useMemo(() => {
     const source = catalog ?? companies;
     const campus = dossier?.schoolId ? campusPeerCompanies(source, dossier.schoolId) : [];
-    return campus.length ? campus : source.filter((c) => c.sectorId && c.sectorId === dossier?.sectorId);
+    return campus.length ? campus : source.filter((c) => dossier?.sectorId && matchesSector(c, dossier.sectorId));
   }, [catalog, companies, dossier]);
   const count = catalog ? peers.length : peerTotals?.campus || peerTotals?.sector || peers.length;
   const similar = useMemo(() => (catalog ?? companies)
-    .filter((c) => c.id !== dossier?.id && Boolean(dossier?.sectorId && c.sectorId === dossier.sectorId))
+    .filter((c) => c.id !== dossier?.id && Boolean(dossier?.sectorId && matchesSector(c, dossier.sectorId)))
     .sort((a, b) => Number(b.schoolId === dossier?.schoolId) - Number(a.schoolId === dossier?.schoolId) || b.signals - a.signals || a.name.localeCompare(b.name)).slice(0, 6),
   [catalog, companies, dossier]);
   return <div className="sample-paper company-dossier" data-company-shell="white">

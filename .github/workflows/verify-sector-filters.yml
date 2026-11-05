@@ -1,0 +1,38 @@
+name: Verify startup sector filters
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/verify-sector-filters.yml"
+      - "lib/domain/sectors*"
+      - "lib/domain/directory*"
+      - "lib/domain/sample-facets*"
+      - "lib/domain/map-startups*"
+      - "lib/domain/overlay-counts*"
+      - "components/map-startup-results.tsx"
+      - "components/company-filters.tsx"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sectors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-scout-sectors.db
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Prepare deployment data on a scratch copy
+        run: |
+          cp data/campus-universe.db "$CAMPUS_UNIVERSE_DB_PATH"
+          npm run prebuild
+      - name: Check all sector counts and omitted-startup regressions
+        run: npm run test:sector-filters
+      - name: Check directory behavior and types
+        run: |
+          npm run test:directory
+          npx tsc --noEmit
