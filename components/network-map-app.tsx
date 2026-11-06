@@ -537,7 +537,7 @@ export function NetworkMapApp() {
 
       <div
         className="absolute bottom-24 z-40 flex flex-col gap-1.5"
-        style={{ right: detailOpen ? `calc(min(${selectedNode?.type === "startup" || selectedNode?.type === "person" ? "360px" : "20rem"}, 100% - 1.5rem) + 0.85rem)` : "1rem" }}
+        style={{ right: detailOpen ? `calc(min(${selectedNode?.type === "startup" || selectedNode?.type === "person" ? "280px" : "20rem"}, 100% - 1.5rem) + 0.85rem)` : "1rem" }}
         role="group"
         aria-label="Map zoom"
       >
@@ -607,13 +607,13 @@ export function NetworkMapApp() {
       {detailOpen && selectedNode?.type === "startup" && (
         <StartupCardSheet id={selectedNode.id} onClose={() => setSelected(null)}
           onFounderSelect={id => { if (!shown?.nodes.some(node => node.id === id)) return false; choose(id); return true; }}
-          className="absolute inset-y-3 right-3 z-40 flex w-[min(360px,calc(100%-24px))] justify-end max-sm:fixed max-sm:z-50" />
+          className="absolute inset-y-3 right-3 z-40 flex w-[min(280px,calc(100%-24px))] justify-end max-sm:fixed max-sm:z-50" />
       )}
 
       {detailOpen && selectedNode?.type === "person" && (
         <FounderCardSheet id={selectedNode.id} onClose={() => setSelected(null)}
           onStartupSelect={id => { if (!shown?.nodes.some(node => node.id === id)) return false; choose(id); return true; }}
-          className="absolute inset-y-3 right-3 z-40 flex w-[min(360px,calc(100%-24px))] justify-end max-sm:fixed max-sm:z-50">
+          className="absolute inset-y-3 right-3 z-40 flex w-[min(280px,calc(100%-24px))] justify-end max-sm:fixed max-sm:z-50">
           {focus?.id === selectedNode.id && <details><summary>Network & source evidence</summary><FocusBody focus={focus} onJump={choose} /></details>}
         </FounderCardSheet>
       )}

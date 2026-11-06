@@ -106,14 +106,14 @@
 }
 
 /* Company previews float independently of the current-view dock. */
-.companyPreview { position: absolute; z-index: 45; top: 64px; right: 64px; bottom: 160px; width: min(360px, calc(100% - 88px)); pointer-events: auto; }
-.companyPreview .locationDetail { margin: 20px 0 0; padding: 0; border: 1px solid #e2e7f1; border-radius: 12px; }
-.companyPreview .locationDetail summary { padding: 12px; color: #2f4fd8; font-size: 12px; font-weight: 650; cursor: pointer; }
+.companyPreview { position: absolute; z-index: 45; top: 64px; right: 64px; bottom: 160px; width: min(280px, calc(100% - 88px)); pointer-events: auto; }
+.companyPreview .locationDetail { margin: 8px 0 0; padding: 0; border: 1px solid #e2e7f1; border-radius: 12px; }
+.companyPreview .locationDetail summary { padding: 6px; color: #2f4fd8; font-size: 10px; font-weight: 650; cursor: pointer; }
 .companyPreview .locationDetail[open] { padding: 0 12px 12px; }
 .companyPreview .locationDetail[open] summary { padding-inline: 0; }
 .companyPreview .locationDetail .buildingCompanies { display: flex; }
 @media (max-width: 639px) {
-  .companyPreview { top: 104px; right: 8px; bottom: 144px; width: calc(100% - 16px); }
+  .companyPreview { top: 104px; right: 8px; bottom: 144px; width: min(280px, calc(100% - 16px)); }
 }
 @media (max-height: 600px) {
   .companyPreview { top: 8px; bottom: 8px; }

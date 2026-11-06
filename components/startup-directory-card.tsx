@@ -281,7 +281,7 @@ export function StartupCardPanel(props: PanelProps) { return <EntityCardPanel ke
 export function FounderCardPanel(props: PanelProps) { return <EntityCardPanel key={props.id} {...props} kind="founder" />; }
 
 function CardSheet({ kind, className, ...props }: PanelProps & { kind: "startup" | "founder"; className?: string }) {
-  return <div className={`${styles.sheet} ${className ?? "fixed inset-y-3 right-3 z-[210] flex w-[min(360px,calc(100%-24px))] justify-end max-sm:inset-y-2 max-sm:right-2 max-sm:w-[calc(100%-16px)]"}`} onClick={event => event.stopPropagation()}>
+  return <div className={`${styles.sheet} ${className ?? "fixed inset-y-3 right-3 z-[210] flex w-[min(280px,calc(100%-24px))] justify-end max-sm:inset-y-2 max-sm:right-2 max-sm:w-[calc(100%-16px)]"}`} onClick={event => event.stopPropagation()}>
     <EntityCardPanel key={props.id} {...props} kind={kind} />
   </div>;
 }

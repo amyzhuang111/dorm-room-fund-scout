@@ -35,7 +35,7 @@ export function MapStartupResults({ companies, ready, query, campusId, compact =
       {c.description && <p className="mt-2 line-clamp-2 text-sm text-fg-2">{c.description}</p>}
       {!!c.founders?.length && <p className="mt-2 text-xs text-fg-2">{c.founders.join(" · ")}</p>}
     </button>)}</div>
-    {selectedCompany && createPortal(<StartupCardSheet id={selectedCompany} onClose={() => setSelectedCompany(null)} className="fixed inset-y-3 right-3 z-[210] flex w-[min(360px,calc(100%-24px))] justify-end" />, document.body)}
+    {selectedCompany && createPortal(<StartupCardSheet id={selectedCompany} onClose={() => setSelectedCompany(null)} className="fixed inset-y-3 right-3 z-[210] flex w-[min(280px,calc(100%-24px))] justify-end" />, document.body)}
     {!compact && matches.length > limit && <button type="button" className="min-h-11 w-full text-sm font-semibold text-link" onClick={() => setLimit(n => n + 12)}>Show more startups</button>}
   </section>;
 }
