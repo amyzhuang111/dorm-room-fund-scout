@@ -27,7 +27,7 @@ export interface StartupCardFounder {
   school: string | null;
   linkedinUrl: string | null;
   /** confirmed is a saved linkedin.com/in alias. likely is a stored candidate the directory card also shows, labeled. */
-  linkedinConfidence: "confirmed" | "likely" | null;
+  linkedinConfidence: "confirmed" | "likely" | "unverified" | null;
   /** Not stored. Left null rather than parsed out of a bio. */
   photoUrl: string | null;
   linkedinFollowers: number | null;
@@ -143,7 +143,7 @@ export function startupSubtitle(batch: string | null, program: string | null, lo
   const org = program?.trim() || null;
   let head: string | null = null;
   if (season) head = season;
-  else if (token && org) head = `${org} ${token}`.replace(/\s+/g, " ").trim();
+  else if (token && org) head = org.toLowerCase().includes(token.toLowerCase()) ? org : `${org} ${token}`.replace(/\s+/g, " ").trim();
   else if (token) head = token;
   const parts = [head, place].filter((part): part is string => !!part);
   return parts.length ? parts.join(" · ") : null;

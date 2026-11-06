@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ShortlistStar } from "./entity-marks";
+import { useUserPipeline } from "./user-pipeline-provider";
+import { userStartupPreview, userFounderPreview } from "@/lib/domain/user-preview";
+import type { FounderPreview, FounderPreviewLink } from "@/lib/domain/founder-preview";
 import styles from "./startup-directory-card.module.css";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
 const LINK_LABEL: Record<StartupLinkKind, string> = {
@@ -105,36 +108,16 @@ export function StartupDirectoryCard({
 
   return (
     <article data-testid="startup-directory-card" className={`${styles.card} ${embedded ? styles.embedded : ""}`}>
-      <header className={styles.header}>
-        <div className={styles.identity}>
-          <CompanyLogo name={card.name} logoUrl={card.logoUrl} />
-          <div className={styles.heading}>
-            <h2>{card.name}</h2>
-            {card.subtitle && <p>{card.subtitle}</p>}
-          </div>
-          <div className={styles.actions}>
-            <ShortlistStar entityType="project" entityId={card.id} name={card.name} campusName={card.campuses[0]} websiteUrl={card.websiteUrl} />
-            {onClose && <button type="button" onClick={onClose} aria-label="Close startup card"><CloseIcon /></button>}
-          </div>
-        </div>
-        {card.sector && <div className={styles.badges}><span>{card.sector}</span></div>}
-        {card.links.length > 0 && (
-          <nav className={styles.socials} aria-label={`${card.name} links`}>
-            {card.links.map(link => (
-              <a key={link.kind} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`${LINK_LABEL[link.kind]}${link.confirmed === false ? " (unverified)" : ""}`} title={`${LINK_LABEL[link.kind]}${link.confirmed === false ? " (unverified)" : ""}`}>
-                <LinkMark kind={link.kind} />
-              </a>
-            ))}
-          </nav>
-        )}
-      </header>
+      <DirectoryHeader id={card.id} name={card.name} subtitle={card.subtitle} logoUrl={card.logoUrl}
+        entityType="project" campus={card.campuses[0]} websiteUrl={card.websiteUrl} onClose={onClose} sector={card.sector}
+        links={card.links.map(link => ({ kind: link.kind, url: link.url, label: `${LINK_LABEL[link.kind]}${link.confirmed === false ? " (unverified)" : ""}` }))} />
       <div className={styles.body}>
         {card.description && <p className={styles.description}>{card.description}</p>}
         {facts.length > 0 && <dl className={styles.facts}>{facts.map(([label, value]) => (
           <div key={label}><dt>{label}:</dt><dd>{value}</dd></div>
         ))}</dl>}
         {card.verifiedOn && <p className={styles.verified}><span aria-hidden="true">✓</span> Verified {card.verifiedOn}{card.verifiedSource ? ` · ${card.verifiedSource}` : ""}</p>}
-        {!card.verifiedOn && card.verificationStatus && <p className={styles.verified}>{card.verificationStatus === "confirmed" ? "✓ Confirmed company" : "Verification pending"}</p>}
+        {!card.verifiedOn && card.verificationStatus && <p className={styles.verified}>{card.verificationStatus === "confirmed" ? "✓ Confirmed company" : card.verificationStatus === "user-added" ? "Added by you" : "Verification pending"}</p>}
         {card.sourceLink && <a className={styles.sourceLink} href={card.sourceLink.url} target="_blank" rel="noopener noreferrer">{card.sourceLink.label} <span aria-hidden="true">↗</span></a>}
         <section className={styles.founders} aria-label="Founders">
           <h3>Founders</h3>
@@ -151,9 +134,9 @@ export function StartupDirectoryCard({
                   </div>
                   {founder.linkedinUrl && founder.linkedinConfidence ? (
                     <a className={styles.linkedin} href={founder.linkedinUrl} target="_blank" rel="noopener noreferrer"
-                      aria-label={`LinkedIn for ${founder.name}${founder.linkedinConfidence === "likely" ? " (likely match)" : ""}`}
-                      title={founder.linkedinConfidence === "confirmed" ? "Verified public LinkedIn profile" : "Likely LinkedIn profile; not confirmed"}>
-                      <span>in</span>{founder.linkedinConfidence === "likely" && <small>Likely</small>}
+                      aria-label={`LinkedIn for ${founder.name}${founder.linkedinConfidence === "likely" ? " (likely match)" : founder.linkedinConfidence === "unverified" ? " (unverified)" : ""}`}
+                      title={founder.linkedinConfidence === "confirmed" ? "Verified public LinkedIn profile" : founder.linkedinConfidence === "likely" ? "Likely LinkedIn profile; not confirmed" : "User-added LinkedIn; not confirmed"}>
+                      <span>in</span>{founder.linkedinConfidence !== "confirmed" && <small>{founder.linkedinConfidence === "likely" ? "Likely" : "Unverified"}</small>}
                     </a>
                   ) : null}
                 </li>
@@ -180,51 +163,104 @@ function FounderAvatar({ name, photoUrl }: { name: string; photoUrl: string | nu
   );
 }
 
-export function useStartupCard(id: string, initial: StartupCard | null): { card: StartupCard | null; settled: boolean } {
-  const ready = initial?.id === id ? initial : null;
-  const [card, setCard] = useState<StartupCard | null>(ready);
-  const [settled, setSettled] = useState(ready != null || id.startsWith("user_"));
-  const [forId, setForId] = useState(id);
-  if (forId !== id) {
-    setForId(id);
-    const next = initial?.id === id ? initial : null;
-    setCard(next);
-    setSettled(next != null || id.startsWith("user_"));
-  }
-
-  useEffect(() => {
-    if (id.startsWith("user_")) return;
-    if (initial?.id === id) return;
-    let cancel = false;
-    fetch(`/api/startup-card?id=${encodeURIComponent(id)}`)
-      .then((res) => (res.ok ? (res.json() as Promise<{ card: StartupCard | null }>) : null))
-      .then((data) => {
-        if (cancel) return;
-        setCard(data?.card ?? null);
-        setSettled(true);
-      })
-      .catch(() => {
-        if (cancel) return;
-        setCard(null);
-        setSettled(true);
-      });
-    return () => {
-      cancel = true;
-    };
-  }, [id, initial]);
-
-  return { card, settled };
+function DirectoryHeader({ id, name, subtitle, logoUrl, entityType, campus, websiteUrl, onClose, sector, links }: {
+  id: string; name: string; subtitle: string | null; logoUrl?: string | null;
+  entityType: "person" | "project"; campus?: string; websiteUrl?: string | null;
+  onClose?: () => void; sector?: string | null; links: FounderPreviewLink[];
+}) {
+  return <header className={styles.header}>
+    <div className={styles.identity}>
+      {entityType === "person" ? <FounderAvatar name={name} photoUrl={null} /> : <CompanyLogo name={name} logoUrl={logoUrl} />}
+      <div className={styles.heading}><h2>{name}</h2>{subtitle && <p>{subtitle}</p>}</div>
+      <div className={styles.actions}>
+        <ShortlistStar entityType={entityType} entityId={id} name={name} campusName={campus} websiteUrl={websiteUrl} />
+        {onClose && <button type="button" onClick={onClose} aria-label={`Close ${entityType === "person" ? "founder" : "startup"} card`}><CloseIcon /></button>}
+      </div>
+    </div>
+    {sector && <div className={styles.badges}><span>{sector}</span></div>}
+    {links.length > 0 && <nav className={styles.socials} aria-label={`${name} links`}>
+      {links.map(link => <a key={`${link.kind}-${link.url}`} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.label} title={link.label}>
+        {link.kind in LINK_LABEL ? <LinkMark kind={link.kind as StartupLinkKind} /> : <span className={styles.linkMark}>{{ twitter: "𝕏", scholar: "sch", substack: "S", huggingface: "HF", devpost: "D" }[link.kind] ?? "↗"}</span>}
+      </a>)}
+    </nav>}
+  </header>;
 }
 
-export function StartupCardPanel({ id, onClose, onFounderSelect, children }: { id: string; onClose: () => void; onFounderSelect?: (id: string) => boolean; children?: ReactNode }) {
+export function FounderDirectoryCard({ card, onClose, onStartupSelect, children }: {
+  card: FounderPreview; onClose: () => void; onStartupSelect: (id: string) => boolean; children?: ReactNode;
+}) {
+  return <article data-testid="founder-directory-card" className={styles.card}>
+    <DirectoryHeader id={card.id} name={card.name} subtitle={card.subtitle} entityType="person"
+      campus={card.schools[0]} onClose={onClose} links={card.links} />
+    <div className={styles.body}>
+      <dl className={styles.facts}>
+        {card.schools.length > 0 && <div><dt>{card.schools.length > 1 ? "Schools" : "School"}:</dt><dd>{card.schools.join(" · ")}</dd></div>}
+        {card.classYear && <div><dt>Class:</dt><dd>{card.classYear}{card.classYearSource && <a href={card.classYearSource} target="_blank" rel="noopener noreferrer" aria-label="Class year source"> ↗</a>}</dd></div>}
+      </dl>
+      {card.verifiedOn ? <p className={styles.verified}>✓ Verified {card.verifiedOn}</p> : card.verificationStatus && <p className={styles.verified}>{card.verificationStatus === "confirmed" ? "✓ Confirmed founder" : card.verificationStatus === "user-added" ? "Added by you" : "Verification pending"}</p>}
+      <section className={styles.founders} aria-label="Founded companies">
+        <h3>Founded</h3>
+        {card.companies.length ? <ul>{card.companies.map(company => <li key={company.id} className={styles.founder}>
+          <CompanyLogo name={company.name} logoUrl={company.logoUrl} />
+          <div className={styles.founderInfo}>
+            <Link className={styles.founderName} href={`/startup/${encodeURIComponent(company.id)}?from=map`} onClick={event => { if (onStartupSelect(company.id)) event.preventDefault(); }}>{company.name}</Link>
+            {company.role && <p className={styles.role}>{company.role}</p>}
+            {company.description && <p className={styles.companyDescription}>{company.description}</p>}
+          </div>
+          {company.websiteUrl && <a className={styles.companyWebsite} href={company.websiteUrl} target="_blank" rel="noopener noreferrer" aria-label={`Website for ${company.name}`} title={`Website for ${company.name}`}><GlobeIcon /></a>}
+        </li>)}</ul> : <p className={styles.empty}>No founded company recorded yet.</p>}
+      </section>
+      {children}
+      <Link className={styles.fullRecord} href={card.recordHref}>View full founder record <span aria-hidden="true">↗</span></Link>
+    </div>
+  </article>;
+}
+
+function useRecordCard<T extends { id: string }>(kind: "startup" | "founder", id: string, initial: T | null) {
+  const ready = initial?.id === id ? initial : null;
+  const [result, setResult] = useState<{ id: string; card: T | null; settled: boolean }>({ id, card: ready, settled: !!ready });
+  useEffect(() => {
+    if (!id || id.startsWith("user_") || id.startsWith("ufounder_") || initial?.id === id) return;
+    const controller = new AbortController();
+    fetch(`/api/${kind}-card?id=${encodeURIComponent(id)}`, { signal: controller.signal })
+      .then(res => res.ok ? res.json() as Promise<{ card: T | null }> : Promise.reject(new Error("Card unavailable")))
+      .then(data => setResult({ id, card: data.card, settled: true }))
+      .catch(() => { if (!controller.signal.aborted) setResult({ id, card: null, settled: true }); });
+    return () => controller.abort();
+  }, [kind, id, initial]);
+  return ready ? { card: ready, settled: true } : result.id === id ? result : { card: null, settled: false };
+}
+
+export function useStartupCard(id: string, initial: StartupCard | null) {
+  const { state } = useUserPipeline();
+  const result = useRecordCard("startup", id, initial);
+  const local = state.startups.find(startup => startup.id === id);
+  return id.startsWith("user_") ? { card: local ? userStartupPreview(local) : null, settled: true } : result;
+}
+
+function EntityCardPanel({ id, kind, onClose, onFounderSelect, onStartupSelect, children }: {
+  id: string; kind: "startup" | "founder"; onClose: () => void;
+  onFounderSelect?: (id: string) => boolean; onStartupSelect?: (id: string) => boolean; children?: ReactNode;
+}) {
+  const [selection, setSelection] = useState({ id, kind });
   const panelRef = useRef<HTMLElement>(null);
+  const { state } = useUserPipeline();
+  const startup = useStartupCard(selection.kind === "startup" ? selection.id : "", null);
+  const fetchedFounder = useRecordCard<FounderPreview>("founder", selection.kind === "founder" ? selection.id : "", null);
+  const founder = selection.id.startsWith("ufounder_") ? { card: userFounderPreview(selection.id, state.startups), settled: true } : fetchedFounder;
+  const current = selection.kind === "startup" ? startup : founder;
+  const original = selection.kind === kind && selection.id === id;
+  const select = (nextKind: "startup" | "founder", nextId: string) => {
+    const handled = nextKind === "startup" ? onStartupSelect?.(nextId) : onFounderSelect?.(nextId);
+    if (!handled) setSelection({ id: nextId, kind: nextKind });
+    return true;
+  };
   useEffect(() => {
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     panelRef.current?.focus({ preventScroll: true });
     return () => { if (previous?.isConnected) previous.focus({ preventScroll: true }); };
   }, []);
-  const { card, settled } = useStartupCard(id, null);
-  useEffect(() => { panelRef.current?.scrollTo({ top: 0 }); }, [id]);
+  useEffect(() => { panelRef.current?.scrollTo({ top: 0 }); }, [selection.id]);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") { event.stopPropagation(); onClose(); }
@@ -232,33 +268,22 @@ export function StartupCardPanel({ id, onClose, onFounderSelect, children }: { i
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
   }, [onClose]);
-
-  return (
-    <aside
-      ref={panelRef}
-      tabIndex={-1}
-      role="dialog"
-      aria-label={card?.name ? `${card.name} startup` : "Startup"}
-      className={styles.panel}
-    >
-      {card ? (
-        <StartupDirectoryCard key={id} card={card} onClose={onClose} onFounderSelect={onFounderSelect}>{children}</StartupDirectoryCard>
-      ) : (
-        <div className="flex items-start justify-between gap-3 p-4">
-          <p className="text-sm text-neutral-600">{settled ? "This startup is not on record." : "Loading startup…"}</p>
-          <button type="button" onClick={onClose} aria-label="Close startup card" className="grid h-11 w-11 place-items-center rounded-lg text-black hover:bg-neutral-100">
-            <CloseIcon />
-          </button>
-        </div>
-      )}
-    </aside>
-  );
+  return <aside ref={panelRef} tabIndex={-1} role="dialog" aria-label={current.card ? `${current.card.name} ${selection.kind}` : selection.kind === "startup" ? "Startup" : "Founder"} className={styles.panel}>
+    {!original && <button type="button" className={styles.back} onClick={() => setSelection({ id, kind })}>← Back to {kind}</button>}
+    {selection.kind === "startup" && startup.card ? <StartupDirectoryCard key={selection.id} card={startup.card} onClose={onClose} onFounderSelect={nextId => select("founder", nextId)}>{original ? children : null}</StartupDirectoryCard>
+      : selection.kind === "founder" && founder.card ? <FounderDirectoryCard key={selection.id} card={founder.card} onClose={onClose} onStartupSelect={nextId => select("startup", nextId)}>{original ? children : null}</FounderDirectoryCard>
+      : <div className={styles.loading}><p role="status">{current.settled ? "This record is unavailable." : `Loading ${selection.kind}…`}</p><button type="button" onClick={onClose} aria-label={`Close ${selection.kind} card`}><CloseIcon /></button></div>}
+  </aside>;
 }
 
-export function StartupCardSheet({ id, onClose, className }: { id: string; onClose: () => void; className?: string }) {
-  return (
-    <div className={`${styles.sheet} ${className ?? "fixed inset-y-3 right-3 z-[210] flex w-[min(440px,calc(100%-24px))] justify-end max-sm:inset-y-2 max-sm:right-2 max-sm:w-[calc(100%-16px)]"}`} onClick={event => event.stopPropagation()}>
-      <StartupCardPanel id={id} onClose={onClose} />
-    </div>
-  );
+type PanelProps = { id: string; onClose: () => void; onFounderSelect?: (id: string) => boolean; onStartupSelect?: (id: string) => boolean; children?: ReactNode };
+export function StartupCardPanel(props: PanelProps) { return <EntityCardPanel key={props.id} {...props} kind="startup" />; }
+export function FounderCardPanel(props: PanelProps) { return <EntityCardPanel key={props.id} {...props} kind="founder" />; }
+
+function CardSheet({ kind, className, ...props }: PanelProps & { kind: "startup" | "founder"; className?: string }) {
+  return <div className={`${styles.sheet} ${className ?? "fixed inset-y-3 right-3 z-[210] flex w-[min(360px,calc(100%-24px))] justify-end max-sm:inset-y-2 max-sm:right-2 max-sm:w-[calc(100%-16px)]"}`} onClick={event => event.stopPropagation()}>
+    <EntityCardPanel key={props.id} {...props} kind={kind} />
+  </div>;
 }
+export function StartupCardSheet(props: PanelProps & { className?: string }) { return <CardSheet {...props} kind="startup" />; }
+export function FounderCardSheet(props: PanelProps & { className?: string }) { return <CardSheet {...props} kind="founder" />; }

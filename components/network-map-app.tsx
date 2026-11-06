@@ -12,13 +12,12 @@ import { signalTooltip } from "@/lib/domain/network-signal-size";
 import { attachUserMapNodes, isUserAddedId } from "@/lib/domain/user-pipeline";
 import { useUserPipeline } from "./user-pipeline-provider";
 import type { NetworkFocus } from "@/lib/domain/network-focus";
-import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
 import type { NetworkSigmaHandle } from "./network-sigma";
 import { NODE_FILL, campusSwatches, groupCampusSwatches } from "./network-style";
 import { useAskHighlight } from "./ask-highlight";
 import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
-import { LinkedInIconButton, LinkedInOpenButton, LinkedInProfileLink, PersonLinkButton, ProfileIconLinks } from "./person-link";
-import { StartupCardSheet } from "./startup-directory-card";
+import { LinkedInIconButton, LinkedInProfileLink, PersonLinkButton, ProfileIconLinks } from "./person-link";
+import { StartupCardSheet, FounderCardSheet } from "./startup-directory-card";
 
 const LEGEND_REGION: Record<string, string> = {
   boston: "Northeast",
@@ -265,14 +264,7 @@ export function NetworkMapApp() {
     }
   }
 
-  const linkedinFor = useMemo(() => (shown ? buildPersonLinkedInLookup(shown) : null), [shown]);
   const selectedNode = shown?.nodes.find((node) => node.id === activeId) ?? null;
-  const personLinkedIn =
-    selectedNode?.type === "person"
-      ? focus?.id === selected && focus.linkedin
-        ? focus.linkedin
-        : linkedinFor?.(selectedNode) ?? null
-      : null;
   const detailOpen = activeId != null && selectedNode != null;
 
   const swatchGroups = useMemo(() => (graph ? groupCampusSwatches(campusSwatches(graph.nodes)) : []), [graph]);
@@ -545,7 +537,7 @@ export function NetworkMapApp() {
 
       <div
         className="absolute bottom-24 z-40 flex flex-col gap-1.5"
-        style={{ right: detailOpen ? `calc(min(${selectedNode?.type === "startup" && !isUserAddedId(selectedNode.id) ? "440px" : "20rem"}, 100% - 1.5rem) + 0.85rem)` : "1rem" }}
+        style={{ right: detailOpen ? `calc(min(${selectedNode?.type === "startup" || selectedNode?.type === "person" ? "360px" : "20rem"}, 100% - 1.5rem) + 0.85rem)` : "1rem" }}
         role="group"
         aria-label="Map zoom"
       >
@@ -612,11 +604,20 @@ export function NetworkMapApp() {
         )}
       </div>
 
-      {detailOpen && selectedNode?.type === "startup" && !isUserAddedId(selectedNode.id) && (
-        <StartupCardSheet id={selectedNode.id} onClose={() => setSelected(null)} className="absolute inset-y-0 right-0 z-40 flex w-full justify-end max-sm:fixed max-sm:inset-0 max-sm:z-50 sm:w-auto" />
+      {detailOpen && selectedNode?.type === "startup" && (
+        <StartupCardSheet id={selectedNode.id} onClose={() => setSelected(null)}
+          onFounderSelect={id => { if (!shown?.nodes.some(node => node.id === id)) return false; choose(id); return true; }}
+          className="absolute inset-y-3 right-3 z-40 flex w-[min(360px,calc(100%-24px))] justify-end max-sm:fixed max-sm:z-50" />
       )}
 
-      {detailOpen && selectedNode && !(selectedNode.type === "startup" && !isUserAddedId(selectedNode.id)) && (
+      {detailOpen && selectedNode?.type === "person" && (
+        <FounderCardSheet id={selectedNode.id} onClose={() => setSelected(null)}
+          onStartupSelect={id => { if (!shown?.nodes.some(node => node.id === id)) return false; choose(id); return true; }}
+          className="absolute inset-y-3 right-3 z-40 flex w-[min(360px,calc(100%-24px))] justify-end max-sm:fixed max-sm:z-50">
+          {focus?.id === selectedNode.id && <details><summary>Network & source evidence</summary><FocusBody focus={focus} onJump={choose} /></details>}
+        </FounderCardSheet>
+      )}
+      {detailOpen && selectedNode && selectedNode.type !== "startup" && selectedNode.type !== "person" && (
         <aside
           className="absolute bottom-3 right-3 top-14 z-30 flex w-[min(20rem,calc(100%-1.5rem))] flex-col overflow-hidden rounded-md border border-neutral-300 bg-white text-black shadow-sm"
           style={{ ["--link" as string]: "#111111", ["--foreground" as string]: "#111111", ["--muted" as string]: "#404040" }}
@@ -639,24 +640,14 @@ export function NetworkMapApp() {
                   .filter(Boolean)
                   .join(" · ")}
               </p>
-              {personLinkedIn && (
-                <div className="mt-2">
-                  {personLinkedIn.status === "confirmed" || personLinkedIn.status === "likely" ? (
-                    <LinkedInProfileLink action={personLinkedIn} name={focus?.name ?? selectedNode.label} />
-                  ) : (
-                    <LinkedInOpenButton action={personLinkedIn} name={focus?.name ?? selectedNode.label} />
-                  )}
-                </div>
-              )}
+
             </div>
             <button type="button" className="text-xs font-medium text-black underline" onClick={() => setSelected(null)} aria-label="Close details">
               Close
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-3 py-2">
-            {isUserAddedId(selectedNode.id) ? (
-              <UserAddedFocus id={selectedNode.id} />
-            ) : focus && focus.id === activeId ? (
+            {focus && focus.id === activeId ? (
               <FocusBody focus={focus} onJump={choose} />
             ) : (
               <p className="text-sm text-neutral-600">Loading…</p>
@@ -664,33 +655,6 @@ export function NetworkMapApp() {
           </div>
         </aside>
       )}
-    </div>
-  );
-}
-
-function UserAddedFocus({ id }: { id: string }) {
-  const { state } = useUserPipeline();
-  const startup = state.startups.find((row) => row.id === id) ?? state.startups.find((row) => row.founders.some((founder) => founder.id === id));
-  const founder = startup?.founders.find((row) => row.id === id);
-  if (!startup) return <p className="text-sm">This user-added record is no longer in the pipeline.</p>;
-  return (
-    <div className="space-y-2 text-sm text-black">
-      <p>{founder ? founder.name : startup.name}</p>
-      <p className="text-xs text-neutral-700">{startup.campusName}{startup.fundingStage ? ` · ${startup.fundingStage}` : ""}</p>
-      {startup.description && <p>{startup.description}</p>}
-      <div className="flex flex-wrap gap-2 text-xs">
-        {startup.websiteUrl && (
-          <a href={startup.websiteUrl} target="_blank" rel="noopener noreferrer" className="rounded-md border border-black px-2 py-1 font-medium">
-            Website
-          </a>
-        )}
-        <a href={startup.verificationUrl} target="_blank" rel="noopener noreferrer" className="rounded-md border border-black px-2 py-1 font-medium">
-          Verified by user
-        </a>
-        <Link href={`/startup/${startup.id}`} className="font-medium underline">
-          Open record
-        </Link>
-      </div>
     </div>
   );
 }
