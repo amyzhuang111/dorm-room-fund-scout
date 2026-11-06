@@ -299,9 +299,16 @@ export function getStartupCard(id: string): StartupCard | null {
   const region = factText("hq") || membershipLocation;
   const descriptionFact = factText("description");
   // Short product taglines are useful here even when too short for sector scoring.
-  const description =
-    (project.description && !isDirectoryBoilerplate(project.description) ? project.description.trim() : null) ||
-    (descriptionFact && !isDirectoryBoilerplate(descriptionFact) ? descriptionFact : null);
+  // Some campus imports only repeat the company and cohort already in the header.
+  const normalized = (text: string) => text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  const repeatedHeadings = new Set([
+    project.name,
+    [project.name, chosen.program].filter(Boolean).join(" "),
+    [project.name, sourceLink?.label].filter(Boolean).join(" "),
+  ].map(normalized));
+  const description = [project.description, descriptionFact].find(text =>
+    text?.trim() && !isDirectoryBoilerplate(text) && !repeatedHeadings.has(normalized(text))
+  )?.trim() || null;
 
   const tag = db
     .prepare(`SELECT tag FROM project_sector_tags WHERE project_id = ? ORDER BY is_primary DESC, rowid LIMIT 1`)

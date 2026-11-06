@@ -118,7 +118,7 @@ export function StartupDirectoryCard({
         ))}</dl>}
         {card.verifiedOn && <p className={styles.verified}><span aria-hidden="true">✓</span> Verified {card.verifiedOn}{card.verifiedSource ? ` · ${card.verifiedSource}` : ""}</p>}
         {!card.verifiedOn && card.verificationStatus && <p className={styles.verified}>{card.verificationStatus === "confirmed" ? "✓ Confirmed company" : card.verificationStatus === "user-added" ? "Added by you" : "Verification pending"}</p>}
-        {card.sourceLink && <a className={styles.sourceLink} href={card.sourceLink.url} target="_blank" rel="noopener noreferrer">{card.sourceLink.label} <span aria-hidden="true">↗</span></a>}
+        {card.sourceLink && <a className={styles.sourceLink} href={card.sourceLink.url} target="_blank" rel="noopener noreferrer" title={card.sourceLink.label} aria-label={`Source: ${card.sourceLink.label}`}>Source <span aria-hidden="true">↗</span></a>}
         <section className={styles.founders} aria-label="Founders">
           <h3>Founders</h3>
           {card.founders.length === 0 ? <p className={styles.empty}>Founder details haven’t been added yet.</p> : (
@@ -211,7 +211,7 @@ export function FounderDirectoryCard({ card, onClose, onStartupSelect, children 
         </li>)}</ul> : <p className={styles.empty}>No founded company recorded yet.</p>}
       </section>
       {children}
-      <Link className={styles.fullRecord} href={card.recordHref}>View full founder record <span aria-hidden="true">↗</span></Link>
+      <Link className={styles.fullRecord} href={card.recordHref}>{card.verificationStatus === "user-added" ? "View pipeline record" : "View full founder record"} <span aria-hidden="true">↗</span></Link>
     </div>
   </article>;
 }

@@ -135,6 +135,11 @@ assert.equal(addsynth.links.some(link => link.kind === "website"), false);
 assert.equal(addsynth.sourceLink?.url, "https://georgiakickstart.com/portfolio");
 assert.equal(addsynth.verifiedOn, null);
 assert.deepEqual(addsynth.founders, []);
+const alonId = getDb().prepare("SELECT id FROM projects WHERE name = 'Alon Technologies'").get() as { id: string };
+const alon = getStartupCard(alonId.id);
+assert.equal(alon?.description, null);
+assert.equal(alon?.subtitle, "WashU Skandalaris I&E Awards spring 2026");
+assert.ok(alon?.sourceLink?.url);
 
 const greptile = getStartupCard("proj_Kjt4QnMR7jT7");
 assert.equal(greptile?.description, "AI code review agent with complete context of your codebase");
