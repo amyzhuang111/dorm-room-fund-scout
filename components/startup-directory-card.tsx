@@ -87,11 +87,13 @@ export function StartupDirectoryCard({
   card,
   onClose,
   embedded = false,
+  onFounderSelect,
   children,
 }: {
   card: StartupCard;
   onClose?: () => void;
   embedded?: boolean;
+  onFounderSelect?: (id: string) => boolean;
   children?: ReactNode;
 }) {
   const facts = [
@@ -119,7 +121,7 @@ export function StartupDirectoryCard({
         {card.links.length > 0 && (
           <nav className={styles.socials} aria-label={`${card.name} links`}>
             {card.links.map(link => (
-              <a key={link.kind} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={LINK_LABEL[link.kind]} title={LINK_LABEL[link.kind]}>
+              <a key={link.kind} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`${LINK_LABEL[link.kind]}${link.confirmed === false ? " (unverified)" : ""}`} title={`${LINK_LABEL[link.kind]}${link.confirmed === false ? " (unverified)" : ""}`}>
                 <LinkMark kind={link.kind} />
               </a>
             ))}
@@ -132,16 +134,18 @@ export function StartupDirectoryCard({
           <div key={label}><dt>{label}:</dt><dd>{value}</dd></div>
         ))}</dl>}
         {card.verifiedOn && <p className={styles.verified}><span aria-hidden="true">✓</span> Verified {card.verifiedOn}{card.verifiedSource ? ` · ${card.verifiedSource}` : ""}</p>}
+        {!card.verifiedOn && card.verificationStatus && <p className={styles.verified}>{card.verificationStatus === "confirmed" ? "✓ Confirmed company" : "Verification pending"}</p>}
+        {card.sourceLink && <a className={styles.sourceLink} href={card.sourceLink.url} target="_blank" rel="noopener noreferrer">{card.sourceLink.label} <span aria-hidden="true">↗</span></a>}
         <section className={styles.founders} aria-label="Founders">
           <h3>Founders</h3>
-          {card.founders.length === 0 ? <p className={styles.empty}>No founders on record.</p> : (
+          {card.founders.length === 0 ? <p className={styles.empty}>Founder details haven’t been added yet.</p> : (
             <ul>{card.founders.map(founder => {
               const meta = founderMeta(founder);
               return (
                 <li key={founder.id} className={styles.founder}>
                   <FounderAvatar name={founder.name} photoUrl={founder.photoUrl} />
                   <div className={styles.founderInfo}>
-                    <Link className={styles.founderName} href={`/founders?founder=${encodeURIComponent(founder.id)}`}>{founder.name}</Link>
+                    <Link className={styles.founderName} href={`/founders?founder=${encodeURIComponent(founder.id)}`} onClick={event => { if (onFounderSelect?.(founder.id)) event.preventDefault(); }}>{founder.name}</Link>
                     {founder.role && <p className={styles.role}>{founder.role}</p>}
                     {meta && <p className={styles.founderMeta}><SchoolIcon /><span>{meta}</span></p>}
                   </div>
@@ -212,7 +216,7 @@ export function useStartupCard(id: string, initial: StartupCard | null): { card:
   return { card, settled };
 }
 
-export function StartupCardPanel({ id, onClose, children }: { id: string; onClose: () => void; children?: ReactNode }) {
+export function StartupCardPanel({ id, onClose, onFounderSelect, children }: { id: string; onClose: () => void; onFounderSelect?: (id: string) => boolean; children?: ReactNode }) {
   const panelRef = useRef<HTMLElement>(null);
   useEffect(() => {
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -220,6 +224,7 @@ export function StartupCardPanel({ id, onClose, children }: { id: string; onClos
     return () => { if (previous?.isConnected) previous.focus({ preventScroll: true }); };
   }, []);
   const { card, settled } = useStartupCard(id, null);
+  useEffect(() => { panelRef.current?.scrollTo({ top: 0 }); }, [id]);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") { event.stopPropagation(); onClose(); }
@@ -237,7 +242,7 @@ export function StartupCardPanel({ id, onClose, children }: { id: string; onClos
       className={styles.panel}
     >
       {card ? (
-        <StartupDirectoryCard key={id} card={card} onClose={onClose}>{children}</StartupDirectoryCard>
+        <StartupDirectoryCard key={id} card={card} onClose={onClose} onFounderSelect={onFounderSelect}>{children}</StartupDirectoryCard>
       ) : (
         <div className="flex items-start justify-between gap-3 p-4">
           <p className="text-sm text-neutral-600">{settled ? "This startup is not on record." : "Loading startup…"}</p>
@@ -252,7 +257,7 @@ export function StartupCardPanel({ id, onClose, children }: { id: string; onClos
 
 export function StartupCardSheet({ id, onClose, className }: { id: string; onClose: () => void; className?: string }) {
   return (
-    <div className={className ?? "absolute inset-0 z-30 flex justify-end max-sm:fixed max-sm:z-50"} onClick={event => event.stopPropagation()}>
+    <div className={`${styles.sheet} ${className ?? "fixed inset-y-3 right-3 z-[210] flex w-[min(440px,calc(100%-24px))] justify-end max-sm:inset-y-2 max-sm:right-2 max-sm:w-[calc(100%-16px)]"}`} onClick={event => event.stopPropagation()}>
       <StartupCardPanel id={id} onClose={onClose} />
     </div>
   );

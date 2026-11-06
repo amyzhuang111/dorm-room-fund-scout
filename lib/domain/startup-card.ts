@@ -1,13 +1,11 @@
-// Directory-style startup card. Every value is a stored field. Follower
-// counts, years of experience, and logo files are not in the database, so
-// those stay empty. A missing logo may be shown as the website's favicon
-// by the UI, with an initial-letter fallback.
+// Shared startup preview. Values come from stored records and evidence;
+// missing portraits and metrics stay empty instead of being inferred.
 
 import { getDb } from "../db/client";
 import { survivorId } from "./entity-redirects";
 import { ownWebsite } from "./company-link";
 import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
-import { isBoilerplateDescription, sectorLabel } from "./sectors";
+import { isDirectoryBoilerplate, sectorLabel } from "./sectors";
 import { localCompanyLogoUrl } from "./local-logos";
 
 export const STARTUP_LINK_KINDS = ["website", "linkedin", "x", "crunchbase", "facebook", "github", "productHunt"] as const;
@@ -16,6 +14,8 @@ export type StartupLinkKind = (typeof STARTUP_LINK_KINDS)[number];
 export interface StartupCardLink {
   kind: StartupLinkKind;
   url: string;
+  /** Website claims may be observed without a confirmed product URL. */
+  confirmed?: boolean;
 }
 
 export interface StartupCardFounder {
@@ -51,6 +51,8 @@ export interface StartupCard {
   campuses: string[];
   verifiedOn: string | null;
   verifiedSource: string | null;
+  verificationStatus: string | null;
+  sourceLink: { url: string; label: string } | null;
   founders: StartupCardFounder[];
 }
 
@@ -252,14 +254,20 @@ export function getStartupCard(id: string): StartupCard | null {
   const claims = db
     .prepare(
       `SELECT claim_type, value_json FROM claims
-       WHERE entity_type = 'project' AND entity_id = ? AND claim_type IN ('accelerator_membership', 'website')`
+       WHERE entity_type = 'project' AND entity_id = ? AND claim_type IN ('accelerator_membership', 'website', 'campus_program_listing')
+       ORDER BY rowid`
     )
     .all(project.id) as { claim_type: string; value_json: string }[];
 
   const batches: BatchChoice[] = [];
   let membershipLocation: string | null = null;
   let membershipStatus: string | null = null;
-  const linkUrls: (string | null)[] = [project.website_url, project.primary_link];
+  // primary_link is often a university/investor listing, not a product site.
+  const primaryKind = project.primary_link ? classifyCompanyLink(project.primary_link) : null;
+  const linkUrls: (string | null)[] = [project.website_url, primaryKind && primaryKind !== "website" ? project.primary_link : null];
+  let sourceLink = project.primary_link && primaryKind === "website"
+    ? { url: project.primary_link, label: "Source listing" }
+    : null;
 
   for (const fact of facts) {
     if (fact.fact_key === "website" || fact.fact_key === "company_linkedin") linkUrls.push(fact.value_text);
@@ -273,6 +281,13 @@ export function getStartupCard(id: string): StartupCard | null {
     const value = readJson(claim.value_json);
     const website = textOrNull(value.website);
     if (website) linkUrls.push(website);
+    if (claim.claim_type === "campus_program_listing") {
+      const program = textOrNull(value.program);
+      const batch = textOrNull(value.cohort_label) || (typeof value.cohort_year === "number" ? String(value.cohort_year) : null);
+      if (batch) batches.push({ batch, program });
+      const evidenceUrl = textOrNull(value.evidence_url);
+      if (evidenceUrl && /^https?:\/\//.test(evidenceUrl)) sourceLink = { url: evidenceUrl, label: program || "Source listing" };
+    }
     if (claim.claim_type !== "accelerator_membership") continue;
     const batch = textOrNull(value.batch);
     if (batch) batches.push({ batch, program: textOrNull(value.org) });
@@ -283,9 +298,10 @@ export function getStartupCard(id: string): StartupCard | null {
   const chosen = chooseBatch(batches);
   const region = factText("hq") || membershipLocation;
   const descriptionFact = factText("description");
+  // Short product taglines are useful here even when too short for sector scoring.
   const description =
-    (descriptionFact && !isBoilerplateDescription(descriptionFact) ? descriptionFact : null) ||
-    (project.description && !isBoilerplateDescription(project.description) ? project.description.trim() : null);
+    (project.description && !isDirectoryBoilerplate(project.description) ? project.description.trim() : null) ||
+    (descriptionFact && !isDirectoryBoilerplate(descriptionFact) ? descriptionFact : null);
 
   const tag = db
     .prepare(`SELECT tag FROM project_sector_tags WHERE project_id = ? ORDER BY is_primary DESC, rowid LIMIT 1`)
@@ -377,6 +393,9 @@ export function getStartupCard(id: string): StartupCard | null {
   });
 
   const links = assembleStartupLinks(linkUrls);
+  for (const link of links) {
+    if (link.kind === "website") link.confirmed = link.url === ownWebsite(project.website_url);
+  }
   const confirmed = project.verification_status === "confirmed";
   return {
     id: project.id,
@@ -393,6 +412,8 @@ export function getStartupCard(id: string): StartupCard | null {
     campuses,
     verifiedOn: confirmed ? formatVerifiedDate(project.last_verified_at) : null,
     verifiedSource: confirmed ? verificationSourceLabel(project.verification_note) : null,
+    verificationStatus: project.verification_status,
+    sourceLink,
     founders,
   };
 }

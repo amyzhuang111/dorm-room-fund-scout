@@ -99,7 +99,7 @@ export function isBoilerplateDescription(text: string | null | undefined): boole
   return isDirectoryBoilerplate(t);
 }
 
-function isDirectoryBoilerplate(t: string): boolean {
+export function isDirectoryBoilerplate(t: string): boolean {
   if (BOILERPLATE.some((re) => re.test(t))) return true;
   // A press blurb that names several "founded by" teams is a shared list,
   // not one company's product description.
