@@ -110,7 +110,29 @@ for (const founder of after.founders) {
 const spencer = after.founders.find((founder) => founder.name === "Spencer Mateega");
 assert.equal(spencer?.school, "University of Pennsylvania");
 const carlos = after.founders.find((founder) => founder.name === "Carlos Georgescu");
-assert.equal(carlos?.school, null);
+assert.equal(carlos?.school, "University of British Columbia");
+
+// The atlas and other previews must get the same complete company card.
+const maive = getStartupCard("proj_UY-Y_bIuBQ6h");
+assert.ok(maive);
+assert.equal(maive.description, "AI for Home Services");
+assert.equal(maive.subtitle, "Winter 2025 · San Francisco");
+assert.deepEqual(maive.founders.map(founder => founder.name), ["David Tondreau", "Will Cray"]);
+assert.equal(maive.links.find(link => link.kind === "website")?.confirmed, false);
+
+// Sparse campus records still expose their recorded cohort and evidence.
+// A portfolio listing must never become the startup's Website button.
+const addsynth = getStartupCard("proj_38CLDX9KEFL_");
+assert.ok(addsynth);
+assert.equal(addsynth.subtitle, "Georgia KickStart Fund 2025");
+assert.equal(addsynth.websiteUrl, null);
+assert.equal(addsynth.links.some(link => link.kind === "website"), false);
+assert.equal(addsynth.sourceLink?.url, "https://georgiakickstart.com/portfolio");
+assert.equal(addsynth.verifiedOn, null);
+assert.deepEqual(addsynth.founders, []);
+
+const greptile = getStartupCard("proj_Kjt4QnMR7jT7");
+assert.equal(greptile?.description, "AI code review agent with complete context of your codebase");
 
 const central = getStartupCard("proj_64eq0ZNyLkur");
 assert.ok(central);

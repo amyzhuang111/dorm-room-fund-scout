@@ -11,6 +11,7 @@ import {
   type AtlasNode,
 } from "@/lib/domain/network-atlas";
 import styles from "./network-atlas.module.css";
+import { StartupCardPanel } from "./startup-directory-card";
 
 type View = { zoom: number; x: number; y: number; yaw: number; pitch: number };
 type ScreenPoint = { x: number; y: number; depth: number; i: number };
@@ -498,6 +499,60 @@ export function NetworkAtlas() {
       : data.companies.flatMap(([a, b]) =>
           a === selected ? [b] : b === selected ? [a] : [],
         );
+  const selectionDetails = current ? (
+    <>
+      <div className={styles.cardSection}>
+      {current.places.map((p, i) => (
+        <p key={i} className={styles.muted}>
+          {p.basis === "campus" ? p.campus : "Headquarters"}
+          <br />
+          {p.country} · {p.continent}
+          {p.source && /^https?:\/\//.test(p.source) && (
+            <>
+              {" "}
+              ·{" "}
+              <a href={p.source} target="_blank" rel="noreferrer">
+                Source ↗
+              </a>
+            </>
+          )}
+        </p>
+      ))}
+      </div>
+      {(nodeGroups.get(selected!) ?? []).length > 0 && <details className={styles.cardSection}><summary>Networks <span>{nodeGroups.get(selected!)!.length}</span></summary><p className={styles.note}>Choose a network to show shared affiliations. Membership does not mean a personal connection.</p>
+      {(nodeGroups.get(selected!) ?? []).map((g) => (
+        <div className={styles.membership} key={g.id}>
+          <button
+            onClick={() => {
+              setGroup(g.id);
+              setMode("networks");
+            }}
+          >
+            Shared {g.name}
+          </button>
+          {(g.evidenceByMember?.[selected!] || g.source) && /^https?:\/\//.test(g.evidenceByMember?.[selected!] || g.source || "") && (
+            <a href={g.evidenceByMember?.[selected!] || g.source} target="_blank" rel="noreferrer">
+              Evidence ↗
+            </a>
+          )}
+        </div>
+      ))}</details>}
+      {nearby.length > 0 && (
+        <details>
+          <summary>Other nearby tiles ({nearby.length})</summary>
+          {nearby.map((i) => (
+            <button
+              className={styles.peer}
+              key={i}
+              onClick={() => choose(i)}
+            >
+              {data.nodes[i].name}
+            </button>
+          ))}
+        </details>
+      )}
+    </>
+  ) : null;
   return (
     <section
       id="network-map"
@@ -802,7 +857,22 @@ export function NetworkAtlas() {
           <span className={styles.hint}>
             Drag to explore · scroll or pinch to zoom · select any tile
           </span>
-          {current && (
+          {current?.kind === "startup" ? (
+            <div className={styles.startupPreview}>
+              <StartupCardPanel key={current.id} id={current.id} onClose={() => setSelected(null)}
+                onFounderSelect={id => {
+                  const index = data.nodes.findIndex(node => node.kind === "founder" && node.id === id);
+                  if (index < 0) return false;
+                  focus(index);
+                  return true;
+                }}>
+                <details className={styles.cardSection}>
+                  <summary>Network & location evidence</summary>
+                  {selectionDetails}
+                </details>
+              </StartupCardPanel>
+            </div>
+          ) : current ? (
             <aside
               className={styles.card}
               aria-label={`Details for ${current.name}`}
@@ -827,9 +897,7 @@ export function NetworkAtlas() {
               <div className={styles.links}>
                 <a
                   href={
-                    current.kind === "startup"
-                      ? `/startup/${encodeURIComponent(current.id)}`
-                      : `/founder/discover?q=${encodeURIComponent(current.name)}`
+                    `/founder/discover?q=${encodeURIComponent(current.name)}`
                   }
                 >
                   Full record ↗
@@ -857,58 +925,9 @@ export function NetworkAtlas() {
                   ))}
                 </>
               )}
-              <div className={styles.cardSection}>
-              {current.places.map((p, i) => (
-                <p key={i} className={styles.muted}>
-                  {p.basis === "campus" ? p.campus : "Headquarters"}
-                  <br />
-                  {p.country} · {p.continent}
-                  {p.source && /^https?:\/\//.test(p.source) && (
-                    <>
-                      {" "}
-                      ·{" "}
-                      <a href={p.source} target="_blank" rel="noreferrer">
-                        Source ↗
-                      </a>
-                    </>
-                  )}
-                </p>
-              ))}
-              </div>
-              {(nodeGroups.get(selected!) ?? []).length > 0 && <details className={styles.cardSection}><summary>Networks <span>{nodeGroups.get(selected!)!.length}</span></summary><p className={styles.note}>Choose a network to show shared affiliations. Membership does not mean a personal connection.</p>
-              {(nodeGroups.get(selected!) ?? []).map((g) => (
-                <div className={styles.membership} key={g.id}>
-                  <button
-                    onClick={() => {
-                      setGroup(g.id);
-                      setMode("networks");
-                    }}
-                  >
-                    Shared {g.name}
-                  </button>
-                  {(g.evidenceByMember?.[selected!] || g.source) && /^https?:\/\//.test(g.evidenceByMember?.[selected!] || g.source || "") && (
-                    <a href={g.evidenceByMember?.[selected!] || g.source} target="_blank" rel="noreferrer">
-                      Evidence ↗
-                    </a>
-                  )}
-                </div>
-              ))}</details>}
-              {nearby.length > 0 && (
-                <details>
-                  <summary>Other nearby tiles ({nearby.length})</summary>
-                  {nearby.map((i) => (
-                    <button
-                      className={styles.peer}
-                      key={i}
-                      onClick={() => choose(i)}
-                    >
-                      {data.nodes[i].name}
-                    </button>
-                  ))}
-                </details>
-              )}
+              {selectionDetails}
             </aside>
-          )}
+          ) : null}
         </div>
         <footer className={styles.footer}>
           <label>

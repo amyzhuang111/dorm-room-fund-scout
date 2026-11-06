@@ -1,62 +1,63 @@
-.panel { width: min(440px, 100%); height: 100%; min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; border: 1px solid #dfe4ef; border-radius: 22px; background: #fff; color: #142039; box-shadow: 0 16px 56px #172c5926, 0 2px 8px #172c5910; outline: none; }
-.card { min-width: 0; background: #fff; color: #142039; font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif); }
+.panel { width: min(440px, 100%); height: auto; max-height: 100%; min-height: 0; align-self: flex-start; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; border: 1px solid #edd6c2; border-radius: 22px; background: #fce9d7; color: #292019; box-shadow: 0 16px 56px #62432924, 0 2px 8px #6243290d; outline: none; }
+.card { min-width: 0; background: linear-gradient(125deg, #f7d5b9 0%, #ffefde 70%, #f7f3ee 100%); color: #292019; font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif); }
 .card :is(a, button):focus-visible { outline: 2px solid #2f4fd8; outline-offset: 3px; }
-.header { padding: 20px 18px 18px; border-bottom: 1px solid #e7ebf3; }
-.identity { position: relative; display: flex; gap: 14px; align-items: flex-start; min-width: 0; padding-top: 24px; }
-.logo { display: grid; place-items: center; flex-shrink: 0; width: 64px; height: 64px; overflow: hidden; border: 1px solid #e4e9f3; border-radius: 15px; background: #f0f3ff; color: #2f4fd8; font-size: 21px; font-weight: 700; letter-spacing: -.04em; }
+.header { padding: 14px 14px 18px; border-bottom: 1px solid #e7cbb34d; }
+.identity { position: relative; display: flex; gap: 14px; align-items: flex-start; min-width: 0; padding-top: 10px; }
+.logo { display: grid; place-items: center; flex-shrink: 0; width: 64px; height: 64px; overflow: hidden; border: 1px solid #fff; border-radius: 15px; background: #fffaf6; color: #775943; font-size: 21px; font-weight: 700; letter-spacing: -.04em; }
 .logo img { width: 100%; height: 100%; padding: 8px; object-fit: contain; background: #fff; }
-.heading { min-width: 0; padding-top: 3px; }
-.heading h2 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 750; letter-spacing: -.035em; overflow-wrap: anywhere; color: #142039; }
-.heading p { margin: 7px 0 0; font-size: 13px; line-height: 1.5; color: #5b6680; overflow-wrap: anywhere; }
-.actions { position: absolute; top: -16px; right: -8px; display: flex; gap: 2px; }
-.actions > :is(a, button) { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 10px; background: transparent; color: #63708a; font-size: 19px; cursor: pointer; }
-.actions > :is(a, button):hover { background: #eef2ff; color: #2f4fd8; }
-.actions > [aria-pressed="true"] { background: #eef2ff; color: #2f4fd8; }
-.actions > [aria-pressed="false"] { font-size: 0; }
-.actions > [aria-pressed="false"]::after { content: "☆"; font-size: 24px; }
-.badges { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
-.badges span { padding: 4px 9px; border-radius: 5px; background: #edf1ff; color: #2846c1; font-size: 11px; font-weight: 750; line-height: 1.3; letter-spacing: .055em; text-transform: uppercase; }
+.heading { min-width: 0; padding-top: 16px; }
+.heading h2 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 750; letter-spacing: -.035em; overflow-wrap: anywhere; color: #292019; }
+.heading p { margin: 7px 0 0; font-size: 13px; line-height: 1.5; color: #715e4f; overflow-wrap: anywhere; }
+.actions { position: absolute; top: -14px; right: -8px; display: flex; gap: 2px; }
+.card .actions > :is(a, button) { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 10px; background: transparent; color: #715e4f; font-size: 19px; cursor: pointer; }
+.card .actions > :is(a, button):hover { background: #fff9; color: #aa4c2c; }
+.card .actions > [aria-pressed="true"] { background: #fff9; color: #aa4c2c; }
+.card .actions > [aria-pressed="false"] { font-size: 0; }
+.card .actions > [aria-pressed="false"]::after { content: "☆"; font-size: 24px; }
+.badges { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.badges span { padding: 4px 9px; border-radius: 0; background: #b54d32; color: #fff; font-size: 11px; font-weight: 750; line-height: 1.3; letter-spacing: .055em; text-transform: uppercase; }
 .socials { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
-.socials a { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid #e4e8f1; border-radius: 12px; background: #fff; color: #1c2940; box-shadow: 0 3px 7px #172c5909; transition: border-color .15s, background .15s; }
-.socials a:hover { border-color: #2f4fd8; background: #f4f6ff; }
-.socials a:first-child { color: #2f4fd8; }
+.socials a { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid #fff; border-radius: 12px; background: #fffaf6; color: #292019; box-shadow: 0 3px 7px #6243290c; transition: border-color .15s, background .15s; }
+.socials a:hover { border-color: #cba78b; background: #fff; }
+.socials a:first-child:has(svg) { color: #459cdd; }
 .socials svg { width: 19px; height: 19px; }
 .linkMark { font-size: 19px; font-weight: 750; line-height: 1; }
-.body { padding: 20px 18px; }
+.body { padding: 20px 14px 16px; }
 .description { margin: 0 0 18px; font-size: 16px; line-height: 1.6; overflow-wrap: anywhere; }
-.facts { display: grid; gap: 6px; margin: 0; font-size: 13px; line-height: 1.55; }
+.facts { display: grid; gap: 6px; margin: 0; font-size: 14px; line-height: 1.55; }
 .facts > div { display: flex; flex-wrap: wrap; column-gap: 5px; }
 .facts dt { font-weight: 700; }
-.facts dd { margin: 0; color: #5b6680; overflow-wrap: anywhere; }
-.verified { margin: 12px 0 0; color: #64708a; font-size: 12px; line-height: 1.5; }
-.verified > span { color: #2f4fd8; }
-.founders { margin-top: 24px; }
-.founders h3 { margin: 0 0 11px; color: #2f4fd8; font-size: 11px; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; }
+.facts dd { margin: 0; color: #715e4f; overflow-wrap: anywhere; }
+.verified { margin: 12px 0 0; color: #786859; font-size: 12px; line-height: 1.5; }
+.verified > span { color: #786859; }
+.founders { margin-top: 22px; }
+.founders h3 { margin: 0 0 11px; color: #bd4e24; font-size: 12px; font-weight: 750; letter-spacing: .045em; text-transform: uppercase; }
 .founders ul { list-style: none; display: grid; gap: 10px; margin: 0; padding: 0; }
-.founder { display: flex; align-items: center; gap: 12px; padding: 14px 12px; border: 1px solid #e7ebf4; border-radius: 17px; background: #fff; box-shadow: 0 3px 9px #172c5908; }
-.avatar { display: grid; place-items: center; width: 54px; height: 58px; flex-shrink: 0; overflow: hidden; border-radius: 12px; background: #edf1ff; color: #2f4fd8; font-size: 16px; font-weight: 650; }
+.founder { display: flex; align-items: center; gap: 12px; padding: 14px 12px; border: 1px solid #fff; border-radius: 17px; background: #fffdfa; box-shadow: 0 3px 9px #6243290a; }
+.avatar { display: grid; place-items: center; width: 54px; height: 58px; flex-shrink: 0; overflow: hidden; border-radius: 12px; background: #eee7df; color: #775943; font-size: 16px; font-weight: 650; }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 .founderInfo { min-width: 0; flex: 1; }
-.founderName { color: #142039; font-size: 15px; font-weight: 700; line-height: 1.35; text-decoration: none; overflow-wrap: anywhere; }
-.founderName:hover { text-decoration: underline; text-underline-offset: 3px; }
-.role { margin: 2px 0 0; color: #5b6680; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
-.founderMeta { display: flex; gap: 5px; margin: 7px 0 0; color: #64708a; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.card .founderName { color: #292019; font-size: 15px; font-weight: 700; line-height: 1.35; text-decoration: none; overflow-wrap: anywhere; }
+.card .founderName:hover { text-decoration: underline; text-underline-offset: 3px; }
+.role { margin: 2px 0 0; color: #715e4f; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.founderMeta { display: flex; gap: 5px; margin: 7px 0 0; color: #786859; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .founderMeta svg { flex-shrink: 0; margin-top: 2px; }
-.linkedin { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; flex-shrink: 0; min-width: 40px; min-height: 42px; padding: 7px; border-radius: 10px; background: #2f4fd8; color: #fff; font-size: 18px; font-weight: 750; line-height: 1.15; }
-.linkedin:hover { background: #203aaf; }
+.linkedin { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; flex-shrink: 0; min-width: 40px; min-height: 42px; padding: 7px; border-radius: 10px; background: #3867c4; color: #fff; font-size: 18px; font-weight: 750; line-height: 1.15; }
+.linkedin:hover { background: #2852a6; }
 .linkedin small { font-size: 8px; font-weight: 500; }
-.empty { margin: 0; color: #64708a; font-size: 13px; }
-.fullRecord { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; margin-top: 20px; padding: 10px 13px; border: 1px solid #dbe2f5; border-radius: 11px; color: #2f4fd8; font-size: 13px; font-weight: 650; }
-.fullRecord:hover { background: #f4f6ff; }
-.embedded { border: 1px solid #e4e9f3; border-radius: 18px; overflow: hidden; }
+.empty { margin: 0; padding: 14px; border: 1px solid #ffffffb3; border-radius: 14px; background: #fffaf6b3; color: #786859; font-size: 13px; line-height: 1.5; }
+.fullRecord { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; margin-top: 20px; padding: 10px 13px; border: 1px solid #ddc4af; border-radius: 11px; color: #714c32; font-size: 13px; font-weight: 650; }
+.fullRecord:hover { background: #fffaf6; }
+.sourceLink { display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; color: #714c32; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.embedded { border: 1px solid #edd6c2; border-radius: 18px; overflow: hidden; }
 @media (max-width: 420px) {
-  .header { padding: 16px 14px; }
+  .header { padding: 12px 14px 16px; }
   .body { padding: 18px 14px; }
   .heading h2 { font-size: 21px; }
   .logo { width: 56px; height: 56px; }
   .identity { gap: 11px; }
   .founder { gap: 10px; padding: 12px 10px; }
   .avatar { width: 44px; height: 50px; }
-  .founderName { font-size: 14px; }
+  .card .founderName { font-size: 14px; }
   .linkedin { min-width: 36px; }
 }
