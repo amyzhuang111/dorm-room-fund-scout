@@ -7,7 +7,7 @@ import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/networ
 import { selectNonOverlappingLabels } from "@/lib/domain/network-layout";
 import type { PersonLinkTarget } from "@/lib/domain/person-link";
 import { PersonLinkButton } from "./person-link";
-import { StartupCardSheet } from "./startup-directory-card";
+import { StartupCardSheet, FounderCardSheet } from "./startup-directory-card";
 
 const PERSON_LINK_KINDS = new Set(["linkedin", "likely", "unverified", "website", "github", "devpost"]);
 
@@ -258,14 +258,17 @@ function OverviewNetworkCanvas({
             </span>
           ))}
         </div>
-        {selected && !selected.startsWith("user_") && nodeById.get(selected)?.type === "project" && (
-          <StartupCardSheet id={selected} onClose={() => setSelected(null)} className="absolute inset-0 z-30 flex justify-end max-sm:fixed max-sm:z-50" />
+        {selected && nodeById.get(selected)?.type === "project" && (
+          <StartupCardSheet id={selected} onClose={() => setSelected(null)} />
         )}
+        {selected && nodeById.get(selected)?.type === "person" && <FounderCardSheet id={selected} onClose={() => setSelected(null)} />}
       </div>
 
       <aside className="w-full shrink-0 rounded-xl border border-border-c bg-surface p-3 lg:w-80">
         {selectedEdge != null && graph.edges[selectedEdge] ? (
           <EdgeCard edge={graph.edges[selectedEdge]} nodeById={nodeById} onClose={() => setSelectedEdge(null)} />
+        ) : focus && (focus.type === "person" || focus.type === "project") ? (
+          <NetworkSelectionEvidence node={focus} edges={focusEdges} nodeById={nodeById} onSelect={id => { setSelected(id); setSelectedEdge(null); }} />
         ) : focus ? (
           <div>
             <p className="ui-label">{focus.type}</p>
@@ -800,9 +803,10 @@ function CampusNetworkCanvas({
               Fit
             </button>
           </div>
-          {selected && !selected.startsWith("user_") && nodeById.get(selected)?.type === "project" && (
+          {selected && nodeById.get(selected)?.type === "project" && (
             <StartupCardSheet id={selected} onClose={() => setSelected(null)} />
           )}
+          {selected && nodeById.get(selected)?.type === "person" && <FounderCardSheet id={selected} onClose={() => setSelected(null)} />}
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[#3a3348]">
           <span className="flex items-center gap-1.5">
@@ -818,6 +822,8 @@ function CampusNetworkCanvas({
       <aside className="w-full shrink-0 rounded-xl border border-border-c bg-white p-3 lg:w-80">
         {selectedEdge != null && graph.edges[selectedEdge] ? (
           <EdgeCard edge={graph.edges[selectedEdge]} nodeById={nodeById} onClose={() => setSelectedEdge(null)} />
+        ) : focus && (focus.type === "person" || focus.type === "project") ? (
+          <NetworkSelectionEvidence node={focus} edges={focusEdges} nodeById={nodeById} onSelect={id => { setSelected(id); setSelectedEdge(null); }} />
         ) : focus ? (
           <div>
             <p className="ui-label">{focus.type === "community" ? "Club / program" : focus.type}</p>
@@ -946,4 +952,23 @@ function EdgeCard({
       )}
     </div>
   );
+}
+
+function NetworkSelectionEvidence({ node, edges, nodeById, onSelect }: {
+  node: NetworkNode; edges: NetworkEdge[]; nodeById: Map<string, NetworkNode>; onSelect: (id: string) => void;
+}) {
+  return <div className="text-xs text-blue-950">
+    <p className="font-semibold">Connections · {edges.length.toLocaleString("en-US")}</p>
+    <p className="mt-1 text-blue-700">Recorded relationships for {node.label}</p>
+    <ul className="mt-3 max-h-[420px] space-y-2 overflow-y-auto">{edges.map((edge, index) => {
+      const otherId = edge.source === node.id ? edge.target : edge.source;
+      const other = nodeById.get(otherId);
+      return <li key={index} className="rounded-lg border border-blue-100 bg-blue-50/50 p-2">
+        <button type="button" className="text-left font-semibold text-blue-800 hover:underline" onClick={() => onSelect(otherId)}>{other?.label ?? otherId}</button>
+        <p className="mt-1 text-blue-700">{edge.relationshipType.replaceAll("_", " ")}</p>
+        {edge.excerpt && <p className="mt-1">{edge.excerpt}</p>}
+        {edge.sourceUrl && <a href={edge.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-blue-700 underline">Source ↗</a>}
+      </li>;
+    })}</ul>
+  </div>;
 }

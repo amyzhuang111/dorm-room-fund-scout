@@ -397,7 +397,7 @@
   z-index: 3;
   display: flex;
   align-items: flex-start;
-  width: min(440px, calc(100% - 24px));
+  width: min(360px, calc(100% - 24px));
   pointer-events: none;
 }
 .startupPreview > * { pointer-events: auto; }

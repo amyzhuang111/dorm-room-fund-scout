@@ -1,4 +1,8 @@
 import assert from "node:assert/strict";
+import { getDb } from "../db/client";
+import { getFounderPreview } from "./founder-preview";
+import { userFounderPreview, userStartupPreview } from "./user-preview";
+import type { UserStartup } from "./user-pipeline";
 import {
   assembleStartupLinks,
   classifyCompanyLink,
@@ -43,6 +47,7 @@ assert.equal(
 assert.equal(startupSubtitle("SR005", "a16z Speedrun", "San Francisco"), "a16z Speedrun SR005 · San Francisco");
 assert.equal(startupSubtitle(null, "Berkeley SkyDeck", "Berkeley"), "Berkeley");
 assert.equal(startupSubtitle(null, null, null), null);
+assert.equal(startupSubtitle("2026", "WashU Skandalaris I&E Awards spring 2026", null), "WashU Skandalaris I&E Awards spring 2026");
 
 assert.equal(startupStatusLabel("acquired"), "Acquired");
 assert.equal(startupStatusLabel("dead"), "Inactive");
@@ -141,4 +146,31 @@ assert.equal(central.status, "Acquired");
 const missing = getStartupCard("does-not-exist");
 assert.equal(missing, null);
 
-console.log("startup-card tests ok");
+// The founder card must preserve the company and school from the atlas example.
+const yi = getFounderPreview("person_9SmCmePgT0cC");
+assert.ok(yi);
+assert.equal(yi.name, "Yi Zhang");
+assert.ok(yi.schools.includes("Harvard University"));
+assert.ok(yi.companies.some(company => company.name === "Relari"));
+assert.ok(yi.links.some(link => link.kind === "linkedin"));
+assert.equal(getFounderPreview("does-not-exist"), null);
+
+// A preview must not hide founding roles just because a company is outside the investment pool.
+const excludedRoles = getDb().prepare(`SELECT r.person_id, p.id FROM person_project_roles r JOIN projects p ON p.id = r.project_id
+  WHERE p.kind = 'company' AND p.is_investable_candidate = 0 AND r.role LIKE '%founder%' LIMIT 5`).all() as { person_id: string; id: string }[];
+for (const row of excludedRoles) assert.ok(getFounderPreview(row.person_id)?.companies.some(company => company.id === row.id));
+
+const local: UserStartup = {
+  id: "user_preview", name: "Local startup", websiteUrl: "https://example.com", campusId: "univ_test", campusName: "Test University",
+  founders: [{ id: "ufounder_preview", name: "Test Founder", linkedinUrl: "https://www.linkedin.com/in/example", classYear: "2027", role: "Co-founder" }],
+  fundingStage: "Pre-seed", description: "A user-added startup", verificationUrl: "https://example.com/team", verificationNotes: "User source",
+  stage: "Sourced", sourcedVia: null, referrer: null, createdAt: "2026-11-06", updatedAt: "2026-11-06",
+};
+assert.equal(userStartupPreview(local).founders[0].linkedinConfidence, "unverified");
+assert.equal(userStartupPreview(local).verifiedOn, null);
+assert.equal(userFounderPreview("ufounder_preview", [local])?.companies[0].id, local.id);
+assert.equal(userFounderPreview("ufounder_preview", [local])?.classYear, "2027");
+assert.equal(userStartupPreview({ ...local, websiteUrl: "javascript:alert(1)" }).websiteUrl, null);
+assert.equal(userFounderPreview("missing", [local]), null);
+
+console.log("startup and founder preview tests ok");

@@ -4,14 +4,13 @@ import {
   ATLAS_COLORS,
   atlasConnectors,
   anchorAtlasSelection,
-  atlasSummary,
   atlasHash,
   atlasLayout,
   type AtlasData,
   type AtlasNode,
 } from "@/lib/domain/network-atlas";
 import styles from "./network-atlas.module.css";
-import { StartupCardPanel } from "./startup-directory-card";
+import { StartupCardPanel, FounderCardPanel } from "./startup-directory-card";
 
 type View = { zoom: number; x: number; y: number; yaw: number; pitch: number };
 type ScreenPoint = { x: number; y: number; depth: number; i: number };
@@ -493,12 +492,6 @@ export function NetworkAtlas() {
     );
   const current = selected === null ? null : data.nodes[selected];
   const resultIds = [...highlighted];
-  const peers =
-    selected === null
-      ? []
-      : data.companies.flatMap(([a, b]) =>
-          a === selected ? [b] : b === selected ? [a] : [],
-        );
   const selectionDetails = current ? (
     <>
       <div className={styles.cardSection}>
@@ -873,60 +866,21 @@ export function NetworkAtlas() {
               </StartupCardPanel>
             </div>
           ) : current ? (
-            <aside
-              className={styles.card}
-              aria-label={`Details for ${current.name}`}
-              style={{
-                right: 12,
-                top: 66,
-              }}
-            >
-              <button
-                className={styles.close}
-                aria-label="Close details"
-                onClick={() => setSelected(null)}
-              >
-                ×
-              </button>
-              <div className={styles.cardHeader}>
-                <span className={styles.avatar} aria-hidden="true">{current.name.split(/\s+/).slice(0,2).map(n => n[0]).join("")}</span>
-                <div><div className={styles.eyebrow}>{current.kind}</div><h3>{current.name}</h3></div>
-              </div>
-              {connectorByNode.has(selected!) && <div className={styles.connectorBadge}>◎ Superconnector · {connectorByNode.get(selected!)!.score} recorded links</div>}
-              {current.description && <p className={styles.description}>{atlasSummary(current.description)}</p>}
-              <div className={styles.links}>
-                <a
-                  href={
-                    `/founder/discover?q=${encodeURIComponent(current.name)}`
-                  }
-                >
-                  Full record ↗
-                </a>
-                {[...current.links].sort((a,b) => Number(!/website|linkedin/i.test(a.label)) - Number(!/website|linkedin/i.test(b.label))).map((l) => (
-                  <a key={l.url} href={l.url} target="_blank" rel="noreferrer">
-                    {/linkedin\.com/i.test(l.url) ? `LinkedIn${/unverified/i.test(l.label) ? " (unverified)" : ""}` : l.label} ↗
-                  </a>
-                ))}
-              </div>
-              {!current.links.some(l => /linkedin\.com/i.test(l.url)) && <p className={styles.missingLink}>LinkedIn not recorded</p>}
-              {!current.links.some(l => /website|site/i.test(l.label)) && <p className={styles.missingLink}>Website not recorded</p>}
-              {peers.length > 0 && (
-                <>
-                  <div className={styles.eyebrow}>
-                    {current.kind === "founder" ? "Founded" : "Founders"}
-                  </div>
-                  {peers.map((i) => (
-                    <div key={i} className={styles.peerRow}><button
-                      className={styles.peer}
-                      onClick={() => focus(i)}
-                    >
-                      {data.nodes[i].name} ↗
-                    </button><div className={styles.peerLinks}>{data.nodes[i].links.map(l => <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>)}</div></div>
-                  ))}
-                </>
-              )}
-              {selectionDetails}
-            </aside>
+            <div className={styles.startupPreview}>
+              <FounderCardPanel key={current.id} id={current.id} onClose={() => setSelected(null)}
+                onStartupSelect={id => {
+                  const index = data.nodes.findIndex(node => node.kind === "startup" && node.id === id);
+                  if (index < 0) return false;
+                  focus(index);
+                  return true;
+                }}>
+                <details className={styles.cardSection}>
+                  <summary>Network & location evidence</summary>
+                  {connectorByNode.has(selected!) && <p>◎ Superconnector · {connectorByNode.get(selected!)!.score.toLocaleString("en-US")} recorded links</p>}
+                  {selectionDetails}
+                </details>
+              </FounderCardPanel>
+            </div>
           ) : null}
         </div>
         <footer className={styles.footer}>
