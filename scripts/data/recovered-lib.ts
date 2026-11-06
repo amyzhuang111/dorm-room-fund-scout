@@ -40,6 +40,9 @@ export function applyRecoveredRows(db: Database.Database, data: RecoveredData, d
   const redirects = new Map<string,string>(hasRedirects ? (db.prepare('SELECT old_id,survivor_id FROM entity_redirects').all() as {old_id:string;survivor_id:string}[]).map(r=>[r.old_id,r.survivor_id]) : []);
   const resolve = (value: unknown): unknown => { const seen=new Set<string>();while(typeof value==='string'&&redirects.has(value)&&!seen.has(value)){seen.add(value);value=redirects.get(value)!;}return value; };
   const remap = (value: unknown): unknown => Array.isArray(value) ? value.map(remap) : value && typeof value==='object' ? Object.fromEntries(Object.entries(value).map(([k,v])=>[k,remap(v)])) : resolve(value);
+  // News refreshes may recreate a URL under a new id. INSERT OR IGNORE keeps
+  // the existing article's unique url_key, so restore mentions against that id.
+  const articleIds = new Map<string, string>();
   db.transaction(() => {
     for (const table of RECOVERED_ORDER) {
       const t = data.tables[table];
@@ -54,10 +57,18 @@ export function applyRecoveredRows(db: Database.Database, data: RecoveredData, d
       const idCol = t.columns.indexOf("id");
       let n = 0;
       for (const original of t.rows) {
+        if (table === "news_articles" && target.has("url_key") && t.columns.includes("url_key") && !exists.get(original[idCol])) {
+          const existing = db.prepare('SELECT id FROM news_articles WHERE url_key = ?').get(original[t.columns.indexOf("url_key")]) as { id: string } | undefined;
+          if (existing) {
+            articleIds.set(String(original[idCol]), existing.id);
+            continue;
+          }
+        }
         // A recovery must never resurrect an identity already merged by a reviewed decision.
         if ((table==='people'||table==='projects') && redirects.has(String(original[idCol]))) continue;
         const row = original.map((value,i)=>{
           const key=t.columns[i];
+          if (table === "news_mentions" && key === "article_id") return articleIds.get(String(value)) ?? value;
           if (['person_id','project_id','entity_id','source_entity_id','target_entity_id'].includes(key)) return resolve(value);
           if (key.endsWith('_json') && typeof value==='string') {try{return JSON.stringify(remap(JSON.parse(value)));}catch{/* Keep historical invalid JSON as-is. */}}
           return value;
