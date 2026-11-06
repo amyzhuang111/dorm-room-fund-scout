@@ -11,11 +11,11 @@
 .heading h2 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 750; letter-spacing: -.035em; overflow-wrap: anywhere; color: #292019; }
 .heading p { margin: 7px 0 0; font-size: 13px; line-height: 1.5; color: #715e4f; overflow-wrap: anywhere; }
 .actions { position: absolute; top: -14px; right: -8px; display: flex; gap: 2px; }
-.card .actions > :is(a, button) { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 10px; background: transparent; color: #715e4f; font-size: 19px; cursor: pointer; }
+.card .actions > :is(a, button) { display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; line-height: 1; border: 0; border-radius: 10px; background: transparent; color: #715e4f; font-size: 19px; cursor: pointer; }
 .card .actions > :is(a, button):hover { background: #fff9; color: #aa4c2c; }
 .card .actions > [aria-pressed="true"] { background: #fff9; color: #aa4c2c; }
-.card .actions > [aria-pressed="false"] { font-size: 0; }
-.card .actions > [aria-pressed="false"]::after { content: "☆"; font-size: 24px; }
+.card .actions > [aria-pressed="false"] { position: relative; font-size: 0; line-height: 0; }
+.card .actions > [aria-pressed="false"]::after { content: "☆"; position: absolute; inset: 0; display: grid; place-items: center; font-size: 24px; line-height: 1; }
 .badges { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
 .badges span { padding: 4px 9px; border-radius: 0; background: #b54d32; color: #fff; font-size: 11px; font-weight: 750; line-height: 1.3; letter-spacing: .055em; text-transform: uppercase; }
 .socials { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
