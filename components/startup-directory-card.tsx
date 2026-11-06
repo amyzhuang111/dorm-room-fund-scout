@@ -252,7 +252,7 @@ export function StartupCardPanel({ id, onClose, children }: { id: string; onClos
 
 export function StartupCardSheet({ id, onClose, className }: { id: string; onClose: () => void; className?: string }) {
   return (
-    <div className={className ?? "absolute inset-0 z-30 flex justify-end max-sm:fixed max-sm:z-50"}>
+    <div className={className ?? "absolute inset-0 z-30 flex justify-end max-sm:fixed max-sm:z-50"} onClick={event => event.stopPropagation()}>
       <StartupCardPanel id={id} onClose={onClose} />
     </div>
   );
