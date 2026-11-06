@@ -1,3 +1,5 @@
+.sheet { pointer-events: none; }
+.sheet > * { pointer-events: auto; }
 .panel { width: min(440px, 100%); height: auto; max-height: 100%; min-height: 0; align-self: flex-start; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; border: 1px solid #edd6c2; border-radius: 22px; background: #fce9d7; color: #292019; box-shadow: 0 16px 56px #62432924, 0 2px 8px #6243290d; outline: none; }
 .card { min-width: 0; background: linear-gradient(125deg, #f7d5b9 0%, #ffefde 70%, #f7f3ee 100%); color: #292019; font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif); }
 .card :is(a, button):focus-visible { outline: 2px solid #2f4fd8; outline-offset: 3px; }
