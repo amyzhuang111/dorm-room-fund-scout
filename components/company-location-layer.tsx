@@ -9,6 +9,7 @@ import { preferLogoCompanies, type FacetCompany } from "@/lib/domain/sample-face
 import { officeMapPoints } from "@/lib/client/office-map-points";
 import { LogoMark } from "@/components/sample-instrument";
 import styles from "./company-location-map.module.css";
+import { StartupCardPanel } from "./startup-directory-card";
 
 const sourceId = "company-hq-cities";
 const layerIds = ["company-city-dots", "company-city-counts", "company-city-labels"];
@@ -117,7 +118,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       const id=ids[0];
       const city=cities.find(c=>c.companies.some(co=>co.id===id));
       const office=city?.companies.find(co=>co.id===id)?.office;
-      if(city && office){setSelected(city.id);setSelectedCompany(id);setCollapsed(innerWidth<640);onExpand(true);map.flyTo({center:office.coordinates,zoom:16,offset:[0,-70],duration:700});}
+      if(city && office){setSelected(city.id);setSelectedCompany(id);setCollapsed(true);onExpand(true);map.flyTo({center:office.coordinates,zoom:16,offset:[0,-70],duration:700});}
     };
     map.on("click",layerIds[0],choose);
     map.on("click",officeLayerIds[0],chooseOffice);
@@ -206,7 +207,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   function focusCompany(id:string,cityId:string){
     const city=cities.find(c=>c.id===cityId), co=city?.companies.find(c=>c.id===id);
     if(!city||!co)return;
-    setSelected(city.id);setSelectedCompany(id);setCollapsed(innerWidth<640);onExpand(true);
+    setSelected(city.id);setSelectedCompany(id);setCollapsed(true);onExpand(true);
     if(co.office)map?.flyTo({center:co.office.coordinates,zoom:16,offset:[0,-70],duration:700});
     else map?.flyTo({center:city.coordinates,zoom:8.5,duration:700});
   }
@@ -277,6 +278,20 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
         </div>
       </aside>
     ) : null}
+    {focused && <div className={styles.companyPreview} data-map-company-preview="">
+      <StartupCardPanel key={focused.id} id={focused.id} onClose={() => { setSelectedCompany(null); setCollapsed(false); }}>
+      <details className={styles.locationDetail} data-company-location-detail="">
+        <summary>Location &amp; address evidence</summary>
+        {buildingCompanies.length>1 && <div className={styles.buildingCompanies} role="group" aria-label="Companies at this building"><span>At this building:</span>{buildingCompanies.map(co=><button key={co.id} aria-pressed={co.id===focused.id} onClick={()=>setSelectedCompany(co.id)}>{co.name}</button>)}</div>}
+        <p>{focused.office ? focused.office.address : `Recorded HQ city: ${selectedCity?.city}. Exact business address not verified.`}</p>
+        {point && <p className={styles.coordinates}>{coordinateLabel}</p>}
+        {focused.office && <p>Address reviewed <time dateTime={focused.office.checkedAt}>{new Date(`${focused.office.checkedAt}T00:00:00Z`).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"})}</time></p>}
+        <p>{focused.office?.kind === "resident_workspace" ? "Confirmed shared resident workspace. The operator lists this startup as a current office resident; this does not establish its corporate headquarters. Workplace point, not a surveyed entrance or desk." : focused.office ? "Published business address matched to public address records. Building point, not a surveyed office entrance." : "No company pin is placed until its business address is sourced."}</p>
+        {focused.office?.coordinateSource.startsWith("https://www.openstreetmap.org/") && <p>Address coordinates © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors · ODbL</a></p>}
+        <nav aria-label="Location evidence"><a href={focused.office?.sourceUrl??focused.sourceUrl} target="_blank" rel="noopener noreferrer">{focused.office?"Business address source":"HQ city source"} ↗</a>{point && <><a href={focused.office?.coordinateSource} target="_blank" rel="noopener noreferrer">Coordinate source ↗</a><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${point[1]},${point[0]}`)}`} target="_blank" rel="noopener noreferrer">Open Google Maps ↗</a></>}{!point && <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${focused.name} ${selectedCity?.city}`)}`} target="_blank" rel="noopener noreferrer">Search Google Maps ↗</a>}</nav>
+      </details>
+      </StartupCardPanel>
+    </div>}
     <section className={styles.results} aria-label="Startups on the map">
       <div className={styles.resultHeading}><div><h3>{selectedCity?selectedCity.city:query.trim()?"Search results":"Current view"} <strong>{allShown.length.toLocaleString("en-US")}</strong> startups</h3><p>{addressShown.length.toLocaleString("en-US")} sourced address pins · {(allShown.length-addressShown.length).toLocaleString("en-US")} city only. {zoom>=streetZoom?"Street view shows address pins only.":"Numbered circles are city totals."}</p>
         <nav className={styles.dbCta} aria-label="Open the full database">
@@ -285,16 +300,6 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
           <Link href="/networks">Networks</Link>
         </nav>
       </div><button aria-expanded={!collapsed} aria-label={collapsed?"Show startups in view":"Collapse startups in view"} onClick={()=>setCollapsed(v=>!v)}>{collapsed?"Show":"Hide"}</button></div>
-      {focused && <div className={styles.locationDetail} data-company-location-detail="">
-        <div><strong>{focused.name}</strong><button aria-label="Close location details" onClick={()=>setSelectedCompany(null)}>×</button></div>
-        {buildingCompanies.length>1 && <div className={styles.buildingCompanies} role="group" aria-label="Companies at this building"><span>At this building:</span>{buildingCompanies.map(co=><button key={co.id} aria-pressed={co.id===focused.id} onClick={()=>setSelectedCompany(co.id)}>{co.name}</button>)}</div>}
-        <p>{focused.office ? focused.office.address : `Recorded HQ city: ${selectedCity?.city}. Exact business address not verified.`}</p>
-        {point && <p className={styles.coordinates}>{coordinateLabel}</p>}
-        {focused.office && <p>Address reviewed <time dateTime={focused.office.checkedAt}>{new Date(`${focused.office.checkedAt}T00:00:00Z`).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"})}</time></p>}
-        <p>{focused.office?.kind === "resident_workspace" ? "Confirmed shared resident workspace. The operator lists this startup as a current office resident; this does not establish its corporate headquarters. Workplace point, not a surveyed entrance or desk." : focused.office ? "Published business address matched to public address records. Building point, not a surveyed office entrance." : "No company pin is placed until its business address is sourced."}</p>
-        {focused.office?.coordinateSource.startsWith("https://www.openstreetmap.org/") && <p>Address coordinates © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors · ODbL</a></p>}
-        <nav aria-label="Location evidence"><a href={focused.office?.sourceUrl??focused.sourceUrl} target="_blank" rel="noopener noreferrer">{focused.office?"Business address source":"HQ city source"} ↗</a>{point && <><a href={focused.office?.coordinateSource} target="_blank" rel="noopener noreferrer">Coordinate source ↗</a><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${point[1]},${point[0]}`)}`} target="_blank" rel="noopener noreferrer">Open Google Maps ↗</a></>}{!point && <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${focused.name} ${selectedCity?.city}`)}`} target="_blank" rel="noopener noreferrer">Search Google Maps ↗</a>}</nav>
-      </div>}
       {!collapsed && <>
         <div className={styles.resultFilters} aria-label="Location precision">
           <button aria-pressed={onlyAddresses} onClick={()=>{setOnlyAddresses(true);setLimit(24);}}>Address pins ({addressShown.length.toLocaleString("en-US")})</button>
