@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { filterFounderPeople, founderYearFacts } from "@/lib/domain/founder-people";
 import type { FounderTableRow } from "@/lib/domain/founder-table";
-import { CAMPUSES } from "@/lib/domain/public-data";
 
 const PAGE = 40;
 
@@ -84,9 +83,16 @@ export function FounderPeopleTable({
   campusLocked?: boolean;
 }) {
   const [q, setQ] = useState(initialQuery);
-  const [campus, setCampus] = useState("all");
+  const [campus, setCampus] = useState("");
   const [shown, setShown] = useState(PAGE);
-  const filtered = useMemo(() => filterFounderPeople(rows, { q, campus: campusLocked ? "all" : campus }), [rows, q, campus, campusLocked]);
+  const campuses = useMemo(() => {
+    const names = new Map<string, string>();
+    for (const row of rows) {
+      if (row.campusId && row.campus) names.set(row.campusId, row.campus);
+    }
+    return [...names.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+  }, [rows]);
+  const filtered = useMemo(() => filterFounderPeople(rows, { text: q, campus: campusLocked ? "" : campus }), [rows, q, campus, campusLocked]);
   const visible = filtered.slice(0, shown);
 
   return (
@@ -117,10 +123,10 @@ export function FounderPeopleTable({
               }}
               className="mt-1 h-11 w-full rounded-lg border border-line bg-paper px-2 text-sm"
             >
-              <option value="all">All campuses</option>
-              {CAMPUSES.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.short}
+              <option value="">All campuses</option>
+              {campuses.map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
                 </option>
               ))}
             </select>
