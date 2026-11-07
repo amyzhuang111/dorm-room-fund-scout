@@ -4,15 +4,19 @@ import Database from 'better-sqlite3';
 import { applyReviewedClassYears } from './apply-reviewed-class-years.mjs';
 const db=new Database(':memory:');
 db.exec(`CREATE TABLE people(id TEXT PRIMARY KEY,name TEXT,enrollment_grad_year INTEGER,enrollment_label TEXT,enrollment_evidence TEXT,enrollment_source_url TEXT,enrollment_source_id TEXT,enrollment_basis TEXT,enrollment_status TEXT);
-CREATE TABLE claims(id TEXT PRIMARY KEY,entity_type TEXT,entity_id TEXT,claim_type TEXT,value_json TEXT,excerpt TEXT,source_url TEXT,retrieved_at TEXT,label TEXT,verification_state TEXT);
+CREATE TABLE claims(id TEXT PRIMARY KEY,entity_type TEXT,entity_id TEXT,claim_type TEXT,value_json TEXT,excerpt TEXT,source_url TEXT,retrieved_at TEXT,label TEXT,verification_state TEXT,created_at TEXT);
 CREATE TABLE accuracy_audit(id TEXT PRIMARY KEY,entity_type TEXT,entity_id TEXT,action TEXT,field TEXT,old_value TEXT,new_value TEXT,reason TEXT,evidence_url TEXT,checked_at TEXT,idempotency_key TEXT UNIQUE);`);
 const rows=JSON.parse(fs.readFileSync('data/imports/reviewed-class-year-corrections-2026-11-04.json','utf8'));
-for(const r of rows)db.prepare('INSERT INTO people(id,name,enrollment_grad_year) VALUES(?,?,?)').run(r.personId,r.name,r.previousYear);
+for(const r of rows)db.prepare('INSERT INTO people(id,name,enrollment_grad_year,enrollment_status) VALUES(?,?,?,?)').run(r.personId,r.name,r.previousYear,'current_student');
 assert.equal(applyReviewedClassYears(db,rows).corrected,17);
 assert.equal(applyReviewedClassYears(db,rows).alreadyCorrect,17);
 assert.equal(db.prepare('SELECT COUNT(*) n FROM claims').get().n,17);
 assert.equal(db.prepare('SELECT COUNT(*) n FROM accuracy_audit').get().n,17);
-for(const r of rows)assert.equal(db.prepare('SELECT enrollment_grad_year y FROM people WHERE id=?').get(r.personId).y,r.graduationYear);
+for(const r of rows){
+  const saved=db.prepare('SELECT enrollment_grad_year y, enrollment_status s FROM people WHERE id=?').get(r.personId);
+  assert.equal(saved.y,r.graduationYear);
+  assert.equal(saved.s,'current_student');
+}
 db.prepare('UPDATE people SET enrollment_grad_year=2030 WHERE id=?').run(rows[0].personId);
 assert.equal(applyReviewedClassYears(db,rows).skipped.length,1);
 assert.equal(db.prepare('SELECT enrollment_grad_year y FROM people WHERE id=?').get(rows[0].personId).y,2030);

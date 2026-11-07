@@ -314,7 +314,7 @@ export function MobileFounderPeek({
         </button>
       </div>
       <div
-        className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex flex-wrap gap-1.5"
         data-founder-peek-scroller=""
         onClick={() => onExpand?.()}
       >
@@ -326,16 +326,16 @@ export function MobileFounderPeek({
           return (
             <div
               key={founder.id}
-              className="relative inline-flex h-10 max-w-[14rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2"
+              className="relative inline-flex min-h-10 max-w-full items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2"
               data-founder-card=""
               data-founder-peek-chip=""
             >
               <CampusSeal label={founder.campus} size="sm" />
-              <span className="min-w-0 truncate leading-none">
-                <span className="block truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]" data-founder-name="">
+              <span className="min-w-0 leading-none">
+                <span className="block break-words text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]" data-founder-name="">
                   {founder.name}
                 </span>
-                <span className="mt-0.5 block truncate font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
+                <span className="mt-0.5 block break-words font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
                   {chip ? chip.label : founder.company || founder.campus || "Signal"}
                 </span>
               </span>
@@ -379,7 +379,7 @@ export function MobileCampusSegments({
         {kicker}
       </p>
       <ol
-        className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex flex-wrap gap-1.5"
         data-fold-peak-campus-rank-mobile=""
         role="listbox"
         aria-label="Filter campus"
@@ -419,7 +419,7 @@ export function MobileCampusSegments({
               >
                 <span className={`font-mono text-[9px] tabular-nums ${active ? "text-white/80" : "text-[color:var(--fg-3,#5C647A)]"}`}>{String(campus.pitchbookRank ?? i + 1).padStart(2, "0")}</span>
                 <CampusSeal label={campus.name} size="sm" />
-                <span className="max-w-[4.5rem] truncate text-[11px] font-semibold tracking-tight" data-fold-peak-campus-label="">
+                <span className="whitespace-nowrap text-[11px] font-semibold tracking-tight" data-fold-peak-campus-label="">
                   {short}
                 </span>
                 <span className={`font-mono text-[11px] font-bold tabular-nums ${active ? "text-white" : "text-[color:var(--cobalt,#2F4FD8)]"}`}>

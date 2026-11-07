@@ -8,6 +8,7 @@ import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
 import { formatCorpusDate } from "@/lib/domain/corpus-totals";
+import { corpusLabeledFields } from "@/lib/domain/corpus-fields";
 import { CorpusFilters } from "@/components/corpus-filters";
 
 export const metadata: Metadata = { title: "Data" };
@@ -90,11 +91,22 @@ export default async function DataExplorerPage({
   return (
     <div className="sample-paper mx-auto max-w-[1200px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
       <DataTheme />
-      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+      <div className="border-b border-[color:var(--line,#E1E5EF)] pb-2">
+        <div className="flex items-start justify-between gap-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
-          <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <h1 className="mt-0.5 scout-display text-[22px] leading-none sm:text-[32px]">Full data</h1>
+        </div>
+        <a
+          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
+          className="inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 text-[14px] font-semibold text-white"
+          data-corpus-csv=""
+          data-corpus-csv-mobile=""
+        >
+          Export this view
+        </a>
+        </div>
+        <p className="mt-1 font-mono text-[12px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" records in this view · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
@@ -103,27 +115,14 @@ export default async function DataExplorerPage({
             {" · "}
             {CORPUS_PAGE_SIZE} per page
           </p>
-        </div>
-        <a
-          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
-          className="hidden h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:inline-flex"
-          data-corpus-csv=""
-        >
-          Export this view
-        </a>
-        <a
-          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
-          className="inline-flex h-11 min-h-11 items-center font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
-          data-corpus-csv-mobile=""
-        >
-          CSV export
-        </a>
       </div>
 
-      <nav className="my-3 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
-      <p className="text-sm text-fg-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
+      <details className="my-2 text-sm text-fg-2">
+        <summary className="cursor-pointer font-semibold text-[color:var(--fg,#0B0E17)]">About this list</summary>
+        <nav className="mt-2 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people and class years</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
+      <p className="mt-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]"
         data-recency-funnel=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Scouting list</span>
@@ -139,7 +138,7 @@ export default async function DataExplorerPage({
       </p>
 
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]"
         data-corpus-fill-rates=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Full corpus coverage</span>
@@ -164,6 +163,7 @@ export default async function DataExplorerPage({
         {" of "}
         {fill.total.toLocaleString("en-US")}
       </p>
+      </details>
 
       <CorpusFilters
         q={q}
@@ -216,7 +216,7 @@ export default async function DataExplorerPage({
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <CampusSeal label={row.label} size="sm" />
-                <span className="max-w-[4.5rem] truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]">{row.label}</span>
+                <span className="whitespace-nowrap text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]">{row.label}</span>
                 <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
               </li>
             ))}
@@ -224,8 +224,38 @@ export default async function DataExplorerPage({
         ) : null}
       </div>
 
-      {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
-      <div className="mt-2 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch] sm:mt-3" data-corpus-table="" data-corpus-cards="">
+      <ul className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] sm:hidden" data-corpus-mobile-records="">
+        {result.rows.map((row) => {
+          const fields = corpusLabeledFields(row);
+          return (
+            <li key={row.id} className="px-3 py-2" data-corpus-row="" data-corpus-mobile-row="">
+              <div className="flex items-start gap-2">
+                <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} />
+                <Link href={`/startup/${row.id}`} className="break-words text-[16px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)]">
+                  {row.name}
+                </Link>
+              </div>
+              <dl className="mt-1.5 grid grid-cols-2 gap-x-3 gap-y-1">
+                {fields.map((field) => (
+                  <div key={field.label} data-corpus-field="" className={field.label === "Scouting status" || field.label === "Program" || field.label === "Funding" ? "col-span-2" : ""}>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{field.label}</dt>
+                    <dd className="break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)]">{field.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {row.website ? (
+                <p className="mt-2 text-[14px]">
+                  <a href={row.website} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline-offset-2">
+                    Website
+                  </a>
+                </p>
+              ) : null}
+            </li>
+          );
+        })}
+        {result.rows.length === 0 ? <li className="px-3 py-6 text-[14px] text-[color:var(--fg-3,#5C647A)]">No companies match these filters.</li> : null}
+      </ul>
+      <div className="mt-3 hidden overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] sm:block" data-corpus-table="" data-corpus-cards="">
         <table className="c-table">
           <thead className="c-head">
             <tr>
@@ -255,7 +285,7 @@ export default async function DataExplorerPage({
                   </Link>
                 </td>
                 <td className="c-m c-m1">{cell(row.campus)}</td>
-                <td className="c-m"><span>{row.scoutingStatus}</span><small className="block text-fg-3">{row.kind}</small></td>
+                <td className="c-m"><span>{row.scoutingStatus}</span>{row.kind !== "company" ? <small className="block text-fg-3">{row.kind}</small> : null}</td>
                 <td className="c-m"><span>{row.verification}</span>{row.sourceUrls[0] ? <a href={row.sourceUrls[0]} target="_blank" rel="noopener noreferrer" className="block c-link">Source{row.sourceUrls.length>1?` +${row.sourceUrls.length-1}`:''}</a> : <small className="block">No source URL</small>}</td>
                 <td className="c-m">{cell(row.stage)}</td>
                 <td className="c-m">{cell(row.sector)}</td>

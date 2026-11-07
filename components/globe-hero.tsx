@@ -313,10 +313,8 @@ function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }
   const campusesOnMap = plottedCampuses(stats).length;
   if (globe) {
     return (
-      <section className="pb-1" aria-label="Campus Scout">
-        <div className="mb-1 flex flex-wrap items-center gap-2">
-          {/* Counts live in the fold masthead; keep DOM anchors for check-facet-dom. */}
-          {/* Count anchors for facet-dom only — no fold fine-print essay. */}
+      <section className="pb-0" aria-label="Campus Scout">
+        <div className="flex flex-wrap items-center gap-2">
           <p className="sr-only" data-sample-strip-counts>
             <span data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
             {foundersIndexed > 0 ? <span data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span> : null}

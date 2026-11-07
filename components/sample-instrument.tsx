@@ -113,7 +113,7 @@ export function ScoutSignalPodium({
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="flex min-w-0 items-center gap-2">
                     <CampusSeal label={row.label} size={i === 0 ? "md" : "sm"} />
-                    <span className={`min-w-0 truncate font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
+                    <span className={`min-w-0 break-words font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
                   </span>
                   <span className={`shrink-0 font-mono font-bold tabular-nums text-[color:var(--ember,#D96B1C)] ${i < 3 ? "text-[18px]" : "text-[14px]"}`}>{row.founders.toLocaleString("en-US")}</span>
                 </div>
@@ -260,7 +260,7 @@ export function ScoutAtlasPlate({
             {rows.map((row) => (
               <li key={row.rank + row.label} className="flex items-baseline gap-2.5 py-2.5">
                 <span className="w-5 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.rank}</span>
-                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</span>
+                <span className="min-w-0 flex-1 break-words text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</span>
                 <span className="shrink-0 font-mono text-[15px] font-bold tabular-nums text-[color:var(--fg,#0B0E17)]">{row.value}</span>
                 {row.unit ? <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">{row.unit}</span> : null}
               </li>
@@ -312,6 +312,39 @@ function NeutralMark({ name, cls }: { name: string; cls: string }) {
   );
 }
 
+/** Near-white or empty files are not logos. A flat brand color still counts. */
+function imageIsBlank(img: HTMLImageElement): boolean {
+  if (img.naturalWidth <= 16 || img.naturalHeight <= 16) return true;
+  try {
+    const size = 12;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return false;
+    ctx.drawImage(img, 0, 0, size, size);
+    const data = ctx.getImageData(0, 0, size, size).data;
+    let opaque = 0;
+    let sum = 0;
+    const samples: number[] = [];
+    for (let i = 0; i < data.length; i += 4) {
+      if ((data[i + 3] ?? 0) < 24) continue;
+      opaque += 1;
+      const lum = (data[i] ?? 0) + (data[i + 1] ?? 0) + (data[i + 2] ?? 0);
+      samples.push(lum);
+      sum += lum;
+    }
+    if (opaque < size * size * 0.08) return true;
+    const mean = sum / opaque;
+    let variance = 0;
+    for (const lum of samples) variance += (lum - mean) ** 2;
+    variance /= opaque;
+    return mean > 720 && variance < 80;
+  } catch {
+    return false;
+  }
+}
+
 export function LogoMark({
   name,
   logoUrl,
@@ -339,8 +372,7 @@ export function LogoMark({
         className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain p-0.5`}
         onError={() => setOk(false)}
         onLoad={(e) => {
-          // Tiny/blank stub tiles → cobalt seal monogram.
-          if (e.currentTarget.naturalWidth <= 16) setOk(false);
+          if (imageIsBlank(e.currentTarget)) setOk(false);
         }}
       />
     );
