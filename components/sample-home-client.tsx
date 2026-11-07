@@ -3,8 +3,7 @@
 import dynamic from "next/dynamic";
 import { MapStartupResults } from "./map-startup-results";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
 import { MobileCampusSegments, MobileFounderDeck, MobileFounderPeek } from "@/components/mobile-founder-deck";
@@ -90,284 +89,52 @@ function useIsLg() {
 
 function MapFoldSheet({
   tabs,
-  peak,
-  founders,
-  deck,
   peek,
   filterKeep,
   campuses,
   campusId,
   onSelectCampus,
   onClearCampus,
-  search,
 }: {
   tabs: ReactNode;
-  peak: ReactNode;
-  founders: ReactNode;
-  deck: ReactNode;
+  peak?: ReactNode;
+  founders?: ReactNode;
+  deck?: ReactNode;
   peek: ReactNode;
   filterKeep: ReactNode;
   campuses: TopCampus[];
   campusId: string | null;
   onSelectCampus: (id: string) => void;
   onClearCampus: () => void;
-  search: ReactNode;
+  search?: ReactNode;
 }) {
-  const sheetRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  const heightRef = useRef(108);
-  const springRef = useRef<number | null>(null);
-  // r53b: compact peek so ≥80% of the home map stays unobstructed @375.
-  // r59: spring-settle on expand / snap; drag stays 1:1 with the finger.
-  const REST = 108;
-  const DECK = 300;
-  const [height, setHeight] = useState(REST);
-  useEffect(() => { heightRef.current = height; }, [height]);
-  const minH = 100;
-  const clampH = (h: number) => {
-    const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
-    return Math.max(minH, Math.min(max, h));
-  };
-  const mode: "peek" | "deck" | "expanded" =
-    height >= DECK + 40 ? "expanded" : height >= REST + 36 ? "deck" : "peek";
-
-  const cancelSpring = () => {
-    if (springRef.current != null) {
-      cancelAnimationFrame(springRef.current);
-      springRef.current = null;
-    }
-  };
-
-  const springTo = (targetRaw: number) => {
-    const target = clampH(targetRaw);
-    cancelSpring();
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setHeight(target);
-      return;
-    }
-    // Critically damped-ish spring (Emil/Apple: interruptible, no bounce on settle).
-    const stiffness = 180;
-    const damping = 26;
-    let v = 0;
-    let h = heightRef.current;
-    const tick = () => {
-      const dt = 1 / 60;
-      const a = -stiffness * (h - target) - damping * v;
-      v += a * dt;
-      // Keep Euler stable on coarse frames.
-      if (v > 6000) v = 6000;
-      if (v < -6000) v = -6000;
-      h += v * dt;
-      if (Math.abs(h - target) < 0.75 && Math.abs(v) < 8) {
-        setHeight(target);
-        springRef.current = null;
-        return;
-      }
-      setHeight(clampH(h));
-      springRef.current = requestAnimationFrame(tick);
-    };
-    springRef.current = requestAnimationFrame(tick);
-  };
-
-  useEffect(() => {
-    const onResize = () => setHeight((h) => clampH(h));
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      cancelSpring();
-    };
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-fold-sheet-mode", mode);
-    return () => {
-      document.documentElement.removeAttribute("data-fold-sheet-mode");
-    };
-  }, [mode]);
-
-  const expandToDeck = () => {
-    // Tap expand must flip React mode immediately (density + feel). Drag snaps still spring.
-    cancelSpring();
-    setHeight(clampH(DECK));
-  };
-
-  const onPointerDown = (e: ReactPointerEvent) => {
-    cancelSpring();
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-    dragRef.current = { startY: e.clientY, startH: heightRef.current };
-  };
-  const onPointerMove = (e: ReactPointerEvent) => {
-    const drag = dragRef.current;
-    if (!drag) return;
-    setHeight(clampH(drag.startH + (drag.startY - e.clientY)));
-  };
-  const onPointerUp = () => {
-    const drag = dragRef.current;
-    dragRef.current = null;
-    if (!drag) return;
-    const h = heightRef.current;
-    if (h < REST + 24) springTo(REST);
-    else if (h < DECK + 24) springTo(DECK);
-    else {
-      const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
-      springTo(max);
-    }
-  };
-
   return (
     <div
-      ref={sheetRef}
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-[30] lg:hidden"
+      className="relative z-[1] border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] lg:hidden"
       data-fold-map-sheet=""
-      data-fold-sheet-mode={mode}
-      data-fold-sheet-rest={String(REST)}
-      style={{ height, willChange: "height" }}
+      data-fold-sheet-mode="peek"
+      data-fold-sheet-rest="0"
     >
-      <div
-        className="pointer-events-auto flex h-full flex-col overflow-hidden rounded-t-2xl border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-10px_32px_rgba(47,79,216,0.16)]"
-        data-fold-sheet-panel=""
-      >
-        <div
-          className="flex shrink-0 cursor-grab touch-none items-center justify-center py-1.5 active:cursor-grabbing"
-          data-fold-sheet-handle=""
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Drag sheet"
-        >
-          <span data-fold-sheet-grab="" className="h-1.5 w-12 rounded-full bg-[color:var(--cobalt,#2F4FD8)]/70" />
+      <div className="px-3 py-2" data-fold-sheet-panel="" data-fold-sheet-body="">
+        <div data-fold-sheet-handle="" className="sr-only">Map records</div>
+        {tabs}
+        <MobileCampusSegments
+          campuses={campuses}
+          selectedId={campusId}
+          onSelect={onSelectCampus}
+          onClear={onClearCampus}
+          kicker={campuses.some((campus) => campus.pitchbookRank != null) ? "PitchBook 2026" : "Open lane campuses"}
+        />
+        <div className="mt-2" data-fold-sheet-peek="" data-fold-founders-col="">
+          {peek}
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-2" data-fold-sheet-body="">
-          <div className="sticky top-0 z-[1] bg-[color:var(--bg,#FFFFFF)] pb-1.5">
-            <div onClick={expandToDeck}>{tabs}</div>
-            <MobileCampusSegments
-              campuses={campuses}
-              selectedId={campusId}
-              onSelect={onSelectCampus}
-              onClear={onClearCampus}
-              kicker={campuses.some((campus) => campus.pitchbookRank != null) ? "PitchBook 2026" : "Open lane campuses"}
-            />
-          </div>
-          {mode === "peek" ? (
-            <div className="mt-1" data-fold-sheet-peek="" data-fold-founders-col="" onClick={expandToDeck}>
-              {peek}
-              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
-                {filterKeep}
-              </div>
-              {/* Peak + deck stay mounted but inert so density can expand into a real surface */}
-              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-deck-keep="">
-                {peak}
-                {deck}
-              </div>
-            </div>
-          ) : null}
-          {mode === "deck" ? (
-            <div className="mt-1" data-fold-sheet-deck="" data-fold-founders-col="">
-              <div className="mb-1" data-fold-peak-in-rail="" data-fold-sheet-peak="">
-                {peak}
-              </div>
-              {deck}
-              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
-                {filterKeep}
-              </div>
-            </div>
-          ) : null}
-          {mode === "expanded" ? (
-            <div className="mt-1 space-y-2" data-fold-sheet-founders="" data-fold-founders-col="">
-              <div data-fold-peak-in-rail="" data-fold-sheet-peak="">
-                {peak}
-              </div>
-              {search}
-              {founders}
-            </div>
-          ) : null}
+        <div className="sr-only" data-fold-sheet-filter-keep="">
+          {filterKeep}
         </div>
       </div>
     </div>
   );
 }
-
-
-/** Desk overlays portaled onto the map stage — filters live in the fold, not stacked above. */
-function MapStageOverlays({
-  label,
-  mast,
-  showFounders,
-  founders,
-}: {
-  label: string;
-  mast: ReactNode;
-  showFounders: boolean;
-  founders: ReactNode;
-}) {
-  const [stage, setStage] = useState<HTMLElement | null>(null);
-  const [foundersOpen, setFoundersOpen] = useState(true);
-
-  useEffect(() => {
-    let dead = false;
-    const sync = () => {
-      if (dead) return;
-      const el = document.querySelector("[data-dispatch-map-stage]") as HTMLElement | null;
-      setStage((prev) => (prev === el ? prev : el));
-    };
-    sync();
-    const id = window.setInterval(sync, 400);
-    const mo = new MutationObserver(sync);
-    mo.observe(document.body, { childList: true, subtree: true });
-    return () => {
-      dead = true;
-      window.clearInterval(id);
-      mo.disconnect();
-    };
-  }, []);
-
-  if (!stage) return null;
-
-  return createPortal(
-    <div className="pointer-events-none absolute inset-0 z-[5] flex flex-col" data-fold-map-overlays="" data-fold-desk-bleed="1">
-      <div
-        className="pointer-events-auto z-[6] mx-2 mt-2 shrink-0 rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-2 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
-        data-fold-overlay-mast=""
-        data-fold-mast=""
-      >
-        {mast}
-      </div>
-      <div className="relative min-h-0 flex-1" data-fold-overlay-body="">
-        {showFounders && <aside
-          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(300px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
-            foundersOpen ? "" : "!w-auto !bottom-auto"
-          }`}
-          data-fold-overlay-founders=""
-          data-fold-founders-col=""
-          data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
-        >
-          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{label}</p>
-            <button
-              type="button"
-              className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
-              aria-expanded={foundersOpen}
-              data-fold-panel-toggle="founders"
-              onClick={() => setFoundersOpen((v) => !v)}
-            >
-              {foundersOpen ? "Hide" : "Show"}
-            </button>
-          </div>
-          {foundersOpen ? <div className="min-h-0 flex-1 overflow-y-auto p-2.5">{founders}</div> : null}
-        </aside>}
-      </div>
-    </div>,
-    stage,
-  );
-}
-
-
 
 export function SampleHomeClient(props: {
   feed: Feed;
@@ -534,6 +301,23 @@ export function SampleHomeClient(props: {
           {/* r45: map-dominant stage with floating panels (desk) / peek sheet (mobile). */}
           <div data-fold-stack="" data-fold-bigmap="" data-fold-overlay="">
             <div className="relative min-w-0" data-fold-globe-col="" data-fold-map-stage-wrap="">
+              {isLg ? (
+                <div
+                  className="border-b border-[color:var(--line,#E1E5EF)] px-4 py-2"
+                  data-fold-overlay-mast=""
+                  data-fold-mast=""
+                >
+                  <div className="space-y-1.5" data-fold-desk-mast-inner="">
+                    {discoveryTabs}
+                    <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
+                    {mapCampusId ? (
+                      <button type="button" className="min-h-11 text-sm text-link" onClick={clearCampus}>
+                        {mapCampusName || "Campus"} × Clear
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
               <GlobeHero
                 stats={stats}
                 showGlobe={feed !== "world"}
@@ -612,19 +396,12 @@ export function SampleHomeClient(props: {
                 }
               /> : null}
 
-              {/* r56 desk: full-bleed fold — mast filters + open-lane hero + founders on the map. */}
-              {isLg ? (
-                <MapStageOverlays
-                  label={resultMode === "startups" ? "Startups" : "Founders"}
-                  mast={
-                    <div className="space-y-1.5" data-fold-desk-mast-inner="">
-                      {discoveryTabs}
-                      <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-                      {mapCampusId && <button type="button" className="min-h-11 text-sm text-link" onClick={clearCampus}>{mapCampusName || "Campus"} × Clear</button>}
-                    </div>
-                  }
-                  showFounders={Boolean(browseOpen || mapCampusId || founderQuery.trim())}
-                  founders={resultMode === "startups" ? startupResults :
+              {isLg && (browseOpen || mapCampusId || founderQuery.trim()) ? (
+                <div className="border-t border-[color:var(--line,#E1E5EF)] px-4 py-3" data-fold-founders-col="" data-fold-overlay-founders="">
+                  <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                    {resultMode === "startups" ? "Startups" : "Founders"}
+                  </p>
+                  {resultMode === "startups" ? startupResults : (
                     <FounderResults
                       founders={founders}
                       status={founderStatus}
@@ -632,7 +409,7 @@ export function SampleHomeClient(props: {
                       campusId={mapCampusId}
                       campusName={mapCampusName}
                       foundersListed={foundersListed}
-                    foundersIndexed={foundersIndexed}
+                      foundersIndexed={foundersIndexed}
                       peek={3}
                       onClearCampus={clearCampus}
                       onMissingCampus={() => {
@@ -642,8 +419,8 @@ export function SampleHomeClient(props: {
                         router.push(`/?${next.toString()}`);
                       }}
                     />
-                  }
-                />
+                  )}
+                </div>
               ) : null}
             </div>
 

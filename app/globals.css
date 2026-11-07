@@ -1386,10 +1386,8 @@ details:not([open]) > :not(summary) {
 }
 [data-fold-sheet-founders] [data-founder-why],
 [data-fold-sheet-founders] [data-founder-meta] {
-  display: -webkit-box !important;
-  -webkit-line-clamp: 1 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
+  overflow: visible !important;
+  white-space: normal !important;
 }
 
 /* r52 mobile: map-first chrome — denser mast + tighter counts (keep overlay gate clean) */
@@ -1412,8 +1410,7 @@ details:not([open]) > :not(summary) {
     max-height: 2.6em !important;
     overflow: hidden !important;
   }
-  /* Peek sheet covers the stage bottom; hide custom map credit + maplibre attrib so sheet is not flagged as overlay-on-control */
-  [data-fold-bigmap-stage] [data-map-credit],
+  /* MapLibre's own attrib sits on the disk. The readable credit stays in the corner, off the chips. */
   [data-fold-bigmap-stage] .maplibregl-ctrl-attrib,
   [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-left,
   [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-right {
@@ -1715,10 +1712,8 @@ details:not([open]) > :not(summary) {
   margin-top: 8px !important;
   font-size: 11px !important;
   line-height: 1.25 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 100% !important;
+  white-space: normal !important;
+  overflow: visible !important;
 }
 [data-fold-sheet-founders] [data-why-worth] {
   margin-top: 8px !important;
@@ -1756,7 +1751,7 @@ details:not([open]) > :not(summary) {
     padding-right: 0 !important;
   }
   [data-fold-mobile-root] {
-    min-height: 70vh;
+    min-height: 0;
   }
   /* Peak in deck sheet: bars only — figure already hidden; hide caption + SSR rank reserve */
   [data-fold-sheet-peak] [data-fold-peak-caption],
@@ -1774,8 +1769,6 @@ details:not([open]) > :not(summary) {
     height: 2.5rem !important;
     margin-top: 0.15rem !important;
   }
-  /* Deck sheet taller rest — keep map credit hidden under sheet */
-  [data-fold-bigmap-stage] [data-map-credit],
   [data-fold-bigmap-stage] .maplibregl-ctrl-attrib,
   [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-left,
   [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-right {

@@ -216,7 +216,7 @@ export default async function DataExplorerPage({
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <CampusSeal label={row.label} size="sm" />
-                <span className="max-w-[4.5rem] truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]">{row.label}</span>
+                <span className="whitespace-nowrap text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]">{row.label}</span>
                 <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
               </li>
             ))}

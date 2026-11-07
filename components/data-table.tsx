@@ -360,7 +360,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                 <div className="min-w-0">
                     <button type="button" className="flex min-h-11 w-full items-center gap-3 text-left" onClick={() => { setCursor(index); setOpenId(row.id); }}>
                       <LogoMark name={markName} logoUrl={row.logoUrl} size={36} />
-                      <span className="min-w-0 truncate text-[14px] font-medium text-fg">{plainText(row.name) || "n/a"}</span>
+                      <span className="min-w-0 break-words text-[14px] font-medium text-fg">{plainText(row.name) || "n/a"}</span>
                     </button>
                     <div className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-fg-2">
                       {row.tier ? (
@@ -440,7 +440,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     <td className={`${pad} px-2`}>
                       <span className="flex min-w-0 items-center gap-2">
                         <AvatarStack people={row.people} />
-                        <span className="min-w-0 truncate font-medium text-fg">{plainText(row.name) || <Empty />}</span>
+                        <span className="min-w-0 break-words font-medium text-fg">{plainText(row.name) || <Empty />}</span>
                         {campusLocked && !showTier && row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}
                         {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-link">Verified</span> : null}
                       </span>
@@ -473,7 +473,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                       </td>
                     )}
                     {!campusLocked && (
-                      <td className={`${pad} truncate px-2`}>
+                      <td className={`${pad} whitespace-normal break-words px-2`}>
                         {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{plainText(row.campus)}</Link> : plainText(row.campus) || <Empty />}
                       </td>
                     )}

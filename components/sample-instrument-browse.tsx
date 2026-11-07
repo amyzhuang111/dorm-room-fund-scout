@@ -1000,7 +1000,7 @@ export function SampleInstrumentBrowse({
                             </span>
                             <CampusSeal label={row.label} size="md" />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className="break-words text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
                               <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" companies"}
@@ -1122,7 +1122,7 @@ export function SampleInstrumentBrowse({
                             </span>
                             <CampusSeal label={row.label} size="sm" />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className="break-words text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
                               <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" cos"}
@@ -1469,8 +1469,8 @@ function LedgerRow({
     <div
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
-      className={`group flex min-h-11 items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
-        ranked ? "gap-2 py-2.5 sm:gap-2.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2 py-2 sm:gap-3 sm:py-3"
+      className={`group flex items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
+        ranked ? "gap-2 py-2 lg:gap-2.5" : "gap-2 py-1.5 sm:py-2"
       } ${selected ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55 ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/35" : ""}`}
     >
       {rank != null ? (
@@ -1487,7 +1487,7 @@ function LedgerRow({
       {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
       {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
       {card.logoUrl ? (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
@@ -1502,7 +1502,7 @@ function LedgerRow({
           </>
         )
       ) : (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       )}
       <div className="min-w-0 flex-1">
         <p
@@ -1512,23 +1512,28 @@ function LedgerRow({
               : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
-          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center">{card.name}</Link>
+          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center lg:min-h-0">{card.name}</Link>
         </p>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
+          <p className="mt-0.5 break-words text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
             {subtitle}
+            {card.latestSignalAt && !subtitle.includes(card.latestSignalAt.slice(0, 10)) ? (
+              <span>{` · ${card.latestSignalAt.replace(/-00/g, "")}`}</span>
+            ) : null}
           </p>
+        ) : card.latestSignalAt ? (
+          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">{card.latestSignalAt.replace(/-00/g, "")}</p>
         ) : null}
         {why ? (
-          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
-            <span className="mt-0.5 block">{why}</span>
+          <p className="mt-1 text-[12px] leading-4 text-[color:var(--fg,#0B0E17)]" data-why-here="">
+            <span className="font-semibold text-[color:var(--ember,#D96B1C)]">Why it&apos;s here: </span>
+            {why}
           </p>
         ) : (
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+          <p className="mt-1 break-words font-mono text-[10px] leading-4 tabular-nums text-[color:var(--fg-3,#5C647A)]" data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>

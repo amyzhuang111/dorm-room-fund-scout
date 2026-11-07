@@ -203,16 +203,12 @@ export function TileGlobe({
       // r53 mobile: taller full-bleed stage (~88vh) so globe dominates under the deck sheet.
       // r56 desk: taller full-bleed (~86vh) so the map owns the first screen with fold overlays.
       // r57 mobile: when the investor sheet is deck/expanded, shrink map to a compact header.
-      const sheetMode = document.documentElement.getAttribute("data-fold-sheet-mode");
-      const compactHeader = !wide && (sheetMode === "deck" || sheetMode === "expanded");
-      const target = compactHeader
-        ? Math.round(window.innerHeight * 0.24)
-        : Math.round(window.innerHeight * (wide ? 0.92 : 0.88));
+      // Size the stage to the disk. A tall stage on a narrow phone leaves an empty
+      // band above the globe and pushes the disk under the sheet.
+      const target = Math.round(window.innerHeight * (wide ? 0.72 : 0.58));
       const next = wide
-        ? Math.max(680, Math.min(1000, target))
-        : compactHeader
-          ? Math.max(140, Math.min(220, target))
-          : Math.max(520, Math.min(760, target));
+        ? Math.max(520, Math.min(760, target))
+        : Math.max(300, Math.min(440, Math.min(target, Math.round(window.innerWidth * 1.05))));
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
       nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
@@ -761,8 +757,8 @@ export function TileGlobe({
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>
 
-      <section className="mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
+      <section className="mb-0 lg:mb-3" data-fold-desk-map="" aria-label="Map">
+        <h2 className="mb-1 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
           <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
             <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
             <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">Reset</button>
@@ -791,7 +787,7 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 [&_a]:pointer-events-auto" data-map-credit>
+          <div className="pointer-events-none absolute right-2 top-2 z-10 max-w-[46%] [&_a]:pointer-events-auto" data-map-credit>
             <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
               <MapCredit />
             </p>

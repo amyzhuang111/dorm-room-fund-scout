@@ -220,8 +220,6 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
     map.flyTo({center:[-72,36],zoom:globeZoom,offset:expanded?[0,-90]:[0,-40],duration:700});
   }
   const dockItems = preferLogoCompanies(shown).slice(0, 28);
-  const peekItems = preferLogoCompanies(allShown).slice(0, 16);
-
   return <div className={styles.layer} data-company-location-map="" data-map-zoom={zoom.toFixed(1)}>
     <div className={styles.toolbar}>
       <label><span className="sr-only">Find a company or city</span><input value={query} onChange={e=>{setQuery(e.target.value);setSelected(null);setSelectedCompany(null);setOnlyAddresses(false);setCollapsed(false);setLimit(24);}} placeholder="Find a company or city" /></label>
@@ -255,28 +253,6 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
           ) : null}
         </div>
       </div>
-    ) : null}
-    {!expanded && peekItems.length > 0 ? (
-      <aside className={styles.logoPeek} aria-label="Current view logos" data-map-logo-peek="">
-        <div className={styles.logoPeekHead}>
-          <p>Current view <strong>{allShown.length.toLocaleString("en-US")}</strong></p>
-          <button type="button" onClick={() => onExpand(true)}>Open sheet</button>
-        </div>
-        <div className={styles.logoDock} data-map-logo-dock="peek">
-          {peekItems.map((co) => (
-            <button
-              key={co.id}
-              type="button"
-              className={styles.logoChip}
-              title={co.name}
-              onClick={() => { focusCompany(co.id, co.cityId); }}
-            >
-              <LogoMark name={co.name} logoUrl={co.logoUrl ?? null} size={22} />
-              <span>{co.name}</span>
-            </button>
-          ))}
-        </div>
-      </aside>
     ) : null}
     {focused && <div className={styles.companyPreview} data-map-company-preview="">
       <StartupCardPanel key={focused.id} id={focused.id} onClose={() => { setSelectedCompany(null); setCollapsed(false); }}>
