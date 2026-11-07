@@ -186,6 +186,7 @@ export function NetworkAtlas() {
     setPath([]);
     setGroup(null);
     setQuery("");
+    setList(false);
     setPage(0);
   }
   function zoom(
