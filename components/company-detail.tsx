@@ -160,7 +160,7 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
             <li key={g.gate} className="flex items-start gap-2 text-sm">
               <GateBadge result={g.result} />
               <span className="text-foreground">
-                <span className="font-medium capitalize">{g.gate.replace(/_/g, " ")}:</span> {plainText(openQuestionText(project, g.rationale))}
+                <span className="font-medium capitalize">{g.gate.replace(/_/g, " ")}:</span> {plainText(displayedGateLine(openQuestionText(project, g.rationale), founderInputs))}
               </span>
             </li>
           ))}
