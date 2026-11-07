@@ -1,5 +1,6 @@
 import { cleanCsvDate, cleanCsvNames, cleanCsvText, cleanCsvUrl, cleanCsvUrls } from "../display/csv";
 import type { CorpusRow } from "./corpus-explorer";
+import { RELATIONSHIP_HEADERS, type RelationshipExportRow } from "./relationship-export";
 
 export const CORPUS_XLSX_HEADERS = [
   "id",
@@ -68,7 +69,7 @@ function createWorkbook(imported: unknown): XlsxWorkbook {
   return new Ctor();
 }
 
-export async function corpusToXlsx(rows: CorpusRow[]): Promise<Buffer> {
+export async function corpusToXlsx(rows: CorpusRow[], relationships: RelationshipExportRow[] = []): Promise<Buffer> {
   const workbook = createWorkbook(await import("exceljs"));
   workbook.creator = "Campus Scout";
   const sheet = workbook.addWorksheet("Corpus", {
@@ -122,6 +123,31 @@ export async function corpusToXlsx(rows: CorpusRow[]): Promise<Buffer> {
   widths.forEach((width, index) => {
     sheet.getColumn(index + 1).width = width;
   });
+
+  if (relationships.length) {
+    const people = workbook.addWorksheet("Relationships", { views: [{ state: "frozen", ySplit: 1 }] });
+    people.addRow([...RELATIONSHIP_HEADERS]);
+    const peopleHeader = people.getRow(1);
+    peopleHeader.font = { bold: true };
+    for (const item of relationships) {
+      people.addRow([
+        textCell(item.personId),
+        textCell(item.personName),
+        textCell(item.projectId),
+        textCell(item.role),
+        textCell(item.roleClaimState),
+        textCell(item.roleClaimUrl),
+        textCell(item.classYear),
+        textCell(item.presentEnrollment),
+        textCell(item.presentReason),
+        textCell(item.sourceUrl),
+        textCell(item.sourceAsOf),
+        textCell(item.leftSchool),
+        textCell(item.storedStatus),
+        textCell(item.storedBasis),
+      ]);
+    }
+  }
 
   const out = await workbook.xlsx.writeBuffer();
   return Buffer.from(out);

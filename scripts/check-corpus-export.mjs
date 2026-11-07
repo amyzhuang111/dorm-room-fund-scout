@@ -26,6 +26,26 @@ async function load(path) {
   await book.xlsx.load(bytes);
   const sheet = book.getWorksheet("Corpus");
   if (!sheet) fail(`${path} missing Corpus sheet`);
+  const people = book.getWorksheet("Relationships");
+  if (!people) fail(`${path} missing Relationships sheet`);
+  else if (path === "/data/export") {
+    const wanted = {
+      person_LRoS0rCtKx51: /unknown/,
+      "per_bym-5BA7UqH5": /unknown/,
+      person__2ZFFoTJx5xE: /unknown/,
+    };
+    const seen = {};
+    for (let i = 2; i <= people.rowCount; i += 1) {
+      const id = String(people.getRow(i).getCell(1).value ?? "");
+      if (!wanted[id] || seen[id]) continue;
+      const present = String(people.getRow(i).getCell(8).value ?? "");
+      const reason = String(people.getRow(i).getCell(9).value ?? "");
+      seen[id] = `${present} ${reason}`;
+      if (!wanted[id].test(present) || !/unknown/i.test(reason)) fail(`${id} relationship scope ${seen[id].slice(0, 180)}`);
+    }
+    for (const id of Object.keys(wanted)) if (!seen[id]) fail(`missing relationship row ${id}`);
+    console.log(JSON.stringify({ relationshipRows: people.rowCount - 1, scoped: seen }));
+  }
   return sheet;
 }
 

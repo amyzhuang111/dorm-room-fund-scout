@@ -4,6 +4,7 @@ import { plainText } from "@/lib/display/plain-text";
 import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import type { StartupCard } from "@/lib/domain/startup-card";
+import { eligibilityLines } from "@/lib/domain/claim-scope";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SameSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
 import { EntityMarks, PipelineStageEditor } from "./entity-marks";
 import { NotesSection } from "./notes-section";
@@ -79,13 +80,25 @@ function founderHref(founder: NamedFounder): string {
 }
 
 export function CompanyDetail({ project, initialCard }: { project: ProjectDetail; initialCard?: StartupCard | null }) {
-  const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
+  const personConcerns = eligibilityLines(project.founderLinks.map((founder) => ({
+    name: founder.name,
+    year: founder.graduationYear,
+    status: founder.enrollmentStatus,
+    basis: founder.enrollmentBasis,
+    evidence: founder.enrollmentEvidence,
+    sourceUrl: founder.enrollmentSourceUrl,
+    leftSchool: founder.leftSchool,
+    roleClaimState: founder.roleClaimState,
+    roleClaimUrl: founder.roleClaimUrl,
+    roleClaimExcerpt: founder.roleClaimExcerpt,
+    affiliationSaysCurrentStudent: /current student|current_student/i.test(`${founder.enrollmentStatus ?? ""} ${founder.enrollmentEvidence ?? ""}`),
+    affiliationSourceUrl: founder.enrollmentSourceUrl,
+  })));
+  const gateConcerns = project.gateOutcomes.filter((g) => g.result !== "pass").map((gate) => openQuestionText(project, gate.rationale));
+  const concernReasons = [...personConcerns, ...gateConcerns];
   const strongestEvidence = project.claims[0];
-  const strongestConcern = concernReasons[0];
 
-  const openQ = strongestConcern
-    ? openQuestionText(project, strongestConcern.rationale)
-    : "No unresolved eligibility concerns on record.";
+  const openQ = concernReasons.length ? concernReasons.join(" ") : "No unresolved eligibility concerns on record.";
   const whyLook = (
       <section className="dossier-brief relative space-y-1.5 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2 sm:space-y-2 sm:p-2.5" data-why-look-section="">
         <div>
@@ -131,7 +144,7 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
 
 
       <div className="flex flex-wrap items-center gap-2" data-company-verification="">
-        <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
+        <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} scope="company" />
         <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
         {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}
         <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
@@ -199,7 +212,8 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
               </Link>
               {f.role ? <span className="text-xs text-muted">{f.role.replaceAll("_", " ")}</span> : null}
               <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={f.school ?? project.universities[0]} websiteUrl={f.linkedinUrl} />
-              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
+              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} evidence={f.enrollmentEvidence} sourceUrl={f.enrollmentSourceUrl} leftSchool={f.leftSchool} />
+              {!f.roleClaimUrl && !f.roleClaimState ? <span className="text-xs text-muted">Role has no source claim</span> : f.roleClaimState === "unverified" ? <span className="text-xs text-muted">Role claim unverified</span> : null}
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
               <ProfileIconLinks links={f.profileLinks} name={f.name} />

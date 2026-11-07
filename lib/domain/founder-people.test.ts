@@ -23,6 +23,8 @@ function person(partial: Partial<FounderTableRow> & Pick<FounderTableRow, "id" |
     leftSchool: false,
     verificationStatus: null,
     verificationNote: null,
+    presentEnrollment: "unknown",
+    presentEnrollmentText: "Present enrollment is unknown.",
     affiliations: [],
     signal: null,
     signalType: null,

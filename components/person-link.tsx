@@ -56,7 +56,7 @@ export function LinkedInProfileLink({ action, name }: { action: LinkedInAction; 
           likely ? "border-dashed border-muted text-muted" : "border-link text-link"
         }`}
       >
-        {action.status}
+        {likely ? "likely" : "LinkedIn profile"}
       </span>
     </span>
   );

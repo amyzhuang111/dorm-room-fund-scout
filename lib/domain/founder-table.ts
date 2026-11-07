@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { databasePath, getDb } from "../db/client";
+import { readPersonScope } from "./claim-scope";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { localCompanyLogoUrl } from "./local-logos";
 import { listFoundersForPage } from "./queries";
@@ -39,6 +40,8 @@ export interface FounderTableRow {
   leftSchool: boolean;
   verificationStatus: string | null;
   verificationNote: string | null;
+  presentEnrollment: "unknown" | "current_student" | "graduated";
+  presentEnrollmentText: string;
   affiliations: FounderAffiliationFact[];
   signal: string | null;
   signalType: string | null;
@@ -169,6 +172,24 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         leftSchool: enrolled?.leftSchool ?? false,
         verificationStatus: enrolled?.verificationStatus ?? null,
         verificationNote: enrolled?.verificationNote ?? null,
+        ...(() => {
+          const student = (affiliations.get(founder.id) ?? []).find((item) => /current student|current_student/i.test(`${item.role ?? ""} ${item.status ?? ""}`));
+          const scope = readPersonScope({
+            name: founder.name,
+            year: years.get(founder.id) ?? null,
+            status: enrolled?.status,
+            basis: enrolled?.basis,
+            evidence: enrolled?.evidence,
+            sourceUrl: enrolled?.sourceUrl,
+            leftSchool: enrolled?.leftSchool,
+            roleClaimState: companyClaim?.state,
+            roleClaimUrl: companyClaim?.url,
+            roleClaimExcerpt: companyClaim?.excerpt,
+            affiliationSaysCurrentStudent: Boolean(student),
+            affiliationSourceUrl: student?.sourceUrl ?? null,
+          });
+          return { presentEnrollment: scope.present, presentEnrollmentText: scope.presentText };
+        })(),
         affiliations: affiliations.get(founder.id) ?? [],
         signal: signal?.text ?? founder.strongestEvidence,
         signalType: signal?.type ?? null,

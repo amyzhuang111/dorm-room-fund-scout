@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { eligibilityLines } from "@/lib/domain/claim-scope";
 import type { ProjectDetail } from "@/lib/domain/queries";
 import { displayedFunding } from "@/lib/domain/company-profile";
 
@@ -26,7 +27,8 @@ export function CompanyEvidenceFacts({ id }: { id: string }) {
     <div><dt>Company verification</dt><dd>{record.verificationStatus || "Not on record"}{record.lastVerifiedAt ? ` · ${record.lastVerifiedAt}` : ""}</dd>{record.verificationNote ? <dd className="workspace-result">{record.verificationNote}</dd> : null}</div>
     <div><dt>Founder identity & enrollment</dt><dd>{record.founderLinks.length ? <ul>{record.founderLinks.map((f) => <li key={f.personId}><strong>{f.name}</strong><p>{[f.school, f.graduationYear ? `Class of ${f.graduationYear}` : "Class year not on record", f.program, f.enrollmentLabel].filter(Boolean).join(" · ")}</p>{f.link ? <a href={f.link.url} target="_blank" rel="noopener noreferrer">{f.link.kind === "linkedin" ? "Confirmed LinkedIn identity" : f.link.kind === "likely" ? "Likely LinkedIn match" : f.link.label}</a> : <span>Identity source not on record</span>}</li>)}</ul> : "Not on record"}</dd></div>
     <div><dt>Capital on record</dt><dd>{funding?.text ?? "Not on record"}{funding?.sourceUrl ? <> · <a href={funding.sourceUrl} target="_blank" rel="noopener noreferrer">Source</a></> : null}</dd></div>
-    <div><dt>Open eligibility questions</dt><dd>{record.gateOutcomes.filter((g) => g.result !== "pass").map((g) => g.rationale).join(" · ") || "No unresolved eligibility concerns on record"}</dd></div>
+    <div><dt>Open eligibility questions</dt><dd>{[...eligibilityLines(record.founderLinks.map((founder) => ({ name: founder.name, year: founder.graduationYear, status: founder.enrollmentStatus, basis: founder.enrollmentBasis, evidence: founder.enrollmentEvidence, sourceUrl: founder.enrollmentSourceUrl, leftSchool: founder.leftSchool, roleClaimState: founder.roleClaimState, roleClaimUrl: founder.roleClaimUrl, roleClaimExcerpt: founder.roleClaimExcerpt }))), ...record.gateOutcomes.filter((g) => g.result !== "pass").map((g) => g.rationale)].join(" · ") || "No unresolved eligibility concerns on record"}</dd></div>
+    <div><dt>Company verification scope</dt><dd>Company verification covers the company record. It does not verify each founder, role, or campus.</dd></div>
     <div><dt>Evidence collected</dt><dd>{record.claims.length.toLocaleString("en-US")} claims · {record.signals.length.toLocaleString("en-US")} signals</dd><dd><ul>{record.claims.slice(0, 3).map((c, index) => <li key={`${c.sourceUrl}-${index}`}><a href={c.sourceUrl} target="_blank" rel="noopener noreferrer">{sourceLabel(c.sourceUrl)}</a></li>)}</ul></dd></div>
   </dl><p className="workspace-result">Confirmed LinkedIn identity does not establish current enrollment or investment eligibility.</p></div>;
 }

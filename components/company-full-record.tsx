@@ -2,6 +2,7 @@ import Link from "next/link";
 import { plainText } from "@/lib/display/plain-text";
 import type { ReactNode } from "react";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
+import { readPersonScope } from "@/lib/domain/claim-scope";
 import { formatCampusList } from "@/lib/domain/campuses";
 import { displayedFunding, formatRound } from "@/lib/domain/company-profile";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
@@ -214,13 +215,23 @@ export function CompanyFullRecord({ project, children, directoryCard }: { projec
                     {f.name}
                   </Link>
                   <p className="mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-                    {/* Mobile: short campus · role; desk keeps full provenance line */}
-                    <span className="sm:hidden">
-                      {[f.role?.replaceAll("_", " "), (f.school || "").replace(/^University of (?:California, )?/, "").replace(/ University$/, "") || null, f.graduationYear ? `Class of ${f.graduationYear}` : "Class year not on record", f.program, f.enrollmentLabel].filter(Boolean).join(" · ") || "Role not on record"}
-                    </span>
-                    <span className="hidden sm:inline">
-                      {[f.role?.replaceAll("_", " "), f.school, f.graduationYear ? `Class of ${f.graduationYear}` : "Class year not on record", f.program, f.enrollmentLabel].filter(Boolean).join(" · ") || "Role not on record"}
-                    </span>
+                    {(() => {
+                      const scope = readPersonScope({
+                        name: f.name,
+                        year: f.graduationYear,
+                        status: f.enrollmentStatus,
+                        basis: f.enrollmentBasis,
+                        evidence: f.enrollmentEvidence,
+                        sourceUrl: f.enrollmentSourceUrl,
+                        leftSchool: f.leftSchool,
+                        roleClaimState: f.roleClaimState,
+                        roleClaimUrl: f.roleClaimUrl,
+                        roleClaimExcerpt: f.roleClaimExcerpt,
+                      });
+                      const present = scope.present === "unknown" ? "Present enrollment unknown" : scope.present === "graduated" ? "Degree stated by a source" : "Current student in a 2026 source";
+                      const role = scope.roleState === "no_claim" ? "Role has no source claim" : scope.roleState === "unverified" ? "Role claim unverified" : null;
+                      return [f.role?.replaceAll("_", " "), f.school, scope.classYearText ?? "Class year not on record", present, role].filter(Boolean).join(" · ");
+                    })()}
                   </p>
                   <div className="max-sm:[&_a]:inline-flex max-sm:[&_a]:min-h-9 max-sm:[&_a]:min-w-9 max-sm:[&_a]:items-center">
                     <FounderSocial founder={f} />

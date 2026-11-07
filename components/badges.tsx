@@ -1,4 +1,4 @@
-import { enrollmentBadge } from "@/lib/domain/founder-status";
+import { readPersonScope } from "@/lib/domain/claim-scope";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 import { bestPrecollegeSignals } from "@/lib/domain/precollege";
 import type { ProgramSignalView } from "@/lib/domain/program-signals";
@@ -240,14 +240,16 @@ export function VerificationBadge({
   status,
   verifiedAt,
   note,
+  scope,
 }: {
   status?: string | null;
   verifiedAt?: string | null;
   note?: string | null;
+  scope?: "company" | "record";
 }) {
   if (!status) return null;
   const when = verifiedAt ? verifiedAt.slice(0, 10) : "";
-  const label = VERIFICATION_LABEL[status] ?? status;
+  const label = scope === "company" && status === "confirmed" ? "Company verified" : (VERIFICATION_LABEL[status] ?? status);
   return (
     <span
       className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${VERIFICATION_CLASS[status] ?? "bg-surface-2 text-muted border-border-c"}`}
@@ -287,20 +289,38 @@ export function EnrollmentBadge({
   label,
   evidence,
   basis,
+  sourceUrl,
+  leftSchool,
 }: {
   status: string | null | undefined;
   label?: string | null;
   evidence?: string | null;
   basis?: string | null;
+  sourceUrl?: string | null;
+  leftSchool?: boolean | null;
 }) {
-  const key = status && status in ENROLLMENT_CLASS ? status : "unknown";
+  const year = Number(label?.match(/\b(20\d{2})\b/)?.[1] ?? "");
+  const scope = readPersonScope({
+    year: Number.isFinite(year) && year > 1900 ? year : null,
+    status,
+    basis,
+    evidence,
+    sourceUrl,
+    leftSchool,
+    affiliationSaysCurrentStudent: /current student/i.test(`${label ?? ""} ${evidence ?? ""}`),
+    affiliationSourceUrl: sourceUrl,
+  });
+  const present =
+    scope.present === "graduated" ? "Degree stated by a source" : scope.present === "current_student" ? "Current student in a 2026 source" : "Present enrollment unknown";
   return (
     <span
-      className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS[key]}`}
-      title={evidence ?? undefined}
+      className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS.unknown}`}
+      title={scope.presentText}
     >
-      {enrollmentBadge(status, label)}
-      {basis === "inferred" && <span className="ml-1 font-normal text-muted">est.</span>}
+      {scope.classYearText ?? "Class year not on record"}
+      {" · "}
+      {present}
+      {basis === "inferred" ? <span className="ml-1 font-normal text-muted">est.</span> : null}
     </span>
   );
 }

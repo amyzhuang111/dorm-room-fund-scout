@@ -60,7 +60,7 @@ function YearFact({ person }: { person: FounderTableRow }) {
   return (
     <span>
       {short || "No class year on record"}
-      <span className="block">Present enrollment: Unknown</span>
+      <span className="block">{present.state === "unknown" ? "Present enrollment: Unknown" : present.summary}</span>
       {hasSource ? (
         <details className="mt-1">
           <summary className="cursor-pointer text-blue">Year source</summary>
