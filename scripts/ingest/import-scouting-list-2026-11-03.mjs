@@ -59,35 +59,35 @@ export function applyScoutingList(db, entries, now = SCOUTING_RETRIEVED_AT) {
   db.exec('BEGIN IMMEDIATE');
   try {
     db.prepare(`INSERT OR IGNORE INTO sources
-      (id,name,family,url,campuses_json,priority,ingestion_mode,status,source_role,tier_rationale)
+      (id,name,family,url,campuses_json,priority,ingestion_mode,status,source_role,tier_rationale,created_at)
       VALUES (?, 'User-submitted scouting list · Nov 3, 2026', 'manual_referral', ?, '[]', 3, 'manual', 'available', 'discovery',
-      'User-supplied leads. Source labels in the submitted list are not independent verification.')`).run(SOURCE, SOURCE_URL);
+      'User-supplied leads. Source labels in the submitted list are not independent verification.', ?)`).run(SOURCE, SOURCE_URL, now);
 
     function claim(entityType, entityId, type, value, excerpt, suffix) {
       const claimId = id('claim', suffix);
       db.prepare(`INSERT OR IGNORE INTO claims
-        (id,entity_type,entity_id,claim_type,value_json,excerpt,source_id,source_url,retrieved_at,label,verification_state)
-        VALUES (?,?,?,?,?,?,?,?,?,'user_note','unverified')`).run(
-          claimId, entityType, entityId, type, JSON.stringify(value), excerpt, SOURCE, SOURCE_URL, now);
+        (id,entity_type,entity_id,claim_type,value_json,excerpt,source_id,source_url,retrieved_at,label,verification_state,created_at)
+        VALUES (?,?,?,?,?,?,?,?,?,'user_note','unverified',?)`).run(
+          claimId, entityType, entityId, type, JSON.stringify(value), excerpt, SOURCE, SOURCE_URL, now, now);
       return claimId;
     }
     function relation(fromType, from, toType, to, type, claimId) {
       const exists = db.prepare(`SELECT 1 FROM relationships WHERE source_entity_type=? AND source_entity_id=?
         AND target_entity_type=? AND target_entity_id=? AND relationship_type=?`).get(fromType, from, toType, to, type);
       if (!exists) db.prepare(`INSERT INTO relationships
-        (id,source_entity_type,source_entity_id,target_entity_type,target_entity_id,relationship_type,evidence_claim_ids_json,verification_state)
-        VALUES (?,?,?,?,?,?,?,'unverified')`).run(id('rel', from, to, type), fromType, from, toType, to, type, JSON.stringify([claimId]));
+        (id,source_entity_type,source_entity_id,target_entity_type,target_entity_id,relationship_type,evidence_claim_ids_json,verification_state,created_at)
+        VALUES (?,?,?,?,?,?,?,'unverified',?)`).run(id('rel', from, to, type), fromType, from, toType, to, type, JSON.stringify([claimId]), now);
     }
 
     for (const entry of entries) {
       if (entry.type === 'source') {
         const sourceId = id('src', entry.key);
         db.prepare(`INSERT OR IGNORE INTO sources
-          (id,name,family,url,campuses_json,priority,ingestion_mode,status,source_role,refresh_suggestion,tier_rationale)
-          VALUES (?,?, 'student_fund', ?, ?, 3, 'manual', 'unconfigured', 'discovery', ?, ?)`).run(
+          (id,name,family,url,campuses_json,priority,ingestion_mode,status,source_role,refresh_suggestion,tier_rationale,created_at)
+          VALUES (?,?, 'student_fund', ?, ?, 3, 'manual', 'unconfigured', 'discovery', ?, ?, ?)`).run(
             sourceId, entry.name, SOURCE_URL, JSON.stringify([entry.campusId]),
             'Verify the official program page and identify student-founder leads.',
-            'User-submitted student-run fund/program. A lead source, not a startup or verified program.');
+            'User-submitted student-run fund/program. A lead source, not a startup or verified program.', now);
         claim('source', sourceId, 'manual_referral', { name: entry.name, school: entry.school },
           'User-submitted: student-run fund/program; possible source of leads. Not independently verified.', `${entry.key}:source`);
         results.push({ name: entry.name, id: sourceId, disposition: 'source' });
@@ -120,8 +120,8 @@ export function applyScoutingList(db, entries, now = SCOUTING_RETRIEVED_AT) {
           (id,entity_type,entity_id,action,field,old_value,new_value,reason,checked_at,idempotency_key)
           VALUES (?,'project',?,'restore_for_review','is_investable_candidate','0','1',?,?,?)`)
           .run(id('audit', entry.key), projectId, reason, now, `${BATCH}:${entry.key}:restore`);
-        db.prepare(`INSERT OR IGNORE INTO notes (id,entity_type,entity_id,body,author) VALUES (?,'project',?,?,'scout')`)
-          .run(id('note', entry.key, 'restored-for-review'), projectId, reason);
+        db.prepare(`INSERT OR IGNORE INTO notes (id,entity_type,entity_id,body,author,created_at) VALUES (?,'project',?,?,'scout',?)`)
+          .run(id('note', entry.key, 'restored-for-review'), projectId, reason, now);
       }
 
       const supplied = Object.fromEntries(Object.entries({
@@ -136,8 +136,8 @@ export function applyScoutingList(db, entries, now = SCOUTING_RETRIEVED_AT) {
         ...Object.entries(supplied).filter(([k]) => k !== 'name').map(([k, value]) => `${labels[k] || k}: ${value}`)];
       const note = lines.join('\n');
       const claimId = claim('project', projectId, 'manual_referral', supplied, note, `${entry.key}:project`);
-      db.prepare(`INSERT OR IGNORE INTO notes (id,entity_type,entity_id,body,author) VALUES (?,'project',?,?,'scout')`)
-        .run(id('note', entry.key), projectId, note);
+      db.prepare(`INSERT OR IGNORE INTO notes (id,entity_type,entity_id,body,author,created_at) VALUES (?,'project',?,?,'scout',?)`)
+        .run(id('note', entry.key), projectId, note, now);
       if (entry.campusId) relation('project', projectId, 'university', entry.campusId, 'affiliated_with', claimId);
 
       for (const founder of entry.founders || []) {
@@ -151,8 +151,8 @@ export function applyScoutingList(db, entries, now = SCOUTING_RETRIEVED_AT) {
         }
         const personId = person?.id ?? id('person', entry.key, founder.name);
         if (!person) db.prepare(`INSERT OR IGNORE INTO people
-          (id,name,aliases_json,founder_status,verification_status,verification_note)
-          VALUES (?,?,'[]','founder','unverified','User-submitted founder; identity and education require verification.')`).run(personId, founder.name);
+          (id,name,aliases_json,founder_status,verification_status,verification_note,created_at)
+          VALUES (?,?,'[]','founder','unverified','User-submitted founder; identity and education require verification.',?)`).run(personId, founder.name, now);
         const founderClaim = claim('person', personId, 'manual_referral', {
           company: entry.name, role: founder.role || 'founder', school: founder.school || entry.school || null,
           education: founder.education || null,
@@ -164,8 +164,8 @@ export function applyScoutingList(db, entries, now = SCOUTING_RETRIEVED_AT) {
         relation('person', personId, 'project', projectId, 'founded', founderClaim);
         const campusId = founder.campusId || entry.campusId;
         if (campusId && !db.prepare('SELECT 1 FROM affiliations WHERE person_id=? AND university_id=?').get(personId, campusId)) {
-          db.prepare(`INSERT INTO affiliations (id,person_id,university_id,role,status,claim_id)
-            VALUES (?,?,?,'User-reported education','unverified',?)`).run(id('aff', personId, campusId), personId, campusId, founderClaim);
+          db.prepare(`INSERT INTO affiliations (id,person_id,university_id,role,status,claim_id,created_at)
+            VALUES (?,?,?,'User-reported education','unverified',?,?)`).run(id('aff', personId, campusId), personId, campusId, founderClaim, now);
         }
         if (campusId) relation('person', personId, 'university', campusId, 'affiliated_with', founderClaim);
       }

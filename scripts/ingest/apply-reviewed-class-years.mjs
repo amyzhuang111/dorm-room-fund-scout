@@ -17,9 +17,9 @@ export function applyReviewedClassYears(db, rows) {
       const key = `${batch}:${r.personId}`;
       const evidence = `${r.name}: Class of ${r.graduationYear}. ${r.yearMeaning}`;
       db.prepare(`INSERT OR IGNORE INTO claims
-        (id,entity_type,entity_id,claim_type,value_json,excerpt,source_url,retrieved_at,label,verification_state)
-        VALUES (?,'person',?,'education',?,?,?,?,'observed_fact','confirmed')`).run(
-        key, r.personId, JSON.stringify({ graduationYear:r.graduationYear, yearMeaning:r.yearMeaning }), evidence, r.sourceUrl, `${r.checkedAt}T00:00:00Z`);
+        (id,entity_type,entity_id,claim_type,value_json,excerpt,source_url,retrieved_at,label,verification_state,created_at)
+        VALUES (?,'person',?,'education',?,?,?,?,'observed_fact','confirmed',?)`).run(
+        key, r.personId, JSON.stringify({ graduationYear:r.graduationYear, yearMeaning:r.yearMeaning }), evidence, r.sourceUrl, `${r.checkedAt}T00:00:00Z`, `${r.checkedAt} 00:00:00`);
       db.prepare(`INSERT OR IGNORE INTO accuracy_audit
         (id,entity_type,entity_id,action,field,old_value,new_value,reason,evidence_url,checked_at,idempotency_key)
         VALUES (?,'person',?,'correct','enrollment_grad_year',?,?,?,?,?,?)`).run(

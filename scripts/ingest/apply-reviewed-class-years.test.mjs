@@ -4,7 +4,7 @@ import Database from 'better-sqlite3';
 import { applyReviewedClassYears } from './apply-reviewed-class-years.mjs';
 const db=new Database(':memory:');
 db.exec(`CREATE TABLE people(id TEXT PRIMARY KEY,name TEXT,enrollment_grad_year INTEGER,enrollment_label TEXT,enrollment_evidence TEXT,enrollment_source_url TEXT,enrollment_source_id TEXT,enrollment_basis TEXT,enrollment_status TEXT);
-CREATE TABLE claims(id TEXT PRIMARY KEY,entity_type TEXT,entity_id TEXT,claim_type TEXT,value_json TEXT,excerpt TEXT,source_url TEXT,retrieved_at TEXT,label TEXT,verification_state TEXT);
+CREATE TABLE claims(id TEXT PRIMARY KEY,entity_type TEXT,entity_id TEXT,claim_type TEXT,value_json TEXT,excerpt TEXT,source_url TEXT,retrieved_at TEXT,label TEXT,verification_state TEXT,created_at TEXT);
 CREATE TABLE accuracy_audit(id TEXT PRIMARY KEY,entity_type TEXT,entity_id TEXT,action TEXT,field TEXT,old_value TEXT,new_value TEXT,reason TEXT,evidence_url TEXT,checked_at TEXT,idempotency_key TEXT UNIQUE);`);
 const rows=JSON.parse(fs.readFileSync('data/imports/reviewed-class-year-corrections-2026-11-04.json','utf8'));
 for(const r of rows)db.prepare('INSERT INTO people(id,name,enrollment_grad_year,enrollment_status) VALUES(?,?,?,?)').run(r.personId,r.name,r.previousYear,'current_student');
