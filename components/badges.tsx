@@ -1,4 +1,4 @@
-import { readPersonScope } from "@/lib/domain/claim-scope";
+import { enrollmentPhrase, readPersonScope } from "@/lib/domain/claim-scope";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 import { bestPrecollegeSignals } from "@/lib/domain/precollege";
 import type { ProgramSignalView } from "@/lib/domain/program-signals";
@@ -285,6 +285,7 @@ export function LeftSchoolBadge({ leftSchool }: { leftSchool?: boolean | number 
 }
 
 export function EnrollmentBadge({
+  name,
   status,
   label,
   evidence,
@@ -294,6 +295,7 @@ export function EnrollmentBadge({
   year,
   classYearSupport,
 }: {
+  name?: string | null;
   status: string | null | undefined;
   label?: string | null;
   evidence?: string | null;
@@ -305,7 +307,7 @@ export function EnrollmentBadge({
 }) {
   const fromLabel = Number(label?.match(/\b(20\d{2})\b/)?.[1] ?? "");
   const scope = readPersonScope({
-    name: undefined,
+    name,
     year: year ?? (Number.isFinite(fromLabel) && fromLabel > 1900 ? fromLabel : null),
     classYearSupport,
     status,
@@ -314,8 +316,7 @@ export function EnrollmentBadge({
     sourceUrl,
     leftSchool,
   });
-  const present =
-    scope.present === "graduated" ? "Degree stated by a source" : scope.present === "current_student" ? "Current student in a 2026 source" : "Present enrollment unknown";
+  const present = enrollmentPhrase(scope);
   return (
     <span
       className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS.unknown}`}

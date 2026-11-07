@@ -2,19 +2,11 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { readPersonScope } from "@/lib/domain/claim-scope";
+import { readPersonScope, storedAffiliationLine } from "@/lib/domain/claim-scope";
 import { affiliationIsEvent, claimDateNote, companyIdentityNote, filterFounderPeople, founderYearFacts, presentEnrollment } from "@/lib/domain/founder-people";
 import type { FounderTableRow } from "@/lib/domain/founder-table";
 
 const PAGE = 40;
-
-function statusLabel(status: string | null): string {
-  if (!status) return "Unknown";
-  if (status === "unverified") return "Unverified";
-  if (status === "confirmed") return "Confirmed";
-  if (status === "corroborated") return "Corroborated";
-  return status.replace(/_/g, " ");
-}
 
 function Affiliations({ person }: { person: FounderTableRow }) {
   if (!person.affiliations.length) {
@@ -25,14 +17,7 @@ function Affiliations({ person }: { person: FounderTableRow }) {
       {person.affiliations.map((item, index) => (
         <li key={`${item.campusId ?? "campus"}-${index}`}>
           <span className="font-medium">{item.campus || "Campus not on file"}</span>
-          {/current student|current_student/i.test(`${item.role ?? ""} ${item.status ?? ""}`) ? (
-            <span className="text-ink-soft"> · source says current student</span>
-          ) : (
-            <>
-              {item.role ? <span className="text-ink-soft"> · {item.role.replace(/_/g, " ")}</span> : null}
-              <span className="text-ink-soft"> · {statusLabel(item.status)}{affiliationIsEvent(item) ? " · not enrollment" : ""}</span>
-            </>
-          )}
+          <span className="text-ink-soft"> · {storedAffiliationLine(item.role, item.status)}{affiliationIsEvent(item) ? " · not enrollment" : ""}</span>
           {item.excerpt || item.sourceUrl ? (
             <details>
               <summary className="cursor-pointer text-blue">Claim</summary>

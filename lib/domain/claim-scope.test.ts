@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { eligibilityLines, readPersonScope } from "./claim-scope";
+import { displayedGateLine, eligibilityLines, enrollmentPhrase, readPersonScope, storedAffiliationLine } from "./claim-scope";
 
 const ethanEvidence = "Listed as student founder on https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/";
 const ethan = readPersonScope({
@@ -119,5 +119,41 @@ assert.match(adarshYear.claimDateNote ?? "", /not a verified publication date/);
 
 assert.ok(eligibilityLines([{ name: "Ethan Shea", status: "current_student", basis: "verified", evidence: ethanEvidence }]).some((line) => /unknown/.test(line)));
 assert.equal(eligibilityLines([{ name: "Victor Espinosa", status: "current_student", basis: "verified", evidence: "The CREATE-X article says Victor Espinosa is currently pursuing his master's degree in computer science at Georgia Tech." }]).some((line) => /Present enrollment is unknown/.test(line)), false);
+
+const victorEvidence = "The CREATE-X article says Victor Espinosa is currently pursuing his master's degree in computer science at Georgia Tech.";
+const victorInput = { name: "Victor Espinosa", status: "current_student", basis: "verified", evidence: victorEvidence };
+const victorScope = readPersonScope(victorInput);
+const victorViews = {
+  header: enrollmentPhrase(victorScope),
+  lower: enrollmentPhrase(victorScope),
+  tooltip: victorScope.presentText,
+  open: displayedGateLine("No dated affiliation evidence yet. Unknown is not the same as ineligible.", [victorInput]),
+  workbook: victorScope.present,
+  date: victorScope.sourceAsOf,
+};
+assert.equal(victorViews.header, victorViews.lower);
+assert.match(victorViews.header, /No publication date is written/);
+assert.doesNotMatch(victorViews.header, /2026/);
+assert.match(victorViews.tooltip, /pursuing a degree or enrolled/);
+assert.match(victorViews.open, /No publication date is written/);
+assert.doesNotMatch(victorViews.open, /No dated affiliation evidence/);
+assert.equal(victorViews.workbook, "current_student");
+assert.equal(victorViews.date, null);
+
+const ethanScope = readPersonScope({ name: "Ethan Shea", status: "current_student", basis: "verified", evidence: ethanEvidence });
+assert.equal(enrollmentPhrase(ethanScope), "Present enrollment unknown");
+assert.match(storedAffiliationLine("current_student", "current_student"), /Stored affiliation label/);
+assert.doesNotMatch(storedAffiliationLine("current_student", "current_student"), /source says/);
+
+const alexandra = readPersonScope({
+  name: "Alexandra Debow",
+  year: 2024,
+  status: "current_student",
+  basis: "verified",
+  evidence: "Alexandra Debow (Tandon '24). Degree completion is not established. Checked 2026-11-04.",
+});
+assert.equal(alexandra.present, "unknown");
+assert.equal(alexandra.sourceAsOf, null);
+assert.equal(alexandra.reviewDate, "2026-11-04");
 
 console.log("claim scope tests ok");

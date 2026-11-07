@@ -21,8 +21,10 @@ export interface PersonScope {
   presentText: string;
   roleState: "no_claim" | "unverified" | "recorded";
   roleText: string;
-  /** A date written in the evidence. A date parsed from a URL path is not used. */
+  /** A date written in the enrollment statement. A review stamp and a URL path are not this date. */
   sourceAsOf: string | null;
+  /** A Checked or Reviewed stamp in the evidence. It does not prove enrollment on that day. */
+  reviewDate: string | null;
   claimDateNote: string | null;
 }
 
@@ -67,18 +69,33 @@ function ownSentences(evidence: string, name: string | null | undefined): string
   return sentences(evidence).filter((sentence) => namesPerson(sentence, name));
 }
 
-/** A date written in the evidence text. URL paths are not publication dates. */
-export function evidenceDate(text: string | null | undefined): string | null {
-  if (!text) return null;
-  const month = text.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s+(\d{1,2}),?\s+(20\d{2})\b/i);
-  if (month) {
-    const key = month[1].slice(0, 3).toLowerCase();
-    const value = MONTHS[key];
-    if (!value) return null;
-    return `${month[3]}-${String(value).padStart(2, "0")}-${month[2].padStart(2, "0")}`;
+function isReviewStamp(before: string): boolean {
+  return /\b(checked|reviewed|retrieved|review)\b/i.test(before);
+}
+
+/** Dates written in the evidence. A stamp after Checked or Reviewed is a review date, not publication. */
+export function evidenceDates(text: string | null | undefined): { asserted: string | null; review: string | null } {
+  if (!text) return { asserted: null, review: null };
+  let asserted: string | null = null;
+  let review: string | null = null;
+  const take = (index: number, stamp: string) => {
+    const before = text.slice(Math.max(0, index - 48), index);
+    if (isReviewStamp(before)) review ??= stamp;
+    else asserted ??= stamp;
+  };
+  for (const match of text.matchAll(/\b(20\d{2})-(\d{2})-(\d{2})\b/g)) {
+    take(match.index ?? 0, `${match[1]}-${match[2]}-${match[3]}`);
   }
-  const iso = text.match(/\b(20\d{2})-(\d{2})-(\d{2})\b/);
-  return iso ? `${iso[1]}-${iso[2]}-${iso[3]}` : null;
+  for (const match of text.matchAll(/\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s+(\d{1,2}),?\s+(20\d{2})\b/gi)) {
+    const value = MONTHS[match[1].slice(0, 3).toLowerCase()];
+    if (!value) continue;
+    take(match.index ?? 0, `${match[3]}-${String(value).padStart(2, "0")}-${match[2].padStart(2, "0")}`);
+  }
+  return { asserted, review };
+}
+
+export function evidenceDate(text: string | null | undefined): string | null {
+  return evidenceDates(text).asserted;
 }
 
 export function claimDateNote(excerpt: string | null | undefined, url: string | null | undefined): string | null {
@@ -109,7 +126,9 @@ export function readPersonScope(input: PersonScopeInput): PersonScope {
   const named = ownSentences(evidence, input.name);
   const enrolled = named.some(statesOwnEnrollment);
   const graduated = named.some(statesOwnDegree);
-  const sourceAsOf = evidenceDate(evidence);
+  const dates = evidenceDates(evidence);
+  const sourceAsOf = dates.asserted;
+  const reviewDate = dates.review;
   const dateNote = claimDateNote(input.roleClaimExcerpt, input.roleClaimUrl);
   const roleState = !input.roleClaimUrl && !input.roleClaimState ? "no_claim" : input.roleClaimState === "unverified" || !input.roleClaimState ? "unverified" : "recorded";
   const roleText =
@@ -145,7 +164,7 @@ export function readPersonScope(input: PersonScopeInput): PersonScope {
     present === "graduated"
       ? "The stored evidence states that this person completed a degree. That statement is as of the source, not a new check."
       : present === "current_student"
-        ? `The stored evidence states that this person was pursuing a degree or enrolled${sourceAsOf ? ` as of ${sourceAsOf}` : " as of the source"}. That is not a separate check of enrollment today.`
+        ? `The stored evidence states that this person was pursuing a degree or enrolled${sourceAsOf ? ` as of ${sourceAsOf}` : " as of the source"}. ${sourceAsOf ? "That date is written in the evidence." : "No publication date is written in that evidence."} This is not a separate check of enrollment today.`
         : `Present enrollment is unknown. ${reasons.join(" ")}`.trim();
 
   return {
@@ -157,8 +176,44 @@ export function readPersonScope(input: PersonScopeInput): PersonScope {
     roleState,
     roleText,
     sourceAsOf,
+    reviewDate,
     claimDateNote: dateNote,
   };
+}
+
+/** Visible enrollment line shared by the header, the lower badge, the list, and the tooltip. */
+export function enrollmentPhrase(scope: PersonScope): string {
+  if (scope.present === "graduated") return "Degree stated by the source";
+  if (scope.present === "current_student") {
+    return scope.sourceAsOf ? `Enrolled as of ${scope.sourceAsOf} in the source` : "Enrolled as stated in the source. No publication date is written in that evidence.";
+  }
+  return "Present enrollment unknown";
+}
+
+/** A stored affiliation label is not a quotation of the source page. */
+export function storedAffiliationLine(role: string | null | undefined, status: string | null | undefined): string {
+  const roleText = role?.replace(/_/g, " ") ?? "";
+  const statusText = status?.replace(/_/g, " ") ?? "";
+  if (/current student/i.test(`${roleText} ${statusText}`)) {
+    return `Stored affiliation label: ${statusText || roleText}. That label is not a quotation of the source page.`;
+  }
+  return [roleText, statusText].filter(Boolean).join(" · ");
+}
+
+/** A stored gate that says evidence is missing must not hide a supported enrollment statement that simply has no date. */
+export function displayedGateLine(raw: string, people: PersonScopeInput[]): string {
+  if (!/no dated affiliation evidence|campus affiliation still has no date/i.test(raw)) return raw;
+  const supported = people
+    .map((person) => ({ name: person.name?.trim() || "A founder", scope: readPersonScope(person) }))
+    .filter((person) => person.scope.present !== "unknown");
+  if (!supported.length) return raw;
+  return supported
+    .map((person) =>
+      person.scope.sourceAsOf
+        ? `${person.name}: enrollment is stated in the source as of ${person.scope.sourceAsOf}.`
+        : `${person.name}: enrollment is stated in the source. No publication date is written in that evidence.`
+    )
+    .join(" ");
 }
 
 export function eligibilityLines(people: PersonScopeInput[]): string[] {

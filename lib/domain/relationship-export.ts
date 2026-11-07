@@ -21,6 +21,8 @@ export const RELATIONSHIP_HEADERS = [
   "role_excerpt",
   "role_retrieved_at",
   "enrollment_evidence_date",
+  "review_checked_date",
+  "evidence_date_kind",
 ] as const;
 
 export interface RelationshipExportRow {
@@ -43,6 +45,8 @@ export interface RelationshipExportRow {
   roleExcerpt: string;
   roleRetrievedAt: string;
   enrollmentEvidenceDate: string;
+  reviewCheckedDate: string;
+  evidenceDateKind: string;
 }
 
 /** Person-role scope for the projects in this export. Company verification is not copied onto these rows. */
@@ -99,6 +103,8 @@ export function relationshipExportRows(projectIds: string[]): RelationshipExport
       roleExcerpt: row.role_claim_excerpt ?? "",
       roleRetrievedAt: row.role_retrieved_at ?? "",
       enrollmentEvidenceDate: scope.sourceAsOf ?? "",
+      reviewCheckedDate: scope.reviewDate ?? "",
+      evidenceDateKind: scope.sourceAsOf ? "asserted" : scope.reviewDate ? "review" : "",
     };
   });
 }

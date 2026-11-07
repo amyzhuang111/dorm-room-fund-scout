@@ -4,7 +4,7 @@ import { plainText } from "@/lib/display/plain-text";
 import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import type { StartupCard } from "@/lib/domain/startup-card";
-import { eligibilityLines } from "@/lib/domain/claim-scope";
+import { displayedGateLine, eligibilityLines } from "@/lib/domain/claim-scope";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SameSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
 import { EntityMarks, PipelineStageEditor } from "./entity-marks";
 import { NotesSection } from "./notes-section";
@@ -80,7 +80,7 @@ function founderHref(founder: NamedFounder): string {
 }
 
 export function CompanyDetail({ project, initialCard }: { project: ProjectDetail; initialCard?: StartupCard | null }) {
-  const personConcerns = eligibilityLines(project.founderLinks.map((founder) => ({
+  const founderInputs = project.founderLinks.map((founder) => ({
     name: founder.name,
     year: founder.graduationYear,
     classYearSupport: founder.classYearSupport,
@@ -92,8 +92,9 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
     roleClaimState: founder.roleClaimState,
     roleClaimUrl: founder.roleClaimUrl,
     roleClaimExcerpt: founder.roleClaimExcerpt,
-  })));
-  const gateConcerns = project.gateOutcomes.filter((g) => g.result !== "pass").map((gate) => openQuestionText(project, gate.rationale));
+  }));
+  const personConcerns = eligibilityLines(founderInputs);
+  const gateConcerns = project.gateOutcomes.filter((g) => g.result !== "pass").map((gate) => displayedGateLine(openQuestionText(project, gate.rationale), founderInputs));
   const concernReasons = [...personConcerns, ...gateConcerns];
   const strongestEvidence = project.claims[0];
 
@@ -211,7 +212,7 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
               </Link>
               {f.role ? <span className="text-xs text-muted">{f.role.replaceAll("_", " ")}</span> : null}
               <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={f.school ?? project.universities[0]} websiteUrl={f.linkedinUrl} />
-              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} evidence={f.enrollmentEvidence} sourceUrl={f.enrollmentSourceUrl} leftSchool={f.leftSchool} year={f.graduationYear} classYearSupport={f.classYearSupport} />
+              <EnrollmentBadge name={f.name} status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} evidence={f.enrollmentEvidence} sourceUrl={f.enrollmentSourceUrl} leftSchool={f.leftSchool} year={f.graduationYear} classYearSupport={f.classYearSupport} />
               {!f.roleClaimUrl && !f.roleClaimState ? <span className="text-xs text-muted">Role has no source claim</span> : f.roleClaimState === "unverified" ? <span className="text-xs text-muted">Role claim unverified</span> : null}
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />

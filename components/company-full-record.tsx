@@ -2,7 +2,7 @@ import Link from "next/link";
 import { plainText } from "@/lib/display/plain-text";
 import type { ReactNode } from "react";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
-import { readPersonScope } from "@/lib/domain/claim-scope";
+import { enrollmentPhrase, readPersonScope } from "@/lib/domain/claim-scope";
 import { formatCampusList } from "@/lib/domain/campuses";
 import { displayedFunding, formatRound } from "@/lib/domain/company-profile";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
@@ -229,7 +229,7 @@ export function CompanyFullRecord({ project, children, directoryCard }: { projec
                         roleClaimUrl: f.roleClaimUrl,
                         roleClaimExcerpt: f.roleClaimExcerpt,
                       });
-                      const present = scope.present === "unknown" ? "Present enrollment unknown" : scope.present === "graduated" ? "Degree stated by a source" : "Current student in a 2026 source";
+                      const present = enrollmentPhrase(scope);
                       const role = scope.roleState === "no_claim" ? "Role has no source claim" : scope.roleState === "unverified" ? "Role claim unverified" : null;
                       return [f.role?.replaceAll("_", " "), f.school, scope.classYearText, present, role].filter(Boolean).join(" · ");
                     })()}

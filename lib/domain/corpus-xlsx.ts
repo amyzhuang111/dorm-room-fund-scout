@@ -150,6 +150,8 @@ export async function corpusToXlsx(rows: CorpusRow[], relationships: Relationshi
         textCell(item.roleExcerpt),
         textCell(item.roleRetrievedAt),
         textCell(item.enrollmentEvidenceDate),
+        textCell(item.reviewCheckedDate),
+        textCell(item.evidenceDateKind),
       ]);
       for (const index of [6, 10]) {
         const value = String(added.getCell(index).value ?? "");
