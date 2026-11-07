@@ -81,6 +81,37 @@ for (const vp of VIEWPORTS) {
   if (!/OpenFreeMap/.test(measured.creditText) || !/OpenMapTiles/.test(measured.creditText) || !/OpenStreetMap/.test(measured.creditText)) {
     fail(`${vp.name}: attribution text missing a required source`);
   }
+  if (vp.width < 1024) {
+    const labels = await page.evaluate(() => {
+      return [...document.querySelectorAll('[aria-label="Map locations"] button')].map((button) => {
+        const box = button.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(button);
+        const rects = [...range.getClientRects()];
+        const cut = rects.some((rect) => rect.right > box.right + 0.5 || rect.left < box.left - 0.5 || rect.bottom > box.bottom + 0.5 || rect.top < box.top - 0.5);
+        const style = getComputedStyle(button);
+        return {
+          text: (button.textContent || "").replace(/\s+/g, " ").trim(),
+          cut,
+          font: style.fontSize,
+          h: Math.round(box.height),
+          w: Math.round(box.width),
+        };
+      });
+    });
+    row.labels = labels;
+    console.log(JSON.stringify({ viewport: vp.name, labels }));
+    for (const label of labels) {
+      if (label.cut) fail(`${vp.name}: control "${label.text}" is clipped`);
+      if (label.h < 44) fail(`${vp.name}: control "${label.text}" tap height ${label.h}px`);
+      const px = Number.parseFloat(label.font);
+      if (px < 13) fail(`${vp.name}: control "${label.text}" font ${label.font} is too small`);
+    }
+    const expected = ["Startup HQs", "Reset", "Rotate", "Campuses"];
+    if (labels.map((label) => label.text).join("|") !== expected.join("|")) {
+      fail(`${vp.name}: map controls changed: ${labels.map((label) => label.text).join(", ")}`);
+    }
+  }
   if (errors.length) fail(`${vp.name}: ${errors.join(" | ")}`);
   await page.close();
 }

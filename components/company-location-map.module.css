@@ -53,8 +53,8 @@
 :global([data-map-expanded="true"]) .zoom { top: 12px; right: 12px; }
 :global([data-map-expanded="true"]) .results { left: 12px; right: 12px; }
 @media(max-width:639px) {
-  .mapModes { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); width: 100%; margin-left: 0; font-size: 11px; }
-  .mapModes button { min-height: 40px; padding-inline: 4px; white-space: nowrap; }
+  .mapModes { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); width: 100%; margin-left: 0; font-size: 14px; }
+  .mapModes button { min-height: 44px; height: auto; min-width: 0; padding: 4px 2px; white-space: normal; line-height: 1.15; text-align: center; overflow: visible; }
   .zoom { display: none; }
   :global([data-map-expanded="true"]) .zoom { display: grid; }
   .results { display: none; }

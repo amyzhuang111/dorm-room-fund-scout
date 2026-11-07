@@ -752,7 +752,7 @@ export function TileGlobe({
       <section className="mb-0 lg:mb-3" data-fold-desk-map="" aria-label="Map">
         <h2 className="mb-1 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
           <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
-            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
+            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-0 px-3 text-[14px] leading-tight max-[639px]:whitespace-normal max-[639px]:px-0.5 ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
             <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">Reset</button>
             <button type="button" aria-pressed={rotationEnabled} title="Turn automatic rotation on or off" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause" : "Rotate"}</button>
             <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
