@@ -41,7 +41,8 @@ function findProject(db, entry) {
   return hits[0] ?? null;
 }
 
-export function applyScoutingList(db, entries, now = new Date().toISOString()) {
+const SCOUTING_RETRIEVED_AT = '2026-11-03T00:00:00.000Z';
+export function applyScoutingList(db, entries, now = SCOUTING_RETRIEVED_AT) {
   if (!Array.isArray(entries) || entries.length !== 21 || new Set(entries.map(e => e.key)).size !== 21) {
     throw new Error('Expected 21 distinct scouting records.');
   }

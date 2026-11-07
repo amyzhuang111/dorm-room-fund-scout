@@ -67,7 +67,7 @@ if (db.prepare('SELECT 1 FROM corpus_migrations WHERE id=?').get(batch)) {
     const issues=db.pragma('foreign_key_check');
     if(issues.length) throw new Error(`Foreign-key check failed: ${JSON.stringify(issues.slice(0,10))}`);
     const result={batch,inserted,clearedEvidence,repairedFactIds,identityMappings:payload.identityMappings.length,ambiguousNamesRetained:payload.ambiguousNames.length};
-    db.prepare('INSERT INTO corpus_migrations VALUES (?,?,?)').run(batch,new Date().toISOString(),JSON.stringify(result));
+    db.prepare('INSERT INTO corpus_migrations VALUES (?,?,?)').run(batch,'2026-11-04T00:00:00.000Z',JSON.stringify(result));
     return result;
   })();
   console.log(JSON.stringify(report));

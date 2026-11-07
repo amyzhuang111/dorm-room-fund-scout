@@ -16,7 +16,6 @@ export function applyReviewedClassYears(db, rows) {
       }
       const key = `${batch}:${r.personId}`;
       const evidence = `${r.name}: Class of ${r.graduationYear}. ${r.yearMeaning}`;
-      const status = r.graduationYear > 2026 ? 'current_student' : r.graduationYear >= 2023 ? 'recent_grad' : 'older_alumni';
       db.prepare(`INSERT OR IGNORE INTO claims
         (id,entity_type,entity_id,claim_type,value_json,excerpt,source_url,retrieved_at,label,verification_state)
         VALUES (?,'person',?,'education',?,?,?,?,'observed_fact','confirmed')`).run(
@@ -26,9 +25,10 @@ export function applyReviewedClassYears(db, rows) {
         VALUES (?,'person',?,'correct','enrollment_grad_year',?,?,?,?,?,?)`).run(
         key, r.personId, String(r.previousYear), String(r.graduationYear),
         'Reviewed official source attaches this class year to the named person, not their teammate.', r.sourceUrl, r.checkedAt, key);
+      // A reviewed class year is not a graduation, a departure, or a 2026 enrollment.
       db.prepare(`UPDATE people SET enrollment_grad_year=?,enrollment_label=?,enrollment_evidence=?,
-        enrollment_source_url=?,enrollment_source_id=NULL,enrollment_basis='verified',enrollment_status=? WHERE id=?`).run(
-        r.graduationYear, `Class of ${r.graduationYear}`, evidence, r.sourceUrl, status, r.personId);
+        enrollment_source_url=?,enrollment_source_id=NULL WHERE id=?`).run(
+        r.graduationYear, `Class of ${r.graduationYear}`, evidence, r.sourceUrl, r.personId);
       if (p.enrollment_grad_year === r.graduationYear) report.alreadyCorrect++;
       else report.corrected++;
     }

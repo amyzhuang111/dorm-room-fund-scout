@@ -55,7 +55,7 @@ db.transaction(()=>{
   const key=`${batch}:${person.id}:${project.id}`;
   db.prepare(`INSERT OR IGNORE INTO accuracy_audit (id,entity_type,entity_id,action,field,old_value,new_value,reason,evidence_url,checked_at,idempotency_key) VALUES (?,'person',?,'verify','enrollment_grad_year',?,?,?,?,?,?)`).run(stable('audit',key),person.id,person.enrollment_grad_year==null?null:String(person.enrollment_grad_year),String(r.graduationYear),'Class year is explicitly attached to this person on the official university/program page; cohort year was not substituted.',r.sourceUrl,'2026-11-04',key);
  }
- db.prepare('INSERT INTO corpus_migrations VALUES (?,?,?)').run(batch,new Date().toISOString(),JSON.stringify(report));
+ db.prepare('INSERT INTO corpus_migrations VALUES (?,?,?)').run(batch,'2026-11-04T00:00:00.000Z',JSON.stringify(report));
  if(db.pragma('foreign_key_check').length)throw new Error('Foreign-key check failed');
 })();
 console.log(JSON.stringify(report));db.close();

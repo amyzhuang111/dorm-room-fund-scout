@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { filterFounderPeople, founderYearFacts } from "@/lib/domain/founder-people";
+import { affiliationIsEvent, claimDateNote, companyIdentityNote, filterFounderPeople, founderYearFacts, presentEnrollment } from "@/lib/domain/founder-people";
 import type { FounderTableRow } from "@/lib/domain/founder-table";
 
 const PAGE = 40;
@@ -25,11 +25,13 @@ function Affiliations({ person }: { person: FounderTableRow }) {
         <li key={`${item.campusId ?? "campus"}-${index}`}>
           <span className="font-medium">{item.campus || "Campus not on file"}</span>
           {item.role ? <span className="text-ink-soft"> · {item.role.replace(/_/g, " ")}</span> : null}
-          <span className="text-ink-soft"> · {statusLabel(item.status)}</span>
+          <span className="text-ink-soft"> · {statusLabel(item.status)}{affiliationIsEvent(item) ? " · not enrollment" : ""}</span>
           {item.excerpt || item.sourceUrl ? (
             <details>
               <summary className="cursor-pointer text-blue">Claim</summary>
               {item.excerpt ? <span className="block text-ink-soft">{item.excerpt}</span> : null}
+              {claimDateNote(item.excerpt, item.sourceUrl) ? <span className="block text-ink-soft">{claimDateNote(item.excerpt, item.sourceUrl)}</span> : null}
+              {item.retrievedAt ? <span className="block text-ink-soft">Claim retrieved {item.retrievedAt.slice(0, 10)}</span> : null}
               {item.sourceUrl ? (
                 <a className="break-all text-blue underline" href={item.sourceUrl}>
                   {item.sourceUrl}
@@ -45,22 +47,19 @@ function Affiliations({ person }: { person: FounderTableRow }) {
 
 function YearFact({ person }: { person: FounderTableRow }) {
   const year = founderYearFacts(person);
-  const listed =
-    person.enrollmentStatus === "current_student"
-      ? "listed as current student"
-      : person.enrollmentStatus === "unknown"
-        ? "enrollment unknown"
-        : null;
-  const short = [year.value, person.leftSchool ? "left school on record" : null, listed].filter(Boolean).join(" · ");
-  const hasSource = Boolean(person.enrollmentEvidence || person.enrollmentSourceUrl || person.enrollmentStatus);
+  const present = presentEnrollment(person);
+  const short = [year.value, person.leftSchool ? "left school on record" : null].filter(Boolean).join(" · ");
+  const hasSource = Boolean(person.enrollmentEvidence || person.enrollmentSourceUrl || person.enrollmentStatus || present.summary);
   if (!short && !hasSource) return <span>Not on file</span>;
   return (
     <span>
       {short || "No class year on record"}
+      <span className="block">Present enrollment: Unknown</span>
       {hasSource ? (
         <details className="mt-1">
           <summary className="cursor-pointer text-blue">Year source</summary>
-          {person.enrollmentStatus ? <span className="block text-ink-soft">Stored enrollment status: {person.enrollmentStatus}</span> : null}
+          <span className="block text-ink-soft">{present.summary}</span>
+          {person.enrollmentStatus ? <span className="block text-ink-soft">Stored enrollment status: {person.enrollmentStatus}{person.enrollmentBasis ? ` · basis ${person.enrollmentBasis}` : ""}</span> : null}
           {person.enrollmentEvidence ? <span className="block text-ink-soft">{person.enrollmentEvidence}</span> : null}
           {person.enrollmentSourceUrl ? (
             <a className="break-all text-blue underline" href={person.enrollmentSourceUrl}>
@@ -150,7 +149,8 @@ export function FounderPeopleTable({
                 <div data-founder-field>
                   <dt className="inline font-medium text-ink-soft">Company </dt>
                   <dd className="inline">
-                    {person.companyId && person.company ? <Link href={`/companies/${person.companyId}`}>{person.company}</Link> : "Not on file"}
+                    {person.companyId && person.company ? <Link href={`/startup/${person.companyId}`}>{person.company}</Link> : "Not on file"}
+                    {companyIdentityNote(person) ? <span className="block text-ink-soft">{companyIdentityNote(person)}</span> : null}
                   </dd>
                 </div>
                 <div data-founder-field>
@@ -198,7 +198,8 @@ export function FounderPeopleTable({
                   <Affiliations person={person} />
                 </td>
                 <td data-founder-field className="py-2 pr-3">
-                  {person.companyId && person.company ? <Link href={`/companies/${person.companyId}`}>{person.company}</Link> : "Not on file"}
+                  {person.companyId && person.company ? <Link href={`/startup/${person.companyId}`}>{person.company}</Link> : "Not on file"}
+                  {companyIdentityNote(person) ? <span className="block text-ink-soft">{companyIdentityNote(person)}</span> : null}
                 </td>
                 <td data-founder-field className="max-w-[280px] py-2 pr-3">
                   <YearFact person={person} />
