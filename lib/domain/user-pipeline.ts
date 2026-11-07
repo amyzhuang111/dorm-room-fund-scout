@@ -14,6 +14,7 @@ import { sameSchoolCofounderHits, scoreBonus, SAME_SCHOOL_FOUNDER_POINTS, SAME_S
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "./network";
 import { undergradEnrollment } from "./campus-enrollment";
 import { connectionSignal, perCapitaSignal, signalFields } from "./network-signal-size";
+import { namedPersonPath } from "./person-href";
 
 export const PIPELINE_STAGES = ["Sourced", "Contacted", "Meeting", "Diligence", "Passed", "Invested"] as const;
 export type PipelineStage = (typeof PIPELINE_STAGES)[number];
@@ -350,7 +351,7 @@ export function recordsFromState(state: UserPipelineState): CatalogRecord[] {
         name: founder.name,
         campusName: startup.campusName,
         websiteUrl: founder.linkedinUrl,
-        href: `/founder/discover?founder=${encodeURIComponent(founder.id)}&enroll=current_student,recent_grad,older_alumni`,
+        href: namedPersonPath(founder.id),
       });
     }
   }

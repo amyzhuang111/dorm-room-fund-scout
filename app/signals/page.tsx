@@ -6,6 +6,7 @@ import { listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 import { domainKey, isHidden } from "@/lib/domain/feedback";
 import { buildHref } from "@/lib/domain/url";
+import { namedPersonPath } from "@/lib/domain/person-href";
 import { topConnectors } from "@/lib/domain/connectors";
 import { listNews } from "@/lib/domain/news";
 import { TopConnectors } from "@/components/top-connectors";
@@ -339,11 +340,10 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             matchStatus: row.match_status,
             sourceUrl: row.source_url,
           };
-          const pool = row.founder_status === "potential" ? "potential" : null;
           return (
             <li key={row.id} className="rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3">
               <Link
-                href={buildHref("/founders", {}, { founder: row.person_id, pool, university: row.university_id })}
+                href={namedPersonPath(row.person_id)}
                 className="text-sm font-medium text-foreground hover:text-link"
               >
                 {row.person_name}

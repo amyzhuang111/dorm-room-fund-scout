@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ATLAS_COLORS,
   atlasConnectors,
-  anchorAtlasSelection,
   atlasHash,
+  atlasLegendEntries,
+  anchorAtlasSelection,
   atlasLayout,
+  colorForAtlasKey,
   type AtlasData,
   type AtlasNode,
 } from "@/lib/domain/network-atlas";
@@ -120,6 +121,16 @@ export function NetworkAtlas() {
       .map(([name, ids]) => ({ name, count: ids.size }))
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   }, [data, path, basis]);
+  const legend = useMemo(() => {
+    if (!data) return [];
+    const keys: string[] = [];
+    data.nodes.forEach((node, index) => {
+      if (hasFilter && !highlighted.has(index)) return;
+      const place = node.places.find((item) => item.basis === basis);
+      keys.push(place?.[colorBy] || unlocated);
+    });
+    return atlasLegendEntries(keys);
+  }, [data, basis, colorBy, hasFilter, highlighted]);
   const nodeGroups = useMemo(() => {
     const m = new Map<number, AtlasData["groups"]>();
     if (data)
@@ -354,10 +365,7 @@ export function NetworkAtlas() {
                 ),
             ) ?? n.places.find((p) => p.basis === basis),
           key = place?.[colorBy] || unlocated;
-        const color =
-          key === unlocated
-            ? "#a7afb8"
-            : ATLAS_COLORS[atlasHash(key) % ATLAS_COLORS.length];
+        const color = colorForAtlasKey(key);
         const active = selected === null
           ? !hasFilter || highlighted.has(p.i)
           : related.has(p.i);
@@ -368,11 +376,6 @@ export function NetworkAtlas() {
           (p.i === selected ? 2 : 0);
         ctx.fillStyle = color;
         ctx.fillRect(p.x - r / 2, p.y - r / 2, r, r);
-        if (active && p.i % 4 === 0 && detail < 0.5) {
-          ctx.font = `${Math.max(3, r * 0.85)}px sans-serif`;
-          ctx.fillStyle = "rgba(30,44,55,.58)";
-          ctx.fillText(n.name.charAt(0), p.x - r * 0.28, p.y + r * 0.3);
-        }
         if (v.zoom > 2 && active && detail < 0.5) {
           ctx.strokeStyle = "rgba(35,48,61,.28)";
           ctx.lineWidth = 0.5;
@@ -422,17 +425,36 @@ export function NetworkAtlas() {
           if (selected !== null || occupied.length >= 5 || p.x > w - 160 || occupied.some(o => Math.abs(o.x-p.x)<165 && Math.abs(o.y-p.y)<35)) continue;
           occupied.push(p);
           const label = data.nodes[c.i].name.slice(0, 24);
-          ctx.font = "11px sans-serif";
+          ctx.font = "13px sans-serif";
           const tw = ctx.measureText(label).width;
           ctx.fillStyle = "rgba(255,255,252,.92)";
           ctx.fillRect(p.x+10,p.y-11,tw+10,21);
           ctx.fillStyle = "#4c4669"; ctx.fillText(label,p.x+15,p.y+3);
         }
       }
+      if (selected === null && v.zoom >= 2.2) {
+        const occupied: { x: number; y: number }[] = [];
+        ctx.font = "13px sans-serif";
+        let drawn = 0;
+        for (const p of screen) {
+          if (drawn >= 8) break;
+          if (hasFilter && !highlighted.has(p.i)) continue;
+          if (p.x < 24 || p.x > w - 168 || p.y < 28 || p.y > h - 28) continue;
+          if (occupied.some((o) => Math.abs(o.x - p.x) < 156 && Math.abs(o.y - p.y) < 22)) continue;
+          occupied.push(p);
+          drawn += 1;
+          const label = data.nodes[p.i].name.slice(0, 28);
+          const tw = ctx.measureText(label).width;
+          ctx.fillStyle = "rgba(255,255,255,.94)";
+          ctx.fillRect(p.x + 8, p.y - 12, tw + 8, 18);
+          ctx.fillStyle = "#0B0E17";
+          ctx.fillText(label, p.x + 12, p.y + 2);
+        }
+      }
       // Labels appear only around the focused record, never thousands of overlapping boxes.
       if (selected !== null && v.zoom > 2) {
         const occupied: { x: number; y: number }[] = [];
-        ctx.font = "12px sans-serif";
+        ctx.font = "13px sans-serif";
         for (const i of related) {
           const p = screen[i];
           if (
@@ -630,17 +652,6 @@ export function NetworkAtlas() {
                       setSelected(null);
                     }}
                   >
-                    <span
-                      className={styles.swatch}
-                      style={{
-                        background:
-                          r.name === unlocated
-                            ? "#a7afb8"
-                            : ATLAS_COLORS[
-                                atlasHash(r.name) % ATLAS_COLORS.length
-                              ],
-                      }}
-                    />
                     <span>{r.name}</span>
                     <small>{r.count.toLocaleString()}</small>
                     <span>›</span>
@@ -697,7 +708,8 @@ export function NetworkAtlas() {
           </button>
           <input
             aria-label="Search founders or startups"
-            placeholder="Search founders or startups…"
+            data-atlas-search=""
+            placeholder="Search founders or startups"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -711,16 +723,19 @@ export function NetworkAtlas() {
         </div>
         <div className={styles.status}>
           <span>
-            {hasFilter
-              ? `${highlighted.size.toLocaleString()} highlighted · `
-              : ""}
+            {hasFilter && highlighted.size === 0
+              ? "No founders or startups match. "
+              : hasFilter
+                ? `${highlighted.size.toLocaleString()} highlighted · `
+                : ""}
             {data.nodes.length.toLocaleString()} founders & startups
           </span>
-          <button onClick={reset}>Reset all</button>
+          <button type="button" data-atlas-reset="" onClick={reset}>Reset all</button>
         </div>
         {list ? (
           <div className={styles.results}>
             <p>Results · {resultIds.length.toLocaleString()}</p>
+            {resultIds.length === 0 ? <p data-atlas-empty="">No founders or startups match this search.</p> : null}
             {resultIds.slice(page * 30, (page + 1) * 30).map((i) => (
               <button
                 key={data.nodes[i].id}
@@ -884,6 +899,16 @@ export function NetworkAtlas() {
           ) : null}
         </div>
         <footer className={styles.footer}>
+          <div className={styles.legend} data-atlas-legend="" data-atlas-color-by={colorBy}>
+            <b>Color: {colorBy}</b>
+            {legend.map((entry) => (
+              <span key={entry.key}>
+                <i className={styles.swatch} style={{ background: entry.color }} />
+                {entry.key}
+                <small>{entry.count.toLocaleString("en-US")}</small>
+              </span>
+            ))}
+          </div>
           <label>
             <input
               type="checkbox"

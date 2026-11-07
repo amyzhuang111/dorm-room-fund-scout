@@ -319,13 +319,14 @@ export function EnrollmentBadge({
   const present = enrollmentPhrase(scope);
   return (
     <span
-      className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS.unknown}`}
+      className={`block max-w-full min-w-0 basis-full whitespace-normal break-words rounded-md border px-2 py-1 text-left text-[14px] font-medium leading-5 ${ENROLLMENT_CLASS.unknown}`}
+      data-enrollment-reading=""
       title={scope.presentText}
     >
       {scope.classYearText}
       {" · "}
       {present}
-      {basis === "inferred" ? <span className="ml-1 font-normal text-muted">est.</span> : null}
+      {basis === "inferred" ? <span className="font-normal"> est.</span> : null}
     </span>
   );
 }

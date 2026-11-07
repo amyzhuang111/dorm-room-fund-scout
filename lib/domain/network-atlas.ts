@@ -153,3 +153,23 @@ export function atlasLayout(nodes: AtlasNode[]) {
   partition(sorted, -0.9, -1, 1.8, 2);
   return points;
 }
+
+export const ATLAS_UNLOCATED = "#a7afb8";
+
+/** Same color the map uses for a campus, country, or continent key. */
+export function colorForAtlasKey(key: string): string {
+  if (!key || key === "Location not yet verified") return ATLAS_UNLOCATED;
+  return ATLAS_COLORS[atlasHash(key) % ATLAS_COLORS.length]!;
+}
+
+/** Largest color groups first, so a legend can match the points actually drawn. */
+export function atlasLegendEntries(keys: string[], limit = 6): { key: string; color: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const key of keys) counts.set(key, (counts.get(key) ?? 0) + 1);
+  const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const shown = ranked.slice(0, limit).map(([key, count]) => ({ key, color: colorForAtlasKey(key), count }));
+  const rest = ranked.slice(limit);
+  const more = rest.reduce((sum, row) => sum + row[1], 0);
+  if (more > 0) shown.push({ key: `${rest.length} more`, color: ATLAS_UNLOCATED, count: more });
+  return shown;
+}

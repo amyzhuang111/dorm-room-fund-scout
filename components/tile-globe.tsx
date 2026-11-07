@@ -138,7 +138,8 @@ export function TileGlobe({
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   /** r44 bigmap default; fit() replaces on mount. */
-  const [stageHeight, setStageHeight] = useState(640);
+  const [stageHeight, setStageHeight] = useState(() => (typeof window === "undefined" ? 640 : mapStageHeight(window.innerWidth, window.innerHeight)));
+  const [deskSquare, setDeskSquare] = useState(() => typeof window !== "undefined" && window.innerWidth >= 1024);
   const hitPadRef = useRef(64);
   const nearestMaxRef = useRef(100);
   const campusesRef = useRef(campuses);
@@ -201,6 +202,7 @@ export function TileGlobe({
 
     const fit = () => {
       const next = mapStageHeight(window.innerWidth, window.innerHeight);
+      setDeskSquare(window.innerWidth >= 1024);
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
       nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
@@ -760,7 +762,7 @@ export function TileGlobe({
         </h2>
         <div
           className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-white`}
-          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
+          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : deskSquare ? { height: stageHeight, width: stageHeight, maxWidth: "100%", marginInline: "auto" } : { height: stageHeight }}
           role={expandedMap ? "dialog" : undefined}
           aria-modal={expandedMap ? true : undefined}
           aria-label={expandedMap ? "Expanded startup map" : undefined}
@@ -768,6 +770,7 @@ export function TileGlobe({
           data-dispatch-map-stage=""
           data-fold-bigmap-stage=""
           data-map-stage-h={stageHeight}
+          data-fold-stage-square={deskSquare ? "1" : "0"}
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
           <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
@@ -879,7 +882,7 @@ export function TileGlobe({
             ) : null}
           </div>
         </div>
-        <p className="mt-1 px-2 text-right font-mono text-[10px] leading-4 text-[color:var(--fg-3,#5C647A)] [&_a]:underline [&_a]:underline-offset-2" data-map-credit>
+        <p className="mt-1 px-2 text-right font-mono text-[10px] leading-4 text-[color:var(--fg-3,#5C647A)] [&_a]:underline [&_a]:underline-offset-2" style={deskSquare ? { width: stageHeight, maxWidth: "100%", marginInline: "auto" } : undefined} data-map-credit>
           <MapCredit />
         </p>
       </section>

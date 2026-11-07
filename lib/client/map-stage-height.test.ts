@@ -11,7 +11,9 @@ for (const width of [320, 375, 390, 430]) {
 }
 
 assert.equal(mapStageHeight(390, 844), 390);
-assert.ok(mapStageHeight(1440, 900) >= 520);
-assert.ok(mapStageHeight(1440, 900) <= 720);
+assert.equal(mapStageHeight(1440, 900), 600);
+assert.equal(mapStageHeight(1280, 800), 500);
+assert.equal(mapStageHeight(1280, 900), 600);
+assert.ok(mapStageHeight(1920, 1080) <= 880);
 
 console.log("map stage height tests ok");

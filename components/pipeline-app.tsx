@@ -9,6 +9,7 @@ import { UserAddedBadge, VerifiedByUserBadge } from "./entity-marks";
 import { PipelineSourceFields } from "./pipeline-source-fields";
 import { PipelineSourceMix } from "./pipeline-source-mix";
 import { useUserPipeline } from "./user-pipeline-provider";
+import { namedPersonPath } from "@/lib/domain/person-href";
 
 export function PipelineApp({ campuses }: { campuses: { id: string; name: string }[] }) {
   const pipeline = useUserPipeline();
@@ -103,7 +104,7 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
                   ) : (
                     <article key={card.link.id} className="rounded-md border border-black bg-white p-2.5 text-sm">
                       <div className="flex items-start justify-between gap-2">
-                        <Link href={card.link.entityType === "project" ? `/startup/${card.link.entityId}` : `/founder/discover?founder=${card.link.entityId}&enroll=current_student,recent_grad,older_alumni`} className="font-medium underline">
+                        <Link href={card.link.entityType === "project" ? `/startup/${card.link.entityId}` : namedPersonPath(card.link.entityId)} className="font-medium underline">
                           {card.link.name}
                         </Link>
                         <span className="text-[10px] uppercase tracking-wide text-neutral-600">{card.link.entityType === "project" ? "Startup" : "Founder"}</span>

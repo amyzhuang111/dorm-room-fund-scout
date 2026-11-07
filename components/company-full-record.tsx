@@ -3,6 +3,7 @@ import { plainText } from "@/lib/display/plain-text";
 import type { ReactNode } from "react";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import { enrollmentPhrase, readPersonScope } from "@/lib/domain/claim-scope";
+import { namedPersonPath } from "@/lib/domain/person-href";
 import { formatCampusList } from "@/lib/domain/campuses";
 import { displayedFunding, formatRound } from "@/lib/domain/company-profile";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
@@ -209,7 +210,7 @@ export function CompanyFullRecord({ project, children, directoryCard }: { projec
                 </div>
                 <div className="min-w-0 flex-1">
                   <Link
-                    href={`/founder/discover?founder=${encodeURIComponent(f.personId)}`}
+                    href={namedPersonPath(f.personId)}
                     className="text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline sm:text-[15px]"
                   >
                     {f.name}

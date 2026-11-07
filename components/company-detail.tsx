@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import type { StartupCard } from "@/lib/domain/startup-card";
 import { displayedGateLine, eligibilityLines } from "@/lib/domain/claim-scope";
+import { namedPersonPath } from "@/lib/domain/person-href";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SameSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
 import { EntityMarks, PipelineStageEditor } from "./entity-marks";
 import { NotesSection } from "./notes-section";
@@ -71,12 +72,7 @@ function openQuestionText(project: ProjectDetail, raw: string): string {
 }
 
 function founderHref(founder: NamedFounder): string {
-  const params = new URLSearchParams({
-    founder: founder.personId,
-    enroll: "current_student,recent_grad,older_alumni",
-  });
-  if (founder.founderStatus === "potential") params.set("pool", "potential");
-  return `/founder/discover?${params.toString()}`;
+  return namedPersonPath(founder.personId);
 }
 
 export function CompanyDetail({ project, initialCard }: { project: ProjectDetail; initialCard?: StartupCard | null }) {
@@ -202,11 +198,11 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
       )}
 
       {project.founderLinks.length > 0 ? (
-      <details data-company-founders="" className="record-review-controls"><summary>Founder evidence & review controls</summary>
+      <details data-company-founders="" className="record-review-controls min-w-0 max-w-full"><summary>Founder evidence & review controls</summary>
         <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
-        <ul className="mt-1 space-y-1 text-sm text-foreground">
+        <ul className="mt-1 max-w-full space-y-2 text-sm text-foreground">
           {project.founderLinks.map((f) => (
-            <li key={f.personId} className="flex flex-wrap items-center gap-2">
+            <li key={f.personId} className="flex min-w-0 max-w-full flex-wrap items-baseline gap-x-2 gap-y-1">
               <Link href={founderHref(f)} className="text-link hover:underline">
                 {f.name}
               </Link>

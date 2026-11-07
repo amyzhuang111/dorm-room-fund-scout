@@ -67,14 +67,16 @@ function YearFact({ person }: { person: FounderTableRow }) {
 export function FounderPeopleTable({
   rows,
   initialQuery = "",
+  initialCampus = "",
   campusLocked = false,
 }: {
   rows: FounderTableRow[];
   initialQuery?: string;
+  initialCampus?: string;
   campusLocked?: boolean;
 }) {
   const [q, setQ] = useState(initialQuery);
-  const [campus, setCampus] = useState("");
+  const [campus, setCampus] = useState(initialCampus);
   const [shown, setShown] = useState(PAGE);
   const campuses = useMemo(() => {
     const names = new Map<string, string>();
@@ -124,6 +126,11 @@ export function FounderPeopleTable({
           </label>
         )}
       </form>
+      {q.trim() || campus ? (
+        <p className="mb-3 text-sm text-ink-soft" data-founders-query="">
+          {filtered.length.toLocaleString("en-US")} {filtered.length === 1 ? "person matches" : "people match"} this search.
+        </p>
+      ) : null}
 
       <div className="space-y-2 sm:hidden">
         {visible.map((person) => {

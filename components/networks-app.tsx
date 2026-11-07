@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { NetworkAtlas } from "./network-atlas";
 import { StartupCardSheet } from "@/components/startup-directory-card";
 import { searchFounderNetworks, selectedNetworkMembers } from "@/lib/domain/network-directory-search";
+import { namedPersonPath } from "@/lib/domain/person-href";
 import type {
   FounderNetworksPage,
   NetworkKind,
@@ -131,7 +132,7 @@ export function NetworksApp({ initial = null }: { initial?: FounderNetworksPage 
 
   if (loadError) {
     return (
-      <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-2)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
+      <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-2)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ffffff)" }}>
         {loadError}
       </div>
     );
@@ -139,15 +140,15 @@ export function NetworksApp({ initial = null }: { initial?: FounderNetworksPage 
 
   if (!data) {
     return (
-      <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-3)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
+      <div className="min-h-screen px-5 py-10 text-sm text-[color:var(--fg-3)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ffffff)" }}>
         Loading networks...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-[color:var(--fg)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
-      <header className="border-b border-[color:var(--line)]" style={{ background: "var(--networks-bg, #ece9e4)" }} data-networks-hero="">
+    <div className="min-h-screen text-[color:var(--fg)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ffffff)" }}>
+      <header className="border-b border-[color:var(--line)]" style={{ background: "var(--networks-bg, #ffffff)" }} data-networks-hero="">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-0.5 px-4 py-2 sm:gap-1 sm:px-6 sm:py-3">
           <h1 className="text-lg font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Networks</h1>
           <p className="hidden max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:block sm:text-sm sm:leading-normal" data-networks-context="">
@@ -423,7 +424,7 @@ function NetworkMemberEntry({
     <div className={`rounded-md border border-[color:var(--line)] bg-white px-2.5 py-2 ${compact ? "text-xs" : "text-sm"}`}>
       <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
         <Link
-          href={`/founder/discover?q=${encodeURIComponent(member.founderName)}`}
+          href={member.founderId ? namedPersonPath(member.founderId) : `/founders?q=${encodeURIComponent(member.founderName)}`}
           className="min-w-0 break-words font-semibold text-[color:var(--cobalt)] hover:underline"
           title={`Find ${member.founderName} in Founder Scout`}
           data-network-founder-link={member.founderId}

@@ -3,6 +3,7 @@
 // A shared club counts only while the club stays small enough to be a real link.
 
 import { shortCampusLabel } from "./campuses";
+import { namedPersonPath } from "./person-href";
 import { loadIntroGraph, type IntroGraph, type IntroOrg } from "./intro-graph";
 
 const CLUB_CAP = 80;
@@ -78,7 +79,7 @@ export function scoreConnectors(graph: IntroGraph): { people: ConnectorPerson[];
       campusId: campus.id,
       campusName: campus.name,
       strongFounders: linked.size,
-      href: `/founder/discover?founder=${encodeURIComponent(person.id)}&enroll=current_student,recent_grad,older_alumni`,
+      href: namedPersonPath(person.id),
     });
   }
   people.sort((a, b) => b.strongFounders - a.strongFounders || a.name.localeCompare(b.name));

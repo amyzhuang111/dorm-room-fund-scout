@@ -11,11 +11,15 @@ export function FoundersDesk({
   campusLocked = false,
   initialCount,
   initialRows = null,
+  initialQuery = "",
+  initialCampus = "",
 }: {
   campusId?: string;
   campusLocked?: boolean;
   initialCount?: number;
   initialRows?: FounderTableRow[] | null;
+  initialQuery?: string;
+  initialCampus?: string;
 }) {
   const seeded = initialRows && initialRows.length ? initialRows.slice(0, FIRST_PAINT) : null;
   const [rows, setRows] = useState<FounderTableRow[] | null>(seeded);
@@ -65,7 +69,7 @@ export function FoundersDesk({
             Loading founders…
           </p>
         ) : null}
-        {rows ? <FounderPeopleTable rows={rows} campusLocked={campusLocked} /> : null}
+        {rows ? <FounderPeopleTable rows={rows} campusLocked={campusLocked} initialQuery={initialQuery} initialCampus={initialCampus} /> : null}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ import { fundingFit, fundingRecency, fuzzyNameHit, viewMentionsYear, type AskSta
 import { sectorLabel } from "./sectors";
 import { signalTierRank } from "./signal-tier";
 import type { AskHit, AskKind, AskSource, AskToolResult } from "./ask-types";
+import { namedPersonPath } from "./person-href";
 
 const DEFAULT_LIMIT = 12;
 const MAX_LIMIT = 30;
@@ -806,12 +807,7 @@ function sourcesFor(href: string, urls: (string | null | undefined)[]): AskSourc
 }
 
 function personHref(person: PersonRec): string {
-  const params = new URLSearchParams({
-    founder: person.id,
-    enroll: "current_student,recent_grad,older_alumni",
-  });
-  if (person.founderStatus === "potential") params.set("pool", "potential");
-  return `/founder/discover?${params.toString()}`;
+  return namedPersonPath(person.id);
 }
 
 function startupIdsFor(person: PersonRec, index: Index, sector: string[] | null, investorIds: Set<string> | null, cityIds: Set<string> | null, founderOnly: boolean): string[] {

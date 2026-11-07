@@ -8,6 +8,7 @@ import { userStartupPreview, userFounderPreview } from "@/lib/domain/user-previe
 import type { FounderPreview, FounderPreviewLink } from "@/lib/domain/founder-preview";
 import styles from "./startup-directory-card.module.css";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
+import { namedPersonPath } from "@/lib/domain/person-href";
 const LINK_LABEL: Record<StartupLinkKind, string> = {
   website: "Website",
   linkedin: "LinkedIn",
@@ -128,7 +129,7 @@ export function StartupDirectoryCard({
                 <li key={founder.id} className={styles.founder}>
                   <FounderAvatar name={founder.name} photoUrl={founder.photoUrl} />
                   <div className={styles.founderInfo}>
-                    <Link className={styles.founderName} href={`/founders?founder=${encodeURIComponent(founder.id)}`} onClick={event => { if (onFounderSelect?.(founder.id)) event.preventDefault(); }}>{founder.name}</Link>
+                    <Link className={styles.founderName} href={namedPersonPath(founder.id)} onClick={event => { if (onFounderSelect?.(founder.id)) event.preventDefault(); }}>{founder.name}</Link>
                     {founder.role && <p className={styles.role}>{founder.role}</p>}
                     {meta && <p className={styles.founderMeta}><SchoolIcon /><span>{meta}</span></p>}
                   </div>

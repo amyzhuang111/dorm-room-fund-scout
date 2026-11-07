@@ -1846,15 +1846,30 @@ html[data-sample="halflight"] [data-site-nav] {
   }
 }
 
-/* /networks preview (dc6d7fd): page-only cream, all other desks stay white. */
+/* Networks uses the same true white as the rest of Scout. */
 html:has([data-networks-cream]) {
-  --networks-bg: #ece9e4;
+  --networks-bg: #ffffff;
 }
 html:has([data-networks-cream]) body {
-  background: var(--networks-bg, #ece9e4);
+  background: var(--networks-bg, #ffffff);
 }
 html:has([data-networks-cream]) [data-site-nav] {
-  background: var(--networks-bg, #ece9e4);
+  background: #ffffff;
+}
+
+[data-enrollment-reading] {
+  display: block;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  line-height: 1.45;
+}
+[data-company-founders],
+[data-company-founders] li,
+[data-company-founders] ul {
+  min-width: 0;
+  max-width: 100%;
 }
 
 

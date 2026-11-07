@@ -2,13 +2,19 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { getDb } from "../db/client";
 import { buildNetworkAtlas } from "./network-atlas-data";
-import { atlasLayout, atlasConnectors, anchorAtlasSelection, atlasSummary, safeAtlasUrl } from "./network-atlas";
+import { atlasLayout, atlasConnectors, atlasLegendEntries, anchorAtlasSelection, atlasSummary, colorForAtlasKey, safeAtlasUrl } from "./network-atlas";
 
 // Guard the integration: a mobile merge previously restored the legacy graph
 // while all atlas data tests still passed for an unused component.
 const networkPage = readFileSync("components/networks-app.tsx", "utf8");
 assert.match(networkPage, /<NetworkAtlas\s*\/>/, "Networks must mount the full-record atlas");
 assert.doesNotMatch(networkPage, /<NetworksGraph\b/, "Legacy graph must not replace the atlas");
+
+const legend = atlasLegendEntries(["Georgia Tech", "Georgia Tech", "Penn", "Location not yet verified"]);
+assert.equal(legend[0]?.key, "Georgia Tech");
+assert.equal(legend[0]?.color, colorForAtlasKey("Georgia Tech"));
+assert.equal(legend.find((row) => row.key === "Penn")?.color, colorForAtlasKey("Penn"));
+assert.notEqual(colorForAtlasKey("Georgia Tech"), colorForAtlasKey("North America"));
 
 const data = buildNetworkAtlas();
 const connectorFixture = { nodes: [{id:"a",name:"A",kind:"founder" as const,places:[],links:[]},{id:"b",name:"B",kind:"startup" as const,places:[],links:[]}], groups:[{id:"g1",name:"One",kind:"club",members:[0,0]},{id:"g2",name:"Two",kind:"program",members:[0]}], companies:[[0,1],[0,1]] as [number,number][],generatedAt:"" };
