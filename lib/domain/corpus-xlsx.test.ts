@@ -58,9 +58,22 @@ const bytes = await corpusToXlsx([
 ]);
 
 assert.ok(bytes.subarray(0, 2).equals(Buffer.from([0x50, 0x4b])), "xlsx is a zip workbook");
-const imported = await import("exceljs");
-const ExcelJS = (imported as { default?: typeof imported }).default ?? imported;
-const book = new ExcelJS.Workbook();
+interface LoadedSheet {
+  views: { state?: string }[];
+  rowCount: number;
+  getRow(index: number): { getCell(index: number): { value: unknown } };
+}
+interface LoadedBook {
+  xlsx: { load(data: unknown): Promise<void> };
+  getWorksheet(name: string): LoadedSheet | undefined;
+}
+const imported = (await import("exceljs")) as unknown as {
+  Workbook?: new () => LoadedBook;
+  default?: { Workbook?: new () => LoadedBook };
+};
+const Ctor = imported.Workbook ?? imported.default?.Workbook;
+if (!Ctor) throw new Error("exceljs Workbook missing");
+const book = new Ctor();
 await book.xlsx.load(bytes);
 const sheet = book.getWorksheet("Corpus");
 assert.ok(sheet);

@@ -39,10 +39,37 @@ function singleHttp(value: string): string | null {
   return /^https?:\/\//i.test(value) ? value : null;
 }
 
+interface XlsxCell {
+  value: unknown;
+  numFmt?: string;
+}
+interface XlsxRow {
+  getCell(index: number): XlsxCell;
+  font?: unknown;
+  fill?: unknown;
+  alignment?: unknown;
+}
+interface XlsxSheet {
+  addRow(values: unknown[]): XlsxRow;
+  getRow(index: number): XlsxRow;
+  getColumn(index: number): { width?: number };
+  views?: unknown;
+}
+interface XlsxWorkbook {
+  creator: string;
+  addWorksheet(name: string, options: unknown): XlsxSheet;
+  xlsx: { writeBuffer(): Promise<ArrayBuffer> };
+}
+
+function createWorkbook(imported: unknown): XlsxWorkbook {
+  const record = imported as { Workbook?: new () => XlsxWorkbook; default?: { Workbook?: new () => XlsxWorkbook } };
+  const Ctor = record.Workbook ?? record.default?.Workbook;
+  if (!Ctor) throw new Error("exceljs Workbook missing");
+  return new Ctor();
+}
+
 export async function corpusToXlsx(rows: CorpusRow[]): Promise<Buffer> {
-  const imported = await import("exceljs");
-  const ExcelJS = (imported as { default?: typeof imported }).default ?? imported;
-  const workbook = new ExcelJS.Workbook();
+  const workbook = createWorkbook(await import("exceljs"));
   workbook.creator = "Campus Scout";
   const sheet = workbook.addWorksheet("Corpus", {
     views: [{ state: "frozen", ySplit: 1 }],
