@@ -16,6 +16,7 @@ function person(partial: Partial<FounderTableRow> & Pick<FounderTableRow, "id" |
     companyClaimUrl: null,
     companyClaimExcerpt: null,
     year: null,
+    classYearSupport: null,
     enrollmentStatus: null,
     enrollmentBasis: null,
     enrollmentEvidence: null,
@@ -63,8 +64,9 @@ const alex = presentEnrollment(person({
   affiliations: [{ campusId: "univ_nyu", campus: "NYU", role: "current_student", status: "current_student", sourceUrl: "https://entrepreneur.nyu.edu/blog/2023/11/10/alexandra-debow-swsh/", excerpt: "current_student · 2025", retrievedAt: "2026-11-03T09:19:10.624Z" }],
 }));
 assert.equal(alex.state, "unknown");
-assert.match(alex.summary, /2023-11-10/);
+assert.match(alex.summary, /not established/);
+assert.doesNotMatch(alex.summary, /2023-11-10/);
 assert.equal(companyIdentityNote(person({ id: "k2", name: "Kevin", company: "Thirdlayer", companyId: "proj" })), "Stored founder role. No source claim is attached to this role.");
-assert.match(claimDateNote("Left Harvard to co-found Mercor ($10B valuation, Oct 2025)", "https://www.thecrimson.com/article/2025/3/14/mercor-valuation-2-bil/") ?? "", /2025-03-14/);
+assert.match(claimDateNote("Left Harvard to co-found Mercor ($10B valuation, Oct 2025)", "https://www.thecrimson.com/article/2025/3/14/mercor-valuation-2-bil/") ?? "", /2025\/3\/14/);
 
 console.log("founder people tests ok");

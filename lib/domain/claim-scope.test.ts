@@ -1,76 +1,123 @@
 import assert from "node:assert/strict";
 import { eligibilityLines, readPersonScope } from "./claim-scope";
 
-const kevinIn = {
-  name: "Kevin Gu",
-  status: "recent_grad",
-  basis: "inferred",
-  evidence: "No class year is stated. The newest dated evidence is 2025 (Founded in 2025).",
-  sourceUrl: "https://devpost.com/software/pitchlab-clxhuj",
-};
-const kevin = readPersonScope(kevinIn);
-assert.equal(kevin.present, "unknown");
-assert.match(kevin.presentText, /inferred/);
-assert.equal(kevin.roleState, "no_claim");
-
-const adarshIn = {
-  name: "Adarsh Hiremath",
-  year: 2025,
-  status: "recent_grad",
+const ethanEvidence = "Listed as student founder on https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/";
+const ethan = readPersonScope({
+  name: "Ethan Shea",
+  status: "current_student",
   basis: "verified",
-  evidence: "class 2025 · alumni",
-  leftSchool: true,
-  roleClaimState: "unverified",
-  roleClaimUrl: "https://www.thecrimson.com/article/2025/3/14/mercor-valuation-2-bil/",
-  roleClaimExcerpt: "Left Harvard to co-found Mercor ($10B valuation, Oct 2025)",
-};
-const adarsh = readPersonScope(adarshIn);
-assert.equal(adarsh.present, "unknown");
-assert.match(adarsh.presentText, /Left school/);
-assert.match(adarsh.claimDateNote ?? "", /2025-03-14/);
-assert.equal(adarsh.classYearText, "Class of 2025");
+  evidence: ethanEvidence,
+  sourceUrl: "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+});
+assert.equal(ethan.present, "unknown", "a 2026 URL and a stored current_student flag are not enrollment");
+assert.equal(ethan.sourceAsOf, null);
+assert.doesNotMatch(ethan.presentText, /2026-07-13/);
+assert.match(ethan.presentText, /not backed by a statement/);
 
-const alexandra = readPersonScope({
+const natalie = readPersonScope({
+  name: "Natalie Aresta-Katz",
+  status: "current_student",
+  basis: "verified",
+  evidence: ethanEvidence.replace("Listed as student founder", "Listed as student founder"),
+  sourceUrl: "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+});
+assert.equal(natalie.present, "unknown");
+
+const alumniCohort = readPersonScope({
+  name: "Ethan Shea",
+  status: "current_student",
+  basis: "verified",
+  evidence: "The Lab cultivates a cohort of alumni entrepreneurs each year. Ethan Shea and Natalie Aresta-Katz are named with CBS.",
+  sourceUrl: "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+});
+assert.equal(alumniCohort.present, "unknown");
+assert.match(alumniCohort.presentText, /alumni cohort/);
+
+const eventOnly = readPersonScope({
+  name: "Ada Event",
+  status: "current_student",
+  basis: "verified",
+  evidence: "Ada Event is listed on the 2026 hackathon prize page.",
+  sourceUrl: "https://example.edu/events/2026/05/02/hackathon/",
+});
+assert.equal(eventOnly.present, "unknown");
+assert.equal(eventOnly.sourceAsOf, null);
+
+const negated = readPersonScope({
   name: "Alexandra Debow",
   year: 2024,
   status: "current_student",
   basis: "verified",
-  evidence: "degree completion is not established",
-  affiliationSaysCurrentStudent: true,
-  affiliationSourceUrl: "https://entrepreneur.nyu.edu/blog/2023/11/10/alexandra-debow-swsh/",
-  roleClaimState: "observed",
-  roleClaimUrl: "https://entrepreneur.nyu.edu/blog/2023/11/10/alexandra-debow-swsh/",
+  evidence: "Alexandra Debow: degree completion is not established.",
 });
-assert.equal(alexandra.present, "unknown");
-assert.match(alexandra.presentText, /2023-11-10/);
-assert.match(alexandra.presentText, /not established/);
-assert.equal(alexandra.roleState, "recorded");
+assert.equal(negated.present, "unknown");
+assert.notEqual(negated.present, "graduated");
+assert.match(negated.presentText, /not established/);
 
-const graduatedIn = {
-  name: "Case Grad",
-  year: 2024,
+const otherPerson = readPersonScope({
+  name: "Ada Team",
   status: "recent_grad",
   basis: "verified",
-  evidence: "She graduated and completed a degree in 2024.",
-  sourceUrl: "https://example.edu/news/2024/06/01/commencement/",
-};
-const graduated = readPersonScope(graduatedIn);
-assert.equal(graduated.present, "graduated");
+  evidence: "Bob Example graduated in 2024. Ada Team is named on the project page.",
+});
+assert.equal(otherPerson.present, "unknown");
 
-const current = readPersonScope({
-  name: "Case Now",
-  year: 2027,
+const unverifiedBasis = readPersonScope({
+  name: "Victor Espinosa",
+  status: "current_student",
+  basis: "unverified",
+  evidence: "Victor Espinosa is pursuing his master's degree in computer science at Georgia Tech.",
+});
+assert.equal(unverifiedBasis.present, "unknown");
+
+const victor = readPersonScope({
+  name: "Victor Espinosa",
   status: "current_student",
   basis: "verified",
-  evidence: "Listed as a current student on the 2026 roster.",
-  sourceUrl: "https://example.edu/roster/2026/09/01/students/",
+  evidence: "The CREATE-X article says Victor Espinosa is currently pursuing his master's degree in computer science at Georgia Tech.",
+  sourceUrl: "https://www.gatech.edu/news/2026/04/09/create-x-startup-brings-digital-access-unbanked",
 });
-assert.equal(current.present, "current_student");
+assert.equal(victor.present, "current_student");
+assert.match(victor.presentText, /as of the source/);
+assert.equal(victor.sourceAsOf, null);
+assert.doesNotMatch(victor.presentText, /2026-04-09/);
 
-const lines = eligibilityLines([kevinIn, adarshIn]);
-assert.ok(lines.some((line) => /Kevin Gu/.test(line) && /unknown/.test(line)));
-assert.ok(lines.some((line) => /No source claim/.test(line)));
-assert.ok(lines.some((line) => /2025-03-14/.test(line)));
-assert.equal(eligibilityLines([graduatedIn]).some((line) => /Present enrollment is unknown/.test(line)), false);
+const datedEnrollment = readPersonScope({
+  name: "Ada Roster",
+  status: "current_student",
+  basis: "verified",
+  evidence: "Ada Roster is enrolled. The roster statement is dated March 1, 2024.",
+});
+assert.equal(datedEnrollment.present, "current_student");
+assert.equal(datedEnrollment.sourceAsOf, "2024-03-01");
+
+const completed = readPersonScope({
+  name: "Ada Degree",
+  status: "recent_grad",
+  basis: "verified",
+  evidence: "Ada Degree completed her degree in 2019.",
+});
+assert.equal(completed.present, "graduated");
+
+const adarshYear = readPersonScope({
+  name: "Adarsh Hiremath",
+  year: 2025,
+  classYearSupport: "source_unavailable",
+  status: "recent_grad",
+  basis: "verified",
+  evidence: "Adarsh Hiremath · class 2025 · alumni",
+  leftSchool: true,
+  roleClaimState: "unverified",
+  roleClaimUrl: "https://www.thecrimson.com/article/2025/3/14/mercor-valuation-2-bil/",
+  roleClaimExcerpt: "Left Harvard to co-found Mercor ($10B valuation, Oct 2025)",
+});
+assert.equal(adarshYear.present, "unknown");
+assert.match(adarshYear.classYearText, /Stored class year 2025/);
+assert.match(adarshYear.classYearText, /not verified/);
+assert.match(adarshYear.claimDateNote ?? "", /2025\/3\/14/);
+assert.match(adarshYear.claimDateNote ?? "", /not a verified publication date/);
+
+assert.ok(eligibilityLines([{ name: "Ethan Shea", status: "current_student", basis: "verified", evidence: ethanEvidence }]).some((line) => /unknown/.test(line)));
+assert.equal(eligibilityLines([{ name: "Victor Espinosa", status: "current_student", basis: "verified", evidence: "The CREATE-X article says Victor Espinosa is currently pursuing his master's degree in computer science at Georgia Tech." }]).some((line) => /Present enrollment is unknown/.test(line)), false);
 
 console.log("claim scope tests ok");

@@ -9,17 +9,16 @@ export interface PresentEnrollment {
 }
 
 /** Present enrollment is unknown unless a source states it. A class year, a departure, or an inferred window is not that statement. */
-export function presentEnrollment(row: Pick<FounderTableRow, "year" | "enrollmentStatus" | "enrollmentBasis" | "enrollmentEvidence" | "enrollmentSourceUrl" | "leftSchool" | "affiliations" | "companyClaimState" | "companyClaimUrl" | "companyClaimExcerpt">): PresentEnrollment {
-  const studentSource = row.affiliations.find((item) => /current student|current_student/i.test(`${item.role ?? ""} ${item.status ?? ""}`));
+export function presentEnrollment(row: Pick<FounderTableRow, "name" | "year" | "classYearSupport" | "enrollmentStatus" | "enrollmentBasis" | "enrollmentEvidence" | "enrollmentSourceUrl" | "leftSchool" | "affiliations" | "companyClaimState" | "companyClaimUrl" | "companyClaimExcerpt">): PresentEnrollment {
   const scope = readPersonScope({
+    name: row.name,
     year: row.year,
+    classYearSupport: row.classYearSupport,
     status: row.enrollmentStatus,
     basis: row.enrollmentBasis,
     evidence: row.enrollmentEvidence,
     sourceUrl: row.enrollmentSourceUrl,
     leftSchool: row.leftSchool,
-    affiliationSaysCurrentStudent: Boolean(studentSource),
-    affiliationSourceUrl: studentSource?.sourceUrl ?? null,
     roleClaimState: row.companyClaimState,
     roleClaimUrl: row.companyClaimUrl,
     roleClaimExcerpt: row.companyClaimExcerpt,

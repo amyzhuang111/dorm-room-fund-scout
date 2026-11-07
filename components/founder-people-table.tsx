@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { readPersonScope } from "@/lib/domain/claim-scope";
 import { affiliationIsEvent, claimDateNote, companyIdentityNote, filterFounderPeople, founderYearFacts, presentEnrollment } from "@/lib/domain/founder-people";
 import type { FounderTableRow } from "@/lib/domain/founder-table";
 
@@ -59,7 +60,7 @@ function YearFact({ person }: { person: FounderTableRow }) {
   if (!short && !hasSource) return <span>Not on file</span>;
   return (
     <span>
-      {short || "No class year on record"}
+      {person.classYearSupport ? readPersonScope({ name: person.name, year: person.year, classYearSupport: person.classYearSupport, status: person.enrollmentStatus, basis: person.enrollmentBasis, evidence: person.enrollmentEvidence, sourceUrl: person.enrollmentSourceUrl, leftSchool: person.leftSchool }).classYearText : short || "No class year on record"}
       <span className="block">{present.state === "unknown" ? "Present enrollment: Unknown" : present.summary}</span>
       {hasSource ? (
         <details className="mt-1">

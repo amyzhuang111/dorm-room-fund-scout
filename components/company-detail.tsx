@@ -83,6 +83,7 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
   const personConcerns = eligibilityLines(project.founderLinks.map((founder) => ({
     name: founder.name,
     year: founder.graduationYear,
+    classYearSupport: founder.classYearSupport,
     status: founder.enrollmentStatus,
     basis: founder.enrollmentBasis,
     evidence: founder.enrollmentEvidence,
@@ -91,8 +92,6 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
     roleClaimState: founder.roleClaimState,
     roleClaimUrl: founder.roleClaimUrl,
     roleClaimExcerpt: founder.roleClaimExcerpt,
-    affiliationSaysCurrentStudent: /current student|current_student/i.test(`${founder.enrollmentStatus ?? ""} ${founder.enrollmentEvidence ?? ""}`),
-    affiliationSourceUrl: founder.enrollmentSourceUrl,
   })));
   const gateConcerns = project.gateOutcomes.filter((g) => g.result !== "pass").map((gate) => openQuestionText(project, gate.rationale));
   const concernReasons = [...personConcerns, ...gateConcerns];
@@ -212,7 +211,7 @@ export function CompanyDetail({ project, initialCard }: { project: ProjectDetail
               </Link>
               {f.role ? <span className="text-xs text-muted">{f.role.replaceAll("_", " ")}</span> : null}
               <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={f.school ?? project.universities[0]} websiteUrl={f.linkedinUrl} />
-              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} evidence={f.enrollmentEvidence} sourceUrl={f.enrollmentSourceUrl} leftSchool={f.leftSchool} />
+              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} evidence={f.enrollmentEvidence} sourceUrl={f.enrollmentSourceUrl} leftSchool={f.leftSchool} year={f.graduationYear} classYearSupport={f.classYearSupport} />
               {!f.roleClaimUrl && !f.roleClaimState ? <span className="text-xs text-muted">Role has no source claim</span> : f.roleClaimState === "unverified" ? <span className="text-xs text-muted">Role claim unverified</span> : null}
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />

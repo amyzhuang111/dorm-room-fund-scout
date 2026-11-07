@@ -32,6 +32,7 @@ export interface FounderTableRow {
   companyClaimUrl: string | null;
   companyClaimExcerpt: string | null;
   year: number | null;
+  classYearSupport: string | null;
   /** Stored enrollment fields. Class year is not a completed degree. */
   enrollmentStatus: string | null;
   enrollmentBasis: string | null;
@@ -113,6 +114,10 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
     });
     affiliations.set(row.person_id, list);
   }
+  const classYearSupport = new Map<string, string>();
+  for (const row of db.prepare(`SELECT person_id, status FROM person_class_year_reviews`).all() as { person_id: string; status: string }[]) {
+    classYearSupport.set(row.person_id, row.status);
+  }
   const companyClaims = new Map<string, { state: string | null; url: string | null; excerpt: string | null }>();
   for (const row of db.prepare(
     `SELECT r.person_id, r.project_id, c.verification_state, c.source_url, c.excerpt
@@ -165,6 +170,7 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         companyClaimUrl: companyClaim?.url ?? null,
         companyClaimExcerpt: companyClaim?.excerpt ?? null,
         year: years.get(founder.id) ?? null,
+        classYearSupport: classYearSupport.get(founder.id) ?? null,
         enrollmentStatus: enrolled?.status ?? null,
         enrollmentBasis: enrolled?.basis ?? null,
         enrollmentEvidence: enrolled?.evidence ?? null,
@@ -173,10 +179,10 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         verificationStatus: enrolled?.verificationStatus ?? null,
         verificationNote: enrolled?.verificationNote ?? null,
         ...(() => {
-          const student = (affiliations.get(founder.id) ?? []).find((item) => /current student|current_student/i.test(`${item.role ?? ""} ${item.status ?? ""}`));
           const scope = readPersonScope({
             name: founder.name,
             year: years.get(founder.id) ?? null,
+            classYearSupport: classYearSupport.get(founder.id) ?? null,
             status: enrolled?.status,
             basis: enrolled?.basis,
             evidence: enrolled?.evidence,
@@ -185,8 +191,6 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
             roleClaimState: companyClaim?.state,
             roleClaimUrl: companyClaim?.url,
             roleClaimExcerpt: companyClaim?.excerpt,
-            affiliationSaysCurrentStudent: Boolean(student),
-            affiliationSourceUrl: student?.sourceUrl ?? null,
           });
           return { presentEnrollment: scope.present, presentEnrollmentText: scope.presentText };
         })(),

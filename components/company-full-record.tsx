@@ -214,11 +214,12 @@ export function CompanyFullRecord({ project, children, directoryCard }: { projec
                   >
                     {f.name}
                   </Link>
-                  <p className="mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]">
+                  <p className="mt-0.5 break-all font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]">
                     {(() => {
                       const scope = readPersonScope({
                         name: f.name,
                         year: f.graduationYear,
+                        classYearSupport: f.classYearSupport,
                         status: f.enrollmentStatus,
                         basis: f.enrollmentBasis,
                         evidence: f.enrollmentEvidence,
@@ -230,7 +231,7 @@ export function CompanyFullRecord({ project, children, directoryCard }: { projec
                       });
                       const present = scope.present === "unknown" ? "Present enrollment unknown" : scope.present === "graduated" ? "Degree stated by a source" : "Current student in a 2026 source";
                       const role = scope.roleState === "no_claim" ? "Role has no source claim" : scope.roleState === "unverified" ? "Role claim unverified" : null;
-                      return [f.role?.replaceAll("_", " "), f.school, scope.classYearText ?? "Class year not on record", present, role].filter(Boolean).join(" · ");
+                      return [f.role?.replaceAll("_", " "), f.school, scope.classYearText, present, role].filter(Boolean).join(" · ");
                     })()}
                   </p>
                   <div className="max-sm:[&_a]:inline-flex max-sm:[&_a]:min-h-9 max-sm:[&_a]:min-w-9 max-sm:[&_a]:items-center">

@@ -291,6 +291,8 @@ export function EnrollmentBadge({
   basis,
   sourceUrl,
   leftSchool,
+  year,
+  classYearSupport,
 }: {
   status: string | null | undefined;
   label?: string | null;
@@ -298,17 +300,19 @@ export function EnrollmentBadge({
   basis?: string | null;
   sourceUrl?: string | null;
   leftSchool?: boolean | null;
+  year?: number | null;
+  classYearSupport?: string | null;
 }) {
-  const year = Number(label?.match(/\b(20\d{2})\b/)?.[1] ?? "");
+  const fromLabel = Number(label?.match(/\b(20\d{2})\b/)?.[1] ?? "");
   const scope = readPersonScope({
-    year: Number.isFinite(year) && year > 1900 ? year : null,
+    name: undefined,
+    year: year ?? (Number.isFinite(fromLabel) && fromLabel > 1900 ? fromLabel : null),
+    classYearSupport,
     status,
     basis,
     evidence,
     sourceUrl,
     leftSchool,
-    affiliationSaysCurrentStudent: /current student/i.test(`${label ?? ""} ${evidence ?? ""}`),
-    affiliationSourceUrl: sourceUrl,
   });
   const present =
     scope.present === "graduated" ? "Degree stated by a source" : scope.present === "current_student" ? "Current student in a 2026 source" : "Present enrollment unknown";
@@ -317,7 +321,7 @@ export function EnrollmentBadge({
       className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS.unknown}`}
       title={scope.presentText}
     >
-      {scope.classYearText ?? "Class year not on record"}
+      {scope.classYearText}
       {" · "}
       {present}
       {basis === "inferred" ? <span className="ml-1 font-normal text-muted">est.</span> : null}

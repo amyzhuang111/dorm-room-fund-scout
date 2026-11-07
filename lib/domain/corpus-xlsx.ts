@@ -130,7 +130,7 @@ export async function corpusToXlsx(rows: CorpusRow[], relationships: Relationshi
     const peopleHeader = people.getRow(1);
     peopleHeader.font = { bold: true };
     for (const item of relationships) {
-      people.addRow([
+      const added = people.addRow([
         textCell(item.personId),
         textCell(item.personName),
         textCell(item.projectId),
@@ -145,7 +145,17 @@ export async function corpusToXlsx(rows: CorpusRow[], relationships: Relationshi
         textCell(item.leftSchool),
         textCell(item.storedStatus),
         textCell(item.storedBasis),
+        textCell(item.relationshipId),
+        textCell(item.claimId),
+        textCell(item.roleExcerpt),
+        textCell(item.roleRetrievedAt),
+        textCell(item.enrollmentEvidenceDate),
       ]);
+      for (const index of [6, 10]) {
+        const value = String(added.getCell(index).value ?? "");
+        const link = singleHttp(value);
+        if (link) added.getCell(index).value = { text: link, hyperlink: link };
+      }
     }
   }
 
