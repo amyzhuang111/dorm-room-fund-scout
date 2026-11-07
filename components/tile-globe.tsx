@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useGlobeRotation } from "@/lib/client/use-globe-rotation";
+import { mapStageHeight } from "@/lib/client/map-stage-height";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadiusForCampus } from "@/lib/domain/marker-radius";
 import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
@@ -199,16 +200,7 @@ export function TileGlobe({
     } | null = null;
 
     const fit = () => {
-      const wide = window.innerWidth >= 1024;
-      // r53 mobile: taller full-bleed stage (~88vh) so globe dominates under the deck sheet.
-      // r56 desk: taller full-bleed (~86vh) so the map owns the first screen with fold overlays.
-      // r57 mobile: when the investor sheet is deck/expanded, shrink map to a compact header.
-      // Size the stage to the disk. A tall stage on a narrow phone leaves an empty
-      // band above the globe and pushes the disk under the sheet.
-      const target = Math.round(window.innerHeight * (wide ? 0.72 : 0.58));
-      const next = wide
-        ? Math.max(520, Math.min(760, target))
-        : Math.max(300, Math.min(440, Math.min(target, Math.round(window.innerWidth * 1.05))));
+      const next = mapStageHeight(window.innerWidth, window.innerHeight);
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
       nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
@@ -787,11 +779,6 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          <div className="pointer-events-none absolute right-2 top-2 z-10 max-w-[46%] [&_a]:pointer-events-auto" data-map-credit>
-            <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
-              <MapCredit />
-            </p>
-          </div>
           {!locationsMode && hover && (!pinned || pinned.id !== hover.id) ? (
             <div
               className="pointer-events-none absolute z-30 w-max max-w-[260px] -translate-x-1/2 -translate-y-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)] shadow-sm"
@@ -892,6 +879,9 @@ export function TileGlobe({
             ) : null}
           </div>
         </div>
+        <p className="mt-1 px-2 text-right font-mono text-[10px] leading-4 text-[color:var(--fg-3,#5C647A)] [&_a]:underline [&_a]:underline-offset-2" data-map-credit>
+          <MapCredit />
+        </p>
       </section>
 
 

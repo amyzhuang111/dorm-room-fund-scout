@@ -1980,6 +1980,15 @@ html:has([data-networks-cream]) [data-site-nav] {
     min-height: 44px !important;
     font-size: 16px !important;
   }
+  /* Map credit stays one readable line under the globe, not a stack of 44px controls on the disk. */
+  [data-map-credit] a[href] {
+    display: inline !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    line-height: 16px !important;
+  }
   /* Inline LinkedIn / person chips */
   a[href*="linkedin.com"],
   a[title*="LinkedIn"],
