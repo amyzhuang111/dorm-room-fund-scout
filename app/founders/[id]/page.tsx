@@ -31,9 +31,9 @@ export default async function FounderRecordPage({ params }: { params: Promise<{ 
                 {person.affiliations.map((item, index) => (
                   <li key={`${item.campusId ?? "campus"}-${index}`}>
                     <span className="font-medium">{item.campus || "Campus not on file"}</span>
-                    {item.role ? ` · ${item.role.replace(/_/g, " ")}` : ""}
-                    {` · ${item.status || "unknown"}`}
-                    {affiliationIsEvent(item) ? " · not enrollment" : ""}
+                    {/current student|current_student/i.test(`${item.role ?? ""} ${item.status ?? ""}`)
+                      ? " · source says current student"
+                      : `${item.role ? ` · ${item.role.replace(/_/g, " ")}` : ""} · ${item.status || "unknown"}${affiliationIsEvent(item) ? " · not enrollment" : ""}`}
                     {item.excerpt ? <span className="block text-fg-2">{item.excerpt}</span> : null}
                     {claimDateNote(item.excerpt, item.sourceUrl) ? <span className="block text-fg-2">{claimDateNote(item.excerpt, item.sourceUrl)}</span> : null}
                     {item.sourceUrl ? <a className="block break-all text-[color:var(--cobalt,#2F4FD8)] underline" href={item.sourceUrl}>{item.sourceUrl}</a> : null}

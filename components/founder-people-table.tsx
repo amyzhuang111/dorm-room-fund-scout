@@ -24,8 +24,14 @@ function Affiliations({ person }: { person: FounderTableRow }) {
       {person.affiliations.map((item, index) => (
         <li key={`${item.campusId ?? "campus"}-${index}`}>
           <span className="font-medium">{item.campus || "Campus not on file"}</span>
-          {item.role ? <span className="text-ink-soft"> · {item.role.replace(/_/g, " ")}</span> : null}
-          <span className="text-ink-soft"> · {statusLabel(item.status)}{affiliationIsEvent(item) ? " · not enrollment" : ""}</span>
+          {/current student|current_student/i.test(`${item.role ?? ""} ${item.status ?? ""}`) ? (
+            <span className="text-ink-soft"> · source says current student</span>
+          ) : (
+            <>
+              {item.role ? <span className="text-ink-soft"> · {item.role.replace(/_/g, " ")}</span> : null}
+              <span className="text-ink-soft"> · {statusLabel(item.status)}{affiliationIsEvent(item) ? " · not enrollment" : ""}</span>
+            </>
+          )}
           {item.excerpt || item.sourceUrl ? (
             <details>
               <summary className="cursor-pointer text-blue">Claim</summary>
