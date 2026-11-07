@@ -94,7 +94,7 @@ export default async function DataExplorerPage({
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
+          <h1 className="mt-0.5 scout-display text-[22px] leading-none sm:text-[32px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" records in this view · page "}
@@ -115,10 +115,12 @@ export default async function DataExplorerPage({
         </a>
       </div>
 
-      <nav className="my-3 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
-      <p className="text-sm text-fg-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
+      <nav className="my-2 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
+      <details className="mb-2 text-sm text-fg-2">
+        <summary className="cursor-pointer font-semibold text-[color:var(--fg,#0B0E17)]">About this list</summary>
+      <p className="mt-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]"
         data-recency-funnel=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Scouting list</span>
@@ -134,7 +136,7 @@ export default async function DataExplorerPage({
       </p>
 
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]"
         data-corpus-fill-rates=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Full corpus coverage</span>
@@ -159,6 +161,7 @@ export default async function DataExplorerPage({
         {" of "}
         {fill.total.toLocaleString("en-US")}
       </p>
+      </details>
 
       <CorpusFilters
         q={q}
@@ -223,16 +226,16 @@ export default async function DataExplorerPage({
         {result.rows.map((row) => {
           const fields = corpusLabeledFields(row);
           return (
-            <li key={row.id} className="px-3 py-3" data-corpus-row="" data-corpus-mobile-row="">
+            <li key={row.id} className="px-3 py-2" data-corpus-row="" data-corpus-mobile-row="">
               <div className="flex items-start gap-2">
                 <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} />
                 <Link href={`/startup/${row.id}`} className="break-words text-[16px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)]">
                   {row.name}
                 </Link>
               </div>
-              <dl className="mt-2 grid grid-cols-1 gap-2">
+              <dl className="mt-1.5 grid grid-cols-2 gap-x-3 gap-y-1">
                 {fields.map((field) => (
-                  <div key={field.label} data-corpus-field="">
+                  <div key={field.label} data-corpus-field="" className={field.label === "Scouting status" || field.label === "Program" || field.label === "Funding" ? "col-span-2" : ""}>
                     <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{field.label}</dt>
                     <dd className="break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)]">{field.value}</dd>
                   </div>

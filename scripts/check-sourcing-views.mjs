@@ -40,11 +40,26 @@ for (const width of WIDTHS) {
       }
     }
     const name = visibleRows[0]?.querySelector("a")?.textContent?.trim() || "";
+    const firstTop = visibleRows[0]?.getBoundingClientRect().top ?? 9999;
+    const search = document.querySelector('form[data-corpus-filters] input[name="q"]');
+    const searchLabel = search?.closest("label")?.querySelector("span")?.textContent?.trim() || "";
+    const placeholder = search?.getAttribute("placeholder") || "";
+    let searchClipped = false;
+    if (search) {
+      const previous = search.value;
+      search.value = placeholder;
+      searchClipped = search.scrollWidth > search.clientWidth + 1;
+      search.value = previous;
+    }
     return {
       mobile,
       rows: visibleRows.length,
       unlabeled,
       name,
+      firstTop: Math.round(firstTop),
+      searchLabel,
+      placeholder,
+      searchClipped,
       exports: document.querySelectorAll("[data-corpus-csv], [data-corpus-csv-mobile]").length,
     };
   });
@@ -52,6 +67,8 @@ for (const width of WIDTHS) {
   if (!data.rows) fail(`${width}: data has no visible records`);
   if (data.unlabeled.length) fail(`${width}: unlabeled data fields`);
   if (data.exports !== 1) fail(`${width}: expected one export control, saw ${data.exports}`);
+  if (!data.searchLabel || data.searchClipped) fail(`${width}: data search label or placeholder is clipped`);
+  if (width <= 390 && data.mobile && data.firstTop > 760) fail(`${width}: first data record starts at ${data.firstTop}`);
   if (errors.length) fail(`${width} data: ${errors.join(" | ")}`);
 
   await page.goto(`${BASE}/founders`, { waitUntil: "domcontentloaded", timeout: 90000 });
@@ -60,22 +77,47 @@ for (const width of WIDTHS) {
     const people = [...document.querySelectorAll("[data-founder-person]")].filter((row) => row.getBoundingClientRect().height > 0);
     const first = people[0];
     const name = first?.querySelector("[data-founder-name]")?.textContent?.trim() || "";
+    const table = document.querySelector("[data-founder-table]");
+    const tableVisible = table ? table.getBoundingClientRect().height > 0 : false;
+    const headers = tableVisible ? [...table.querySelectorAll("th")].map((th) => (th.textContent || "").trim()) : [];
     const fields = [...(first?.querySelectorAll("[data-founder-field]") || [])].map((field) => ({
       label: field.querySelector("dt")?.textContent?.trim() || "",
       value: field.querySelector("dd")?.textContent?.trim() || "",
     }));
+    const search = document.querySelector('form input[name="q"]');
+    const searchLabel = search?.closest("label")?.querySelector("span")?.textContent?.trim() || "";
+    const placeholder = search?.getAttribute("placeholder") || "";
+    let searchClipped = false;
+    if (search) {
+      const previous = search.value;
+      search.value = placeholder;
+      searchClipped = search.scrollWidth > search.clientWidth + 1;
+      search.value = previous;
+    }
     return {
       people: people.length,
       projects: document.querySelectorAll("[data-project-card]").length,
       name,
       fields,
+      tableVisible,
+      headers,
+      searchLabel,
+      placeholder,
+      searchClipped,
     };
   });
   console.log(JSON.stringify({ width, page: "founders", ...founders }));
   if (!founders.people) fail(`${width}: no named founders`);
   if (founders.projects) fail(`${width}: project cards still render on Founders`);
   if (!founders.name || founders.name === "n/a") fail(`${width}: founder name missing`);
-  if (founders.fields.some((field) => !field.label || !field.value)) fail(`${width}: founder field missing a label or value`);
+  if (founders.tableVisible) {
+    for (const header of ["Name", "Campus", "Company", "Class year"]) {
+      if (!founders.headers.includes(header)) fail(`${width}: founder table missing ${header}`);
+    }
+  } else if (founders.fields.some((field) => !field.label || !field.value)) {
+    fail(`${width}: founder field missing a label or value`);
+  }
+  if (!founders.searchLabel || founders.searchClipped) fail(`${width}: founder search label or placeholder is clipped`);
   await page.close();
 }
 

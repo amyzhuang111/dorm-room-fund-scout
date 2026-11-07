@@ -6,6 +6,15 @@ import { listFoundersForPage } from "./queries";
 
 const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5, talent: 6, Unranked: 7 };
 
+export interface FounderAffiliationFact {
+  campusId: string | null;
+  campus: string | null;
+  role: string | null;
+  status: string | null;
+  sourceUrl: string | null;
+  excerpt: string | null;
+}
+
 export interface FounderTableRow {
   id: string;
   name: string;
@@ -18,6 +27,14 @@ export interface FounderTableRow {
   company: string | null;
   companyId: string | null;
   year: number | null;
+  /** Stored enrollment fields. Class year is not a completed degree. */
+  enrollmentStatus: string | null;
+  enrollmentEvidence: string | null;
+  enrollmentSourceUrl: string | null;
+  leftSchool: boolean;
+  verificationStatus: string | null;
+  verificationNote: string | null;
+  affiliations: FounderAffiliationFact[];
   signal: string | null;
   signalType: string | null;
   signalAt: string | null;
@@ -53,6 +70,38 @@ export function loadFounderTable(universityId?: string): FounderTableRow[] {
 function buildFounderTable(universityId?: string): FounderTableRow[] {
   const db = getDb();
   const years = new Map<string, number>();
+  const enrollment = new Map<string, { status: string | null; evidence: string | null; sourceUrl: string | null; leftSchool: boolean; verificationStatus: string | null; verificationNote: string | null }>();
+  for (const row of db.prepare(
+    `SELECT id, enrollment_status as status, enrollment_evidence as evidence, enrollment_source_url as source_url, left_school, verification_status, verification_note
+     FROM people`
+  ).all() as { id: string; status: string | null; evidence: string | null; source_url: string | null; left_school: number | null; verification_status: string | null; verification_note: string | null }[]) {
+    enrollment.set(row.id, {
+      status: row.status,
+      evidence: row.evidence,
+      sourceUrl: row.source_url,
+      leftSchool: row.left_school === 1,
+      verificationStatus: row.verification_status,
+      verificationNote: row.verification_note,
+    });
+  }
+  const affiliations = new Map<string, FounderAffiliationFact[]>();
+  for (const row of db.prepare(
+    `SELECT a.person_id, a.university_id, u.name as campus, a.role, a.status, c.source_url, c.excerpt
+     FROM affiliations a
+     LEFT JOIN universities u ON u.id = a.university_id
+     LEFT JOIN claims c ON c.id = a.claim_id`
+  ).all() as { person_id: string; university_id: string | null; campus: string | null; role: string | null; status: string | null; source_url: string | null; excerpt: string | null }[]) {
+    const list = affiliations.get(row.person_id) ?? [];
+    list.push({
+      campusId: row.university_id,
+      campus: row.campus ? shortCampusLabel(row.university_id ?? "", row.campus) : null,
+      role: row.role,
+      status: row.status,
+      sourceUrl: row.source_url,
+      excerpt: row.excerpt,
+    });
+    affiliations.set(row.person_id, list);
+  }
   try {
     for (const row of db.prepare(
       `SELECT id as person_id, enrollment_grad_year as year FROM people WHERE enrollment_grad_year IS NOT NULL`
@@ -77,6 +126,7 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
     .map((founder) => {
       const campusId = founder.universityId;
       const signal = signals.get(founder.id);
+      const enrolled = enrollment.get(founder.id);
       return {
         id: founder.id,
         name: founder.name,
@@ -89,6 +139,13 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         company: founder.linkedCompany?.name ?? founder.projects.find((project) => project.kind === "company" && /founder/i.test(project.role))?.name ?? null,
         companyId: founder.linkedCompany?.id ?? founder.projects.find((project) => project.kind === "company" && /founder/i.test(project.role))?.id ?? null,
         year: years.get(founder.id) ?? null,
+        enrollmentStatus: enrolled?.status ?? null,
+        enrollmentEvidence: enrolled?.evidence ?? null,
+        enrollmentSourceUrl: enrolled?.sourceUrl ?? null,
+        leftSchool: enrolled?.leftSchool ?? false,
+        verificationStatus: enrolled?.verificationStatus ?? null,
+        verificationNote: enrolled?.verificationNote ?? null,
+        affiliations: affiliations.get(founder.id) ?? [],
         signal: signal?.text ?? founder.strongestEvidence,
         signalType: signal?.type ?? null,
         signalAt: signal?.at ?? null,

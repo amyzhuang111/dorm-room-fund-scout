@@ -2,136 +2,222 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { filterFounderPeople } from "@/lib/domain/founder-people";
+import { filterFounderPeople, founderYearFacts } from "@/lib/domain/founder-people";
 import type { FounderTableRow } from "@/lib/domain/founder-table";
-import { absoluteDate } from "@/lib/domain/relative-time";
+import { CAMPUSES } from "@/lib/domain/public-data";
 
-const PAGE = 24;
+const PAGE = 40;
 
-function Field({ label, value }: { label: string; value: string | null | undefined }) {
-  const text = value?.trim();
-  if (!text) return null;
+function statusLabel(status: string | null): string {
+  if (!status) return "Unknown";
+  if (status === "unverified") return "Unverified";
+  if (status === "confirmed") return "Confirmed";
+  if (status === "corroborated") return "Corroborated";
+  return status.replace(/_/g, " ");
+}
+
+function Affiliations({ person }: { person: FounderTableRow }) {
+  if (!person.affiliations.length) {
+    return <span>{person.campus || "Not on file"}</span>;
+  }
   return (
-    <div data-founder-field={label}>
-      <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{label}</dt>
-      <dd className="break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)]">{text}</dd>
-    </div>
+    <ul className="space-y-1">
+      {person.affiliations.map((item, index) => (
+        <li key={`${item.campusId ?? "campus"}-${index}`}>
+          <span className="font-medium">{item.campus || "Campus not on file"}</span>
+          {item.role ? <span className="text-ink-soft"> · {item.role}</span> : null}
+          <span className="text-ink-soft"> · {statusLabel(item.status)}</span>
+          {item.excerpt || item.sourceUrl ? (
+            <details>
+              <summary className="cursor-pointer text-blue">Claim</summary>
+              {item.excerpt ? <span className="block text-ink-soft">{item.excerpt}</span> : null}
+              {item.sourceUrl ? (
+                <a className="break-all text-blue underline" href={item.sourceUrl}>
+                  {item.sourceUrl}
+                </a>
+              ) : null}
+            </details>
+          ) : null}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function YearFact({ person }: { person: FounderTableRow }) {
+  const year = founderYearFacts(person);
+  const listed =
+    person.enrollmentStatus === "current_student"
+      ? "listed as current student"
+      : person.enrollmentStatus === "unknown"
+        ? "enrollment unknown"
+        : null;
+  const short = [year.value, person.leftSchool ? "left school on record" : null, listed].filter(Boolean).join(" · ");
+  const hasSource = Boolean(person.enrollmentEvidence || person.enrollmentSourceUrl || person.enrollmentStatus);
+  if (!short && !hasSource) return <span>Not on file</span>;
+  return (
+    <span>
+      {short || "No class year on record"}
+      {hasSource ? (
+        <details className="mt-1">
+          <summary className="cursor-pointer text-blue">Year source</summary>
+          {person.enrollmentStatus ? <span className="block text-ink-soft">Stored enrollment status: {person.enrollmentStatus}</span> : null}
+          {person.enrollmentEvidence ? <span className="block text-ink-soft">{person.enrollmentEvidence}</span> : null}
+          {person.enrollmentSourceUrl ? (
+            <a className="break-all text-blue underline" href={person.enrollmentSourceUrl}>
+              {person.enrollmentSourceUrl}
+            </a>
+          ) : null}
+        </details>
+      ) : null}
+    </span>
   );
 }
 
 export function FounderPeopleTable({
   rows,
+  initialQuery = "",
   campusLocked = false,
 }: {
   rows: FounderTableRow[];
+  initialQuery?: string;
   campusLocked?: boolean;
 }) {
-  const [text, setText] = useState("");
-  const [campus, setCampus] = useState("");
+  const [q, setQ] = useState(initialQuery);
+  const [campus, setCampus] = useState("all");
   const [shown, setShown] = useState(PAGE);
-  const campuses = useMemo(() => {
-    const names = new Map<string, string>();
-    for (const row of rows) {
-      if (row.campusId && row.campus) names.set(row.campusId, row.campus);
-    }
-    return [...names.entries()].sort((a, b) => a[1].localeCompare(b[1]));
-  }, [rows]);
-  const matches = useMemo(
-    () => filterFounderPeople(rows, { text, campus: campusLocked ? null : campus }),
-    [rows, text, campus, campusLocked],
-  );
-  const page = matches.slice(0, shown);
+  const filtered = useMemo(() => filterFounderPeople(rows, { q, campus: campusLocked ? "all" : campus }), [rows, q, campus, campusLocked]);
+  const visible = filtered.slice(0, shown);
 
   return (
-    <div data-founder-people="">
-      <form className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end" role="search" onSubmit={(event) => event.preventDefault()}>
-        <label className="block min-w-0 sm:flex-1">
-          <span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Search founders</span>
+    <div>
+      <form className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-end" action="/founders" method="get">
+        <label className="block min-w-0 sm:min-w-[220px] sm:flex-1">
+          <span className="text-[13px] font-semibold text-ink">Search</span>
           <input
-            type="search"
-            value={text}
+            name="q"
+            value={q}
             onChange={(event) => {
-              setText(event.target.value);
+              setQ(event.target.value);
               setShown(PAGE);
             }}
-            placeholder="Name, campus, or company"
-            className="h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[16px] text-[color:var(--fg,#0B0E17)]"
+            placeholder="Name or campus"
+            className="mt-1 h-11 w-full rounded-lg border border-line bg-paper px-3 text-sm"
           />
         </label>
         {campusLocked ? null : (
-          <label className="block min-w-[10rem]">
-            <span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Campus</span>
+          <label className="block sm:w-52">
+            <span className="text-[13px] font-semibold text-ink">Campus</span>
             <select
+              name="campus"
               value={campus}
               onChange={(event) => {
                 setCampus(event.target.value);
                 setShown(PAGE);
               }}
-              className="h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[16px]"
+              className="mt-1 h-11 w-full rounded-lg border border-line bg-paper px-2 text-sm"
             >
-              <option value="">All campuses</option>
-              {campuses.map(([id, name]) => (
-                <option key={id} value={id}>
-                  {name}
+              <option value="all">All campuses</option>
+              {CAMPUSES.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.short}
                 </option>
               ))}
             </select>
           </label>
         )}
       </form>
-      <p className="mb-2 text-[14px] text-[color:var(--fg-2,#3F465C)]">
-        <span className="font-bold tabular-nums text-[color:var(--fg,#0B0E17)]">{matches.length.toLocaleString("en-US")}</span>
-        {" named founders"}
-      </p>
-      {page.length === 0 ? (
-        <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">No named founders match this view.</p>
-      ) : (
-        <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]">
-          {page.map((person) => (
-            <li key={person.id} className="py-3" data-founder-person="">
-              <h2 className="break-words text-[18px] font-semibold leading-6 text-[color:var(--fg,#0B0E17)]" data-founder-name="">
-                {person.name}
+
+      <div className="space-y-2 sm:hidden">
+        {visible.map((person) => {
+          const year = founderYearFacts(person);
+          return (
+            <article key={person.id} data-founder-person className="rounded-lg border border-line bg-paper px-3 py-2">
+              <h2 data-founder-name className="text-[15px] font-semibold leading-5">
+                <Link href={`/founders/${person.id}`}>{person.name}</Link>
               </h2>
-              <dl className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <Field label="Campus" value={person.campus ?? "Not on file"} />
-                <div data-founder-field="Company">
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Company</dt>
-                  <dd className="break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)]">
-                    {person.company ? (
-                      person.companyId ? (
-                        <Link href={`/startup/${person.companyId}`} className="text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">
-                          {person.company}
-                        </Link>
-                      ) : (
-                        person.company
-                      )
-                    ) : (
-                      <span className="text-[color:var(--fg-3,#5C647A)]">Not on file</span>
-                    )}
+              <dl className="mt-1 grid grid-cols-1 gap-1 text-[13px] leading-5">
+                <div data-founder-field>
+                  <dt className="inline font-medium text-ink-soft">Campus </dt>
+                  <dd className="inline"><Affiliations person={person} /></dd>
+                </div>
+                <div data-founder-field>
+                  <dt className="inline font-medium text-ink-soft">Company </dt>
+                  <dd className="inline">
+                    {person.companyId && person.company ? <Link href={`/companies/${person.companyId}`}>{person.company}</Link> : "Not on file"}
                   </dd>
                 </div>
-                <Field label="Year" value={person.year != null ? String(person.year) : null} />
-                <Field label="Signal" value={person.signalType} />
-                <Field label="Signal date" value={person.signalAt ? absoluteDate(person.signalAt) : null} />
-                {person.tier ? <Field label="Tier" value={person.tier} /> : null}
-                {person.verified ? <Field label="Verified" value="Confirmed" /> : null}
+                <div data-founder-field>
+                  <dt className="inline font-medium text-ink-soft">{year.label} </dt>
+                  <dd className="inline"><YearFact person={person} /></dd>
+                </div>
+                {person.tier && person.tierBasis ? (
+                  <div data-founder-field>
+                    <dt className="inline font-medium text-ink-soft">Signal tier </dt>
+                    <dd className="inline">
+                      {person.tier}
+                      <details>
+                        <summary className="cursor-pointer text-blue">Why</summary>
+                        <span className="text-ink-soft">{person.tierBasis}</span>
+                      </details>
+                    </dd>
+                  </div>
+                ) : null}
               </dl>
-              {person.signal?.trim() ? (
-                <p className="mt-2 break-words text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-founder-evidence="">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Evidence </span>
-                  {person.signal.trim()}
-                </p>
-              ) : null}
-            </li>
-          ))}
-        </ol>
-      )}
-      {shown < matches.length ? (
-        <button
-          type="button"
-          className="mt-3 inline-flex h-11 items-center border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 text-[14px] font-semibold text-white"
-          onClick={() => setShown((count) => count + PAGE)}
-        >
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="hidden overflow-x-auto sm:block">
+        <table data-founder-table className="w-full border-collapse text-[13px]">
+          <thead>
+            <tr className="border-b border-line text-left text-ink-soft">
+              <th className="py-2 pr-3 font-semibold">Name</th>
+              <th className="py-2 pr-3 font-semibold">Campus</th>
+              <th className="py-2 pr-3 font-semibold">Company</th>
+              <th className="py-2 pr-3 font-semibold">Class year</th>
+              <th className="py-2 font-semibold">Signal tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visible.map((person) => (
+              <tr key={person.id} data-founder-person className="border-b border-line align-top">
+                <td className="py-2 pr-3">
+                  <Link data-founder-name className="font-semibold" href={`/founders/${person.id}`}>
+                    {person.name}
+                  </Link>
+                </td>
+                <td data-founder-field className="py-2 pr-3">
+                  <Affiliations person={person} />
+                </td>
+                <td data-founder-field className="py-2 pr-3">
+                  {person.companyId && person.company ? <Link href={`/companies/${person.companyId}`}>{person.company}</Link> : "Not on file"}
+                </td>
+                <td data-founder-field className="max-w-[280px] py-2 pr-3">
+                  <YearFact person={person} />
+                </td>
+                <td data-founder-field className="max-w-[220px] py-2">
+                  {person.tier && person.tierBasis ? (
+                    <span>
+                      {person.tier}
+                      <details>
+                        <summary className="cursor-pointer text-blue">Why</summary>
+                        <span className="text-ink-soft">{person.tierBasis}</span>
+                      </details>
+                    </span>
+                  ) : (
+                    "Not on file"
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {shown < filtered.length ? (
+        <button type="button" className="mt-3 h-11 rounded-lg border border-line px-4 text-sm font-semibold" onClick={() => setShown((count) => count + PAGE)}>
           Show more
         </button>
       ) : null}

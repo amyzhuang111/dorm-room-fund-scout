@@ -45,7 +45,7 @@ export function FoundersDesk({
       .then((data) => data ?? fromApi())
       .then((data) => {
         if (cancel) return;
-        setRows(data.rows);
+        setRows(data.rows.map((row) => ({ ...row, affiliations: row.affiliations ?? [], leftSchool: row.leftSchool ?? false })));
       })
       .catch((err) => {
         if (cancel) return;

@@ -44,7 +44,7 @@ export function CorpusFilters({
           <input
             name="q"
             defaultValue={q}
-            placeholder="Search name or founder"
+            placeholder="Name or founder"
             className="h-11 min-h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[16px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[14px]"
           />
         </label>

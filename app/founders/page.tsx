@@ -9,7 +9,7 @@ export default function FoundersPage() {
   return (
     <div className="px-3 py-3 sm:px-6 sm:py-8" data-founders-page="">
       <link rel="preload" as="fetch" href="/data/founder-table.json" />
-      <h1 className="page-title text-[28px] leading-8 sm:text-[inherit] sm:leading-[inherit]">Founders</h1>
+      <h1 className="page-title text-[22px] leading-7 sm:text-[inherit] sm:leading-[inherit]">Founders</h1>
       <p className="mt-1 text-[14px] leading-5 text-fg-2" data-founders-totals="">
         <span className="font-bold text-fg" data-count="founders-indexed">{rows.length.toLocaleString("en-US")}</span>
         {" named founders on record"}
