@@ -40,7 +40,7 @@ export function CorpusFilters({
     >
       <div className="flex items-center gap-2 sm:flex-wrap sm:items-end sm:gap-1.5">
         <label className="block min-w-0 flex-1 sm:flex-[1_1_10rem]">
-          <span className="sr-only">Search</span>
+          <span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Search</span>
           <input
             name="q"
             defaultValue={q}
@@ -63,10 +63,10 @@ export function CorpusFilters({
           ) : null}
         </button>
         <div className={`w-full space-y-2 sm:contents ${open ? "block" : "hidden sm:contents"}`} data-corpus-filters-sheet="">
-          <label className="block min-w-0 sm:flex-none"><span className="sr-only">Record type</span><select name="kind" defaultValue={kind} className={field}><option value="">All companies & projects</option><option value="company">Companies</option><option value="project">Other projects</option></select></label>
-          <label className="block min-w-0 sm:flex-none"><span className="sr-only">Scouting status</span><select name="scope" defaultValue={scope} className={field}><option value="">All statuses</option><option value="scout">Scouting list</option><option value="review">Needs review</option><option value="excluded">Excluded from scouting list</option></select></label>
+          <label className="block min-w-0 sm:flex-none"><span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Record type</span><select name="kind" defaultValue={kind} className={field}><option value="">All companies and projects</option><option value="company">Companies</option><option value="project">Other projects</option></select></label>
+          <label className="block min-w-0 sm:flex-none"><span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Scouting status</span><select name="scope" defaultValue={scope} className={field}><option value="">All statuses</option><option value="scout">Scouting list</option><option value="review">Needs review</option><option value="excluded">Excluded from scouting list</option></select></label>
           <label className="block min-w-0 sm:min-w-[7.5rem] sm:flex-none">
-            <span className="sr-only">Sector</span>
+            <span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Sector</span>
             <select name="sector" defaultValue={sector || ""} className={field}>
               <option value="">All sectors</option>
               {sectors.map((s) => (
@@ -77,7 +77,7 @@ export function CorpusFilters({
             </select>
           </label>
           <label className="block min-w-0 sm:min-w-[7.5rem] sm:flex-none">
-            <span className="sr-only">Campus</span>
+            <span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Campus</span>
             <select name="campus" defaultValue={campus || ""} className={field}>
               <option value="">All campuses</option>
               {campuses.map((c) => (
@@ -88,7 +88,7 @@ export function CorpusFilters({
             </select>
           </label>
           <label className="block min-w-0 sm:min-w-[6.5rem] sm:flex-none">
-            <span className="sr-only">Sort</span>
+            <span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Sort</span>
             <select name="sort" defaultValue={sort || "rank"} className={field}>
               <option value="rank">Rank</option>
               <option value="recent">Newest signal</option>

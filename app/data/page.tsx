@@ -8,6 +8,7 @@ import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
 import { formatCorpusDate } from "@/lib/domain/corpus-totals";
+import { corpusLabeledFields } from "@/lib/domain/corpus-fields";
 import { CorpusFilters } from "@/components/corpus-filters";
 
 export const metadata: Metadata = { title: "Data" };
@@ -106,17 +107,11 @@ export default async function DataExplorerPage({
         </div>
         <a
           href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
-          className="hidden h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:inline-flex"
+          className="inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 text-[14px] font-semibold text-white"
           data-corpus-csv=""
-        >
-          Export this view
-        </a>
-        <a
-          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
-          className="inline-flex h-11 min-h-11 items-center font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
           data-corpus-csv-mobile=""
         >
-          CSV export
+          Export this view
         </a>
       </div>
 
@@ -224,8 +219,38 @@ export default async function DataExplorerPage({
         ) : null}
       </div>
 
-      {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
-      <div className="mt-2 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch] sm:mt-3" data-corpus-table="" data-corpus-cards="">
+      <ul className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] sm:hidden" data-corpus-mobile-records="">
+        {result.rows.map((row) => {
+          const fields = corpusLabeledFields(row);
+          return (
+            <li key={row.id} className="px-3 py-3" data-corpus-row="" data-corpus-mobile-row="">
+              <div className="flex items-start gap-2">
+                <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} />
+                <Link href={`/startup/${row.id}`} className="break-words text-[16px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)]">
+                  {row.name}
+                </Link>
+              </div>
+              <dl className="mt-2 grid grid-cols-1 gap-2">
+                {fields.map((field) => (
+                  <div key={field.label} data-corpus-field="">
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{field.label}</dt>
+                    <dd className="break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)]">{field.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {row.website ? (
+                <p className="mt-2 text-[14px]">
+                  <a href={row.website} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline-offset-2">
+                    Website
+                  </a>
+                </p>
+              ) : null}
+            </li>
+          );
+        })}
+        {result.rows.length === 0 ? <li className="px-3 py-6 text-[14px] text-[color:var(--fg-3,#5C647A)]">No companies match these filters.</li> : null}
+      </ul>
+      <div className="mt-3 hidden overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] sm:block" data-corpus-table="" data-corpus-cards="">
         <table className="c-table">
           <thead className="c-head">
             <tr>

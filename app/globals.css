@@ -904,7 +904,7 @@ html[data-sample="halflight"] body {
   line-height: 1rem;
 }
 @media (min-width: 640px) {
-  [data-corpus-cards] .c-table { min-width: 100%; font-size: 11px; }
+  [data-corpus-cards] .c-table { min-width: 100%; font-size: 13px; }
 }
 [data-corpus-cards] .c-head {
   background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 50%, transparent);
