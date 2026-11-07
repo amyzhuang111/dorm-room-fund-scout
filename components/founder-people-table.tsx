@@ -44,8 +44,8 @@ export function FounderPeopleTable({
 
   return (
     <div data-founder-people="">
-      <form className="mb-3 flex flex-wrap items-end gap-2" role="search" onSubmit={(event) => event.preventDefault()}>
-        <label className="block min-w-0 flex-1">
+      <form className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end" role="search" onSubmit={(event) => event.preventDefault()}>
+        <label className="block min-w-0 sm:flex-1">
           <span className="mb-0.5 block font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">Search founders</span>
           <input
             type="search"
