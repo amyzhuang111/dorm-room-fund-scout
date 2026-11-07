@@ -72,7 +72,7 @@ for (const width of WIDTHS) {
   if (errors.length) fail(`${width} data: ${errors.join(" | ")}`);
 
   await page.goto(`${BASE}/founders`, { waitUntil: "domcontentloaded", timeout: 90000 });
-  await page.waitForSelector("[data-founder-person]", { timeout: 60000 });
+  await page.waitForFunction(() => [...document.querySelectorAll("[data-founder-person]")].some((el) => el.getBoundingClientRect().height > 0), { timeout: 60000 });
   const founders = await page.evaluate(() => {
     const people = [...document.querySelectorAll("[data-founder-person]")].filter((row) => row.getBoundingClientRect().height > 0);
     const first = people[0];

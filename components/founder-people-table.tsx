@@ -24,7 +24,7 @@ function Affiliations({ person }: { person: FounderTableRow }) {
       {person.affiliations.map((item, index) => (
         <li key={`${item.campusId ?? "campus"}-${index}`}>
           <span className="font-medium">{item.campus || "Campus not on file"}</span>
-          {item.role ? <span className="text-ink-soft"> · {item.role}</span> : null}
+          {item.role ? <span className="text-ink-soft"> · {item.role.replace(/_/g, " ")}</span> : null}
           <span className="text-ink-soft"> · {statusLabel(item.status)}</span>
           {item.excerpt || item.sourceUrl ? (
             <details>

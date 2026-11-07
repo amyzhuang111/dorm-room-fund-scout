@@ -91,19 +91,11 @@ export default async function DataExplorerPage({
   return (
     <div className="sample-paper mx-auto max-w-[1200px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
       <DataTheme />
-      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+      <div className="border-b border-[color:var(--line,#E1E5EF)] pb-2">
+        <div className="flex items-start justify-between gap-2">
         <div>
           <p className="scout-kicker">Corpus</p>
           <h1 className="mt-0.5 scout-display text-[22px] leading-none sm:text-[32px]">Full data</h1>
-          <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
-            {" records in this view · page "}
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
-            {" of "}
-            {result.pageCount.toLocaleString("en-US")}
-            {" · "}
-            {CORPUS_PAGE_SIZE} per page
-          </p>
         </div>
         <a
           href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
@@ -113,11 +105,21 @@ export default async function DataExplorerPage({
         >
           Export this view
         </a>
+        </div>
+        <p className="mt-1 font-mono text-[12px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">
+            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
+            {" records in this view · page "}
+            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
+            {" of "}
+            {result.pageCount.toLocaleString("en-US")}
+            {" · "}
+            {CORPUS_PAGE_SIZE} per page
+          </p>
       </div>
 
-      <nav className="my-2 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
-      <details className="mb-2 text-sm text-fg-2">
+      <details className="my-2 text-sm text-fg-2">
         <summary className="cursor-pointer font-semibold text-[color:var(--fg,#0B0E17)]">About this list</summary>
+        <nav className="mt-2 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people and class years</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
       <p className="mt-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
       <p
         className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]"
@@ -283,7 +285,7 @@ export default async function DataExplorerPage({
                   </Link>
                 </td>
                 <td className="c-m c-m1">{cell(row.campus)}</td>
-                <td className="c-m"><span>{row.scoutingStatus}</span><small className="block text-fg-3">{row.kind}</small></td>
+                <td className="c-m"><span>{row.scoutingStatus}</span>{row.kind !== "company" ? <small className="block text-fg-3">{row.kind}</small> : null}</td>
                 <td className="c-m"><span>{row.verification}</span>{row.sourceUrls[0] ? <a href={row.sourceUrls[0]} target="_blank" rel="noopener noreferrer" className="block c-link">Source{row.sourceUrls.length>1?` +${row.sourceUrls.length-1}`:''}</a> : <small className="block">No source URL</small>}</td>
                 <td className="c-m">{cell(row.stage)}</td>
                 <td className="c-m">{cell(row.sector)}</td>
