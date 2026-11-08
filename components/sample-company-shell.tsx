@@ -46,7 +46,7 @@ export function SampleCompanyShell({ children, companies, campuses, dossier, pee
     .filter((c) => c.id !== dossier?.id && Boolean(dossier?.sectorId && matchesSector(c, dossier.sectorId)))
     .sort((a, b) => Number(b.schoolId === dossier?.schoolId) - Number(a.schoolId === dossier?.schoolId) || b.signals - a.signals || a.name.localeCompare(b.name)).slice(0, 6),
   [catalog, companies, dossier]);
-  return <div className="sample-paper company-dossier" data-company-shell="white">
+  return <div className="sample-paper company-dossier" data-company-shell="white" data-context-state={catalog ? "ready" : failed ? "failed" : "loading"}>
     <SampleTheme />
     <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-10 sm:px-5">
       <nav className="dossier-breadcrumb" aria-label="Company navigation">
