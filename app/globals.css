@@ -2229,7 +2229,24 @@ html:has([data-networks-cream]) [data-site-nav] {
     height: auto;
     grid-template-rows: auto minmax(220px, 46dvh) auto;
   }
+  [data-home-counts] {
+    position: relative;
+    z-index: 4;
+    display: block;
+    width: 100%;
+  }
+  /* Wrapped row layout let later chips overflow the line box and sit under the
+     map controls. One chip per row keeps every count readable. */
+  .corpus-count-line {
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-start;
+    width: 100%;
+    height: auto;
+  }
   [data-home-map-well] {
+    position: relative;
+    z-index: 1;
     height: 46dvh;
     min-height: 220px;
   }
@@ -2252,6 +2269,29 @@ html:has([data-networks-cream]) [data-site-nav] {
   [data-home-fold] [data-fold-desk-map] h2 button {
     font-size: 12px !important;
     padding-inline: 8px;
+  }
+}
+
+/* Narrow home: the count row was growing past the viewport and overflow-x:clip
+   hid the later chips. Keep the fold at the viewport width and stack the chips. */
+@media (max-width: 1023px) {
+  [data-home-fold],
+  [data-home-fold-screen],
+  [data-home-counts],
+  [data-home-counts] .corpus-count-line {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  [data-home-counts] [data-fold-counts] > p.corpus-count-line:first-child {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    /* Beats the older 2.6em clip on [data-fold-counts] > p:first-child. */
+    max-height: none !important;
+    overflow: visible !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
   }
 }
 
