@@ -140,17 +140,18 @@ export default function MethodologyPage() {
       <section id="founder-recency">
         <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Founder recency gate</h2>
         <p className="mt-1 text-sm text-muted">
-          As of November 2026, a company is <strong>kept (investable)</strong> only when at least one named founder is a
+          As of November 2026, the stored scouting rule keeps a company when at least one named founder is recorded as a
           current student or an alum who graduated in <strong>2023 or later</strong>. Companies that fail that bar are
-          excluded as older alumni. Companies we have not yet checked stay in an explicit{" "}
-          <strong>unverified recency</strong> bucket. They are labeled as such and are <em>not</em> counted in the
-          verified/investable totals on the home page, globe, or /data explorer.
+          excluded as older alumni. Companies not yet checked stay in an explicit{" "}
+          <strong>unverified recency</strong> bucket. The home, map, and data counts use the stored flag
+          is_investable_candidate. That flag is not a fresh check that a founder is enrolled now, and a source link does
+          not confirm every field.
         </p>
         <ul className="mt-3 space-y-2 text-sm" data-recency-funnel="">
           <li className="rounded-md border border-border-c bg-surface p-3">
             <span className="font-medium text-foreground">Kept / investable</span>
             <span className="ml-2 font-mono tabular-nums text-ok" data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-            <p className="mt-1 text-xs text-muted">This is the vetted company list on Companies, the map, and Data.</p>
+            <p className="mt-1 text-xs text-muted">This is the eligible company list on Companies, the map, and Data. Eligible means the stored flag, not a separate verification of every row.</p>
           </li>
           <li className="rounded-md border border-border-c bg-surface p-3">
             <span className="font-medium text-foreground">Excluded · older alumni</span>
@@ -164,7 +165,7 @@ export default function MethodologyPage() {
           </li>
         </ul>
         <p className="mt-2 text-xs text-muted">
-          The wider corpus is {recency.companiesTotal.toLocaleString("en-US")} companies. Only the kept count is the vetted list.
+          The wider corpus is {recency.companiesTotal.toLocaleString("en-US")} companies. Only rows with the stored eligible flag are in that count.
         </p>
       </section>
 

@@ -8,6 +8,7 @@ import { markerRadiusForCampus } from "@/lib/domain/marker-radius";
 import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
+import { COUNTED_HREFS } from "@/lib/domain/counted-hrefs";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import { CompanyLocationLayer } from "./company-location-layer";
@@ -126,7 +127,7 @@ export function TileGlobe({
   foundersListed?: number;
   /** Rows in the searchable founder index (founders.json). May exceed foundersListed. */
   foundersIndexed?: number;
-  /** Campuses page list: schools with a promoted founder. A subset of the pins. */
+  /** Promoted-founder campuses. Not the stored founder_status list. */
   campusesWithFounders?: number;
   selectedId?: string | null;
   onSelect: (id: string) => void;
@@ -743,9 +744,9 @@ export function TileGlobe({
     <div className={`${className ?? ""} relative ${fold ? "flex h-full min-h-0 flex-col" : ""}`} data-fold-mobile-root="">
       <div className={`mb-2 flex-wrap gap-2 ${fold ? "hidden" : "hidden lg:flex"}`} data-fold-counts="">
         <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
-          <Link href="/companies" className="pointer-events-auto hover:underline">
-            <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
-            {" vetted companies"}
+          <Link href={COUNTED_HREFS.eligibleCompanies} className="pointer-events-auto inline-flex items-baseline gap-1 hover:underline">
+            <span className={COUNT}>{companyCount.toLocaleString("en-US")}</span>
+            <span>eligible companies</span>
           </Link>
           {catalogReady ? (
             <span>
@@ -753,31 +754,27 @@ export function TileGlobe({
               {" signaled"}
             </span>
           ) : null}
-          <span>
+          <Link href={COUNTED_HREFS.pins} className="pointer-events-auto inline-flex items-baseline gap-1 hover:underline">
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" schools with a pin"}
-          </span>
+            <span>schools with a pin</span>
+          </Link>
           {campusesWithFounders > 0 ? (
-            <Link href="/campuses" className="pointer-events-auto hover:underline">
+            <Link href={COUNTED_HREFS.promotedFounderCampuses} className="pointer-events-auto inline-flex items-baseline gap-1 hover:underline">
               <span className={COUNT} data-count="campuses-with-founders">{campusesWithFounders.toLocaleString("en-US")}</span>
-              {" campuses with promoted founders"}
+              <span>promoted-founder campuses</span>
             </Link>
           ) : null}
-          {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
-          <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
+          <Link href={COUNTED_HREFS.eligibleCompanyPeople} className="pointer-events-auto inline-flex items-baseline gap-1 hover:underline" data-founder-count-note="">
             <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founders on those companies"}
-            {foundersIndexed > 0 ? (
-              <>
-                {" · "}
-                <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-                {" in the full index"}
-              </>
-            ) : null}
+            <span>people on those companies</span>
+          </Link>
+          <Link href={COUNTED_HREFS.fullIndex} className="pointer-events-auto inline-flex items-baseline gap-1 hover:underline">
+            <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
+            <span>full index</span>
           </Link>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
+        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin are campuses with coordinates. That list is separate from the campus ranking and from promoted founders."}</p>
       </div>
 
       <section className={fold ? "flex min-h-0 flex-1 flex-col" : "mb-4"} data-fold-desk-map="" aria-label="Map">

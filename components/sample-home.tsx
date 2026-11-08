@@ -12,7 +12,8 @@ import {
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 import { topCampusLeads } from "@/lib/domain/campus-record";
-import { loadHomePrograms } from "@/lib/domain/home-panels";
+import { loadEligibilityExamples } from "@/lib/domain/counted-membership";
+import { loadHomePrograms, loadHomeSectors } from "@/lib/domain/home-panels";
 import { buildPeakShell } from "@/lib/domain/peak-shell";
 import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { undergradRankFields } from "@/lib/domain/pitchbook-model";
@@ -175,6 +176,9 @@ export function SampleHome({
       place={place}
       facetExtras={facetExtras}
       programs={place === "map" ? loadHomePrograms() : []}
+      homeSectors={place === "map" ? loadHomeSectors() : []}
+      campusesOnMap={totals.campusesOnMap}
+      examples={place === "map" ? loadEligibilityExamples() : null}
       leads={place === "map" ? topCampusLeads(data.cards) : []}
     />
   );

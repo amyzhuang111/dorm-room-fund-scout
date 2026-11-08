@@ -1,4 +1,5 @@
 import { cleanCsvDate, cleanCsvList, cleanCsvName, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
+import { resolvePeopleIds } from "@/lib/domain/counted-membership";
 import { getDb } from "@/lib/db/client";
 
 export interface PersonCorpusRow {
@@ -13,7 +14,7 @@ export interface PersonCorpusRow {
   projects: {id:string;name:string;role:string}[];
   sourceUrls: string[];
 }
-export type PeopleOptions = {q?:string;campus?:string;year?:string;status?:string;review?:string};
+export type PeopleOptions = {q?:string;campus?:string;year?:string;status?:string;review?:string;membership?:string;program?:string;sector?:string};
 export function loadPeopleCorpus(): PersonCorpusRow[] {
   const db=getDb();
   const rows=db.prepare(`SELECT id,name,founder_status,enrollment_status,verification_status,enrollment_grad_year,enrollment_evidence,enrollment_source_url FROM people ORDER BY name COLLATE NOCASE,id`).all() as {id:string;name:string;founder_status:string|null;enrollment_status:string|null;verification_status:string|null;enrollment_grad_year:number|null;enrollment_evidence:string|null;enrollment_source_url:string|null}[];
@@ -47,7 +48,8 @@ export function loadPeopleCorpus(): PersonCorpusRow[] {
 function httpUrl(value:string|null):string|null{if(!value)return null;try{const url=new URL(value);return ['http:','https:'].includes(url.protocol)&&url.hostname?value:null;}catch{return null;}}
 export function filterPeopleCorpus(opts:PeopleOptions={}):PersonCorpusRow[]{
   const q=(opts.q||'').trim().toLocaleLowerCase();
-  return loadPeopleCorpus().filter(p=>(!q||[p.name,...p.campuses.map(c=>c.name),...p.projects.map(c=>c.name)].join(' ').toLocaleLowerCase().includes(q)) && (!opts.campus||p.campuses.some(c=>c.id===opts.campus)) && (!opts.status||p.founderStatus===opts.status) && (!opts.review||(opts.review==='unresolved'?!p.yearChecked:p.yearReviewStatus===opts.review)) && (!opts.year || (opts.year==='known'?p.graduationYear!=null:opts.year==='unknown'?p.graduationYear==null:String(p.graduationYear)===opts.year)));
+  const allowed=resolvePeopleIds({membership:opts.membership,program:opts.program,sector:opts.sector});
+  return loadPeopleCorpus().filter(p=>(!allowed||allowed.has(p.id)) && (!q||[p.name,...p.campuses.map(c=>c.name),...p.projects.map(c=>c.name)].join(' ').toLocaleLowerCase().includes(q)) && (!opts.campus||p.campuses.some(c=>c.id===opts.campus)) && (!opts.status||p.founderStatus===opts.status) && (!opts.review||(opts.review==='unresolved'?!p.yearChecked:p.yearReviewStatus===opts.review)) && (!opts.year || (opts.year==='known'?p.graduationYear!=null:opts.year==='unknown'?p.graduationYear==null:String(p.graduationYear)===opts.year)));
 }
 export function yearReviewLabel(p:PersonCorpusRow):string{
   if(p.yearChecked)return 'Individual class year verified';

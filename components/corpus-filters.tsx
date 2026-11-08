@@ -11,6 +11,7 @@ export function CorpusFilters({
   sort,
   scope,
   kind,
+  membership = "",
   sectors,
   campuses,
 }: {
@@ -20,6 +21,7 @@ export function CorpusFilters({
   sort: string;
   scope: string;
   kind: string;
+  membership?: string;
   sectors: Opt[];
   campuses: Opt[];
 }) {
@@ -38,6 +40,7 @@ export function CorpusFilters({
       className="mt-1.5 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pb-2 sm:mt-2"
       data-corpus-filters=""
     >
+      {membership ? <input type="hidden" name="membership" value={membership} /> : null}
       <div className="flex items-center gap-2 sm:flex-wrap sm:items-end sm:gap-1.5">
         <label className="block min-w-0 flex-1 sm:flex-[1_1_10rem]">
           <span className="sr-only">Search</span>

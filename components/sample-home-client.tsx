@@ -4,7 +4,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { HomeFold } from "@/components/home-fold";
 import type { CampusLead } from "@/lib/domain/campus-record";
-import type { HomeProgram } from "@/lib/domain/home-panels";
+import type { EligibilityExamples } from "@/lib/domain/counted-hrefs";
+import type { HomeProgram, HomeSector } from "@/lib/domain/home-panels";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SampleTheme } from "@/components/sample-theme";
@@ -84,6 +85,9 @@ export function SampleHomeClient(props: {
   place?: "map" | "explore";
   facetExtras?: Record<string, string | number | boolean | null | undefined>;
   programs?: HomeProgram[];
+  homeSectors?: HomeSector[];
+  campusesOnMap?: number;
+  examples?: EligibilityExamples | null;
   leads?: CampusLead[];
 }) {
   const {
@@ -110,6 +114,9 @@ export function SampleHomeClient(props: {
     place = "map",
   facetExtras,
     programs = [],
+    homeSectors = [],
+    campusesOnMap = 0,
+    examples = null,
     leads = [],
   } = props;
 
@@ -145,7 +152,10 @@ export function SampleHomeClient(props: {
           companyCount={cardCount}
           foundersListed={foundersListed}
           foundersIndexed={foundersIndexed}
+          campusesOnMap={campusesOnMap}
           campusesWithFounders={campusesWithFounders}
+          sectors={homeSectors}
+          examples={examples}
         />
       ) : null}
       {place === "explore" ? (

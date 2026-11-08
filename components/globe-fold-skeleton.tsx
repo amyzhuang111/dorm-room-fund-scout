@@ -12,9 +12,9 @@ export function GlobeFoldSkeleton({
 }: {
   companyCount?: number;
   foundersListed?: number;
-  /** Schools that have coordinates, including schools with no promoted founder. */
+  /** Campuses with coordinates, including public campus overrides. */
   campusesOnMap?: number;
-  /** Same list as the Campuses page: a promoted founder is on record. */
+  /** Affiliations of people stored with founder_status founder. */
   campusesWithFounders?: number;
   dataThrough?: string | null;
   topName?: string;

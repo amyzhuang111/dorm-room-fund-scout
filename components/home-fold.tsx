@@ -8,8 +8,9 @@ import { GlobeHero } from "@/components/globe-hero";
 import type { CampusLead } from "@/lib/domain/campus-record";
 import { campusRecordHref } from "@/lib/domain/campus-record";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { LEAD_COMPANY_RANKING, type EligibilityExamples } from "@/lib/domain/counted-hrefs";
 import type { HeroStats, WeekItem } from "@/lib/domain/hero-stats";
-import type { HomeProgram } from "@/lib/domain/home-panels";
+import type { HomeProgram, HomeSector } from "@/lib/domain/home-panels";
 import { updatedAgo } from "@/lib/domain/relative-time";
 import type { TileCompany } from "@/components/tile-globe";
 
@@ -26,7 +27,10 @@ export function HomeFold({
   companyCount,
   foundersListed,
   foundersIndexed,
+  campusesOnMap,
   campusesWithFounders,
+  sectors,
+  examples = null,
   highlightCampusIds = null,
 }: {
   stats: HeroStats;
@@ -36,7 +40,10 @@ export function HomeFold({
   companyCount: number;
   foundersListed: number;
   foundersIndexed: number;
+  campusesOnMap: number;
   campusesWithFounders: number;
+  sectors: HomeSector[];
+  examples?: EligibilityExamples | null;
   highlightCampusIds?: Set<string> | null;
 }) {
   useEffect(() => {
@@ -77,6 +84,7 @@ export function HomeFold({
   const campusList = (extraClass: string) => (
     <section className={`home-panel ${extraClass}`} data-home-campuses="" aria-label="Top campuses">
       <h2 className="home-panel-label">Top campuses</h2>
+      <p className="home-panel-note">{LEAD_COMPANY_RANKING} The number beside the campus is promoted founders, a different count.</p>
       <ol className="home-panel-list">
         {campuses.map((campus, index) => {
           const lead = leadByCampus.get(campus.id);
@@ -110,9 +118,10 @@ export function HomeFold({
             companies={companyCount}
             foundersListed={foundersListed}
             foundersIndexed={foundersIndexed}
-            campusesOnMap={stats.universities.filter((university) => university.lat != null && university.lon != null).length}
+            campusesOnMap={campusesOnMap}
             campusesWithFounders={campusesWithFounders}
             updatedAt={stats.updatedAt}
+            examples={examples}
           />
           <p className="home-map-credit" data-map-credit="">
             <MapCredit />
@@ -141,15 +150,37 @@ export function HomeFold({
         {programs.length > 0 ? (
           <section className="home-panel" data-home-programs="" aria-label="Top programs">
             <h2 className="home-panel-label">Top programs</h2>
+            <p className="home-panel-note">People linked to the program. A company name search is a different list.</p>
             <ol className="home-panel-list">
               {programs.map((program) => (
                 <li key={program.id}>
-                  <Link href={`/data?q=${encodeURIComponent(program.name)}`} className="home-panel-row">
+                  <Link href={program.href} className="home-panel-row" data-home-program={program.id}>
                     <span className="home-panel-copy">
                       <span className="home-panel-name">{program.name}</span>
                     </span>
                     <span className="home-panel-count">
                       {program.people.toLocaleString("en-US")}
+                      <span className="home-panel-unit"> people</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
+        {sectors.length > 0 ? (
+          <section className="home-panel" data-home-sectors="" aria-label="Sectors by people">
+            <h2 className="home-panel-label">Sectors</h2>
+            <p className="home-panel-note">People on eligible companies, by the company primary sector. A person in two sectors is listed in both.</p>
+            <ol className="home-panel-list">
+              {sectors.map((sector) => (
+                <li key={sector.id}>
+                  <Link href={sector.href} className="home-panel-row" data-home-sector={sector.id}>
+                    <span className="home-panel-copy">
+                      <span className="home-panel-name">{sector.label}</span>
+                    </span>
+                    <span className="home-panel-count">
+                      {sector.people.toLocaleString("en-US")}
                       <span className="home-panel-unit"> people</span>
                     </span>
                   </Link>
