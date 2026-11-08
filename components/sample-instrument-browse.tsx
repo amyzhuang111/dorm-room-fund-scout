@@ -1528,7 +1528,7 @@ function LedgerRow({
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+          <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] [overflow-wrap:anywhere]" data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>

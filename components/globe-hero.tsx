@@ -18,7 +18,7 @@ const TileGlobe = dynamic(() => import("./tile-globe").then((mod) => mod.TileGlo
 });
 
 function GlobeFoldSkeletonFromContext() {
-  return <GlobeFoldSkeleton {...useContext(FoldSkeletonContext)} />;
+  return <GlobeFoldSkeleton {...useContext(FoldSkeletonContext)} variant="disc" />;
 }
 
 function plottedCampuses(stats: HeroStats): TileCampus[] {
@@ -44,6 +44,8 @@ function GlobeBlock({
   foundersListed,
   foundersIndexed = 0,
   highlightCampusIds = null,
+  layout = "default",
+  campusHref,
 }: {
   stats: HeroStats;
   companies: TileCompany[];
@@ -51,6 +53,8 @@ function GlobeBlock({
   foundersListed: number;
   foundersIndexed?: number;
   highlightCampusIds?: Set<string> | null;
+  layout?: "default" | "fold";
+  campusHref?: (id: string) => string;
 }) {
   const router = useRouter();
   const search = useSearchParams();
@@ -61,6 +65,11 @@ function GlobeBlock({
   const top = [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0];
 
   function onSelect(id: string) {
+    if (layout === "fold" && campusHref) {
+      if (!id) return;
+      router.push(campusHref(id));
+      return;
+    }
     const next = new URLSearchParams(search.toString());
     next.delete("feed");
     next.delete("university");
@@ -93,6 +102,7 @@ function GlobeBlock({
         onSelect={onSelect}
         dataThrough={stats.updatedAt}
         highlightCampusIds={highlightCampusIds}
+        layout={layout}
       />
     </FoldSkeletonContext.Provider>
   );
@@ -106,6 +116,8 @@ export function GlobeHero({
   foundersIndexed = 0,
   showGlobe = true,
   highlightCampusIds = null,
+  layout = "default",
+  campusHref,
 }: {
   stats: HeroStats;
   companies?: TileCompany[];
@@ -114,15 +126,17 @@ export function GlobeHero({
   foundersIndexed?: number;
   showGlobe?: boolean;
   highlightCampusIds?: Set<string> | null;
+  layout?: "default" | "fold";
+  campusHref?: (id: string) => string;
 }) {
   return (
-    <div className={showGlobe ? "bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]" : "bg-bg px-6 py-6 text-fg"}>
+    <div data-globe-layout={layout} className={showGlobe ? (layout === "fold" ? "flex h-full min-h-0 flex-col bg-transparent text-[color:var(--fg,#20140c)]" : "bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]") : "bg-bg px-6 py-6 text-fg"}>
       <div>
         <SignatureBand
           stats={stats}
           foundersListed={foundersListed}
           foundersIndexed={foundersIndexed}
-          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} foundersIndexed={foundersIndexed} highlightCampusIds={highlightCampusIds} /> : null}
+          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} foundersIndexed={foundersIndexed} highlightCampusIds={highlightCampusIds} layout={layout} campusHref={campusHref} /> : null}
         />
       </div>
       {/* Collage teasers compete with Directory tabs on mobile browse; instrument rails carry signals instead. */}
@@ -313,8 +327,8 @@ function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }
   const campusesOnMap = plottedCampuses(stats).length;
   if (globe) {
     return (
-      <section className="pb-1" aria-label="Campus Scout">
-        <div className="mb-1 flex flex-wrap items-center gap-2">
+      <section className="flex h-full min-h-0 flex-col pb-0" aria-label="Campus Scout">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Counts live in the fold masthead; keep DOM anchors for check-facet-dom. */}
           {/* Count anchors for facet-dom only — no fold fine-print essay. */}
           <p className="sr-only" data-sample-strip-counts>
@@ -323,7 +337,7 @@ function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }
             <span data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
           </p>
         </div>
-        <div className="min-h-0">{globe}</div>
+        <div className="min-h-0 flex-1">{globe}</div>
       </section>
     );
   }
