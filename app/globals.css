@@ -2235,14 +2235,15 @@ html:has([data-networks-cream]) [data-site-nav] {
     display: block;
     width: 100%;
   }
-  /* Wrapped row layout let later chips overflow the line box and sit under the
-     map controls. One chip per row keeps every count readable. */
+  /* Wrap chips onto shared rows. A column of 44px rows pushed the globe down. */
   .corpus-count-line {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     align-content: flex-start;
     width: 100%;
     height: auto;
+    gap: 2px 10px;
   }
   [data-home-map-well] {
     position: relative;
@@ -2272,8 +2273,7 @@ html:has([data-networks-cream]) [data-site-nav] {
   }
 }
 
-/* Narrow home: the count row was growing past the viewport and overflow-x:clip
-   hid the later chips. Keep the fold at the viewport width and stack the chips. */
+/* Narrow home: keep every count inside the viewport and let chips share rows. */
 @media (max-width: 1023px) {
   [data-home-fold],
   [data-home-fold-screen],
@@ -2284,14 +2284,24 @@ html:has([data-networks-cream]) [data-site-nav] {
     width: 100%;
   }
   [data-home-counts] [data-fold-counts] > p.corpus-count-line:first-child {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     /* Beats the older 2.6em clip on [data-fold-counts] > p:first-child. */
     max-height: none !important;
     overflow: visible !important;
-    font-size: 13px !important;
-    line-height: 1.35 !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+  }
+  [data-home-counts] a.corpus-count-chip {
+    min-height: 28px !important;
+    min-width: max-content !important;
+    width: auto;
+    padding: 1px 0;
+  }
+  [data-home-counts] summary {
+    min-height: 28px !important;
+    min-width: 0 !important;
   }
 }
 
