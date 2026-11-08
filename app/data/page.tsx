@@ -7,7 +7,8 @@ import { loadRecencyFunnel } from "@/lib/domain/recency-funnel";
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
-import { formatCorpusDate } from "@/lib/domain/corpus-totals";
+import { formatCorpusDate, loadCorpusTotals } from "@/lib/domain/corpus-totals";
+import { CorpusCountStrip } from "@/components/corpus-count-strip";
 import { CorpusFilters } from "@/components/corpus-filters";
 
 export const metadata: Metadata = { title: "Data" };
@@ -45,11 +46,11 @@ export default async function DataExplorerPage({
   const { sectors: sectorFilters } = buildDirectoryFromDb({includeAll:true});
   // Keep select options tiny in RSC HTML (id + label only) — full university rows blow the 210 KB gate.
   const sectors = sectorFilters.map((s) => ({ id: s.id, label: s.label }));
-  const campuses = loadHeroStats()
-    .universities
-    .map((c) => ({ id: c.id, name: c.name }));
+  const hero = loadHeroStats();
+  const campuses = hero.universities.map((c) => ({ id: c.id, name: c.name }));
   const recency = loadRecencyFunnel();
   const fill = loadCorpusFillRates();
+  const totals = loadCorpusTotals();
 
   const pageCampusRanks = (() => {
     const map = new Map<string, { label: string; companies: number; signaled: number }>();
@@ -94,6 +95,16 @@ export default async function DataExplorerPage({
         <div>
           <p className="scout-kicker">Corpus</p>
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
+          <div className="mt-2">
+            <CorpusCountStrip
+              companies={totals.investableCompanies}
+              foundersListed={totals.foundersListed}
+              foundersIndexed={totals.foundersIndexed}
+              campusesOnMap={totals.campusesOnMap}
+              campusesWithFounders={totals.campusesWithFounders}
+              updatedAt={hero.updatedAt}
+            />
+          </div>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" records in this view · page "}
