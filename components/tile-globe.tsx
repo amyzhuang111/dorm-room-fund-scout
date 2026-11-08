@@ -9,6 +9,7 @@ import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { COUNTED_HREFS } from "@/lib/domain/counted-hrefs";
+import { GLOBE_TILE_WAIT_MS, globeLoadDecision } from "@/lib/domain/globe-load";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import { CompanyLocationLayer } from "./company-location-layer";
@@ -163,6 +164,7 @@ export function TileGlobe({
   const [ready, setReady] = useState(false);
   const [painted, setPainted] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [mapAttempt, setMapAttempt] = useState(0);
   const [locationsMode, setLocationsMode] = useState(false);
   const [expandedMap, setExpandedMap] = useState(false);
   const [rotationEnabled, setRotationEnabled] = useState(false);
@@ -173,9 +175,14 @@ export function TileGlobe({
   useEffect(() => {
     const node = mapNode.current;
     if (!node) return;
+    setPainted(false);
+    setFailed(false);
+    setReady(false);
     let dead = false;
+    let tileTimer: number | undefined;
     let map: {
-      on: (type: string, layerOrHandler: string | ((event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number }; originalEvent?: Event }) => void), handler?: (event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number }; originalEvent?: Event }) => void) => void;
+      on: (type: string, layerOrHandler: string | ((event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number }; originalEvent?: Event; sourceId?: string; sourceDataType?: string; tile?: unknown }) => void), handler?: (event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number }; originalEvent?: Event; sourceId?: string; sourceDataType?: string; tile?: unknown }) => void) => void;
+      areTilesLoaded: () => boolean;
       getStyle: () => { layers: { id: string; type: string }[] };
       setProjection: (opts: object) => void;
       setSky: (opts: object) => void;
@@ -415,19 +422,33 @@ export function TileGlobe({
         setReady(true);
         setActiveMap(map as unknown as LibreMap);
         let revealed = false;
-        const reveal = () => {
+        let vectorTileArrived = false;
+        let timedOut = false;
+        const applyLoad = () => {
           if (dead || revealed || !map) return;
-          // Waiting on map.loaded()
-          // leaves the skeleton up when a tile request never settles.
+          const decision = globeLoadDecision({
+            vectorTileArrived,
+            tilesSettled: map.areTilesLoaded(),
+            timedOut,
+          });
+          if (decision === "loading") return;
           revealed = true;
+          window.clearTimeout(tileTimer);
           frame();
-          setPainted(true);
+          if (decision === "ready") setPainted(true);
+          else setFailed(true);
         };
-        map.on("render", reveal);
-        map.on("idle", reveal);
-        // Cap skeleton time: first paint must not sit on LOADING GLOBE for long
-        // even if idle/render stall (offline tiles, slow network).
-        window.setTimeout(reveal, 900);
+        tileTimer = window.setTimeout(() => {
+          timedOut = true;
+          applyLoad();
+        }, GLOBE_TILE_WAIT_MS);
+        map.on("sourcedata", (event) => {
+          if (event.sourceId !== "openmaptiles") return;
+          // Vector tiles carry a tile object. GeoJSON "content" events do not.
+          if (event.tile) vectorTileArrived = true;
+          applyLoad();
+        });
+        map.on("idle", () => applyLoad());
       });
 
       const read = (event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number } }) => {
@@ -637,15 +658,16 @@ export function TileGlobe({
     return () => {
       dead = true;
       window.clearTimeout(styleTimer);
+      window.clearTimeout(tileTimer);
       observer.disconnect();
       window.removeEventListener("resize", fit);
       sheetMo.disconnect();
       map?.remove();
       mapRef.current = null;
     };
-    // The map is created once. Campus data is pushed in the effect below.
+    // Recreate the map when Retry asks for another tile load.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mapAttempt]);
 
   useEffect(() => {
     frameRef.current?.();
@@ -797,14 +819,16 @@ export function TileGlobe({
           data-fold-bigmap-stage=""
           data-map-stage-h={stageHeight}
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
+          data-globe-tiles={painted ? "loaded" : failed ? "failed" : "pending"}
         >
           <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
           <CompanyLocationLayer map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={setExpandedMap} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
           {!painted ? (
-            <div className="absolute inset-0 z-30 bg-[#F7F1E6]" aria-busy="true">
+            <div className="absolute inset-0 z-30 bg-[#F7F1E6]" aria-busy={failed ? undefined : true} data-globe-feedback="">
               {failed ? (
-                <div className="grid h-full place-items-center">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#9A3412]">Globe unavailable</p>
+                <div className="grid h-full place-items-center gap-3 px-4 text-center">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#9A3412]">Map tiles did not load</p>
+                  <button type="button" className="min-h-11 bg-[#9A3412] px-4 text-sm text-white" onClick={() => setMapAttempt((attempt) => attempt + 1)}>Retry</button>
                 </div>
               ) : (
                 <div className="home-globe-skeleton h-full border-0">

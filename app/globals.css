@@ -2127,11 +2127,15 @@ html:has([data-networks-cream]) [data-site-nav] {
   color: #8a7260;
 }
 .home-panel-note {
-  margin: 0 4px 6px;
+  margin: 0 4px 4px;
   font-size: 12px;
   line-height: 1.4;
   color: #6b5443;
 }
+.home-panel-note summary {
+  cursor: pointer;
+}
+.home-panel-note p { margin: 4px 0 0; }
 .corpus-count-line {
   display: flex;
   flex-wrap: wrap;
@@ -2144,7 +2148,7 @@ html:has([data-networks-cream]) [data-site-nav] {
   align-items: baseline;
   gap: 0.35rem;
   white-space: nowrap;
-  min-height: 32px;
+  min-height: 44px;
   padding: 1px 0;
   color: inherit;
   font-size: 13px;
@@ -2253,6 +2257,15 @@ html:has([data-networks-cream]) [data-site-nav] {
   }
 }
 @media (max-width: 639px) {
+  [data-home-fold-screen] {
+    grid-template-rows: auto minmax(240px, 40dvh) auto;
+  }
+  [data-home-map-well] {
+    height: 40dvh;
+    min-height: 240px;
+  }
+}
+@media (max-width: 639px) {
   [data-home-fold] .corpus-count-chip {
     min-width: max-content;
     white-space: nowrap;
@@ -2290,14 +2303,15 @@ html:has([data-networks-cream]) [data-site-nav] {
     /* Beats the older 2.6em clip on [data-fold-counts] > p:first-child. */
     max-height: none !important;
     overflow: visible !important;
-    font-size: 12px !important;
+    font-size: 13px !important;
     line-height: 1.3 !important;
   }
   [data-home-counts] a.corpus-count-chip {
-    min-height: 28px !important;
+    min-height: 44px !important;
     min-width: max-content !important;
     width: auto;
-    padding: 1px 0;
+    align-items: center;
+    padding: 0 2px;
   }
   [data-home-counts] summary {
     min-height: 28px !important;

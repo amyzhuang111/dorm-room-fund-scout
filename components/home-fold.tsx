@@ -84,7 +84,10 @@ export function HomeFold({
   const campusList = (extraClass: string) => (
     <section className={`home-panel ${extraClass}`} data-home-campuses="" aria-label="Top campuses">
       <h2 className="home-panel-label">Top campuses</h2>
-      <p className="home-panel-note">{LEAD_COMPANY_RANKING} The number beside the campus is promoted founders, a different count.</p>
+      <details className="home-panel-note" data-campus-ranking-note="">
+        <summary>How the company under a campus is chosen</summary>
+        <p>{LEAD_COMPANY_RANKING} The number beside the campus is promoted founders, a different count.</p>
+      </details>
       <ol className="home-panel-list">
         {campuses.map((campus, index) => {
           const lead = leadByCampus.get(campus.id);

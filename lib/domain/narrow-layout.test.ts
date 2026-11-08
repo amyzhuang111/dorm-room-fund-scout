@@ -10,7 +10,10 @@ assert.match(countRule.slice(0, 500), /flex-direction:\s*row/);
 assert.match(countRule.slice(0, 500), /flex-wrap:\s*wrap/);
 assert.doesNotMatch(countRule.slice(0, 400), /flex-direction:\s*column/);
 assert.match(countRule.slice(0, 900), /max-height:\s*none !important/);
-assert.match(css, /\[data-home-counts\] a\.corpus-count-chip \{[\s\S]*min-height:\s*28px !important/);
+assert.match(css, /\[data-home-counts\] a\.corpus-count-chip \{[\s\S]*min-height:\s*44px !important/);
+const fold = readFileSync(new URL("../../components/home-fold.tsx", import.meta.url), "utf8");
+assert.match(fold, /data-campus-ranking-note=""[\s\S]*<summary>How the company under a campus is chosen<\/summary>/);
+assert.match(fold, /LEAD_COMPANY_RANKING/);
 
 const cards = people.slice(people.indexOf('data-class-year-review=""'));
 assert.equal(cards.split('className="flex min-h-11 flex-col gap-1').length - 1, 3);
