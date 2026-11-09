@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
+import { logoLooksBlank } from "@/components/corpus-row-mark";
 import { sectorIdsOf, sectorLabel } from "@/lib/domain/sectors";
 import {
   countBy,
@@ -325,22 +326,25 @@ export function LogoMark({
 }) {
   void mark;
   const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : size <= 36 ? "h-9 w-9" : size <= 44 ? "h-11 w-11" : "h-12 w-12";
-  const [ok, setOk] = useState(Boolean(logoUrl));
-  if (logoUrl && ok) {
+  const src = logoUrl && logoUrl.startsWith("/") && !logoUrl.startsWith("//") ? logoUrl : null;
+  const [ok, setOk] = useState(Boolean(src));
+  if (src && ok) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={logoUrl}
+        src={src}
         alt=""
         width={size}
         height={size}
         loading="lazy"
         decoding="async"
-        className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain p-0.5`}
+        className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#F0D7C2)] bg-[color:var(--bg-raised,#FFFBF6)] object-contain p-0.5`}
+        ref={(img) => {
+          if (img?.complete && img.naturalWidth > 0 && logoLooksBlank(img)) setOk(false);
+        }}
         onError={() => setOk(false)}
         onLoad={(e) => {
-          // Tiny/blank stub tiles → cobalt seal monogram.
-          if (e.currentTarget.naturalWidth <= 16) setOk(false);
+          if (logoLooksBlank(e.currentTarget)) setOk(false);
         }}
       />
     );
@@ -384,7 +388,7 @@ export function LogoPill({
           {initials}
         </span>
       )}
-      <span className="min-w-0 truncate">{name}</span>
+      <span className="min-w-0 break-words leading-tight">{name}</span>
     </Link>
   );
 }
