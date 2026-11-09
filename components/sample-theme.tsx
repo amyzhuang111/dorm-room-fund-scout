@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Keep the sample product on Halflight daylight: true white + cobalt ink + campus seals. */
+/** Keep the sample product on the cream field with the orange accent. */
 export function SampleTheme() {
   useEffect(() => {
     const root = document.documentElement;

@@ -93,7 +93,7 @@ export default async function DataExplorerPage({
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
+          <h1 className="mt-0.5 scout-display text-[22px] leading-none sm:text-[28px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" records in this view · page "}
@@ -121,25 +121,23 @@ export default async function DataExplorerPage({
       </div>
 
       <nav className="my-3 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
-      <p className="text-sm text-fg-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
+      <p className="hidden text-[13px] leading-5 text-fg-2 sm:block">Every stored company is here, including unverified leads. A source link does not verify every field.</p>
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 font-mono text-[13px] leading-5 text-[color:var(--fg-2,#5C4030)]"
         data-recency-funnel=""
       >
-        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Scouting list</span>
+        <span className="font-semibold text-[color:var(--fg,#2A1A10)]">Scouting list</span>
         {" · "}
         <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        {" companies marked eligible by the stored scouting rules, matching Companies and the map. These rules target current students and recent graduates; individual verification labels still apply."}
-        {" "}
+        {" eligible, the same count as Companies and the map. "}
         <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
-        {" older-alumni companies are left out of it."}
-        {" "}
-        <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
-        {" have unverified founder recency and are outside the scouting list."}
+        {" older-alumni companies are left out. "}
+        <span className="text-[color:var(--ember,#E85D04)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
+        {" have unverified founder recency."}
       </p>
 
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-1 hidden font-mono text-[13px] leading-5 text-[color:var(--fg-2,#5C4030)] sm:block"
         data-corpus-fill-rates=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Full corpus coverage</span>
@@ -194,7 +192,7 @@ export default async function DataExplorerPage({
               {" signaled"}
             </p>
             {pageCampusRanks[0] ? (
-              <p className="mt-0.5 truncate font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <p className="mt-0.5 break-words font-mono text-[12px] tabular-nums leading-4 text-[color:var(--fg-2,#5C4030)]">
                 <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{pageCampusRanks[0].label}</span>
                 {" leads · "}
                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{pageCampusRanks[0].companies.toLocaleString("en-US")}</span>
@@ -216,7 +214,7 @@ export default async function DataExplorerPage({
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <CampusSeal label={row.label} size="sm" />
-                <span className="max-w-[4.5rem] truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]">{row.label}</span>
+                <span className="max-w-[9rem] break-words text-[12px] font-semibold leading-4 text-[color:var(--fg,#2A1A10)]">{row.label}</span>
                 <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
               </li>
             ))}

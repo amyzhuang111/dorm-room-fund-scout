@@ -163,14 +163,14 @@ export function MobileFounderDeck({
                     <CampusSeal label={founder.campus} size="lg" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-founder-name="">
+                    <h3 className="break-words text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#2A1A10)]" data-founder-name="">
                       {founder.name}
                     </h3>
                     <p className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]" data-founder-campus-company="">
                       {founder.companyId ? (
                         <LogoMark name={founder.company || "Company"} logoUrl={`/company-logos/${founder.companyId}.webp`} size={14} />
                       ) : null}
-                      <span className="truncate font-semibold text-[color:var(--fg,#0B0E17)]">{founder.company || "Company missing"}</span>
+                      <span className="break-words font-semibold text-[color:var(--fg,#2A1A10)]">{founder.company || "Company missing"}</span>
                     </p>
                     <p className="mt-0.5 truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
                       {founder.campus}
@@ -371,7 +371,7 @@ export function MobileCampusSegments({
   onClear: () => void;
   kicker?: string;
 }) {
-  const top = campuses.slice(0, 5);
+  const top = campuses.slice(0, 3);
   if (top.length === 0) return null;
   return (
     <div className="border-b border-[color:var(--line,#E1E5EF)] pb-2" data-fold-campus-segments="">
@@ -379,7 +379,7 @@ export function MobileCampusSegments({
         {kicker}
       </p>
       <ol
-        className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex flex-wrap gap-1.5"
         data-fold-peak-campus-rank-mobile=""
         role="listbox"
         aria-label="Filter campus"
@@ -419,7 +419,7 @@ export function MobileCampusSegments({
               >
                 <span className={`font-mono text-[9px] tabular-nums ${active ? "text-white/80" : "text-[color:var(--fg-3,#5C647A)]"}`}>{String(campus.pitchbookRank ?? i + 1).padStart(2, "0")}</span>
                 <CampusSeal label={campus.name} size="sm" />
-                <span className="max-w-[4.5rem] truncate text-[11px] font-semibold tracking-tight" data-fold-peak-campus-label="">
+                <span className="text-[12px] font-semibold tracking-tight" data-fold-peak-campus-label="">
                   {short}
                 </span>
                 <span className={`font-mono text-[11px] font-bold tabular-nums ${active ? "text-white" : "text-[color:var(--cobalt,#2F4FD8)]"}`}>
