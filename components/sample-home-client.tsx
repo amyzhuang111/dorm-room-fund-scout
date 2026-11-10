@@ -14,6 +14,7 @@ import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
+import { logoLooksBlank } from "@/components/corpus-row-mark";
 import { founderMatches, type FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
@@ -104,7 +105,7 @@ function HomeRail({
   const people = useMemo(() => {
     return founders
       .filter((founder) => founderMatches(founder, { text: query, campusId: campusId || null }))
-      .slice(0, 12);
+      .slice(0, 14);
   }, [founders, query, campusId]);
   const programs = useMemo(() => {
     const counts = new Map<string, number>();
@@ -113,35 +114,38 @@ function HomeRail({
       if (!label) continue;
       counts.set(label, (counts.get(label) ?? 0) + 1);
     }
-    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 6);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 4);
   }, [companies]);
-  const signals = week.filter((item) => item.event.trim() || item.campus.trim()).slice(0, 5);
+  const signals = week.filter((item) => item.event.trim() || item.campus.trim()).slice(0, 3);
+  const schools = campuses.slice(0, 5);
   return (
     <aside className="mt-3 hidden min-w-0 lg:mt-0 lg:block" data-home-rail="">
-      <div className="flex max-h-[calc(100dvh-4.5rem)] flex-col overflow-hidden rounded-sm border border-[color:var(--line,#F0D7C2)] bg-[color:var(--bg-raised,#FFFBF6)]">
+      <div className="home-float flex max-h-[calc(100dvh-4.5rem)] flex-col overflow-hidden">
         <div className="border-b border-[color:var(--line,#F0D7C2)] px-3 py-2">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#E85D04)]">Founders</p>
-          <p className="text-[13px] leading-5 text-[color:var(--fg-2,#5C4030)]">
-            <span className="font-bold tabular-nums text-[color:var(--ember,#E85D04)]">{foundersIndexed.toLocaleString("en-US")}</span>
-            {" in the full index"}
-          </p>
-          <div className="mt-2">
+          <div className="flex items-baseline justify-between gap-2">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#E85D04)]">Founders</p>
+            <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#5C4030)]">
+              <span className="font-bold text-[color:var(--ember,#E85D04)]">{foundersIndexed.toLocaleString("en-US")}</span>
+              {" indexed"}
+            </p>
+          </div>
+          <div className="mt-1.5">
             <FounderSearchBar query={query} onQuery={onQuery} />
           </div>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto">
           {campusId ? (
-            <div className="flex items-start justify-between gap-2 border-b border-[color:var(--line,#F0D7C2)] px-3 py-2">
+            <div className="flex items-start justify-between gap-2 border-b border-[color:var(--line,#F0D7C2)] px-3 py-1.5">
               <p className="break-words text-[14px] font-semibold leading-5">{campusName || "Selected school"}</p>
               <button type="button" className="inline-flex min-h-11 items-center text-[13px] font-semibold text-[color:var(--ember,#E85D04)]" onClick={onClearCampus}>Clear</button>
             </div>
           ) : null}
-          <section className="border-b border-[color:var(--line,#F0D7C2)] px-3 py-2">
+          <section className="border-b border-[color:var(--line,#F0D7C2)] px-3 py-1.5">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#8A6854)]">Schools</p>
-            <ol className="mt-1">
-              {campuses.slice(0, 8).map((campus, index) => (
+            <ol className="mt-0.5">
+              {schools.map((campus, index) => (
                 <li key={campus.id}>
-                  <button type="button" onClick={() => onSelectCampus(campus.id)} className="flex w-full min-h-8 items-baseline gap-2 py-1 text-left">
+                  <button type="button" onClick={() => onSelectCampus(campus.id)} className="flex w-full items-baseline gap-2 py-0.5 text-left">
                     <span className="w-5 shrink-0 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#8A6854)]">{String(index + 1).padStart(2, "0")}</span>
                     <span className="min-w-0 flex-1 break-words text-[13px] font-semibold leading-5">{campus.name}</span>
                     <span className="shrink-0 font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#E85D04)]">{campus.founders.toLocaleString("en-US")}</span>
@@ -150,12 +154,35 @@ function HomeRail({
               ))}
             </ol>
           </section>
+          <section className="px-3 py-1.5">
+            <div className="flex items-baseline justify-between gap-2">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#8A6854)]">People</p>
+              <a href="/founders" className="inline-flex min-h-8 items-center text-[12px] font-semibold text-[color:var(--ember,#E85D04)]">Full index</a>
+            </div>
+            {status === "loading" ? <p className="mt-1 text-[13px] text-[color:var(--fg-2,#5C4030)]">Loading founders</p> : null}
+            {status === "error" ? <p className="mt-1 text-[13px] text-[color:var(--fg-2,#5C4030)]">The founder index did not load.</p> : null}
+            <ul>
+              {people.map((person) => (
+                <li key={person.id} className="border-t border-[color:var(--line,#F0D7C2)] py-1" data-founder-card="">
+                  <a href={`/founder/discover?founder=${encodeURIComponent(person.id)}`} className="flex items-start gap-2">
+                    <RailMark name={person.company || person.name} companyId={person.companyId} />
+                    <span className="min-w-0 flex-1">
+                      <span className="block break-words text-[14px] font-semibold leading-5 text-[color:var(--fg,#2A1A10)]">{person.name}</span>
+                      <span className="block break-words text-[12px] leading-4 text-[color:var(--fg-2,#5C4030)]">
+                        {[person.campus, person.company].filter(Boolean).join(" · ")}
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
           {programs.length > 0 ? (
-            <section className="border-b border-[color:var(--line,#F0D7C2)] px-3 py-2">
+            <section className="border-t border-[color:var(--line,#F0D7C2)] px-3 py-1.5">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#8A6854)]">Programs</p>
-              <ul className="mt-1">
+              <ul>
                 {programs.map(([label, count]) => (
-                  <li key={label} className="flex items-baseline gap-2 py-1">
+                  <li key={label} className="flex items-baseline gap-2 py-0.5">
                     <span className="min-w-0 flex-1 break-words text-[13px] leading-5">{label}</span>
                     <span className="shrink-0 font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#E85D04)]">{count.toLocaleString("en-US")}</span>
                   </li>
@@ -164,13 +191,13 @@ function HomeRail({
             </section>
           ) : null}
           {signals.length > 0 ? (
-            <section className="border-b border-[color:var(--line,#F0D7C2)] px-3 py-2">
+            <section className="border-t border-[color:var(--line,#F0D7C2)] px-3 py-1.5">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#8A6854)]">Recent signals</p>
-              <ul className="mt-1">
+              <ul>
                 {signals.map((item) => (
-                  <li key={item.id} className="py-1">
+                  <li key={item.id} className="py-0.5">
                     <p className="break-words text-[13px] font-semibold leading-5">{item.event.trim() || item.campus}</p>
-                    <p className="text-[12px] leading-4 text-[color:var(--fg-3,#8A6854)]">
+                    <p className="break-words text-[12px] leading-4 text-[color:var(--fg-3,#8A6854)]">
                       {item.campus}
                       {item.tag ? ` · ${item.tag}` : ""}
                     </p>
@@ -179,27 +206,42 @@ function HomeRail({
               </ul>
             </section>
           ) : null}
-          <section className="px-3 py-2">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#8A6854)]">People</p>
-            {status === "loading" ? <p className="mt-1 text-[13px] text-[color:var(--fg-2,#5C4030)]">Loading founders</p> : null}
-            {status === "error" ? <p className="mt-1 text-[13px] text-[color:var(--fg-2,#5C4030)]">The founder index did not load.</p> : null}
-            <ul className="mt-1">
-              {people.map((person) => (
-                <li key={person.id} className="border-t border-[color:var(--line,#F0D7C2)] py-1.5" data-founder-card="">
-                  <a href={`/founder/discover?founder=${encodeURIComponent(person.id)}`} className="block break-words text-[14px] font-semibold leading-5 text-[color:var(--fg,#2A1A10)]">
-                    {person.name}
-                  </a>
-                  <p className="break-words text-[12px] leading-4 text-[color:var(--fg-2,#5C4030)]">
-                    {[person.campus, person.company].filter(Boolean).join(" · ")}
-                  </p>
-                </li>
-              ))}
-            </ul>
-            <a href="/founders" className="inline-flex min-h-11 items-center text-[13px] font-semibold text-[color:var(--ember,#E85D04)]">Full index</a>
-          </section>
         </div>
       </div>
     </aside>
+  );
+}
+
+function markInitials(name: string): string {
+  const parts = name.replace(/[^a-zA-Z0-9\s]/g, " ").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
+  return `${parts[0]![0]}${parts[1]![0]}`.toUpperCase();
+}
+
+function RailMark({ name, companyId }: { name: string; companyId: string | null }) {
+  const [ok, setOk] = useState(Boolean(companyId));
+  const src = companyId ? `/company-logos/${companyId}.webp` : "";
+  if (src && ok) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt=""
+        width={18}
+        height={18}
+        className="mt-0.5 h-[18px] w-[18px] shrink-0 rounded-full border border-[color:var(--line,#F0D7C2)] bg-[#FFF4E8] object-contain"
+        onError={() => setOk(false)}
+        onLoad={(event) => {
+          if (logoLooksBlank(event.currentTarget)) setOk(false);
+        }}
+      />
+    );
+  }
+  return (
+    <span className="mt-0.5 grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full bg-[#FFE4CC] font-mono text-[8px] font-bold text-[#9A3412]" aria-hidden>
+      {markInitials(name)}
+    </span>
   );
 }
 
@@ -341,7 +383,7 @@ function MapFoldSheet({
       data-fold-sheet-rest={String(REST)}
     >
       <div
-        className="pointer-events-auto flex flex-col overflow-visible rounded-sm border border-[color:var(--line,#F0D7C2)] bg-[color:var(--bg-raised,#FFFBF6)]"
+        className="home-float pointer-events-auto flex flex-col overflow-visible"
         data-fold-sheet-panel=""
       >
         <div
@@ -364,16 +406,18 @@ function MapFoldSheet({
               {peek}
             </div>
           ) : null}
-          <div className="bg-[color:var(--bg-raised,#FFFBF6)] pb-1.5">
-            {mode === "peek" ? null : <div onClick={expandToDeck}>{tabs}</div>}
-            <MobileCampusSegments
-              campuses={campuses}
-              selectedId={campusId}
-              onSelect={onSelectCampus}
-              onClear={onClearCampus}
-              kicker={campuses.some((campus) => campus.pitchbookRank != null) ? "PitchBook 2026" : "Schools"}
-            />
-          </div>
+          {mode === "peek" ? null : (
+            <div className="bg-[color:var(--bg-raised,#FFFBF6)] pb-1.5">
+              <div onClick={expandToDeck}>{tabs}</div>
+              <MobileCampusSegments
+                campuses={campuses}
+                selectedId={campusId}
+                onSelect={onSelectCampus}
+                onClear={onClearCampus}
+                kicker={campuses.some((campus) => campus.pitchbookRank != null) ? "PitchBook 2026" : "Schools"}
+              />
+            </div>
+          )}
           {mode === "peek" ? (
             <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true">
               <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
@@ -498,6 +542,8 @@ export function SampleHomeClient(props: {
       if (dead) return;
       setCompanies(cards);
       setReady(true);
+    }).catch(() => {
+      if (!dead) setReady(true);
     });
     void (async () => {
       const attempts = 3;
@@ -571,7 +617,7 @@ export function SampleHomeClient(props: {
     <ul className="mt-1" data-home-phone-founders="">
       {founders
         .filter((founder) => founderMatches(founder, { text: founderQuery, campusId: mapCampusId || null }))
-        .slice(0, 4)
+        .slice(0, 3)
         .map((founder) => (
           <li key={founder.id} className="border-t border-[color:var(--line,#F0D7C2)] py-1.5" data-founder-card="">
             <a href={`/founder/discover?founder=${encodeURIComponent(founder.id)}`} className="block break-words text-[15px] font-semibold leading-5" data-founder-name="">

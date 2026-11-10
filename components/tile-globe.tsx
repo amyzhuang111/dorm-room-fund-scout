@@ -176,6 +176,7 @@ export function TileGlobe({
       setProjection: (opts: object) => void;
       setSky: (opts: object) => void;
       setPaintProperty: (layer: string, prop: string, value: unknown) => void;
+      setLayerZoomRange: (layer: string, min: number, max: number) => void;
       addSource: (id: string, source: object) => void;
       addLayer: (layer: object) => void;
       getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
@@ -207,8 +208,8 @@ export function TileGlobe({
       const next = wide
         ? Math.max(480, Math.min(640, Math.round(window.innerHeight - 220)))
         : compactHeader
-          ? Math.max(220, Math.min(300, Math.round(window.innerWidth * 0.72)))
-          : Math.max(260, Math.min(Math.round(window.innerWidth * 0.78), Math.round(window.innerHeight - 430)));
+          ? Math.max(200, Math.min(240, Math.round(window.innerWidth * 0.58)))
+          : Math.max(240, Math.min(Math.round(window.innerWidth * 0.86), Math.round(window.innerHeight - 430)));
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
       nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
@@ -265,6 +266,15 @@ export function TileGlobe({
           // The globe still paints without a custom sky.
         }
         const layers = map.getStyle().layers;
+        // Place names sit on the tiles and cover campus markers. Keep them for a zoomed map only.
+        for (const layer of layers) {
+          if (layer.type !== "symbol") continue;
+          try {
+            map.setLayerZoomRange(layer.id, 4.6, 24);
+          } catch {
+            // A style layer can refuse a zoom range. The disk still paints.
+          }
+        }
         const styled = layers.some((layer) => layer.id === "water") && layers.some((layer) => layer.type === "background");
         if (!styled) {
           setFailed(true);
@@ -331,7 +341,7 @@ export function TileGlobe({
           id: "campus-labels",
           type: "symbol",
           source: "campuses",
-          filter: ["<=", ["get", "labelRank"], 5],
+          filter: ["<=", ["get", "labelRank"], 3],
           layout: {
             "text-field": ["get", "shortLabel"],
             "text-font": ["Noto Sans Regular"],
@@ -744,7 +754,6 @@ export function TileGlobe({
           </Link>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
@@ -757,8 +766,8 @@ export function TileGlobe({
           </span>
         </h2>
         <div
-          className={`${expandedMap ? mapStyles.expandedStage : "globe-stage"} relative overflow-hidden rounded-none border border-[color:var(--ember,#E85D04)]/40 bg-[#FFF4E8]`}
-          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
+          className={`${expandedMap ? mapStyles.expandedStage : "globe-stage"} relative`}
+          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw"} : { height: stageHeight }}
           role={expandedMap ? "dialog" : undefined}
           aria-modal={expandedMap ? true : undefined}
           aria-label={expandedMap ? "Expanded startup map" : undefined}
@@ -768,35 +777,31 @@ export function TileGlobe({
           data-map-stage-h={stageHeight}
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
-          <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
-          <CompanyLocationLayer map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={setExpandedMap} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
-          {!painted ? (
-            <div className="absolute inset-0 z-30 grid place-items-center bg-[#FFF4E8]" aria-busy="true" aria-live="polite">
-              <div className="globe-disc" data-globe-disc="" />
-              <p className="sr-only">{failed ? "Globe unavailable" : "Globe is loading"}</p>
-            </div>
-          ) : null}
-          {!locationsMode && hover && (!pinned || pinned.id !== hover.id) ? (
-            <div
-              className="pointer-events-none absolute z-30 w-max max-w-[260px] -translate-x-1/2 -translate-y-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)] shadow-sm"
-              style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
-              data-fold-entity-hover=""
-            >
-              <p className="text-[13px] font-semibold leading-4">{hover.name}</p>
-              <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
-                {" · "}
-                <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
-                {hover.country ? <>{" · "}{hover.country}</> : null}
-              </p>
-            </div>
-          ) : null}
+          <div className={expandedMap ? "relative h-full w-full" : "globe-disk"}>
+            <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
+            <CompanyLocationLayer map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={setExpandedMap} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
+            {!painted ? (
+              <div className="absolute inset-0 z-30 grid place-items-center bg-[#F08A3A]" aria-busy="true" aria-live="polite">
+                <div className="globe-disc" data-globe-disc="" />
+                <p className="sr-only">{failed ? "Globe unavailable" : "Globe is loading"}</p>
+              </div>
+            ) : null}
+          </div>
         </div>
         <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5" data-map-credit>
           <p className="max-w-full font-mono text-[11px] leading-4 text-[color:var(--fg-3,#8A6854)]">
             <MapCredit />
           </p>
-          {!locationsMode ? (
+          {!locationsMode && hover && (!pinned || pinned.id !== hover.id) ? (
+            <p className="max-w-full break-words text-[13px] leading-4 text-[color:var(--fg,#2A1A10)]" data-fold-entity-hover="">
+              <span className="font-semibold">{hover.name}</span>
+              {" · "}
+              <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span>
+              {" founders · "}
+              <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span>
+              {" signals"}
+            </p>
+          ) : !locationsMode ? (
             <p className="hidden text-[12px] leading-4 text-[color:var(--fg-2,#5C4030)] sm:block" data-fold-map-legend="" data-fold-legend-body="">
               Marker size follows founders on file. A ring marks the selected school.
             </p>

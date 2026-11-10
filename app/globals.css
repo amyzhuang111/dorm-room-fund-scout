@@ -1033,6 +1033,13 @@ html[data-sample="halflight"] body {
     gap: 0.35rem 0.5rem;
     padding: 0.95rem 0.9rem;
   }
+  [data-corpus-cards] td.c-n,
+  [data-corpus-cards] td.c-m1 {
+    position: static;
+    left: auto;
+    max-width: none;
+    box-shadow: none;
+  }
   [data-corpus-cards] .c-n {
     display: flex;
     align-items: center;
@@ -1045,6 +1052,10 @@ html[data-sample="halflight"] body {
     font-size: 15px;
     font-weight: 700;
     letter-spacing: -0.02em;
+  }
+  [data-corpus-cards] .c-a {
+    overflow-wrap: normal;
+    word-break: normal;
   }
   [data-corpus-cards] .c-mark {
     display: contents;
@@ -1460,9 +1471,10 @@ details:not([open]) > :not(summary) {
   min-width: 0;
 }
 [data-fold-sheet-peak] [data-fold-peak-campus-label] {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 3.25rem !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-width: none !important;
+  white-space: normal !important;
 }
 
 
@@ -1714,14 +1726,13 @@ details:not([open]) > :not(summary) {
   line-height: 1.25 !important;
   color: var(--fg-2, #3F465C) !important;
 }
-/* Single-line cohort in peek — avoids wrap self-collisions without cutting density */
 [data-fold-sheet-founders] [data-founder-cohort] {
   margin-top: 8px !important;
   font-size: 11px !important;
   line-height: 1.25 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
   max-width: 100% !important;
 }
 [data-fold-sheet-founders] [data-why-worth] {
@@ -2059,13 +2070,36 @@ html:has([data-networks-cream]) [data-site-nav] {
   background: var(--bg-raised, #FFFBF6);
 }
 
-/* Home globe: the disk is the stage. Credit and lists sit outside it. */
+/* Home globe: a circular disk on the cream page. Credit and lists sit outside it. */
 .globe-stage {
-  background: #FFF4E8;
+  container-type: size;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  overflow: visible;
+  border: 0;
+}
+.globe-disk {
+  position: relative;
+  width: min(100cqw, 100cqh);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #F08A3A;
+  box-shadow:
+    0 18px 42px rgba(120, 48, 8, 0.16),
+    0 0 0 10px #FFF4E8;
 }
 .globe-disc {
-  height: 92%;
-  aspect-ratio: 1;
+  width: 100%;
+  height: 100%;
   border-radius: 999px;
-  background: #F08A3A;
+  background:
+    radial-gradient(circle at 38% 36%, #FFB067 0%, #F08A3A 42%, #E06A18 100%);
+}
+.home-float {
+  border-radius: 18px;
+  background: #FFFBF6;
+  border: 1px solid rgba(232, 140, 70, 0.35);
+  box-shadow: 0 16px 40px rgba(90, 36, 8, 0.1);
 }

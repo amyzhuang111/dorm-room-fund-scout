@@ -1508,14 +1508,14 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              ? "break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
               : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
           <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center break-words">{card.name}</Link>
         </p>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
+          <p className="mt-0.5 break-words text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
             {subtitle}
           </p>
         ) : null}

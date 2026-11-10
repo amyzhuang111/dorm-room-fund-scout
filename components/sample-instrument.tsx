@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { logoLooksBlank } from "@/components/corpus-row-mark";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
-import { logoLooksBlank } from "@/components/corpus-row-mark";
 import { sectorIdsOf, sectorLabel } from "@/lib/domain/sectors";
 import {
   countBy,
@@ -303,7 +303,7 @@ function NeutralMark({ name, cls }: { name: string; cls: string }) {
           : "text-[8px]";
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-full border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono ${text} font-bold tracking-tight text-[color:var(--cobalt,#2F4FD8)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-full border border-[#E2C2A6] bg-[#FFE4CC] font-mono ${text} font-bold tracking-tight text-[#9A3412]`}
       aria-hidden
       title={name}
       data-logo-fallback="seal"

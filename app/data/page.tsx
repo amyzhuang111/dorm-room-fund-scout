@@ -88,12 +88,12 @@ export default async function DataExplorerPage({
   };
 
   return (
-    <div className="sample-paper mx-auto max-w-[1200px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
+    <div className="sample-paper mx-auto max-w-[1200px] px-3 py-2 pb-8 sm:px-5 sm:py-3" data-corpus-explorer="">
       <DataTheme />
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-0.5 scout-display text-[22px] leading-none sm:text-[28px]">Full data</h1>
+          <h1 className="mt-0.5 scout-display text-[20px] leading-none sm:text-[26px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" records in this view · page "}
