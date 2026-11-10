@@ -16,26 +16,32 @@ export const GLOBE_BOOT_SCRIPT = `
     });
   }
   if (!w.__directoryPromise) {
-    w.__directoryPromise = fetch("/data/sample-directory.json").then(async (res) => {
+    const directory = fetch("/data/sample-directory.json").then(async (res) => {
       if (!res.ok) throw new Error("directory");
       return res.json();
     });
+    directory.catch(() => {});
+    w.__directoryPromise = directory;
   }
   if (!w.__foundersPromise) {
-    w.__foundersPromise = fetch("/data/founders.json").then(async (res) => {
+    const founders = fetch("/data/founders.json").then(async (res) => {
       if (!res.ok) throw new Error("founders");
       return res.json();
     });
+    founders.catch(() => {});
+    w.__foundersPromise = founders;
   }
 `;
 
 export const DIRECTORY_BOOT_SCRIPT = `
   const w = window;
   if (!w.__directoryPromise) {
-    w.__directoryPromise = fetch("/data/sample-directory.json").then(async (res) => {
+    const directory = fetch("/data/sample-directory.json").then(async (res) => {
       if (!res.ok) throw new Error("directory");
       return res.json();
     });
+    directory.catch(() => {});
+    w.__directoryPromise = directory;
   }
 `;
 

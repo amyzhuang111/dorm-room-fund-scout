@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Discover from "../startup/discover/page";
+import { CorpusCountStrip } from "@/components/corpus-count-strip";
 import { SampleHome } from "@/components/sample-home";
+import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { CompanySetToggle, UnverifiedCompaniesView, unverifiedTotal } from "@/components/unverified-companies";
 import { loadDirectory } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
@@ -27,9 +29,21 @@ export default async function CompaniesPage({
     );
   }
   const facets = facetsFromSearchParams(sp);
+  const totals = loadCorpusTotals();
+  const stats = loadHeroStats();
   return (
     <>
     <CompanySetToggle vetted={vettedCount} unverified={unverifiedTotal()} active="vetted" />
+    <div className="px-3 pt-3 sm:px-5">
+      <CorpusCountStrip
+        companies={totals.investableCompanies}
+        foundersListed={totals.foundersListed}
+        foundersIndexed={totals.foundersIndexed}
+        campusesOnMap={totals.campusesOnMap}
+        campusesWithFounders={totals.campusesWithFounders}
+        updatedAt={stats.updatedAt}
+      />
+    </div>
     <h1 className="sr-only">Companies</h1>
     <SampleHome
       place="explore"

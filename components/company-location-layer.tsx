@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { GeoJSONSource, Map as LibreMap, MapLayerMouseEvent } from "maplibre-gl";
 import type { FeatureCollection, Point } from "geojson";
@@ -34,6 +35,7 @@ function frameCity(map: LibreMap, city: CityView) {
 }
 
 export function CompanyLocationLayer({ map, enabled, companies, highlightCampusIds, expanded, onExpand, rotationEnabled, onRotationChange }: { map: LibreMap | null; enabled: boolean; companies: FacetCompany[]; highlightCampusIds?: Set<string> | null; expanded: boolean; onExpand: (value:boolean)=>void; rotationEnabled: boolean; onRotationChange: (value:boolean)=>void }) {
+  const router = useRouter();
   const [data, setData] = useState<CompanyLocations | null>(null);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -99,6 +101,11 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       }).map(c=>c.id));
     };
     update(); map.on("moveend",update);
+    const openHomeRecord = (companyId: string | undefined) => {
+      if (!companyId || !document.querySelector("[data-home-fold]")) return false;
+      router.push(`/startup/${encodeURIComponent(companyId)}?from=map`);
+      return true;
+    };
     const choose = async (event:MapLayerMouseEvent) => {
       if (!enabled) return;
       const feature=event.features?.[0];
@@ -110,12 +117,14 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       }
       const id=String(event.features?.[0]?.properties.id??"");
       const city=cities.find(c=>c.id===id);
+      if (city && openHomeRecord(city.companies[0]?.id)) return;
       if (city) {setSelected(id);setSelectedCompany(null);setOnlyAddresses(true);setLimit(24);setCollapsed(false);onExpand(true);frameCity(map,city);}
     };
     const chooseOffice = (event:MapLayerMouseEvent) => {
       if(!enabled)return;
       const ids: string[] = JSON.parse(event.features?.[0]?.properties.companyIds ?? "[]");
       const id=ids[0];
+      if (openHomeRecord(id)) return;
       const city=cities.find(c=>c.companies.some(co=>co.id===id));
       const office=city?.companies.find(co=>co.id===id)?.office;
       if(city && office){setSelected(city.id);setSelectedCompany(id);setCollapsed(true);onExpand(true);map.flyTo({center:office.coordinates,zoom:16,offset:[0,-70],duration:700});}
@@ -184,7 +193,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       map.off("mouseleave", officeLayerIds[0], clearHover);
       setHover(null);
     };
-  }, [map,geo,officeGeo,cities,enabled,onExpand]);
+  }, [map,geo,officeGeo,cities,enabled,onExpand,router]);
 
   if (!enabled) return null;
   const selectedCity=cities.find(c=>c.id===selected);
@@ -223,12 +232,12 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   const peekItems = preferLogoCompanies(allShown).slice(0, 16);
 
   return <div className={styles.layer} data-company-location-map="" data-map-zoom={zoom.toFixed(1)}>
-    <div className={styles.toolbar}>
+    <div className={styles.toolbar} data-map-hq-chrome="">
       <label><span className="sr-only">Find a company or city</span><input value={query} onChange={e=>{setQuery(e.target.value);setSelected(null);setSelectedCompany(null);setOnlyAddresses(false);setCollapsed(false);setLimit(24);}} placeholder="Find a company or city" /></label>
       <label><span className="sr-only">Go to company city</span><select value={selectedCity?.id??""} onChange={e=>focusCity(e.target.value)}><option value="">Go to city</option>{cities.map(c=><option key={c.id} value={c.id}>{c.city} ({c.companies.length.toLocaleString("en-US")})</option>)}</select></label>
       <button className={styles.mobileExplore} disabled={!map || !data} onClick={()=>onExpand(true)}>{data ? `Explore ${mapped.toLocaleString("en-US")} mapped startups ↗` : "Loading company locations…"}</button>
     </div>
-    <div className={styles.zoom} aria-label="Map controls">
+    <div className={styles.zoom} aria-label="Map controls" data-map-hq-chrome="">
       <button aria-label="Zoom in" disabled={!map||zoom>=17} onClick={()=>map?.zoomIn()}>+</button>
       <button aria-label="Zoom out" disabled={!map||zoom<=0.35} onClick={()=>map?.zoomOut()}>−</button>
       <button aria-label="Reset globe view" disabled={!map} onClick={resetView}>◎</button>
@@ -292,7 +301,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       </details>
       </StartupCardPanel>
     </div>}
-    <section className={styles.results} aria-label="Startups on the map">
+    <section className={styles.results} aria-label="Startups on the map" data-map-startup-list="">
       <div className={styles.resultHeading}><div><h3>{selectedCity?selectedCity.city:query.trim()?"Search results":"Current view"} <strong>{allShown.length.toLocaleString("en-US")}</strong> startups</h3><p>{addressShown.length.toLocaleString("en-US")} sourced address pins · {(allShown.length-addressShown.length).toLocaleString("en-US")} city only. {zoom>=streetZoom?"Street view shows address pins only.":"Numbered circles are city totals."}</p>
         <nav className={styles.dbCta} aria-label="Open the full database">
           <Link href="/companies">Full database</Link>

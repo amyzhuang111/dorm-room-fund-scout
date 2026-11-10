@@ -11,6 +11,8 @@ import {
   type DirectoryFilter,
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
+import { topCampusLeads } from "@/lib/domain/campus-record";
+import { loadHomePrograms } from "@/lib/domain/home-panels";
 import { buildPeakShell } from "@/lib/domain/peak-shell";
 import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 import { undergradRankFields } from "@/lib/domain/pitchbook-model";
@@ -140,6 +142,9 @@ export function SampleHome({
           ...stats,
           universities: foldUniversities,
           week: foldWeek,
+          // Type keys such as an internal launch code stay off the map document.
+          signalTypes: [],
+          collageFounder: null,
         };
 
   return (
@@ -163,11 +168,14 @@ export function SampleHome({
       signalCompanyCount={data.cards.filter((c) => c.signals > 0).length}
       foundersListed={foundersListed}
       foundersIndexed={totals.foundersIndexed}
+      campusesWithFounders={totals.campusesWithFounders}
       newestHome={newestHome}
       peakShell={peakShell}
       directoryUrl="/data/sample-directory.json"
       place={place}
       facetExtras={facetExtras}
+      programs={place === "map" ? loadHomePrograms() : []}
+      leads={place === "map" ? topCampusLeads(data.cards) : []}
     />
   );
 }
