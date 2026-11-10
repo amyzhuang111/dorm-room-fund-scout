@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PipelineStageEditor, UserAddedBadge, VerifiedByUserBadge } from "./entity-marks";
 import { useUserPipeline } from "./user-pipeline-provider";
+import { namedPersonPath } from "@/lib/domain/person-href";
 
 export function UserStartupPage({ id }: { id: string }) {
   const router = useRouter();
@@ -62,7 +63,7 @@ export function UserStartupPage({ id }: { id: string }) {
             {startup.founders.length === 0 && <li>No founders recorded.</li>}
             {startup.founders.map((founder) => (
               <li key={founder.id} className="flex flex-wrap items-center gap-2">
-                <Link href={`/founder/discover?founder=${founder.id}&enroll=current_student,recent_grad,older_alumni`} className="underline">
+                <Link href={namedPersonPath(founder.id)} className="underline">
                   {founder.name}
                 </Link>
                 {founder.role && <span className="text-neutral-700">{founder.role}</span>}

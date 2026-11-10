@@ -11,6 +11,7 @@ import { directoryLabel, hotspotGroupByMapId, hotspotGroups, personIdsForPlace, 
 import { bestCard, hotspotHref, samePlace, SECTION_SHORT, tierBandLabel } from "./hotspot-model";
 import { bestPersonLink, linkedinAction, readLinkedInCandidate, type LinkedInAction, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type ProfileIconLink } from "./profile-links";
+import { namedPersonPath } from "./person-href";
 export interface FocusLink {
   id: string;
   name: string;
@@ -49,13 +50,8 @@ function enrollmentLine(status: string | null, label: string | null, basis: stri
   return basis === "inferred" ? `${badge} est.` : badge;
 }
 
-function personHref(id: string, potential: boolean): string {
-  const params = new URLSearchParams({
-    founder: id,
-    enroll: "current_student,recent_grad,older_alumni",
-  });
-  if (potential) params.set("pool", "potential");
-  return `/founder/discover?${params.toString()}`;
+function personHref(id: string): string {
+  return namedPersonPath(id);
 }
 
 function linkedinByPerson(
@@ -217,7 +213,7 @@ function personFocus(
     subtitle: [roleLabel(founderRole?.role ?? roles[0]?.role ?? null), school?.name, enrollmentLine(person.enrollment_status, person.enrollment_label, person.enrollment_basis)]
       .filter(Boolean)
       .join(" · "),
-    href: personHref(person.id, person.founder_status === "potential"),
+    href: personHref(person.id),
     hrefLabel: "Open person",
     website: null,
     link: bestPersonLink({ aliasesJson: person.aliases_json, linkedinCandidates }),

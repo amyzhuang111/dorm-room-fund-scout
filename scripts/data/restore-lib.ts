@@ -29,7 +29,7 @@ export function applyRestoreList(db: Database.Database, list: RestoreList, dry =
        AND (excluded_reason IS NULL${fromReasons.length ? ` OR excluded_reason IN (${marks})` : ""})`,
   );
   const update = db.prepare(
-    `UPDATE projects SET is_investable_candidate = 1, excluded_reason = NULL, updated_at = datetime('now') WHERE id = ?`,
+    `UPDATE projects SET is_investable_candidate = 1, excluded_reason = NULL, updated_at = ? WHERE id = ?`,
   );
   const vettedBefore = vettedCount(db);
   let changed = 0;
@@ -41,7 +41,7 @@ export function applyRestoreList(db: Database.Database, list: RestoreList, dry =
         skipped.push(`${c.name} (${c.id})`);
         continue;
       }
-      if (!dry) update.run(c.id);
+      if (!dry) update.run("2026-11-04 00:00:00", c.id);
       changed += 1;
     }
   })();

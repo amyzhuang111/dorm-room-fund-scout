@@ -2,7 +2,7 @@
   --ink: #263a43;
   --muted: #64767e;
   --border: #e2e8e9;
-  --paper: #fffefa;
+  --paper: #ffffff;
   --hover: #f1f5f5;
   color: var(--ink);
   background: var(--paper);
@@ -103,8 +103,8 @@
   padding: 4px;
 }
 .regionList {
-  max-height: 230px;
-  overflow: auto;
+  max-height: none;
+  overflow: visible;
 }
 .regionList button {
   display: flex;
@@ -122,10 +122,32 @@
   color: var(--muted);
 }
 .swatch {
+  display: inline-block;
   width: 8px;
   height: 8px;
   flex: none !important;
   border-radius: 2px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  width: 100%;
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.legend b {
+  font-weight: 600;
+}
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend small {
+  color: var(--muted);
 }
 .note {
   font-size: 11px;
@@ -324,7 +346,7 @@
     border-right: 1px solid var(--border);
   }
   .regionList {
-    max-height: 360px;
+    max-height: none;
   }
   .viewport {
     height: 690px;
@@ -383,8 +405,11 @@
   }
 }
 
-@media (min-width: 768px) { .sidebar { max-height: 780px; overflow-y: auto; } }
-@media (min-width: 1280px) { .sidebar { max-height: 840px; } }
+@media (min-width: 768px) { .sidebar { max-height: none; overflow: visible; } }
+@media (max-width: 767px) {
+  .toolbar { flex-wrap: wrap; }
+  .toolbar input { flex: 1 1 100%; width: 100%; }
+}
 
 .description { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 

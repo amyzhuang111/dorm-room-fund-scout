@@ -41,7 +41,7 @@ export const FounderCard = memo(function FounderCard({
             {founder.founderStatus === "potential" && <PotentialFounderBadge />}
             <PrecollegeBadges signals={founder.precollegeSignals} />
             <ProgramBadges signals={founder.programSignals} />
-            <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} basis={founder.enrollmentBasis} />
+            <EnrollmentBadge name={founder.name} status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} basis={founder.enrollmentBasis} sourceUrl={founder.enrollmentSourceUrl} leftSchool={founder.leftSchool} />
             <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
             {founder.sameSchoolCofounders ? <SameSchoolBadge /> : null}

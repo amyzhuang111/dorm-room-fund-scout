@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { NextResponse } from "next/server";
-import { loadFounderTable, loadProjectRows } from "@/lib/domain/founder-table";
+import { loadFounderTable } from "@/lib/domain/founder-table";
 
 export const runtime = "nodejs";
 
 const CACHE = "public, s-maxage=3600, stale-while-revalidate=86400";
 
-/** GET ?campus=univ_penn → project rows for DataTable (keeps /founders HTML under 210 KB). */
+/** GET ?campus=univ_penn → named founder rows. */
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const campus = url.searchParams.get("campus")?.trim() || undefined;
@@ -25,10 +25,9 @@ export async function GET(request: Request) {
       // Precompute has not run (local dev). Fall through to SQLite.
     }
   }
-  const founders = loadFounderTable(campus);
-  const rows = loadProjectRows(campus);
+  const rows = loadFounderTable(campus);
   return NextResponse.json(
-    { founderCount: founders.length, rows },
+    { founderCount: rows.length, rows },
     {
       // Data only changes with a deploy (bundled database), and the CDN cache is
       // per deployment, so cache hard and serve stale while revalidating.

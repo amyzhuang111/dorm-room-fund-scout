@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useGlobeRotation } from "@/lib/client/use-globe-rotation";
+import { mapStageHeight } from "@/lib/client/map-stage-height";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadiusForCampus } from "@/lib/domain/marker-radius";
 import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
@@ -137,7 +138,8 @@ export function TileGlobe({
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   /** r44 bigmap default; fit() replaces on mount. */
-  const [stageHeight, setStageHeight] = useState(640);
+  const [stageHeight, setStageHeight] = useState(() => (typeof window === "undefined" ? 640 : mapStageHeight(window.innerWidth, window.innerHeight)));
+  const [deskSquare, setDeskSquare] = useState(() => typeof window !== "undefined" && window.innerWidth >= 1024);
   const hitPadRef = useRef(64);
   const nearestMaxRef = useRef(100);
   const campusesRef = useRef(campuses);
@@ -199,20 +201,8 @@ export function TileGlobe({
     } | null = null;
 
     const fit = () => {
-      const wide = window.innerWidth >= 1024;
-      // r53 mobile: taller full-bleed stage (~88vh) so globe dominates under the deck sheet.
-      // r56 desk: taller full-bleed (~86vh) so the map owns the first screen with fold overlays.
-      // r57 mobile: when the investor sheet is deck/expanded, shrink map to a compact header.
-      const sheetMode = document.documentElement.getAttribute("data-fold-sheet-mode");
-      const compactHeader = !wide && (sheetMode === "deck" || sheetMode === "expanded");
-      const target = compactHeader
-        ? Math.round(window.innerHeight * 0.24)
-        : Math.round(window.innerHeight * (wide ? 0.92 : 0.88));
-      const next = wide
-        ? Math.max(680, Math.min(1000, target))
-        : compactHeader
-          ? Math.max(140, Math.min(220, target))
-          : Math.max(520, Math.min(760, target));
+      const next = mapStageHeight(window.innerWidth, window.innerHeight);
+      setDeskSquare(window.innerWidth >= 1024);
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
       nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
@@ -761,10 +751,10 @@ export function TileGlobe({
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>
 
-      <section className="mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
+      <section className="mb-0 lg:mb-3" data-fold-desk-map="" aria-label="Map">
+        <h2 className="mb-1 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
           <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
-            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
+            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-0 px-3 text-[14px] leading-tight max-[639px]:whitespace-normal max-[639px]:px-0.5 ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
             <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">Reset</button>
             <button type="button" aria-pressed={rotationEnabled} title="Turn automatic rotation on or off" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause" : "Rotate"}</button>
             <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
@@ -772,7 +762,7 @@ export function TileGlobe({
         </h2>
         <div
           className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-white`}
-          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
+          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : deskSquare ? { height: stageHeight, width: stageHeight, maxWidth: "100%", marginInline: "auto" } : { height: stageHeight }}
           role={expandedMap ? "dialog" : undefined}
           aria-modal={expandedMap ? true : undefined}
           aria-label={expandedMap ? "Expanded startup map" : undefined}
@@ -780,6 +770,7 @@ export function TileGlobe({
           data-dispatch-map-stage=""
           data-fold-bigmap-stage=""
           data-map-stage-h={stageHeight}
+          data-fold-stage-square={deskSquare ? "1" : "0"}
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
           <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
@@ -791,11 +782,6 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 [&_a]:pointer-events-auto" data-map-credit>
-            <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
-              <MapCredit />
-            </p>
-          </div>
           {!locationsMode && hover && (!pinned || pinned.id !== hover.id) ? (
             <div
               className="pointer-events-none absolute z-30 w-max max-w-[260px] -translate-x-1/2 -translate-y-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)] shadow-sm"
@@ -896,6 +882,9 @@ export function TileGlobe({
             ) : null}
           </div>
         </div>
+        <p className="mt-1 px-2 text-right font-mono text-[10px] leading-4 text-[color:var(--fg-3,#5C647A)] [&_a]:underline [&_a]:underline-offset-2" style={deskSquare ? { width: stageHeight, maxWidth: "100%", marginInline: "auto" } : undefined} data-map-credit>
+          <MapCredit />
+        </p>
       </section>
 
 

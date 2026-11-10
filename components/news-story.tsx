@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { NewsListItem } from "@/lib/domain/news-types";
 import { CATEGORY_LABEL, SOURCE_TYPE_LABEL, newsShortDate } from "@/lib/domain/news-types";
+import { namedPersonPath } from "@/lib/domain/person-href";
 
 export function NewsStory({ item }: { item: NewsListItem }) {
   return (
@@ -40,7 +41,7 @@ export function NewsStory({ item }: { item: NewsListItem }) {
         {item.founders.map((founder) => (
           <Link
             key={founder.id}
-            href={`/founder/discover?founder=${encodeURIComponent(founder.id)}&enroll=current_student,recent_grad,older_alumni`}
+            href={namedPersonPath(founder.id)}
             className="inline-flex max-w-[220px] items-center truncate rounded-full border border-black bg-white px-2 py-0.5 text-xs font-medium text-black hover:bg-black hover:text-white"
           >
             {founder.name}

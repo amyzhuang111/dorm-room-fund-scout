@@ -1,6 +1,7 @@
 import { memberDeniedResponse } from "@/lib/auth/guard";
 import { getDb } from "@/lib/db/client";
 import { findDuplicates, type CatalogRecord } from "@/lib/domain/user-pipeline";
+import { namedPersonPath } from "@/lib/domain/person-href";
 
 export const runtime = "nodejs";
 
@@ -85,7 +86,7 @@ function catalogRecords(): CatalogRecord[] {
         name: row.name,
         campusName: row.campus,
         websiteUrl: null,
-        href: `/founder/discover?founder=${encodeURIComponent(row.id)}&enroll=current_student,recent_grad,older_alumni`,
+        href: namedPersonPath(row.id),
       });
     } else if (row.campus && existing.campusName && !existing.campusName.includes(row.campus)) {
       existing.campusName = `${existing.campusName}, ${row.campus}`;

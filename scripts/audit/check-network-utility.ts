@@ -36,7 +36,7 @@ for (const marker of [
   "data-network-founder-link", "data-network-company-link", "data-network-evidence-link",
   "Copy network link", "sourceUrl",
 ]) assert.ok(component.includes(marker), `Missing actionable network UI: ${marker}`);
-assert.ok(component.includes("/founder/discover?q="), "Founder links must point to a working searchable founder route");
+assert.ok(component.includes("namedPersonPath("), "Named founders open their person record");
 assert.ok(component.includes("/startup/"), "Company links must open full records");
 assert.ok(!component.includes('id="investor-hubs-heading" className="order-5 hidden'), "Do not keep an inaccessible duplicate investor table");
 

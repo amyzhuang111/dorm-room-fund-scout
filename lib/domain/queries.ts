@@ -222,6 +222,12 @@ export interface NamedFounder {
   enrollmentStatus: string | null;
   enrollmentLabel: string | null;
   enrollmentBasis: string | null;
+  enrollmentEvidence?: string | null;
+  enrollmentSourceUrl?: string | null;
+  classYearSupport?: string | null;
+  roleClaimState?: string | null;
+  roleClaimUrl?: string | null;
+  roleClaimExcerpt?: string | null;
   leftSchool: boolean;
   school: string | null;
   program: string | null;
@@ -576,12 +582,17 @@ function buildAllCandidates(): CandidateSummary[] {
       `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
               pe.enrollment_basis as enrollment_basis, pe.enrollment_grad_year as graduation_year,
-              pe.left_school as left_school, pe.founder_status as founder_status, ppr.role as role
+              pe.enrollment_evidence as enrollment_evidence, pe.enrollment_source_url as enrollment_source_url,
+              y.status as class_year_support,
+              pe.left_school as left_school, pe.founder_status as founder_status, ppr.role as role,
+              c.verification_state as role_claim_state, c.source_url as role_claim_url, c.excerpt as role_claim_excerpt
        FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
+       LEFT JOIN claims c ON c.id = ppr.claim_id
+       LEFT JOIN person_class_year_reviews y ON y.person_id = pe.id
        WHERE ppr.role LIKE '%founder%'
-       ORDER BY ppr.rowid`
+       ORDER BY ppr.project_id, pe.name, ppr.id`
     )
-    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; enrollment_basis: string | null; graduation_year: number | null; left_school: number | null; founder_status: string | null; role: string | null }[]) {
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; enrollment_basis: string | null; graduation_year: number | null; enrollment_evidence: string | null; enrollment_source_url: string | null; class_year_support: string | null; left_school: number | null; founder_status: string | null; role: string | null; role_claim_state: string | null; role_claim_url: string | null; role_claim_excerpt: string | null }[]) {
     const key = `${r.project_id}:${r.id}`;
     if (seenFounder.has(key)) continue;
     seenFounder.add(key);
@@ -602,6 +613,12 @@ function buildAllCandidates(): CandidateSummary[] {
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
       enrollmentBasis: r.enrollment_basis,
+      enrollmentEvidence: r.enrollment_evidence,
+      enrollmentSourceUrl: r.enrollment_source_url,
+      classYearSupport: r.class_year_support,
+      roleClaimState: r.role_claim_state,
+      roleClaimUrl: r.role_claim_url,
+      roleClaimExcerpt: r.role_claim_excerpt,
       graduationYear: r.graduation_year,
       leftSchool: r.left_school === 1,
       school: schoolByPerson.get(r.id) ?? null,

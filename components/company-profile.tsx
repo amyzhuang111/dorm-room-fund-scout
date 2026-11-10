@@ -3,15 +3,11 @@ import Link from "next/link";
 import type { CompanyProfile, FundingRound, InvestorFact, SourcedValue } from "@/lib/domain/company-profile";
 import { displayedFunding, formatRound, latestRound } from "@/lib/domain/company-profile";
 import type { NamedFounder } from "@/lib/domain/queries";
+import { namedPersonPath } from "@/lib/domain/person-href";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 function founderHref(founder: NamedFounder): string {
-  const params = new URLSearchParams({
-    founder: founder.personId,
-    enroll: "current_student,recent_grad,older_alumni",
-  });
-  if (founder.founderStatus === "potential") params.set("pool", "potential");
-  return `/founder/discover?${params.toString()}`;
+  return namedPersonPath(founder.personId);
 }
 
 function roleLabel(role: string | null): string {

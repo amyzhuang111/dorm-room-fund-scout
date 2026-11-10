@@ -1,4 +1,4 @@
-import { enrollmentBadge } from "@/lib/domain/founder-status";
+import { enrollmentPhrase, readPersonScope } from "@/lib/domain/claim-scope";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 import { bestPrecollegeSignals } from "@/lib/domain/precollege";
 import type { ProgramSignalView } from "@/lib/domain/program-signals";
@@ -240,14 +240,16 @@ export function VerificationBadge({
   status,
   verifiedAt,
   note,
+  scope,
 }: {
   status?: string | null;
   verifiedAt?: string | null;
   note?: string | null;
+  scope?: "company" | "record";
 }) {
   if (!status) return null;
   const when = verifiedAt ? verifiedAt.slice(0, 10) : "";
-  const label = VERIFICATION_LABEL[status] ?? status;
+  const label = scope === "company" && status === "confirmed" ? "Company verified" : (VERIFICATION_LABEL[status] ?? status);
   return (
     <span
       className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${VERIFICATION_CLASS[status] ?? "bg-surface-2 text-muted border-border-c"}`}
@@ -283,24 +285,48 @@ export function LeftSchoolBadge({ leftSchool }: { leftSchool?: boolean | number 
 }
 
 export function EnrollmentBadge({
+  name,
   status,
   label,
   evidence,
   basis,
+  sourceUrl,
+  leftSchool,
+  year,
+  classYearSupport,
 }: {
+  name?: string | null;
   status: string | null | undefined;
   label?: string | null;
   evidence?: string | null;
   basis?: string | null;
+  sourceUrl?: string | null;
+  leftSchool?: boolean | null;
+  year?: number | null;
+  classYearSupport?: string | null;
 }) {
-  const key = status && status in ENROLLMENT_CLASS ? status : "unknown";
+  const fromLabel = Number(label?.match(/\b(20\d{2})\b/)?.[1] ?? "");
+  const scope = readPersonScope({
+    name,
+    year: year ?? (Number.isFinite(fromLabel) && fromLabel > 1900 ? fromLabel : null),
+    classYearSupport,
+    status,
+    basis,
+    evidence,
+    sourceUrl,
+    leftSchool,
+  });
+  const present = enrollmentPhrase(scope);
   return (
     <span
-      className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS[key]}`}
-      title={evidence ?? undefined}
+      className={`block max-w-full min-w-0 basis-full whitespace-normal break-words rounded-md border px-2 py-1 text-left text-[14px] font-medium leading-5 ${ENROLLMENT_CLASS.unknown}`}
+      data-enrollment-reading=""
+      title={scope.presentText}
     >
-      {enrollmentBadge(status, label)}
-      {basis === "inferred" && <span className="ml-1 font-normal text-muted">est.</span>}
+      {scope.classYearText}
+      {" · "}
+      {present}
+      {basis === "inferred" ? <span className="font-normal"> est.</span> : null}
     </span>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ClassYearChart } from "@/components/class-year-chart";
+import { countClassYears } from "@/lib/domain/class-year-cohort";
 import { FoundersDesk } from "@/components/founders-desk";
 import { ShortlistCampusButton } from "@/components/shortlist-campus";
 import { campusSlug, resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
@@ -101,11 +102,7 @@ export default async function CampusPage({
   const founders = loadFounderTable(university.id);
   const topTier = founders.filter((row) => row.tier === "S" || row.tier === "S+").length;
   const signalsWeek = signalsThisWeek(university.id);
-  const yearCounts = [...founders.reduce((counts, row) => {
-    if (row.year == null) return counts;
-    counts.set(row.year, (counts.get(row.year) ?? 0) + 1);
-    return counts;
-  }, new Map<number, number>())].map(([year, count]) => ({ year, count }));
+  const yearCounts = countClassYears(founders);
   const affiliated = companies(university.id);
   const sources = listSources().filter((source) => source.campuses.includes(university.id));
   const signals = tab === "signals" ? listSignalsForUniversity(university.id) : [];

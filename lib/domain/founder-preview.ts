@@ -6,6 +6,7 @@ import { assembleProfileLinks, profileLabel } from "./profile-links";
 import { canonicalPersonLinkedIn, formatVerifiedDate, founderRoleLabel } from "./startup-card";
 import { localCompanyLogoUrl } from "./local-logos";
 import { isDirectoryBoilerplate } from "./sectors";
+import { namedPersonPath } from "./person-href";
 
 export interface FounderPreviewLink {
   kind: string;
@@ -78,8 +79,6 @@ export function getFounderPreview(id: string): FounderPreview | null {
   for (const link of assembleProfileLinks(person.aliases_json, claims).profileLinks) {
     links.push({ kind: link.type, label: `${profileLabel(link.type)}${link.status === "unverified" ? " (unverified)" : ""}`, url: link.url });
   }
-  const params = new URLSearchParams({ founder: person.id, enroll: "current_student,recent_grad,older_alumni" });
-  if (person.founder_status === "potential") params.set("pool", "potential");
   return {
     id: person.id, name: person.name, schools, companies, links,
     subtitle: companies.length ? "Founder" : person.founder_status === "potential" ? "Potential founder" : null,
@@ -87,6 +86,6 @@ export function getFounderPreview(id: string): FounderPreview | null {
     classYearSource: person.enrollment_source_url,
     verifiedOn: person.verification_status === "confirmed" ? formatVerifiedDate(person.last_verified_at) : null,
     verificationStatus: person.verification_status,
-    recordHref: `/founder/discover?${params}`,
+    recordHref: namedPersonPath(person.id),
   };
 }

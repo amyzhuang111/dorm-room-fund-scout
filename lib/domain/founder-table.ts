@@ -1,10 +1,21 @@
 import fs from "node:fs";
 import { databasePath, getDb } from "../db/client";
+import { readPersonScope } from "./claim-scope";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { localCompanyLogoUrl } from "./local-logos";
 import { listFoundersForPage } from "./queries";
 
 const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5, talent: 6, Unranked: 7 };
+
+export interface FounderAffiliationFact {
+  campusId: string | null;
+  campus: string | null;
+  role: string | null;
+  status: string | null;
+  sourceUrl: string | null;
+  excerpt: string | null;
+  retrievedAt: string | null;
+}
 
 export interface FounderTableRow {
   id: string;
@@ -17,7 +28,22 @@ export interface FounderTableRow {
   campusSlug: string | null;
   company: string | null;
   companyId: string | null;
+  companyClaimState: string | null;
+  companyClaimUrl: string | null;
+  companyClaimExcerpt: string | null;
   year: number | null;
+  classYearSupport: string | null;
+  /** Stored enrollment fields. Class year is not a completed degree. */
+  enrollmentStatus: string | null;
+  enrollmentBasis: string | null;
+  enrollmentEvidence: string | null;
+  enrollmentSourceUrl: string | null;
+  leftSchool: boolean;
+  verificationStatus: string | null;
+  verificationNote: string | null;
+  presentEnrollment: "unknown" | "current_student" | "graduated";
+  presentEnrollmentText: string;
+  affiliations: FounderAffiliationFact[];
   signal: string | null;
   signalType: string | null;
   signalAt: string | null;
@@ -53,6 +79,55 @@ export function loadFounderTable(universityId?: string): FounderTableRow[] {
 function buildFounderTable(universityId?: string): FounderTableRow[] {
   const db = getDb();
   const years = new Map<string, number>();
+  const enrollment = new Map<string, { status: string | null; basis: string | null; evidence: string | null; sourceUrl: string | null; leftSchool: boolean; verificationStatus: string | null; verificationNote: string | null }>();
+  for (const row of db.prepare(
+    `SELECT id, enrollment_status as status, enrollment_basis as basis, enrollment_evidence as evidence, enrollment_source_url as source_url, left_school, verification_status, verification_note
+     FROM people`
+  ).all() as { id: string; status: string | null; basis: string | null; evidence: string | null; source_url: string | null; left_school: number | null; verification_status: string | null; verification_note: string | null }[]) {
+    enrollment.set(row.id, {
+      status: row.status,
+      basis: row.basis,
+      evidence: row.evidence,
+      sourceUrl: row.source_url,
+      leftSchool: row.left_school === 1,
+      verificationStatus: row.verification_status,
+      verificationNote: row.verification_note,
+    });
+  }
+  const affiliations = new Map<string, FounderAffiliationFact[]>();
+  for (const row of db.prepare(
+    `SELECT a.person_id, a.university_id, u.name as campus, a.role, a.status, c.source_url, c.excerpt, c.retrieved_at
+     FROM affiliations a
+     LEFT JOIN universities u ON u.id = a.university_id
+     LEFT JOIN claims c ON c.id = a.claim_id
+     ORDER BY a.person_id, a.id`
+  ).all() as { person_id: string; university_id: string | null; campus: string | null; role: string | null; status: string | null; source_url: string | null; excerpt: string | null; retrieved_at: string | null }[]) {
+    const list = affiliations.get(row.person_id) ?? [];
+    list.push({
+      campusId: row.university_id,
+      campus: row.campus ? shortCampusLabel(row.university_id ?? "", row.campus) : null,
+      role: row.role,
+      status: row.status,
+      sourceUrl: row.source_url,
+      excerpt: row.excerpt,
+      retrievedAt: row.retrieved_at,
+    });
+    affiliations.set(row.person_id, list);
+  }
+  const classYearSupport = new Map<string, string>();
+  for (const row of db.prepare(`SELECT person_id, status FROM person_class_year_reviews`).all() as { person_id: string; status: string }[]) {
+    classYearSupport.set(row.person_id, row.status);
+  }
+  const companyClaims = new Map<string, { state: string | null; url: string | null; excerpt: string | null }>();
+  for (const row of db.prepare(
+    `SELECT r.person_id, r.project_id, c.verification_state, c.source_url, c.excerpt
+     FROM person_project_roles r
+     LEFT JOIN claims c ON c.id = r.claim_id
+     WHERE r.role LIKE '%founder%'
+     ORDER BY r.person_id, r.id`
+  ).all() as { person_id: string; project_id: string; verification_state: string | null; source_url: string | null; excerpt: string | null }[]) {
+    companyClaims.set(`${row.person_id}:${row.project_id}`, { state: row.verification_state, url: row.source_url, excerpt: row.excerpt });
+  }
   try {
     for (const row of db.prepare(
       `SELECT id as person_id, enrollment_grad_year as year FROM people WHERE enrollment_grad_year IS NOT NULL`
@@ -77,6 +152,9 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
     .map((founder) => {
       const campusId = founder.universityId;
       const signal = signals.get(founder.id);
+      const enrolled = enrollment.get(founder.id);
+      const companyId = founder.linkedCompany?.id ?? founder.projects.find((project) => project.kind === "company" && /founder/i.test(project.role))?.id ?? null;
+      const companyClaim = companyId ? companyClaims.get(`${founder.id}:${companyId}`) : undefined;
       return {
         id: founder.id,
         name: founder.name,
@@ -86,9 +164,37 @@ function buildFounderTable(universityId?: string): FounderTableRow[] {
         campusId,
         campusIds: [...new Set([campusId, ...founder.campuses.map((campus) => campus.universityId)].filter((id): id is string => Boolean(id)))],
         campusSlug: campusId && founder.universityName ? campusSlug(shortCampusLabel(campusId, founder.universityName)) : null,
-        company: founder.linkedCompany?.name ?? founder.possibleCompany?.name ?? founder.projects.find((project) => project.kind === "company")?.name ?? null,
-        companyId: founder.linkedCompany?.id ?? founder.projects.find((project) => project.kind === "company")?.id ?? null,
+        company: founder.linkedCompany?.name ?? founder.projects.find((project) => project.kind === "company" && /founder/i.test(project.role))?.name ?? null,
+        companyId,
+        companyClaimState: companyClaim?.state ?? null,
+        companyClaimUrl: companyClaim?.url ?? null,
+        companyClaimExcerpt: companyClaim?.excerpt ?? null,
         year: years.get(founder.id) ?? null,
+        classYearSupport: classYearSupport.get(founder.id) ?? null,
+        enrollmentStatus: enrolled?.status ?? null,
+        enrollmentBasis: enrolled?.basis ?? null,
+        enrollmentEvidence: enrolled?.evidence ?? null,
+        enrollmentSourceUrl: enrolled?.sourceUrl ?? null,
+        leftSchool: enrolled?.leftSchool ?? false,
+        verificationStatus: enrolled?.verificationStatus ?? null,
+        verificationNote: enrolled?.verificationNote ?? null,
+        ...(() => {
+          const scope = readPersonScope({
+            name: founder.name,
+            year: years.get(founder.id) ?? null,
+            classYearSupport: classYearSupport.get(founder.id) ?? null,
+            status: enrolled?.status,
+            basis: enrolled?.basis,
+            evidence: enrolled?.evidence,
+            sourceUrl: enrolled?.sourceUrl,
+            leftSchool: enrolled?.leftSchool,
+            roleClaimState: companyClaim?.state,
+            roleClaimUrl: companyClaim?.url,
+            roleClaimExcerpt: companyClaim?.excerpt,
+          });
+          return { presentEnrollment: scope.present, presentEnrollmentText: scope.presentText };
+        })(),
+        affiliations: affiliations.get(founder.id) ?? [],
         signal: signal?.text ?? founder.strongestEvidence,
         signalType: signal?.type ?? null,
         signalAt: signal?.at ?? null,

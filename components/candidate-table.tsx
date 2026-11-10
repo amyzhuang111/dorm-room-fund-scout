@@ -102,7 +102,7 @@ export const CandidateTable = memo(function CandidateTable({
             <p className="mt-1 flex flex-wrap gap-1">
               {c.founderLinks.slice(0, 2).map((f) => (
                 <span key={f.personId} className="inline-flex flex-wrap gap-1">
-                  <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
+                  <EnrollmentBadge name={f.name} status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} evidence={f.enrollmentEvidence} sourceUrl={f.enrollmentSourceUrl} leftSchool={f.leftSchool} year={f.graduationYear} classYearSupport={f.classYearSupport} />
                   <LeftSchoolBadge leftSchool={f.leftSchool} />
                 </span>
               ))}
@@ -168,7 +168,7 @@ export const CandidateTable = memo(function CandidateTable({
                   <p className="mt-1 flex flex-wrap gap-1">
                     {c.founderLinks.slice(0, 2).map((f) => (
                       <span key={f.personId} className="inline-flex flex-wrap gap-1">
-                  <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
+                  <EnrollmentBadge name={f.name} status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} evidence={f.enrollmentEvidence} sourceUrl={f.enrollmentSourceUrl} leftSchool={f.leftSchool} year={f.graduationYear} classYearSupport={f.classYearSupport} />
                   <LeftSchoolBadge leftSchool={f.leftSchool} />
                 </span>
                     ))}
