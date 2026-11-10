@@ -15,6 +15,11 @@ export interface DirectoryCard {
   description: string | null;
   school: string | null;
   schoolId: string | null;
+  campusIds?: string[];
+  campuses?: string[];
+  teamSize?: string | null;
+  verificationStatus?: string | null;
+  sourceUrls?: string[];
   schoolSlug: string | null;
   sectorId: string | null;
   sectorIds?: string[];
@@ -240,11 +245,11 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
   const db = getDb();
   const companies = db
     .prepare(
-      `SELECT id, name, description
+      `SELECT id, name, description, verification_status
          FROM projects
         WHERE ${options.includeAll ? '1 = 1' : "kind = 'company' AND is_investable_candidate = 1"}`,
     )
-    .all() as { id: string; name: string; description: string | null }[];
+    .all() as { id: string; name: string; description: string | null; verification_status: string | null }[];
 
   const signalCount = new Map<string, number>();
   for (const row of db.prepare(`SELECT project_id, COUNT(*) as n FROM signals GROUP BY project_id`).all() as { project_id: string; n: number }[]) {
@@ -291,6 +296,12 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
   }
 
   const schoolByProject = new Map<string, { id: string; name: string; n: number }>();
+  const campusesByProject = new Map<string, Map<string, string>>();
+  const rememberCampus = (project: string, id: string, name: string) => {
+    const campuses = campusesByProject.get(project) ?? new Map<string, string>();
+    campuses.set(id, shortCampusLabel(id, name));
+    campusesByProject.set(project, campuses);
+  };
   for (const row of db
     .prepare(
       `SELECT r.project_id as project_id, u.id as university_id, u.name as name, COUNT(*) as n
@@ -301,6 +312,7 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
     )
     .all() as { project_id: string; university_id: string; name: string; n: number }[]) {
     const prev = schoolByProject.get(row.project_id);
+    rememberCampus(row.project_id, row.university_id, row.name);
     if (!prev || row.n > prev.n || (row.n === prev.n && row.name.localeCompare(prev.name) < 0)) {
       schoolByProject.set(row.project_id, { id: row.university_id, name: row.name, n: row.n });
     }
@@ -322,6 +334,7 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
     if (!schoolByProject.has(row.project_id)) {
       schoolByProject.set(row.project_id, { id: row.university_id, name: row.name, n: 0 });
     }
+    rememberCampus(row.project_id, row.university_id, row.name);
   }
 
   const foundersByProject = new Map<string, string[]>();
@@ -448,6 +461,17 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
     }
   }
 
+  const teams = new Map<string, string>();
+  const sources = new Map<string, Set<string>>();
+  for (const fact of db.prepare(`SELECT project_id, fact_key, value_text, source_url FROM company_facts ORDER BY id`).all() as { project_id: string; fact_key: string; value_text: string | null; source_url: string | null }[]) {
+    if (fact.fact_key === "team_size" && fact.value_text?.trim() && !teams.has(fact.project_id)) teams.set(fact.project_id, fact.value_text.trim());
+    const url = httpUrl(fact.source_url);
+    if (url) {
+      const urls = sources.get(fact.project_id) ?? new Set<string>();
+      urls.add(url);
+      sources.set(fact.project_id, urls);
+    }
+  }
   const cards: DirectoryCard[] = [];
   for (const company of companies) {
     const school = schoolByProject.get(company.id);
@@ -481,6 +505,11 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
       description,
       school: short,
       schoolId: school?.id ?? null,
+      campusIds: [...(campusesByProject.get(company.id)?.keys() ?? [])],
+      campuses: [...(campusesByProject.get(company.id)?.values() ?? [])],
+      teamSize: teams.get(company.id) ?? null,
+      verificationStatus: company.verification_status,
+      sourceUrls: [...(sources.get(company.id) ?? [])],
       schoolSlug: short ? campusSlug(short) : null,
       sectorId,
       sectorIds,

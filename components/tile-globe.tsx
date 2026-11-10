@@ -9,6 +9,7 @@ import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { CampusGlobeFallback } from "./campus-globe-fallback";
 import { MapCredit } from "./map-credit";
 import { CompanyLocationLayer } from "./company-location-layer";
 import mapStyles from "./company-location-map.module.css";
@@ -606,7 +607,7 @@ export function TileGlobe({
         },
       };
 
-    });
+    }).catch(() => { if (!dead) setFailed(true); });
     };
 
     const ric = window.requestIdleCallback?.bind(window);
@@ -763,12 +764,12 @@ export function TileGlobe({
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
         <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
-          <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
+          {!failed && <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
             <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
             <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">Reset</button>
             <button type="button" aria-pressed={rotationEnabled} title="Turn automatic rotation on or off" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause" : "Rotate"}</button>
             <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
-          </span>
+          </span>}
         </h2>
         <div
           className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-white`}
@@ -784,11 +785,12 @@ export function TileGlobe({
         >
           <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
           <CompanyLocationLayer map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={setExpandedMap} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
-          {!painted ? (
-            <div className="absolute inset-0 z-30 bg-[#FFFFFF]" aria-busy="true" aria-live="polite">
+          {!painted || failed ? (
+            <div className="absolute inset-0 z-30 bg-[#FFFFFF]" aria-busy={!failed} aria-live="polite">
+              {failed ? <CampusGlobeFallback campuses={campuses} onSelect={onSelect} selectedId={selectedId} highlightCampusIds={highlightCampusIds} /> : (
               <div className="grid h-full place-items-center">
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{failed ? "Globe unavailable" : "Loading globe"}</p>
-              </div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Loading globe</p>
+              </div>)}
             </div>
           ) : null}
           <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 [&_a]:pointer-events-auto" data-map-credit>

@@ -30,6 +30,13 @@ export function SiteNav() {
   const menuButton = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
   const contextPath = pathname === "/" || pathname === "/companies";
+  const workspacePanel: Record<string, string> = { companies: "companies", founders: "founders", networks: "networks", campuses: "rankings", data: "insights" };
+  const workspaceLink = (id: string, fallback: string) => {
+    if (pathname !== "/" || !workspacePanel[id]) return fallback;
+    const next = new URLSearchParams(searchParams.toString());
+    next.set("panel", workspacePanel[id]);
+    return `/?${next.toString()}`;
+  };
   const discoveryLink = (id: "map" | "companies" | "signals") => discoveryHref(id, contextPath ? new URLSearchParams(searchParams) : new URLSearchParams());
   useEffect(() => {
     if (open) menu.current?.querySelector<HTMLElement>("a")?.focus();
@@ -46,7 +53,7 @@ export function SiteNav() {
         <Link href="/" className="wordmark inline-flex min-h-11 shrink-0 items-center"><span className="mark" aria-hidden />Campus Scout</Link>
         <nav className="ml-2 hidden min-w-0 items-center gap-3 lg:flex" aria-label="Primary">
           {NAV.map((item) => (
-            <Link key={item.id} href={contextPath && (item.id === "map" || item.id === "companies") ? discoveryLink(item.id) : item.href} aria-current={item.match(pathname) ? "page" : undefined} className={`nav-link ${item.match(pathname) ? "is-active" : ""}`}>
+            <Link key={item.id} href={workspaceLink(item.id, contextPath && (item.id === "map" || item.id === "companies") ? discoveryLink(item.id) : item.href)} aria-current={item.match(pathname) ? "page" : undefined} className={`nav-link ${item.match(pathname) ? "is-active" : ""}`}>
               {item.label}
               {item.id === "work" && local ? (
                 <span
@@ -77,7 +84,7 @@ export function SiteNav() {
         {DESK_TABS.map((item) => (
           <Link
             key={item.href}
-            href={contextPath && (item.id === "map" || item.id === "companies") ? discoveryLink(item.id) : item.href}
+            href={workspaceLink(item.id, contextPath && (item.id === "map" || item.id === "companies") ? discoveryLink(item.id) : item.href)}
             aria-current={item.match(pathname) ? "page" : undefined}
             className={`subtab inline-flex min-h-11 items-center justify-center px-2 text-[13px] ${item.match(pathname) ? "is-active" : ""}`}
           >
@@ -88,7 +95,7 @@ export function SiteNav() {
       {open ? (
         <div ref={menu} id="mobile-site-menu" className="max-h-[75dvh] overflow-y-auto space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden" onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeMenu(); } }}>
           {NAV.map((item) => (
-            <Link key={item.id} href={contextPath && (item.id === "map" || item.id === "companies") ? discoveryLink(item.id) : item.href} aria-current={item.match(pathname) ? "page" : undefined} className="flex min-h-11 items-center text-[14px] text-fg" onClick={() => setOpen(false)}>
+            <Link key={item.id} href={workspaceLink(item.id, contextPath && (item.id === "map" || item.id === "companies") ? discoveryLink(item.id) : item.href)} aria-current={item.match(pathname) ? "page" : undefined} className="flex min-h-11 items-center text-[14px] text-fg" onClick={() => setOpen(false)}>
               {item.label}
             </Link>
           ))}

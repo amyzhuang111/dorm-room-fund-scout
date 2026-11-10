@@ -47,6 +47,7 @@ export interface StartupCard {
   description: string | null;
   region: string | null;
   teamSize: string | null;
+  foundedYear?: string | null;
   status: "Active" | "Acquired" | "Inactive" | null;
   campuses: string[];
   verifiedOn: string | null;
@@ -415,6 +416,7 @@ export function getStartupCard(id: string): StartupCard | null {
     description,
     region,
     teamSize: factText("team_size"),
+    foundedYear: factText("founded_year"),
     status: startupStatusLabel(factText("operating_status") || membershipStatus),
     campuses,
     verifiedOn: confirmed ? formatVerifiedDate(project.last_verified_at) : null,

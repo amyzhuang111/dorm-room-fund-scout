@@ -1,69 +1,14 @@
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import { GlobeFoldSkeleton } from "@/components/globe-fold-skeleton";
-import { GlobeBoot } from "@/components/map-boot";
-import { SampleHome, type Feed } from "@/components/sample-home";
-import { loadDirectory } from "@/lib/domain/directory";
-import { loadHeroStats } from "@/lib/domain/hero-stats";
-import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
+import { Suspense } from 'react';
+import { CampusWorkspace } from '@/components/campus-workspace';
+import { GlobeBoot } from '@/components/map-boot';
+import { loadHeroStats } from '@/lib/domain/hero-stats';
+import { loadCorpusTotals } from '@/lib/domain/corpus-totals';
 
-function feedOf(value: string | undefined): Feed {
-  if (value === "leaderboard" || value === "world") return value;
-  return "directory";
-}
-
-export default async function Home({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
-  const sp = await searchParams;
-  if (sp.view === "table") {
-    const qs = new URLSearchParams();
-    for (const [key, value] of Object.entries(sp)) {
-      if (value && key !== "view") qs.set(key, value);
-    }
-    const query = qs.toString();
-    redirect(query ? `/companies?${query}` : "/companies");
-  }
-  if (sp.view === "network") redirect("/networks");
-  // Browse feeds live under /companies; keep ?sample=1 as a harmless alias.
-  if (sp.feed === "directory" || sp.feed === "leaderboard") {
-    const qs = new URLSearchParams();
-    if (sp.sample === "1") qs.set("sample", "1");
-    for (const key of ["feed", "sector", "kind", "campus", "q", "sort", "more"] as const) {
-      const value = sp[key];
-      if (value) qs.set(key, value);
-    }
-    redirect(`/companies?${qs.toString()}`);
-  }
-  const feed = feedOf(sp.feed);
+export default function Home() {
   const stats = loadHeroStats();
-  const directory = loadDirectory();
   const totals = loadCorpusTotals();
-  const foundersListed = totals.foundersListed;
-  const companyCount = totals.investableCompanies;
-  const plotted = stats.universities.filter((university) => university.lat != null && university.lon != null);
-  const campusesWithFounders = totals.campusesWithFounders;
-  const top = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))[0];
-  return (
-    <>
-      <h1 className="sr-only">Campus Scout: student founder intelligence by campus</h1>
-      <GlobeBoot />
-      <Suspense
-        fallback={
-          <div className="sample-paper">
-            <GlobeFoldSkeleton
-              companyCount={companyCount}
-              foundersListed={foundersListed}
-              campusesOnMap={totals.campusesOnMap}
-              campusesWithFounders={campusesWithFounders}
-              dataThrough={stats.updatedAt}
-              topName={top?.name ?? ""}
-              topFounders={top?.founderCount ?? 0}
-              topSignals={top?.signalCount ?? 0}
-            />
-          </div>
-        }
-      >
-        <SampleHome feed={feed} sector={sp.sector} kind={sp.kind} campus={sp.campus} more={sp.more} q={sp.q} sort={sp.sort} stats={stats} />
-      </Suspense>
-    </>
-  );
+  const campuses = stats.universities.filter(u => u.lat != null && u.lon != null).map(u => ({ id:u.id,name:u.name,lat:u.lat!,lon:u.lon!,country:u.country?.trim() || 'Unknown',founders:u.founderCount,signals:u.signalCount }));
+  const support = process.env.NEXT_PUBLIC_SCOUT_SUPPORT_URL;
+  const supportUrl = support && /^https:\/\/(?:www\.)?(?:buymeacoffee\.com|ko-fi\.com)\/[^\s]+$/.test(support) ? support : undefined;
+  return <><GlobeBoot /><Suspense fallback={<div className="p-6 text-sm text-blue-700">Loading Campus Scout workspace…</div>}><CampusWorkspace campuses={campuses} companyCount={totals.investableCompanies} founderCount={totals.foundersListed} updatedAt={stats.updatedAt} supportUrl={supportUrl} /></Suspense></>;
 }
