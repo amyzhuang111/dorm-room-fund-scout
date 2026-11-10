@@ -92,7 +92,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="flex min-h-full flex-col bg-bg font-sans text-fg">
         <UserPipelineProvider>
-            <header className="sticky top-0 z-40 bg-[#FFFFFF]" data-site-chrome="">
+            <header className="sticky top-0 z-40 bg-[color:var(--bg,#FFF4E8)]" data-site-chrome="">
               <Suspense fallback={<div className="h-12 border-b border-line bg-bg" />}>
                 <SiteNav />
               </Suspense>

@@ -482,55 +482,55 @@ a, button {
 }
 
 
-/* Sample Halflight daylight: force true white on document while sample is open (nav included). Cobalt ink; no cream or orange. */
+/* Cream paper and orange ink while the sample product is open, including the nav. */
 html[data-sample="halflight"],
 html[data-sample="halflight"] body {
-  --bg: #FFFFFF;
-  --bg-raised: #FFFFFF;
-  --bg-sunken: #F3F5F9;
-  --fg: #0B0E17;
-  --fg-2: #3F465C;
-  --fg-3: #5C647A;
-  --line: #E1E5EF;
-  --line-strong: #C5CAD8;
-  --cobalt: #2F4FD8;
-  --cobalt-haze: #E8ECFA;
-  --link: #2F4FD8;
-  --ember: #2F4FD8;
-  --amber: #2F4FD8;
-  --accent: #2F4FD8;
-  --accent-foreground: #FFFFFF;
-  --on-ember: #FFFFFF;
-  --accent-2: #2F4FD8;
-  --accent-subtle: #E8ECFA;
-  --background: #FFFFFF;
-  --surface: #FFFFFF;
-  --surface-2: #F3F5F9;
-  --foreground: #0B0E17;
-  --muted: #3F465C;
-  --border-c: #E1E5EF;
-  color: #0B0E17;
-  background: #FFFFFF;
+  --bg: #FFF4E8;
+  --bg-raised: #FFFBF6;
+  --bg-sunken: #F8E6D4;
+  --fg: #2A1A10;
+  --fg-2: #5C4030;
+  --fg-3: #8A6854;
+  --line: #F0D7C2;
+  --line-strong: #E2C2A6;
+  --cobalt: #E85D04;
+  --cobalt-haze: #FFE4CC;
+  --link: #9A3412;
+  --ember: #E85D04;
+  --amber: #C2410C;
+  --accent: #E85D04;
+  --accent-foreground: #FFF4E8;
+  --on-ember: #FFF4E8;
+  --accent-2: #C2410C;
+  --accent-subtle: #FFE4CC;
+  --background: #FFF4E8;
+  --surface: #FFFBF6;
+  --surface-2: #F8E6D4;
+  --foreground: #2A1A10;
+  --muted: #5C4030;
+  --border-c: #F0D7C2;
+  color: #2A1A10;
+  background: #FFF4E8;
 }
 
-/* Sample product: Halflight daylight - true white field, cobalt ink only, campus seals. Not YCGlobe cream or orange. */
+/* Cream field, orange accent, dark ink. Campus seals stay. */
 .sample-paper {
-  --bg: #FFFFFF;
-  --bg-raised: #FFFFFF;
-  --bg-sunken: #F3F5F9;
-  --fg: #0B0E17;
-  --fg-2: #3F465C;
-  --fg-3: #5C647A;
-  --line: #E1E5EF;
-  --line-strong: #C5CAD8;
-  --cobalt: #2F4FD8;
-  --cobalt-haze: #E8ECFA;
-  --link: #2F4FD8;
-  --ember: #2F4FD8;
-  --amber: #2F4FD8;
-  --accent: #2F4FD8;
-  --accent-foreground: #FFFFFF;
-  --on-ember: #FFFFFF;
+  --bg: #FFF4E8;
+  --bg-raised: #FFFBF6;
+  --bg-sunken: #F8E6D4;
+  --fg: #2A1A10;
+  --fg-2: #5C4030;
+  --fg-3: #8A6854;
+  --line: #F0D7C2;
+  --line-strong: #E2C2A6;
+  --cobalt: #E85D04;
+  --cobalt-haze: #FFE4CC;
+  --link: #9A3412;
+  --ember: #E85D04;
+  --amber: #C2410C;
+  --accent: #E85D04;
+  --accent-foreground: #FFF4E8;
+  --on-ember: #FFF4E8;
   --background: var(--bg);
   --surface: var(--bg-raised);
   --surface-2: var(--bg-sunken);
@@ -626,7 +626,7 @@ html[data-sample="halflight"] body {
 }
 
 
-/* Scout identity leap: type scale + accent rhythm on white field (not YCGlobe cream). */
+/* Type scale on the cream field. */
 .sample-paper {
   --scout-display: var(--font-display), "Fraunces", "Newsreader", Georgia, serif;
   --scout-heading: var(--font-heading), "Newsreader", Georgia, serif;
@@ -830,9 +830,10 @@ html[data-sample="halflight"] body {
 }
 .sample-paper .campus-index-row .campus-name {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
+  overflow-wrap: break-word;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -983,9 +984,12 @@ html[data-sample="halflight"] body {
 }
 [data-corpus-cards] .c-link { color: var(--cobalt, #2F4FD8); text-decoration: underline; }
 
-/* corpus row marks: desk hides mobile mark chrome */
+/* Logos or initials sit beside the company name on every width. */
 [data-corpus-cards] .c-mark {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.4rem;
+  vertical-align: middle;
 }
 [data-corpus-cards] .c-logo,
 [data-corpus-cards] .c-mono {
@@ -1029,6 +1033,13 @@ html[data-sample="halflight"] body {
     gap: 0.35rem 0.5rem;
     padding: 0.95rem 0.9rem;
   }
+  [data-corpus-cards] td.c-n,
+  [data-corpus-cards] td.c-m1 {
+    position: static;
+    left: auto;
+    max-width: none;
+    box-shadow: none;
+  }
   [data-corpus-cards] .c-n {
     display: flex;
     align-items: center;
@@ -1041,6 +1052,10 @@ html[data-sample="halflight"] body {
     font-size: 15px;
     font-weight: 700;
     letter-spacing: -0.02em;
+  }
+  [data-corpus-cards] .c-a {
+    overflow-wrap: normal;
+    word-break: normal;
   }
   [data-corpus-cards] .c-mark {
     display: contents;
@@ -1113,28 +1128,28 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-b {
     display: none;
   }
-  /* Tighter cards + truncate long sector so rows don't wrap awkwardly */
   [data-corpus-cards] tr[data-corpus-row] {
-    padding: 0.6rem 0.75rem;
+    padding: 0.45rem 0.7rem;
     gap: 0.2rem 0.35rem;
   }
   [data-corpus-cards] .c-m,
   [data-corpus-cards] .c-fund {
-    max-width: 11rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    max-width: 16rem;
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
   [data-corpus-cards] .c-n {
     font-size: 14px;
   }
-  /* r48: single-line company names — avoids wrap self-collisions in card rows */
   [data-corpus-cards] .c-a {
-    display: block;
+    display: inline;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 }
 
@@ -1456,9 +1471,10 @@ details:not([open]) > :not(summary) {
   min-width: 0;
 }
 [data-fold-sheet-peak] [data-fold-peak-campus-label] {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 3.25rem !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-width: none !important;
+  white-space: normal !important;
 }
 
 
@@ -1710,14 +1726,13 @@ details:not([open]) > :not(summary) {
   line-height: 1.25 !important;
   color: var(--fg-2, #3F465C) !important;
 }
-/* Single-line cohort in peek — avoids wrap self-collisions without cutting density */
 [data-fold-sheet-founders] [data-founder-cohort] {
   margin-top: 8px !important;
   font-size: 11px !important;
   line-height: 1.25 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
   max-width: 100% !important;
 }
 [data-fold-sheet-founders] [data-why-worth] {
@@ -1756,7 +1771,7 @@ details:not([open]) > :not(summary) {
     padding-right: 0 !important;
   }
   [data-fold-mobile-root] {
-    min-height: 70vh;
+    min-height: 0;
   }
   /* Peak in deck sheet: bars only — figure already hidden; hide caption + SSR rank reserve */
   [data-fold-sheet-peak] [data-fold-peak-caption],
@@ -1979,9 +1994,14 @@ html:has([data-networks-cream]) [data-site-nav] {
     min-width: 44px !important;
   }
   /* inline anchors ignore min-height unless they participate in flex/block formatting */
-  a[href]:not(.block):not(.flex):not(.inline-flex):not(.grid) {
+  a[href]:not(.hidden):not(.block):not(.flex):not(.inline-flex):not(.grid) {
     display: inline-flex !important;
     align-items: center;
+  }
+  [data-map-credit] a {
+    display: inline !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
   }
   input, textarea, select {
     min-height: 44px !important;
@@ -2028,4 +2048,58 @@ html:has([data-networks-cream]) [data-site-nav] {
   [data-campuses-index] .campus-index-row .campus-founders { order: 1; flex: 0 0 4.5rem; }
   [data-campuses-index] .campus-index-row .campus-country { order: 2; flex: 0 0 100%; padding-left: 2.25rem; }
   [data-campuses-index] .campus-index-row .campus-meta { order: 3; flex: 0 0 100%; padding-left: 2.25rem; flex-wrap: wrap; }
+}
+
+/* Names stay whole. A clipped name hides the record. */
+[data-founder-name],
+[data-founder-campus-company],
+[data-founder-cohort],
+[data-card-facts],
+[data-corpus-cards] .c-a,
+[data-corpus-cards] td,
+[data-home-rail] .break-words {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  -webkit-line-clamp: unset !important;
+  overflow-wrap: break-word;
+  max-width: none;
+}
+[data-corpus-cards] .c-logo,
+[data-corpus-cards] .c-mono {
+  background: var(--bg-raised, #FFFBF6);
+}
+
+/* Home globe: a circular disk on the cream page. Credit and lists sit outside it. */
+.globe-stage {
+  container-type: size;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  overflow: visible;
+  border: 0;
+}
+.globe-disk {
+  position: relative;
+  width: min(100cqw, 100cqh);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #F08A3A;
+  box-shadow:
+    0 18px 42px rgba(120, 48, 8, 0.16),
+    0 0 0 10px #FFF4E8;
+}
+.globe-disc {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 38% 36%, #FFB067 0%, #F08A3A 42%, #E06A18 100%);
+}
+.home-float {
+  border-radius: 18px;
+  background: #FFFBF6;
+  border: 1px solid rgba(232, 140, 70, 0.35);
+  box-shadow: 0 16px 40px rgba(90, 36, 8, 0.1);
 }

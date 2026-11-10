@@ -1096,7 +1096,7 @@ export function SampleInstrumentBrowse({
                             <div className="min-w-0 flex-1">
                               <Link
                                 href={`/startup/${card.id}`}
-                                className="block truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)]"
+                                className="block break-words text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#2A1A10)] hover:text-[color:var(--ember,#E85D04)]"
                               >
                                 {card.name}
                               </Link>
@@ -1487,7 +1487,7 @@ function LedgerRow({
       {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
       {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
       {card.logoUrl ? (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
@@ -1502,20 +1502,20 @@ function LedgerRow({
           </>
         )
       ) : (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       )}
       <div className="min-w-0 flex-1">
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              ? "break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
               : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
-          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center">{card.name}</Link>
+          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center break-words">{card.name}</Link>
         </p>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
+          <p className="mt-0.5 break-words text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
             {subtitle}
           </p>
         ) : null}
@@ -1528,7 +1528,7 @@ function LedgerRow({
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+          <p className="mt-1 break-words font-mono text-[12px] tabular-nums leading-4 text-[color:var(--fg-3,#8A6854)]" data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>
@@ -1563,7 +1563,7 @@ function LedgerRow({
                 }}
               >
                 in
-                <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
+                <span className="max-w-[12rem] break-words font-sans text-[12px] font-medium normal-case leading-4 tracking-normal text-[color:var(--fg,#2A1A10)]">{founder.name}</span>
               </button>
             ))}
           </span>

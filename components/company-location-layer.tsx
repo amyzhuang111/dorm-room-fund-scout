@@ -74,16 +74,16 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
     if (!map) return;
     if (!map.getSource(sourceId)) {
       map.addSource(sourceId, {type:"geojson", data:geo,cluster:true,clusterRadius:44,clusterMaxZoom:5,clusterProperties:{companiesTotal:["+",["get","count"]]}});
-      map.addLayer({id:layerIds[0],type:"circle",source:sourceId,maxzoom:streetZoom,paint:{"circle-color":"#2F4FD8","circle-opacity":0.98,"circle-radius":["interpolate",["linear"],["coalesce",["get","companiesTotal"],["get","count"]],1,10,10,15,100,21,700,29],"circle-stroke-color":"#FFFFFF","circle-stroke-width":2}});
-      map.addLayer({id:layerIds[1],type:"symbol",source:sourceId,maxzoom:streetZoom,layout:{"text-field":["number-format",["coalesce",["get","companiesTotal"],["get","count"]],{"locale":"en-US","max-fraction-digits":0}],"text-font":["Noto Sans Bold"],"text-size":12,"text-allow-overlap":false,"text-ignore-placement":false},paint:{"text-color":"#FFFFFF"}});
-      map.addLayer({id:layerIds[2],type:"symbol",source:sourceId,minzoom:3,maxzoom:streetZoom,layout:{"text-field":["concat",["get","name"]," · city total"],"text-font":["Noto Sans Regular"],"text-size":12,"text-anchor":"top","text-offset":[0,2.4],"text-allow-overlap":false},paint:{"text-color":"#2F4FD8","text-halo-color":"#FFFFFF","text-halo-width":2}});
+      map.addLayer({id:layerIds[0],type:"circle",source:sourceId,maxzoom:streetZoom,paint:{"circle-color":"#3A2416","circle-opacity":0.98,"circle-radius":["interpolate",["linear"],["coalesce",["get","companiesTotal"],["get","count"]],1,10,10,15,100,21,700,29],"circle-stroke-color":"#FFF4E8","circle-stroke-width":2}});
+      map.addLayer({id:layerIds[1],type:"symbol",source:sourceId,maxzoom:streetZoom,layout:{"text-field":["number-format",["coalesce",["get","companiesTotal"],["get","count"]],{"locale":"en-US","max-fraction-digits":0}],"text-font":["Noto Sans Bold"],"text-size":12,"text-allow-overlap":false,"text-ignore-placement":false},paint:{"text-color":"#FFF4E8"}});
+      map.addLayer({id:layerIds[2],type:"symbol",source:sourceId,minzoom:3,maxzoom:streetZoom,layout:{"text-field":["concat",["get","name"]," · city total"],"text-font":["Noto Sans Regular"],"text-size":12,"text-anchor":"top","text-offset":[0,2.4],"text-allow-overlap":false},paint:{"text-color":"#2A1A10","text-halo-color":"#FFF4E8","text-halo-width":2}});
     }
     (map.getSource(sourceId) as GeoJSONSource).setData(geo);
     for (const id of layerIds) map.setLayoutProperty(id,"visibility",enabled?"visible":"none");
     if (!map.getSource(officeSourceId)) {
       map.addSource(officeSourceId,{type:"geojson",data:officeGeo});
-      map.addLayer({id:officeLayerIds[0],type:"circle",source:officeSourceId,minzoom:7,paint:{"circle-color":"#2F4FD8","circle-radius":8,"circle-stroke-width":3,"circle-stroke-color":"#FFFFFF"}});
-      map.addLayer({id:officeLayerIds[1],type:"symbol",source:officeSourceId,minzoom:9,layout:{"text-field":["get","name"],"text-font":["Noto Sans Bold"],"text-size":13,"text-anchor":"bottom","text-offset":[0,-1.1],"text-allow-overlap":false},paint:{"text-color":"#203DA7","text-halo-color":"#FFFFFF","text-halo-width":2}});
+      map.addLayer({id:officeLayerIds[0],type:"circle",source:officeSourceId,minzoom:7,paint:{"circle-color":"#3A2416","circle-radius":8,"circle-stroke-width":3,"circle-stroke-color":"#FFF4E8"}});
+      map.addLayer({id:officeLayerIds[1],type:"symbol",source:officeSourceId,minzoom:9,layout:{"text-field":["get","name"],"text-font":["Noto Sans Bold"],"text-size":13,"text-anchor":"bottom","text-offset":[0,-1.1],"text-allow-overlap":false},paint:{"text-color":"#2A1A10","text-halo-color":"#FFF4E8","text-halo-width":2}});
     }
     (map.getSource(officeSourceId) as GeoJSONSource).setData(officeGeo);
     for (const id of officeLayerIds) map.setLayoutProperty(id,"visibility",enabled?"visible":"none");
