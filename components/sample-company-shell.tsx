@@ -7,6 +7,7 @@ import { campusPeerCompanies, type FacetCompany } from "@/lib/domain/sample-face
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import { matchesSector } from "@/lib/domain/sectors";
 import { browseHref } from "@/lib/domain/facet-url";
+import { shortCampusName } from "@/lib/domain/campuses";
 import { safeDiscoveryReturn } from "@/lib/domain/discovery-navigation";
 import { emptyFacets, FacetRail, IntelligenceBoards, PANEL, type FacetState } from "./sample-instrument";
 import { SampleTheme } from "./sample-theme";
@@ -21,6 +22,12 @@ export function SampleCompanyShell({ children, companies, campuses, dossier, pee
   const router = useRouter();
   const search = useSearchParams();
   const backHref = safeDiscoveryReturn(search.get("from"), search.get("campus"));
+  const fromCampus = campuses.find((campus) => campus.id === search.get("campus"));
+  const backLabel = backHref.startsWith("/companies")
+    ? "Company results"
+    : fromCampus
+      ? `Map, ${shortCampusName(fromCampus.name)}`
+      : "Map";
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -39,11 +46,11 @@ export function SampleCompanyShell({ children, companies, campuses, dossier, pee
     .filter((c) => c.id !== dossier?.id && Boolean(dossier?.sectorId && matchesSector(c, dossier.sectorId)))
     .sort((a, b) => Number(b.schoolId === dossier?.schoolId) - Number(a.schoolId === dossier?.schoolId) || b.signals - a.signals || a.name.localeCompare(b.name)).slice(0, 6),
   [catalog, companies, dossier]);
-  return <div className="sample-paper company-dossier" data-company-shell="white">
+  return <div className="sample-paper company-dossier" data-company-shell="white" data-context-state={catalog ? "ready" : failed ? "failed" : "loading"}>
     <SampleTheme />
     <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-10 sm:px-5">
       <nav className="dossier-breadcrumb" aria-label="Company navigation">
-        <Link href={backHref}>← {backHref.startsWith("/companies") ? "Company results" : "Map"}</Link><Link href="/work/shortlist">Saved companies</Link>
+        <Link href={backHref}>← {backLabel}</Link><Link href="/work/shortlist">Saved companies</Link>
       </nav>
       <div className="grid gap-4 lg:grid-cols-[230px_minmax(0,1fr)_250px]" data-dossier-spread="">
         <aside className="hidden min-w-0 lg:block" data-dossier-index=""><div className="sticky top-14 h-[min(78vh,720px)]">
@@ -52,13 +59,13 @@ export function SampleCompanyShell({ children, companies, campuses, dossier, pee
         <div className="min-w-0">
           <div className="company-instrument" data-unified-company-record="">{children}</div>
           <section className="similar-companies"><h2>Similar companies</h2><p>Same recorded sector{dossier?.sector ? `: ${dossier.sector}` : ""}. Shared campus appears first; signal count breaks ties.</p>
-            {similar.length ? <ul>{similar.map((c) => <li key={c.id}><Link href={`/startup/${c.id}`}><strong>{c.name}</strong><span>{c.schoolId === dossier?.schoolId ? "Same campus" : c.school ?? c.sector ?? "Sector peer"}</span></Link><Link href={`/compare?ids=${encodeURIComponent(dossier?.id ?? "")},${encodeURIComponent(c.id)}`}>Compare pair</Link></li>)}</ul> : <p>{catalog ? "No other companies with this sector are on record." : "Loading sector peers…"}</p>}
+            {similar.length ? <ul>{similar.map((c) => <li key={c.id}><Link href={`/startup/${c.id}`}><strong>{c.name}</strong><span>{c.schoolId === dossier?.schoolId ? "Same campus" : c.school ?? c.sector ?? "Sector peer"}</span></Link><Link href={`/compare?ids=${encodeURIComponent(dossier?.id ?? "")},${encodeURIComponent(c.id)}`}>Compare pair</Link></li>)}</ul> : catalog ? <p>No other companies with this sector are on record.</p> : <div className="mt-2 h-16 animate-pulse rounded bg-[#F3E6D2]" aria-hidden="true" />}
           </section>
         </div>
         <aside className="min-w-0" data-dossier-wire=""><div className={`${PANEL} p-3 lg:sticky lg:top-14`}>
           <h2 className="text-sm font-semibold">{dossier?.campus ? `${dossier.campus} context` : "Sector context"}</h2>
           <p className="mt-1 mb-3 text-xs text-muted">{count.toLocaleString("en-US")} companies · includes this company</p>
-          {!catalog ? <p className="mb-3 text-xs text-muted" role="status">{failed ? "Full context could not load. Charts show the initial record sample." : "Loading full context. Charts show the initial record sample."}{failed ? <button className="min-h-11 px-2 text-link underline" onClick={() => { setFailed(false); setAttempt((n) => n + 1); }}>Retry</button> : null}</p> : null}
+          {!catalog ? <div className="mb-3" role="status">{failed ? <p className="text-xs text-muted">Full context could not load. Charts show the initial record sample. <button className="min-h-11 px-2 text-link underline" onClick={() => { setFailed(false); setAttempt((n) => n + 1); }}>Retry</button></p> : <div className="h-10 animate-pulse rounded bg-[#F3E6D2]" aria-hidden="true" />}</div> : null}
           <IntelligenceBoards companies={peers} compact hideSector surface="company" />
         </div></aside>
       </div>

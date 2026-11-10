@@ -31,10 +31,10 @@ export function CompanySetToggle({ vetted, unverified, active }: { vetted: numbe
   return (
     <nav aria-label="Company set" className="mx-auto flex max-w-[1100px] flex-wrap items-center gap-2 px-3 pt-4 sm:px-6" data-company-set-toggle="">
       <Link href="/companies" aria-current={active === "vetted" ? "page" : undefined} className={`${base} ${active === "vetted" ? on : off}`}>
-        Vetted · {vetted.toLocaleString("en-US")}
+        Scouting list · {vetted.toLocaleString("en-US")}
       </Link>
       <Link href="/companies?unverified=1" aria-current={active === "unverified" ? "page" : undefined} className={`${base} ${active === "unverified" ? on : off}`}>
-        Unverified · {unverified.toLocaleString("en-US")}
+        Unverified recency · {unverified.toLocaleString("en-US")}
       </Link>
     </nav>
   );
@@ -108,7 +108,7 @@ export function UnverifiedCompaniesView({ sp }: { sp: Record<string, string | un
       <h1 className="text-[28px] font-semibold tracking-tight text-[color:var(--fg)]">Unverified companies</h1>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-[color:var(--fg-2)]">
         These companies are reported at a campus, but nobody has confirmed that their founders are current students or recent graduates.
-        Treat every entry as a lead, not a finding. They are <strong>not</strong> included in the vetted counts anywhere on the site.
+        Treat every entry as a lead, not a finding. They are <strong>not</strong> included in the eligible company count. Stored eligibility is a flag, not a fresh enrollment check.
         Companies whose founders are known to have graduated before 2023 are not listed.
       </p>
 

@@ -7,7 +7,9 @@ import { loadRecencyFunnel } from "@/lib/domain/recency-funnel";
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
-import { formatCorpusDate } from "@/lib/domain/corpus-totals";
+import { formatCorpusDate, loadCorpusTotals } from "@/lib/domain/corpus-totals";
+import { loadEligibilityExamples } from "@/lib/domain/counted-membership";
+import { CorpusCountStrip } from "@/components/corpus-count-strip";
 import { CorpusFilters } from "@/components/corpus-filters";
 
 export const metadata: Metadata = { title: "Data" };
@@ -41,15 +43,16 @@ export default async function DataExplorerPage({
   const campus = sp.campus || undefined;
   const scope = sp.scope || undefined;
   const kind = sp.kind || undefined;
-  const result = paginateCorpus({ q, sector, campus, sort, page, scope, kind });
+  const membership = sp.membership || undefined;
+  const result = paginateCorpus({ q, sector, campus, sort, page, scope, kind, membership });
   const { sectors: sectorFilters } = buildDirectoryFromDb({includeAll:true});
   // Keep select options tiny in RSC HTML (id + label only) — full university rows blow the 210 KB gate.
   const sectors = sectorFilters.map((s) => ({ id: s.id, label: s.label }));
-  const campuses = loadHeroStats()
-    .universities
-    .map((c) => ({ id: c.id, name: c.name }));
+  const hero = loadHeroStats();
+  const campuses = hero.universities.map((c) => ({ id: c.id, name: c.name }));
   const recency = loadRecencyFunnel();
   const fill = loadCorpusFillRates();
+  const totals = loadCorpusTotals();
 
   const pageCampusRanks = (() => {
     const map = new Map<string, { label: string; companies: number; signaled: number }>();
@@ -94,6 +97,17 @@ export default async function DataExplorerPage({
         <div>
           <p className="scout-kicker">Corpus</p>
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
+          <div className="mt-2">
+            <CorpusCountStrip
+              companies={totals.investableCompanies}
+              foundersListed={totals.foundersListed}
+              foundersIndexed={totals.foundersIndexed}
+              campusesOnMap={totals.campusesOnMap}
+              campusesWithFounders={totals.campusesWithFounders}
+              updatedAt={hero.updatedAt}
+              examples={loadEligibilityExamples()}
+            />
+          </div>
           <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" records in this view · page "}
@@ -103,16 +117,23 @@ export default async function DataExplorerPage({
             {" · "}
             {CORPUS_PAGE_SIZE} per page
           </p>
+          {membership === "eligible-companies" ? (
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-fg-2" data-eligible-companies="">
+              {result.total === totals.investableCompanies
+                ? `${result.total.toLocaleString("en-US")} companies. This is the eligible-company count: stored is_investable_candidate on company rows. It is not a fresh enrollment check.`
+                : `${result.total.toLocaleString("en-US")} records in this narrowed view. The eligible-company count is ${totals.investableCompanies.toLocaleString("en-US")}.`}
+            </p>
+          ) : null}
         </div>
         <a
-          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
+          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind,membership}).filter(([,v])=>v) as [string,string][]).toString()}`}
           className="hidden h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[14px] font-semibold text-white sm:inline-flex"
           data-corpus-csv=""
         >
           Export this view
         </a>
         <a
-          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind}).filter(([,v])=>v) as [string,string][]).toString()}`}
+          href={`/data/export?${new URLSearchParams(Object.entries({q,sector,campus,sort,scope,kind,membership}).filter(([,v])=>v) as [string,string][]).toString()}`}
           className="inline-flex h-11 min-h-11 items-center font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
           data-corpus-csv-mobile=""
         >
@@ -123,7 +144,7 @@ export default async function DataExplorerPage({
       <nav className="my-3 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
       <p className="text-sm text-fg-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)]"
         data-recency-funnel=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Scouting list</span>
@@ -172,6 +193,7 @@ export default async function DataExplorerPage({
         sort={sp.sort || "rank"}
         scope={scope || ""}
         kind={kind || ""}
+        membership={membership || ""}
         sectors={sectors}
         campuses={campuses}
       />

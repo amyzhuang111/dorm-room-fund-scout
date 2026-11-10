@@ -176,7 +176,7 @@ export default async function CampusPage({
                   <span className="num shrink-0 text-[14px] text-fg-2">{company.people.toLocaleString("en-US")}</span>
                 </li>
               ))}
-              {affiliated.length === 0 && <li className="text-[14px] text-fg-2">No vetted companies are stored for {label}.</li>}
+              {affiliated.length === 0 && <li className="text-[14px] text-fg-2">No eligible companies are stored for {label}.</li>}
             </ul>
             {unverifiedHere > 0 && (
               <p className="mt-4 text-[14px] text-fg-2" data-campus-unverified="">

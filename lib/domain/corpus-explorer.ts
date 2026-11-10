@@ -12,6 +12,7 @@ import {
   searchDirectory,
   sortDirectory,
 } from "@/lib/domain/directory";
+import { eligibleCompanyIds } from "@/lib/domain/counted-membership";
 import { cleanCsvDate, cleanCsvNames, cleanCsvText, cleanCsvUrl, cleanCsvUrls, encodeCsv } from "@/lib/display/csv";
 import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 
@@ -166,7 +167,7 @@ function loadCorpusRowsUncached(): CorpusRow[] {
       verification:m.verification_status||'unverified',sourceUrls:[...(sources.get(card.id)??[])].sort(),campusIds:[...(campuses.get(card.id)??[])]};
   });
 }
-export type CorpusOptions = { q?:string; sector?:string; campus?:string; sort?:string; scope?:string; kind?:string; page?:number };
+export type CorpusOptions = { q?:string; sector?:string; campus?:string; sort?:string; scope?:string; kind?:string; page?:number; membership?:string };
 export function filterCorpus(opts: CorpusOptions = {}): CorpusRow[] {
   let rows=loadCorpusRows();
   const {cards}=buildDirectoryFromDb({includeAll:true});
@@ -175,6 +176,10 @@ export function filterCorpus(opts: CorpusOptions = {}): CorpusRow[] {
   if(opts.scope==='scout')rows=rows.filter(r=>r.scoutingStatus==='Scouting list');
   if(opts.scope==='review')rows=rows.filter(r=>r.scoutingStatus==='Needs review');
   if(opts.scope==='excluded')rows=rows.filter(r=>r.scoutingStatus==='Excluded from scouting list');
+  if(opts.membership==='eligible-companies'){
+    const ids=new Set(eligibleCompanyIds());
+    rows=rows.filter(r=>ids.has(r.id));
+  }
   return sortCorpus(rows,corpusSortOf(opts.sort));
 }
 

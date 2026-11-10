@@ -1,45 +1,27 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { MapStartupResults } from "./map-startup-results";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
-import { createPortal } from "react-dom";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
-import { MobileCampusSegments, MobileFounderDeck, MobileFounderPeek } from "@/components/mobile-founder-deck";
-import {
-  campusIdsForSearch,
-} from "@/components/fold-map-craft";
-import { buildOpenLaneShell } from "@/lib/domain/open-lane";
-import { GlobeHero } from "@/components/globe-hero";
+import { HomeFold } from "@/components/home-fold";
+import type { CampusLead } from "@/lib/domain/campus-record";
+import type { EligibilityExamples } from "@/lib/domain/counted-hrefs";
+import type { HomeProgram, HomeSector } from "@/lib/domain/home-panels";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
-import { type FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
-import { shortCampusLabel } from "@/lib/domain/campuses";
 import { discoveryHref } from "@/lib/domain/discovery-navigation";
-import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { browseHref as buildBrowseHref, type FacetState as UrlFacetState } from "@/lib/domain/facet-url";
 
 const SampleInstrumentBrowse = dynamic(
   () => import("@/components/sample-instrument-browse").then((mod) => ({ default: mod.SampleInstrumentBrowse })),
   { ssr: true },
 );
-
-type TopCampus = {
-  id: string;
-  name: string;
-  founders: number;
-  pitchbookRank: number | null;
-  pitchbookFounders: number | null;
-};
-
-
 
 type CampusOpt = {
   id: string;
@@ -76,299 +58,6 @@ function browseHref(opts: {
 }
 
 
-function useIsLg() {
-  const [lg, setLg] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const apply = () => setLg(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-  return lg;
-}
-
-function MapFoldSheet({
-  tabs,
-  peak,
-  founders,
-  deck,
-  peek,
-  filterKeep,
-  campuses,
-  campusId,
-  onSelectCampus,
-  onClearCampus,
-  search,
-}: {
-  tabs: ReactNode;
-  peak: ReactNode;
-  founders: ReactNode;
-  deck: ReactNode;
-  peek: ReactNode;
-  filterKeep: ReactNode;
-  campuses: TopCampus[];
-  campusId: string | null;
-  onSelectCampus: (id: string) => void;
-  onClearCampus: () => void;
-  search: ReactNode;
-}) {
-  const sheetRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  const heightRef = useRef(108);
-  const springRef = useRef<number | null>(null);
-  // r53b: compact peek so ≥80% of the home map stays unobstructed @375.
-  // r59: spring-settle on expand / snap; drag stays 1:1 with the finger.
-  const REST = 108;
-  const DECK = 300;
-  const [height, setHeight] = useState(REST);
-  useEffect(() => { heightRef.current = height; }, [height]);
-  const minH = 100;
-  const clampH = (h: number) => {
-    const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
-    return Math.max(minH, Math.min(max, h));
-  };
-  const mode: "peek" | "deck" | "expanded" =
-    height >= DECK + 40 ? "expanded" : height >= REST + 36 ? "deck" : "peek";
-
-  const cancelSpring = () => {
-    if (springRef.current != null) {
-      cancelAnimationFrame(springRef.current);
-      springRef.current = null;
-    }
-  };
-
-  const springTo = (targetRaw: number) => {
-    const target = clampH(targetRaw);
-    cancelSpring();
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setHeight(target);
-      return;
-    }
-    // Critically damped-ish spring (Emil/Apple: interruptible, no bounce on settle).
-    const stiffness = 180;
-    const damping = 26;
-    let v = 0;
-    let h = heightRef.current;
-    const tick = () => {
-      const dt = 1 / 60;
-      const a = -stiffness * (h - target) - damping * v;
-      v += a * dt;
-      // Keep Euler stable on coarse frames.
-      if (v > 6000) v = 6000;
-      if (v < -6000) v = -6000;
-      h += v * dt;
-      if (Math.abs(h - target) < 0.75 && Math.abs(v) < 8) {
-        setHeight(target);
-        springRef.current = null;
-        return;
-      }
-      setHeight(clampH(h));
-      springRef.current = requestAnimationFrame(tick);
-    };
-    springRef.current = requestAnimationFrame(tick);
-  };
-
-  useEffect(() => {
-    const onResize = () => setHeight((h) => clampH(h));
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      cancelSpring();
-    };
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-fold-sheet-mode", mode);
-    return () => {
-      document.documentElement.removeAttribute("data-fold-sheet-mode");
-    };
-  }, [mode]);
-
-  const expandToDeck = () => {
-    // Tap expand must flip React mode immediately (density + feel). Drag snaps still spring.
-    cancelSpring();
-    setHeight(clampH(DECK));
-  };
-
-  const onPointerDown = (e: ReactPointerEvent) => {
-    cancelSpring();
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-    dragRef.current = { startY: e.clientY, startH: heightRef.current };
-  };
-  const onPointerMove = (e: ReactPointerEvent) => {
-    const drag = dragRef.current;
-    if (!drag) return;
-    setHeight(clampH(drag.startH + (drag.startY - e.clientY)));
-  };
-  const onPointerUp = () => {
-    const drag = dragRef.current;
-    dragRef.current = null;
-    if (!drag) return;
-    const h = heightRef.current;
-    if (h < REST + 24) springTo(REST);
-    else if (h < DECK + 24) springTo(DECK);
-    else {
-      const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
-      springTo(max);
-    }
-  };
-
-  return (
-    <div
-      ref={sheetRef}
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-[30] lg:hidden"
-      data-fold-map-sheet=""
-      data-fold-sheet-mode={mode}
-      data-fold-sheet-rest={String(REST)}
-      style={{ height, willChange: "height" }}
-    >
-      <div
-        className="pointer-events-auto flex h-full flex-col overflow-hidden rounded-t-2xl border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-10px_32px_rgba(47,79,216,0.16)]"
-        data-fold-sheet-panel=""
-      >
-        <div
-          className="flex shrink-0 cursor-grab touch-none items-center justify-center py-1.5 active:cursor-grabbing"
-          data-fold-sheet-handle=""
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Drag sheet"
-        >
-          <span data-fold-sheet-grab="" className="h-1.5 w-12 rounded-full bg-[color:var(--cobalt,#2F4FD8)]/70" />
-        </div>
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-2" data-fold-sheet-body="">
-          <div className="sticky top-0 z-[1] bg-[color:var(--bg,#FFFFFF)] pb-1.5">
-            <div onClick={expandToDeck}>{tabs}</div>
-            <MobileCampusSegments
-              campuses={campuses}
-              selectedId={campusId}
-              onSelect={onSelectCampus}
-              onClear={onClearCampus}
-              kicker={campuses.some((campus) => campus.pitchbookRank != null) ? "PitchBook 2026" : "Open lane campuses"}
-            />
-          </div>
-          {mode === "peek" ? (
-            <div className="mt-1" data-fold-sheet-peek="" data-fold-founders-col="" onClick={expandToDeck}>
-              {peek}
-              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
-                {filterKeep}
-              </div>
-              {/* Peak + deck stay mounted but inert so density can expand into a real surface */}
-              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-deck-keep="">
-                {peak}
-                {deck}
-              </div>
-            </div>
-          ) : null}
-          {mode === "deck" ? (
-            <div className="mt-1" data-fold-sheet-deck="" data-fold-founders-col="">
-              <div className="mb-1" data-fold-peak-in-rail="" data-fold-sheet-peak="">
-                {peak}
-              </div>
-              {deck}
-              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
-                {filterKeep}
-              </div>
-            </div>
-          ) : null}
-          {mode === "expanded" ? (
-            <div className="mt-1 space-y-2" data-fold-sheet-founders="" data-fold-founders-col="">
-              <div data-fold-peak-in-rail="" data-fold-sheet-peak="">
-                {peak}
-              </div>
-              {search}
-              {founders}
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-/** Desk overlays portaled onto the map stage — filters live in the fold, not stacked above. */
-function MapStageOverlays({
-  label,
-  mast,
-  showFounders,
-  founders,
-}: {
-  label: string;
-  mast: ReactNode;
-  showFounders: boolean;
-  founders: ReactNode;
-}) {
-  const [stage, setStage] = useState<HTMLElement | null>(null);
-  const [foundersOpen, setFoundersOpen] = useState(true);
-
-  useEffect(() => {
-    let dead = false;
-    const sync = () => {
-      if (dead) return;
-      const el = document.querySelector("[data-dispatch-map-stage]") as HTMLElement | null;
-      setStage((prev) => (prev === el ? prev : el));
-    };
-    sync();
-    const id = window.setInterval(sync, 400);
-    const mo = new MutationObserver(sync);
-    mo.observe(document.body, { childList: true, subtree: true });
-    return () => {
-      dead = true;
-      window.clearInterval(id);
-      mo.disconnect();
-    };
-  }, []);
-
-  if (!stage) return null;
-
-  return createPortal(
-    <div className="pointer-events-none absolute inset-0 z-[5] flex flex-col" data-fold-map-overlays="" data-fold-desk-bleed="1">
-      <div
-        className="pointer-events-auto z-[6] mx-2 mt-2 shrink-0 rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-2 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
-        data-fold-overlay-mast=""
-        data-fold-mast=""
-      >
-        {mast}
-      </div>
-      <div className="relative min-h-0 flex-1" data-fold-overlay-body="">
-        {showFounders && <aside
-          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(300px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
-            foundersOpen ? "" : "!w-auto !bottom-auto"
-          }`}
-          data-fold-overlay-founders=""
-          data-fold-founders-col=""
-          data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
-        >
-          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{label}</p>
-            <button
-              type="button"
-              className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
-              aria-expanded={foundersOpen}
-              data-fold-panel-toggle="founders"
-              onClick={() => setFoundersOpen((v) => !v)}
-            >
-              {foundersOpen ? "Hide" : "Show"}
-            </button>
-          </div>
-          {foundersOpen ? <div className="min-h-0 flex-1 overflow-y-auto p-2.5">{founders}</div> : null}
-        </aside>}
-      </div>
-    </div>,
-    stage,
-  );
-}
-
-
-
 export function SampleHomeClient(props: {
   feed: Feed;
   sector?: string;
@@ -389,11 +78,17 @@ export function SampleHomeClient(props: {
   signalCompanyCount: number;
   foundersListed: number;
   foundersIndexed: number;
+  campusesWithFounders?: number;
   newestHome: { label: string; detail: string } | null;
   peakShell?: PeakShell | null;
   directoryUrl?: string;
   place?: "map" | "explore";
   facetExtras?: Record<string, string | number | boolean | null | undefined>;
+  programs?: HomeProgram[];
+  homeSectors?: HomeSector[];
+  campusesOnMap?: number;
+  examples?: EligibilityExamples | null;
+  leads?: CampusLead[];
 }) {
   const {
     feed,
@@ -414,39 +109,21 @@ export function SampleHomeClient(props: {
     cardCount,
     foundersListed,
     foundersIndexed,
+    campusesWithFounders = 0,
     directoryUrl = "/data/sample-directory.json",
     place = "map",
   facetExtras,
+    programs = [],
+    homeSectors = [],
+    campusesOnMap = 0,
+    examples = null,
+    leads = [],
   } = props;
 
   const [companies, setCompanies] = useState<FacetCompany[]>([]);
-  const [founders, setFounders] = useState<FounderLead[]>([]);
-  const [founderStatus, setFounderStatus] = useState<"loading" | "ready" | "error">("loading");
-  const [founderQuery, setFounderQuery] = useState("");
-  const [resultMode, setResultMode] = useState<"startups" | "founders">("startups");
-  const [browseOpen, setBrowseOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const search = useSearchParams();
-  const router = useRouter();
-  const isLg = useIsLg();
-  const mapCampusId = search.get("campus");
   const listed = feed === "directory" || feed === "leaderboard";
-  const topCampuses = useMemo<TopCampus[]>(() => {
-    const pitchbook = rankedByUndergrad(campuses);
-    const source = pitchbook.length
-      ? pitchbook.slice(0, 5)
-      : [...campuses]
-          .filter((c) => (c.founders ?? 0) > 0)
-          .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
-          .slice(0, 5);
-    return source.map((c) => ({
-      id: c.id,
-      name: shortCampusLabel(c.id, c.name),
-      founders: c.founders,
-      pitchbookRank: c.pitchbookRank ?? null,
-      pitchbookFounders: c.pitchbookFounders ?? null,
-    }));
-  }, [campuses]);
 
   useEffect(() => {
     let dead = false;
@@ -454,202 +131,32 @@ export function SampleHomeClient(props: {
       if (dead) return;
       setCompanies(cards);
       setReady(true);
+    }).catch(() => {
+      if (!dead) setReady(true);
     });
-    void (async () => {
-      const attempts = 3;
-      for (let i = 0; i < attempts; i++) {
-        try {
-          const boot = i === 0 ? (window as Window & { __foundersPromise?: Promise<FounderLead[]> }).__foundersPromise : undefined;
-          const data = boot
-            ? await boot
-            : await (async () => {
-                const res = await fetch("/data/founders.json");
-                if (!res.ok) throw new Error(String(res.status));
-                return (await res.json()) as FounderLead[];
-              })();
-          if (!Array.isArray(data) || data.length === 0) throw new Error("empty founders");
-          if (dead) return;
-          setFounders(data);
-          setFounderStatus("ready");
-          return;
-        } catch {
-          if (i < attempts - 1) await new Promise((r) => setTimeout(r, 200 * (i + 1)));
-        }
-      }
-      if (!dead) setFounderStatus("error");
-    })();
     return () => {
       dead = true;
     };
   }, [directoryUrl]);
 
-  const mapCampusName =
-    mapCampusId && mapCampusId !== "missing"
-      ? campuses.find((campus) => campus.id === mapCampusId)?.name ?? null
-      : null;
 
-  const highlightCampusIds = useMemo(
-    () => campusIdsForSearch(founders, founderQuery, campuses),
-    [founders, founderQuery, campuses],
-  );
-
-  const clearCampus = () => {
-    const next = new URLSearchParams(search.toString());
-    next.delete("campus");
-    next.set("sample", "1");
-    router.push(`/?${next.toString()}`);
-  };
-
-  const selectCampus = (id: string) => {
-    const next = new URLSearchParams(search.toString());
-    next.delete("feed");
-    next.delete("university");
-    next.set("sample", "1");
-    if (!id) next.delete("campus");
-    else next.set("campus", id);
-    router.push(`/?${next.toString()}`);
-  };
-
-  const investableCompanyIds = useMemo(
-    () => new Set(companies.map((company) => company.id).filter(Boolean)),
-    [companies],
-  );
-
-  const openLane = useMemo(
-    () =>
-      founders.length && investableCompanyIds.size
-        ? buildOpenLaneShell(founders, investableCompanyIds)
-        : null,
-    [founders, investableCompanyIds],
-  );
-
-  const discoveryTabs = <div className="flex gap-2" role="group" aria-label="Browse map records">{(["startups", "founders"] as const).map(mode => <button key={mode} type="button" aria-pressed={resultMode === mode} className={`min-h-11 rounded px-3 text-sm font-semibold ${resultMode === mode ? "bg-blue-50 text-blue-700" : "text-fg-2"}`} onClick={() => { setResultMode(mode); setBrowseOpen(true); }}>{mode === "startups" ? "Startups" : "Founders"}</button>)}</div>;
-  const startupResults = <MapStartupResults key={`${mapCampusId}:${founderQuery}`} companies={companies} ready={ready} query={founderQuery} campusId={mapCampusId} />;
   return (
-    <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
+    <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <div className="px-0 pb-6 pt-0 sm:px-4 lg:px-0 lg:pt-0" data-fold-hierarchy="" data-fold-mobile-bleed="" data-fold-desk-bleed="1" data-fold-investor-first="1">
-          {/* r56 desk: search + chips live inside the map fold overlays (not stacked above). Mobile unchanged. */}
-          {/* r45: map-dominant stage with floating panels (desk) / peek sheet (mobile). */}
-          <div data-fold-stack="" data-fold-bigmap="" data-fold-overlay="">
-            <div className="relative min-w-0" data-fold-globe-col="" data-fold-map-stage-wrap="">
-              <GlobeHero
-                stats={stats}
-                showGlobe={feed !== "world"}
-                companies={companies}
-                companyCount={cardCount}
-                foundersListed={foundersListed}
-                foundersIndexed={foundersIndexed}
-                highlightCampusIds={highlightCampusIds}
-              />
-
-              {/* Mobile sheet only below lg — keeps first [data-founder-card] visible for checks. */}
-              {!isLg ? <MapFoldSheet
-                tabs={discoveryTabs}
-                campuses={topCampuses}
-                campusId={mapCampusId}
-                onSelectCampus={selectCampus}
-                onClearCampus={clearCampus}
-                peak={null}
-                deck={resultMode === "startups" ? startupResults :
-                  <MobileFounderDeck
-                    founders={founders}
-                    status={founderStatus}
-                    query={founderQuery}
-                    campusId={mapCampusId}
-                    openLane={openLane}
-                    investableCompanyIds={investableCompanyIds}
-                  />
-                }
-                peek={resultMode === "startups" ? <MapStartupResults companies={companies} ready={ready} query={founderQuery} campusId={mapCampusId} compact /> :
-                  <MobileFounderPeek
-                    founders={founders}
-                    status={founderStatus}
-                    query={founderQuery}
-                    campusId={mapCampusId}
-                    openLane={openLane}
-                    investableCompanyIds={investableCompanyIds}
-                  />
-                }
-                filterKeep={
-                  <FounderResults
-                    founders={founders}
-                    status={founderStatus}
-                    query={founderQuery}
-                    campusId={mapCampusId}
-                    campusName={mapCampusName}
-                    foundersListed={foundersListed}
-                    foundersIndexed={foundersIndexed}
-                    filtersOnly
-                    onClearCampus={clearCampus}
-                    onMissingCampus={() => {
-                      const next = new URLSearchParams(search.toString());
-                      next.set("sample", "1");
-                      next.set("campus", "missing");
-                      router.push(`/?${next.toString()}`);
-                    }}
-                  />
-                }
-                search={<FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />}
-                founders={resultMode === "startups" ? startupResults :
-                  <FounderResults
-                    founders={founders}
-                    status={founderStatus}
-                    query={founderQuery}
-                    campusId={mapCampusId}
-                    campusName={mapCampusName}
-                    foundersListed={foundersListed}
-                    foundersIndexed={foundersIndexed}
-                    onClearCampus={clearCampus}
-                    onMissingCampus={() => {
-                      const next = new URLSearchParams(search.toString());
-                      next.set("sample", "1");
-                      next.set("campus", "missing");
-                      router.push(`/?${next.toString()}`);
-                    }}
-                  />
-                }
-              /> : null}
-
-              {/* r56 desk: full-bleed fold — mast filters + open-lane hero + founders on the map. */}
-              {isLg ? (
-                <MapStageOverlays
-                  label={resultMode === "startups" ? "Startups" : "Founders"}
-                  mast={
-                    <div className="space-y-1.5" data-fold-desk-mast-inner="">
-                      {discoveryTabs}
-                      <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-                      {mapCampusId && <button type="button" className="min-h-11 text-sm text-link" onClick={clearCampus}>{mapCampusName || "Campus"} × Clear</button>}
-                    </div>
-                  }
-                  showFounders={Boolean(browseOpen || mapCampusId || founderQuery.trim())}
-                  founders={resultMode === "startups" ? startupResults :
-                    <FounderResults
-                      founders={founders}
-                      status={founderStatus}
-                      query={founderQuery}
-                      campusId={mapCampusId}
-                      campusName={mapCampusName}
-                      foundersListed={foundersListed}
-                    foundersIndexed={foundersIndexed}
-                      peek={3}
-                      onClearCampus={clearCampus}
-                      onMissingCampus={() => {
-                        const next = new URLSearchParams(search.toString());
-                        next.set("sample", "1");
-                        next.set("campus", "missing");
-                        router.push(`/?${next.toString()}`);
-                      }}
-                    />
-                  }
-                />
-              ) : null}
-            </div>
-
-
-          </div>
-        </div>
+        <HomeFold
+          stats={stats}
+          programs={programs}
+          leads={leads}
+          companies={companies}
+          companyCount={cardCount}
+          foundersListed={foundersListed}
+          foundersIndexed={foundersIndexed}
+          campusesOnMap={campusesOnMap}
+          campusesWithFounders={campusesWithFounders}
+          sectors={homeSectors}
+          examples={examples}
+        />
       ) : null}
       {place === "explore" ? (
       <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-1 sm:px-5 md:pt-2">

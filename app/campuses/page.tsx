@@ -1,10 +1,92 @@
 import Link from "next/link";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
+import { pinnedCampuses, promotedFounderCampuses, storedFounderCampuses } from "@/lib/domain/counted-membership";
 import { listUniversities } from "@/lib/domain/queries";
 import { CampusesTheme } from "@/components/campuses-theme";
 import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
 
-export default function CampusesPage() {
+function MembershipList({
+  title,
+  detail,
+  rows,
+}: {
+  title: string;
+  detail: string;
+  rows: { id: string; label: string; href: string; note?: string }[];
+}) {
+  return (
+    <div className="sample-paper min-h-[calc(100dvh-48px)]" data-campus-membership="">
+      <CampusesTheme />
+      <div className="mx-auto max-w-[800px] px-3 py-4 sm:px-5">
+        <Link href="/campuses" className="text-sm text-[color:var(--cobalt,#2F4FD8)]">All campuses</Link>
+        <h1 className="mt-2 text-[28px] font-semibold leading-tight">{title}</h1>
+        <p className="mt-2 text-sm leading-6" data-campus-membership-count="">
+          {rows.length.toLocaleString("en-US")} campuses in this list. {detail}
+        </p>
+        <ol className="mt-4 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]">
+          {rows.map((row) => (
+            <li key={row.id}>
+              <Link href={row.href} className="flex min-h-11 items-center justify-between gap-3 py-2">
+                <span className="font-semibold">{row.label}</span>
+                {row.note ? <span className="text-right text-sm text-[color:var(--fg-2,#3F465C)]">{row.note}</span> : null}
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+export default async function CampusesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>;
+}) {
+  const sp = await searchParams;
+  if (sp.pins === "1") {
+    const pins = pinnedCampuses().map((university) => {
+      const label = shortCampusLabel(university.id, university.name);
+      return {
+        id: university.id,
+        label,
+        href: `/campuses/${campusSlug(label)}`,
+        note: university.coordSource === "public_campus" ? "Public campus coordinate" : "Coordinate stored on the row",
+      };
+    });
+    return (
+      <MembershipList
+        title="Schools with a pin"
+        detail="These campuses have coordinates. Two public campus coordinates are used when the stored row has none. This is not the promoted-founder ranking."
+        rows={pins}
+      />
+    );
+  }
+  if (sp.membership === "stored-founder") {
+    return (
+      <MembershipList
+        title="Stored-founder campuses"
+        detail="A person with founder_status founder has an affiliation here. This is not the promoted-founder count."
+        rows={storedFounderCampuses().map((campus) => ({
+          id: campus.id,
+          label: campus.name,
+          href: campus.slug ? `/campuses/${campus.slug}` : "/campuses",
+        }))}
+      />
+    );
+  }
+  if (sp.membership === "promoted-founders") {
+    return (
+      <MembershipList
+        title="Promoted-founder campuses"
+        detail="The promoted-founder count on file is above zero. This is a different list from stored founder status."
+        rows={promotedFounderCampuses().map((university) => {
+          const label = shortCampusLabel(university.id, university.name);
+          return { id: university.id, label, href: `/campuses/${campusSlug(label)}` };
+        })}
+      />
+    );
+  }
   const rows = listUniversities()
     .map((university) => ({
       ...university,
