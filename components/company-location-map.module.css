@@ -1,3 +1,4 @@
+.mapModes { display: inline-flex; }
 .layer { position: absolute; inset: 0; pointer-events: none; z-index: 25; color: #162039; }
 .hqCounts.hqCounts > p:first-child { max-height: none !important; overflow: visible !important; }
 .expandedStage :global([data-fold-map-overlays]) { display: none; }
@@ -71,7 +72,12 @@
 .dbCta a { color: #2f4fd8; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; min-height: 28px; display: inline-flex; align-items: center; }
 .logoDock { display: flex; flex-wrap: wrap; gap: 4px; max-height: 88px; overflow-y: auto; overscroll-behavior: contain; margin: 6px 0 4px; padding: 2px; }
 .logoChip { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 52px; min-height: 52px; padding: 4px 2px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; pointer-events: auto; }
-.logoChip span { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 8px; line-height: 10px; color: #162039; text-align: center; }
+.logoChip span { width: 100%; overflow: visible; white-space: normal; overflow-wrap: anywhere; font-size: 8px; line-height: 10px; color: #2A1A10; text-align: center; }
+/* Home globe stays clear. Search, the startup list, and logo docks open only on the expanded map. */
+.toolbar, .results, .logoPeek, .companyPreview, .mobileExplore { display: none !important; }
+:global([data-map-expanded="true"]) .toolbar { display: flex !important; }
+:global([data-map-expanded="true"]) .results, :global([data-map-expanded="true"]) .companyPreview { display: block !important; }
+:global([data-map-expanded="true"]) .mobileExplore { display: none !important; }
 .logoChip[aria-pressed="true"] { border-color: #2f4fd8; background: #e8ecfa; }
 .logoChip:hover { border-color: #2f4fd8; }
 .cardTitle { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; min-width: 0; }
