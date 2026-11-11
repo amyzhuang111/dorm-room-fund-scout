@@ -11,6 +11,7 @@
 // what each means. The dimensions make the tier reproducible; they aren't
 // separately surfaced as scores in the UI.
 
+import discoveryDirectories from "../../data/discovery/directories.json";
 import type { CommunitySignal } from "./community-signal";
 import { EXPANDED_CAMPUS_DIRECTORIES } from "./expanded-campus-directories";
 import { CAMPUS_FOUNDER_SOURCE_EXPANSION } from "./campus-founder-source-expansion";
@@ -81,6 +82,16 @@ export interface SourceCatalogueEntry {
 }
 
 export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
+  ...discoveryDirectories.map((directory): SourceCatalogueEntry => ({
+    id: `cat_${directory.id}`, name: directory.name, campus: directory.campusId,
+    sourceType: 'directory', url: directory.url, founderScoutTier: 'D', startupScoutTier: 'D',
+    role: 'reference', dimensions: {},
+    tierRationale: 'Reference only until the roster and field quality have been reviewed; this is not a quality rating based on campus prestige.',
+    whyItMatters: 'An additional campus venture directory to investigate through the review pipeline.',
+    whatToExtract: directory.fields,
+    whatNotToInfer: ['Listing does not establish enrollment, founder identity, investment eligibility or a funding round. Missing fields remain unknown.'],
+    status: 'unconfigured', statusNote: directory.notes,
+  })),
   // ---------- PENN ----------
   {
     id: "cat_pennapps",

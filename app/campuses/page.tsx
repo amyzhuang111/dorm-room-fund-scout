@@ -12,7 +12,7 @@ export default async function CampusesPage({ searchParams }: { searchParams: Pro
   const context = new URLSearchParams(Object.entries(sp).filter((entry): entry is [string,string] => typeof entry[1] === 'string'));
   context.delete('campus');
   const filters = workspaceFilters(context);
-  const scoped = Boolean(filters.q || filters.sector || filters.region || filters.status || filters.network || filters.missing);
+  const scoped = Boolean(filters.q || filters.sector || filters.region || filters.status || filters.stage || filters.network || filters.missing);
   const href = (path:string,campus?:string) => { const query = new URLSearchParams(context); if(campus) query.set('campus',campus); return query.size ? `${path}?${query}` : path; };
   const universities = listUniversities();
   const byId = new Map(universities.map(university => [university.id, university]));

@@ -1,3 +1,4 @@
+import { stageFilter, fundingStageLabel } from './funding-stage';
 import type { FacetCompany } from './sample-facets';
 import { statusOf, STATUS_LABEL, COVERAGE_FIELDS, filterFacetCompanies, type StatusId } from './sample-facets';
 import { companyCampusIds } from './campus-membership';
@@ -11,15 +12,15 @@ export const PANELS: { id: WorkspacePanel; label: string }[] = [
   { id: 'networks', label: 'Networks' }, { id: 'rankings', label: 'Rankings' }, { id: 'insights', label: 'Insights' },
 ];
 export function panelOf(value: string | null): WorkspacePanel { return PANELS.find(p => p.id === value)?.id ?? 'companies'; }
-export type WorkspaceFilters = { q: string; campus: string; sector: string; region: string; status: string; network: string; missing: string; sort: string };
+export type WorkspaceFilters = { q: string; campus: string; sector: string; region: string; status: string; stage: string; network: string; missing: string; sort: string };
 export function workspaceFilters(params: Pick<URLSearchParams, 'get'>): WorkspaceFilters {
-  return { q: params.get('q') ?? '', campus: params.get('campus') ?? '', sector: params.get('sector') ?? '', region: params.get('hqRegion') ?? params.get('hq') ?? '', status: params.get('status') ?? '', network: params.get('network') ?? '', missing: params.get('missing') ?? '', sort: params.get('sort') ?? 'signals' };
+  return { q: params.get('q') ?? '', campus: params.get('campus') ?? '', sector: params.get('sector') ?? '', region: params.get('hqRegion') ?? params.get('hq') ?? '', status: params.get('status') ?? '', stage: stageFilter(params.get('stage')), network: params.get('network') ?? '', missing: params.get('missing') ?? '', sort: params.get('sort') ?? 'signals' };
 }
 export const campusIds = companyCampusIds;
 export function campusNames(company: FacetCompany): string[] { return company.campuses?.length ? company.campuses : company.school ? [company.school] : []; }
 export { hasNamedFounder, COVERAGE_FIELDS } from './sample-facets';
 export function filterWorkspace(companies: FacetCompany[], filters: WorkspaceFilters): FacetCompany[] {
-  return filterFacetCompanies(companies, { campus:filters.campus || null, sector:filters.sector || null, hqRegion:filters.region || null, status:(filters.status || null) as StatusId | null, query:filters.q, network:filters.network || null, missing:filters.missing || null }).sort((a,b) => {
+  return filterFacetCompanies(companies, { campus:filters.campus || null, sector:filters.sector || null, hqRegion:filters.region || null, status:(filters.status || null) as StatusId | null, query:filters.q, stage:filters.stage || null, network:filters.network || null, missing:filters.missing || null }).sort((a,b) => {
     if (filters.sort === 'name') return a.name.localeCompare(b.name);
     if (filters.sort === 'recent') return (b.latestSignalAt ?? '').localeCompare(a.latestSignalAt ?? '') || a.name.localeCompare(b.name);
     return b.signals - a.signals || a.name.localeCompare(b.name);
@@ -27,7 +28,7 @@ export function filterWorkspace(companies: FacetCompany[], filters: WorkspaceFil
 }
 export function workspaceFounders(founders: FounderLead[], companies: FacetCompany[], filters: WorkspaceFilters): FounderLead[] {
   const companyIds = new Set(companies.map(c => c.id));
-  const requiresCompany = !!(filters.sector || filters.region || filters.status || filters.network || filters.missing);
+  const requiresCompany = !!(filters.sector || filters.region || filters.status || filters.stage || filters.network || filters.missing);
   const tokens = filters.q.toLowerCase().trim().split(/\s+/).filter(Boolean);
   const seen = new Set<string>();
   return founders.filter(f => {
@@ -71,6 +72,6 @@ export function workspaceCsv(panel: WorkspacePanel, companies: FacetCompany[], f
   if (panel === 'insights') return encodeCsv([['Field', 'Present', 'Missing', 'Total'], ...COVERAGE_FIELDS.map(f => { const n = companies.filter(f.has).length; return [f.label,n,companies.length-n,companies.length]; })]);
   return encodeCsv([
     ['Company','Campuses','Founders','Industry','HQ region','Founded year','Team size','Operating status','Funding stage','Investors or programs','Signals','Latest signal date','Sources','Record'],
-    ...companies.map(c => [cleanCsvText(c.name),cleanCsvList(campusNames(c)),cleanCsvNames(c.founders ?? []),cleanCsvText(c.sector),cleanCsvText(c.hqRegion),c.foundedYear,cleanCsvText(c.teamSize),STATUS_LABEL[statusOf(c)],cleanCsvText(c.stage),cleanCsvList(c.programs ?? []),c.signals,cleanCsvDate(c.latestSignalAt),cleanCsvUrls(c.sourceUrls ?? []),`/startup/${encodeURIComponent(c.id)}`]),
+    ...companies.map(c => [cleanCsvText(c.name),cleanCsvList(campusNames(c)),cleanCsvNames(c.founders ?? []),cleanCsvText(c.sector),cleanCsvText(c.hqRegion),c.foundedYear,cleanCsvText(c.teamSize),STATUS_LABEL[statusOf(c)],cleanCsvText(fundingStageLabel(c.stage)),cleanCsvList(c.programs ?? []),c.signals,cleanCsvDate(c.latestSignalAt),cleanCsvUrls(c.sourceUrls ?? []),`/startup/${encodeURIComponent(c.id)}`]),
   ]);
 }

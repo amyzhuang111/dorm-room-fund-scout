@@ -1,0 +1,14 @@
+[
+  {
+    "id": "lse-startbook-ventures",
+    "name": "LSE ventures — Startbook",
+    "campusId": "univ_lse",
+    "campusName": "London School of Economics",
+    "url": "https://startbook.app/events/lse/ventures",
+    "registeredAt": "2026-11-11",
+    "status": "awaiting_roster_verification",
+    "reviewRequired": true,
+    "fields": ["company name", "company website", "description", "named founders", "explicit campus affiliation", "funding round and source date when stated", "source URL"],
+    "notes": "User-supplied directory. Public HTML retrieved on 2026-11-11, but it contains a client-rendered Loading shell, not verified venture rows. Inspect the rendered roster or an authorized export before staging a review CSV. Do not infer founder enrollment or funding stage from inclusion. No records imported."
+  }
+]

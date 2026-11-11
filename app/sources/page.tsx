@@ -25,6 +25,7 @@ const CAMPUS_LABEL: Record<string, string> = {
   univ_stanford: "Stanford",
   univ_mit: "MIT",
   univ_waterloo: "Waterloo",
+  univ_lse: "LSE",
 };
 
 function sortCards(cards: SourceCard[], by: "founder" | "startup"): SourceCard[] {
@@ -82,6 +83,7 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
   }
 
   let filtered = allCards;
+  if (sp.q?.trim()) filtered = filtered.filter(c => c.name.toLowerCase().includes(sp.q!.trim().toLowerCase()));
   if (sp.campus) filtered = filtered.filter((c) => c.campus === sp.campus);
   if (sp.tier) filtered = filtered.filter((c) => c.founderScoutTier === sp.tier || c.startupScoutTier === sp.tier);
   if (sp.type) filtered = filtered.filter((c) => c.sourceType === sp.type);

@@ -11,7 +11,7 @@ export default async function FoundersPage({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const params = new URLSearchParams(Object.entries(sp).filter((entry): entry is [string, string] => typeof entry[1] === 'string'));
   const filters = workspaceFilters(params);
-  const scoped = Boolean(filters.campus || filters.q || filters.sector || filters.region || filters.status || filters.network || filters.missing);
+  const scoped = Boolean(filters.campus || filters.q || filters.sector || filters.region || filters.status || filters.stage || filters.network || filters.missing);
   const founders = workspaceFounders(buildFounderIndex(), filterWorkspace(loadDirectory().cards, filters), filters);
   const allowedIds = founders.map(founder => founder.id);
   const count = allowedIds.length;

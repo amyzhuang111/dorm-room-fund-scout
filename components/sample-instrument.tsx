@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { fundingStageBuckets } from "@/lib/domain/funding-stage";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { companyCampusIds } from "@/lib/domain/campus-membership";
@@ -398,7 +399,7 @@ function facetAnchorId(title: string): string {
   if (key.startsWith("campus")) return "facet-campus";
   if (key.startsWith("hq")) return "facet-hq";
   if (key.startsWith("flag")) return "facet-flags";
-  if (key.startsWith("stage")) return "facet-stage";
+  if (key.startsWith("stage") || key.startsWith("funding")) return "facet-stage";
   if (key.startsWith("signal recency") || key.startsWith("recency")) return "facet-recency";
   if (key.startsWith("country")) return "facet-country";
   if (key.startsWith("signal kind")) return "facet-kind";
@@ -587,7 +588,9 @@ export function FacetRail({
   const sectorRows = sectorExpanded ? [...sectorPack.visible, ...sectorPack.more] : sectorPack.visible;
   const listedTotal = useSeed && seed ? seed.total : baseCompanies.length;
   const kinds = useMemo(() => countBy(baseCompanies, (c) => c.signalKind, (id) => baseCompanies.find((c) => c.signalKind === id)?.signalLabel ?? id), [baseCompanies]);
-  const stages = useMemo(() => countBy(baseCompanies, (c) => c.stage, (id) => id), [baseCompanies]);
+  const stages = useMemo(() => fundingStageBuckets(filterFacetCompanies(baseCompanies, {
+    ...facets, stage: null,
+  })), [baseCompanies, facets]);
   const yearsLive = useMemo(() => foundedYearBuckets(baseCompanies), [baseCompanies]);
   const years = useSeed && seed ? seed.years : yearsLive;
   const statusesLive = useMemo(() => {
@@ -689,13 +692,14 @@ export function FacetRail({
             ) : null}
             <p className={`mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${sheet && indexCount != null ? "mt-1.5" : ""}`}>{caption}</p>
             {sheet ? (
-              <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
+              <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Stage · Status · Year · Sector · Campus</p>
             ) : null}
           </>
         )}
         <div className="flex flex-wrap gap-1 pb-1 pt-0.5" data-facet-jump="" aria-label="Jump to facet">
           {(
             [
+              ["facet-stage", "Stage"],
               ["facet-status", "Status"],
               ["facet-year", "Year"],
               ["facet-sector", "Sector"],
@@ -766,6 +770,13 @@ export function FacetRail({
         </div>
       ) : null}
       <div className="min-h-0 flex-1 overflow-y-auto">
+        <FacetGroup title="Funding stage" defaultOpen={Boolean(facets.stage)} dense={editorial}>
+          <FacetRow active={!facets.stage} onClick={() => set({ stage: null })} label="All" />
+          <p className="mb-2 text-[11px] text-muted">Highest recorded round. Unknown does not mean unfunded.</p>
+          {stages.map((item) => (
+            <FacetRow key={item.id} active={facets.stage === item.id} onClick={() => set({ stage: facets.stage === item.id ? null : item.id })} label={item.label} count={item.count} />
+          ))}
+        </FacetGroup>
         {editorial ? null : (
           <FacetGroup title="Status" dense={editorial}>
             <FacetRow facet="status" count={listedTotal} active={!facets.status} onClick={() => set({ status: null })} label="All" />
@@ -897,12 +908,6 @@ export function FacetRail({
           <FacetRow active={!facets.kind} onClick={() => set({ kind: null })} label="All" />
           {kinds.map((item) => (
             <FacetRow key={item.id} active={facets.kind === item.id} onClick={() => set({ kind: facets.kind === item.id ? null : item.id })} label={item.label} count={item.count} />
-          ))}
-        </FacetGroup>
-        <FacetGroup title="Stage" defaultOpen={false} dense={editorial}>
-          <FacetRow active={!facets.stage} onClick={() => set({ stage: null })} label="All" />
-          {stages.map((item) => (
-            <FacetRow key={item.id} active={facets.stage === item.id} onClick={() => set({ stage: facets.stage === item.id ? null : item.id })} label={item.label} count={item.count} />
           ))}
         </FacetGroup>
         <FacetGroup title="Signal recency" defaultOpen={false} dense={editorial}>
