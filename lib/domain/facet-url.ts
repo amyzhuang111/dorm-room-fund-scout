@@ -89,7 +89,7 @@ export function facetsFromSearchParams(
     const n = Number(yearRaw);
     if (Number.isFinite(n)) foundedYear = n;
   }
-  const hqRegion = get("hq")?.trim() || null;
+  const hqRegion = get("hq")?.trim() || get("hqRegion")?.trim() || null;
   const country = get("country")?.trim() || null;
   const recencyRaw = get("recency")?.trim()?.toLowerCase() || null;
   const recency = recencyRaw && RECENCY_OK.has(recencyRaw) ? (recencyRaw as RecencyId) : null;
