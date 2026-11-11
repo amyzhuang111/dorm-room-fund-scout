@@ -100,10 +100,11 @@ export function StartupDirectoryCard({
   children?: ReactNode;
 }) {
   const facts = [
-    card.region ? ["Region", card.region] : null,
-    card.teamSize ? ["Team size", card.teamSize.replace(/\d[\d,]*/g, value => Number(value.replaceAll(",", "")).toLocaleString("en-US"))] : null,
-    card.status ? ["Status", card.status] : null,
-    card.campuses.length ? [card.campuses.length > 1 ? "Campuses" : "Campus", card.campuses.join(", ")] : null,
+    ["Region", card.region || "Not on record"],
+    ["Team size", card.teamSize ? card.teamSize.replace(/\d[\d,]*/g, value => Number(value.replaceAll(",", "")).toLocaleString("en-US")) : "Not on record"],
+    ["Status", card.status || "Not on record"],
+    ["Founded", card.foundedYear || "Not on record"],
+    [card.campuses.length > 1 ? "Campuses" : "Campus", card.campuses.join(", ") || "Not on record"],
   ].filter((fact): fact is string[] => fact !== null);
 
   return (

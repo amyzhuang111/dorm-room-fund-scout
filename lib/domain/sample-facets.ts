@@ -14,6 +14,11 @@ export interface FacetCompany {
   id: string;
   name: string;
   schoolId: string | null;
+  campusIds?: string[];
+  campuses?: string[];
+  teamSize?: string | null;
+  verificationStatus?: string | null;
+  sourceUrls?: string[];
   school?: string | null;
   signals: number;
   logoUrl?: string | null;
