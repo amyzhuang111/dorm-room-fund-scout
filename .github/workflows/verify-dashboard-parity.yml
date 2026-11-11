@@ -2,6 +2,10 @@ name: Verify dashboard and SQL migration
 on:
   pull_request:
     paths:
+      - 'scripts/build/**'
+      - 'lib/db/client.ts'
+      - 'next.config.ts'
+      - 'package.json'
       - 'app/directories/lse/**'
       - 'app/api/directories/lse/**'
       - 'lib/domain/lse-directory*'
@@ -49,14 +53,13 @@ jobs:
       - run: npx tsc --noEmit
       - run: npx eslint components/campus-workspace.tsx components/company-location-layer.tsx components/scout-icon.tsx components/site-nav.tsx components/tile-globe.tsx lib/user-pipeline/owner.ts lib/user-pipeline/store.ts app/api/user-pipeline/route.ts scripts/postgres/*.ts
 
-      - run: cp data/campus-universe.db /tmp/campus-stage-ci.db
+      # Match Vercel's build environment; the source seed remains untouched.
       - run: npm run build
         env:
-          CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-stage-ci.db
-      - run: node --import tsx lib/domain/lse-directory.test.ts
-        env:
-          CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-stage-ci.db
+          VERCEL: '1'
+      - run: npm run test:runtime-corpus
       - run: npx playwright install --with-deps chromium
       - run: node scripts/verify-stage-filters.mjs
         env:
-          CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-stage-ci.db
+          VERCEL: '1'
+          CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-browser-cold-start.db

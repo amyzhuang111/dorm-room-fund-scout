@@ -59,6 +59,7 @@ const nextConfig: NextConfig = {
     // Vercel function is not missing the file the tracer did not follow.
     "/**": [
       "./data/campus-universe.db",
+      "./data/runtime/campus-universe.db",
       "./data/snapshots/**/*",
       "./node_modules/better-sqlite3/prebuilds/**/*",
       "./public/data/founder-table.json",

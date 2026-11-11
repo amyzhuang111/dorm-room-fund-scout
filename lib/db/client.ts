@@ -4,15 +4,21 @@ import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
 
-const BUNDLED_DB_PATH = path.join(process.cwd(), "data", "campus-universe.db");
+const PREPARED_DB_PATH = path.join(process.cwd(), "data", "runtime", "campus-universe.db");
+const BUNDLED_DB_PATH = fs.existsSync(PREPARED_DB_PATH)
+  ? PREPARED_DB_PATH
+  : path.join(process.cwd(), "data", "campus-universe.db");
+if (process.env.VERCEL && !fs.existsSync(PREPARED_DB_PATH)) {
+  throw new Error("Prepared corpus is missing. Run npm run build and include data/runtime/campus-universe.db in the deployment.");
+}
 
 // Vercel's Lambda filesystem is read-only outside /tmp — but SQLite needs to
 // write a -wal/-shm (or rollback journal) file next to the .db file even for
 // plain reads. So on Vercel we copy the bundled, ingested database into /tmp
 // on cold start and open it there. Writes (e.g. pipeline status updates) then
 // only live for that lambda instance's lifetime — real, but not durable across
-// cold starts/instances. Locally (or any non-Vercel host with a persistent
-// disk) we just open data/campus-universe.db directly, and writes are durable.
+// cold starts/instances. Locally we use the prepared corpus when present, or the seed database before
+// the first build. CAMPUS_UNIVERSE_DB_PATH still supports isolated working copies.
 const DB_PATH =
   process.env.CAMPUS_UNIVERSE_DB_PATH ||
   (process.env.VERCEL ? path.join("/tmp", "campus-universe.db") : BUNDLED_DB_PATH);
