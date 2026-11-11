@@ -56,11 +56,11 @@ export default async function CampusesPage({ searchParams }: { searchParams: Pro
               <span className="campus-rank">{row.rank ? String(row.rank).padStart(2,'0') : '—'}</span>
               <Link href={`/campuses/${campusSlug(label)}`} className="campus-name hover:underline">{label}</Link>
               <span className="campus-country">{row.country?.trim() || 'Not on record'}</span>
-              <Link href={href("/founders",row.id)} className="campus-founders hover:underline" aria-label={`${label}: ${row.founderCount} indexed founders`}>{row.founderCount.toLocaleString('en-US')}</Link>
+              <Link href={href("/founders",row.id)} className="campus-founders hover:underline" aria-label={`${label}: ${row.founderCount} indexed founders`}>{row.founderCount.toLocaleString('en-US')}<span className="text-[10px] font-normal sm:hidden"> founders</span></Link>
               <span className="campus-meta">
-                <Link href={href("/companies",row.id)} className="hover:underline" aria-label={`${label}: ${row.companyCount} companies`}>
+                <span><Link href={href("/companies",row.id)} className="hover:underline" aria-label={`${label}: ${row.companyCount} companies`}>
                   <span className="sm-only-label">{row.companyCount.toLocaleString('en-US')} companies</span><span className="desk-only-num">{row.companyCount.toLocaleString('en-US')}</span>
-                </Link>
+                </Link></span>
                 <span><span className="sm-only-label">{row.sourcesConfigured.toLocaleString('en-US')} sources</span><span className="desk-only-num">{row.sourcesConfigured.toLocaleString('en-US')}</span></span>
               </span>
             </li>;
