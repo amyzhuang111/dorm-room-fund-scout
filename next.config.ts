@@ -43,7 +43,7 @@ const nextConfig: NextConfig = {
       { source: "/sources", destination: "/signals/sources", permanent: true },
       { source: "/alumni", destination: "/map/network", permanent: true },
       { source: "/pipeline", destination: "/work/pipeline", permanent: true },
-      { source: "/founder/discover", destination: "/founders", permanent: false },
+      { source: "/founder/discover", missing: [{ type: "query", key: "founder" }, { type: "query", key: "person" }, { type: "query", key: "q" }], destination: "/founders", permanent: false },
       { source: "/startup/discover", destination: "/companies", permanent: false },
       { source: "/hotspots", destination: "/map/hotspots", permanent: false },
       { source: "/founder/network", destination: "/map/network", permanent: false },
