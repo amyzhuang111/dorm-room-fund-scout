@@ -83,14 +83,14 @@ export interface SourceCatalogueEntry {
 
 export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
   ...discoveryDirectories.map((directory): SourceCatalogueEntry => ({
-    id: `cat_${directory.id}`, name: directory.name, campus: directory.campusId,
-    sourceType: 'directory', url: directory.url, founderScoutTier: 'D', startupScoutTier: 'D',
-    role: 'reference', dimensions: {},
-    tierRationale: 'Reference only until the roster and field quality have been reviewed; this is not a quality rating based on campus prestige.',
-    whyItMatters: 'An additional campus venture directory to investigate through the review pipeline.',
+    id: `cat_${directory.id}`, dbSourceId: directory.status === 'imported' ? directory.dbSourceId : undefined, name: directory.name, campus: directory.campusId,
+    sourceType: 'directory', url: directory.url, founderScoutTier: directory.status === 'imported' ? 'C' : 'D', startupScoutTier: directory.status === 'imported' ? 'C' : 'D',
+    role: directory.status === 'imported' ? 'discovery' : 'reference', dimensions: {},
+    tierRationale: directory.status === 'imported' ? 'C: public named profiles and business details are extractable, but stages are mixed and enrollment, dates and traction need corroboration. Source quality is separate from company benchmarks.' : 'Reference only until roster quality is reviewed.',
+    whyItMatters: 'A campus venture directory with public company and founder profiles.',
     whatToExtract: directory.fields,
     whatNotToInfer: ['Listing does not establish enrollment, founder identity, investment eligibility or a funding round. Missing fields remain unknown.'],
-    status: 'unconfigured', statusNote: directory.notes,
+    status: directory.status === 'imported' ? 'implemented' : 'unconfigured', statusNote: directory.notes,
   })),
   // ---------- PENN ----------
   {

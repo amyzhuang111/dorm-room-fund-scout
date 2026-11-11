@@ -1,0 +1,32 @@
+import Link from 'next/link';
+import { lseDirectory, filterLse } from '@/lib/domain/lse-directory';
+import { RUBRIC_DIMENSIONS } from '@/lib/scoring/rubric';
+export const metadata = { title:'LSE directory · company benchmarks' };
+export const dynamic = 'force-dynamic';
+export default async function LseDirectoryPage({searchParams}:{searchParams:Promise<{q?:string;tier?:string;stage?:string}>}) {
+  const sp=await searchParams, all=lseDirectory(), rows=filterLse(all,sp);
+  const people=new Set(all.flatMap(r=>r.founders.map(f=>f.key))).size;
+  const query=new URLSearchParams();
+  for(const key of ['q','tier','stage'] as const) if(sp[key]) query.set(key,sp[key]);
+  return <main className="mx-auto max-w-6xl space-y-5 bg-white px-4 py-6 text-slate-900 sm:px-6">
+    <nav className="flex flex-wrap gap-4 text-sm text-blue-700"><Link href="/">Dashboard</Link><Link href="/companies?campus=univ_lse">LSE on the map & directory</Link><Link href="/signals/sources?q=LSE">Source registry</Link></nav>
+    <header className="space-y-2"><p className="text-xs font-semibold uppercase tracking-widest text-blue-700">LSE · Startbook</p><h1 className="text-2xl font-semibold">Venture benchmarks</h1><p className="text-sm text-slate-600">{all.length} ventures · {people} named people · source review November 11, 2026</p>
+      <p className="max-w-3xl text-sm leading-relaxed">Provisional assessments using Campus Scout’s seven-factor rubric. Scores reflect the evidence in the public profiles, including self-reported claims. A high score does not establish investment eligibility or current student status. Campus founder counts use recorded education; this directory also includes non-LSE cofounders and one operations lead.</p>
+    </header>
+    <details className="rounded-lg border border-blue-100 bg-blue-50 p-3 text-sm"><summary className="cursor-pointer font-medium text-blue-900">How tiers and missing evidence work</summary><p className="mt-2">Benchmark A: 80–100 · B: 65–79.9 · C: 50–64.9 · D: below 50. These display bands are separate from the existing program/investor sourcing tiers. Unassessed means the evidence is insufficient, not poor quality.</p><p className="mt-2">A score requires at least 70% weighted coverage and ratings for ability to build, domain knowledge and customer pain. Unknown ratings stay blank. Stages are reported labels; “Fundraising” is not a financing round.</p><ul className="mt-2 grid gap-1 sm:grid-cols-2">{RUBRIC_DIMENSIONS.map(d=><li key={d.key}>{d.label}: {d.weight}%</li>)}</ul></details>
+    <form className="flex flex-wrap items-end gap-3 rounded-lg border border-slate-200 p-3" action="/directories/lse">
+      <label className="min-w-0 flex-1 text-xs font-medium">Search<input name="q" defaultValue={sp.q} placeholder="Company or founder" className="mt-1 block w-full rounded border border-slate-300 bg-white px-3 py-2 text-sm"/></label>
+      <label className="text-xs font-medium">Benchmark tier<select name="tier" defaultValue={sp.tier ?? ''} className="mt-1 block rounded border border-slate-300 bg-white px-3 py-2 text-sm"><option value="">All tiers</option>{['A','B','C','D','Unassessed'].map(t=><option key={t}>{t}</option>)}</select></label>
+      <label className="text-xs font-medium">Recorded stage<select name="stage" defaultValue={sp.stage ?? ''} className="mt-1 block rounded border border-slate-300 bg-white px-3 py-2 text-sm"><option value="">All stages</option>{['Pre-seed','Seed'].map(t=><option key={t}>{t}</option>)}<option value="unknown">Round unknown</option></select></label>
+      <button className="rounded bg-blue-700 px-4 py-2 text-sm font-medium text-white">Apply</button><Link href="/directories/lse" className="py-2 text-sm text-blue-700">Reset</Link>
+    </form>
+    <div className="flex flex-wrap items-center justify-between gap-2 text-sm"><p>{rows.length} of {all.length} ventures · sorted by benchmark score</p><a href={`/api/directories/lse/export?${query}`} className="font-medium text-blue-700 underline">Export this view as CSV</a></div>
+    <ol className="space-y-3">{rows.map((r,i)=><li key={r.key} className="rounded-lg border border-slate-200 p-4">
+      <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0 flex-1"><Link href={`/startup/${r.projectId}`} className="break-words text-base font-semibold text-blue-800">{i+1}. {r.name} →</Link><p className="mt-1 text-sm">{r.description || 'Description not supplied'}</p><p className="mt-1 text-xs leading-relaxed text-slate-600">{r.founders.map(f=>f.name).join(' · ')}</p></div><div className="text-right"><p className="rounded bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-800">{r.benchmark.tier==='Unassessed' ? 'Unassessed' : `Benchmark ${r.benchmark.tier}`}</p><p className="mt-1 text-sm">{r.benchmark.qualityScore==null ? 'No headline score' : `${r.benchmark.qualityScore}/100`}</p><p className="text-xs text-slate-500">{Math.round(r.benchmark.coverage*100)}% coverage</p></div></div>
+      <p className="mt-2 text-xs text-slate-600">Reported stage: {r.reportedStage || 'Not supplied'} · {r.fundraisingStatus || 'Fundraising status unknown'}</p>
+      <p className="mt-2 text-sm leading-relaxed">{r.notes}</p>
+      <details className="mt-3 text-xs"><summary className="cursor-pointer font-medium text-blue-700">Ratings & source evidence</summary><dl className="mt-2 grid gap-2 sm:grid-cols-2">{RUBRIC_DIMENSIONS.map(d=><div key={d.key} className="flex justify-between gap-2 border-b border-slate-100 py-1"><dt>{d.label} ({d.weight}%)</dt><dd className="shrink-0 font-medium">{r.ratings[d.key]==null ? 'Unknown' : `${r.ratings[d.key]}/5`}</dd></div>)}</dl><div className="mt-3 flex flex-wrap gap-4"><a href={r.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">Public company profile</a>{r.founders.map(f=><a key={f.key} href={f.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">{f.name}: source</a>)}</div><p className="mt-2 text-slate-500">{r.evaluator}. Cohort and directory membership do not establish enrollment. Funding dates and operating status remain unknown unless separately sourced.</p></details>
+    </li>)}</ol>
+    {!rows.length && <p className="py-8 text-center text-slate-500">No ventures match these filters.</p>}
+  </main>;
+}

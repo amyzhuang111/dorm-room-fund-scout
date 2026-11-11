@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import { benchmark } from './benchmark';
+import { RUBRIC_DIMENSIONS, type Ratings } from './rubric';
+const all = (n: 0 | 1 | 2 | 3 | 4 | 5): Ratings => Object.fromEntries(RUBRIC_DIMENSIONS.map(d => [d.key, n]));
+assert.equal(benchmark(all(4)).tier, 'A');
+assert.equal(benchmark({ ...all(3), ability_to_build: 4, domain_knowledge_access: 4 }).tier, 'B');
+assert.equal(benchmark(all(3)).tier, 'C');
+assert.equal(benchmark(all(2)).tier, 'D');
+assert.equal(benchmark({ ...all(5), ability_to_build: null }).tier, 'Unassessed');
+assert.equal(benchmark({ ability_to_build: 4, domain_knowledge_access: 4, customer_pain_market: 4 }).qualityScore, null);
+assert.equal(benchmark({ ability_to_build: 4, domain_knowledge_access: 4, customer_pain_market: 4, differentiated_insight: 4 }).tier, 'A');
+assert.equal(benchmark({}).coverage, 0);
+console.log('Benchmark boundaries and missing-evidence gates passed.');

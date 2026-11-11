@@ -109,6 +109,8 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
         </Link>
       </div>
 
+      <Link href="/directories/lse" className="mt-4 inline-flex rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800">LSE directory · reviewed companies and benchmarks →</Link>
+
       {sp.importError && <div className="mt-3 rounded-md border border-danger/30 bg-danger/10 p-2.5 text-sm text-danger">{sp.importError}</div>}
       {sp.imported && (
         <div className="mt-3 rounded-md border border-ok/30 bg-ok/10 p-2.5 text-sm text-foreground">

@@ -1,4 +1,6 @@
 import { saveAssessment } from "@/lib/actions/assessment";
+import { benchmark } from "@/lib/scoring/benchmark";
+import type { Ratings } from "@/lib/scoring/rubric";
 import { RUBRIC_DIMENSIONS } from "@/lib/scoring/rubric";
 import type { AssessmentHistoryRow } from "@/lib/domain/queries";
 
@@ -28,6 +30,8 @@ export function AssessmentForm({ projectId, history }: { projectId: string; hist
                   {h.evaluator} · {h.createdAt.slice(0, 10)}
                 </span>
               </div>
+              <p className="mt-1 font-medium text-blue-800">{benchmark(h.ratings as Ratings).tier === 'Unassessed' ? 'Benchmark: insufficient evidence' : `Benchmark ${benchmark(h.ratings as Ratings).tier}`}</p>
+              <details className="mt-2"><summary className="cursor-pointer text-blue-700">Seven-factor breakdown</summary><dl className="mt-2 grid gap-1 sm:grid-cols-2">{RUBRIC_DIMENSIONS.map(d => <div key={d.key} className="flex justify-between gap-2"><dt>{d.label} ({d.weight}%)</dt><dd className="shrink-0">{h.ratings[d.key] == null ? 'Unknown' : `${h.ratings[d.key]}/5`}</dd></div>)}</dl><p className="mt-2 text-muted">A ≥80 · B ≥65 · C ≥50 · D below 50. At least 70% coverage and all three required dimensions must be assessed. Program/investor tiers and eligibility are separate.</p>{h.evidenceSourceUrl?.startsWith('https://') && <a href={h.evidenceSourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-blue-700 underline">Assessment source</a>}</details>
               {h.notes && <p className="mt-1 text-foreground">{h.notes}</p>}
             </li>
           ))}
