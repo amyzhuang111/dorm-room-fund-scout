@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { buildHref } from "@/lib/domain/url";
 import { foundersInView } from "@/lib/domain/candidate-filter";
@@ -124,6 +125,23 @@ function FounderBody({
   }, [query, current.q, nav]);
 
   const monitored = universities.filter((u) => u.sourcesConfigured > 0).length;
+  if (filters.founder) {
+    const founder = visible[0];
+    return (
+      <div className="mx-auto max-w-[900px] px-4 py-8 sm:px-6">
+        <nav aria-label="Founder record navigation" className="mb-5 flex gap-5 text-sm">
+          <Link href="/founders" className="text-link underline">← All founders</Link>
+          <Link href="/networks" className="text-link underline">Network map ↗</Link>
+        </nav>
+        <h1 className="page-title mb-5">{founder?.name ?? "Founder not found"}</h1>
+        {founder ? (
+          <FounderCard founder={founder} feedbackView={filters.feedback} open basePath="/founder/discover" current={filters} />
+        ) : (
+          <p>This founder is no longer in the current index. Use All founders to find an updated record.</p>
+        )}
+      </div>
+    );
+  }
   return (
     <div data-scout-live="" className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
       <PageHeader
