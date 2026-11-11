@@ -156,6 +156,7 @@ function quotedName(text: string | null): string | null {
 
 export interface ProjectMate {
   id: string;
+  campusIds?: string[];
   name: string;
   tier: string | null;
   tierBasis: string | null;
@@ -305,7 +306,7 @@ function buildProjectRows(universityId?: string): ProjectTableRow[] {
     const parsed = parseSignalCopy(obs);
     const rosterNote = projectHits.some((hit) => hit.project_kind === "company") ? rosterNotes.get(projectId) ?? null : null;
     const mates = [...members.values()]
-      .map((person) => ({ id: person.id, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }))
+      .map((person) => ({ id: person.id, campusIds: person.campusIds, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }))
       .sort((a, b) => a.name.localeCompare(b.name));
     const campus = majorityCampus([...members.values()]);
     const tier = bestTier([projectTier, ...mates.map((mate) => mate.tier)]);
@@ -348,7 +349,7 @@ function buildProjectRows(universityId?: string): ProjectTableRow[] {
       campus: person.campus,
       campusSlug: person.campusSlug,
       campusIds: person.campusIds,
-      people: [{ id: person.id, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }],
+      people: [{ id: person.id, campusIds: person.campusIds, name: person.name, tier: person.tier, tierBasis: person.tierBasis, signalAt: person.signalAt }],
       verified: person.verified,
       logoUrl: person.companyId ? localCompanyLogoUrl(person.companyId) : null,
     });

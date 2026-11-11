@@ -1,131 +1,72 @@
-import Link from "next/link";
-import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
-import { listUniversities } from "@/lib/domain/queries";
-import { CampusesTheme } from "@/components/campuses-theme";
-import { loadCorpusTotals } from "@/lib/domain/corpus-totals";
+import Link from 'next/link';
+import { campusSlug, shortCampusLabel } from '@/lib/domain/campuses';
+import { listUniversities } from '@/lib/domain/queries';
+import { loadDirectory } from '@/lib/domain/directory';
+import { rankGroups, workspaceFilters, filterWorkspace, workspaceFounders } from '@/lib/domain/scout-workspace';
+import { CampusesTheme } from '@/components/campuses-theme';
+import { loadCorpusTotals } from '@/lib/domain/corpus-totals';
+import { buildFounderIndex } from '@/lib/domain/founder-index-build';
 
-export default function CampusesPage() {
-  const rows = listUniversities()
-    .map((university) => ({
-      ...university,
-      label: shortCampusLabel(university.id, university.name),
-      slug: campusSlug(shortCampusLabel(university.id, university.name)),
-    }))
-  const withFounders = rows.filter((row) => row.founderCount > 0);
-  const ranked = rows
-    .filter((row) => row.pitchbook?.undergrad)
-    .sort(
-      (a, b) =>
-        (a.pitchbook?.undergrad?.rank ?? 999) - (b.pitchbook?.undergrad?.rank ?? 999) ||
-        a.label.localeCompare(b.label),
-    );
-  const unranked = rows
-    .filter((row) => !row.pitchbook?.undergrad && row.founderCount > 0)
-    .sort((a, b) => b.founderCount - a.founderCount || a.label.localeCompare(b.label));
+export default async function CampusesPage({ searchParams }: { searchParams: Promise<Record<string,string | undefined>> }) {
+  const sp = await searchParams;
+  const context = new URLSearchParams(Object.entries(sp).filter((entry): entry is [string,string] => typeof entry[1] === 'string'));
+  context.delete('campus');
+  const filters = workspaceFilters(context);
+  const scoped = Boolean(filters.q || filters.sector || filters.region || filters.status || filters.network || filters.missing);
+  const href = (path:string,campus?:string) => { const query = new URLSearchParams(context); if(campus) query.set('campus',campus); return query.size ? `${path}?${query}` : path; };
+  const universities = listUniversities();
+  const byId = new Map(universities.map(university => [university.id, university]));
+  const companies = filterWorkspace(loadDirectory().cards,filters);
+  const filteredFounders = scoped ? workspaceFounders(buildFounderIndex(),companies,filters) : null;
+  const founderCounts = new Map<string,number>();
+  for (const founder of filteredFounders ?? []) for (const id of new Set([...(founder.campusIds ?? []), ...(founder.campusId ? [founder.campusId] : [])])) founderCounts.set(id,(founderCounts.get(id) ?? 0)+1);
+  const founderCount = (id:string,stored:number) => scoped ? founderCounts.get(id) ?? 0 : stored;
+  const ranks = rankGroups(companies, 'campus');
+  const rankedIds = new Set(ranks.map(row => row.id));
+  const rows = ranks.flatMap((rank, index) => {
+    const university = byId.get(rank.id);
+    return university ? [{ ...university, companyCount: rank.companies, founderCount: founderCount(rank.id,university.founderCount), rank: index + 1 }] : [];
+  });
+  const other = universities.filter(row => !rankedIds.has(row.id) && founderCount(row.id,row.founderCount) > 0)
+    .sort((a,b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
+    .map(row => ({ ...row, companyCount: 0, founderCount: founderCount(row.id,row.founderCount), rank: 0 }));
   const totals = loadCorpusTotals();
-
-  return (
-    <div className="sample-paper min-h-[calc(100dvh-48px)]" data-campuses-index="">
-      <CampusesTheme />
-      <div className="mx-auto max-w-[1200px] px-3 py-3 sm:px-5 sm:py-6">
-        <div className="border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:pb-4" data-campuses-hero="">
-          <h1 className="mt-1 scout-display text-[28px] leading-[1.05] sm:text-[48px]">Campuses</h1>
-          <p
-            className="mt-2 max-w-xl bg-[color:var(--bg,#FFFFFF)] font-mono text-[13px] leading-4 tabular-nums text-[color:var(--fg-2,#3F465C)] sm:mt-3 sm:text-[14px] sm:leading-5"
-            data-campuses-stats=""
-          >
-            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]" data-count="campuses-with-founders">{withFounders.length.toLocaleString("en-US")}</span>
-            {" of "}
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="campuses-total">{totals.campusesTotal.toLocaleString("en-US")}</span>
-            {" with founders"}
-            <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="founders-listed">{totals.foundersListed.toLocaleString("en-US")}</span>
-            {" founders"}
-            <span className="hidden sm:inline">
-              <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]" data-count="investable-companies">{totals.investableCompanies.toLocaleString("en-US")}</span>
-              {" investable companies"}
-            </span>
-          </p>
-          <details className="mt-2 max-w-xl text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]"><summary className="cursor-pointer py-2">How campuses are ranked</summary><p>
-            PitchBook ranks undergraduate alumni who founded venture-backed companies (Jan 2015–Aug 2026). “On file” counts founders in Campus Scout. {ranked.length.toLocaleString("en-US")} of the undergraduate top 100 are linked to a campus here.
-          </p></details>
-          <Link
-            href="/companies?feed=leaderboard"
-            className="mt-2 inline-flex h-11 min-h-11 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[14px] font-semibold text-white sm:mt-3"
-          >
-            Companies by campus
-          </Link>
+  return <div className="sample-paper min-h-[calc(100dvh-48px)]" data-campuses-index="">
+    <CampusesTheme />
+    <div className="mx-auto max-w-[1200px] px-3 py-3 sm:px-5 sm:py-6">
+      <div className="border-b border-line pb-4" data-campuses-hero="">
+        <h1 className="scout-display text-[28px] leading-tight sm:text-[48px]">{scoped ? 'Filtered campus rankings' : 'Campus rankings'}</h1>
+        <p className="mt-2 text-sm tabular-nums" data-campuses-stats="">
+          <strong>{ranks.length.toLocaleString('en-US')}</strong> campuses with companies · <strong>{companies.length.toLocaleString('en-US')}</strong> companies · <strong>{(filteredFounders?.length ?? totals.foundersIndexed).toLocaleString('en-US')}</strong> indexed founders
+        </p>
+        <details className="mt-2 max-w-3xl text-sm text-fg-2"><summary className="cursor-pointer py-2">How campuses are ranked</summary>
+          <p>Ranked by distinct companies in the scouting list. Ties use recorded signals, then campus name. These are the same company counts shown in the dashboard and company directory. Founders are counted by unique person ID in the full founder index. A company or founder linked to several campuses counts once at each campus, so campus totals overlap.</p>
+        </details>
+        <Link href={href("/companies")} className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-link underline">Browse these companies ↗</Link>
+        {scoped && <Link href="/campuses" className="ml-4 inline-flex min-h-11 items-center text-sm text-link underline">Clear filters</Link>}
+      </div>
+      <div className="mt-4 overflow-hidden border border-line bg-white" data-campuses-table="">
+        <div className="hidden grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_5.5rem_5.5rem_5rem] gap-2 border-b border-line px-3 py-3 text-[10px] uppercase tracking-wider text-fg-2 sm:grid">
+          <span>#</span><span>Campus</span><span>Country</span><span className="text-right">Founders</span><span className="text-right">Companies</span><span className="text-right">Sources</span>
         </div>
-
-        <div className="mt-3 grid gap-4 sm:mt-4 ">
-          <div className="overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]" data-campuses-table="">
-            <div className="hidden grid-cols-[3rem_minmax(0,1.4fr)_minmax(0,1fr)_5.5rem_5.5rem_5rem] gap-2 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3 py-2.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] sm:grid">
-              <span>#</span>
-              <span>Campus</span>
-              <span>Country</span>
-              <span className="text-right">PitchBook</span>
-              <span className="text-right">Companies</span>
-              <span className="text-right">Sources</span>
-            </div>
-            <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campuses-cards="">
-              {ranked.map((row) => {
-                const track = row.pitchbook?.undergrad;
-                return (
-                <li key={row.id}>
-                  <Link href={`/campuses/${row.slug}`} className="campus-index-row">
-                    <span className="campus-rank">{String(track?.rank ?? 0).padStart(2, "0")}</span>
-                    <span className="campus-name">{row.label}</span>
-                    <span className="campus-country">{row.country?.trim() || "Not on record"} · {row.founderCount.toLocaleString("en-US")} on file</span>
-                    <span className="campus-founders">{(track?.founderCount ?? 0).toLocaleString("en-US")}</span>
-                    <span className="campus-meta">
-                      <span>
-                        <span className="sm-only-label">{row.companyCount.toLocaleString("en-US")} companies</span>
-                        <span className="desk-only-num">{row.companyCount.toLocaleString("en-US")}</span>
-                      </span>
-                      <span>
-                        <span className="sm-only-label">{row.sourcesConfigured.toLocaleString("en-US")} sources</span>
-                        <span className="desk-only-num">{row.sourcesConfigured.toLocaleString("en-US")}</span>
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-                );
-              })}
-            </ol>
-            {unranked.length > 0 ? (
-              <div data-campuses-unranked="">
-                <p className="border-t border-[color:var(--line,#E1E5EF)] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
-                  Other campuses
-                </p>
-                <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                  {unranked.map((row) => (
-                    <li key={row.id}>
-                      <Link href={`/campuses/${row.slug}`} className="campus-index-row">
-                        <span className="campus-rank">-</span>
-                        <span className="campus-name">{row.label}</span>
-                        <span className="campus-country">{row.country?.trim() || "Not on record"} · {row.founderCount.toLocaleString("en-US")} on file</span>
-                        <span className="campus-founders">-</span>
-                        <span className="campus-meta">
-                          <span>
-                            <span className="sm-only-label">{row.companyCount.toLocaleString("en-US")} companies</span>
-                            <span className="desk-only-num">{row.companyCount.toLocaleString("en-US")}</span>
-                          </span>
-                          <span>
-                            <span className="sm-only-label">{row.sourcesConfigured.toLocaleString("en-US")} sources</span>
-                            <span className="desk-only-num">{row.sourcesConfigured.toLocaleString("en-US")}</span>
-                          </span>
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            ) : null}
-          </div>
-
-        </div>
+        <ol className="divide-y divide-line" data-campuses-cards="">
+          {[...rows,...other].map(row => {
+            const label = shortCampusLabel(row.id,row.name);
+            return <li key={row.id} className="campus-index-row" data-campus-id={row.id}>
+              <span className="campus-rank">{row.rank ? String(row.rank).padStart(2,'0') : '—'}</span>
+              <Link href={`/campuses/${campusSlug(label)}`} className="campus-name hover:underline">{label}</Link>
+              <span className="campus-country">{row.country?.trim() || 'Not on record'}</span>
+              <Link href={href("/founders",row.id)} className="campus-founders hover:underline" style={{ flexDirection: 'column', alignItems: 'flex-end' }} aria-label={`${label}: ${row.founderCount} indexed founders`}>{row.founderCount.toLocaleString('en-US')}<span className="block font-normal sm:hidden" style={{ fontSize: 14 }}>founders</span></Link>
+              <span className="campus-meta">
+                <span><Link href={href("/companies",row.id)} className="hover:underline" aria-label={`${label}: ${row.companyCount} companies`}>
+                  <span className="sm-only-label">{row.companyCount.toLocaleString('en-US')} companies</span><span className="desk-only-num">{row.companyCount.toLocaleString('en-US')}</span>
+                </Link></span>
+                <span><span className="sm-only-label">{row.sourcesConfigured.toLocaleString('en-US')} sources</span><span className="desk-only-num">{row.sourcesConfigured.toLocaleString('en-US')}</span></span>
+              </span>
+            </li>;
+          })}
+        </ol>
       </div>
     </div>
-  );
+  </div>;
 }

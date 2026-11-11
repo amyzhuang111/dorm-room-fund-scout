@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { companyCampusIds } from "@/lib/domain/campus-membership";
 import { CampusSeal } from "@/components/campus-seal";
 import { sectorIdsOf, sectorLabel } from "@/lib/domain/sectors";
 import {
@@ -508,6 +509,8 @@ export interface FacetState {
   status: StatusId | null;
   flag: FlagId | null;
   hqRegion: string | null;
+  network?: string | null;
+  missing?: string | null;
 }
 
 export function emptyFacets(): FacetState {
@@ -525,6 +528,8 @@ export function emptyFacets(): FacetState {
     status: null,
     flag: null,
     hqRegion: null,
+    network: null,
+    missing: null,
   };
 }
 
@@ -571,7 +576,7 @@ export function FacetRail({
   const baseCompanies = useMemo(() => {
     if (!facets.country) return companies;
     const ids = new Set(countryScoped.map((campus) => campus.id));
-    return companies.filter((company) => !company.schoolId || ids.has(company.schoolId));
+    return companies.filter((company) => companyCampusIds(company).some(id => ids.has(id)));
   }, [companies, countryScoped, facets.country]);
 
   const [hqExpanded, setHqExpanded] = useState(false);
@@ -633,6 +638,11 @@ export function FacetRail({
       .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
       .slice(0, 36);
   }, [countryScoped, facets.query]);
+  const campusCompanyCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const company of baseCompanies) for (const id of companyCampusIds(company)) counts.set(id, (counts.get(id) ?? 0) + 1);
+    return counts;
+  }, [baseCompanies]);
 
   const searchSuggestions = useMemo(() => {
     const q = facets.query.trim().toLowerCase();
@@ -867,7 +877,7 @@ export function FacetRail({
         </FacetGroup>
         <FacetGroup title="Campus" defaultOpen={false} dense={editorial}>
           <p className="px-2 pb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)]" data-campus-count-unit="founders">
-            Promoted founders, once per campus
+            Companies, once per linked campus
           </p>
           {campusRows.map((campus) => (
             <FacetRow
@@ -878,7 +888,7 @@ export function FacetRail({
                 onCampusFocus?.(campus.id);
               }}
               label={shortCampusLabel(campus.id, campus.name)}
-              count={campus.founders}
+              count={companies.length ? campusCompanyCounts.get(campus.id) ?? 0 : undefined}
               facet="campus"
             />
           ))}
@@ -909,7 +919,7 @@ export function FacetRail({
 
 export function applyFacets(companies: FacetCompany[], facets: FacetState, countryCampusIds?: Set<string>): FacetCompany[] {
   const scoped = countryCampusIds
-    ? companies.filter((company) => !company.schoolId || countryCampusIds.has(company.schoolId))
+    ? companies.filter((company) => companyCampusIds(company).some(id => countryCampusIds.has(id)))
     : companies;
   return filterFacetCompanies(scoped, {
     sector: facets.sector,
@@ -924,6 +934,8 @@ export function applyFacets(companies: FacetCompany[], facets: FacetState, count
     flag: facets.flag,
     hqRegion: facets.hqRegion,
     query: facets.query,
+    network: facets.network,
+    missing: facets.missing,
   });
 }
 

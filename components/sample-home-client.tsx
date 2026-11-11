@@ -703,6 +703,8 @@ export function SampleHomeClient(props: {
               campus: campusId ?? null,
               query: query ?? "",
               stage: (facetExtras?.stage as string) ?? null,
+              network: (facetExtras?.network as string) ?? null,
+              missing: (facetExtras?.missing as string) ?? null,
               status: (facetExtras?.status as UrlFacetState["status"]) ?? null,
               flag: (facetExtras?.flag as UrlFacetState["flag"]) ?? null,
               foundedYear: typeof facetExtras?.foundedYear === "number" ? facetExtras.foundedYear : null,

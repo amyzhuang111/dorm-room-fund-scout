@@ -1,5 +1,6 @@
 /** Facet helpers for the sample instrument. Counts come from stored directory cards only. */
 import { matchesSector, sectorIdsOf, sectorLabelsOf, sectorLabel } from "./sectors";
+import { companyMatchesCampus, companyCampusIds } from "./campus-membership";
 
 export type RecencyId = "month" | "year" | "older" | "future" | "none";
 export type StatusId = "active" | "acquired" | "closed" | "unknown";
@@ -291,12 +292,16 @@ export function filterFacetCompanies(
     flag?: FlagId | null;
     hqRegion?: string | null;
     query?: string;
+    network?: string | null;
+    missing?: string | null;
     today?: CalendarDay;
   },
 ): FacetCompany[] {
   const tokens = (opts.query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   const today = opts.today ?? currentCalendarDay();
   return companies.filter((company) => {
+    if (opts.network && !(company.programs ?? []).includes(opts.network)) return false;
+    if (COVERAGE_FIELDS.find(field => field.id === opts.missing)?.has(company)) return false;
     if (opts.sectorMissing) {
       if (sectorIdsOf(company).length) return false;
     } else if (opts.sector && !matchesSector(company, opts.sector)) {
@@ -304,7 +309,7 @@ export function filterFacetCompanies(
     }
     if (opts.kind && company.signalKind !== opts.kind) return false;
     if (opts.stage && company.stage !== opts.stage) return false;
-    if (opts.campus && company.schoolId !== opts.campus) return false;
+    if (opts.campus && !companyMatchesCampus(company, opts.campus)) return false;
     if (opts.recency && recencyOf(company.latestSignalAt, today) !== opts.recency) return false;
     if (opts.yearMissing) {
       if (company.foundedYear != null) return false;
@@ -313,13 +318,13 @@ export function filterFacetCompanies(
     }
     if (opts.status && statusOf(company) !== opts.status) return false;
     if (opts.flag && !hasFlag(company, opts.flag, today)) return false;
-    if (opts.hqRegion === NOT_ON_RECORD) {
+    if ((opts.hqRegion === NOT_ON_RECORD || opts.hqRegion === "missing")) {
       if (company.hqRegion) return false;
     } else if (opts.hqRegion && company.hqRegion !== opts.hqRegion) {
       return false;
     }
     if (tokens.length) {
-      const hay = [company.name, company.description ?? "", ...sectorLabelsOf(company), company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
+      const hay = [company.name, company.description ?? "", ...sectorLabelsOf(company), company.school ?? "", ...(company.campuses ?? []), ...(company.founders ?? []), company.hqRegion ?? "", ...(company.programs ?? [])].join("\n").toLowerCase();
       if (!tokens.every((token) => hay.includes(token))) return false;
     }
     return true;
@@ -368,11 +373,25 @@ export function sampleSurfaceCounts(
 }
 
 /** Companies on the same campus as `schoolId`, including the subject company. */
-export function campusPeerCompanies<T extends { schoolId: string | null }>(
+export function campusPeerCompanies<T extends { schoolId: string | null; campusIds?: string[] }>(
   companies: T[],
   schoolId: string | null | undefined,
 ): T[] {
   if (!schoolId) return [];
-  return companies.filter((c) => c.schoolId === schoolId);
+  return companies.filter((c) => companyMatchesCampus(c, schoolId));
 }
 
+
+export function hasNamedFounder(company: FacetCompany): boolean {
+  return (company.founders ?? []).some(name => /[\p{L}]{2,}/u.test(name) && !/^(unknown|unnamed|n\/a|founder)$/i.test(name.trim()));
+}
+export const COVERAGE_FIELDS = [
+  { id: 'campus', label: 'Campus', has: (c: FacetCompany) => companyCampusIds(c).length > 0 },
+  { id: 'founders', label: 'Named founders', has: hasNamedFounder },
+  { id: 'year', label: 'Founded year', has: (c: FacetCompany) => !!c.foundedYear },
+  { id: 'sector', label: 'Industry', has: (c: FacetCompany) => !!c.sectorId },
+  { id: 'region', label: 'Headquarters', has: (c: FacetCompany) => !!c.hqRegion },
+  { id: 'team', label: 'Team size', has: (c: FacetCompany) => !!c.teamSize },
+  { id: 'status', label: 'Operating status', has: (c: FacetCompany) => statusOf(c) !== 'unknown' },
+  { id: 'logo', label: 'Logo', has: (c: FacetCompany) => !!c.logoUrl },
+];

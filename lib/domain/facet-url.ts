@@ -25,6 +25,8 @@ export type FacetState = {
   status: StatusId | null;
   flag: FlagId | null;
   hqRegion: string | null;
+  network?: string | null;
+  missing?: string | null;
 };
 
 export function emptyFacets(): FacetState {
@@ -42,6 +44,8 @@ export function emptyFacets(): FacetState {
     status: null,
     flag: null,
     hqRegion: null,
+    network: null,
+    missing: null,
   };
 }
 
@@ -85,7 +89,7 @@ export function facetsFromSearchParams(
     const n = Number(yearRaw);
     if (Number.isFinite(n)) foundedYear = n;
   }
-  const hqRegion = get("hq")?.trim() || null;
+  const hqRegion = get("hq")?.trim() || get("hqRegion")?.trim() || null;
   const country = get("country")?.trim() || null;
   const recencyRaw = get("recency")?.trim()?.toLowerCase() || null;
   const recency = recencyRaw && RECENCY_OK.has(recencyRaw) ? (recencyRaw as RecencyId) : null;
@@ -94,6 +98,8 @@ export function facetsFromSearchParams(
   return {
     ...base,
     query: q,
+    network: get("network")?.trim() || null,
+    missing: get("missing")?.trim() || null,
     sector,
     sectorMissing,
     kind,
@@ -115,6 +121,8 @@ export function browseHref(opts: BrowseUrlOpts): string {
   if (feed && feed !== "directory") query.set("feed", feed);
 
   const f = { ...emptyFacets(), ...(opts.facets ?? {}) };
+  if (f.network) query.set("network", f.network);
+  if (f.missing) query.set("missing", f.missing);
   if (f.sector) query.set("sector", f.sector);
   if (f.sectorMissing) query.set("sectorMissing", "1");
   if (f.kind) query.set("kind", f.kind);
@@ -155,6 +163,8 @@ export function activeFacetChips(
   } = {},
 ): { key: keyof FacetState | "query"; label: string; clear: Partial<FacetState> }[] {
   const chips: { key: keyof FacetState | "query"; label: string; clear: Partial<FacetState> }[] = [];
+  if (facets.network) chips.push({key:"network",label:facets.network,clear:{network:null}});
+  if (facets.missing) chips.push({key:"missing",label:`Missing ${facets.missing}`,clear:{missing:null}});
   if (facets.query.trim()) {
     chips.push({ key: "query", label: `“${facets.query.trim()}”`, clear: { query: "" } });
   }

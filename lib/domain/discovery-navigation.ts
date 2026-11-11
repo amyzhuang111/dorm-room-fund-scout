@@ -6,7 +6,7 @@ export function discoveryHref(target: "map" | "companies" | "signals", search: U
   params.delete("hqRegion");
   if (hq) params.set("hq", hq);
   for (const key of [...params.keys()]) {
-    if (!["campus", "sector", "kind", "q", "stage", "status", "flag", "year", "yearMissing", "sectorMissing", "hq", "country", "recency", "sort", "c"].includes(key)) params.delete(key);
+    if (!["network", "missing", "campus", "sector", "kind", "q", "stage", "status", "flag", "year", "yearMissing", "sectorMissing", "hq", "country", "recency", "sort", "c"].includes(key)) params.delete(key);
   }
   if (target === "map" && hq) {
     params.delete("hq");
