@@ -747,7 +747,8 @@ export function NetworkAtlas() {
             {hasFilter
               ? `${highlighted.size.toLocaleString()} highlighted · `
               : ""}
-            {data.nodes.length.toLocaleString()} founders & startups
+            {data.nodes.length.toLocaleString("en-US")} network records
+            <small className={styles.block}>Includes sourced records outside the company and founder directories.</small>
           </span>
           <button onClick={reset}>Reset all</button>
         </div>

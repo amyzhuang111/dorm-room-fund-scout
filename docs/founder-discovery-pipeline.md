@@ -2,7 +2,7 @@
 
 ## Delivered
 
-The globe now offers explicit Globe / Network map / Directory navigation, campus starting points, a floating campus leaderboard, and a Saved shortcut. Company and founder cards link to their exact network nodes. The network retains the previous filtered view and offers a return link; selecting and closing nodes updates the URL. Rankings continue to use the shared company corpus.
+The globe now offers explicit Globe / Network map / Directory navigation, campus starting points, a floating campus leaderboard, and a Saved shortcut. Company and founder cards link to their exact network nodes. The network retains the previous filtered view and offers a return link; selecting and closing nodes updates the URL. Rankings continue to use the shared company corpus. Network totals explicitly count the broader research database, which includes records outside the published directories.
 
 The discovery CLI supports query planning, limited public-profile retrieval, evidence staging, CSV review, transactional imports and a per-path quality report. Publication consumes reviewed JSON before rebuilding public data indexes. There is no unauthenticated import endpoint.
 
