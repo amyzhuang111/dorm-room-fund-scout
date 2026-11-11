@@ -83,6 +83,9 @@ function FounderBody({
   const pool = showingPotential ? potentialFounders : catalog.founders;
   const liveLikes = useMemo(() => likeTargetsFrom(records, [], pool, initialLikes), [records, pool, initialLikes]);
   const visible = useMemo(() => {
+    // A full-record link must show the selected founder even if directory filters
+    // would otherwise exclude them (for example, an older graduation year).
+    if (filters.founder) return pool.filter((founder) => founder.id === filters.founder);
     const matched = foundersInView(pool, { universityId: filters.university, search: filters.q, confirmed: filters.confirmed === "1" });
     const reviewed = reviewFounders(matched, records, liveLikes, reviewMode(filters.feedback)).filter((founder) =>
       userFounderPassesEnrollment(founder, selectedEnrollment(filters.enroll))
