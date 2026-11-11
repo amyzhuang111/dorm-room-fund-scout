@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
+import { shortCampusLabel } from "@/lib/domain/campuses";
+import { campusFounderProjectRows } from "@/lib/domain/founder-view";
 import { cleanCsvNames, cleanCsvText, encodeCsv } from "@/lib/display/csv";
 import { plainText } from "@/lib/display/plain-text";
 import { relativeTime } from "@/lib/domain/relative-time";
@@ -108,7 +110,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const feedback = useFeedback();
   const pipeline = useUserPipeline();
 
-  const campuses = useMemo(() => [...new Set(rows.map((row) => row.campus).filter(Boolean))] as string[], [rows]);
+  const campuses = useMemo(() => [...new Set(rows.flatMap(row => row.campusIds))].map(id => ({id,label:shortCampusLabel(id)})).sort((a,b)=>a.label.localeCompare(b.label)), [rows]);
   const verifiedFilled = rows.filter((row) => row.verified).length;
   const dateFilled = rows.filter((row) => row.signalAt).length;
   const mostlyEmpty = (filled: number) => rows.length === 0 || filled / rows.length < 0.5;
@@ -124,13 +126,12 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const showTier = true;
   const showDate = dateChoice ?? autoDate;
 
-  const filtered = rows.filter((row) => {
+  const filtered = campusFounderProjectRows(rows, campus).filter((row) => {
     if (query) {
       const hay = `${row.name} ${row.detail ?? ""} ${row.event ?? ""} ${row.people.map((person) => person.name).join(" ")}`.toLowerCase();
       if (!hay.includes(query.toLowerCase())) return false;
     }
     if (tier && row.tier !== tier && !row.people.some((person) => person.tier === tier)) return false;
-    if (campus && row.campus !== campus) return false;
     if (verifiedOnly && !row.verified) return false;
     return true;
   });
@@ -261,7 +262,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
           {!campusLocked && (
             <select value={campus} onChange={(event) => setCampus(event.target.value)} className={`${control} w-full`} aria-label="Campus">
               <option value="">Campus</option>
-              {campuses.map((value) => <option key={value}>{value}</option>)}
+              {campuses.map(({id,label}) => <option key={id} value={id}>{label}</option>)}
             </select>
           )}
           {verifiedFilled > 0 && (
@@ -309,7 +310,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
           {!campusLocked && (
             <select value={campus} onChange={(event) => setCampus(event.target.value)} className={control} aria-label="Campus">
               <option value="">Campus</option>
-              {campuses.map((value) => <option key={value}>{value}</option>)}
+              {campuses.map(({id,label}) => <option key={id} value={id}>{label}</option>)}
             </select>
           )}
           {verifiedFilled > 0 && (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/data-table";
 import type { ProjectTableRow } from "@/lib/domain/founder-table";
+import { founderProjectRows } from "@/lib/domain/founder-view";
 
 const FIRST_PAINT = 150;
 
@@ -11,6 +12,7 @@ export function FoundersDesk({
   campusLocked = false,
   initialCount,
   initialRows = null,
+  allowedFounderIds,
 }: {
   campusId?: string;
   campusLocked?: boolean;
@@ -18,6 +20,7 @@ export function FoundersDesk({
   initialCount?: number;
   /** First page, already rendered by the server. The full file replaces it. */
   initialRows?: ProjectTableRow[] | null;
+  allowedFounderIds?: string[];
 }) {
   const seeded = initialRows && initialRows.length ? initialRows.slice(0, FIRST_PAINT) : null;
   const [rows, setRows] = useState<ProjectTableRow[] | null>(seeded);
@@ -44,7 +47,7 @@ export function FoundersDesk({
     void fromStatic().then((data) => data ?? fromApi())
       .then((data) => {
         if (cancel) return;
-        setRows(data.rows);
+        setRows(founderProjectRows(data.rows, allowedFounderIds));
       })
       .catch((err) => {
         if (cancel) return;
@@ -53,7 +56,7 @@ export function FoundersDesk({
     return () => {
       cancel = true;
     };
-  }, [campusId]);
+  }, [campusId, allowedFounderIds]);
 
   return (
     <div data-founders-desk="" data-founders-loaded={rows?.length ? "1" : "0"}>

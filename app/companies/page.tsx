@@ -43,6 +43,8 @@ export default async function CompaniesPage({
       stats={loadHeroStats()}
       facetExtras={{
         stage: facets.stage,
+        network: facets.network,
+        missing: facets.missing,
         status: facets.status,
         flag: facets.flag,
         foundedYear: facets.foundedYear,

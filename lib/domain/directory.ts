@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { companyMatchesCampus } from "./campus-membership";
 import path from "node:path";
 import { databaseStamp, getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
@@ -308,6 +309,7 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
          FROM person_project_roles r
          JOIN affiliations a ON a.person_id = r.person_id AND a.university_id IS NOT NULL
          JOIN universities u ON u.id = a.university_id
+        WHERE r.role LIKE '%founder%'
         GROUP BY r.project_id, u.id`,
     )
     .all() as { project_id: string; university_id: string; name: string; n: number }[]) {
@@ -343,7 +345,7 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
       `SELECT r.project_id as project_id, p.name as name
          FROM person_project_roles r
          JOIN people p ON p.id = r.person_id
-        WHERE trim(p.name) != ''`,
+        WHERE trim(p.name) != '' AND r.role LIKE '%founder%'`,
     )
     .all() as { project_id: string; name: string }[]) {
     const list = foundersByProject.get(row.project_id) ?? [];
@@ -569,7 +571,7 @@ export function countFoundersListed(): number {
          FROM person_project_roles r
          JOIN people pe ON pe.id = r.person_id
          JOIN projects p ON p.id = r.project_id
-        WHERE trim(pe.name) != '' AND p.kind = 'company' AND p.is_investable_candidate = 1`,
+        WHERE trim(pe.name) != '' AND r.role LIKE '%founder%' AND p.kind = 'company' AND p.is_investable_candidate = 1`,
     )
     .get() as { n: number };
   return row.n;
@@ -579,7 +581,7 @@ export function filterDirectory(cards: DirectoryCard[], sector: string | undefin
   return cards.filter((card) => {
     if (sector && !matchesSector(card, sector)) return false;
     if (kind && card.signalKind !== kind) return false;
-    if (campus && card.schoolId !== campus) return false;
+    if (campus && !companyMatchesCampus(card, campus)) return false;
     return true;
   });
 }

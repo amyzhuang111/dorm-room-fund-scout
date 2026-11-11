@@ -4,6 +4,7 @@ export interface FounderLead {
   id: string;
   name: string;
   campusId: string | null;
+  campusIds?: string[];
   campus: string | null;
   programs: string[];
   sector: string | null;
@@ -11,6 +12,7 @@ export interface FounderLead {
   signalTypes: string[];
   company: string | null;
   companyId: string | null;
+  companyIds?: string[];
   /** Stored person_project_roles.role for the linked company, when present. */
   role: string | null;
   /** Best real source URL per signal type (duckduckgo skipped). */

@@ -7,6 +7,7 @@ import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadiusForCampus } from "@/lib/domain/marker-radius";
 import { rankedByUndergrad } from "@/lib/domain/pitchbook-model";
 import { absoluteDate } from "@/lib/domain/relative-time";
+import { companyMatchesCampus } from "@/lib/domain/campus-membership";
 import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { CampusGlobeFallback } from "./campus-globe-fallback";
@@ -111,6 +112,7 @@ export function TileGlobe({
   companyCount = 0,
   foundersListed = 0,
   foundersIndexed = 0,
+  foundersLabel = "founders on those companies",
   campusesWithFounders = 0,
   selectedId,
   onSelect,
@@ -126,6 +128,7 @@ export function TileGlobe({
   foundersListed?: number;
   /** Rows in the searchable founder index (founders.json). May exceed foundersListed. */
   foundersIndexed?: number;
+  foundersLabel?: string;
   /** Campuses page list: schools with a promoted founder. A subset of the pins. */
   campusesWithFounders?: number;
   selectedId?: string | null;
@@ -708,7 +711,7 @@ export function TileGlobe({
   const pinnedCompanies = useMemo(() => {
     if (!pinned) return [] as TileCompany[];
     return companies
-      .filter((c) => c.schoolId === pinned.id)
+      .filter((c) => companyMatchesCampus(c, pinned.id))
       .slice()
       .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || a.name.localeCompare(b.name))
       .slice(0, 3);
@@ -748,7 +751,7 @@ export function TileGlobe({
           {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
           <Link href="/founders" className="pointer-events-auto hover:underline" data-founder-count-note="">
             <span className={COUNT} data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founders on those companies"}
+            {` ${foundersLabel}`}
             {foundersIndexed > 0 ? (
               <>
                 {" · "}

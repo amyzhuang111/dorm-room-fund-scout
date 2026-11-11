@@ -30,7 +30,7 @@ export function loadCorpusTotals(): CorpusTotals {
   const universities=listUniversities();
   const value:CorpusTotals={
     investableCompanies:cards.length,
-    foundersListed:count(`SELECT COUNT(DISTINCT r.person_id) n FROM person_project_roles r JOIN projects p ON p.id=r.project_id WHERE p.kind='company' AND p.is_investable_candidate=1`),
+    foundersListed:count(`SELECT COUNT(DISTINCT r.person_id) n FROM person_project_roles r JOIN projects p ON p.id=r.project_id WHERE p.kind='company' AND p.is_investable_candidate=1 AND r.role LIKE '%founder%'`),
     foundersIndexed:buildFounderIndex().length,
     campusesOnMap:universities.filter(u=>u.lat!=null&&u.lon!=null).length,
     campusesTotal:universities.length,
