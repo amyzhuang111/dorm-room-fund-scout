@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {networkExplorationHref,safeReturnTo} from './exploration-navigation';
+const original='/?campus=univ_penn&sector=ai_infra&entity=person_1&entityType=founder';
+const url=new URL(networkExplorationHref({entity:'person_1',kind:'founder',campus:'University of Pennsylvania',returnTo:original}),'https://example.test');
+assert.equal(url.searchParams.get('entity'),'person_1');
+assert.equal(url.searchParams.get('campusName'),'University of Pennsylvania');
+assert.equal(safeReturnTo(url.searchParams.get('returnTo')),original);
+for(const value of ['https://evil.test','//evil.test','/\\evil.test','/signin?returnTo=https://evil.test'])assert.equal(safeReturnTo(value),'/');
+assert.equal(safeReturnTo('/startup/proj_1?from=map'),'/startup/proj_1?from=map');
+console.log('Exploration links retain the selected entity and exact safe return view.');

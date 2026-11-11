@@ -14,6 +14,7 @@
   border-radius: 12px;
   overflow: hidden;
 }
+.journeyBar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 14px;background:#fff;border-bottom:1px solid #dce4f1;font-size:12px;color:#65758d}.journeyBar a{display:inline-flex;align-items:center;min-height:40px;color:#2f4fd8;text-decoration:none}.journeyBar a:hover{text-decoration:underline}.journeyBar span{overflow-wrap:anywhere;text-align:center}.requestNotice{grid-column:1/-1;margin:0;padding:12px 16px;background:#f3f6ff;font-size:12px;color:#17315b}@media(max-width:639px){.journeyBar{font-size:11px;gap:8px;padding:3px 10px}.journeyBar span{max-width:120px;font-size:10px}}
 .atlas button,
 .atlas select,
 .atlas input {

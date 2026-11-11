@@ -11,6 +11,8 @@ import {
 } from "@/lib/domain/network-atlas";
 import styles from "./network-atlas.module.css";
 import { StartupCardPanel, FounderCardPanel } from "./startup-directory-card";
+import Link from 'next/link';
+import { safeReturnTo } from '@/lib/domain/exploration-navigation';
 
 type View = { zoom: number; x: number; y: number; yaw: number; pitch: number };
 type ScreenPoint = { x: number; y: number; depth: number; i: number };
@@ -34,6 +36,9 @@ export function NetworkAtlas() {
     [list, setList] = useState(false),
     [page, setPage] = useState(0);
   const [nearby, setNearby] = useState<number[]>([]);
+  const [returnTo,setReturnTo]=useState('/');
+  const [requestedCampus,setRequestedCampus]=useState('');
+  const [requestNotice,setRequestNotice]=useState('');
   const canvas = useRef<HTMLCanvasElement>(null),
     host = useRef<HTMLDivElement>(null);
   const view = useRef<View>(initialView()),
@@ -64,6 +69,21 @@ export function NetworkAtlas() {
     () => (data ? atlasLayout(data.nodes) : []),
     [data],
   );
+  useEffect(()=>{
+    if(!data)return;
+    const restore=()=>{
+      const params=new URLSearchParams(window.location.search);
+      setReturnTo(safeReturnTo(params.get('returnTo')));
+      setRequestedCampus(params.get('campusName')??'');
+      const entity=params.get('entity'),kind=params.get('entityType');
+      const index=entity?data.nodes.findIndex(n=>n.id===entity&&(!kind||n.kind===kind)):-1;
+      setSelected(index>=0?index:null);
+      setRequestNotice(entity&&index<0?'This record has no mapped connections yet. Return to your view to keep exploring.':'');
+      if(index>=0&&positions[index]){view.current={...initialView(),zoom:4};setRunning(false);}
+    };
+    restore();window.addEventListener('popstate',restore);
+    return ()=>window.removeEventListener('popstate',restore);
+  },[data,positions]);
   const placeFor = (n: AtlasNode) => n.places.filter((p) => p.basis === basis);
   const activeGroup = data?.groups.find((g) => g.id === group);
   const highlighted = useMemo(() => {
@@ -80,15 +100,15 @@ export function NetworkAtlas() {
         ) ||
         (path[0] === unlocated && !places.length);
       if (
-        geography &&
+        geography && (!requestedCampus || n.places.some(p=>p.basis==='campus'&&p.campus===requestedCampus)) &&
         (!activeGroup || activeGroup.members.includes(i)) &&
         (!query || n.name.toLowerCase().includes(query.toLowerCase()))
       )
         out.add(i);
     });
     return out;
-  }, [data, path, basis, activeGroup, query]);
-  const hasFilter = Boolean(path.length || group || query);
+  }, [data, path, basis, activeGroup, query, requestedCampus]);
+  const hasFilter = Boolean(path.length || group || query || requestedCampus);
   const rows = useMemo(() => {
     const counts = new Map<string, Set<number>>();
     if (!data) return [];
@@ -166,16 +186,25 @@ export function NetworkAtlas() {
     }
     return out;
   }, [data, selected, group]);
+  function clearSelection() {
+    setSelected(null);
+    setNearby([]);
+    const url=new URL(window.location.href);
+    url.searchParams.delete('entity');url.searchParams.delete('entityType');
+    window.history.replaceState(null,'',url.pathname+url.search+url.hash);
+  }
   function reset() {
     setColorBy("campus");
     setBasis("campus");
     view.current = initialView();
-    setSelected(null);
+    clearSelection();
     setNearby([]);
     setPath([]);
     setGroup(null);
     setQuery("");
     setPage(0);
+    setRequestedCampus('');setRequestNotice('');
+    const url=new URL(window.location.href);for(const key of ['entity','entityType','campusName'])url.searchParams.delete(key);window.history.replaceState(null,'',url.pathname+url.search+url.hash);
   }
   function zoom(
     factor: number,
@@ -192,6 +221,8 @@ export function NetworkAtlas() {
   function choose(i: number) {
     setSelected(i);
     setNearby([]);
+    setRequestNotice('');
+    if(data){const url=new URL(window.location.href);url.searchParams.set('entity',data.nodes[i].id);url.searchParams.set('entityType',data.nodes[i].kind);window.history.replaceState(null,'',url.pathname+url.search+url.hash);}
   }
   function focus(i: number) {
     host.current?.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -552,6 +583,8 @@ export function NetworkAtlas() {
       className={styles.atlas}
       aria-label="Founder and startup atlas"
     >
+      <nav className={styles.journeyBar} aria-label="Continue exploring"><Link href={returnTo}>← Back to your view</Link><span>{requestedCampus||'Explore recorded connections'}</span><Link href="/work/shortlist">☆ Saved</Link></nav>
+      {requestNotice&&<p role="status" className={styles.requestNotice}>{requestNotice}</p>}
       <aside className={styles.sidebar} data-open={filtersOpen}>
         <h2>Explore the map</h2>
         <div className={styles.tabs}>
@@ -627,7 +660,7 @@ export function NetworkAtlas() {
                             : "campus",
                       );
                       setPage(0);
-                      setSelected(null);
+                      clearSelection();
                     }}
                   >
                     <span
@@ -661,7 +694,7 @@ export function NetworkAtlas() {
                   aria-pressed={group === g.id}
                   onClick={() => {
                     setGroup(g.id);
-                    setSelected(null);
+                    clearSelection();
                     setPage(0);
                   }}
                 >
@@ -768,7 +801,7 @@ export function NetworkAtlas() {
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "Escape") {
-                setSelected(null);
+                clearSelection();
                 return;
               }
               if (e.key === "+" || e.key === "=") zoom(1.4);
@@ -799,7 +832,7 @@ export function NetworkAtlas() {
                 if (Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>4) {
                   d.moved = true;
                   // Dragging deliberately leaves the anchored detail view.
-                  if (selected !== null) setSelected(null);
+                  if (selected !== null) clearSelection();
                 }
                 view.current.x += dx;
                 view.current.y += dy;
@@ -828,7 +861,7 @@ export function NetworkAtlas() {
               if (hits[0]) {
                 choose(hits[0].i);
                 setNearby(hits.slice(1, 8).map((p) => p.i));
-              } else setSelected(null);
+              } else clearSelection();
             }}
           />
           <div className={styles.mapTools}>
@@ -841,7 +874,7 @@ export function NetworkAtlas() {
             <button
               onClick={() => {
                 view.current = initialView();
-                setSelected(null);
+                clearSelection();
               }}
             >
               Fit all
@@ -852,7 +885,7 @@ export function NetworkAtlas() {
           </span>
           {current?.kind === "startup" ? (
             <div className={styles.startupPreview}>
-              <StartupCardPanel key={current.id} id={current.id} onClose={() => setSelected(null)}
+              <StartupCardPanel key={current.id} id={current.id} onClose={clearSelection}
                 onFounderSelect={id => {
                   const index = data.nodes.findIndex(node => node.kind === "founder" && node.id === id);
                   if (index < 0) return false;
@@ -867,7 +900,7 @@ export function NetworkAtlas() {
             </div>
           ) : current ? (
             <div className={styles.startupPreview}>
-              <FounderCardPanel key={current.id} id={current.id} onClose={() => setSelected(null)}
+              <FounderCardPanel key={current.id} id={current.id} onClose={clearSelection}
                 onStartupSelect={id => {
                   const index = data.nodes.findIndex(node => node.kind === "startup" && node.id === id);
                   if (index < 0) return false;

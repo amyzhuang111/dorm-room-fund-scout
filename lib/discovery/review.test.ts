@@ -1,0 +1,81 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import Database from 'better-sqlite3';
+import { approveCsv, fingerprint, qualityReport, reviewCsv, stageBatch, type Catalog, type Observation } from './review';
+import { parseCsv } from '../ingest/csv';
+import { encodeCsv } from '../display/csv';
+import { applyApprovedBatch } from '../../scripts/discovery/apply';
+import { readCatalog } from '../../scripts/discovery/catalog';
+import { extractPublicProfile, robotsAllows } from '../../scripts/discovery/public-profile';
+
+const created='2026-11-10T10:00:00.000Z',reviewed='2026-11-10T11:00:00.000Z';
+const catalog:Catalog={campuses:[{id:'univ_test',name:'Test University'}],companies:[],people:[]};
+const lead:Observation={pathId:'test-bio',query:'test search',founderName:'Jordan Example',companyName:'Example Company',campusId:'univ_test',campusName:'Test University',linkedinUrl:'https://www.linkedin.com/in/jordan-example/?tracking=1',companyWebsite:'https://example.com',description:'Test-only company fixture.',retrievedAt:created,profileStatus:'fetched',notes:'Synthetic test fixture only.',evidence:[{url:'https://example.com/team',excerpt:'Jordan Example founded Example Company and attended Test University.',kind:'company_bio',supports:['founder','company','campus','linkedin']}]};
+const batch=stageBatch('test-batch',[lead],catalog,created);
+assert.equal(batch.rows[0].ready,true);
+assert.equal(batch.rows[0].linkedinUrl,'https://www.linkedin.com/in/jordan-example');
+assert.equal(approveCsv(batch,reviewCsv(batch),reviewed).rows.length,0,'hold rows never publish');
+const cells=parseCsv(reviewCsv(batch).replace(/^\uFEFF/,''));
+cells[1][1]='approve';cells[1][2]='Test reviewer';cells[1][3]=reviewed;
+const approved=approveCsv(batch,encodeCsv(cells),reviewed);
+assert.equal(approved.rows.length,1);
+cells[1][4]='Another Person';
+assert.throws(()=>approveCsv(batch,encodeCsv(cells),reviewed),/facts changed/);
+cells[1][4]=lead.founderName;cells[1][2]='';
+assert.throws(()=>approveCsv(batch,encodeCsv(cells),reviewed),/reviewer/);
+assert.throws(()=>approveCsv(batch,encodeCsv([cells[0]]),reviewed),/missing staged rows/);
+assert.throws(()=>approveCsv(batch,encodeCsv([...cells,cells[1]]),reviewed),/repeated row|reviewer/);
+const searchOnly=stageBatch('search-only',[{...lead,evidence:lead.evidence.map(e=>({...e,kind:'search_snippet'}))}],catalog,created);
+assert.equal(searchOnly.rows[0].ready,false,'a search hit is not direct bio evidence');
+const stealth=stageBatch('stealth-test',[{...lead,companyName:'Stealth Startup'}],catalog,created);
+assert.equal(stealth.rows[0].ready,false);
+assert.equal(stageBatch('dup-test',[lead,lead],catalog,created).rows[1].ready,false);
+assert.equal(stageBatch('wrong-campus',[{...lead,campusName:'Different School'}],catalog,created).rows[0].ready,false);
+assert.equal(stageBatch('name-collision',[lead],{...catalog,people:[{id:'someone-else',name:lead.founderName,linkedinUrls:[],campusIds:[],companyIds:[]}]},created).rows[0].ready,false);
+assert.equal(qualityReport(searchOnly)[0].readyForReview,0);
+
+const db=new Database(':memory:');db.exec(fs.readFileSync('lib/db/schema.sql','utf8'));
+db.prepare('INSERT INTO universities(id,name) VALUES (?,?)').run('univ_test','Test University');
+assert.equal(applyApprovedBatch(db,approved)[0].status,'imported');
+assert.equal(applyApprovedBatch(db,approved)[0].status,'already imported');
+assert.equal((db.prepare('SELECT count(*) n FROM projects').get() as {n:number}).n,1);
+assert.equal((db.prepare('SELECT count(*) n FROM people').get() as {n:number}).n,1);
+assert.equal((db.prepare('SELECT count(*) n FROM claims').get() as {n:number}).n,1);
+assert.equal((db.pragma('foreign_key_check') as unknown[]).length,0);
+const changed=structuredClone(approved);changed.rows[0].founderName='Changed Name';
+assert.throws(()=>applyApprovedBatch(db,changed),/facts were changed/);
+const pending=structuredClone(approved);(pending.rows[0] as unknown as {decision:string}).decision='hold';
+assert.throws(()=>applyApprovedBatch(db,pending),/explicit/);
+// A write failure rolls the whole batch back, including its audit table.
+const rollback=new Database(':memory:');rollback.exec(fs.readFileSync('lib/db/schema.sql','utf8'));rollback.prepare('INSERT INTO universities(id,name) VALUES (?,?)').run('univ_test','Test University');
+rollback.exec("CREATE TRIGGER fail_import BEFORE INSERT ON person_project_roles BEGIN SELECT RAISE(ABORT,'test failure'); END;");
+assert.throws(()=>applyApprovedBatch(rollback,approved),/test failure/);
+assert.equal((rollback.prepare('SELECT count(*) n FROM projects').get() as {n:number}).n,0);
+assert.equal((rollback.prepare('SELECT count(*) n FROM people').get() as {n:number}).n,0);
+// Two cofounders with the same company domain across campuses create one company.
+const shared=new Database(':memory:');shared.exec(fs.readFileSync('lib/db/schema.sql','utf8'));
+for(const [id,name] of [['univ_test','Test University'],['univ_other','Other University']]) shared.prepare('INSERT INTO universities(id,name) VALUES (?,?)').run(id,name);
+const sharedBatch=stageBatch('shared-company',[lead,{...lead,founderName:'Taylor Example',linkedinUrl:'https://www.linkedin.com/in/taylor-example',campusId:'univ_other',campusName:'Other University',companyWebsite:'https://www.example.com/about'}],readCatalog(shared),created);
+const sharedCells=parseCsv(reviewCsv(sharedBatch).replace(/^\uFEFF/,''));
+for(const row of sharedCells.slice(1)){row[1]='approve';row[2]='Test reviewer';row[3]=reviewed;}
+const sharedApproved=approveCsv(sharedBatch,encodeCsv(sharedCells),reviewed);
+applyApprovedBatch(shared,sharedApproved);applyApprovedBatch(shared,sharedApproved);
+assert.equal((shared.prepare('SELECT count(*) n FROM projects').get() as {n:number}).n,1);
+assert.equal((shared.prepare('SELECT count(*) n FROM people').get() as {n:number}).n,2);
+// Reviewed enrichment fills missing fields but leaves a nonempty website alone.
+db.prepare('UPDATE projects SET website_url=NULL').run();db.prepare("UPDATE people SET aliases_json='[]'").run();
+const enrich=stageBatch('enrich-test',[lead],readCatalog(db),created);
+const enrichCells=parseCsv(reviewCsv(enrich).replace(/^\uFEFF/,''));enrichCells[1][1]='approve';enrichCells[1][2]='Test reviewer';enrichCells[1][3]=reviewed;
+applyApprovedBatch(db,approveCsv(enrich,encodeCsv(enrichCells),reviewed));
+assert.equal((db.prepare('SELECT website_url FROM projects').get() as {website_url:string}).website_url,lead.companyWebsite);
+assert.ok((db.prepare('SELECT aliases_json FROM people').get() as {aliases_json:string}).aliases_json.includes('jordan-example'));
+db.close();rollback.close();shared.close();
+
+assert.equal(robotsAllows('User-agent: *\nDisallow: /in/','/in/test'),false);
+assert.equal(robotsAllows('User-agent: *\nDisallow: /\nAllow: /public/','/public/bio'),true);
+const profile=extractPublicProfile('<h1>Jordan Example</h1><section data-section="summary"><div class="core-section-container__content">Researcher at Test University.</div></section><section data-section="activities">Liked: another person founded a startup.</section>','https://www.linkedin.com/in/jordan-example');
+assert.equal(profile.bio,'Researcher at Test University.');
+assert.ok(!profile.bio.includes('startup'),'activity posts must not enter the biography');
+assert.equal(extractPublicProfile('<h1>Sign in</h1><p>Join LinkedIn to view this profile</p>','https://www.linkedin.com/in/test').status,'blocked');
+assert.ok(fingerprint(approved).length===64);
+console.log('Discovery tests passed: review gate, changed facts, missing evidence, duplicates, transactional rollback, idempotency, robots, and bio-only extraction.');

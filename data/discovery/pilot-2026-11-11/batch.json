@@ -1,0 +1,363 @@
+{
+  "version": 1,
+  "id": "pilot-2026-11-11",
+  "createdAt": "2026-11-11T16:27:42.869Z",
+  "rows": [
+    {
+      "pathId": "stanford-student-ai",
+      "query": "site:linkedin.com/in \"founder\" \"Stanford\" \"student\" AI",
+      "founderName": "Carmel Limcaoco",
+      "companyName": "Kita",
+      "campusId": "univ_stanford",
+      "campusName": "Stanford University",
+      "linkedinUrl": "https://www.linkedin.com/in/carmellimcaoco",
+      "companyWebsite": "https://www.kita.ai/",
+      "description": "AI software for lenders to review borrower documents.",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "fetched",
+      "evidence": [
+        {
+          "url": "https://www.linkedin.com/in/carmellimcaoco",
+          "excerpt": "Paraphrase of About/Education: Carmel identifies herself as Kita co-founder and CEO, with prior computer-science study at Stanford.",
+          "kind": "profile_bio",
+          "supports": [
+            "founder",
+            "company",
+            "campus",
+            "linkedin"
+          ]
+        }
+      ],
+      "notes": "Public profile retrieval succeeded through the research browser; no authenticated scraping used. Existing founder; useful for evidence enrichment.",
+      "rowId": "lead_f30d5345d1ce3a99c9",
+      "companyId": "proj_mYamfoL2ulwW",
+      "personId": "person_vwTegJtH48Hx",
+      "issues": [],
+      "duplicate": "Existing company; Existing person",
+      "ready": true,
+      "digest": "b3731f4a6695ed81b3933bc160763af1a076e169f6266f235fdbef4f258ecf16"
+    },
+    {
+      "pathId": "stanford-student-ai",
+      "query": "site:linkedin.com/in \"founder\" \"Stanford\" \"student\" AI",
+      "founderName": "Rhea Malhotra",
+      "companyName": "Kita",
+      "campusId": "univ_stanford",
+      "campusName": "Stanford University",
+      "linkedinUrl": "",
+      "companyWebsite": "https://www.kita.ai/",
+      "description": "AI software for lenders to review borrower documents.",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "not_attempted",
+      "evidence": [
+        {
+          "url": "https://www.ycombinator.com/companies/kita",
+          "excerpt": "Paraphrase of named founder bio: Rhea co-founded Kita as CTO and completed undergraduate and graduate computer-science degrees at Stanford.",
+          "kind": "company_bio",
+          "supports": [
+            "founder",
+            "company",
+            "campus"
+          ]
+        }
+      ],
+      "notes": "Followed company directory from Carmel result. No LinkedIn URL inferred.",
+      "rowId": "lead_fe28702a50eac000be",
+      "companyId": "proj_mYamfoL2ulwW",
+      "personId": "person_tJ0zDiykLr9L",
+      "issues": [],
+      "duplicate": "Existing company; Existing person",
+      "ready": true,
+      "digest": "4623c25676ee7e5adadeb148152804d53af529620c4784c86e0378d86b2b2177"
+    },
+    {
+      "pathId": "usc-cofounder",
+      "query": "site:linkedin.com/in \"co-founder\" \"University of Southern California\" startup",
+      "founderName": "Victor Ong",
+      "companyName": "Bilisense",
+      "campusId": "univ_usc",
+      "campusName": "University of Southern California",
+      "linkedinUrl": "https://www.linkedin.com/in/victoraong",
+      "companyWebsite": "https://www.bilisense.com",
+      "description": "Develops a wearable sensor for bilirubin monitoring.",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "not_attempted",
+      "evidence": [
+        {
+          "url": "https://viterbischool.usc.edu/news/2026/05/usc-viterbi-startup-showcase-awards-150k-to-student-ventures/",
+          "excerpt": "Victor Ong, the founder and CEO of Bilisense",
+          "kind": "campus_directory",
+          "supports": [
+            "founder",
+            "company"
+          ]
+        },
+        {
+          "url": "https://madlab.usc.edu/team/victor-ong",
+          "excerpt": "Paraphrase of USC laboratory biography: Victor transferred to USC as an undergraduate and remained for doctoral study.",
+          "kind": "campus_directory",
+          "supports": [
+            "campus"
+          ]
+        }
+      ],
+      "notes": "Existing record lacks company website. LinkedIn URL is a discovery candidate, not a confirmed alias without direct profile evidence.",
+      "rowId": "lead_ed1cd7de663d0be238",
+      "companyId": "proj_XLSPNjeToAR4",
+      "personId": "person_uBuhDEVi19WQ",
+      "issues": [],
+      "duplicate": "Existing company; Existing person",
+      "ready": true,
+      "digest": "8267c1c937838265c3a8fe0ac161f6e0dc9117bf13c268bddd8f07173c74a747"
+    },
+    {
+      "pathId": "usc-cofounder",
+      "query": "site:linkedin.com/in \"co-founder\" \"University of Southern California\" startup",
+      "founderName": "Christian Yeghnazar",
+      "companyName": "Lattice Partners",
+      "campusId": "univ_usc",
+      "campusName": "University of Southern California",
+      "linkedinUrl": "https://www.linkedin.com/in/yeggic",
+      "companyWebsite": "https://www.latticepartners.ai",
+      "description": "Helps companies implement AI tools and workflows.",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "blocked",
+      "evidence": [
+        {
+          "url": "https://www.latticepartners.ai/articles/ai-quoting-and-scheduling-for-netsuite-shops",
+          "excerpt": "Christian Yeghnazar is a co-founder and managing partner of Lattice Partners",
+          "kind": "company_bio",
+          "supports": [
+            "founder",
+            "company"
+          ]
+        },
+        {
+          "url": "https://ahf.usc.edu/bennis-scholars/bennis-scholars-class-of-2021-cohort-4/",
+          "excerpt": "Paraphrase: USC lists Christian Yeghnazar in its Bennis Scholars 2021 cohort with business-administration studies and Spark SC leadership.",
+          "kind": "campus_directory",
+          "supports": [
+            "campus"
+          ]
+        }
+      ],
+      "notes": "LinkedIn returned HTTP 999. Independent company and USC biographies corroborate founder, company and historical campus link; no current enrollment or graduation year inferred. Confirm eligibility before approval.",
+      "rowId": "lead_0d917033eeb682f40e",
+      "companyId": "",
+      "personId": "",
+      "issues": [],
+      "duplicate": "New candidate",
+      "ready": true,
+      "digest": "7759b9e9a1b62d90cb4e32e3a13a2b4380838e4a9b1e0ee6c4cfb228a1ffa545"
+    },
+    {
+      "pathId": "penn-founder-building",
+      "query": "site:linkedin.com/in \"founder\" \"University of Pennsylvania\" \"building\"",
+      "founderName": "Henry Corkran",
+      "companyName": "Stealth Startup",
+      "campusId": "univ_penn",
+      "campusName": "University of Pennsylvania",
+      "linkedinUrl": "https://www.linkedin.com/in/w-henry-corkran",
+      "companyWebsite": "",
+      "description": "",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "blocked",
+      "evidence": [
+        {
+          "url": "https://www.linkedin.com/in/w-henry-corkran",
+          "excerpt": "Paraphrase of search result: founder building in stealth; lists Penn computer-science study. No named company established.",
+          "kind": "search_snippet",
+          "supports": [
+            "founder",
+            "campus"
+          ]
+        }
+      ],
+      "notes": "HTTP 999. Hold: unnamed company and no directly retrieved corroboration.",
+      "rowId": "lead_20d1384b0b4c0bdd7e",
+      "companyId": "",
+      "personId": "",
+      "issues": [
+        "Named company missing",
+        "Direct founder evidence required",
+        "Direct company evidence required",
+        "Direct campus evidence required"
+      ],
+      "duplicate": "New candidate",
+      "ready": false,
+      "digest": "6476fa07d145e60af5ea24eb8d26af977fd3bd782e342482e899662f5bd2eea5"
+    },
+    {
+      "pathId": "stanford-student-ai",
+      "query": "site:linkedin.com/in \"founder\" \"Stanford\" \"student\" AI",
+      "founderName": "Justin Sato",
+      "companyName": "Skarmy",
+      "campusId": "univ_stanford",
+      "campusName": "Stanford University",
+      "linkedinUrl": "https://www.linkedin.com/in/justintsato",
+      "companyWebsite": "",
+      "description": "",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "blocked",
+      "evidence": [
+        {
+          "url": "https://www.linkedin.com/in/justintsato",
+          "excerpt": "Paraphrase of search result: lists Skarmy and Stanford; activity includes posts about startup founders.",
+          "kind": "search_snippet",
+          "supports": [
+            "company",
+            "campus"
+          ]
+        }
+      ],
+      "notes": "HTTP 999. Hold: confirm founder role from own biography or official company source; do not use reposts as bio evidence.",
+      "rowId": "lead_e21751cf0900f63987",
+      "companyId": "",
+      "personId": "",
+      "issues": [
+        "Direct founder evidence required",
+        "Direct company evidence required",
+        "Direct campus evidence required"
+      ],
+      "duplicate": "New candidate",
+      "ready": false,
+      "digest": "43e64016766d21ad2d2433a14eedca2557a22f94ee099d78781e44879322971b"
+    },
+    {
+      "pathId": "usc-cofounder",
+      "query": "site:linkedin.com/in \"co-founder\" \"University of Southern California\" startup",
+      "founderName": "Debora Chan-Southwell",
+      "companyName": "PublicRisk.ai",
+      "campusId": "univ_usc",
+      "campusName": "University of Southern California",
+      "linkedinUrl": "https://www.linkedin.com/in/deborachansouthwell",
+      "companyWebsite": "",
+      "description": "",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "blocked",
+      "evidence": [
+        {
+          "url": "https://www.linkedin.com/in/deborachansouthwell",
+          "excerpt": "Co-founder of PublicRisk.ai, with expertise in contracts and regulatory law.",
+          "kind": "search_snippet",
+          "supports": [
+            "founder",
+            "company"
+          ]
+        }
+      ],
+      "notes": "HTTP 999. Hold pending direct biography and campus evidence. Company participation in a USC program alone does not prove personal education.",
+      "rowId": "lead_b305ce6f097f83703d",
+      "companyId": "",
+      "personId": "",
+      "issues": [
+        "Direct founder evidence required",
+        "Direct company evidence required",
+        "Direct campus evidence required"
+      ],
+      "duplicate": "New candidate",
+      "ready": false,
+      "digest": "521984b9ebccd3685417c84c44b41e4099ab00f76bf70e30ebd27996aa520313"
+    },
+    {
+      "pathId": "usc-cofounder",
+      "query": "site:linkedin.com/in \"co-founder\" \"University of Southern California\" startup",
+      "founderName": "Elijah Fernandez",
+      "companyName": "CEREVITY",
+      "campusId": "univ_usc",
+      "campusName": "University of Southern California",
+      "linkedinUrl": "https://www.linkedin.com/in/elijah-fernandez-818142266",
+      "companyWebsite": "https://cerevity.com",
+      "description": "Provides a platform and operations for concierge mental healthcare.",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "blocked",
+      "evidence": [
+        {
+          "url": "https://cerevity.com/elijah-fernandez-cto-co-founder/",
+          "excerpt": "Paraphrase of named leadership bio: Elijah is CEREVITY co-founder and CTO and holds an MSW from the University of Southern California.",
+          "kind": "company_bio",
+          "supports": [
+            "founder",
+            "company",
+            "campus"
+          ]
+        }
+      ],
+      "notes": "HTTP 999 on LinkedIn; direct company bio corroborates role and historical campus affiliation. This is an alumni discovery candidate, not a verified current student or investment recommendation.",
+      "rowId": "lead_b69bad198a4ad15492",
+      "companyId": "",
+      "personId": "",
+      "issues": [],
+      "duplicate": "New candidate",
+      "ready": true,
+      "digest": "08d45cd2f65c7e25c986e968cd73173af4ae482c67f2a395b90b282eec082fbd"
+    },
+    {
+      "pathId": "penn-founder-building",
+      "query": "site:linkedin.com/in \"founder\" \"University of Pennsylvania\" \"building\"",
+      "founderName": "Shen Lin",
+      "companyName": "",
+      "campusId": "univ_penn",
+      "campusName": "University of Pennsylvania",
+      "linkedinUrl": "https://www.linkedin.com/in/shen-lin-0704a6282",
+      "companyWebsite": "",
+      "description": "",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "not_attempted",
+      "evidence": [
+        {
+          "url": "https://www.linkedin.com/in/shen-lin-0704a6282",
+          "excerpt": "Paraphrase: search result includes a liked Penn post about Brianna Lin and Copperlane, not a founder biography for Shen Lin.",
+          "kind": "search_snippet",
+          "supports": []
+        }
+      ],
+      "notes": "False-positive control: reject. Do not attribute another person's startup to the profile owner.",
+      "rowId": "lead_3cf09803b1d49faaf5",
+      "companyId": "",
+      "personId": "",
+      "issues": [
+        "Named company missing",
+        "Direct founder evidence required",
+        "Direct company evidence required",
+        "Direct campus evidence required"
+      ],
+      "duplicate": "New candidate",
+      "ready": false,
+      "digest": "ef9f98adeb5ab7ccfdad08cfc26082d5c8cb1744b469d4fb8ff8918f9fb35567"
+    },
+    {
+      "pathId": "usc-cofounder",
+      "query": "site:linkedin.com/in \"co-founder\" \"University of Southern California\" startup",
+      "founderName": "Christine Ly",
+      "companyName": "DermaVision Technologies",
+      "campusId": "univ_usc",
+      "campusName": "University of Southern California",
+      "linkedinUrl": "",
+      "companyWebsite": "https://www.dermavisiontech.com",
+      "description": "Builds multispectral imaging technology to document bruises.",
+      "retrievedAt": "2026-11-11T16:27:42+00:00",
+      "profileStatus": "not_attempted",
+      "evidence": [
+        {
+          "url": "https://viterbischool.usc.edu/news/2026/05/usc-viterbi-startup-showcase-awards-150k-to-student-ventures/",
+          "excerpt": "Christine Ly, a co-founder of DermaVision and a USC Viterbi Ph.D. student",
+          "kind": "campus_directory",
+          "supports": [
+            "founder",
+            "company",
+            "campus"
+          ]
+        }
+      ],
+      "notes": "Followed USC showcase directory while corroborating Victor. Existing founder and company; no class year inferred. Student description is dated May 2026, not asserted current today.",
+      "rowId": "lead_4f9007cc3433174c35",
+      "companyId": "proj_EdBMISuSj4VD",
+      "personId": "person_v-RZjzAkKG4i",
+      "issues": [],
+      "duplicate": "Existing company; Existing person",
+      "ready": true,
+      "digest": "b65cb03442e4a7c5a6ee62c363b674843972e85f35c5e0e9e375dea0011cd4a9"
+    }
+  ]
+}

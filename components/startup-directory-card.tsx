@@ -8,6 +8,7 @@ import { userStartupPreview, userFounderPreview } from "@/lib/domain/user-previe
 import type { FounderPreview, FounderPreviewLink } from "@/lib/domain/founder-preview";
 import styles from "./startup-directory-card.module.css";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
+import { networkExplorationHref } from "@/lib/domain/exploration-navigation";
 const LINK_LABEL: Record<StartupLinkKind, string> = {
   website: "Website",
   linkedin: "LinkedIn",
@@ -129,7 +130,7 @@ export function StartupDirectoryCard({
                 <li key={founder.id} className={styles.founder}>
                   <FounderAvatar name={founder.name} photoUrl={founder.photoUrl} />
                   <div className={styles.founderInfo}>
-                    <Link className={styles.founderName} href={`/founders?founder=${encodeURIComponent(founder.id)}`} onClick={event => { if (onFounderSelect?.(founder.id)) event.preventDefault(); }}>{founder.name}</Link>
+                    <Link className={styles.founderName} href={`/founder/discover?founder=${encodeURIComponent(founder.id)}`} onClick={event => { if (onFounderSelect?.(founder.id)) event.preventDefault(); }}>{founder.name}</Link>
                     {founder.role && <p className={styles.role}>{founder.role}</p>}
                     {meta && <p className={styles.founderMeta}><SchoolIcon /><span>{meta}</span></p>}
                   </div>
@@ -146,6 +147,7 @@ export function StartupDirectoryCard({
           )}
         </section>
         {children}
+        <ExploreConnections id={card.id} kind="startup" />
         {!embedded && <Link className={styles.fullRecord} href={`/startup/${encodeURIComponent(card.id)}?from=map`}>View full company record <span aria-hidden="true">↗</span></Link>}
       </div>
     </article>
@@ -212,9 +214,17 @@ export function FounderDirectoryCard({ card, onClose, onStartupSelect, children 
         </li>)}</ul> : <p className={styles.empty}>No founded company recorded yet.</p>}
       </section>
       {children}
+      <ExploreConnections id={card.id} kind="founder" />
       <Link className={styles.fullRecord} href={card.recordHref}>{card.verificationStatus === "user-added" ? "View pipeline record" : "View full founder record"} <span aria-hidden="true">↗</span></Link>
     </div>
   </article>;
+}
+
+function ExploreConnections({id,kind}:{id:string;kind:'founder'|'startup'}) {
+  const [returnTo,setReturnTo]=useState('/');
+  useEffect(()=>{setReturnTo(window.location.pathname+window.location.search);},[id]);
+  if(returnTo.startsWith('/networks')||id.startsWith('user_')||id.startsWith('ufounder_'))return null;
+  return <Link className={styles.fullRecord} href={networkExplorationHref({entity:id,kind,returnTo})}>Explore connections <span aria-hidden="true">↗</span></Link>;
 }
 
 function useRecordCard<T extends { id: string }>(kind: "startup" | "founder", id: string, initial: T | null) {

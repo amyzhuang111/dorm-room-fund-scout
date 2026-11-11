@@ -12,6 +12,7 @@ import { fetchSampleDirectory } from '@/lib/domain/sample-directory-client';
 import { COVERAGE_FIELDS, PANELS, campusIds, campusNames, filterWorkspace, hasNamedFounder, panelOf, rankGroups, workspaceCsv, workspaceFilters } from '@/lib/domain/scout-workspace';
 import { workspaceFounders } from '@/lib/domain/scout-workspace';
 import { discoveryHref } from '@/lib/domain/discovery-navigation';
+import { networkExplorationHref } from '@/lib/domain/exploration-navigation';
 import { absoluteDate } from '@/lib/domain/relative-time';
 import { StartupCardSheet, FounderCardSheet } from './startup-directory-card';
 import { useDialogFocus } from './use-dialog-focus';
@@ -58,6 +59,7 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
   const matched = useMemo(() => filterWorkspace(companies, filters), [companies, filters]);
   const people = useMemo(() => workspaceFounders(founders, matched, filters), [founders, matched, filters]);
   const rankings = useMemo(() => rankGroups(matched, 'campus'), [matched]);
+  const leadingCampuses = useMemo(() => rankGroups(filterWorkspace(companies,{...filters,campus:''}), 'campus').slice(0,5),[companies,filters]);
   const networks = useMemo(() => rankGroups(matched, 'network'), [matched]);
   const highlights = useMemo(() => new Set(matched.flatMap(campusIds)), [matched]);
   const sectors = useMemo(() => [...new Map(companies.filter(c => c.sectorId).map(c => [c.sectorId!, c.sector ?? c.sectorId!])).entries()].sort((a,b) => a[1].localeCompare(b[1])), [companies]);
@@ -84,27 +86,38 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
   const selectStartup = (id: string) => { update({entity:id,entityType:'startup'}); return true; };
   const visibleCompanies = matched.slice(0, page * 24);
   const visiblePeople = people.slice(0, page * 24);
+  const campusName=campuses.find(c=>c.id===filters.campus)?.name;
+  const networkHref=networkExplorationHref({campus:campusName,returnTo:context?`/?${context}`:'/'});
 
   return <section className={styles.workspace} aria-label="Campus Scout workspace">
     <div className={styles.topline}>
       <div><span className={styles.eyebrow}>THE CAMPUS ECOSYSTEM</span><h1>Discover the next generation.</h1></div>
-      <div className={styles.topActions}><button onClick={share}>Share view ↗</button><button onClick={() => setFeedback(true)}>Feedback</button>{supportUrl && <a href={supportUrl} target="_blank" rel="noopener noreferrer">Buy me a coffee ↗</a>}</div>
+      <nav className={styles.viewModes} aria-label="Explore views"><span aria-current="page">◎ Globe</span><Link href={networkHref}>⌘ Network map</Link><Link href={discoveryHref('companies',new URLSearchParams(params))}>☷ Directory</Link></nav>
+      <div className={styles.topActions}><Link href="/work/shortlist">☆ Saved</Link><button onClick={share}>Share view ↗</button><button onClick={() => setFeedback(true)}>Feedback</button>{supportUrl && <a href={supportUrl} target="_blank" rel="noopener noreferrer">Buy me a coffee ↗</a>}</div>
     </div>
     <div className={styles.stage}>
       <div className={styles.map} aria-label="Interactive campus globe">
         <TileGlobe campuses={campuses} companies={matched} companyCount={companyState === 'ready' ? matched.length : active ? 0 : companyCount} foundersListed={founderState === 'ready' && companyState === 'ready' ? people.length : active ? 0 : founderCount} foundersLabel="indexed founders" selectedId={filters.campus} onSelect={selectCampus} dataThrough={updatedAt} highlightCampusIds={active ? highlights : null} />
       </div>
-      <aside className={styles.summary} aria-label="Current view">
+      <div className={styles.rightRail}><aside className={styles.summary} aria-label="Current view">
         <span className={styles.eyebrow}>CURRENT VIEW</span>
         <strong>{filters.campus ? campuses.find(c => c.id === filters.campus)?.name ?? 'Campus not recorded' : active ? 'Your filtered view' : 'Every campus. One view.'}</strong>
         <div><span><b>{companyState === 'ready' ? number(matched.length) : active ? '…' : number(companyCount)}</b> companies</span><span><b>{founderState === 'ready' && companyState === 'ready' ? number(people.length) : active ? '…' : number(founderCount)}</b> indexed founders</span></div>
         <p>{active ? `${number(highlights.size)} linked campuses · filters apply across panels` : `${number(campuses.length)} mapped campuses · source-backed records`}</p>
         {updatedAt && <small>Data updated {absoluteDate(updatedAt)}</small>}
       </aside>
+      <aside className={styles.leaders} aria-label="Leading campuses">
+        <div><span className={styles.eyebrow}>LEADING CAMPUSES</span><button onClick={()=>update({panel:'rankings',campus:null})}>View all ↗</button></div>
+        <p>{Object.entries(filters).some(([key,value])=>!['campus','sort'].includes(key)&&value) ? 'Companies matching your filters' : 'Companies across campuses'}</p>
+        {leadingCampuses.map((campus,index)=><button key={campus.id} className={styles.leaderRow} onClick={()=>selectCampus(campus.id)}><span>{String(index+1).padStart(2,'0')}</span><strong>{campus.name}</strong><b>{number(campus.companies)}</b></button>)}
+        {!leadingCampuses.length&&<p>{companyState==='loading'?'Loading campuses…':'No campuses match these filters.'}</p>}
+      </aside>
+      </div>
       <aside className={`${styles.panel} ${expanded ? styles.expanded : ''}`} aria-label="Browse campus database">
         <div className={styles.panelHead}><span className={styles.eyebrow}>SCOUT DATABASE</span><button className={styles.mobileExpand} onClick={() => setExpanded(v => !v)} aria-expanded={expanded}>{expanded ? 'Collapse ↓' : 'Expand ↑'}</button><Link className={`${styles.fullDirectory} block`} href={panel === 'founders' ? `/founders?${new URLSearchParams([...params.entries()].filter(([key]) => ['campus','q','sector','hqRegion','status','network','missing'].includes(key)))}` : panel === 'rankings' ? `/campuses?${new URLSearchParams([...params.entries()].filter(([key]) => ['q','sector','hqRegion','status','network','missing'].includes(key)))}` : panel === 'insights' ? '/data?scope=scout' : panel === 'networks' ? '/networks' : discoveryHref('companies', new URLSearchParams(params))}>Full directory ↗</Link></div>
-        <nav className={styles.tabs} aria-label="Workspace panels">{PANELS.map(p => p.id === 'networks' ? <Link key={p.id} href="/networks" className="inline-flex" title="Open the founder and startup network map">Networks ↗</Link> : <button key={p.id} aria-pressed={panel === p.id} onClick={() => { update({ panel:p.id, ...(p.id === 'rankings' ? { campus:null } : {}) }); setExpanded(true); }}>{p.label}</button>)}</nav>
+        <nav className={styles.tabs} aria-label="Workspace panels">{PANELS.map(p => p.id === 'networks' ? <Link key={p.id} href={networkHref} className="inline-flex" title="Open the founder and startup network map">Networks ↗</Link> : <button key={p.id} aria-pressed={panel === p.id} onClick={() => { update({ panel:p.id, ...(p.id === 'rankings' ? { campus:null } : {}) }); setExpanded(true); }}>{p.label}</button>)}</nav>
         <div className={styles.search}><span aria-hidden="true">⌕</span><input aria-label="Search companies, founders and campuses" placeholder="Company, founder, campus…" value={filters.q} onChange={e => update({ q:e.target.value || null }, true)} /><button onClick={() => setFiltersOpen(v => !v)} aria-expanded={filtersOpen} aria-controls="workspace-filters">Filters{active ? ' •' : ''}</button></div>
+        {!active&&!filtersOpen&&<div className={styles.startPoints} aria-label="Start exploring"><span>Start with</span><button onClick={()=>selectCampus('univ_penn')}>Penn</button><button onClick={()=>selectCampus('univ_berkeley')}>Berkeley</button><button onClick={()=>selectCampus('univ_stanford')}>Stanford</button><button onClick={()=>update({panel:'rankings',campus:null})}>Rankings ↗</button></div>}
         {filtersOpen && <div id="workspace-filters" className={styles.filters}>
           <Filter label="Campus" value={filters.campus} onChange={selectCampus} options={[["missing","Campus not recorded"],...campuses.map(c => [c.id,c.name] as [string,string]).sort((a,b)=>a[1].localeCompare(b[1]))]} />
           <Filter label="Industry" value={filters.sector} onChange={v => update({sector:v})} options={sectors} />
