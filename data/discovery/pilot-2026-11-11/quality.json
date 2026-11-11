@@ -1,0 +1,35 @@
+[
+  {
+    "pathId": "stanford-student-ai",
+    "candidates": 3,
+    "profileAttempts": 2,
+    "profilesFetched": 1,
+    "profilesBlocked": 1,
+    "readyForReview": 2,
+    "newPeople": 0,
+    "newCompanies": 0,
+    "needsEvidence": 1
+  },
+  {
+    "pathId": "usc-cofounder",
+    "candidates": 5,
+    "profileAttempts": 3,
+    "profilesFetched": 0,
+    "profilesBlocked": 3,
+    "readyForReview": 4,
+    "newPeople": 2,
+    "newCompanies": 2,
+    "needsEvidence": 1
+  },
+  {
+    "pathId": "penn-founder-building",
+    "candidates": 2,
+    "profileAttempts": 1,
+    "profilesFetched": 0,
+    "profilesBlocked": 1,
+    "readyForReview": 0,
+    "newPeople": 0,
+    "newCompanies": 0,
+    "needsEvidence": 2
+  }
+]

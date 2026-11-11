@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "maxResultsPerQuery": 10,
+  "maxProfilesPerTrial": 10,
+  "fetchHosts": ["www.linkedin.com"],
+  "paths": [
+    {"id":"penn-founder-building","campusId":"univ_penn","campusName":"University of Pennsylvania","query":"site:linkedin.com/in \"founder\" \"University of Pennsylvania\" \"building\""},
+    {"id":"usc-cofounder","campusId":"univ_usc","campusName":"University of Southern California","query":"site:linkedin.com/in \"co-founder\" \"University of Southern California\" startup"},
+    {"id":"stanford-student-ai","campusId":"univ_stanford","campusName":"Stanford University","query":"site:linkedin.com/in \"founder\" \"Stanford\" \"student\" AI"}
+  ],
+  "nextIteration": "Require founder/company statements from the subject's About or Experience section. A campus keyword, a liked post, a club role, and an unnamed stealth company are discovery leads only. Corroborate campus membership on a named official bio. Compare review-ready and new-entity yield before scheduling."
+}
