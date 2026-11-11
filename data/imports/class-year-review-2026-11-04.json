@@ -1,7 +1,7 @@
 {
   "version": "class-year-review-2026-11-04",
   "checkedAt": "2026-11-04",
-  "methodology": "All baseline people screened for stored class-year evidence. Live source retrieval attempted for all 266 distinct cited year URLs and 245 additional linked institutional pages. Confirm only explicit individual class designations with a resolved school; do not infer graduation from company founding, accelerator cohort, competition date, or academic seniority. Source matches establish the stated class designation, not degree completion or current founder/employment status. Separate degree years are retained. Unavailable or non-explicit sources remain unresolved. Exact name and existing source association used; no fuzzy person merges. PDF columns are excluded from automated matching.",
+  "methodology": "All baseline people screened for stored class-year evidence. Live source retrieval attempted for all 266 distinct cited year URLs and 245 additional linked institutional pages. Confirm only explicit individual class designations with a resolved school; do not infer graduation from company founding, accelerator cohort, competition date, or academic seniority. Source matches establish the stated class designation, not degree completion or current founder/employment status. Separate degree years are retained. Unavailable or non-explicit sources remain unresolved. Exact name and existing source association used; no fuzzy person merges. PDF columns are excluded from automated matching. Follow-up: 50 additional individual designations manually checked on seven university sources, including visual column-by-column review of MIT PDF pages 3, 5 and 6. GHC conference year replaced only where CMU explicitly supplies an expected degree year.",
   "reviewedPeople": [
     "person_JnrZGMsft6bk",
     "person_QHACr4V2jYpx",
@@ -20037,6 +20037,506 @@
       "evidence": "Tsai CITY post reposted by Paris Mielke explicitly says YC '28; its Summer Fellowship roster instead says YC '29.",
       "yearMeaning": "Published class designation or expected graduation year; degree completion is not established",
       "retrievalMethod": "individually reviewed source"
+    },
+    {
+      "personId": "person_e1bkTC_v95Gr",
+      "name": "Daniel Agudelo",
+      "universityId": "univ_mit",
+      "graduationYear": 2025,
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "evidence": "PDF page 3: the degree immediately below Daniel Agudelo identifies a 2025 MIT Sloan MBA.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually inspected rendered PDF pages 3, 5 and 6; each name and degree matched within its own portrait column"
+    },
+    {
+      "personId": "person_4fWXVLrKozl_",
+      "name": "Carlos Gosen",
+      "universityId": "univ_mit",
+      "graduationYear": 2025,
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "evidence": "PDF page 3: the degree immediately below Carlos Gosen identifies a 2025 MIT Sloan MBA; his older GWU degree is separate.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually inspected rendered PDF pages 3, 5 and 6; each name and degree matched within its own portrait column"
+    },
+    {
+      "personId": "person_lwatJeAND6vh",
+      "name": "Alexander Curth",
+      "universityId": "univ_mit",
+      "graduationYear": 2025,
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "evidence": "PDF page 5: Alexander (Sandy) Curth has a 2025 MIT doctorate, separate from earlier Berkeley and Bennington degrees.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually inspected rendered PDF pages 3, 5 and 6; each name and degree matched within its own portrait column"
+    },
+    {
+      "personId": "person_csrV-mgE-EJr",
+      "name": "Kiley Feickert",
+      "universityId": "univ_mit",
+      "graduationYear": 2025,
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "evidence": "PDF page 5: Kiley Feickert has a 2025 MIT doctorate; the 2022 MIT architecture degree is listed separately.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually inspected rendered PDF pages 3, 5 and 6; each name and degree matched within its own portrait column"
+    },
+    {
+      "personId": "person_6cZYaQnHlevN",
+      "name": "Clyde Anderson",
+      "universityId": "univ_mit",
+      "graduationYear": 2025,
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "evidence": "PDF page 6: Clyde Anderson has a 2025 MIT Sloan MBA; the Chicago degree is a separate 2018 entry.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually inspected rendered PDF pages 3, 5 and 6; each name and degree matched within its own portrait column"
+    },
+    {
+      "personId": "person_bgaZwefrMwXW",
+      "name": "Raj Shrimali",
+      "universityId": "univ_mit",
+      "graduationYear": 2025,
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "evidence": "PDF page 6: Raj Shrimali has a 2025 MIT Sloan MBA; the Georgia Tech degree is separate.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually inspected rendered PDF pages 3, 5 and 6; each name and degree matched within its own portrait column"
+    },
+    {
+      "personId": "person_UUCFQAzhSHYf",
+      "name": "Samuel Hall",
+      "universityId": "univ_mit",
+      "graduationYear": 2025,
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "evidence": "PDF page 6: Samuel Hall has a 2025 MIT Sloan MBA; the Princeton degree is separate.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually inspected rendered PDF pages 3, 5 and 6; each name and degree matched within its own portrait column"
+    },
+    {
+      "personId": "person_i2zVzFfzVJDa",
+      "name": "Ariana Sharafat",
+      "universityId": "univ_emory",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Ariana Sharafat class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_vIpNoNBc8I3S",
+      "name": "Dharshini Kannan",
+      "universityId": "univ_emory",
+      "graduationYear": 2028,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Dharshini Kannan class year 2028.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_coNAZ-uOWTKB",
+      "name": "Dhwani Ghandi",
+      "universityId": "univ_emory",
+      "graduationYear": 2027,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Dhwani Ghandi class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_WHZ_mcEOqzTG",
+      "name": "Federico Morales Barerra",
+      "universityId": "univ_emory",
+      "graduationYear": 2027,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Federico Morales Barerra class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_6nwK3-t2SvlG",
+      "name": "Jake Shawler",
+      "universityId": "univ_emory",
+      "graduationYear": 2027,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Jake Shawler class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_QMD-zFzHvBhF",
+      "name": "Karimatou Diallo",
+      "universityId": "univ_emory",
+      "graduationYear": 2028,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Karimatou Diallo class year 2028.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_V-hh0oniHgeh",
+      "name": "Luka Undilashvili",
+      "universityId": "univ_emory",
+      "graduationYear": 2028,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Luka Undilashvili class year 2028.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_Na_fYH1C3pgY",
+      "name": "Malia Wakesho-Ajwang",
+      "universityId": "univ_emory",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Malia Wakesho-Ajwang class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_kM9cmxgfSlRu",
+      "name": "Prem Galani",
+      "universityId": "univ_emory",
+      "graduationYear": 2029,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Prem Galani class year 2029.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_9y4DSBjc9pKJ",
+      "name": "Rom Zuckerman",
+      "universityId": "univ_emory",
+      "graduationYear": 2028,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Rom Zuckerman class year 2028.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_Xzu0bk8qjP78",
+      "name": "Shirin Deepak",
+      "universityId": "univ_emory",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Shirin Deepak class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_4xNU1z4Gp9FX",
+      "name": "Sushmita Rajan",
+      "universityId": "univ_emory",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Sushmita Rajan class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_7cWXJcFG75TL",
+      "name": "Varun Sheel",
+      "universityId": "univ_emory",
+      "graduationYear": 2027,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "evidence": "Emory individually assigns Varun Sheel class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_VsZ0Z9D27G-b",
+      "name": "Angie Mercurio",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Angie Mercurio class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_OPSZaSe1G045",
+      "name": "Eden Growney",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Eden Growney class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_CMibQ5h-yMqD",
+      "name": "Marco Hartono",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2029,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Marco Hartono class year 2029.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_2EOPAcLYoPa6",
+      "name": "Nicolas Angel-Ordonez",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2029,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Nicolas Angel-Ordonez class year 2029.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_yns7Tb-yeHg0",
+      "name": "Quinn McGinley",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2028,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Quinn McGinley class year 2028.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_NaV3bvY0TaX1",
+      "name": "Rayden Yap",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2029,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Rayden Yap class year 2029.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_JzH2yI1Ojqdz",
+      "name": "Rishi Garg",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2027,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Rishi Garg class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_4flqg9U825hZ",
+      "name": "Tiffany Sorto",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Tiffany Sorto class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_mjewroMca50o",
+      "name": "Trevor Abbott",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2026,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Trevor Abbott class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_w8nvReojEoji",
+      "name": "Viet Tong",
+      "universityId": "univ_northwestern",
+      "graduationYear": 2027,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "evidence": "Northwestern individually assigns Viet Tong class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_w9NOIF2fQsv4",
+      "name": "Aaryan Shah",
+      "universityId": "univ_stanford",
+      "graduationYear": 2026,
+      "sourceUrl": "https://stvp.stanford.edu/news/building-future-meet-stvps-2026-graduating-fellows",
+      "evidence": "Stanford explicitly names Aaryan Shah among its 2026 graduating fellows and describes the bachelor degree. This is a graduating-class article, not a program-entry cohort.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_RWbVSFuhjvE_",
+      "name": "Alex Georgiou",
+      "universityId": "univ_stanford",
+      "graduationYear": 2026,
+      "sourceUrl": "https://stvp.stanford.edu/news/building-future-meet-stvps-2026-graduating-fellows",
+      "evidence": "Stanford explicitly names Alex Georgiou among its 2026 graduating fellows and describes the mechanical engineering master degree. This is a graduating-class article, not a program-entry cohort.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_WPSLoxsbIEVa",
+      "name": "Emmet Kenney",
+      "universityId": "univ_stanford",
+      "graduationYear": 2026,
+      "sourceUrl": "https://stvp.stanford.edu/news/building-future-meet-stvps-2026-graduating-fellows",
+      "evidence": "Stanford explicitly names Emmet Kenney among its 2026 graduating fellows and describes the bachelor and master degrees. This is a graduating-class article, not a program-entry cohort.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_-CYAiKbN2sJJ",
+      "name": "J Yim",
+      "universityId": "univ_stanford",
+      "graduationYear": 2026,
+      "sourceUrl": "https://stvp.stanford.edu/news/building-future-meet-stvps-2026-graduating-fellows",
+      "evidence": "Stanford explicitly names J Yim among its 2026 graduating fellows and describes the bachelor degrees. This is a graduating-class article, not a program-entry cohort.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_MMnWEyocuoQY",
+      "name": "Nicholas Allen",
+      "universityId": "univ_stanford",
+      "graduationYear": 2026,
+      "sourceUrl": "https://stvp.stanford.edu/news/building-future-meet-stvps-2026-graduating-fellows",
+      "evidence": "Stanford explicitly names Nicholas Allen among its 2026 graduating fellows and describes the master degree expected in December 2026. This is a graduating-class article, not a program-entry cohort.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_U6WgQqfKYPUY",
+      "name": "Yousef Al-Riyami",
+      "universityId": "univ_stanford",
+      "graduationYear": 2026,
+      "sourceUrl": "https://stvp.stanford.edu/news/building-future-meet-stvps-2026-graduating-fellows",
+      "evidence": "Stanford explicitly names Yousef Al-Riyami among its 2026 graduating fellows and describes the design master degree. This is a graduating-class article, not a program-entry cohort.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_dbLRqjTZ08OZ",
+      "name": "Aaron Tan",
+      "universityId": "univ_toronto",
+      "graduationYear": 2024,
+      "sourceUrl": "https://robotics.utoronto.ca/news/a-lume-in-every-room-u-of-t-engineering-alumni-are-reimagining-home-robotics-starting-with-your-laundry/",
+      "evidence": "Toronto identifies Aaron Tan with a mechanical and industrial engineering doctorate in 2024 (2T4 notation).",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_hHkifiITg5gb",
+      "name": "Angus Fung",
+      "universityId": "univ_toronto",
+      "graduationYear": 2024,
+      "sourceUrl": "https://robotics.utoronto.ca/news/a-lume-in-every-room-u-of-t-engineering-alumni-are-reimagining-home-robotics-starting-with-your-laundry/",
+      "evidence": "Toronto identifies Angus Fung with a 2024 mechanical and industrial engineering doctorate (2T4); the earlier engineering science degree is separately listed.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_Q0UESun_ao4a",
+      "name": "Abdulkarim Mugisha",
+      "universityId": "univ_caltech",
+      "graduationYear": 2026,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Abdulkarim Mugisha class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_sJhu1o0YMaGe",
+      "name": "Andrea Olsen",
+      "universityId": "univ_caltech",
+      "graduationYear": 2027,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Andrea Olsen class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_nC7XxFWGftbp",
+      "name": "Brian Hu",
+      "universityId": "univ_caltech",
+      "graduationYear": 2026,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Brian Hu class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_e04QUUSBlao4",
+      "name": "Eden Obeng",
+      "universityId": "univ_caltech",
+      "graduationYear": 2026,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Eden Obeng class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_65TFlIJlSLJ7",
+      "name": "Helen Wexler",
+      "universityId": "univ_caltech",
+      "graduationYear": 2025,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Helen Wexler class year 2025.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_vhXDxmujMvmL",
+      "name": "Madison Dunitz",
+      "universityId": "univ_caltech",
+      "graduationYear": 2027,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Madison Dunitz class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_nDxwzVjpgXs2",
+      "name": "Nika Chuzhoy",
+      "universityId": "univ_caltech",
+      "graduationYear": 2026,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Nika Chuzhoy class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_uXvbAdgiu2GJ",
+      "name": "Nyasha Makaya",
+      "universityId": "univ_caltech",
+      "graduationYear": 2026,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Nyasha Makaya class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_InMpGaB0j5zq",
+      "name": "Raymond Provost",
+      "universityId": "univ_caltech",
+      "graduationYear": 2027,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Raymond Provost class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_B0nxylbnxV12",
+      "name": "Robert Otieno",
+      "universityId": "univ_caltech",
+      "graduationYear": 2027,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Robert (Otis) Otieno class year 2027.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_1KGNqddLislS",
+      "name": "Sean Theuri",
+      "universityId": "univ_caltech",
+      "graduationYear": 2026,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "evidence": "Caltech's degree heading assigns Sean Theuri class year 2026.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
+    },
+    {
+      "personId": "person_xXE34kjgzwIB",
+      "name": "Advika Vuppala",
+      "universityId": "univ_cmu",
+      "graduationYear": 2028,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/mentorship-and-programs/undergraduate-innovation-scholars/meet-the-undergraduate-innovation-scholars.html",
+      "evidence": "CMU identifies SpoilSafe co-founder Advika Vuppala with an electrical and computer engineering bachelor degree anticipated in 2028.",
+      "yearMeaning": "Published individual class designation or expected degree year; degree completion is not independently established",
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
     }
   ],
   "patches": [
@@ -20894,6 +21394,15 @@
       "expectedEvidence": null,
       "newYear": 2024,
       "reason": "Explicit individual class designation in the cited source; other degree years retained in observations."
+    },
+    {
+      "personId": "person_xXE34kjgzwIB",
+      "name": "Advika Vuppala",
+      "expectedYear": 2025,
+      "expectedSourceUrl": "https://www.linkedin.com/in/advikav",
+      "expectedEvidence": "Advika Vuppala: confirmed LinkedIn https://www.linkedin.com/in/advikav because the profile title is \"Advika Vuppala\" and the company matches the record. Evidence: Title matches. Snippet: \"ECE @ Carnegie Mellon University | SpoilSafe (AL26) | GHC '25\", \"student at Carnegie Mellon University pursuing a degree in Electrical and Computer Engineering\", and a current entry for SpoilSafe (AL26). No other result is titled Advika Vuppala. Query: \"Advika Vuppala\" \"Carnegie Mellon\" \"SpoilSafe\" site:linkedin.com/in.",
+      "newYear": 2028,
+      "reason": "GHC 2025 is a conference reference, not a class year. CMU explicitly identifies the expected ECE degree year as 2028."
     }
   ],
   "conflicts": {
@@ -23488,6 +23997,11 @@
       "url": "https://www.linkedin.com/in/parismielke",
       "readable": true,
       "retrieval": "individually reviewed; PDF search excerpt where indicated"
+    },
+    {
+      "url": "https://www.cmu.edu/swartz-center-for-entrepreneurship/mentorship-and-programs/undergraduate-innovation-scholars/meet-the-undergraduate-innovation-scholars.html",
+      "readable": true,
+      "retrievalMethod": "Manually reviewed individual designation on the university source"
     }
   ]
 }
