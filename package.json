@@ -65,7 +65,10 @@
     "test:reviewed-class-years": "node scripts/ingest/apply-reviewed-class-years.test.mjs",
     "discovery": "node --import tsx scripts/discovery/run.ts",
     "test:discovery": "node --import tsx lib/discovery/review.test.ts",
-    "test:exploration": "node --import tsx lib/domain/exploration-navigation.test.ts"
+    "test:exploration": "node --import tsx lib/domain/exploration-navigation.test.ts",
+    "db:postgres:migrate": "node --import tsx scripts/postgres/migrate.ts",
+    "test:postgres-migration": "node --import tsx scripts/postgres/corpus-migration.test.ts",
+    "test:pipeline-owner": "node --import tsx lib/user-pipeline/owner.test.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.65",
@@ -93,6 +96,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^9.6.0",
     "@types/d3-force": "^3.0.10",

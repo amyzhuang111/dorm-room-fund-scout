@@ -1,0 +1,30 @@
+name: Verify dashboard and SQL migration
+on:
+  pull_request:
+    paths:
+      - 'components/campus-workspace*'
+      - 'components/company-location*'
+      - 'components/tile-globe.tsx'
+      - 'components/site-nav.tsx'
+      - 'components/scout-icon.tsx'
+      - 'lib/user-pipeline/**'
+      - 'app/api/user-pipeline/route.ts'
+      - 'scripts/postgres/**'
+      - '.github/workflows/verify-dashboard-parity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run test:postgres-migration
+      - run: npm run test:pipeline-owner
+      - run: npx tsc --noEmit
+      - run: npx eslint components/campus-workspace.tsx components/company-location-layer.tsx components/scout-icon.tsx components/site-nav.tsx components/tile-globe.tsx lib/user-pipeline/owner.ts lib/user-pipeline/store.ts app/api/user-pipeline/route.ts scripts/postgres/*.ts

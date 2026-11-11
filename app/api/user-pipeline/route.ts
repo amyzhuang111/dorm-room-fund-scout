@@ -1,26 +1,29 @@
-import { memberDeniedResponse } from "@/lib/auth/guard";
+import { currentMember } from "@/lib/auth/guard";
 import { parseState } from "@/lib/domain/user-pipeline";
 import { pipelineBackend, readPipeline, writePipeline } from "@/lib/user-pipeline/store";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  const denied = await memberDeniedResponse();
-  if (denied) return denied;
+  const member = await currentMember();
+  // Public exploration and local saves remain free. Hosted records require identity.
+  if (!member) return Response.json({ configured: false, backend: null, state: null }, { headers: { "Cache-Control": "private, no-store" } });
   const backend = pipelineBackend();
   if (!backend) return Response.json({ configured: false, backend: null, state: null });
   try {
-    const state = await readPipeline();
-    return Response.json({ configured: true, backend, state });
+    const state = await readPipeline(member.email);
+    return Response.json({ configured: true, backend, state }, { headers: { "Cache-Control": "private, no-store" } });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Pipeline store unavailable";
+    void err;
+    const message = "Saved-list sync is temporarily unavailable";
     return Response.json({ configured: true, backend, state: null, error: message }, { status: 503 });
   }
 }
 
 export async function PUT(request: Request) {
-  const denied = await memberDeniedResponse();
-  if (denied) return denied;
+  const member = await currentMember();
+  // Public exploration and local saves remain free. Hosted records require identity.
+  if (!member) return Response.json({ configured: false, backend: null, state: null }, { headers: { "Cache-Control": "private, no-store" } });
   const backend = pipelineBackend();
   if (!backend) return Response.json({ configured: false, backend: null });
   let body: unknown;
@@ -31,9 +34,10 @@ export async function PUT(request: Request) {
   }
   const state = parseState(body);
   try {
-    await writePipeline(state);
+    await writePipeline(member.email, state);
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Pipeline store unavailable";
+    void err;
+    const message = "Saved-list sync is temporarily unavailable";
     return Response.json({ configured: true, backend, error: message }, { status: 503 });
   }
   return Response.json({ configured: true, backend, ok: true });

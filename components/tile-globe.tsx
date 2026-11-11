@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useGlobeRotation } from "@/lib/client/use-globe-rotation";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
@@ -119,8 +119,15 @@ export function TileGlobe({
   className = "",
   dataThrough = null,
   highlightCampusIds = null,
+  embedded = false,
+  onCompanySelect,
+  onMapFocusChange,
 }: {
   campuses: TileCampus[];
+  /** Keep city exploration within the dashboard, preserving its navigation and filters. */
+  embedded?: boolean;
+  onMapFocusChange?: (expanded: boolean) => void;
+  onCompanySelect?: (id: string) => void;
   companies?: TileCompany[];
   /** Full catalog size, used until /data/directory.json arrives. */
   companyCount?: number;
@@ -165,6 +172,7 @@ export function TileGlobe({
   const [failed, setFailed] = useState(false);
   const [locationsMode, setLocationsMode] = useState(false);
   const [expandedMap, setExpandedMap] = useState(false);
+  const changeMapFocus = useCallback((value: boolean) => { setExpandedMap(value); onMapFocusChange?.(value); }, [onMapFocusChange]);
   const [rotationEnabled, setRotationEnabled] = useState(false);
   useGlobeRotation(activeMap, rotationEnabled && !pinnedCaptureCenter());
   const locationsModeRef = useRef(locationsMode);
@@ -402,6 +410,7 @@ export function TileGlobe({
         };
         frameRef.current = frame;
         frame();
+        setFailed(false);
         setReady(true);
         setActiveMap(map as unknown as LibreMap);
         let revealed = false;
@@ -610,15 +619,15 @@ export function TileGlobe({
         },
       };
 
-    }).catch(() => { if (!dead) setFailed(true); });
+    }).catch((error) => { if (!dead) { console.warn("Campus globe unavailable", error instanceof Error ? error.message : String(error)); setFailed(true); } });
     };
 
     const ric = window.requestIdleCallback?.bind(window);
     if (ric) ric(() => { if (!dead) startMap(); }, { timeout: 50 });
     else window.setTimeout(() => { if (!dead) startMap(); }, 0);
 
-    const observer = new ResizeObserver(() => mapRef.current?.resize());
-    observer.observe(node);
+    const observer = new ResizeObserver(() => { frameRef.current?.(); mapRef.current?.resize(); });
+    observer.observe(node.parentElement ?? node);
     return () => {
       dead = true;
       window.clearTimeout(styleTimer);
@@ -637,7 +646,7 @@ export function TileGlobe({
   }, [stageHeight, expandedMap]);
 
   useEffect(() => {
-    if (!expandedMap) return;
+    if (!expandedMap || embedded) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const keyboard = (event: KeyboardEvent) => {
@@ -650,7 +659,7 @@ export function TileGlobe({
     };
     document.addEventListener("keydown", keyboard);
     return () => { document.body.style.overflow = previousOverflow; document.removeEventListener("keydown", keyboard); };
-  }, [expandedMap]);
+  }, [expandedMap, embedded]);
 
   useEffect(() => {
     if (!ready || !mapRef.current) return;
@@ -776,18 +785,19 @@ export function TileGlobe({
         </h2>
         <div
           className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-white`}
-          style={expandedMap ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
-          role={expandedMap ? "dialog" : undefined}
-          aria-modal={expandedMap ? true : undefined}
-          aria-label={expandedMap ? "Expanded startup map" : undefined}
+          style={expandedMap && !embedded ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
+          role={expandedMap && !embedded ? "dialog" : undefined}
+          aria-modal={expandedMap && !embedded ? true : undefined}
+          aria-label={expandedMap && !embedded ? "Expanded startup map" : undefined}
           data-map-expanded={expandedMap ? "true" : undefined}
+          data-map-embedded={embedded ? "true" : undefined}
           data-dispatch-map-stage=""
           data-fold-bigmap-stage=""
           data-map-stage-h={stageHeight}
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
           <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
-          <CompanyLocationLayer map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={setExpandedMap} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
+          <CompanyLocationLayer embedded={embedded} onCompanySelect={onCompanySelect} map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={changeMapFocus} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
           {!painted || failed ? (
             <div className="absolute inset-0 z-30 bg-[#FFFFFF]" aria-busy={!failed} aria-live="polite">
               {failed ? <CampusGlobeFallback campuses={campuses} onSelect={onSelect} selectedId={selectedId} highlightCampusIds={highlightCampusIds} /> : (

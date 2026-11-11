@@ -17,6 +17,7 @@ import { absoluteDate } from '@/lib/domain/relative-time';
 import { StartupCardSheet, FounderCardSheet } from './startup-directory-card';
 import { useDialogFocus } from './use-dialog-focus';
 import styles from './campus-workspace.module.css';
+import { ScoutIcon } from './scout-icon';
 
 const TileGlobe = dynamic(() => import('./tile-globe').then(m => m.TileGlobe), { ssr: false, loading: () => <div className={styles.loading}>Loading campus map…</div> });
 const number = (n: number) => n.toLocaleString('en-US');
@@ -36,10 +37,33 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
   const [founderState, setFounderState] = useState('loading');
   const [retry, setRetry] = useState(0);
   const [expanded, setExpanded] = useState(false);
+  const [mapFocused, setMapFocused] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [notice, setNotice] = useState('');
   const [shareLink, setShareLink] = useState('');
   const [feedback, setFeedback] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
+  const workspaceRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    const previousRootOverflow = document.documentElement.style.overflow;
+    const footer = document.querySelector('footer');
+    const footerHidden = footer?.hidden ?? false;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    if (footer) footer.hidden = true;
+    window.scrollTo(0, 0);
+    return () => { document.body.style.overflow = previousOverflow; document.documentElement.style.overflow = previousRootOverflow; if (footer) footer.hidden = footerHidden; };
+  }, []);
+  useEffect(() => {
+    const header = document.querySelector<HTMLElement>('header[data-site-chrome]');
+    if (!header) return;
+    const measure = () => workspaceRef.current?.style.setProperty('--site-chrome-height', `${header.getBoundingClientRect().height}px`);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
   const [page, setPage] = useState(1);
   const resultRef = useRef<HTMLDivElement>(null);
   const context = params.toString();
@@ -83,21 +107,21 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
   }
   const selectCampus = useCallback((id: string) => update({ campus: id || null, panel: 'companies' }), [update]);
   const selectFounder = (id: string) => { update({entity:id,entityType:'founder'}); return true; };
-  const selectStartup = (id: string) => { update({entity:id,entityType:'startup'}); return true; };
+  const selectStartup = useCallback((id: string) => { update({entity:id,entityType:'startup'}); return true; }, [update]);
   const visibleCompanies = matched.slice(0, page * 24);
   const visiblePeople = people.slice(0, page * 24);
   const campusName=campuses.find(c=>c.id===filters.campus)?.name;
   const networkHref=networkExplorationHref({campus:campusName,returnTo:context?`/?${context}`:'/'});
 
-  return <section className={styles.workspace} aria-label="Campus Scout workspace">
+  return <section ref={workspaceRef} className={styles.workspace} aria-label="Campus Scout workspace">
     <div className={styles.topline}>
       <div><span className={styles.eyebrow}>THE CAMPUS ECOSYSTEM</span><h1>Discover the next generation.</h1></div>
-      <nav className={styles.viewModes} aria-label="Explore views"><span aria-current="page">◎ Globe</span><Link href={networkHref}>⌘ Network map</Link><Link href={discoveryHref('companies',new URLSearchParams(params))}>☷ Directory</Link></nav>
-      <div className={styles.topActions}><Link href="/work/shortlist">☆ Saved</Link><button onClick={share}>Share view ↗</button><button onClick={() => setFeedback(true)}>Feedback</button>{supportUrl && <a href={supportUrl} target="_blank" rel="noopener noreferrer">Buy me a coffee ↗</a>}</div>
+      <nav className={styles.viewModes} aria-label="Explore views"><span aria-current="page"><ScoutIcon name="globe" /> Globe</span><Link href={networkHref}><ScoutIcon name="network" /> Network</Link><Link href={discoveryHref('companies',new URLSearchParams(params))}><ScoutIcon name="directory" /> Directory</Link></nav>
+      <div className={styles.topActions}><Link href="/work/shortlist" title="Saved companies"><ScoutIcon name="bookmark" /><span>Saved</span></Link><button onClick={share} title="Share this view"><ScoutIcon name="share" /><span>Share</span></button><button onClick={() => setFeedback(true)} title="Send feedback"><ScoutIcon name="message" /><span>Feedback</span></button><button className={styles.donate} onClick={() => setSupportOpen(true)}><ScoutIcon name="heart" /><span>Donate</span></button></div>
     </div>
-    <div className={styles.stage}>
+    <div className={`${styles.stage} ${mapFocused ? styles.mapFocused : ""}`}>
       <div className={styles.map} aria-label="Interactive campus globe">
-        <TileGlobe campuses={campuses} companies={matched} companyCount={companyState === 'ready' ? matched.length : active ? 0 : companyCount} foundersListed={founderState === 'ready' && companyState === 'ready' ? people.length : active ? 0 : founderCount} foundersLabel="indexed founders" selectedId={filters.campus} onSelect={selectCampus} dataThrough={updatedAt} highlightCampusIds={active ? highlights : null} />
+        <TileGlobe embedded onMapFocusChange={setMapFocused} onCompanySelect={selectStartup} campuses={campuses} companies={matched} companyCount={companyState === 'ready' ? matched.length : active ? 0 : companyCount} foundersListed={founderState === 'ready' && companyState === 'ready' ? people.length : active ? 0 : founderCount} foundersLabel="indexed founders" selectedId={filters.campus} onSelect={selectCampus} dataThrough={updatedAt} highlightCampusIds={active ? highlights : null} />
       </div>
       <div className={styles.rightRail}><aside className={styles.summary} aria-label="Current view">
         <span className={styles.eyebrow}>CURRENT VIEW</span>
@@ -116,7 +140,7 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
       <aside className={`${styles.panel} ${expanded ? styles.expanded : ''}`} aria-label="Browse campus database">
         <div className={styles.panelHead}><span className={styles.eyebrow}>SCOUT DATABASE</span><button className={styles.mobileExpand} onClick={() => setExpanded(v => !v)} aria-expanded={expanded}>{expanded ? 'Collapse ↓' : 'Expand ↑'}</button><Link className={`${styles.fullDirectory} block`} href={panel === 'founders' ? `/founders?${new URLSearchParams([...params.entries()].filter(([key]) => ['campus','q','sector','hqRegion','status','network','missing'].includes(key)))}` : panel === 'rankings' ? `/campuses?${new URLSearchParams([...params.entries()].filter(([key]) => ['q','sector','hqRegion','status','network','missing'].includes(key)))}` : panel === 'insights' ? '/data?scope=scout' : panel === 'networks' ? '/networks' : discoveryHref('companies', new URLSearchParams(params))}>Full directory ↗</Link></div>
         <nav className={styles.tabs} aria-label="Workspace panels">{PANELS.map(p => p.id === 'networks' ? <Link key={p.id} href={networkHref} className="inline-flex" title="Open the founder and startup network map">Networks ↗</Link> : <button key={p.id} aria-pressed={panel === p.id} onClick={() => { update({ panel:p.id, ...(p.id === 'rankings' ? { campus:null } : {}) }); setExpanded(true); }}>{p.label}</button>)}</nav>
-        <div className={styles.search}><span aria-hidden="true">⌕</span><input aria-label="Search companies, founders and campuses" placeholder="Company, founder, campus…" value={filters.q} onChange={e => update({ q:e.target.value || null }, true)} /><button onClick={() => setFiltersOpen(v => !v)} aria-expanded={filtersOpen} aria-controls="workspace-filters">Filters{active ? ' •' : ''}</button></div>
+        <div className={styles.search}><ScoutIcon name="search" /><input aria-label="Search companies, founders and campuses" placeholder="Company, founder, campus…" value={filters.q} onChange={e => update({ q:e.target.value || null }, true)} /><button onClick={() => setFiltersOpen(v => !v)} aria-expanded={filtersOpen} aria-controls="workspace-filters"><ScoutIcon name="filters" /> Filters{active ? ' •' : ''}</button></div>
         {!active&&!filtersOpen&&<div className={styles.startPoints} aria-label="Start exploring"><span>Start with</span><button onClick={()=>selectCampus('univ_penn')}>Penn</button><button onClick={()=>selectCampus('univ_berkeley')}>Berkeley</button><button onClick={()=>selectCampus('univ_stanford')}>Stanford</button><button onClick={()=>update({panel:'rankings',campus:null})}>Rankings ↗</button></div>}
         {filtersOpen && <div id="workspace-filters" className={styles.filters}>
           <Filter label="Campus" value={filters.campus} onChange={selectCampus} options={[["missing","Campus not recorded"],...campuses.map(c => [c.id,c.name] as [string,string]).sort((a,b)=>a[1].localeCompare(b[1]))]} />
@@ -127,7 +151,7 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
           <Filter label="Order" value={filters.sort} onChange={v=>update({sort:v})} options={[["signals","Most signals"],["name","A–Z"],["recent","Latest signal"]]} all={false} />
         </div>}
         {active && <div className={styles.activeFilters}><span>{[filters.campus && (campuses.find(c=>c.id===filters.campus)?.name ?? 'Campus missing'), filters.sector && (sectors.find(s=>s[0]===filters.sector)?.[1] ?? filters.sector), filters.region, filters.status && STATUS_LABEL[filters.status as keyof typeof STATUS_LABEL], filters.network, filters.missing && `Missing ${COVERAGE_FIELDS.find(f=>f.id===filters.missing)?.label ?? filters.missing}`, filters.q && `“${filters.q}”`].filter(Boolean).join(' · ')}</span><button onClick={reset}>Clear all</button></div>}
-        <div className={styles.resultTools}><span role="status">{ready ? `${number(currentCount)} ${panel === 'insights' ? 'companies analyzed' : panel === 'rankings' ? 'campuses ranked' : panel}` : failed ? 'Data unavailable' : 'Loading records…'}</span><button disabled={!ready} onClick={exportCsv}>↓ Export CSV</button></div>
+        <div className={styles.resultTools}><span role="status">{ready ? `${number(currentCount)} ${panel === 'insights' ? 'companies analyzed' : panel === 'rankings' ? 'campuses ranked' : panel}` : failed ? 'Data unavailable' : 'Loading records…'}</span><button disabled={!ready} onClick={exportCsv}><ScoutIcon name="download" /> Export CSV</button></div>
         <div className={styles.results} ref={resultRef} key={panel}>
           {failed ? <div className={styles.empty}><p>We couldn’t load the records. Your filters are saved in the link.</p><button onClick={()=>{setCompanyState('loading');setFounderState('loading');setRetry(v=>v+1);}}>Try again</button></div> : !ready ? <div className={styles.empty}>Loading the source-backed index…</div> : <>
             {panel === 'companies' && visibleCompanies.map(c => <CompanyRow key={c.id} company={c} onOpen={()=>update({entity:c.id,entityType:'startup'})} />)}
@@ -145,10 +169,11 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
     {notice && <div className={styles.notice} role="status">{notice}<button aria-label="Dismiss notification" onClick={()=>{setNotice('');setShareLink('');}}>×</button>{shareLink && <input aria-label="Shareable view link" readOnly value={shareLink} onFocus={e=>e.target.select()} />}</div>}
     {entity && (params.get('entityType')==='founder' ? <FounderCardSheet key={entity} id={entity} onClose={closeEntity} onFounderSelect={selectFounder} onStartupSelect={selectStartup} className={styles.detail} /> : <StartupCardSheet key={entity} id={entity} onClose={closeEntity} onFounderSelect={selectFounder} onStartupSelect={selectStartup} className={styles.detail} />)}
     {feedback && <FeedbackDialog context={context} onClose={()=>setFeedback(false)} />}
+    {supportOpen && <SupportDialog url={supportUrl} onClose={()=>setSupportOpen(false)} />}
   </section>;
 }
 
-function Filter({label,value,onChange,options,all=true}:{label:string;value:string;onChange:(v:string)=>void;options:[string,string][];all?:boolean}) { return <label>{label}<select value={value} onChange={e=>onChange(e.target.value)}>{all&&<option value="">All</option>}{options.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>; }
+function Filter({label,value,onChange,options,all=true}:{label:string;value:string;onChange:(v:string)=>void;options:[string,string][];all?:boolean}) { return <label>{label}<select aria-label={label} value={value} onChange={e=>onChange(e.target.value)}>{all&&<option value="">All</option>}{options.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>; }
 function CompanyRow({company:c,onOpen}:{company:FacetCompany;onOpen:()=>void}) {
   const [failed,setFailed]=useState(false);
   return <button className={styles.companyRow} onClick={onOpen} aria-label={`Preview ${c.name}`}>
@@ -158,9 +183,20 @@ function CompanyRow({company:c,onOpen}:{company:FacetCompany;onOpen:()=>void}) {
 }
 function FeedbackDialog({context,onClose}:{context:string;onClose:()=>void}) {
   const ref=useRef<HTMLDivElement>(null);
-  const close=useCallback(onClose,[onClose]);
-  useDialogFocus(true,ref,close);
+  useDialogFocus(true,ref,onClose);
   const [title,setTitle]=useState('');const [body,setBody]=useState('');const [source,setSource]=useState('');const [link,setLink]=useState('');
   function prepare(e:FormEvent){e.preventDefault();const url=new URL('https://github.com/amyzhuang111/dorm-room-fund-scout/issues/new');url.searchParams.set('title',title);url.searchParams.set('body',`${body}\n\nSource: ${source||'Not supplied'}\n\nView: ${window.location.origin}/?${context}`);setLink(url.toString());}
   return <div className={styles.modalBackdrop} onClick={e=>{if(e.target===e.currentTarget)onClose();}}><div ref={ref} className={styles.feedback} role="dialog" aria-modal="true" aria-labelledby="feedback-title" tabIndex={-1}><button className={styles.close} aria-label="Close feedback" onClick={onClose}>×</button><span className={styles.eyebrow}>HELP IMPROVE THE INDEX</span><h2 id="feedback-title">Feedback & corrections</h2><p>Suggest a feature or correct a record. You’ll review and submit a public issue on GitHub.</p><form onSubmit={prepare}><label>Subject<input required maxLength={120} value={title} onChange={e=>{setTitle(e.target.value);setLink('');}} /></label><label>What should change?<textarea required rows={4} maxLength={2000} value={body} onChange={e=>{setBody(e.target.value);setLink('');}} /></label><label>Source URL (optional)<input type="url" value={source} onChange={e=>{setSource(e.target.value);setLink('');}} /></label><button type="submit">Prepare feedback</button>{link&&<a href={link} target="_blank" rel="noopener noreferrer">Review & submit on GitHub ↗</a>}</form></div></div>;
+}
+
+function SupportDialog({url,onClose}:{url?:string;onClose:()=>void}) {
+  const ref=useRef<HTMLDivElement>(null);
+  useDialogFocus(true, ref, onClose);
+  return <div className={styles.modalBackdrop} onClick={onClose}><div ref={ref} className={styles.feedback} role="dialog" aria-modal="true" aria-labelledby="support-title" onClick={e=>e.stopPropagation()}>
+    <button className={styles.close} aria-label="Close support dialog" onClick={onClose}>×</button>
+    <ScoutIcon name="heart" /><h2 id="support-title">Keep curiosity free.</h2>
+    <p>Campus Scout is free to explore. Optional donations help keep the data and tools available to everyone.</p>
+    {url ? <a className={styles.supportLink} href={url} target="_blank" rel="noopener noreferrer">Make a donation ↗</a> : <p>Donations are not available yet. You can still support Campus Scout by sharing it or suggesting a correction.</p>}
+    <small>Free access. No subscriptions.</small>
+  </div></div>;
 }
