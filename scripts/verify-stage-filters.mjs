@@ -46,6 +46,26 @@ try {
     await directory.click();
     await page.waitForURL(/\/companies\?.*stage=Seed/);
     await page.getByRole('heading', { name: 'Companies', exact: true }).waitFor();
+    await page.goto(`${origin}/directories/lse`);
+    await page.getByRole('heading', { name: 'Venture benchmarks' }).waitFor();
+    assert.equal(await page.locator('main ol > li').count(), 142);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'LSE directory fits mobile and desktop');
+    await page.getByLabel('Benchmark tier', { exact: true }).selectOption('B');
+    await page.getByRole('button', { name: 'Apply', exact: true }).click();
+    await page.waitForURL(/tier=B/);
+    assert.equal(await page.locator('main ol > li').count(), 6);
+    const lseDownloadPromise = page.waitForEvent('download');
+    await page.getByRole('link', { name: 'Export this view as CSV', exact: true }).click();
+    const lseDownload = await lseDownloadPromise;
+    const lseStream = await lseDownload.createReadStream();
+    let lseCsv = '';
+    for await (const chunk of lseStream) lseCsv += chunk;
+    assert.equal(lseCsv.trim().split('\r\n').length, 7, 'CSV contains exactly six filtered companies plus header');
+    await page.locator('main ol > li').first().getByText('Ratings & source evidence', { exact: true }).click();
+    await page.locator('main ol > li').first().getByRole('link', { name: 'Public company profile', exact: true }).waitFor();
+    await page.locator('main ol > li').first().locator('a[href^="/startup/"]').click();
+    await page.waitForURL(/\/startup\//);
+    await page.getByText('Seven-factor breakdown', { exact: true }).first().waitFor();
     await context.close();
   }
   const page = await browser.newPage();

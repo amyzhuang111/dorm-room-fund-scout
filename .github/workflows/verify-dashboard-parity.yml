@@ -2,6 +2,13 @@ name: Verify dashboard and SQL migration
 on:
   pull_request:
     paths:
+      - 'app/directories/lse/**'
+      - 'app/api/directories/lse/**'
+      - 'lib/domain/lse-directory*'
+      - 'lib/scoring/**'
+      - 'lib/discovery/startbook.ts'
+      - 'scripts/ingest/import-lse-startbook*'
+      - 'data/imports/lse-startbook*'
       - 'lib/domain/funding-stage*'
       - 'lib/domain/scout-workspace*'
       - 'lib/domain/sample-facets.ts'
@@ -38,11 +45,15 @@ jobs:
       - run: npm run test:pipeline-owner
       - run: node --import tsx lib/domain/funding-stage.test.ts
       - run: node --import tsx lib/domain/scout-workspace.test.ts
+      - run: node --import tsx lib/scoring/benchmark.test.ts
       - run: npx tsc --noEmit
       - run: npx eslint components/campus-workspace.tsx components/company-location-layer.tsx components/scout-icon.tsx components/site-nav.tsx components/tile-globe.tsx lib/user-pipeline/owner.ts lib/user-pipeline/store.ts app/api/user-pipeline/route.ts scripts/postgres/*.ts
 
       - run: cp data/campus-universe.db /tmp/campus-stage-ci.db
       - run: npm run build
+        env:
+          CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-stage-ci.db
+      - run: node --import tsx lib/domain/lse-directory.test.ts
         env:
           CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-stage-ci.db
       - run: npx playwright install --with-deps chromium
