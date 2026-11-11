@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "node scripts/copy-maplibre.mjs && next dev",
     "build": "next build --webpack",
-    "prebuild": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && node scripts/ingest/reconcile-corpus-2026-11-04.mjs && tsx scripts/data/apply-recovered-rows.ts && node scripts/ingest/import-verified-class-years-2026-11-04.mjs && node scripts/ingest/apply-reviewed-class-years.mjs && tsx scripts/data/apply-reviewed-patches.ts && node scripts/ingest/review-class-years-2026-11-04.mjs && node --import tsx scripts/discovery/apply.ts && node --import tsx scripts/ingest/import-lse-startbook.ts && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts && tsx scripts/precompute-founder-table.ts && node scripts/copy-maplibre.mjs && node --import tsx lib/domain/count-consistency.test.ts",
+    "prebuild": "node scripts/build/prepare-corpus.mjs",
     "start": "next start",
     "lint": "eslint",
     "enrich:apify-linkedin": "tsx scripts/enrich/apify-linkedin-lookup.ts",
@@ -69,7 +69,9 @@
     "db:postgres:migrate": "node --import tsx scripts/postgres/migrate.ts",
     "test:postgres-migration": "node --import tsx scripts/postgres/corpus-migration.test.ts",
     "test:pipeline-owner": "node --import tsx lib/user-pipeline/owner.test.ts",
-    "test:lse": "node --import tsx scripts/ingest/import-lse-startbook.test.ts && node --import tsx lib/scoring/benchmark.test.ts"
+    "test:lse": "node --import tsx scripts/ingest/import-lse-startbook.test.ts && node --import tsx lib/scoring/benchmark.test.ts",
+    "corpus:prepare": "node scripts/ingest/import-scouting-list-2026-11-03.mjs && node scripts/ingest/reconcile-corpus-2026-11-04.mjs && tsx scripts/data/apply-recovered-rows.ts && node scripts/ingest/import-verified-class-years-2026-11-04.mjs && node scripts/ingest/apply-reviewed-class-years.mjs && tsx scripts/data/apply-reviewed-patches.ts && node scripts/ingest/review-class-years-2026-11-04.mjs && node --import tsx scripts/discovery/apply.ts && node --import tsx scripts/ingest/import-lse-startbook.ts && tsx scripts/precompute-map-cache.ts && tsx scripts/precompute-founder-networks.ts && tsx scripts/precompute-founder-table.ts && node scripts/copy-maplibre.mjs && node --import tsx lib/domain/count-consistency.test.ts",
+    "test:runtime-corpus": "node scripts/build/verify-runtime-corpus.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.65",

@@ -62,3 +62,6 @@ next-env.d.ts
 /data/imports/linkedin-direct-results.jsonl
 /data/imports/linkedin-direct.log
 data/campus-universe.db.bak-pre-audit
+
+# Prepared deployment database, generated without modifying the committed seed.
+/data/runtime/
