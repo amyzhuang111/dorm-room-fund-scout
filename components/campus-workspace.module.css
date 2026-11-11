@@ -49,3 +49,4 @@
 @media(min-width:768px){.rightRail{position:absolute;right:20px;top:82px;width:220px;z-index:35;display:flex;flex-direction:column;gap:12px}.rightRail .summary,.rightRail .leaders{position:static;width:auto}.rightRail .summary{pointer-events:none}}
 @media(min-width:768px) and (max-width:1100px){.rightRail{width:180px}}
 @media(min-width:768px) and (max-height:780px){.rightRail{top:60px;gap:8px}.rightRail .summary p{margin-top:6px}.rightRail .leaderRow{padding:6px 0}}
+@media(max-width:767px){.topline>div:first-child{flex:1;min-width:0}.topline .topActions{flex:none}.topline h1{font-size:17px;max-width:205px}.summary{width:150px}.summary>div>span{display:flex;align-items:baseline;gap:4px}.summary b{margin-right:0}}
