@@ -35,6 +35,8 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/", has: [{ type: "query", key: "panel", value: "networks" }], destination: "/networks", permanent: false },
+      { source: "/", has: [{ type: "query", key: "view", value: "network" }], destination: "/networks", permanent: false },
       { source: "/map", destination: "/networks", permanent: false },
       { source: "/deals", destination: "/networks", permanent: false },
       { source: "/news", destination: "/signals?type=press", permanent: true },

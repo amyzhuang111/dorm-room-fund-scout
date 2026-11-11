@@ -1,0 +1,17 @@
+import assert from "node:assert/strict";
+import { discoveryHref } from "./discovery-navigation";
+const workspace = new URLSearchParams({ panel:"companies", campus:"univ_penn", q:"robot", hqRegion:"New York", status:"active", entity:"proj_test" });
+const directory = new URL(discoveryHref("companies", workspace), "https://example.test");
+assert.equal(directory.pathname, "/companies");
+assert.equal(directory.searchParams.get("campus"), "univ_penn");
+assert.equal(directory.searchParams.get("hq"), "New York");
+assert.equal(directory.searchParams.get("q"), "robot");
+assert.equal(directory.searchParams.get("status"), "active");
+assert.equal(directory.searchParams.has("panel"), false);
+assert.equal(directory.searchParams.has("entity"), false);
+const map = new URL(discoveryHref("map", directory.searchParams), "https://example.test");
+assert.equal(map.pathname, "/");
+assert.equal(map.searchParams.get("hqRegion"), "New York");
+assert.equal(map.searchParams.has("hq"), false);
+assert.equal(discoveryHref("companies", new URLSearchParams()), "/companies");
+console.log("discovery navigation tests ok");

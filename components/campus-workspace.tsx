@@ -11,6 +11,7 @@ import type { FounderLead } from '@/lib/domain/founder-index';
 import { fetchSampleDirectory } from '@/lib/domain/sample-directory-client';
 import { COVERAGE_FIELDS, PANELS, campusIds, campusNames, filterWorkspace, hasNamedFounder, panelOf, rankGroups, workspaceCsv, workspaceFilters } from '@/lib/domain/scout-workspace';
 import { workspaceFounders } from '@/lib/domain/scout-workspace';
+import { discoveryHref } from '@/lib/domain/discovery-navigation';
 import { absoluteDate } from '@/lib/domain/relative-time';
 import { StartupCardSheet, FounderCardSheet } from './startup-directory-card';
 import { useDialogFocus } from './use-dialog-focus';
@@ -98,8 +99,8 @@ export function CampusWorkspace({ campuses, companyCount, founderCount, updatedA
         {updatedAt && <small>Data updated {absoluteDate(updatedAt)}</small>}
       </aside>
       <aside className={`${styles.panel} ${expanded ? styles.expanded : ''}`} aria-label="Browse campus database">
-        <div className={styles.panelHead}><span className={styles.eyebrow}>SCOUT DATABASE</span><button className={styles.mobileExpand} onClick={() => setExpanded(v => !v)} aria-expanded={expanded}>{expanded ? 'Collapse ↓' : 'Expand ↑'}</button><Link className={`${styles.fullDirectory} block`} href={panel === 'founders' ? '/founders' : '/companies'}>Full directory ↗</Link></div>
-        <nav className={styles.tabs} aria-label="Workspace panels">{PANELS.map(p => <button key={p.id} aria-pressed={panel === p.id} onClick={() => { update({ panel:p.id }); setExpanded(true); }}>{p.label}</button>)}</nav>
+        <div className={styles.panelHead}><span className={styles.eyebrow}>SCOUT DATABASE</span><button className={styles.mobileExpand} onClick={() => setExpanded(v => !v)} aria-expanded={expanded}>{expanded ? 'Collapse ↓' : 'Expand ↑'}</button><Link className={`${styles.fullDirectory} block`} href={panel === 'founders' ? '/founders' : panel === 'rankings' ? '/campuses' : panel === 'insights' ? '/data' : panel === 'networks' ? '/networks' : discoveryHref('companies', new URLSearchParams(params))}>Full directory ↗</Link></div>
+        <nav className={styles.tabs} aria-label="Workspace panels">{PANELS.map(p => p.id === 'networks' ? <Link key={p.id} href="/networks" className="inline-flex" title="Open the founder and startup network map">Networks ↗</Link> : <button key={p.id} aria-pressed={panel === p.id} onClick={() => { update({ panel:p.id }); setExpanded(true); }}>{p.label}</button>)}</nav>
         <div className={styles.search}><span aria-hidden="true">⌕</span><input aria-label="Search companies, founders and campuses" placeholder="Company, founder, campus…" value={filters.q} onChange={e => update({ q:e.target.value || null }, true)} /><button onClick={() => setFiltersOpen(v => !v)} aria-expanded={filtersOpen} aria-controls="workspace-filters">Filters{active ? ' •' : ''}</button></div>
         {filtersOpen && <div id="workspace-filters" className={styles.filters}>
           <Filter label="Campus" value={filters.campus} onChange={v => update({campus:v})} options={[["missing","Campus not recorded"],...campuses.map(c => [c.id,c.name] as [string,string]).sort((a,b)=>a[1].localeCompare(b[1]))]} />
