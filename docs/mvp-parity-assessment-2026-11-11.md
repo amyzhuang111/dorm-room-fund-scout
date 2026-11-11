@@ -38,6 +38,12 @@ This is **tested migration tooling, not a completed hosted migration**. The test
 3. **Interaction completion:** verify the exact network-map drawing when supplied; continue end-to-end checks of directory → detail → founder/network → return. The current share URL preserves filters and selected records; geographic camera-position sharing/image export remains separate scope.
 4. **Launch:** supply the donation URL and custom domain; confirm DNS access; run staging load tests with a defined peak-concurrency target. “2,000 users” must distinguish total users from simultaneous requests. Measure p95 latency, error rate, pool pressure, mobile rendering and source freshness before claiming capacity.
 
+## Verification limits
+
+TypeScript, the production build, ESLint (one existing image warning), owner-key tests, startup/founder preview tests, navigation tests, all-campus reconciliation and the PostgreSQL migration tests pass. CI also runs the new tests on Node 22.
+
+Browser checks cover the responsive workspace at 375 × 600, 375 × 812, 768 × 700 and 1024 × 650, filter access, USC counts, company detail selection, and the Donate dialog. This remote browser lacks WebGL2, so it exercises the simplified SVG globe. The 3D city-cluster/hover interactions still require verification in a WebGL2-capable browser; code changes for those paths are included, but that visual check is not claimed complete. Production load testing and DNS verification are also pending.
+
 ## Reproduce the migration check
 
 Create a scratch copy of the latest SQLite file, apply the repository's prebuild steps to that copy with `CAMPUS_UNIVERSE_DB_PATH`, then:

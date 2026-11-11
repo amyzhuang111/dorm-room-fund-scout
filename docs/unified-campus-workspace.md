@@ -11,7 +11,7 @@ The homepage keeps the globe, company database, founders, campus rankings, inves
 - Networks rank recorded investor/program affiliations. The database does not support a credible former-employer mafia ranking or social-influence ranking; neither is invented.
 - The Insights panel shows field coverage and lets a scout open records missing a particular field.
 - Feedback prepares a public GitHub issue for the visitor to review and submit. It does not silently send feedback or claim delivery.
-- A donation link appears only when `NEXT_PUBLIC_SCOUT_SUPPORT_URL` points to the owner's HTTPS Buy Me a Coffee or Ko-fi profile. No payment destination is assumed.
+- Donate opens a free-app support dialog. Its payment link appears only when `NEXT_PUBLIC_SCOUT_SUPPORT_URL` points to the owner's HTTPS Buy Me a Coffee or Ko-fi profile. No payment destination is assumed.
 - When WebGL or map tiles fail, an orthographic SVG globe plots the recorded campus coordinates and supports campus selection and east/west rotation. This is labeled as a simplified globe.
 
 ## Validation
