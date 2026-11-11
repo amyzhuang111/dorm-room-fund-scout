@@ -68,8 +68,8 @@ export function SiteNav() {
           </button>
         </div>
       </div>
-      {/* Desk tabs always on for mobile — not tucked behind Menu */}
-      <nav
+      {/* The home workspace supplies its own persistent view and database tabs. */}
+      {pathname !== "/" && <nav
         className={`${open ? "hidden" : "grid"} grid-cols-4 px-3 lg:hidden`}
         aria-label="Quick navigation"
         data-mobile-desk-tabs=""
@@ -84,7 +84,7 @@ export function SiteNav() {
             {item.label}
           </Link>
         ))}
-      </nav>
+      </nav>}
       {open ? (
         <div ref={menu} id="mobile-site-menu" className="max-h-[75dvh] overflow-y-auto space-y-1 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden" onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeMenu(); } }}>
           {NAV.map((item) => (

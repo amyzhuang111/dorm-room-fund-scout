@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GeoJSONSource, Map as LibreMap, MapLayerMouseEvent } from "maplibre-gl";
 import type { FeatureCollection, Point } from "geojson";
 import type { CompanyCity, CompanyLocations } from "@/lib/domain/company-locations";
@@ -33,7 +33,7 @@ function frameCity(map: LibreMap, city: CityView) {
   ], {padding:{top:innerWidth<640?150:70,bottom:Math.min(height*0.5,350),left:36,right:60},maxZoom:14,duration:700});
 }
 
-export function CompanyLocationLayer({ map, enabled, companies, highlightCampusIds, expanded, onExpand, rotationEnabled, onRotationChange }: { map: LibreMap | null; enabled: boolean; companies: FacetCompany[]; highlightCampusIds?: Set<string> | null; expanded: boolean; onExpand: (value:boolean)=>void; rotationEnabled: boolean; onRotationChange: (value:boolean)=>void }) {
+export function CompanyLocationLayer({ map, enabled, companies, highlightCampusIds, expanded, onExpand, rotationEnabled, onRotationChange, onCompanySelect, embedded = false }: { embedded?: boolean; onCompanySelect?: (id: string) => void; map: LibreMap | null; enabled: boolean; companies: FacetCompany[]; highlightCampusIds?: Set<string> | null; expanded: boolean; onExpand: (value:boolean)=>void; rotationEnabled: boolean; onRotationChange: (value:boolean)=>void }) {
   const [data, setData] = useState<CompanyLocations | null>(null);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -41,6 +41,19 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   const [selected, setSelected] = useState<string | null>(null);
   const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
   const [hover, setHover] = useState<HoverCard | null>(null);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverCardRef = useRef<HTMLDivElement>(null);
+  const keepHover = useCallback(() => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+  }, []);
+  const dismissHover = useCallback(() => {
+    keepHover();
+    hoverTimer.current = setTimeout(() => {
+      if (!hoverCardRef.current?.contains(document.activeElement)) setHover(null);
+    }, 300);
+  }, [keepHover]);
+  useEffect(() => keepHover, [keepHover]);
   const [visible, setVisible] = useState<string[]>([]);
   const [limit, setLimit] = useState(24);
   const [collapsed, setCollapsed] = useState(false);
@@ -110,7 +123,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       }
       const id=String(event.features?.[0]?.properties.id??"");
       const city=cities.find(c=>c.id===id);
-      if (city) {setSelected(id);setSelectedCompany(null);setOnlyAddresses(true);setLimit(24);setCollapsed(false);onExpand(true);frameCity(map,city);}
+      if (city) {setSelected(id);setSelectedCompany(null);setOnlyAddresses(false);setLimit(24);setCollapsed(false);onExpand(true);frameCity(map,city);}
     };
     const chooseOffice = (event:MapLayerMouseEvent) => {
       if(!enabled)return;
@@ -118,7 +131,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       const id=ids[0];
       const city=cities.find(c=>c.companies.some(co=>co.id===id));
       const office=city?.companies.find(co=>co.id===id)?.office;
-      if(city && office){setSelected(city.id);setSelectedCompany(id);setCollapsed(true);onExpand(true);map.flyTo({center:office.coordinates,zoom:16,offset:[0,-70],duration:700});}
+      if(city && office){onCompanySelect?.(id);setSelected(city.id);setSelectedCompany(id);setCollapsed(true);onExpand(true);map.flyTo({center:office.coordinates,zoom:16,offset:[0,-70],duration:700});}
     };
     map.on("click",layerIds[0],choose);
     map.on("click",officeLayerIds[0],chooseOffice);
@@ -127,6 +140,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
     map.on("mouseenter",layerIds[0],enter);map.on("mouseleave",layerIds[0],leave);
     map.on("mouseenter",officeLayerIds[0],enter);map.on("mouseleave",officeLayerIds[0],leave);
     const hoverCity = (event: MapLayerMouseEvent) => {
+      keepHover();
       if (!enabled) return;
       const feature = event.features?.[0];
       if (!feature || feature.properties?.cluster) { setHover(null); return; }
@@ -147,6 +161,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       });
     };
     const hoverOffice = (event: MapLayerMouseEvent) => {
+      keepHover();
       if (!enabled) return;
       const ids: string[] = JSON.parse(event.features?.[0]?.properties.companyIds ?? "[]");
       const id = ids[0];
@@ -165,7 +180,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
         count: 1,
       });
     };
-    const clearHover = () => setHover(null);
+    const clearHover = dismissHover;
     map.on("mousemove", layerIds[0], hoverCity);
     map.on("mousemove", officeLayerIds[0], hoverOffice);
     map.on("mouseleave", layerIds[0], clearHover);
@@ -182,9 +197,10 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       map.off("mousemove", officeLayerIds[0], hoverOffice);
       map.off("mouseleave", layerIds[0], clearHover);
       map.off("mouseleave", officeLayerIds[0], clearHover);
+      keepHover();
       setHover(null);
     };
-  }, [map,geo,officeGeo,cities,enabled,onExpand]);
+  }, [map,geo,officeGeo,cities,enabled,onExpand,dismissHover,keepHover,onCompanySelect]);
 
   if (!enabled) return null;
   const selectedCity=cities.find(c=>c.id===selected);
@@ -201,12 +217,13 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   const coordinateLabel=point ? `${Math.abs(point[1]).toFixed(5)}° ${point[1]>=0?"N":"S"}, ${Math.abs(point[0]).toFixed(5)}° ${point[0]>=0?"E":"W"}` : "";
   function focusCity(id:string) {
     const city=cities.find(c=>c.id===id);
-    setSelected(city?.id??null);setSelectedCompany(null);setOnlyAddresses(true);setLimit(24);setCollapsed(false);
+    setSelected(city?.id??null);setSelectedCompany(null);setOnlyAddresses(false);setLimit(24);setCollapsed(false);
     if(city&&map){onExpand(true);frameCity(map,city);}
   }
   function focusCompany(id:string,cityId:string){
     const city=cities.find(c=>c.id===cityId), co=city?.companies.find(c=>c.id===id);
     if(!city||!co)return;
+    onCompanySelect?.(id);
     setSelected(city.id);setSelectedCompany(id);setCollapsed(true);onExpand(true);
     if(co.office)map?.flyTo({center:co.office.coordinates,zoom:16,offset:[0,-70],duration:700});
     else map?.flyTo({center:city.coordinates,zoom:8.5,duration:700});
@@ -233,14 +250,21 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       <button aria-label="Zoom out" disabled={!map||zoom<=0.35} onClick={()=>map?.zoomOut()}>−</button>
       <button aria-label="Reset globe view" disabled={!map} onClick={resetView}>◎</button>
       <button aria-label={rotationEnabled?"Pause globe rotation":"Start globe rotation"} aria-pressed={rotationEnabled} onClick={()=>onRotationChange(!rotationEnabled)}>{rotationEnabled?"Ⅱ":"↻"}</button>
-      <button aria-label={expanded?"Exit expanded map":"Expand map"} onClick={()=>onExpand(!expanded)}>{expanded?"×":"⤢"}</button>
+      <button aria-label={embedded ? (expanded ? "Hide city results" : "Show city results") : (expanded ? "Exit expanded map" : "Expand map")} onClick={()=>onExpand(!expanded)}>{expanded?"×":"⤢"}</button>
     </div>
     {hover ? (
       <div
+        ref={hoverCardRef}
+        onMouseEnter={keepHover}
+        onMouseLeave={dismissHover}
+        onFocusCapture={keepHover}
+        onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) dismissHover(); }}
+        onKeyDown={e => { if (e.key === 'Escape') { keepHover(); setHover(null); } }}
         className={styles.hoverCard}
-        style={{ left: Math.min(hover.x + 14, (typeof window !== "undefined" ? window.innerWidth : 390) - 220), top: Math.max(8, hover.y - 72) }}
+        style={{ left: Math.max(8, Math.min(hover.x + 14, (map?.getContainer().clientWidth ?? 390) - 228)), top: Math.max(8, Math.min(hover.y - 72, (map?.getContainer().clientHeight ?? 600) - 130)) }}
         data-fold-hq-hover=""
-        role="status"
+        role="group"
+        aria-label={`${hover.name} preview`}
       >
         <LogoMark name={hover.name} logoUrl={hover.logoUrl ?? null} size={28} />
         <div className={styles.hoverBody}>
@@ -251,7 +275,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
             {hover.count && hover.count > 1 ? ` · ${hover.count.toLocaleString("en-US")} in city` : ""}
           </p>
           {hover.companyId ? (
-            <Link href={`/startup/${encodeURIComponent(hover.companyId)}?from=map`} className={styles.hoverLink}>Open record</Link>
+            <Link href={`/startup/${encodeURIComponent(hover.companyId)}?from=map`} className={styles.hoverLink} onClick={e => { if (onCompanySelect && hover.companyId) { e.preventDefault(); onCompanySelect(hover.companyId); keepHover(); setHover(null); } }}>Open record</Link>
           ) : null}
         </div>
       </div>
@@ -278,7 +302,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
         </div>
       </aside>
     ) : null}
-    {focused && <div className={styles.companyPreview} data-map-company-preview="">
+    {focused && !onCompanySelect && <div className={styles.companyPreview} data-map-company-preview="">
       <StartupCardPanel key={focused.id} id={focused.id} onClose={() => { setSelectedCompany(null); setCollapsed(false); }}>
       <details className={styles.locationDetail} data-company-location-detail="">
         <summary>Location &amp; address evidence</summary>
@@ -302,7 +326,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       </div><button aria-expanded={!collapsed} aria-label={collapsed?"Show startups in view":"Collapse startups in view"} onClick={()=>setCollapsed(v=>!v)}>{collapsed?"Show":"Hide"}</button></div>
       {!collapsed && <>
         <div className={styles.resultFilters} aria-label="Location precision">
-          <button aria-pressed={onlyAddresses} onClick={()=>{setOnlyAddresses(true);setLimit(24);}}>Address pins ({addressShown.length.toLocaleString("en-US")})</button>
+          <button aria-pressed={onlyAddresses} onClick={()=>{setOnlyAddresses(false);setLimit(24);}}>Address pins ({addressShown.length.toLocaleString("en-US")})</button>
           <button aria-pressed={!onlyAddresses} onClick={()=>{setOnlyAddresses(false);setLimit(24);}}>All companies ({allShown.length.toLocaleString("en-US")})</button>
         </div>
         {dockItems.length > 0 ? (

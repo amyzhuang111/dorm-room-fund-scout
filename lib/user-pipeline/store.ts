@@ -4,12 +4,12 @@
 // set, the API reports the store as unconfigured and the browser keeps entries
 // in localStorage.
 
+import { pipelineOwnerKey } from "./owner";
 import { parseState, type UserPipelineState } from "../domain/user-pipeline";
 
 type Sql = (strings: TemplateStringsArray, ...values: unknown[]) => PromiseLike<unknown>;
 
-const REDIS_KEY = "scout-user-pipeline";
-const ROW_ID = "default";
+// Old shared keys are deliberately never read or reassigned to an individual.
 
 export type PipelineBackend = "postgres" | "upstash";
 
@@ -64,17 +64,17 @@ async function ensureTable(sql: Sql) {
   `;
 }
 
-async function readPostgres(): Promise<UserPipelineState | null> {
+async function readPostgres(owner: string): Promise<UserPipelineState | null> {
   const url = postgresUrl();
   if (!url) return null;
   const sql = await sqlClient(url);
   await ensureTable(sql);
-  const rows = (await sql`SELECT payload FROM scout_user_pipeline WHERE id = ${ROW_ID}`) as { payload: string }[];
+  const rows = (await sql`SELECT payload FROM scout_user_pipeline WHERE id = ${pipelineOwnerKey(owner)}`) as { payload: string }[];
   if (!rows[0]?.payload) return null;
   return parseState(JSON.parse(rows[0].payload));
 }
 
-async function writePostgres(state: UserPipelineState): Promise<void> {
+async function writePostgres(owner: string, state: UserPipelineState): Promise<void> {
   const url = postgresUrl();
   if (!url) throw new Error("Postgres is not configured");
   const sql = await sqlClient(url);
@@ -82,7 +82,7 @@ async function writePostgres(state: UserPipelineState): Promise<void> {
   const payload = JSON.stringify(state);
   await sql`
     INSERT INTO scout_user_pipeline (id, payload, updated_at)
-    VALUES (${ROW_ID}, ${payload}, now())
+    VALUES (${pipelineOwnerKey(owner)}, ${payload}, now())
     ON CONFLICT (id) DO UPDATE SET payload = excluded.payload, updated_at = now()
   `;
 }
@@ -101,24 +101,24 @@ async function redisCommand(args: (string | number)[]): Promise<unknown> {
   return data.result;
 }
 
-async function readRedis(): Promise<UserPipelineState | null> {
-  const result = await redisCommand(["GET", REDIS_KEY]);
+async function readRedis(owner: string): Promise<UserPipelineState | null> {
+  const result = await redisCommand(["GET", `scout-user-pipeline:${pipelineOwnerKey(owner)}`]);
   if (typeof result !== "string" || !result) return null;
   return parseState(JSON.parse(result));
 }
 
-async function writeRedis(state: UserPipelineState): Promise<void> {
-  await redisCommand(["SET", REDIS_KEY, JSON.stringify(state)]);
+async function writeRedis(owner: string, state: UserPipelineState): Promise<void> {
+  await redisCommand(["SET", `scout-user-pipeline:${pipelineOwnerKey(owner)}`, JSON.stringify(state)]);
 }
 
-export async function readPipeline(): Promise<UserPipelineState | null> {
-  if (pipelineBackend() === "postgres") return readPostgres();
-  if (pipelineBackend() === "upstash") return readRedis();
+export async function readPipeline(owner: string): Promise<UserPipelineState | null> {
+  if (pipelineBackend() === "postgres") return readPostgres(owner);
+  if (pipelineBackend() === "upstash") return readRedis(owner);
   return null;
 }
 
-export async function writePipeline(state: UserPipelineState): Promise<void> {
-  if (pipelineBackend() === "postgres") return writePostgres(state);
-  if (pipelineBackend() === "upstash") return writeRedis(state);
+export async function writePipeline(owner: string, state: UserPipelineState): Promise<void> {
+  if (pipelineBackend() === "postgres") return writePostgres(owner, state);
+  if (pipelineBackend() === "upstash") return writeRedis(owner, state);
   throw new Error("No pipeline store is configured");
 }

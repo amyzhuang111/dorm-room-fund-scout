@@ -118,3 +118,26 @@
 @media (max-height: 600px) {
   .companyPreview { top: 8px; bottom: 8px; }
 }
+
+/* Embedded city exploration never covers the dashboard header or filters. */
+:global([data-map-embedded="true"]) .toolbar{top:58px;left:8px;width:calc(100% - 64px);flex-direction:row}
+:global([data-map-embedded="true"]) .toolbar :is(input,select){font-size:11px;height:34px;border-radius:7px}
+:global([data-map-embedded="true"]) .zoom{top:58px;right:8px;border-radius:8px;overflow:hidden}
+:global([data-map-embedded="true"]) .zoom button{width:34px;min-height:34px;font-size:18px}
+:global([data-map-embedded="true"]) .results{display:none;left:8px;right:8px;bottom:28px;max-height:42%;overflow:auto;border-radius:10px;background:#ffffffeb;backdrop-filter:blur(16px)}
+:global([data-map-embedded="true"]) .results .logoDock{display:none}
+:global([data-map-embedded="true"]) .mobileExplore,:global([data-map-embedded="true"]) .logoPeek{display:none}
+:global([data-map-embedded="true"]) .hoverCard{background:#ffffffef;backdrop-filter:blur(16px);border-radius:10px}
+@media(max-width:767px){
+  :global([data-map-embedded="true"]) .toolbar{top:41px;width:calc(100% - 50px);left:0;gap:4px}
+  :global([data-map-embedded="true"]) .toolbar label:first-child{display:none}
+  :global([data-map-embedded="true"]) .toolbar select{height:30px;font-size:11px;max-width:165px}
+  :global([data-map-embedded="true"]) .zoom{top:78px;right:0;display:flex}
+  :global([data-map-embedded="true"]) .zoom button{width:29px;min-height:29px;border-bottom:0;border-right:1px solid #dce3f1}
+  :global([data-map-embedded="true"]) .results{display:none}
+  :global([data-map-embedded="true"][data-map-expanded="true"]) .results{display:block;bottom:24px;max-height:calc(100% - 116px);padding:4px 6px;left:0;right:0}
+  :global([data-map-embedded="true"]) .resultHeading h3{font-size:11px;line-height:16px}
+  :global([data-map-embedded="true"]) .resultHeading p,:global([data-map-embedded="true"]) .dbCta{display:none}
+}
+
+:global([data-map-embedded="true"][data-map-expanded="true"]) .results{display:block}
