@@ -46,11 +46,36 @@ try {
     await directory.click();
     await page.waitForURL(/\/companies\?.*stage=Seed/);
     await page.getByRole('heading', { name: 'Companies', exact: true }).waitFor();
+    await page.goto(`${origin}/directories/lse`);
+    await page.getByRole('heading', { name: 'Venture benchmarks' }).waitFor();
+    const lseCards = page.getByRole('list', { name: 'LSE venture rankings', exact: true }).locator(':scope > li');
+    assert.equal(await lseCards.count(), 142);
+    assert.equal(new Set(await lseCards.locator('a[href^="/startup/"]').evaluateAll(links => links.map(a => a.getAttribute('href')))).size, 142, 'Each directory company appears once');
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'LSE directory fits mobile and desktop');
+    await page.getByLabel('Benchmark tier', { exact: true }).selectOption('B');
+    await page.getByRole('button', { name: 'Apply', exact: true }).click();
+    await page.waitForURL(/tier=B/);
+    assert.equal(await page.getByRole('list', { name: 'LSE venture rankings', exact: true }).locator(':scope > li').count(), 6);
+    const lseDownloadPromise = page.waitForEvent('download');
+    await page.getByRole('link', { name: 'Export this view as CSV', exact: true }).click();
+    const lseDownload = await lseDownloadPromise;
+    const lseStream = await lseDownload.createReadStream();
+    let lseCsv = '';
+    for await (const chunk of lseStream) lseCsv += chunk;
+    assert.equal(lseCsv.trim().split('\r\n').length, 7, 'CSV contains exactly six filtered companies plus header');
+    await page.getByRole('list', { name: 'LSE venture rankings', exact: true }).locator(':scope > li').first().getByText('Ratings & source evidence', { exact: true }).click();
+    await page.getByRole('list', { name: 'LSE venture rankings', exact: true }).locator(':scope > li').first().getByRole('link', { name: 'Public company profile', exact: true }).waitFor();
+    await page.getByRole('list', { name: 'LSE venture rankings', exact: true }).locator(':scope > li').first().locator('a[href^="/startup/"]').click();
+    await page.waitForURL(/\/startup\//);
+    await page.getByText('Seven-factor breakdown', { exact: true }).first().waitFor();
     await context.close();
   }
   const page = await browser.newPage();
   await page.goto(`${origin}/signals/sources?q=LSE`);
   await page.getByRole('link', { name: 'https://startbook.app/events/lse/ventures', exact: true }).waitFor();
+  await page.getByRole('link', { name: 'LSE directory · reviewed companies and benchmarks →', exact: true }).click();
+  await page.waitForURL(/\/directories\/lse/);
+  await page.getByRole('heading', { name: 'Venture benchmarks' }).waitFor();
   console.log(`Stage browser checks passed: ${seed.length} Seed companies, ${expectedFounders} founders, desktop/mobile control, CSV and directory URL, LSE source link.`);
 } finally {
   await browser?.close();

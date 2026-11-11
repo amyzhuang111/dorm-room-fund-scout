@@ -55,5 +55,6 @@ assert.equal(csv.trim().split('\n').length,2);
 const source=SOURCE_CATALOGUE.find(s=>s.id==='cat_lse-startbook-ventures');
 assert.equal(source?.url,'https://startbook.app/events/lse/ventures');
 assert.equal(source?.campus,'univ_lse');
-assert.equal(source?.status,'unconfigured');
+assert.equal(source?.status,'implemented');
+assert.equal(source?.dbSourceId,'src_lse_startbook');
 console.log('Funding-stage checks passed: normalization, stage evidence, counts, URL continuity, founder scope, CSV, LSE registry.');

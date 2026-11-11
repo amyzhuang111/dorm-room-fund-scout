@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Link from "next/link";
 import { Suspense, type ReactNode } from "react";
@@ -14,18 +13,18 @@ import { absoluteDate } from "@/lib/domain/relative-time";
 import "./globals.css";
 import "./company-workspace.css";
 
-const geist = Geist({
+const geist = localFont({
+  src: "../public/fonts/geist-variable.woff2",
   variable: "--font-geist",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: "400 600",
   display: "swap",
   preload: true,
 });
 
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+  src: "../public/fonts/geist-mono-variable.woff2",
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400 500",
   display: "swap",
   preload: true,
 });
@@ -53,10 +52,10 @@ const display = localFont({
 
 
 
-/** 085e0c0 Google Fraunces — fold + campuses display headings only (r32). */
-const displayClassic = Fraunces({
+/** Self-hosted Fraunces — fold + campuses display headings only (r32). */
+const displayClassic = localFont({
+  src: "../public/fonts/fraunces-latin-600.woff2",
   variable: "--font-display-classic",
-  subsets: ["latin"],
   weight: "600",
   display: "swap",
   preload: false,

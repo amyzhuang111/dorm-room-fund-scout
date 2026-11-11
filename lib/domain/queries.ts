@@ -1049,6 +1049,7 @@ export interface AssessmentHistoryRow {
   qualityScore: number | null;
   ratings: Record<string, number | null>;
   notes: string;
+  evidenceSourceUrl?: string;
 }
 
 export function listAssessmentHistory(projectId: string): AssessmentHistoryRow[] {
@@ -1075,6 +1076,7 @@ export function listAssessmentHistory(projectId: string): AssessmentHistoryRow[]
     qualityScore: r.quality_score,
     ratings: JSON.parse(r.ratings_json),
     notes: (JSON.parse(r.rationale_json || "{}").notes as string) || "",
+    evidenceSourceUrl: (JSON.parse(r.rationale_json || "{}").sourceUrl as string) || undefined,
   }));
 }
 
