@@ -31,6 +31,7 @@ const CAMPUS_LABEL: Record<string, string> = {
   univ_stanford: "Stanford",
   univ_mit: "MIT",
   univ_waterloo: "Waterloo",
+  univ_lse: "LSE",
 };
 
 export function SourceCardView({ card, compact, typedCounts }: { card: SourceCardData; compact?: boolean; typedCounts?: SourceTypedCounts }) {
@@ -121,7 +122,7 @@ export function SourceCardView({ card, compact, typedCounts }: { card: SourceCar
             )}
           </>
         )}
-        {!card.live && card.url.startsWith("http") && (
+        {card.url.startsWith("http") && (
           <a href={card.url} target="_blank" rel="noopener noreferrer" className="text-link underline">
             {card.url}
           </a>

@@ -73,6 +73,9 @@ try {
   const page = await browser.newPage();
   await page.goto(`${origin}/signals/sources?q=LSE`);
   await page.getByRole('link', { name: 'https://startbook.app/events/lse/ventures', exact: true }).waitFor();
+  await page.getByRole('link', { name: 'LSE directory · reviewed companies and benchmarks →', exact: true }).click();
+  await page.waitForURL(/\/directories\/lse/);
+  await page.getByRole('heading', { name: 'Venture benchmarks' }).waitFor();
   console.log(`Stage browser checks passed: ${seed.length} Seed companies, ${expectedFounders} founders, desktop/mobile control, CSV and directory URL, LSE source link.`);
 } finally {
   await browser?.close();
