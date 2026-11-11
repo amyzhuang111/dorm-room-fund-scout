@@ -1,4 +1,5 @@
 /** Facet helpers for the sample instrument. Counts come from stored directory cards only. */
+import { matchesFundingStage } from "./funding-stage";
 import { matchesSector, sectorIdsOf, sectorLabelsOf, sectorLabel } from "./sectors";
 import { companyMatchesCampus, companyCampusIds } from "./campus-membership";
 
@@ -308,7 +309,7 @@ export function filterFacetCompanies(
       return false;
     }
     if (opts.kind && company.signalKind !== opts.kind) return false;
-    if (opts.stage && company.stage !== opts.stage) return false;
+    if (!matchesFundingStage(company.stage, opts.stage)) return false;
     if (opts.campus && !companyMatchesCampus(company, opts.campus)) return false;
     if (opts.recency && recencyOf(company.latestSignalAt, today) !== opts.recency) return false;
     if (opts.yearMissing) {

@@ -3,6 +3,7 @@
  * Keys: q, sector, kind, campus, stage, status, flag, year, hq, country, recency,
  *       sectorMissing, yearMissing, sort, feed, more, c (selected company).
  */
+import { stageFilter, fundingStageLabel } from "./funding-stage";
 import type { DirectorySort } from "./directory";
 import {
   type FlagId,
@@ -77,7 +78,7 @@ export function facetsFromSearchParams(
   const sector = get("sector")?.trim() || null;
   const kind = get("kind")?.trim() || null;
   const campus = get("campus")?.trim() || null;
-  const stage = get("stage")?.trim() || null;
+  const stage = stageFilter(get("stage")) || null;
   const statusRaw = get("status")?.trim()?.toLowerCase() || null;
   const status = statusRaw && STATUS_OK.has(statusRaw) ? (statusRaw as StatusId) : null;
   const flagRaw = get("flag")?.trim()?.toLowerCase() || null;
@@ -186,7 +187,7 @@ export function activeFacetChips(
     });
   }
   if (facets.stage) {
-    chips.push({ key: "stage", label: labels.stage ?? facets.stage, clear: { stage: null } });
+    chips.push({ key: "stage", label: labels.stage ?? fundingStageLabel(facets.stage), clear: { stage: null } });
   }
   if (facets.sector || facets.sectorMissing) {
     chips.push({

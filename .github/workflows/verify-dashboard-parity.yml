@@ -2,6 +2,16 @@ name: Verify dashboard and SQL migration
 on:
   pull_request:
     paths:
+      - 'lib/domain/funding-stage*'
+      - 'lib/domain/scout-workspace*'
+      - 'lib/domain/sample-facets.ts'
+      - 'lib/domain/facet-url.ts'
+      - 'lib/domain/directory.ts'
+      - 'lib/domain/source-quality.ts'
+      - 'components/sample-instrument.tsx'
+      - 'scripts/verify-stage-filters.mjs'
+      - 'app/sources/page.tsx'
+      - 'data/discovery/directories.json'
       - 'components/campus-workspace*'
       - 'components/company-location*'
       - 'components/tile-globe.tsx'
@@ -26,5 +36,16 @@ jobs:
       - run: npm ci
       - run: npm run test:postgres-migration
       - run: npm run test:pipeline-owner
+      - run: node --import tsx lib/domain/funding-stage.test.ts
+      - run: node --import tsx lib/domain/scout-workspace.test.ts
       - run: npx tsc --noEmit
       - run: npx eslint components/campus-workspace.tsx components/company-location-layer.tsx components/scout-icon.tsx components/site-nav.tsx components/tile-globe.tsx lib/user-pipeline/owner.ts lib/user-pipeline/store.ts app/api/user-pipeline/route.ts scripts/postgres/*.ts
+
+      - run: cp data/campus-universe.db /tmp/campus-stage-ci.db
+      - run: npm run build
+        env:
+          CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-stage-ci.db
+      - run: npx playwright install --with-deps chromium
+      - run: node scripts/verify-stage-filters.mjs
+        env:
+          CAMPUS_UNIVERSE_DB_PATH: /tmp/campus-stage-ci.db

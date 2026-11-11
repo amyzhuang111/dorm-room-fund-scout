@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { preferredFundingStage, fundingStageSortRank } from "./funding-stage";
 import { companyMatchesCampus } from "./campus-membership";
 import path from "node:path";
 import { databaseStamp, getDb } from "../db/client";
@@ -63,17 +64,6 @@ export interface DirectoryData {
   kinds: DirectoryFilter[];
 }
 
-const STAGE_LABEL: Record<string, string> = {
-  "pre-seed": "Pre-seed",
-  "pre-seed / student project": "Pre-seed / student project",
-  seed: "Seed",
-  "series a": "Series A",
-  "series b": "Series B",
-  "series c": "Series C",
-  venture: "Venture",
-  accelerator: "Accelerator",
-};
-
 const SIGNAL_LABEL = {
   funding: "Funding",
   launch: "Launch",
@@ -84,7 +74,7 @@ const SIGNAL_LABEL = {
 const DIRECTORY_LIMIT = 14;
 const LEADERBOARD_LIMIT = 14;
 const LOGO_FACT_KEYS = new Set(["logo", "favicon", "logo_url", "favicon_url"]);
-const STAGE_ORDER = ["Accelerator", "Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
+
 
 export type DirectorySort = "rank" | "name" | "recent" | "stage";
 
@@ -172,12 +162,6 @@ function oneLine(text: string): string {
   const space = cut.lastIndexOf(" ");
   return space > 60 ? cut.slice(0, space) : cut;
 }
-
-function stageLabel(raw: string | null): string | null {
-  if (!raw) return null;
-  return STAGE_LABEL[raw.trim().toLowerCase()] ?? null;
-}
-
 
 function hqRegionOf(raw: string | null | undefined): string | null {
   if (!raw) return null;
@@ -270,11 +254,10 @@ function buildDirectoryFromDbUncached(options: { includeAll?: boolean } = {}): D
   for (const row of db
     .prepare(`SELECT project_id, detail_json FROM company_facts WHERE fact_key = 'funding_round'`)
     .all() as { project_id: string; detail_json: string | null }[]) {
-    if (stageByProject.has(row.project_id)) continue;
     let stage: string | null = null;
     try {
       const detail = JSON.parse(row.detail_json || "{}") as { stage?: unknown };
-      if (typeof detail.stage === "string") stage = stageLabel(detail.stage);
+      if (typeof detail.stage === "string") stage = preferredFundingStage(stageByProject.get(row.project_id), detail.stage);
     } catch {
       stage = null;
     }
@@ -602,12 +585,7 @@ export function sortDirectory(cards: DirectoryCard[], sort: DirectorySort): Dire
     return copy;
   }
   if (sort === "stage") {
-    const rank = (stage: string | null) => {
-      if (!stage) return STAGE_ORDER.length + 1;
-      const index = STAGE_ORDER.indexOf(stage);
-      return index === -1 ? STAGE_ORDER.length : index;
-    };
-    copy.sort((a, b) => rank(a.stage) - rank(b.stage) || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+    copy.sort((a, b) => fundingStageSortRank(a.stage) - fundingStageSortRank(b.stage) || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
     return copy;
   }
   if (sort === "recent") {

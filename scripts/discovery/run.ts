@@ -11,7 +11,7 @@ const option=(flag:string)=>{const i=args.indexOf(flag);return i<0?'':args[i+1]?
 const required=(flag:string)=>{const value=option(flag);if(!value || value.startsWith('--'))throw Error(`${flag} is required`);return value;};
 const read=(file:string)=>JSON.parse(fs.readFileSync(file,'utf8'));
 const write=(file:string,value:unknown)=>{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,typeof value==='string'?value:JSON.stringify(value,null,2)+'\n');};
-const config=read('data/discovery/paths.json');
+const config={...read('data/discovery/paths.json'),directories:read('data/discovery/directories.json')};
 if(command==='plan') {
   const plan={...config,generatedAt:new Date().toISOString(),paths:config.paths.map((p:{query:string})=>({...p,searchUrl:`https://www.google.com/search?q=${encodeURIComponent(p.query)}`}))};
   if(option('--out'))write(option('--out'),plan); else console.log(JSON.stringify(plan,null,2));
