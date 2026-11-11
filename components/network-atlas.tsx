@@ -20,7 +20,7 @@ export function NetworkAtlas() {
   const [data, setData] = useState<AtlasData | null>(null),
     [error, setError] = useState("");
   const [path, setPath] = useState<string[]>([]),
-    [mode, setMode] = useState<"geography" | "networks">("geography");
+    [mode, setMode] = useState<"geography" | "networks">("networks");
   const [basis, setBasis] = useState<"campus" | "headquarters">("campus");
   const [colorBy, setColorBy] = useState<"continent" | "country" | "campus">(
     "campus",
