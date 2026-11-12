@@ -71,14 +71,26 @@
 .dbCta a { color: #2f4fd8; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; min-height: 28px; display: inline-flex; align-items: center; }
 .logoDock { display: flex; flex-wrap: wrap; gap: 4px; max-height: 88px; overflow-y: auto; overscroll-behavior: contain; margin: 6px 0 4px; padding: 2px; }
 .logoChip { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 52px; min-height: 52px; padding: 4px 2px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; pointer-events: auto; }
-.logoChip span { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 8px; line-height: 10px; color: #162039; text-align: center; }
+.logoChip { flex-direction: row; width: auto; max-width: 100%; min-height: 32px; gap: 6px; padding: 4px 8px; background: #FFFBF6; border-color: #F0D7C2; }
+.logoChip span { width: auto; overflow: visible; white-space: normal; overflow-wrap: anywhere; font-size: 12px; line-height: 14px; color: #2A1A10; text-align: left; }
+.zoom, .hoverCard, .toolbar, .results, .logoPeek, .companyPreview { display: none !important; }
+:global([data-map-expanded="true"]) .zoom { display: grid !important; }
+:global([data-map-expanded="true"]) .hoverCard { display: flex !important; }
+:global([data-map-expanded="true"]) .toolbar { display: flex !important; }
+:global([data-map-expanded="true"]) .results, :global([data-map-expanded="true"]) .companyPreview { display: block !important; }
+:global([data-map-expanded="true"]) .results { top: 64px; bottom: 16px; left: auto; right: 12px; width: min(340px, calc(100% - 24px)); max-height: none; overflow: auto; background: #FFFBF6; border-color: #F0D7C2; color: #2A1A10; }
+:global([data-map-expanded="true"]) .toolbar { top: 12px; left: 12px; width: min(520px, calc(100% - 380px)); }
+@media (max-width: 700px) {
+  :global([data-map-expanded="true"]) .results { top: auto; left: 8px; right: 8px; bottom: 12px; width: auto; max-height: 42%; }
+  :global([data-map-expanded="true"]) .toolbar { width: calc(100% - 64px); }
+}
 .logoChip[aria-pressed="true"] { border-color: #2f4fd8; background: #e8ecfa; }
 .logoChip:hover { border-color: #2f4fd8; }
 .cardTitle { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; min-width: 0; }
 .cardTitle a { min-height: 24px; font-weight: 650; color: #2f4fd8; overflow-wrap: anywhere; }
 .hoverCard { position: absolute; z-index: 40; display: flex; gap: 8px; width: min(220px, calc(100% - 24px)); padding: 8px 10px; border: 1px solid #c5cfe7; border-radius: 4px; background: #fff; box-shadow: 0 4px 16px #24304b18; pointer-events: auto; }
 .hoverBody { min-width: 0; }
-.hoverName { margin: 0; font-size: 13px; font-weight: 650; line-height: 16px; color: #0b0e17; }
+.hoverName { margin: 0; font-size: 13px; font-weight: 650; line-height: 16px; color: #2A1A10; overflow-wrap: anywhere; }
 .hoverMeta { margin: 2px 0 0; font-size: 11px; line-height: 14px; color: #53617b; }
 .hoverLink { display: inline-flex; margin-top: 4px; min-height: 24px; align-items: center; font-size: 11px; font-weight: 600; color: #2f4fd8; text-decoration: underline; text-underline-offset: 2px; }
 .logoPeek { display: none; }

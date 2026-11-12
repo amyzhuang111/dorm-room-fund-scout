@@ -26,8 +26,8 @@ function host(url: string): string {
 /** Switch between the vetted company list and the labeled unverified list. */
 export function CompanySetToggle({ vetted, unverified, active }: { vetted: number; unverified: number; active: "vetted" | "unverified" }) {
   const base = "inline-flex min-h-10 items-center rounded-md border px-3 text-sm font-medium";
-  const on = "border-[color:var(--cobalt)] bg-[color:var(--cobalt)] text-white";
-  const off = "border-[color:var(--line)] bg-white text-[color:var(--fg-2)] hover:border-[color:var(--cobalt)]";
+  const on = "border-[#E85D04] bg-[#E85D04] text-[#FFF4E8]";
+  const off = "border-[color:var(--line)] bg-[color:var(--bg-raised,#FFFBF6)] text-[color:var(--fg-2)] hover:border-[#E85D04]";
   return (
     <nav aria-label="Company set" className="mx-auto flex max-w-[1100px] flex-wrap items-center gap-2 px-3 pt-4 sm:px-6" data-company-set-toggle="">
       <Link href="/companies" aria-current={active === "vetted" ? "page" : undefined} className={`${base} ${active === "vetted" ? on : off}`}>
@@ -47,7 +47,7 @@ export function unverifiedTotal(): number {
 function CompanyRow({ c }: { c: UnverifiedCompany }) {
   const shown = c.campuses.slice(0, 3);
   return (
-    <li className="rounded-lg border border-[color:var(--line)] bg-white px-4 py-3" data-unverified-company="">
+    <li className="rounded-lg border border-[color:var(--line)] bg-[color:var(--bg-raised,#FFFBF6)] px-4 py-3" data-unverified-company="">
       <div className="flex flex-wrap items-center gap-2">
         <Link href={`/startup/${c.id}`} className="text-[15px] font-semibold text-[color:var(--fg)] hover:underline">
           {c.name}
@@ -63,7 +63,7 @@ function CompanyRow({ c }: { c: UnverifiedCompany }) {
           {c.campuses.length > shown.length ? ` · +${c.campuses.length - shown.length} more` : ""}
         </p>
       ) : null}
-      {c.description ? <p className="mt-1.5 line-clamp-2 text-[13px] leading-5 text-[color:var(--fg-2)]">{c.description}</p> : null}
+      {c.description ? <p className="mt-1.5 break-words text-[13px] leading-5 text-[color:var(--fg-2)]">{c.description}</p> : null}
       <p className="mt-1.5 text-xs text-[color:var(--fg-3)]">
         {c.people.length > 0 ? (
           <>
