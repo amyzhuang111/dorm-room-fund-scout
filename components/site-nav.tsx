@@ -41,7 +41,7 @@ export function SiteNav() {
   }
 
   return (
-    <div className="border-b border-line bg-[#FFFFFF]" data-site-nav="merged">
+    <div className="border-b border-line bg-[color:var(--bg,#FFF4E8)]" data-site-nav="merged">
       <div className="flex min-h-12 items-center gap-3 px-3 pt-[env(safe-area-inset-top)] sm:gap-4 sm:px-5">
         <Link href="/" className="wordmark inline-flex min-h-11 shrink-0 items-center"><span className="mark" aria-hidden />Campus Scout</Link>
         <nav className="ml-2 hidden min-w-0 items-center gap-3 lg:flex" aria-label="Primary">
