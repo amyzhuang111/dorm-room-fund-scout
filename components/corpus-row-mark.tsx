@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { DrawnMark, imageIsFlat } from "./drawn-mark";
 
-/** Mobile corpus mark: verified local logo when provided, else monogram. Never hotlink. */
+/** Corpus mark: a stored local logo, or a drawn seal when the file is missing or blank. */
 export function CorpusRowMark({
   name,
   website,
@@ -14,7 +15,6 @@ export function CorpusRowMark({
 }) {
   void website;
   const src = logoUrl && logoUrl.startsWith("/") ? logoUrl : null;
-  const initial = (name.trim()[0] || "?").toUpperCase();
   const [ok, setOk] = useState(Boolean(src));
   if (src && ok) {
     return (
@@ -27,17 +27,12 @@ export function CorpusRowMark({
         loading="lazy"
         decoding="async"
         className="c-logo"
-        onLoad={(e) => {
-          const img = e.currentTarget;
-          if (img.naturalWidth <= 16 && img.naturalHeight <= 16) setOk(false);
+        onLoad={(event) => {
+          if (imageIsFlat(event.currentTarget)) setOk(false);
         }}
         onError={() => setOk(false)}
       />
     );
   }
-  return (
-    <span className="c-mono" aria-hidden data-logo-fallback="seal">
-      {initial}
-    </span>
-  );
+  return <DrawnMark name={name} className="c-mono h-7 w-7" />;
 }

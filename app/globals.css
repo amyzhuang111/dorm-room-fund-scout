@@ -482,55 +482,55 @@ a, button {
 }
 
 
-/* Sample Halflight daylight: force true white on document while sample is open (nav included). Cobalt ink; no cream or orange. */
+/* Cream page, orange accent. The home disk uses the same pair. */
 html[data-sample="halflight"],
 html[data-sample="halflight"] body {
-  --bg: #FFFFFF;
-  --bg-raised: #FFFFFF;
-  --bg-sunken: #F3F5F9;
-  --fg: #0B0E17;
-  --fg-2: #3F465C;
-  --fg-3: #5C647A;
-  --line: #E1E5EF;
-  --line-strong: #C5CAD8;
-  --cobalt: #2F4FD8;
-  --cobalt-haze: #E8ECFA;
-  --link: #2F4FD8;
-  --ember: #2F4FD8;
-  --amber: #2F4FD8;
-  --accent: #2F4FD8;
-  --accent-foreground: #FFFFFF;
-  --on-ember: #FFFFFF;
-  --accent-2: #2F4FD8;
-  --accent-subtle: #E8ECFA;
-  --background: #FFFFFF;
-  --surface: #FFFFFF;
-  --surface-2: #F3F5F9;
-  --foreground: #0B0E17;
-  --muted: #3F465C;
-  --border-c: #E1E5EF;
-  color: #0B0E17;
-  background: #FFFFFF;
+  --bg: #FFF4E8;
+  --bg-raised: #FFFBF6;
+  --bg-sunken: #FFE8D2;
+  --fg: #2A1A10;
+  --fg-2: #5C4030;
+  --fg-3: #8A6854;
+  --line: #F0D7C2;
+  --line-strong: #E7C9A8;
+  --cobalt: #9A3412;
+  --cobalt-haze: #FFE8D2;
+  --link: #9A3412;
+  --ember: #E85D04;
+  --amber: #C2410C;
+  --accent: #E85D04;
+  --accent-foreground: #FFF4E8;
+  --on-ember: #FFF4E8;
+  --accent-2: #E85D04;
+  --accent-subtle: #FFE8D2;
+  --background: #FFF4E8;
+  --surface: #FFFBF6;
+  --surface-2: #FFE8D2;
+  --foreground: #2A1A10;
+  --muted: #5C4030;
+  --border-c: #F0D7C2;
+  color: #2A1A10;
+  background: #FFF4E8;
 }
 
-/* Sample product: Halflight daylight - true white field, cobalt ink only, campus seals. Not YCGlobe cream or orange. */
+/* Companies and Data use the same cream field as the home disk. */
 .sample-paper {
-  --bg: #FFFFFF;
-  --bg-raised: #FFFFFF;
-  --bg-sunken: #F3F5F9;
-  --fg: #0B0E17;
-  --fg-2: #3F465C;
-  --fg-3: #5C647A;
-  --line: #E1E5EF;
-  --line-strong: #C5CAD8;
-  --cobalt: #2F4FD8;
-  --cobalt-haze: #E8ECFA;
-  --link: #2F4FD8;
-  --ember: #2F4FD8;
-  --amber: #2F4FD8;
-  --accent: #2F4FD8;
-  --accent-foreground: #FFFFFF;
-  --on-ember: #FFFFFF;
+  --bg: #FFF4E8;
+  --bg-raised: #FFFBF6;
+  --bg-sunken: #FFE8D2;
+  --fg: #2A1A10;
+  --fg-2: #5C4030;
+  --fg-3: #8A6854;
+  --line: #F0D7C2;
+  --line-strong: #E7C9A8;
+  --cobalt: #9A3412;
+  --cobalt-haze: #FFE8D2;
+  --link: #9A3412;
+  --ember: #E85D04;
+  --amber: #C2410C;
+  --accent: #E85D04;
+  --accent-foreground: #FFF4E8;
+  --on-ember: #FFF4E8;
   --background: var(--bg);
   --surface: var(--bg-raised);
   --surface-2: var(--bg-sunken);
@@ -639,9 +639,9 @@ html[data-sample="halflight"] body {
   font-feature-settings: "tnum" 1;
 }
 .sample-paper .campus-seal {
-  border-color: var(--cobalt, #2F4FD8);
-  color: var(--cobalt, #2F4FD8);
-  background: #FFFFFF;
+  border-color: var(--ember, #E85D04);
+  color: #9A3412;
+  background: #FFFBF6;
 }
 
 
@@ -1132,9 +1132,18 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-a {
     display: block;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  [data-corpus-cards] .c-m,
+  [data-corpus-cards] .c-fund {
+    max-width: none;
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -1784,17 +1793,56 @@ details:not([open]) > :not(summary) {
 }
 
 
-/* r55: company white shell + opaque site chrome (no cream around mobile dossier) */
 html[data-sample="halflight"] header[data-site-chrome],
 html[data-sample="halflight"] [data-site-nav] {
-  background: #FFFFFF !important;
+  background: #FFF4E8 !important;
 }
 [data-company-shell="white"] {
-  background: #FFFFFF !important;
-  color: #0B0E17;
+  background: #FFF4E8 !important;
+  color: #2A1A10;
 }
 [data-company-product-chrome] {
-  background: #FFFFFF !important;
+  background: #FFFBF6 !important;
+}
+
+.globe-stage {
+  container-type: size;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  overflow: visible;
+  border: 0;
+}
+.globe-disk {
+  position: relative;
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #FFF4E8;
+  box-shadow: 0 16px 36px rgba(120, 48, 8, 0.14);
+}
+.globe-disc {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: radial-gradient(circle at 38% 36%, #FFB067 0%, #F08A3A 42%, #E06A18 100%);
+}
+.globe-disk .maplibregl-ctrl-attrib,
+.globe-disk .maplibregl-ctrl-bottom-left,
+.globe-disk .maplibregl-ctrl-bottom-right {
+  display: none !important;
+}
+[data-home-rail] strong,
+[data-home-schools] button,
+[data-card-facts],
+[data-corpus-cards] .c-a,
+[data-corpus-cards] td {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  overflow-wrap: break-word;
 }
 
 

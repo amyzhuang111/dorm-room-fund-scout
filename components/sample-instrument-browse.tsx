@@ -1469,9 +1469,9 @@ function LedgerRow({
     <div
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
-      className={`group flex min-h-11 items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
-        ranked ? "gap-2 py-2.5 sm:gap-2.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2 py-2 sm:gap-3 sm:py-3"
-      } ${selected ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55 ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/35" : ""}`}
+      className={`group flex items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#FFE8D2)]/40 sm:px-3 ${
+        ranked ? "gap-2 py-1.5" : "gap-2 py-1.5"
+      } ${selected ? "bg-[color:var(--cobalt-haze,#FFE8D2)]/55 ring-1 ring-inset ring-[color:var(--ember,#E85D04)]/35" : ""}`}
     >
       {rank != null ? (
         <span
@@ -1487,7 +1487,7 @@ function LedgerRow({
       {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
       {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
       {card.logoUrl ? (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
@@ -1502,33 +1502,24 @@ function LedgerRow({
           </>
         )
       ) : (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       )}
       <div className="min-w-0 flex-1">
         <p
           className={
-            ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
+            "break-words text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#2A1A10)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#E85D04)] lg:group-hover:underline"
           }
         >
-          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center">{card.name}</Link>
+          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline">{card.name}</Link>
         </p>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
+          <p className="text-[12px] leading-4 text-[color:var(--fg-2,#5C4030)] break-words">
             {subtitle}
           </p>
         ) : null}
-        {why ? (
-          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
-            <span className="mt-0.5 block">{why}</span>
-          </p>
-        ) : (
-          <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
-        )}
+        <p className="sr-only" data-why-here="" data-why-blank={why ? undefined : "1"}>{why || "Why it is here is blank"}</p>
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+          <p className="font-mono text-[11px] tabular-nums leading-4 text-[color:var(--fg-3,#8A6854)] break-words" data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>
@@ -1555,7 +1546,7 @@ function LedgerRow({
                 type="button"
                 title={founder.name}
                 aria-label={`${founder.name} on LinkedIn`}
-                className="inline-flex h-11 min-h-11 min-w-11 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex items-center gap-1 rounded-sm border border-[color:var(--line,#F0D7C2)] bg-[color:var(--bg-raised,#FFFBF6)] px-1.5 py-0.5 font-mono text-[11px] font-semibold text-[color:var(--ember,#E85D04)]"
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -1563,7 +1554,7 @@ function LedgerRow({
                 }}
               >
                 in
-                <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
+                <span className="break-words font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#2A1A10)]">{founder.name}</span>
               </button>
             ))}
           </span>
