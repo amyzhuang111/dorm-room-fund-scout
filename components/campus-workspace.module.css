@@ -93,12 +93,12 @@
   .topline .eyebrow,.topline .viewModes{display:none}
   .topline{padding:6px 10px}
   .topline h1{font-size:18px;margin:0}
-  .stage{grid-template-rows:248px minmax(0,1fr)!important}
+  .stage{grid-template-rows:200px minmax(0,1fr)!important}
   .rightRail{display:none!important}
   .primaryFilters{gap:4px;padding:0 8px 4px}
   .primaryFilters select{min-height:30px;font-size:10px}
   .schoolStrip{padding:0 8px 4px}
   .founderRow{padding:4px 8px}
-  .resultTools button{display:none}
+  .resultTools button{min-height:28px;font-size:11px}
   .map :global([data-fold-desk-map])>h2 button{min-height:32px!important;padding:4px 8px!important;font-size:12px!important}
 }
