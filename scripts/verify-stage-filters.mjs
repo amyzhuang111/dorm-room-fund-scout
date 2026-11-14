@@ -40,7 +40,10 @@ try {
     const stream = await download.createReadStream();
     let csv = '';
     for await (const chunk of stream) csv += chunk;
-    for (const company of seed) assert.ok(csv.includes(company.name.replaceAll('"', '""')), `CSV includes ${company.name}`);
+    assert.ok(csv.includes('Founder'), 'Home export is the founder list');
+    const linked = founders.filter(f => [...(f.companyIds ?? []), f.companyId].some(id => seedIds.has(id)));
+    assert.ok(linked.length > 0, 'Seed companies have indexed founders');
+    assert.ok(csv.includes(linked[0].name), `CSV includes ${linked[0].name}`);
     const directory = page.getByRole('link', { name: 'Full directory ↗', exact: true });
     assert.ok((await directory.getAttribute('href')).includes('stage=Seed'));
     await directory.click();

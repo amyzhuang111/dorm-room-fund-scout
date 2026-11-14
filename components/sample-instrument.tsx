@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { fundingStageBuckets } from "@/lib/domain/funding-stage";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { DrawnMark, imageIsFlat } from "./drawn-mark";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { companyCampusIds } from "@/lib/domain/campus-membership";
 import { CampusSeal } from "@/components/campus-seal";
@@ -293,25 +294,7 @@ export function companyInitials(name: string): string {
 }
 
 function NeutralMark({ name, cls }: { name: string; cls: string }) {
-  const initials = companyInitials(name).slice(0, 2);
-  const text =
-    cls.includes("h-11") || cls.includes("h-12")
-      ? "text-[12px]"
-      : cls.includes("h-9") || cls.includes("h-7")
-        ? "text-[11px]"
-        : cls.includes("h-6")
-          ? "text-[10px]"
-          : "text-[8px]";
-  return (
-    <span
-      className={`${cls} grid shrink-0 place-items-center rounded-full border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono ${text} font-bold tracking-tight text-[color:var(--cobalt,#2F4FD8)]`}
-      aria-hidden
-      title={name}
-      data-logo-fallback="seal"
-    >
-      {initials}
-    </span>
-  );
+  return <DrawnMark name={name} className={`${cls} shrink-0`} />;
 }
 
 export function LogoMark({
@@ -338,11 +321,10 @@ export function LogoMark({
         height={size}
         loading="lazy"
         decoding="async"
-        className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain p-0.5`}
+        className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFBF6)] object-contain p-0.5`}
         onError={() => setOk(false)}
         onLoad={(e) => {
-          // Tiny/blank stub tiles → cobalt seal monogram.
-          if (e.currentTarget.naturalWidth <= 16) setOk(false);
+          if (imageIsFlat(e.currentTarget)) setOk(false);
         }}
       />
     );
@@ -364,7 +346,6 @@ export function LogoPill({
   void mark;
   const src = logoUrl && logoUrl.startsWith("/") ? logoUrl : null;
   const [ok, setOk] = useState(Boolean(src));
-  const initials = companyInitials(name).slice(0, 2);
   return (
     <Link
       href={href}
@@ -378,15 +359,16 @@ export function LogoPill({
           alt=""
           width={14}
           height={14}
-          className="h-4 w-4 shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] object-contain"
+          className="h-4 w-4 shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFBF6)] object-contain"
           onError={() => setOk(false)}
+          onLoad={(e) => {
+            if (imageIsFlat(e.currentTarget)) setOk(false);
+          }}
         />
       ) : (
-        <span className="grid h-4 w-4 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
-          {initials}
-        </span>
+        <DrawnMark name={name} className="h-4 w-4 shrink-0" />
       )}
-      <span className="min-w-0 truncate">{name}</span>
+      <span className="min-w-0 break-words">{name}</span>
     </Link>
   );
 }
