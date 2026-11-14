@@ -3,7 +3,11 @@
 .review-actions :is(button,a), .record-sections a { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:8px 14px; border:1px solid #dce1ee; border-radius:4px; color:#2f4fd8; font-size:14px; font-weight:600; background:#fff; text-decoration:none; }
 .review-actions button[aria-pressed="true"] { border-color:#2f4fd8; background:#edf1ff; }
 .review-actions :is(button,a):hover { border-color:#2f4fd8; background:#f4f6ff; }
-.ledger-review { padding:0 12px 12px; }
+.ledger-review { display:flex; align-items:center; padding:0 8px 0 0; }
+.ledger-review .review-actions { display:flex; gap:4px; }
+.ledger-review .review-actions :is(button,a) { min-height:28px; padding:2px 8px; font-size:12px; border-color:#F0D7C2; color:#9A3412; background:#FFFBF6; white-space:nowrap; }
+[data-card-founder-links] { margin-top:2px !important; }
+[data-card-founder-links] button { min-height:0 !important; height:auto !important; padding:1px 6px !important; }
 [data-dossier-spread-mobile] { display:flex; flex-direction:column; }
 [data-company-title-block] { order:-2; }
 [data-dossier-campus-band] { order:-1; }
