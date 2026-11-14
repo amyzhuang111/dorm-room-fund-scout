@@ -93,8 +93,8 @@ export default async function DataExplorerPage({
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
-          <p className="mt-1.5 font-mono text-[14px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <h1 className="mt-0.5 scout-display text-[22px] leading-none sm:text-[32px]">Full data</h1>
+          <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" records in this view · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
@@ -120,12 +120,9 @@ export default async function DataExplorerPage({
         </a>
       </div>
 
-      <nav className="my-3 flex flex-wrap gap-4 text-sm font-semibold text-[color:var(--cobalt,#2F4FD8)]"><Link href="/data/people">All people & class years →</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
-      <p className="text-sm text-fg-2">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence; a source link alone does not verify every field.</p>
-      <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
-        data-recency-funnel=""
-      >
+      <nav className="my-1 flex flex-wrap gap-3 text-[13px] font-semibold text-[color:var(--ember,#E85D04)]"><Link href="/data/people">All people and class years</Link><Link href="/data?scope=scout">Scouting list</Link><Link href="/data">All records</Link></nav>
+      <p className="sr-only">Every stored company and project is available here, including unverified leads. Status labels describe the stored evidence. A source link alone does not verify every field.</p>
+      <p className="sr-only" data-recency-funnel="">
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Scouting list</span>
         {" · "}
         <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
@@ -139,7 +136,7 @@ export default async function DataExplorerPage({
       </p>
 
       <p
-        className="mt-2 hidden rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:block sm:px-2.5 sm:py-2 sm:text-[14px] sm:leading-6"
+        className="sr-only"
         data-corpus-fill-rates=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Full corpus coverage</span>

@@ -7,6 +7,7 @@ import { useUserPipeline } from "./user-pipeline-provider";
 import { userStartupPreview, userFounderPreview } from "@/lib/domain/user-preview";
 import type { FounderPreview, FounderPreviewLink } from "@/lib/domain/founder-preview";
 import styles from "./startup-directory-card.module.css";
+import { DrawnMark, imageIsFlat } from "./drawn-mark";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
 import { networkExplorationHref } from "@/lib/domain/exploration-navigation";
 const LINK_LABEL: Record<StartupLinkKind, string> = {
@@ -26,14 +27,6 @@ function personInitials(name: string): string {
   return `${parts[0].charAt(0)}${parts[parts.length - 1].charAt(0)}`.toUpperCase();
 }
 
-function companyInitials(name: string): string {
-  const cleaned = name.replace(/[^a-zA-Z0-9&+\s.-]/g, " ").trim();
-  const parts = cleaned.split(/[\s._-]+/).filter(Boolean).filter((p) => !/^(inc|llc|ltd|co|corp|the|and|&)$/i.test(p));
-  if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
-  return `${parts[0]!.charAt(0)}${parts[1]!.charAt(0)}`.toUpperCase();
-}
-
 function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string | null }) {
   const src = logoUrl?.startsWith("/") && !logoUrl.startsWith("//") ? logoUrl : null;
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
@@ -41,8 +34,8 @@ function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string | null 
     <div className={styles.logo} aria-hidden="true">
       {src && src !== failedSrc ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" width={64} height={64} onError={() => setFailedSrc(src)} />
-      ) : companyInitials(name).slice(0, 2)}
+        <img src={src} alt="" width={64} height={64} onError={() => setFailedSrc(src)} onLoad={(event) => { if (imageIsFlat(event.currentTarget)) setFailedSrc(src); }} />
+      ) : <DrawnMark name={name} className="h-8 w-8" />}
     </div>
   );
 }

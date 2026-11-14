@@ -962,18 +962,22 @@ export function SampleInstrumentBrowse({
                         </div>
                       </>
                     ) : null}
-                    <LedgerRow
-                      returnHref={browseHref({ feed, sort, facets, more: pages, c: card.id })}
-                      selected={selectedCompanyId === card.id}
-                      founderLinks={founderLinks[card.id] ?? []}
-                      card={card}
-                      rank={feed === "leaderboard" ? index + 1 : null}
-                      ranked={feed === "leaderboard"}
-                      whyOverride={whyOverride}
-                      showCampusSeal={showCampusSeal}
-                      evidenceRich={feed === "directory" && pages > 1}
-                    />
-                    <div className="ledger-review"><CompanyReviewActions id={card.id} name={card.name} /></div>
+                    <div className="flex items-center">
+                      <div className="min-w-0 flex-1">
+                        <LedgerRow
+                          returnHref={browseHref({ feed, sort, facets, more: pages, c: card.id })}
+                          selected={selectedCompanyId === card.id}
+                          founderLinks={founderLinks[card.id] ?? []}
+                          card={card}
+                          rank={feed === "leaderboard" ? index + 1 : null}
+                          ranked={feed === "leaderboard"}
+                          whyOverride={whyOverride}
+                          showCampusSeal={showCampusSeal}
+                          evidenceRich={feed === "directory" && pages > 1}
+                        />
+                      </div>
+                      <div className="ledger-review"><CompanyReviewActions id={card.id} name={card.name} /></div>
+                    </div>
                   </li>
                 );
               })}
@@ -1469,17 +1473,13 @@ function LedgerRow({
     <div
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
-      className={`group flex min-h-11 items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
-        ranked ? "gap-2 py-2.5 sm:gap-2.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2 py-2 sm:gap-3 sm:py-3"
-      } ${selected ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55 ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/35" : ""}`}
+      className={`group flex items-start px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.995] lg:hover:bg-[color:var(--cobalt-haze,#FFE8D2)]/40 sm:px-3 ${
+        ranked ? "gap-2 py-1.5" : "gap-2 py-1.5"
+      } ${selected ? "bg-[color:var(--cobalt-haze,#FFE8D2)]/55 ring-1 ring-inset ring-[color:var(--ember,#E85D04)]/35" : ""}`}
     >
       {rank != null ? (
         <span
-          className={`shrink-0 text-right font-mono font-bold tabular-nums tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${
-            ranked
-              ? "mt-0 w-9 text-[22px] leading-none sm:w-10 sm:text-[24px] lg:w-11 lg:text-[26px]"
-              : "mt-0.5 w-6 text-[16px] leading-none sm:w-8 sm:text-[20px]"
-          }`}
+          className="mt-0.5 w-7 shrink-0 self-center text-right font-mono text-[14px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]"
         >
           {String(rank).padStart(2, "0")}
         </span>
@@ -1487,7 +1487,7 @@ function LedgerRow({
       {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
       {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
       {card.logoUrl ? (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
@@ -1502,33 +1502,24 @@ function LedgerRow({
           </>
         )
       ) : (
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 40 : 44} />
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       )}
       <div className="min-w-0 flex-1">
         <p
           className={
-            ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "break-words text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
+            "break-words text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#2A1A10)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#E85D04)] lg:group-hover:underline"
           }
         >
-          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline-flex min-h-11 items-center">{card.name}</Link>
+          <Link href={`/startup/${card.id}?from=${encodeURIComponent(returnHref)}`} data-card-signals={card.signals} className="inline">{card.name}</Link>
         </p>
         {subtitle ? (
-          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
+          <p className="line-clamp-1 text-[12px] leading-4 text-[color:var(--fg-2,#5C4030)]">
             {subtitle}
           </p>
         ) : null}
-        {why ? (
-          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
-            <span className="mt-0.5 block">{why}</span>
-          </p>
-        ) : (
-          <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
-        )}
+        <p className="sr-only" data-why-here="" data-why-blank={why ? undefined : "1"}>{why || "Why it is here is blank"}</p>
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+          <p className="sr-only" data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>
@@ -1548,14 +1539,14 @@ function LedgerRow({
         ) : null}
 
         {founderLinks.length > 0 ? (
-          <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
+          <span className="sr-only" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
             {founderLinks.slice(0, 3).map((founder) => (
               <button
                 key={founder.linkedinUrl}
                 type="button"
                 title={founder.name}
                 aria-label={`${founder.name} on LinkedIn`}
-                className="inline-flex h-11 min-h-11 min-w-11 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[14px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex items-center gap-1 rounded-sm border border-[color:var(--line,#F0D7C2)] bg-[color:var(--bg-raised,#FFFBF6)] px-1.5 py-0.5 font-mono text-[11px] font-semibold text-[color:var(--ember,#E85D04)]"
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -1563,13 +1554,13 @@ function LedgerRow({
                 }}
               >
                 in
-                <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
+                <span className="break-words font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#2A1A10)]">{founder.name}</span>
               </button>
             ))}
           </span>
         ) : null}
         {meta || (evidenceRich && (card.stage || card.primaryProgram)) ? (
-          <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined}>
+          <span className="sr-only" data-evidence-chips={evidenceRich ? "1" : undefined} data-company-evidence={evidenceRich ? "1" : undefined}>
             {meta ? (
               <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" data-evidence-chip="signal">
                 {meta.primary}

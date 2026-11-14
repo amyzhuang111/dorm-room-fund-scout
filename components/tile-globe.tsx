@@ -40,14 +40,39 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const BRAND = "#2F4FD8";
-const COUNT = "font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]";
+const BRAND = "#3A2416";
+const COUNT = "font-bold tabular-nums text-[color:var(--ember,#E85D04)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
-  "United States": "#2F4FD8",
-  Canada: "#5C6FA8",
-  "United Kingdom": "#3F465C",
+  "United States": "#3A2416",
+  Canada: "#6B3A1F",
+  "United Kingdom": "#8A4B24",
 };
+
+const LAND = "#F08A3A";
+const OCEAN = "#F7E2C8";
+
+function paintCampusDisk(map: {
+  getStyle: () => { layers: { id: string; type: string }[] };
+  setPaintProperty: (layer: string, prop: string, value: unknown) => void;
+  setLayerZoomRange: (layer: string, min: number, max: number) => void;
+}) {
+  for (const layer of map.getStyle().layers) {
+    try {
+      if (layer.type === "background") map.setPaintProperty(layer.id, "background-color", LAND);
+      else if (layer.type === "fill") {
+        const water = layer.id === "water" || layer.id.startsWith("water");
+        map.setPaintProperty(layer.id, "fill-color", water ? OCEAN : LAND);
+      } else if (layer.type === "line") {
+        map.setPaintProperty(layer.id, "line-color", layer.id.includes("water") ? "#E7C9A8" : "#9A3412");
+      } else if (layer.type === "symbol") {
+        map.setLayerZoomRange(layer.id, 4.6, 24);
+      }
+    } catch {
+      // A style layer can refuse a paint or zoom change.
+    }
+  }
+}
 
 function markerColor(country: string): string {
   return COUNTRY_COLOR[country] ?? BRAND;
@@ -69,9 +94,9 @@ function pinnedCaptureCenter(): [number, number] | null {
   return [-109.5, 36];
 }
 
-function globeView(width: number, height: number): { center: [number, number]; zoom: number } {
+function globeView(width: number, height: number, fill = 0.96): { center: [number, number]; zoom: number } {
   const minDim = Math.max(160, Math.min(width, height));
-  const diameter = minDim * 0.96;
+  const diameter = minDim * fill;
   const zoom = Math.log2((diameter * Math.PI) / 512);
   // Faces the US, with Canada and the UK still on the near side.
   const pinned = pinnedCaptureCenter();
@@ -188,6 +213,7 @@ export function TileGlobe({
       setProjection: (opts: object) => void;
       setSky: (opts: object) => void;
       setPaintProperty: (layer: string, prop: string, value: unknown) => void;
+      setLayerZoomRange: (layer: string, min: number, max: number) => void;
       addSource: (id: string, source: object) => void;
       addLayer: (layer: object) => void;
       getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
@@ -269,9 +295,9 @@ export function TileGlobe({
         }
         try {
           map.setSky({
-            "sky-color": "#F4F6FB",
-            "horizon-color": "#FFFFFF",
-            "fog-color": "#EEF1F8",
+            "sky-color": "#FFF4E8",
+            "horizon-color": "#FFF4E8",
+            "fog-color": "#FFE8D2",
             "sky-horizon-blend": 0.45,
             "horizon-fog-blend": 0.7,
             "fog-ground-blend": 0.55,
@@ -286,6 +312,7 @@ export function TileGlobe({
           setFailed(true);
           return;
         }
+        paintCampusDisk(map);
         map.addSource("campuses", { type: "geojson", data: collection() });
         map.addLayer({
           id: "campus-halo",
@@ -294,9 +321,9 @@ export function TileGlobe({
           filter: ["==", ["get", "top"], 1],
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 1.05], 6], 1.8, ["+", ["*", ["get", "radius"], 1.15], 7], 3.2, ["+", ["*", ["get", "radius"], 1.55], 8]],
-            "circle-color": "#2F4FD8",
+            "circle-color": "#3A2416",
             "circle-opacity": 0.18,
-            "circle-stroke-color": "#2F4FD8",
+            "circle-stroke-color": "#3A2416",
             "circle-stroke-width": 1.35,
             "circle-stroke-opacity": 0.55,
           },
@@ -307,8 +334,8 @@ export function TileGlobe({
           source: "campuses",
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 1.0], 1.8, ["*", ["get", "radius"], 1.18], 3.2, ["*", ["get", "radius"], 1.55]],
-            "circle-color": ["case", ["==", ["get", "top"], 1], "#2F4FD8", ["get", "color"]],
-            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#FFFFFF", "#FFFFFF"],
+            "circle-color": ["case", ["==", ["get", "top"], 1], "#3A2416", ["get", "color"]],
+            "circle-stroke-color": "#FFF4E8",
             "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 2.4, 1.5],
             "circle-opacity": 0.98,
             "circle-stroke-opacity": 1,
@@ -322,8 +349,8 @@ export function TileGlobe({
           filter: ["==", ["get", "id"], ""],
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 1.05], 6], 1.8, ["+", ["*", ["get", "radius"], 1.2], 7], 3.2, ["+", ["*", ["get", "radius"], 1.55], 9]],
-            "circle-color": "rgba(47,79,216,0.12)",
-            "circle-stroke-color": "#2F4FD8",
+            "circle-color": "rgba(58,36,22,0.16)",
+            "circle-stroke-color": "#3A2416",
             "circle-stroke-width": 3.2,
             "circle-stroke-opacity": 1,
             "circle-opacity": 1,
@@ -336,8 +363,8 @@ export function TileGlobe({
           filter: ["==", ["get", "id"], ""],
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.95], 2], 1.8, ["+", ["get", "radius"], 2.6], 3.2, ["+", ["*", ["get", "radius"], 1.4], 3.5]],
-            "circle-color": "#2F4FD8",
-            "circle-stroke-color": "#FFFFFF",
+            "circle-color": "#3A2416",
+            "circle-stroke-color": "#FFF4E8",
             "circle-stroke-width": 2.4,
             "circle-opacity": 1,
           },
@@ -347,7 +374,8 @@ export function TileGlobe({
           id: "campus-labels",
           type: "symbol",
           source: "campuses",
-          filter: ["<=", ["get", "labelRank"], 12],
+          minzoom: 3.2,
+          filter: ["<=", ["get", "labelRank"], 3],
           layout: {
             "text-field": ["get", "shortLabel"],
             "text-font": ["Noto Sans Regular"],
@@ -361,8 +389,8 @@ export function TileGlobe({
             "text-max-width": 8,
           },
           paint: {
-            "text-color": "#0B0E17",
-            "text-halo-color": "#FFFFFF",
+            "text-color": "#2A1A10",
+            "text-halo-color": "#FFF4E8",
             "text-halo-width": 1.6,
             "text-halo-blur": 0.2,
           },
@@ -371,6 +399,7 @@ export function TileGlobe({
           id: "campus-label-selected",
           type: "symbol",
           source: "campuses",
+          minzoom: 3.2,
           filter: ["==", ["get", "id"], ""],
           layout: {
             "text-field": ["get", "shortLabel"],
@@ -384,19 +413,21 @@ export function TileGlobe({
             "text-max-width": 9,
           },
           paint: {
-            "text-color": "#2F4FD8",
-            "text-halo-color": "#FFFFFF",
+            "text-color": "#9A3412",
+            "text-halo-color": "#FFF4E8",
             "text-halo-width": 2,
             "text-halo-blur": 0.15,
           },
         });
         window.clearTimeout(styleTimer);
         let framed = false;
+        let framedSize = 0;
         const frame = () => {
           if (dead || !map) return;
           const stage = mapNode.current?.parentElement;
-          const height = stage?.clientHeight || mapNode.current?.clientHeight || 520;
-          const width = stage?.clientWidth || mapNode.current?.clientWidth || 640;
+          const height = stage?.clientHeight || 0;
+          const width = stage?.clientWidth || 0;
+          if (width < 40 || height < 40) return;
           if (mapNode.current) {
             mapNode.current.style.width = `${width}px`;
             mapNode.current.style.height = `${height}px`;
@@ -405,8 +436,11 @@ export function TileGlobe({
           canvasBox.style.width = `${width}px`;
           canvasBox.style.height = `${height}px`;
           map.resize();
-          if (!framed) map.jumpTo(globeView(width, height));
+          const sizeKey = Math.round(Math.min(width, height));
+          const fill = stage?.classList.contains("globe-disk") ? 1.22 : 0.96;
+          if (!framed || Math.abs(sizeKey - framedSize) > 24) map.jumpTo(globeView(width, height, fill));
           framed = true;
+          framedSize = sizeKey;
         };
         frameRef.current = frame;
         frame();
@@ -731,8 +765,6 @@ export function TileGlobe({
   // counts the same person twice and disagrees with the vetted list.
   const campusesOnMap = campuses.length;
 
-  const [legendOpen, setLegendOpen] = useState(false);
-
   return (
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
       <div className="mb-2 hidden flex-wrap gap-2 lg:flex" data-fold-counts="">
@@ -774,143 +806,96 @@ export function TileGlobe({
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">{locationsMode ? "Startup headquarters, by city. Switch to Campuses for the school map." : "Schools with a pin include campuses with no promoted founder. The Campuses page lists only the schools that have one."}</p>
       </div>
 
-      <section className="mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 flex flex-wrap items-center gap-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]"><span className="max-sm:sr-only">Map</span>
-          {!failed && <span className={`${mapStyles.mapModes} ml-auto inline-flex border border-[#c3cdee] bg-white`} role="group" aria-label="Map locations">
-            <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Startup HQs</button>
-            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">Reset</button>
-            <button type="button" aria-pressed={rotationEnabled} title="Turn automatic rotation on or off" onClick={()=>setRotationEnabled(v=>!v)} className="min-h-11 min-w-11 px-3 bg-white text-[14px] text-[#2f4fd8]">{rotationEnabled ? "Pause" : "Rotate"}</button>
-            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); resetGlobalView(); }} className={`min-h-11 min-w-11 px-3 text-[14px] ${!locationsMode ? "bg-[#2f4fd8] text-white" : "bg-white text-[#2f4fd8]"}`}>Campuses</button>
+      <section
+        className={expandedMap ? "fixed inset-0 z-[200] flex flex-col bg-[#FFF4E8]" : "flex h-full min-h-0 w-full flex-col items-center"}
+        data-fold-desk-map=""
+        aria-label="Map"
+        role={expandedMap ? "dialog" : undefined}
+        aria-modal={expandedMap ? true : undefined}
+      >
+        <h2 className={`${expandedMap ? "mb-1" : "mb-2"} flex w-full flex-wrap items-center justify-center gap-1 text-[12px] font-semibold tracking-tight text-[#9A3412]`}>
+          <span className="sr-only">Map</span>
+          {!failed && <span className={`${mapStyles.mapModes} inline-flex border border-[#F0D7C2] bg-[#FFFBF6]`} role="group" aria-label="Map locations">
+            {expandedMap ? <button type="button" aria-pressed={locationsMode} onClick={() => { setLocationsMode(true); resetGlobalView(); }} className={`min-h-11 px-3 text-[13px] ${locationsMode ? "bg-[#E85D04] text-[#FFF4E8]" : "bg-[#FFFBF6] text-[#9A3412]"}`}>Startup HQs</button> : null}
+            <button type="button" onClick={resetGlobalView} title="Recenter the entire globe" className={`${expandedMap ? "min-h-11 px-3 text-[13px]" : "min-h-8 px-2.5 text-[12px]"} bg-[#FFFBF6] text-[#9A3412]`}>Reset</button>
+            <button type="button" aria-pressed={rotationEnabled} title="Turn automatic rotation on or off" onClick={() => setRotationEnabled(v => !v)} className={`${expandedMap ? "min-h-11 px-3 text-[13px]" : "min-h-8 px-2.5 text-[12px]"} bg-[#FFFBF6] text-[#9A3412]`}>{rotationEnabled ? "Pause" : "Rotate"}</button>
+            <button type="button" aria-pressed={!locationsMode} onClick={() => { setLocationsMode(false); if (expandedMap) changeMapFocus(false); resetGlobalView(); }} className={`${expandedMap ? "min-h-11 px-3 text-[13px]" : "min-h-8 px-2.5 text-[12px]"} ${!locationsMode ? "bg-[#E85D04] text-[#FFF4E8]" : "bg-[#FFFBF6] text-[#9A3412]"}`}>Campuses</button>
+            {expandedMap ? <button type="button" onClick={() => changeMapFocus(false)} className="min-h-11 bg-[#FFFBF6] px-3 text-[13px] text-[#9A3412]">Close</button> : null}
           </span>}
         </h2>
-        <div
-          className={`${expandedMap ? mapStyles.expandedStage : ""} relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-white`}
-          style={expandedMap && !embedded ? {position:"fixed",inset:0,zIndex:200,height:"100dvh",width:"100vw",border:0} : { height: stageHeight }}
-          role={expandedMap && !embedded ? "dialog" : undefined}
-          aria-modal={expandedMap && !embedded ? true : undefined}
-          aria-label={expandedMap && !embedded ? "Expanded startup map" : undefined}
-          data-map-expanded={expandedMap ? "true" : undefined}
-          data-map-embedded={embedded ? "true" : undefined}
-          data-dispatch-map-stage=""
-          data-fold-bigmap-stage=""
-          data-map-stage-h={stageHeight}
-          data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
-        >
-          <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
-          <CompanyLocationLayer embedded={embedded} onCompanySelect={onCompanySelect} map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={changeMapFocus} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
-          {!painted || failed ? (
-            <div className="absolute inset-0 z-30 bg-[#FFFFFF]" aria-busy={!failed} aria-live="polite">
-              {failed ? <CampusGlobeFallback campuses={campuses} onSelect={onSelect} selectedId={selectedId} highlightCampusIds={highlightCampusIds} /> : (
-              <div className="grid h-full place-items-center">
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Loading globe</p>
-              </div>)}
-            </div>
-          ) : null}
-          <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 [&_a]:pointer-events-auto" data-map-credit>
-            <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
-              <MapCredit />
-            </p>
+        <div className={expandedMap ? "flex min-h-0 w-full flex-1" : "globe-stage min-h-0 w-full flex-1"}>
+          <div
+            className={expandedMap ? "relative min-h-0 min-w-0 flex-1" : "globe-disk"}
+            data-map-expanded={expandedMap ? "true" : undefined}
+            data-map-embedded={embedded ? "true" : undefined}
+            data-dispatch-map-stage=""
+            data-fold-bigmap-stage=""
+            data-map-stage-h={stageHeight}
+            data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
+          >
+            <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
+            <CompanyLocationLayer embedded={embedded} onCompanySelect={onCompanySelect} map={activeMap} enabled={locationsMode} companies={companies} highlightCampusIds={selectedId ? new Set([selectedId]) : highlightCampusIds} expanded={expandedMap} onExpand={changeMapFocus} rotationEnabled={rotationEnabled} onRotationChange={setRotationEnabled} />
+            {!painted || failed ? (
+              <div className="absolute inset-0 z-30 bg-[#F08A3A]" aria-busy={!failed} aria-live="polite">
+                {failed ? <CampusGlobeFallback campuses={campuses} onSelect={onSelect} selectedId={selectedId} highlightCampusIds={highlightCampusIds} /> : (
+                  <div className="globe-disc" data-globe-disc="">
+                    <p className="sr-only">Globe is loading</p>
+                  </div>
+                )}
+              </div>
+            ) : null}
           </div>
-          {!locationsMode && hover && (!pinned || pinned.id !== hover.id) ? (
-            <div
-              className="pointer-events-none absolute z-30 w-max max-w-[260px] -translate-x-1/2 -translate-y-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)] shadow-sm"
-              style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
-              data-fold-entity-hover=""
-            >
-              <p className="text-[13px] font-semibold leading-4">{hover.name}</p>
-              <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
-                {" · "}
-                <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
-                {hover.country ? <>{" · "}{hover.country}</> : null}
-              </p>
-            </div>
-          ) : null}
-          {!locationsMode && pinned ? (
-            <div
-              className="absolute bottom-8 left-3 z-30 w-[min(300px,calc(100%-1.5rem))] rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 text-left shadow-sm"
-              data-fold-entity-card=""
-              data-entity-selected={pinned.id}
-            >
+          {expandedMap && pinned ? (
+            <aside className="hidden w-[280px] shrink-0 overflow-auto border-l border-[#F0D7C2] bg-[#FFFBF6] p-3 sm:block" data-fold-entity-card="" data-entity-selected={pinned.id}>
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Selected</p>
-                  <p className="mt-0.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{pinned.name}</p>
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#E85D04]">Selected</p>
+                  <p className="mt-0.5 break-words text-[15px] font-semibold tracking-tight text-[#2A1A10]">{pinned.name}</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onSelect("");
-                    try {
-                      (window as unknown as { __campusScoutMap?: { resize?: () => void } }).__campusScoutMap?.resize?.();
-                    } catch { /* ignore */ }
-                  }}
-                  className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)] hover:underline"
-                  data-entity-clear=""
-                >
-                  Clear
-                </button>
+                <button type="button" onClick={() => onSelect("")} className="shrink-0 text-[12px] font-semibold text-[#9A3412]" data-entity-clear="">Clear</button>
               </div>
-              <p className="mt-1 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
+              <p className="mt-1 text-[12px] leading-4 text-[#5C4030]">
                 <span className={COUNT}>{pinned.founders.toLocaleString("en-US")}</span> founders
                 {" · "}
                 <span className={COUNT}>{pinned.signals.toLocaleString("en-US")}</span> signals
                 {pinned.country ? <>{" · "}{pinned.country}</> : null}
               </p>
               {pinnedCompanies.length > 0 ? (
-                <ul className="mt-2 space-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-entity-companies="">
+                <ul className="mt-2 space-y-1 border-t border-[#F0D7C2] pt-2">
                   {pinnedCompanies.map((co) => (
                     <li key={co.id}>
-                      <a
-                        href={`/startup/${co.id}`}
-                        className="flex items-baseline justify-between gap-2 text-[12px] hover:text-[color:var(--cobalt,#2F4FD8)]"
-                      >
-                        <span className="truncate font-medium text-[color:var(--fg,#0B0E17)]">{co.name}</span>
-                        {co.sector ? (
-                          <span className="shrink-0 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{co.sector}</span>
-                        ) : null}
+                      <a href={`/startup/${co.id}`} className="flex items-baseline justify-between gap-2 text-[12px]">
+                        <span className="break-words font-medium text-[#2A1A10]">{co.name}</span>
+                        {co.sector ? <span className="shrink-0 font-mono text-[10px] text-[#8A6854]">{co.sector}</span> : null}
                       </a>
                     </li>
                   ))}
                 </ul>
               ) : null}
               <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12px]">
-                <a href={`/campuses/${campusSlug(pinned.id)}`} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-                  Campus page
-                </a>
-                <a href={`/companies?campus=${encodeURIComponent(pinned.id)}&from=map`} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-                  Open companies
-                </a>
-                <a href={`/founders?campus=${encodeURIComponent(pinned.id)}`} className="font-medium text-[color:var(--fg-2,#3F465C)] hover:underline">
-                  Founders
-                </a>
+                <a href={`/campuses/${campusSlug(pinned.id)}`} className="font-medium text-[#9A3412]">Campus page</a>
+                <a href={`/founders?campus=${encodeURIComponent(pinned.id)}`} className="font-medium text-[#5C4030]">Founders</a>
               </div>
-            </div>
+            </aside>
           ) : null}
-          {/* r49: collapsible legend tucked bottom-left — never over Program/filters or stats. */}
-          <div className={`pointer-events-auto absolute left-2 top-2 z-20 max-w-[168px] lg:top-auto lg:bottom-2 ${locationsMode ? "hidden" : ""}`} data-fold-map-legend="">
-            <button
-              type="button"
-              className="inline-flex h-7 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] shadow-sm"
-              aria-expanded={legendOpen}
-              aria-controls="fold-map-legend-body"
-              data-fold-legend-toggle=""
-              onClick={() => setLegendOpen((v) => !v)}
-            >
-              Markers
-              <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "\u2212" : "+"}</span>
-            </button>
-            {legendOpen ? (
-              <div
-                id="fold-map-legend-body"
-                className="mt-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 py-1.5 shadow-sm"
-                data-fold-legend-body=""
-              >
-                <p className="text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = PitchBook founders when listed, founders on file otherwise. Cobalt marks the undergraduate top 10. A cobalt ring is the selected school.</p>
-              </div>
-            ) : null}
-          </div>
         </div>
+        {!expandedMap ? (
+          <div className="mt-1 flex w-full flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 px-1" data-map-credit>
+            <p className="font-mono text-[11px] leading-4 text-[#8A6854]"><MapCredit /></p>
+            {!locationsMode && (hover || pinned) ? (
+              <p className="max-w-full break-words text-[13px] leading-4 text-[#2A1A10]" data-fold-entity-hover="">
+                <span className="font-semibold">{(hover && (!pinned || pinned.id !== hover.id) ? hover : pinned)!.name}</span>
+                {" · "}
+                <span className={COUNT}>{(hover && (!pinned || pinned.id !== hover.id) ? hover : pinned)!.founders.toLocaleString("en-US")}</span>
+                {" founders · "}
+                <span className={COUNT}>{(hover && (!pinned || pinned.id !== hover.id) ? hover : pinned)!.signals.toLocaleString("en-US")}</span>
+                {" signals"}
+              </p>
+            ) : (
+              <button type="button" className="text-[12px] font-semibold text-[#E85D04]" onClick={() => { setLocationsMode(true); changeMapFocus(true); }}>Headquarters map</button>
+            )}
+          </div>
+        ) : null}
       </section>
 
 
